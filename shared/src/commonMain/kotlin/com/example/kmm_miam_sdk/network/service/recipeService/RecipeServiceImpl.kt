@@ -25,6 +25,6 @@ class RecipeServiceImpl(
     }
 
     companion object {
-        const val BASE_URL = "http://10.0.2.2:3000/api/v1/recipes"
+        const val BASE_URL = "https://api-uat.miam.tech/api/v1/recipes"
     }
 }
