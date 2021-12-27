@@ -1,4 +1,4 @@
-package com.example.kmm_miam_sdk.network.service.recipeService
+package com.example.kmm_miam_sdk.network.service
 
 import com.example.kmm_miam_sdk.network.model.Recipe
 import com.example.kmm_miam_sdk.network.model.RecipeDTO
@@ -6,13 +6,13 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-class RecipeServiceImpl(
+class RecipeService(
     private val httpClient: HttpClient,
     private val baseUrl: String,
-): RecipeService {
+) {
 
 
-    override suspend fun get(id: Int): Recipe {
+     suspend fun get(id: Int): Recipe {
         return httpClient.get<RecipeDTO>{
 
             headers {

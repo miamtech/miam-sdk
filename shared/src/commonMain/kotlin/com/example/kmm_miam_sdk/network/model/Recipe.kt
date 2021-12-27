@@ -8,22 +8,17 @@ import kotlinx.serialization.Serializable
     val recipe: Recipe,
 )
 
-
-
 @Serializable
 data class Recipe(
-
-    @SerialName("id")
     val id: Int,
-
-    @SerialName("attributes")
     val attributes: RecipeAttributes,
 )
 
 @Serializable
 data class RecipeAttributes (
-    @SerialName("title")
+
     val title: String,
+    val description: String?,
 
     @SerialName("ext-id")
     val extId: String? = null,
@@ -31,17 +26,14 @@ data class RecipeAttributes (
     @SerialName("ext-link")
     val extLink: String? = null,
 
-    @SerialName("description")
-    val description: String,
-
     @SerialName("number-of-guests")
-    val numberOfGuests: Int,
+    val numberOfGuests: Int?,
 
     @SerialName("ingredients-str")
-    val ingredientsStr: Array<String>,
+    val ingredientsStr: Array<String>?,
 
     @SerialName("media-url")
-    val mediaUrl: String,
+    val mediaUrl: String?,
 )
 
 

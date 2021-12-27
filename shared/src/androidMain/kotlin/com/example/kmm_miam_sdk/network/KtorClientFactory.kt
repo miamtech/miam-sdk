@@ -6,6 +6,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 
 
+/*
 actual class KtorClientFactory {
     actual fun build(): HttpClient {
         return HttpClient(Android) {
@@ -19,3 +20,4 @@ actual class KtorClientFactory {
         }
     }
 }
+*/

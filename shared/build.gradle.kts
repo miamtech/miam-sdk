@@ -1,3 +1,6 @@
+
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -23,6 +26,8 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-core:1.6.7")
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+                implementation("io.insert-koin:koin-core:3.1.2")
             }
         }
         val commonTest by getting {
@@ -36,6 +41,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-android:1.6.7")
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
             }
         }
         val androidTest by getting {
