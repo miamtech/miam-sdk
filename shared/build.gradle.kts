@@ -25,6 +25,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-core:1.6.7")
+                implementation("io.ktor:ktor-client-cio:1.6.7")
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
                 implementation("io.insert-koin:koin-core:3.1.2")
@@ -39,8 +40,6 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:1.6.7")
-                implementation("io.ktor:ktor-client-serialization:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
             }
         }
@@ -84,3 +83,4 @@ android {
         targetSdk = 31
     }
 }
+

@@ -7,5 +7,5 @@ pluginManagement {
 }
 
 rootProject.name = "kmm-miam-sdk"
-include(":androidApp")
+include(":androidSDK")
 include(":shared")
