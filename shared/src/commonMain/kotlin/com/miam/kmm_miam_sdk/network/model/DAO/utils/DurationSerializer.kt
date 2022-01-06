@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.network.model.utils
+package com.miam.kmm_miam_sdk.network.model.DAO.utils
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -7,8 +7,6 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 object DurationSerializer : KSerializer<Duration> {
     override fun deserialize(decoder: Decoder): Duration =

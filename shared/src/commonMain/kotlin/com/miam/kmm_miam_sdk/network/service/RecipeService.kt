@@ -1,7 +1,11 @@
 package com.miam.kmm_miam_sdk.network.service
 
-import com.miam.kmm_miam_sdk.network.model.Recipe
-import com.miam.kmm_miam_sdk.network.model.RecipeDTO
+
+import com.miam.kmm_miam_sdk.network.model.DAO.RecipeDAO
+import com.miam.kmm_miam_sdk.network.model.DAO.RecipeDAOResult
+
+
+
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -11,9 +15,9 @@ class RecipeService(
     private val baseUrl: String,
 ) {
 
-     suspend fun get(id: Int): Recipe {
+     suspend fun get(id: Int): RecipeDAO {
 
-       val response = httpClient.get<RecipeDTO>{
+       val response = httpClient.get<RecipeDAOResult>{
 
             headers {
                 append(HttpHeaders.ContentType, "application/vnd.api+json")
@@ -22,7 +26,7 @@ class RecipeService(
             url("${baseUrl}recipes/$id")
         }
 
-         return response.recipe
+         return response.data
 
     }
 
