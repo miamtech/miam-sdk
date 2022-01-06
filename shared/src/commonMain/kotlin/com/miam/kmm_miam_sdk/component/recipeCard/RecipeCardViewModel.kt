@@ -16,7 +16,7 @@ class RecipeCardViewModel :
 
     override fun createInitialState(): RecipeCardContract.State =
         RecipeCardContract.State(
-            recipe = BasicUiState.Idle
+            recipeCard = BasicUiState.Idle
         )
 
     override fun handleEvent(event: RecipeCardContract.Event) {
@@ -29,13 +29,13 @@ class RecipeCardViewModel :
 
     private fun getRecipe(recipeId: Int) {
         this.recipeId = recipeId
-        setState { copy(recipe = BasicUiState.Loading) }
+        setState { copy(recipeCard = BasicUiState.Loading) }
         launch(getRecipeUseCase.execute(recipeId), { recipe ->
-            setState { copy(recipe = BasicUiState.Success(recipe)) }
+            setState { copy(recipeCard = BasicUiState.Success(recipe)) }
             println("miam ${recipe}", )
             this.recipe = recipe
         }, {
-            setState {  copy(recipe = BasicUiState.Error()) }
+            setState {  copy(recipeCard = BasicUiState.Error()) }
         })
     }
 

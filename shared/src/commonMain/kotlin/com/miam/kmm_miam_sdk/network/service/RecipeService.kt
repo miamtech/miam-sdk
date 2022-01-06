@@ -12,15 +12,17 @@ class RecipeService(
 ) {
 
      suspend fun get(id: Int): Recipe {
-         println("Get Recipe call Miam" )
-        return httpClient.get<RecipeDTO>{
+
+       val response = httpClient.get<RecipeDTO>{
 
             headers {
                 append(HttpHeaders.ContentType, "application/vnd.api+json")
                 append(HttpHeaders.Accept,"*/*")
             }
             url("${baseUrl}recipes/$id")
-        }.recipe
+        }
+
+         return response.recipe
 
     }
 

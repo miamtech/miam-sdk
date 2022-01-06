@@ -13,7 +13,7 @@ interface RecipeCardContract {
     }
 
     data class State(
-        val recipe: BasicUiState<Recipe>,
+        val recipeCard: BasicUiState<Recipe>,
     ) : UiState
 
     sealed class Effect : UiEffect {

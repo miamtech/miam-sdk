@@ -62,7 +62,7 @@ fun RecipeCardView(vmRecipeCard: RecipeCardViewModel){
 
     Box( ){
         ManagementResourceState(
-            resourceState = state.recipe,
+            resourceState = state.recipeCard,
             successView = { recipe ->
                 requireNotNull(recipe)
                 recipeCard(recipe)
