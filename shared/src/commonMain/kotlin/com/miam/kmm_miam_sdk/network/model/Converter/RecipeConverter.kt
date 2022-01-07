@@ -12,7 +12,7 @@ class RecipeConverter {
        suspend fun DAOtoDTO(recipeDAO: RecipeDAO , ingredientService: IngredientService) : Recipe {
             val recipe =  Recipe(recipeDAO.attributes)
 
-           recipe.ingredients = IngredientConverter.DAOstoDTOs(ingredientService.getWhere(Recipe.type, recipeDAO.id))
+          // recipe.ingredients = IngredientConverter.DAOstoDTOs(ingredientService.getWhere(Recipe.type, recipeDAO.id))
 
            return recipe
 

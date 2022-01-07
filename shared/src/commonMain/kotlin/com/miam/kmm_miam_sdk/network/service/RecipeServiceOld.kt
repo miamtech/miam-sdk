@@ -10,7 +10,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-class RecipeService(
+class RecipeServiceOld(
     private val httpClient: HttpClient,
     private val baseUrl: String,
 ) {
