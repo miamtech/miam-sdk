@@ -18,24 +18,8 @@ class MiamService (
 
         fun getRecipe(id: Int): Flow<Recipe> = flow {
             val recipe = recipeService.getRecipeById(id)
-
-            println(" the recipe is")
-            print(recipe.id)
-
             val ingredients = ingredientService.getIngredient(recipe.id, "recipes")
-            println(" the ingredient is")
-            print(ingredients.ingredients.first())
-
             ingredients.also { recipe.attributes.ingredients = it }
-
             emit(recipe)
-
         }
-
-
-
-            // com.miam.kmm_miam_sdk.miam_core.service.RecipeServiceImpl().getRecipeById()
-        //emit(RecipeConverter.DAOtoDTO(recipeServiceOld.get(id),ingredientService ))
-
-
 }
