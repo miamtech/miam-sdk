@@ -72,7 +72,11 @@ data class RecipeAttributes (
     @SerialName("video-id")
     val videoId: String?,
 
-    val promoted: Boolean?
+    val promoted: Boolean?,
+
+    var ingredients : Ingredients? = null
+
+
 
     )
 

@@ -3,7 +3,7 @@ package com.miam.kmm_miam_sdk.di
 import com.miam.kmm_miam_sdk.base.mvi.MiamStore
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.miam_core.service.MiamService
-import com.miam.kmm_miam_sdk.network.service.IngredientService
+import com.miam.kmm_miam_sdk.network.service.IngredientServiceOld
 import com.miam.kmm_miam_sdk.network.service.RecipeServiceOld
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -33,7 +33,7 @@ fun initKoin() = initKoin {}
 val repositoryModule = module {
     single<MiamService> { MiamService(get(), get()) }
     single<RecipeServiceOld> { RecipeServiceOld(get(), get()) }
-    single<IngredientService> { IngredientService(get(), get()) }
+    single<IngredientServiceOld> { IngredientServiceOld(get(), get()) }
 
     single {
         HttpClient(CIO) {

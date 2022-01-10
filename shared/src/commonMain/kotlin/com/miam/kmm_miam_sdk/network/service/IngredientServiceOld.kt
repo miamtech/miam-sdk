@@ -6,8 +6,8 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-class IngredientService(private val httpClient: HttpClient,
-                        private val baseUrl: String,) {
+class IngredientServiceOld(private val httpClient: HttpClient,
+                           private val baseUrl: String,) {
 
 
 
