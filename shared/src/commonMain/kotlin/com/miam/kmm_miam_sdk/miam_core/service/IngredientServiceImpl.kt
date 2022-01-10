@@ -13,17 +13,17 @@ class IngredientServiceImpl(
     private val client: HttpClient
 ):IngredientService {
 
-    override suspend fun getIngredient(entityId: Int, type: String): Ingredients {
-       return callIngredientAPI(entityId, type)
+    override suspend fun getIngredient(entityId: Int): Ingredients {
+       return callIngredientAPI(entityId)
     }
 
-    private suspend fun callIngredientAPI(entityId: Int, type: String): Ingredients{
+    private suspend fun callIngredientAPI(entityId: Int): Ingredients{
         return client.get<Ingredients>{
             headers {
                 append(HttpHeaders.ContentType, "application/vnd.api+json")
                 append(HttpHeaders.Accept,"*/*")
             }
-            url(HttpRoutes.INGREDIENT_ENDPOINT+"/${type}/${entityId}/ingredients")
+            url(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")
         }
     }
 

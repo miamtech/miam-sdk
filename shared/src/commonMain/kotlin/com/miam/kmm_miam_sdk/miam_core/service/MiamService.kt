@@ -18,7 +18,7 @@ class MiamService (
 
         fun getRecipe(id: Int): Flow<Recipe> = flow {
             val recipe = recipeService.getRecipeById(id)
-            val ingredients = ingredientService.getIngredient(recipe.id, "recipes")
+            val ingredients = ingredientService.getIngredient(recipe.id)
             ingredients.also { recipe.attributes.ingredients = it }
             emit(recipe)
         }
