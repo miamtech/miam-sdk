@@ -6,7 +6,7 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
 
 interface RecipeService {
-    suspend fun getRecipeById(): Recipe
+    suspend fun getRecipeById(id: Int): Recipe
 
     companion object {
         fun create(): RecipeService{

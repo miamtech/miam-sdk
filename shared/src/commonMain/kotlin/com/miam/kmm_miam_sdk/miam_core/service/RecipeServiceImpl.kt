@@ -12,17 +12,17 @@ class RecipeServiceImpl(
     private val client: HttpClient
 ):RecipeService {
 
-    override suspend fun getRecipeById(): Recipe {
-       return callRecipeAPI()
+    override suspend fun getRecipeById(id: Int): Recipe {
+       return callRecipeAPI(id)
     }
-    
-    private suspend fun callRecipeAPI(): Recipe{
+
+    private suspend fun callRecipeAPI(id: Int): Recipe{
         return client.get<RecipeWrapper>{
             headers {
                 append(HttpHeaders.ContentType, "application/vnd.api+json")
                 append(HttpHeaders.Accept,"*/*")
             }
-            url(HttpRoutes.RECIPE_ENDPOINT)
+            url(HttpRoutes.RECIPE_ENDPOINT+"$id")
         }.data
     }
 

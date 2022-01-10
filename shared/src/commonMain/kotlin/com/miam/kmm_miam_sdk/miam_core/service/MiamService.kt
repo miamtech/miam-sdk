@@ -15,8 +15,12 @@ class MiamService (
 
         private val recipeService = RecipeService.create()
 
-        fun getRecipe(id:Int): Flow<Recipe> = flow {
-            emit(recipeService.getRecipeById())
+        fun getRecipe(id: Int): Flow<Recipe> = flow {
+            val recipe = recipeService.getRecipeById(id)
+            println(" the recipe is")
+            print(recipe.id)
+            print(recipe.attributes.title)
+            emit(recipe)
         }
 
 
