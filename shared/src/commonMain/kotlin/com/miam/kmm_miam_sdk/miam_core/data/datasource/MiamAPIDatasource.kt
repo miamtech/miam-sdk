@@ -18,6 +18,7 @@ object HttpRoutes {
 
 class MiamAPIDatasource: RecipeDataSource {
 
+    // TODO manage exception when 3xx 4xx 5xx
     private val httpClient = HttpClient(CIO){
         install(JsonFeature) {
             serializer = KotlinxSerializer(
@@ -28,6 +29,7 @@ class MiamAPIDatasource: RecipeDataSource {
         }
     }
 
+    // TODO factorize header in a object
     override suspend fun getIngredient(entityId: Int): Ingredients {
         return httpClient.get<Ingredients>{
             headers {
