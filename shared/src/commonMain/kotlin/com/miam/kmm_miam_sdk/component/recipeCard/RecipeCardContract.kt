@@ -4,7 +4,8 @@ import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.base.mvi.UiEffect
 import com.miam.kmm_miam_sdk.base.mvi.UiEvent
 import com.miam.kmm_miam_sdk.base.mvi.UiState
-import com.miam.kmm_miam_sdk.network.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+
 
 interface RecipeCardContract {
 

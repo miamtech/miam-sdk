@@ -28,7 +28,7 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardContract
 import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardViewModel
-import com.miam.kmm_miam_sdk.network.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

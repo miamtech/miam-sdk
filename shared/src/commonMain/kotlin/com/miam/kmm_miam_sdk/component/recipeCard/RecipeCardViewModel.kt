@@ -3,7 +3,8 @@ package com.miam.kmm_miam_sdk.component.recipeCard
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
-import com.miam.kmm_miam_sdk.network.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+
 import org.koin.core.component.inject
 
 class RecipeCardViewModel :
