@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.component.BottomSheet
+package com.miam.kmm_miam_sdk.component.bottomSheet
 
 import com.miam.kmm_miam_sdk.base.mvi.UiEffect
 import com.miam.kmm_miam_sdk.base.mvi.UiEvent

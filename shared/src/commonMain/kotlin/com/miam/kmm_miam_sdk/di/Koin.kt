@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.di
 
 import com.miam.kmm_miam_sdk.base.mvi.MiamStore
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.network.service.IngredientService
 import com.miam.kmm_miam_sdk.network.service.RecipeService
@@ -23,6 +24,7 @@ startKoin {
         dispatcherModule,
         useCasesModule,
         miamStoreModule,
+        bottomSheetModule,
         platformModule()
     )
 }
@@ -61,6 +63,10 @@ val dispatcherModule = module {
 
 val miamStoreModule = module {
     single<MiamStore> { MiamStore() }
+}
+
+val bottomSheetModule = module {
+    single<BottomSheetViewModel> { BottomSheetViewModel() }
 }
 
 
