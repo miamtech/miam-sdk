@@ -4,7 +4,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.Ingredients
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeWrapper
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -19,7 +18,7 @@ object HttpRoutes {
 class MiamAPIDatasource: RecipeDataSource {
 
     // TODO manage exception when 3xx 4xx 5xx
-    private val httpClient = HttpClient(CIO){
+    private val httpClient = HttpClient{
         install(JsonFeature) {
             serializer = KotlinxSerializer(
                 kotlinx.serialization.json.Json {

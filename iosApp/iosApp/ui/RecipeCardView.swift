@@ -1,9 +1,9 @@
 //
-//  CharacterView.swift
+//  RecipeCardView.swift
 //  iosApp
 //
-//  Created by Miam on 15/9/21.
-//  Copyright © 2021 orgName. All rights reserved.
+//  Created by Miam on 12/01/2022.
+//  Copyright © 2022 orgName. All rights reserved.
 //
 
 import SwiftUI
@@ -18,18 +18,20 @@ struct RecipeCardView: View {
     init(recipeId: Int) {
         self.recipeId = recipeId
     }
+    
 
     var body: some View {
         VStack {
-            Text(viewModel.recipe.attributes.name)
+            Text("" + viewModel.recipe.attributes.title)
                 .font(.title)
                 .bold()
-            AsyncImage(url: URL(string: viewModel.recipe!.attributes.mediaUrl )!,
-                                      placeholder: { Text("loading ...")})
+            if(viewModel.recipe.attributes.mediaUrl != nil ) { AsyncImage(url: URL(string: "" + (viewModel.recipe.attributes.mediaUrl ?? ""))! ,
+                                                                  placeholder: { Text("loading ...")})}
+           
 
           }
         .onAppear(perform: {
-            viewModel.setEvent(event: RecipeCardContractEvent.GetRecipe(idRecipe: Int32(recipeId)))
+            viewModel.setEvent(event: RecipeCardContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
         })
     }
 }

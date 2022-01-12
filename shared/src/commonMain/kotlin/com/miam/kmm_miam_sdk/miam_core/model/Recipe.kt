@@ -12,7 +12,7 @@ import kotlin.time.Duration.Companion.minutes
 data class RecipeWrapper(val data: Recipe)
 
 @Serializable
-data class Recipe(val id: Int, val attributes: RecipeAttributes) {
+data class Recipe(val id: Int, val attributes: RecipeAttributes ) {
 
     val totalTime: String
         get() {
@@ -45,7 +45,12 @@ data class Recipe(val id: Int, val attributes: RecipeAttributes) {
                 else -> "moyen"
             }
         }
+
+    companion object {
+        fun emptyRecipe() = Recipe(1,RecipeAttributes(""))
+    }
 }
+
 
 @Serializable
 data class RecipeAttributes (
@@ -58,56 +63,56 @@ data class RecipeAttributes (
     @SerialName("ext-link")
     val extLink: String? = null,
 
-    val description: String?,
+    val description: String? = null,
 
     @SerialName("number-of-guests")
-    val numberOfGuests: Int?,
+    val numberOfGuests: Int? = 4,
 
     @SerialName("ingredients-str")
-    val ingredientsStr: List<String>?,
+    val ingredientsStr: List<String>? = emptyList(),
 
     @Serializable(with = DurationSerializer::class)
     @SerialName("preparation-time")
-    val preparationTime: Duration?,
+    val preparationTime: Duration? = 0.minutes,
 
     @Serializable(with = DurationSerializer::class)
     @SerialName("preheating-time")
-    val preheatingTime: Duration?,
+    val preheatingTime: Duration? = 0.minutes,
 
     @Serializable(with = DurationSerializer::class)
     @SerialName("cooking-time")
-    val cookingTime: Duration?,
+    val cookingTime: Duration? = 0.minutes,
 
     @Serializable(with = DurationSerializer::class)
     @SerialName("resting-time")
-    val restingTime: Duration?,
+    val restingTime: Duration? = 0.minutes,
 
     @SerialName("media-url")
-    val mediaUrl: String?,
+    val mediaUrl: String? = null,
 
-    val source : String?,
+    val source : String? = "",
 
     @SerialName("informational-page-html")
-    val informationalPageHtml: String?,
+    val informationalPageHtml: String?= "",
 
     @SerialName("filigrane-logo-url")
-    val filigraneLogoUrl: String?,
+    val filigraneLogoUrl: String? = "",
 
     @SerialName("informational-sentence")
-    val informationalSentence: String?,
+    val informationalSentence: String? ="",
 
-    val difficulty : Int?,
+    val difficulty : Int? = 1,
 
-    val cost : Int?,
+    val cost : Int? = 2,
 
-    val suggested: Boolean?,
+    val suggested: Boolean? = false,
 
-    val popularity: Int?,
+    val popularity: Int? = 5,
 
     @SerialName("video-id")
-    val videoId: String?,
+    val videoId: String? = "",
 
-    val promoted: Boolean?,
+    val promoted: Boolean? = false,
 
     var ingredients : Ingredients? = null
 )

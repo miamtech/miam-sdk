@@ -1,24 +1,24 @@
 //
-//  CharacterDetailVM.swift
+//  RecipeCardVM.swift
 //  iosApp
 //
-//  Created by miam on  27/12/21.
-//  Copyright © 2021 orgName. All rights reserved.
+//  Created by Miam on 12/01/2022.
+//  Copyright © 2022 orgName. All rights reserved.
 //
 
 import shared
 
 class RecipeCardVM : RecipeCardViewModel, ObservableObject {
-    @Published var recipe: Recipe = Recipe(id: 1, )
+    @Published var recipe: Recipe = Recipe.companion.emptyRecipe()
 
 
     override init() {
         super.init()
-
+        // TODO handle other states
         collect(flow: uiState, collect: { data in
             let state = data as! RecipeCardContractState
-
-            switch state.recipe {
+            print("" + state.recipeCard.debugDescription)
+            switch state.recipeCard {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
                 default:

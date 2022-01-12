@@ -15,8 +15,8 @@ struct ContentView: View {
 
     var body: some View {
             VStack {
-                RecipeCardView(recipeId: 1637)
-                RecipeCardView(recipeId: 1639)
+                RecipeCardView(recipeId: 1)
+                RecipeCardView(recipeId: 2)
     }
     
 }
@@ -27,5 +27,5 @@ struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
         ContentView()
 	}
+    }
 }
-

@@ -7,7 +7,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 import org.koin.core.component.inject
 
-class RecipeCardViewModel :
+open class RecipeCardViewModel :
     BaseViewModel<RecipeCardContract.Event, RecipeCardContract.State, RecipeCardContract.Effect>() {
 
     private val getRecipeUseCase: GetRecipeUseCase by inject()
