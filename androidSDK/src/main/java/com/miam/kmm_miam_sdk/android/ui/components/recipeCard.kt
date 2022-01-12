@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -56,7 +57,7 @@ class RecipeView  @JvmOverloads constructor(
     override fun Content() {
 
         val state by vmRecipeCard.uiState.collectAsState()
-        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Expanded)
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val scope = rememberCoroutineScope()
         val toggleBottomSheet =  { scope.launch { bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))  } }
 
@@ -71,6 +72,10 @@ class RecipeView  @JvmOverloads constructor(
                 onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
             )
             BottomSheet(bottomSheetState)
+
+            BackHandler(enabled = bottomSheetState.isVisible) {
+                scope.launch {  bottomSheetState.hide() }
+            }
         }
     }
 }

@@ -15,9 +15,6 @@ import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
 import org.koin.java.KoinJavaComponent.get
 
 
-import kotlinx.coroutines.CoroutineScope
-
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(
@@ -41,7 +38,7 @@ private fun BottomSheetContent(){
     val vmBottomSheet: BottomSheetViewModel = get(BottomSheetViewModel::class.java)
     val state by vmBottomSheet.uiState.collectAsState()
 
-    val goTo = { destination: BottomSheetContract.Event  ->   vmBottomSheet.setEvent(destination) }
+    val goTo = { destination: BottomSheetContract.Event  ->  vmBottomSheet.setEvent(destination) }
 
     when(state.content) {
         BottomSheetContent.RECIPE_DETAIL -> RecipeDetail(goTo)
