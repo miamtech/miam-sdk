@@ -1,20 +1,21 @@
-package com.miam.kmm_miam_sdk.network.model
+package com.miam.kmm_miam_sdk.network.model.DAO
 
-import com.miam.kmm_miam_sdk.network.model.utils.DurationSerializer
+import com.miam.kmm_miam_sdk.network.model.DAO.utils.DurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
-@Serializable class RecipeDTO(
-    @SerialName("data")
-    val recipe: Recipe,
+
+@Serializable
+data class RecipeDAOResult(
+    val data: RecipeDAO
 )
 
 @Serializable
-data class Recipe(
+data class RecipeDAO(
     val id: Int,
     val attributes: RecipeAttributes,
-)
+): MiamObjectDAO
 
 @Serializable
 data class RecipeAttributes (
@@ -33,7 +34,7 @@ data class RecipeAttributes (
     val numberOfGuests: Int?,
 
     @SerialName("ingredients-str")
-    val ingredientsStr: Array<String>?,
+    val ingredientsStr: List<String>?,
 
     @Serializable(with = DurationSerializer::class)
     @SerialName("preparation-time")
@@ -78,8 +79,8 @@ data class RecipeAttributes (
 
     val promoted: Boolean?,
 
+    )
 
 
-)
 
 

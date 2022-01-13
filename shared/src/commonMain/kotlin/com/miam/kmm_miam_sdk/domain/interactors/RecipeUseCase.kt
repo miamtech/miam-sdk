@@ -1,13 +1,14 @@
 package com.miam.kmm_miam_sdk.domain.interactors
 
 import com.miam.kmm_miam_sdk.domain.interactors.type.UseCaseInOut
+import com.miam.kmm_miam_sdk.miam_core.data.repository.MiamRepository
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
-import com.miam.kmm_miam_sdk.network.model.Recipe
-import com.miam.kmm_miam_sdk.repository.Repository
+
 import kotlinx.coroutines.flow.Flow
 
 class GetRecipeUseCase(
-    private val repository: Repository
+    private val miamRepository: MiamRepository
 ): UseCaseInOut<Int, Recipe> {
-    override fun execute(param: Int): Flow<Recipe> = repository.getRecipe(param)
+    override fun execute(param: Int): Flow<Recipe> = miamRepository.getRecipeById(param)
 }
