@@ -2,7 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.activity.compose.BackHandler
+//import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -34,6 +34,7 @@ import com.miam.kmm_miam_sdk.android.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+@coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 class RecipeView  @JvmOverloads constructor(
@@ -52,6 +53,7 @@ class RecipeView  @JvmOverloads constructor(
         )
     }
 
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
@@ -59,7 +61,14 @@ class RecipeView  @JvmOverloads constructor(
         val state by vmRecipeCard.uiState.collectAsState()
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val scope = rememberCoroutineScope()
-        val toggleBottomSheet =  { scope.launch { bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))  } }
+        val toggleBottomSheet =  {
+            println("---------------")
+            println("miam toggle triggered")
+            scope.launch {
+            println("++++++++++++++++++++++++++++")
+            println("miam in coroutin scope")
+            bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
+            println(bottomSheetState.isVisible)} }
 
         Box( ){
             ManagementResourceState(
@@ -73,9 +82,9 @@ class RecipeView  @JvmOverloads constructor(
             )
             BottomSheet(bottomSheetState)
 
-            BackHandler(enabled = bottomSheetState.isVisible) {
+           /* BackHandler(enabled = bottomSheetState.isVisible) {
                 scope.launch {  bottomSheetState.hide() }
-            }
+            }*/
         }
     }
 }
