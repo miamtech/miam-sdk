@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.Ingredients
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeWrapper
 import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -17,7 +18,6 @@ object HttpRoutes {
 
 class MiamAPIDatasource: RecipeDataSource {
 
-    // TODO manage exception when 3xx 4xx 5xx
     private val httpClient = HttpClient{
         install(JsonFeature) {
             serializer = KotlinxSerializer(
@@ -28,24 +28,40 @@ class MiamAPIDatasource: RecipeDataSource {
         }
     }
 
-    // TODO factorize header in a object
-    override suspend fun getIngredient(entityId: Int): Ingredients {
-        return httpClient.get<Ingredients>{
-            headers {
-                append(HttpHeaders.ContentType, "application/vnd.api+json")
-                append(HttpHeaders.Accept,"*/*")
+    private suspend inline fun <reified T> get(url:String): T? {
+        return try {
+            httpClient.get<T>{
+                headers {
+                    append(HttpHeaders.ContentType, "application/vnd.api+json")
+                    append(HttpHeaders.Accept,"*/*")
+                }
+                url(url)
             }
-            url(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")
+        } catch(e: RedirectResponseException){
+            // 3XX
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ClientRequestException){
+            // 4xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ServerResponseException){
+            // 5xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: Exception){
+            println ("Error: ${e.message}")
+            null
         }
     }
 
+    override suspend fun getIngredient(entityId: Int): Ingredients? {
+        return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")
+    }
+
     override suspend fun getRecipeById(id: Int): Recipe {
-        return httpClient.get<RecipeWrapper>{
-            headers {
-                append(HttpHeaders.ContentType, "application/vnd.api+json")
-                append(HttpHeaders.Accept,"*/*")
-            }
-            url(HttpRoutes.RECIPE_ENDPOINT+"$id")
-        }.data
+        return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
     }
 }
+
+

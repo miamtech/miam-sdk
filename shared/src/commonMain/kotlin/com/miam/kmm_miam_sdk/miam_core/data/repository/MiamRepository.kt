@@ -15,5 +15,4 @@ class MiamRepository(
         ingredients.also { recipe.attributes.ingredients = it }
         emit(recipe)
     }
-
 }
