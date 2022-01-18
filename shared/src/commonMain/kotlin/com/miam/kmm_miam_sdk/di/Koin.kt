@@ -1,11 +1,17 @@
 package com.miam.kmm_miam_sdk.di
 
-import com.miam.kmm_miam_sdk.base.mvi.MiamStore
+import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
+import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
+import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.RecipeDataSource
-import com.miam.kmm_miam_sdk.miam_core.data.repository.MiamRepository
+import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.PointOfSaleRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -19,7 +25,7 @@ startKoin {
         repositoryModule,
         dispatcherModule,
         useCasesModule,
-        miamStoreModule,
+        storeModule,
         bottomSheetModule,
         platformModule()
     )
@@ -29,8 +35,11 @@ startKoin {
 fun initKoin() = initKoin {}
 
 val repositoryModule = module {
-    single<MiamRepository> { MiamRepository(get()) }
-    single<RecipeDataSource> { MiamAPIDatasource()}
+    single { RecipeRepositoryImp(get()) }
+    single { GroceriesListRepositoryImp(get()) }
+    single { PointOfSaleRepositoryImp(get()) }
+    single { BasketRepositoryImp(get()) }
+    single { MiamAPIDatasource()}
 }
 
 val useCasesModule: Module = module {
@@ -42,12 +51,16 @@ val dispatcherModule = module {
     factory { Dispatchers.Default }
 }
 
-val miamStoreModule = module {
-    single<MiamStore> { MiamStore() }
+val storeModule = module {
+    single { UserStore() }
+    single { GroceriesListStore() }
+    single { BasketStore() }
+    single { PointOfSaleStore() }
+
 }
 
 val bottomSheetModule = module {
-    single<BottomSheetViewModel> { BottomSheetViewModel() }
+    single { BottomSheetViewModel() }
 }
 
 

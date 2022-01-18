@@ -48,7 +48,7 @@ class RecipeView  @JvmOverloads constructor(
     init {
         vmRecipeCard.setEvent(
             RecipeCardContract.Event.OnGetRecipe(
-                idRecipe = 1
+                idRecipe = 2516
             )
         )
     }

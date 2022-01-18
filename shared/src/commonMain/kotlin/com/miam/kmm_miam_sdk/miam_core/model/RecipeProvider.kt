@@ -1,17 +1,14 @@
-package com.miam.kmm_miam_sdk.network.model
+package com.miam.kmm_miam_sdk.miam_core.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
 @Serializable
-class RecipeProviderDTO(
-    @SerialName("data")
-    val recipeProvider: RecipeProvider,
-)
+data class RecipeProviderWrapper(val data: RecipeProvider)
 
 @Serializable
 data class RecipeProvider(
-    val id: Int,
+    val id: String,
     val attributes: RecipeProviderAttributes,
 )
 

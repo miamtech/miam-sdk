@@ -68,7 +68,7 @@ dependencies {
     implementation ("com.google.android.material:compose-theme-adapter:1.0.5")
     implementation("io.coil-kt:coil-compose:1.3.1")
     implementation ("io.coil-kt:coil-svg:1.3.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    //implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.databinding:databinding-runtime:4.1.3")
