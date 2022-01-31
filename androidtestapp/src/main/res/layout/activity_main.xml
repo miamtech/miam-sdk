@@ -7,10 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.miam.kmm_miam_sdk.android.ui.components.RecipeView
-        android:id="@+id/miam2"
+    <TextView
+        android:id="@+id/text_view_id"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/bonjour" />
+
+    <com.miam.kmm_miam_sdk.android.ui.components.RecipeCardView
+        android:id="@+id/miam3"
         android:layout_width="match_parent"
         android:layout_height= "wrap_content"
         />
+
+
+<!--    <com.miam.kmm_miam_sdk.android.ui.components.RecipeView-->
+<!--        android:id="@+id/miam2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height= "wrap_content"-->
+<!--        />-->
 
 </LinearLayout>
