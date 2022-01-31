@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.network.model.DAO.utils
+package com.miam.kmm_miam_sdk.miam_core.model.utils
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

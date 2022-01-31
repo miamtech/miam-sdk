@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
-import com.miam.kmm_miam_sdk.network.model.DAO.utils.DurationSerializer
-import com.miam.kmm_miam_sdk.network.model.Ingredient
+import com.miam.kmm_miam_sdk.miam_core.model.utils.DurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -114,9 +113,25 @@ data class RecipeAttributes (
 
     val promoted: Boolean? = false,
 
-    var ingredients : Ingredients? = null
+    var ingredients : Ingredients? = null,
+
+    var provider : RecipeProvider? = null,
+
+    var status : RecipeStatus? = null,
+
+    var sponsor: Sponsors? = null,
+
+    var steps: RecipeSteps? = null,
+
+    var type: RecipeType? = null,
+
 )
 
+@Serializable
+data class RecipeInfos (
+    val id: Int,
+    val guests: Int,
+)
 
 
 

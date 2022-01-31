@@ -32,8 +32,16 @@ android {
 }
 
 dependencies {
+
+    // as an aar extern file
+    // if use you have to put manually aar file in libs folder
     implementation(name:'androidSDK-debug', ext:'aar')
-    //complie project(":androidSDK")
+
+    // else auto deploye add debug
+    /* implementation project(":androidSDK")
+    implementation("io.insert-koin:koin-android:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.2")*/
+    //////////////////////////////////
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
