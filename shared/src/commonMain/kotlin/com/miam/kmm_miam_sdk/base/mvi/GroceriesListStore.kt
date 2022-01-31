@@ -106,7 +106,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
              val recipeIndex = recipesInfos.indexOfFirst { el -> el.id == recipeId }
              recipesInfos.let { it[recipeIndex].copy(guests = guest)  }
         } else {
-            recipesInfos = recipesInfos?.let { it.plus(RecipeInfos(recipeId,guest)) }
+            recipesInfos = recipesInfos?.let { it.plus(RecipeInfos(recipeId,guest))  } ?: emptyList()
         }
         launch { sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))}
         alterRecipeInfos(recipesInfos,states)
@@ -128,7 +128,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         var gl = states.groceriesList!!.copy(
             attributes = states.groceriesList!!.attributes.copy(
                 recipesInfos =  recipesInfos,
-                appendRecipe = true))
+                appendRecipes = true))
         launch { alterList(gl) }
     }
 

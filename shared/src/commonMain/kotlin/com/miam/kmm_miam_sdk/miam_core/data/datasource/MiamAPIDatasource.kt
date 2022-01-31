@@ -2,14 +2,15 @@ package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.miam_core.model.*
+
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
+
 import io.ktor.http.*
-import kotlinx.serialization.encodeToString
-import  kotlinx.serialization.json.Json
+import io.ktor.util.*
+
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -28,6 +29,7 @@ object HttpRoutes {
     const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
 }
 
+@OptIn(InternalAPI::class)
 class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
@@ -106,13 +108,13 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     override suspend fun getCurrent(): GroceriesList {
             return httpClient.get<GroceriesListWrapper> {
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT+"current")
-            }.groceriesList
+            }.data
     }
 
     override suspend fun getNew(): GroceriesList {
         return httpClient.get<GroceriesListWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"reset")
-        }.groceriesList
+        }.data
     }
 
     override suspend fun getGroceriesEntries(glId : Int): GroceriesEntries {
@@ -122,13 +124,12 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun updateGroceriesList(groceriesList: GroceriesList): GroceriesList {
-
         try {
           return  httpClient.patch<GroceriesListWrapper>{
                 headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT+"${groceriesList.id}")
-                body = {"\"data\": ${Json.encodeToString( groceriesList )}"}
-            }.groceriesList
+                body = GroceriesListWrapper(groceriesList)
+            }.data
         } catch (c :Throwable) {
             print(c)
         }

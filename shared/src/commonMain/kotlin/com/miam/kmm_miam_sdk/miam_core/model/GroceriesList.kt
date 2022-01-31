@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GroceriesListWrapper(
     @SerialName("data")
-    val groceriesList: GroceriesList
+    val data: GroceriesList
 )
 
 @Serializable
@@ -41,8 +41,8 @@ data class GroceriesListAttributes(
     @SerialName("user-id")
     val userId: String? = null,
     @SerialName("append-recipes")
-    var appendRecipe: Boolean = true
-    //var groceriesEntries: GroceriesEntries? =  null
+    var appendRecipes: Boolean = true,
+    //var groceriesEntries: List<GroceriesEntry>? = emptyList()
 )
 
 
