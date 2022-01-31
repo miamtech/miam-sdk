@@ -86,19 +86,18 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }
     }
 
-    override suspend fun getIngredient(entityId: Int): Ingredients? {
-        return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")
+    override suspend fun getIngredient(entityId: Int): Ingredients {
+        return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")!!
     }
-
-    override suspend fun getRecipeById(id: Int): Recipe {
-        return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
-    }
-}
 
     override suspend fun getProvider(entityId: Int): RecipeProvider {
         return httpClient.get<RecipeProviderWrapper>{
             url(HttpRoutes.PROVIDER_ENDPOINT+"${entityId}/recipe-provider")
         }.data
+    }
+
+    override suspend fun getRecipeById(id: Int): Recipe {
+        return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
     }
 
     override suspend fun getStep(entityId: Int): RecipeSteps {
