@@ -8,5 +8,5 @@ interface GroceriesListDataSource {
     suspend fun getCurrent() : GroceriesList
     suspend fun getNew() : GroceriesList
     suspend fun getGroceriesEntries(glId : Int) : GroceriesEntries
-    suspend fun getBasket(glId : Int) : Baskets
+    suspend fun updateGroceriesList(groceriesList: GroceriesList) :GroceriesList
 }

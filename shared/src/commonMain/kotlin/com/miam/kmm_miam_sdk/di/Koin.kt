@@ -5,6 +5,7 @@ import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.RecipeDataSource
@@ -44,6 +45,7 @@ val repositoryModule = module {
 
 val useCasesModule: Module = module {
     factory { GetRecipeUseCase(get()) }
+    factory { AddRecipeUseCase() }
 
 }
 

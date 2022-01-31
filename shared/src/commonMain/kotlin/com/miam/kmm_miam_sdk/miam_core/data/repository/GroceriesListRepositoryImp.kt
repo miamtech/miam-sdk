@@ -20,12 +20,14 @@ class GroceriesListRepositoryImp (
        emit(gl)
     }
 
-    override suspend fun getNew(): Flow<GroceriesList> {
-        TODO("Not yet implemented")
+    override suspend fun getNew(): Flow<GroceriesList> = flow {
+       val gl = groceriesListDataSource.getNew()
+       emit(gl)
     }
 
-    override suspend fun appendRecipeToList(): Flow<GroceriesList> {
-        TODO("Not yet implemented")
+    override suspend fun updateGroceriesList(gl :GroceriesList): Flow<GroceriesList> = flow {
+        val gl = groceriesListDataSource.updateGroceriesList(gl)
+        emit(gl)
     }
 
     override suspend fun removeRecipeFromList(): Flow<GroceriesList> {

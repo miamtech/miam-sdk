@@ -12,12 +12,13 @@ data class GroceriesListWrapper(
 @Serializable
 data class GroceriesList(
     val id: Int,
+    val type: String,
     val attributes : GroceriesListAttributes
 ) {
 
    fun hasRecipe(recipeId: Int): Boolean {
-       if (attributes.recipesIds.isNullOrEmpty()) return false
-       return  attributes.recipesIds.contains(""+recipeId)
+       if (attributes.recipesInfos.isNullOrEmpty()) return false
+       return  attributes.recipesInfos.any { el -> el.id == recipeId }
     }
 
     fun guestsForRecipe(recipeId: Int): Int {
@@ -35,13 +36,13 @@ data class GroceriesListAttributes(
     val createdAt: String? =null,
     @SerialName("updated-at")
     val updatedAt: String? =null,
-    @SerialName("recipes-ids")
-    val recipesIds: List<String>? = emptyList(),
     @SerialName("recipes-infos")
     val recipesInfos: List<RecipeInfos>? = emptyList(),
     @SerialName("user-id")
     val userId: String? = null,
-
+    @SerialName("append-recipes")
+    var appendRecipe: Boolean = true
     //var groceriesEntries: GroceriesEntries? =  null
 )
+
 

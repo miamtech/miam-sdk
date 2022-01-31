@@ -12,13 +12,15 @@ interface RecipeCardContract {
     sealed class Event : UiEvent {
         data class OnGetRecipe(val idRecipe: Int) : Event()
         data class setHeader(val header: String) : Event()
-        object addRecipe: Event()
+        object OnAddRecipe: Event()
         object Retry : Event()
     }
 
       data class State(
         val recipeCard: BasicUiState<Recipe>,
         val headerText: String,
+        val guest: Int,
+        val isInCart : Boolean,
         val analyticsEventSent: Boolean,
         val isPriceDisplayed: Boolean,
         val isInViewport : Boolean,
