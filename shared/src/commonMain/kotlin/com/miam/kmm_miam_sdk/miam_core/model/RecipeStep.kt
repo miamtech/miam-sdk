@@ -1,12 +1,12 @@
-package com.miam.kmm_miam_sdk.network.model
+package com.miam.kmm_miam_sdk.miam_core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class RecipeStepDTO(
+data class RecipeSteps(
     @SerialName("data")
-    val recipeStep: RecipeStep,
+    val steps: List<RecipeStep>
 )
 
 @Serializable

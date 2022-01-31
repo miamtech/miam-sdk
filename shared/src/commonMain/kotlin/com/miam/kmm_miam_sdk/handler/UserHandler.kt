@@ -1,27 +1,19 @@
 package com.miam.kmm_miam_sdk.handler
 
-import com.miam.kmm_miam_sdk.base.mvi.MiamAction
-import com.miam.kmm_miam_sdk.base.mvi.MiamStore
+import com.miam.kmm_miam_sdk.base.mvi.UserAction
+import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object UserHandler : KoinComponent {
 
-    private val store: MiamStore by inject()
+    private val store: UserStore by inject()
 
     fun updateUserId(userId: String){
-        triggerAction(MiamAction.RefreshUserId(userId))
+        triggerAction(UserAction.RefreshUser(userId))
     }
 
-    fun onLogout(){
-
-    }
-
-    fun onLogin(){
-
-    }
-
-   private fun triggerAction(action: MiamAction) {
+   private fun triggerAction(action: UserAction) {
         store.dispatch(action)
     }
 

@@ -2,7 +2,6 @@ package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
 import android.util.AttributeSet
-//import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -33,6 +32,8 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+
 
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
@@ -41,9 +42,10 @@ class RecipeView  @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var vmRecipeCard : RecipeCardViewModel = RecipeCardViewModel()
+
 
     init {
         vmRecipeCard.setEvent(
@@ -59,23 +61,27 @@ class RecipeView  @JvmOverloads constructor(
     override fun Content() {
 
         val state by vmRecipeCard.uiState.collectAsState()
+
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val scope = rememberCoroutineScope()
         val toggleBottomSheet =  {
-            println("---------------")
-            println("miam toggle triggered")
             scope.launch {
-            println("++++++++++++++++++++++++++++")
-            println("miam in coroutin scope")
-            bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
-            println(bottomSheetState.isVisible)} }
+                bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
+                println(bottomSheetState.isVisible)
+            }
+        }
+
+        val onClickCartButton = {
+            vmRecipeCard.setEvent(RecipeCardContract.Event.OnAddRecipe)
+        }
+
 
         Box( ){
             ManagementResourceState(
                 resourceState = state.recipeCard,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipeCard, toggleBottomSheet )
+                    recipeCard(recipe, vmRecipeCard,  toggleBottomSheet ,onClickCartButton )
                 },
                 onTryAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
                 onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
@@ -93,7 +99,7 @@ class RecipeView  @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , toggleBottomSheet: () -> Job) {
+private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggleBottomSheet: () -> Job , onClickCartButton : () -> Unit) {
 
     Card(
         modifier = Modifier
@@ -121,15 +127,30 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                             .align(Alignment.Center)
                             .padding(horizontal = 30.dp)
                     )
+                    if (vmRecipeCard.currentState.isInCart) {
+                        Box(modifier = Modifier.absoluteOffset(x = 8.dp, y = 8.dp)
+                            .clip(RoundedCornerShape(topEnd = 4.dp, topStart = 4.dp , bottomStart = 4.dp,  bottomEnd = 4.dp))
+                            .background(Color(0xffF47F7A))){
+                            Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center){
 
-                    FloatingActionButton(modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .size(24.dp)
-                        .absoluteOffset(x = 8.dp, y = 8.dp),
-                        backgroundColor = Color.Gray,
-                        onClick =  { toggleBottomSheet() }) {
-                        Text(text = "?", color = Color.White )
+                                Text(text = "Déjà ajoutée", color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 5.dp))
+                            }
+                        }
+                    }else {
+                        FloatingActionButton(modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .size(24.dp)
+                            .absoluteOffset(x = 8.dp, y = 8.dp),
+                            backgroundColor = Color.Gray,
+                            onClick =  { toggleBottomSheet() }) {
+                            Text(text = "?", color = Color.White )
+                        }
                     }
+
+
                 }
                 Row (
                     Modifier
@@ -251,18 +272,38 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                 }
             }
 
-            Box(modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 8.dp, bottom = 8.dp)) {
-                FloatingActionButton(modifier = Modifier.size(36.dp),
-                    backgroundColor = Color(0xff037E92),
-                    onClick = { /*TODO*/ }) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_cart),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
+            if (vmRecipeCard.currentState.isInCart) {
+                Box(modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp, bottom = 8.dp)) {
+                    FloatingActionButton(modifier = Modifier.size(36.dp),
+                        backgroundColor = Color(0xff037E92),
+                        onClick = { toggleBottomSheet() }) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_details),
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
+            } else {
+                Box(modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp, bottom = 8.dp)) {
+                    FloatingActionButton(modifier = Modifier.size(36.dp),
+                        backgroundColor = Color(0xff037E92),
+                        onClick = { onClickCartButton() }) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_cart),
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+            }
+
+
+
+
             }
         }
 
