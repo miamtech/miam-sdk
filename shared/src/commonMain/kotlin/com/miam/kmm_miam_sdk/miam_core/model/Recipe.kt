@@ -130,7 +130,7 @@ data class RecipeAttributes (
 @Serializable
 data class RecipeInfos (
     val id: Int,
-    val guests: Int,
+    var guests: Int,
 )
 
 

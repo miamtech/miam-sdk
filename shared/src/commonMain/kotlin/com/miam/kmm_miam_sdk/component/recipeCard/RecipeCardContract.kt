@@ -13,6 +13,9 @@ interface RecipeCardContract {
         data class OnGetRecipe(val idRecipe: Int) : Event()
         data class setHeader(val header: String) : Event()
         object OnAddRecipe: Event()
+        data class UpdateGuest(val nbGuest: Int):Event()
+        object DecreaseGuest: Event()
+        object IncreaseGuest: Event()
         object Retry : Event()
     }
 
