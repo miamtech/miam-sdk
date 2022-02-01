@@ -41,13 +41,13 @@ import kotlinx.coroutines.launch
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
-class RecipeCardView  @JvmOverloads constructor(
+class RecipeCardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr) {
 
-    private var vmRecipeCard : RecipeCardViewModel = RecipeCardViewModel()
+    private var vmRecipeCard: RecipeCardViewModel = RecipeCardViewModel()
 
     init {
         vmRecipeCard.setEvent(
@@ -65,21 +65,18 @@ class RecipeCardView  @JvmOverloads constructor(
         val state by vmRecipeCard.uiState.collectAsState()
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val scope = rememberCoroutineScope()
-        val toggleBottomSheet =  {
-            println("---------------")
-            println("miam toggle triggered")
+        val toggleBottomSheet = {
             scope.launch {
-                println("++++++++++++++++++++++++++++")
-                println("miam in coroutin scope")
                 bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
-                println(bottomSheetState.isVisible)} }
+            }
+        }
 
-        Box( ){
+        Box() {
             ManagementResourceState(
                 resourceState = state.recipeCard,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipeCard, toggleBottomSheet )
+                    recipeCard(recipe, vmRecipeCard, toggleBottomSheet)
                 },
                 onTryAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
                 onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
@@ -97,18 +94,24 @@ class RecipeCardView  @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , toggleBottomSheet: () -> Job) {
+private fun recipeCard(
+    recipe: Recipe,
+    vmRecipeCard: RecipeCardViewModel,
+    toggleBottomSheet: () -> Job
+) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Box  {
+        Box {
             Column {
-                Box ( modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                ) {
                     Image(
                         painter = rememberImagePainter(recipe.attributes.mediaUrl),
                         contentDescription = null,
@@ -123,8 +126,8 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                         .size(24.dp)
                         .align(alignment = TopEnd),
                         backgroundColor = Color.Gray,
-                        onClick =  { toggleBottomSheet() }) {
-                        Text(text = "x", color = Color.White )
+                        onClick = { toggleBottomSheet() }) {
+                        Text(text = "x", color = Color.White)
                     }
                 }
 
@@ -132,21 +135,30 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                 Row(
                     Modifier
                         .padding(end = 16.dp)
-                        .align(CenterHorizontally)) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_clock),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = recipe.totalTime , color = Color(0xff00af98) ,fontSize = 16.sp,modifier= Modifier.padding(top = 4.dp))
-                    }
+                        .align(CenterHorizontally)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_clock),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(
+                        text = recipe.totalTime,
+                        color = Color(0xff00af98),
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
 
                 // Titre
-                Row(){
+                Row() {
                     Text(
                         text = recipe.attributes.title,
                         fontFamily = FontFamily.Cursive,
-                        style = MaterialTheme.typography.h5.copy(color = Color.Red, fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.h5.copy(
+                            color = Color.Red,
+                            fontWeight = FontWeight.Bold
+                        ),
                         modifier = Modifier
                             .wrapContentWidth(Alignment.CenterHorizontally)
                             .padding(horizontal = 30.dp)
@@ -155,7 +167,8 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                 // Difficulte
                 Row(
                     Modifier
-                        .padding(top = 4.dp)) {
+                        .padding(top = 4.dp)
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_diflow),
                         contentDescription = null,
@@ -164,27 +177,50 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                             .padding(horizontal = 4.dp)
 
                     )
-                    Text(text = recipe.difficultyLabel ,fontSize = 16.sp, modifier= Modifier.padding(top = 4.dp))
+                    Text(
+                        text = recipe.difficultyLabel,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
                 }
 
                 // Description
-                Row(){
-                    Text(text = recipe.attributes.description!! ,fontSize = 16.sp, modifier= Modifier.padding(top = 4.dp))
+                Row() {
+                    Text(
+                        text = recipe.attributes.description!!,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
                 }
 
                 // Switcher ingredients preparation
 
-                Row(modifier = Modifier
-                    .padding(top = 8.dp)
-                    .height(32.dp)){
+                Row(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .height(32.dp)
+                ) {
 
-                    Box(modifier = Modifier
-                        .clip(RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp, topEnd = 8.dp, bottomEnd = 8.dp))
-                        .background(Color(0xff00af98))){
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center){
-                            Text(text = "Ingredients", color = Color.White,
-                                modifier = Modifier.padding(horizontal = 5.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(
+                                    bottomStart = 8.dp,
+                                    topStart = 8.dp,
+                                    topEnd = 8.dp,
+                                    bottomEnd = 8.dp
+                                )
+                            )
+                            .background(Color(0xff00af98))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "Ingredients", color = Color.White,
+                                modifier = Modifier.padding(horizontal = 5.dp)
+                            )
                         }
                     }
                     Divider(
@@ -193,18 +229,31 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                             .height(32.dp)
                             .width(1.dp)
                     )
-                    Box(modifier = Modifier
-                        .clip(RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp, topEnd = 8.dp, bottomEnd = 8.dp))
-                        .background(Color(0xff00af98))){
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center){
-                            Text(text = "Recette", color = Color.White,
-                                modifier = Modifier.padding(horizontal = 5.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(
+                                    bottomStart = 8.dp,
+                                    topStart = 8.dp,
+                                    topEnd = 8.dp,
+                                    bottomEnd = 8.dp
+                                )
+                            )
+                            .background(Color(0xff00af98))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "Recette", color = Color.White,
+                                modifier = Modifier.padding(horizontal = 5.dp)
+                            )
                         }
                     }
-            }
-                
-                Row (
+                }
+
+                Row(
                     Modifier
                         .padding(
                             start = 8.dp,
@@ -214,32 +263,35 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                         )
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
 
-                        Divider(
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .height(32.dp)
-                                .width(1.dp)
-                        )
+                    Divider(
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(1.dp)
+                    )
 
-                    }
-                    Row() {
-                        Column() {
-                            Row() {
-                                Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
-                                Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
-                            }
-                            Text("par pers.", color = Color.Gray, fontSize = 16.sp)
+                }
+                Row() {
+                    Column() {
+                        Row() {
+                            Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
+                            Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
                         }
+                        Text("par pers.", color = Color.Gray, fontSize = 16.sp)
                     }
+                }
 
 
                 Row(
                     Modifier.padding(
                         horizontal = 8.dp,
                         vertical = 8.dp
-                    ), verticalAlignment = Alignment.CenterVertically,){
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_peoples),
                         contentDescription = null,
@@ -248,8 +300,8 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
 
-                        ){
-                        IconButton(onClick = { /*TODO*/ },) {
+                        ) {
+                        IconButton(onClick = { /*TODO*/ }) {
                             Image(
                                 painter = painterResource(R.drawable.ic_less),
                                 contentDescription = null,
@@ -269,10 +321,13 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
                         ) {
                             BasicTextField(
                                 value = "4",
-                                onValueChange = {/*TODO*/},
-                                modifier = Modifier.padding(   horizontal = 8.dp,
-                                    vertical= 4.dp)
-                            )}
+                                onValueChange = {/*TODO*/ },
+                                modifier = Modifier.padding(
+                                    horizontal = 8.dp,
+                                    vertical = 4.dp
+                                )
+                            )
+                        }
                         IconButton(onClick = { /*TODO*/ }) {
                             Image(
                                 painter = painterResource(R.drawable.ic_plus),
@@ -304,9 +359,11 @@ private fun recipeCard(recipe : Recipe, vmRecipeCard : RecipeCardViewModel , tog
 //                }
 //            }
 
-            Box(modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 8.dp, bottom = 8.dp)) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp, bottom = 8.dp)
+            ) {
                 FloatingActionButton(modifier = Modifier.size(36.dp),
                     backgroundColor = Color(0xff037E92),
                     onClick = { /*TODO*/ }) {
