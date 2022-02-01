@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
-class RecipeCardView @JvmOverloads constructor(
+class RecipeDetailsView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

@@ -12,8 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/bonjour" />
+    <TextView
+        android:id="@+id/text_view_id2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/bonjour" />
 
-    <com.miam.kmm_miam_sdk.android.ui.components.RecipeCardView
+    <com.miam.kmm_miam_sdk.android.ui.components.RecipeDetailsView
         android:id="@+id/miam3"
         android:layout_width="match_parent"
         android:layout_height= "wrap_content"
