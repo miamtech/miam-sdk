@@ -103,8 +103,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         var recipesInfos =  states.groceriesList.attributes.recipesInfos ?: emptyList()
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
-             val recipeIndex = recipesInfos.indexOfFirst { el -> el.id == recipeId }
-             recipesInfos.let { it[recipeIndex].copy(guests = guest)  }
+            recipesInfos?.find { it.id == recipeId }?.guests = guest
         } else {
             recipesInfos = recipesInfos?.let { it.plus(RecipeInfos(recipeId,guest))  } ?: emptyList()
         }
