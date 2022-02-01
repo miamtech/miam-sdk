@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 //import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
@@ -15,11 +16,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.fontResource
@@ -90,7 +93,6 @@ class RecipeCardView @JvmOverloads constructor(
     }
 }
 
-
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
@@ -140,13 +142,15 @@ private fun recipeCard(
                     Image(
                         painter = painterResource(R.drawable.ic_clock),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
+                        colorFilter = ColorFilter.tint(Color(0xff00af98)),
+                        modifier = Modifier.size(30.dp)
                     )
                     Text(
                         text = recipe.totalTime,
                         color = Color(0xff00af98),
-                        fontSize = 16.sp,
+                        fontSize = 22.sp,
                         modifier = Modifier.padding(top = 4.dp)
+                            .align(CenterVertically)
                     )
                 }
 
