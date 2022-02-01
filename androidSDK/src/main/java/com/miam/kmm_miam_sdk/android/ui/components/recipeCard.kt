@@ -71,24 +71,20 @@ class RecipeView  @JvmOverloads constructor(
             }
         }
 
-        val onClickCartButton = {
-            vmRecipeCard.setEvent(RecipeCardContract.Event.OnAddRecipe)
-        }
-
 
         Box( ){
             ManagementResourceState(
                 resourceState = state.recipeCard,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipeCard,  toggleBottomSheet ,onClickCartButton )
+                    recipeCard(recipe, vmRecipeCard,  toggleBottomSheet  )
                 },
                 onTryAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
                 onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
             )
             BottomSheet(bottomSheetState)
 
-           /* BackHandler(enabled = bottomSheetState.isVisible) {
+            /* BackHandler(enabled = bottomSheetState.isVisible) {
                 scope.launch {  bottomSheetState.hide() }
             }*/
         }
@@ -99,7 +95,8 @@ class RecipeView  @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggleBottomSheet: () -> Job , onClickCartButton : () -> Unit) {
+private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggleBottomSheet: () -> Job ) {
+
 
     Card(
         modifier = Modifier
@@ -109,27 +106,36 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
         Box  {
             Column {
                 Box ( modifier = Modifier
-                    .height(200.dp)
+                    .height(245.dp)
                     .fillMaxWidth()) {
                     Image(
                         painter = rememberImagePainter(recipe.attributes.mediaUrl),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth()
-                    )
+                            .height(245.dp)
+                            .fillMaxWidth(),
+
+                        )
                     Text(
                         text = recipe.attributes.title,
-                        style = MaterialTheme.typography.h5.copy(color = Color.White, fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.h5.copy(color = Color.White, fontSize = 27.sp ,fontWeight = FontWeight.Bold),
                         modifier = Modifier
                             .wrapContentWidth(Alignment.CenterHorizontally)
                             .align(Alignment.Center)
                             .padding(horizontal = 30.dp)
                     )
                     if (vmRecipeCard.currentState.isInCart) {
-                        Box(modifier = Modifier.absoluteOffset(x = 8.dp, y = 8.dp)
-                            .clip(RoundedCornerShape(topEnd = 4.dp, topStart = 4.dp , bottomStart = 4.dp,  bottomEnd = 4.dp))
+                        Box(modifier = Modifier
+                            .absoluteOffset(x = 8.dp, y = 8.dp)
+                            .clip(
+                                RoundedCornerShape(
+                                    topEnd = 4.dp,
+                                    topStart = 4.dp,
+                                    bottomStart = 4.dp,
+                                    bottomEnd = 4.dp
+                                )
+                            )
                             .background(Color(0xffF47F7A))){
                             Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -217,7 +223,7 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                         verticalAlignment = Alignment.CenterVertically,
 
                         ){
-                        IconButton(onClick = { /*TODO*/ },) {
+                        IconButton(onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.DecreaseGuest) },) {
                             Image(
                                 painter = painterResource(R.drawable.ic_less),
                                 contentDescription = null,
@@ -235,13 +241,13 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                        BasicTextField(
-                            value = "4",
-                            onValueChange = {/*TODO*/},
-                            modifier = Modifier.padding(   horizontal = 8.dp,
-                            vertical= 4.dp)
-                            )}
-                        IconButton(onClick = { /*TODO*/ }) {
+                            Text(text =  vmRecipeCard.currentState.guest.toString(),  modifier = Modifier
+                                .padding(
+                                    horizontal = 8.dp,
+                                    vertical = 4.dp
+                                ))
+                        }
+                        IconButton(onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.IncreaseGuest) }) {
                             Image(
                                 painter = painterResource(R.drawable.ic_plus),
                                 contentDescription = null,
@@ -292,18 +298,14 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                     .padding(end = 8.dp, bottom = 8.dp)) {
                     FloatingActionButton(modifier = Modifier.size(36.dp),
                         backgroundColor = Color(0xff037E92),
-                        onClick = { onClickCartButton() }) {
+                        onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.OnAddRecipe) }) {
                         Image(
                             painter = painterResource(R.drawable.ic_cart),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp)
                         )
                     }
-            }
-
-
-
-
+                }
             }
         }
 
