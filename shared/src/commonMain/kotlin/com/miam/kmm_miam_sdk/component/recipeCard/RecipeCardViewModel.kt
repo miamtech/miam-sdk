@@ -20,6 +20,7 @@ open class RecipeCardViewModel :
     private val groceriesListStore :GroceriesListStore by inject()
 
     private var recipeId: Int? = null
+    private var isInit: Boolean = false
     private lateinit var recipe: Recipe
 
     override fun createInitialState(): RecipeCardContract.State =
@@ -44,7 +45,10 @@ open class RecipeCardViewModel :
     override fun handleEvent(event: RecipeCardContract.Event) {
         when (event) {
             is RecipeCardContract.Event.OnGetRecipe -> getRecipe(event.idRecipe)
-            RecipeCardContract.Event.OnAddRecipe -> addRecipe()
+            is RecipeCardContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
+            RecipeCardContract.Event.OnAddRecipe -> addOrAlterRecipe()
+            RecipeCardContract.Event.DecreaseGuest -> removeGuest()
+            RecipeCardContract.Event.IncreaseGuest -> addGuest()
             RecipeCardContract.Event.Retry -> recipeId?.let { getRecipe(it) }
         }
     }
@@ -52,7 +56,12 @@ open class RecipeCardViewModel :
     private fun handleGLChange(gl : GroceriesListEffect) {
         when (gl) {
             is GroceriesListEffect.GroceriesListLoaded -> {
-                setState { copy(isInCart = checkIsInCart())}
+                if (isInit) {
+                    setState { copy(isInCart = checkIsInCart(), guest = getGuest(recipe))}
+                }else {
+                    setState { copy(isInCart = checkIsInCart())}
+                    }
+
             }
             is GroceriesListEffect.RecipeAdded -> {
                 if(gl.recipeId !==  recipeId) return
@@ -70,8 +79,28 @@ open class RecipeCardViewModel :
        return  currentGl.attributes.recipesInfos != null &&  currentGl.attributes.recipesInfos.any { ri ->ri.id == recipeId }
     }
 
-   private fun addRecipe() {
-       launch(addRecipeUseCase.execute(recipe), {
+    private fun removeGuest() {
+        if (uiState.value.guest == 1) return
+        setState { copy(guest = uiState.value.guest - 1) }
+        if(checkIsInCart()) addOrAlterRecipe()
+    }
+
+    private fun addGuest(){
+        if (uiState.value.guest == 100) return
+        setState { copy(guest = uiState.value.guest + 1) }
+        if(checkIsInCart()) addOrAlterRecipe()
+    }
+
+    private fun updateGuest(nbGuest: Int){
+        if (uiState.value.guest <= 1 || uiState.value.guest >= 100 ) return
+        setState { copy(guest = nbGuest) }
+        if(checkIsInCart()) {
+            addOrAlterRecipe()
+        }
+    }
+
+   private fun addOrAlterRecipe() {
+       launch(addRecipeUseCase.execute(recipe.copy(attributes = recipe.attributes.copy(numberOfGuests = uiState.value.guest))), {
            setState { copy(isInCart = true) }
        })
     }
@@ -96,6 +125,7 @@ open class RecipeCardViewModel :
                 isInCart = checkIsInCart()
             ) }
             this.recipe = recipe
+            this.isInit = true
             displayPrice()
         }, {
             setState {  copy(recipeCard = BasicUiState.Error()) }
@@ -104,9 +134,12 @@ open class RecipeCardViewModel :
     }
 
     private fun getGuest(recipe: Recipe) :Int{
+        if(checkIsInCart()){
+            val currentGl =  groceriesListStore.observeState().value.groceriesList
+            return (currentGl?.attributes?.recipesInfos?.find { ri ->ri.id == recipeId })?.guests ?: 4
+        }
         return recipe.attributes.numberOfGuests ?: 4
     }
-
 
     private fun  recipeLoaded(){
         this.initIngredientsString();
@@ -122,9 +155,7 @@ open class RecipeCardViewModel :
     }
 
    private fun displayPrice() {
-        if (currentState.isPriceDisplayed || !currentState.isInViewport) {
-            return
-        }
+       if (currentState.isPriceDisplayed || !currentState.isInViewport) return
        setState { copy(isPriceDisplayed = true) }
     }
 }
