@@ -1,9 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-//import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -25,12 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
@@ -50,7 +46,7 @@ class RecipeDetailsView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+) : MiamMasterView(context, attrs, defStyleAttr) {
 
     private var vmRecipeCard: RecipeCardViewModel = RecipeCardViewModel()
 
@@ -61,7 +57,6 @@ class RecipeDetailsView @JvmOverloads constructor(
             )
         )
     }
-
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -144,12 +139,12 @@ private fun recipeCard(
                     Image(
                         painter = painterResource(R.drawable.ic_clock),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(Color(0xff00af98)),
+                        colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
                         modifier = Modifier.size(30.dp)
                     )
                     Text(
                         text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
-                        color = Color(0xff00af98),
+                        color = MiamMasterView.greenColor,
                         fontSize = 22.sp,
                         modifier = Modifier
                             .padding(top = 4.dp)
@@ -211,7 +206,9 @@ private fun recipeCard(
                             Text(
                                 text = "Ingredients", color = Color.White,
                             )
-                        }, onClick = {
+                        },
+                        backgroundColor = MiamMasterView.greenColor,
+                        onClick = {
                             ischecked = false
                         })
                     ExtendedFloatingActionButton(
@@ -219,12 +216,13 @@ private fun recipeCard(
                             Text(
                                 text = "Préparation", color = Color.White,
                             )
-                        }, onClick = {
+                        },
+                        backgroundColor = MiamMasterView.greenColor,
+                        onClick = {
                             ischecked = true
                         })
                 }
 
-                //MultifloatingActionButton(ischecked= ischecked)
 
                 Row() {
                     MyText(ischecked = ischecked)
@@ -247,7 +245,7 @@ private fun recipeCard(
                                     bottomEnd = 8.dp
                                 )
                             )
-                            .background(Color(0xff00af98))
+                            .background(MiamMasterView.greenColor)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -275,7 +273,7 @@ private fun recipeCard(
                                     bottomEnd = 8.dp
                                 )
                             )
-                            .background(Color(0xff00af98))
+                            .background(MiamMasterView.greenColor)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -380,7 +378,7 @@ private fun recipeCard(
 //
 //                Box(modifier = Modifier
 //                    .clip(RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp))
-//                    .background(Color(0xff00af98))){
+//                    .background(MiamMasterView.greenColor)){
 //                    Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
 //                        verticalAlignment = Alignment.CenterVertically,
 //                        horizontalArrangement = Arrangement.Center){
@@ -413,15 +411,6 @@ private fun recipeCard(
         }
 
     }
-
-}
-
-enum class MultiFabState {
-    COLLAPSED, EXPANDED
-}
-
-@Composable
-fun MultifloatingActionButton(ischecked: Boolean.Companion) {
 
 }
 
