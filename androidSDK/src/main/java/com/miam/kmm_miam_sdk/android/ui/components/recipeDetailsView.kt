@@ -27,8 +27,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
@@ -146,10 +148,11 @@ private fun recipeCard(
                         modifier = Modifier.size(30.dp)
                     )
                     Text(
-                        text = recipe.totalTime,
+                        text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
                         color = Color(0xff00af98),
                         fontSize = 22.sp,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier
+                            .padding(top = 4.dp)
                             .align(CenterVertically)
                     )
                 }
@@ -159,6 +162,7 @@ private fun recipeCard(
                     Text(
                         text = recipe.attributes.title,
                         fontFamily = FontFamily.Cursive,
+                        fontSize = 24.sp,
                         style = MaterialTheme.typography.h5.copy(
                             color = Color.Red,
                             fontWeight = FontWeight.Bold
@@ -198,6 +202,34 @@ private fun recipeCard(
                 }
 
                 // Switcher ingredients preparation
+
+                var ischecked by remember { mutableStateOf(true)}
+
+                Row() {
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(
+                                text = "Ingredients", color = Color.White,
+                            )
+                        }, onClick = {
+                            ischecked = false
+                        })
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(
+                                text = "Préparation", color = Color.White,
+                            )
+                        }, onClick = {
+                            ischecked = true
+                        })
+                }
+
+                //MultifloatingActionButton(ischecked= ischecked)
+
+                Row() {
+                    MyText(ischecked = ischecked)
+                }
+
 
                 Row(
                     modifier = Modifier
@@ -382,4 +414,20 @@ private fun recipeCard(
 
     }
 
+}
+
+enum class MultiFabState {
+    COLLAPSED, EXPANDED
+}
+
+@Composable
+fun MultifloatingActionButton(ischecked: Boolean.Companion) {
+
+}
+
+@Composable
+fun MyText(ischecked: Boolean) {
+    if (ischecked) {
+        Text(text = "Depuis la fonction")
+    }
 }
