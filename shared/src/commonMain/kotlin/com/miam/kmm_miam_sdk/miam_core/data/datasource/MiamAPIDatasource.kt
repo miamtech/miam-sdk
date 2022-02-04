@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -35,7 +36,6 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     private val userStore: UserStore by inject()
 
-    // TODO manage exception when 3xx 4xx 5xx
     private val httpClient = HttpClient{
         install(JsonFeature) {
             serializer = KotlinxSerializer(
@@ -60,16 +60,45 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }
     }
 
-    override suspend fun getIngredient(entityId: Int): Ingredients {
-        return httpClient.get{
-            url(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")
+    private suspend inline fun <reified T> get(url:String): T? {
+        return try {
+            httpClient.get<T>{
+                headers {
+                    append(HttpHeaders.ContentType, "application/vnd.api+json")
+                    append(HttpHeaders.Accept,"*/*")
+                }
+                url(url)
+            }
+        } catch(e: RedirectResponseException){
+            // 3XX
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ClientRequestException){
+            // 4xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ServerResponseException){
+            // 5xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: Exception){
+            println ("Error: ${e.message}")
+            null
         }
+    }
+
+    override suspend fun getIngredient(entityId: Int): Ingredients {
+        return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")!!
     }
 
     override suspend fun getProvider(entityId: Int): RecipeProvider {
         return httpClient.get<RecipeProviderWrapper>{
             url(HttpRoutes.PROVIDER_ENDPOINT+"${entityId}/recipe-provider")
         }.data
+    }
+
+    override suspend fun getRecipeById(id: Int): Recipe {
+        return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
     }
 
     override suspend fun getStep(entityId: Int): RecipeSteps {
@@ -95,14 +124,6 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.TYPE_ENDPOINT+"${entityId}/recipe-type")
         }.data
     }
-
-    override suspend fun getRecipeById(id: Int): Recipe {
-            return httpClient.get<RecipeWrapper>{
-                url(HttpRoutes.RECIPE_ENDPOINT+"$id")
-            }.data
-    }
-
-
 
     ///////// GroceriesList ///////////////
 

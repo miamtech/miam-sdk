@@ -26,5 +26,4 @@ class RecipeRepositoryImp(
         type.also { recipe.attributes.type = it }
         emit(recipe)
     }
-
 }
