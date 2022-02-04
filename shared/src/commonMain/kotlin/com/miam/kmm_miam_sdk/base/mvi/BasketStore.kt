@@ -1,7 +1,7 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.model.Basket
+import com.miam.kmm_miam_sdk.miam_core.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -10,16 +10,23 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 data class BasketState(
-    val idGroceriesList : Int?,
+    val groceriesList : GroceriesList?,
     val idPointOfSale : Int?,
-    val basket :Basket?
+    val basket :Basket?,
+    val basketPreview : List<BasketPreviewLine>?,
+    val entriesCount : Int? =0,
+    val recipeCount :Int? =0,
+    val totalPrice : Double? =0.0
 ) : State
 
 sealed class  BasketAction : Action {
-    data class RefreshBasket(val idGroceriesList: Int, val idPointOfSale: Int): BasketAction()
+    data class RefreshBasket(val groceriesList: GroceriesList, val idPointOfSale: Int): BasketAction()
     data class SetBasket(val basket: Basket): BasketAction()
-    data class SetIdGroceriesList(val groceriesListId: Int) : BasketAction()
+    data class SetGroceriesList(val groceriesList: GroceriesList) : BasketAction()
     data class SetIdPointOfSale(val pointOfSaleId: Int) : BasketAction()
+    data class SetBasketState(val basketPreview: List<BasketPreviewLine>) :BasketAction()
+    // TODO data class  removeBasketEntries() :BasketAction()
+    object ConfirmBasket : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
 
@@ -31,7 +38,7 @@ sealed class  BasketEffect : Effect {
 class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val state = MutableStateFlow(BasketState(null, null, null))
+    private val state = MutableStateFlow(BasketState(null, null, null, emptyList()))
     private val sideEffect = MutableSharedFlow<BasketEffect>()
     private val basketRepo : BasketRepositoryImp by inject()
 
@@ -45,12 +52,12 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         val newState = when (action) {
             is BasketAction.RefreshBasket -> {
                 launch {
-                        loadBasket(action.idGroceriesList, action.idPointOfSale)
+                        loadBasket(action.groceriesList.id, action.idPointOfSale)
                 }
                 oldState
             }
-            is BasketAction.SetIdGroceriesList -> {
-                val tmp =  oldState.copy(idGroceriesList = action.groceriesListId)
+            is BasketAction.SetGroceriesList -> {
+                val tmp =  oldState.copy(groceriesList = action.groceriesList)
                 shouldUpdateBasket(tmp)
                 tmp
             }
@@ -60,7 +67,18 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 tmp
             }
             is BasketAction.SetBasket -> {
-                oldState.copy(basket = action.basket)
+                val lineEntries = this.groupBasketEntries( state.value.groceriesList?.attributes?.recipesInfos ?: emptyList()
+                    , action.basket._relationships?.basketEntries ?: emptyList())
+                val basketPreview = BasketPreviewLine.recipesAndLineEntriesToBasketPreviewLine(state.value.groceriesList!!, lineEntries,)
+                dispatch(BasketAction.SetBasketState(basketPreview))
+                oldState.copy(basket = action.basket, basketPreview = basketPreview, recipeCount = state.value.groceriesList?.attributes?.recipesInfos?.size ?: 0 )
+            }
+            is BasketAction.SetBasketState -> {
+                setBasketStates(action.basketPreview,oldState)
+            }
+            is BasketAction.ConfirmBasket -> {
+                confirmBasket()
+                oldState
             }
             is BasketAction.Error -> {
                 oldState
@@ -72,8 +90,45 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private fun shouldUpdateBasket(tmpState: BasketState){
-        if(tmpState == state.value || tmpState.idGroceriesList  == null  || tmpState.idPointOfSale == null ) return
-        dispatch(BasketAction.RefreshBasket(tmpState.idGroceriesList,tmpState.idPointOfSale))
+        if(tmpState == state.value || tmpState.groceriesList  == null  || tmpState.idPointOfSale == null ) return
+        dispatch(BasketAction.RefreshBasket(tmpState.groceriesList,tmpState.idPointOfSale))
+    }
+
+    private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
+            return recipesInfos.map { ri ->
+               val lineEntries = LineEntries()
+                entries.filter { entry -> entry.attributes.recipeIds?.contains(ri.id) ?: false }
+                    .forEach { matchingEntry ->
+                        val available  = matchingEntry.attributes.selectedItemId
+                        if(available != null){
+                            when(matchingEntry.attributes.groceriesEntryStatus){
+                                 "often_deleted" -> lineEntries.oftenDeleted.plus(matchingEntry)
+                                    "deleted" -> lineEntries.removed.plus(matchingEntry)
+                                 else -> lineEntries.found
+                            }
+                        } else {
+                            lineEntries.notFound.plus(matchingEntry)
+                        }
+                     }
+                lineEntries
+            }
+    }
+
+    private fun setBasketStates(basketPreview: List<BasketPreviewLine>, oldState: BasketState) : BasketState {
+
+        val entriesFound: List<BasketEntry> = basketPreview.map { bpl -> bpl.entries?.found ?: emptyList() }.flatten()
+        var totalPrice = 0.0
+
+        entriesFound.forEach { e ->
+            val item = e.attributes.basketEntriesItems?.find { bei ->  bei.itemId != null && bei.itemId == e.attributes.selectedItemId }
+            totalPrice +=  (e.attributes.quantity ?: 0) * (item?.unitPrice ?: 0.0)
+        }
+
+       return oldState.copy( entriesCount = entriesFound.size, totalPrice = totalPrice)
+    }
+
+    private fun confirmBasket(){
+        //TODO confimr basket
     }
 
     private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {

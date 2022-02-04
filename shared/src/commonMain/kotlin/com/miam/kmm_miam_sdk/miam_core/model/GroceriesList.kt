@@ -13,7 +13,8 @@ data class GroceriesListWrapper(
 data class GroceriesList(
     val id: Int,
     val type: String,
-    val attributes : GroceriesListAttributes
+    val attributes : GroceriesListAttributes,
+    var relationships: GroceriesEntryRelationship?
 ) {
 
    fun hasRecipe(recipeId: Int): Boolean {
@@ -42,7 +43,23 @@ data class GroceriesListAttributes(
     val userId: String? = null,
     @SerialName("append-recipes")
     var appendRecipes: Boolean = true,
-    //var groceriesEntries: List<GroceriesEntry>? = emptyList()
+
 )
+
+@Serializable
+data class GroceriesEntryRelationship(
+    var groceriesEntries: List<GroceriesEntry>? = emptyList(),
+    var recipes: List<Recipe>? = emptyList()
+)
+
+@Serializable
+data class GroceriesListWithoutRelationship(
+    val id: Int,
+    val type: String,
+    val attributes : GroceriesListAttributes
+    )
+
+@Serializable
+class GroceriesListWithoutRelationshipWrapper(val data :GroceriesListWithoutRelationship)
 
 

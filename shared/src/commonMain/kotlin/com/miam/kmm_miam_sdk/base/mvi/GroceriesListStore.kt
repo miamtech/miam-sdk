@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.base.mvi
 
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.GroceriesList
+import com.miam.kmm_miam_sdk.miam_core.model.GroceriesListWithoutRelationship
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeInfos
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ data class GroceriesListState(
 
 sealed class  GroceriesListAction : Action {
     object RefreshGroceriesList : GroceriesListAction()
+    object ResetGroceriesList : GroceriesListAction()
     data class SetGroceriesList(val gl :GroceriesList) : GroceriesListAction()
     data class AlterRecipeList(val recipeId : Int, val guests: Int) : GroceriesListAction()
     data class RemoveRecipe(val recipeId: Int): GroceriesListAction()
@@ -56,8 +58,12 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 launch { loadGroceriesList() }
                 oldState
             }
+            is GroceriesListAction.ResetGroceriesList -> {
+                launch { restGroserriesList() }
+                oldState
+            }
             is GroceriesListAction.SetGroceriesList -> {
-                basketStore.dispatch(BasketAction.SetIdGroceriesList(action.gl.id))
+                basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
                 if(oldState.groceriesList?.id != action.gl.id ){
                     launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
                 }
@@ -99,6 +105,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     }
 
     private fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
+        // TODO ? add recipe in relationship
         if(states.groceriesList == null) return
         var recipesInfos =  states.groceriesList.attributes.recipesInfos ?: emptyList()
         if(states.groceriesList.hasRecipe(recipeId)) {
@@ -128,13 +135,26 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             attributes = states.groceriesList!!.attributes.copy(
                 recipesInfos =  recipesInfos,
                 appendRecipes = true))
+        gl.relationships = null
         launch { alterList(gl) }
+    }
+
+    private suspend fun restGroserriesList(){
+        try {
+            launch {
+                groceriesListRepo.getNew().collect {
+                    dispatch(GroceriesListAction.SetGroceriesList(it))
+                }
+            }
+        } catch (e: Exception) {
+            dispatch(GroceriesListAction.Error(e))
+        }
     }
 
     private  suspend fun alterList(gl :GroceriesList){
         try {
             launch {
-                groceriesListRepo.updateGroceriesList(gl).collect {
+                groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {
                     dispatch(GroceriesListAction.SetGroceriesList(it))
                 }
             }
