@@ -41,7 +41,6 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
         val newState = when (action) {
             is UserAction.RefreshUser -> {
-
                 groceriesListStore.dispatch(GroceriesListAction.RefreshGroceriesList)
                 oldState.copy(userId = action.idUser)
             }
@@ -51,6 +50,4 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
             state.value = newState
         }
     }
-
-
 }

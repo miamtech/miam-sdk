@@ -13,7 +13,10 @@ data class Baskets(
 data class Basket(
     val id: Int,
     val attributes: BasketAttributes,
-)
+
+){
+    var _relationships: BasketRelationships? = null
+}
 
 @Serializable
 data class BasketAttributes(
@@ -25,8 +28,11 @@ data class BasketAttributes(
     @SerialName("capacity-factor")
     val capacityFactor: String? =null,
     val token :String? = null,
+)
 
-    var basketEntries: BasketEntries? = null,
+@Serializable
+data class BasketRelationships(
+    var basketEntries: List<BasketEntry>? = emptyList<BasketEntry>(),
 )
 
 @Serializable

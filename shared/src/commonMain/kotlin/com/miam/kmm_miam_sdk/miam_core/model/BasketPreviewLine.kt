@@ -1,0 +1,110 @@
+package com.miam.kmm_miam_sdk.miam_core.model
+
+import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import kotlin.math.truncate
+
+interface BasketPreviewEntry
+
+class LineEntries {
+    val found: List<BasketEntry> = emptyList()
+    val notFound: List<BasketEntry> = emptyList()
+    val oftenDeleted: List<BasketEntry> = emptyList()
+    val removed: List<BasketEntry> = emptyList()
+}
+
+data class BasketPreviewLine(
+    val id : Int? = null,
+    val record : BasketPreviewEntry,
+    val isRecipe: Boolean,
+    val inlineTag : String? = null,
+    val title: String,
+    val picture: String,
+    val description: List<String>? = emptyList(),
+    val price: String,
+    val count: Int,
+    val entries : LineEntries?,
+    val _displayMode: Boolean = false,
+) : KoinComponent{
+
+    private val groceriesListStore: GroceriesListStore by inject()
+
+    fun hasEntries(): Boolean {
+        return this.entries != null && (
+                this.entries.found.isNotEmpty() ||
+                        this.entries.notFound.isNotEmpty()||
+                        this.entries.oftenDeleted.isNotEmpty() ||
+                        this.entries.removed.isNotEmpty())
+    }
+
+    companion object {
+        fun fromRecipe( recipe: Recipe,
+                        itemsCount: Int,
+                        pricePerGuest: Double? = null,
+                        guestNum: Int? = 4,
+                        recipePrice: String? = "",
+                        entries: LineEntries? = null) : BasketPreviewLine {
+            var bpl = BasketPreviewLine(
+                id= recipe.id,
+                record= recipe,
+                isRecipe= true,
+                title= recipe.attributes.title,
+                picture= recipe.attributes.mediaUrl ?: "",
+                description=  listOf("$itemsCount article${if (itemsCount > 1) 's' else ' '}"),
+                count= guestNum ?: 4 ,
+                entries = entries,
+                price= recipePrice ?: "",
+            )
+
+            if(pricePerGuest != null) {
+                bpl.description?.plus("${truncate(pricePerGuest)} € / personne")
+            }
+
+            return bpl
+        }
+        fun fromBasketEntry(entry: BasketEntry) : BasketPreviewLine {
+            val item = entry._relationships?.items?.find{ i -> i.id == entry.attributes.selectedItemId}
+            val beItem = entry.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  entry.attributes.selectedItemId }
+            val price = if(beItem?.unitPrice != null && entry?.attributes?.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
+            val gEntry = entry._relationships?.groceriesEntry
+            val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
+            return BasketPreviewLine(
+                id= entry.id,
+                record= entry,
+                isRecipe = false,
+                inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
+                title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
+                picture = item?.attributes?.image ?: "",
+                description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit} ?: ' '`"),
+                price= "${truncate(price)}",
+                count= entry?.attributes?.quantity ?: 1,
+                entries = null,
+            )
+        }
+
+        fun  recipesAndLineEntriesToBasketPreviewLine(groceriesList: GroceriesList, lineEntries: List<LineEntries>) : List<BasketPreviewLine> {
+            val recipes = groceriesList.relationships?.recipes ?: emptyList()
+
+            return recipes.mapIndexed { idx,recipe ->
+                val itemsCount = lineEntries[idx].found.size
+                var recipePrice = 0.0
+                val guests =  groceriesList.guestsForRecipe(recipe.id)
+                lineEntries[idx].found.forEach { entry ->
+                        val selectedItem =
+                            entry.attributes.basketEntriesItems?.find { item -> item.itemId == entry.attributes.selectedItemId }
+                                ?: null
+                        val qty = entry.attributes.quantity ?: 1
+                        val unitPrice = selectedItem?.unitPrice ?: 0.0
+                        val numberOfRecipesForEntry = entry.attributes.recipeIds?.size ?: 1
+                        recipePrice += (qty * unitPrice) / numberOfRecipesForEntry
+                }
+
+                val pricePerGuest = recipePrice / guests;
+
+                 fromRecipe(recipe, itemsCount, pricePerGuest,guests, recipePrice.toString(), lineEntries[idx]);
+            }
+        }
+
+    }
+}
