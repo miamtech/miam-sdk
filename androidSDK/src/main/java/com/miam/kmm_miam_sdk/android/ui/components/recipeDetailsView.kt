@@ -211,12 +211,12 @@ private fun recipeCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CustomActionButton(
-                        icon = R.drawable.ic_diflow,
+                        icon = R.drawable.ic_ingredient,
                         text = "Ingredients",
                         action = { isIngredientChecked = true }
                     )
                     CustomActionButton(
-                        icon = R.drawable.ic_diflow,
+                        icon = R.drawable.ic_preparation,
                         text = "Préparation",
                         action = { isIngredientChecked = false }
                     )
@@ -460,7 +460,7 @@ fun CustomActionButton(action: () -> Unit, icon: Int, text: String) {
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(Color.White),
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(30.dp)
                         .padding(horizontal = 4.dp)
 
                 )
