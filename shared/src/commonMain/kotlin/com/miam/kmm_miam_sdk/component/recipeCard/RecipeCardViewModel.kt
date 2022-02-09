@@ -58,10 +58,9 @@ open class RecipeCardViewModel :
             is GroceriesListEffect.GroceriesListLoaded -> {
                 if (isInit) {
                     setState { copy(isInCart = checkIsInCart(), guest = getGuest(recipe))}
-                }else {
+                } else {
                     setState { copy(isInCart = checkIsInCart())}
-                    }
-
+                }
             }
             is GroceriesListEffect.RecipeAdded -> {
                 if(gl.recipeId !==  recipeId) return
@@ -75,8 +74,8 @@ open class RecipeCardViewModel :
     }
 
     private fun checkIsInCart() : Boolean {
-       val currentGl = groceriesListStore.observeState().value.groceriesList ?: return false
-       return  currentGl.attributes.recipesInfos != null &&  currentGl.attributes.recipesInfos.any { ri ->ri.id == recipeId }
+        val currentGl = groceriesListStore.observeState().value.groceriesList ?: return false
+        return  currentGl.attributes.recipesInfos != null &&  currentGl.attributes.recipesInfos.any { ri ->ri.id == recipeId }
     }
 
     private fun removeGuest() {
@@ -99,10 +98,10 @@ open class RecipeCardViewModel :
         }
     }
 
-   private fun addOrAlterRecipe() {
-       launch(addRecipeUseCase.execute(recipe.copy(attributes = recipe.attributes.copy(numberOfGuests = uiState.value.guest))), {
-           setState { copy(isInCart = true) }
-       })
+    private fun addOrAlterRecipe() {
+        launch(addRecipeUseCase.execute(recipe.copy(attributes = recipe.attributes.copy(numberOfGuests = uiState.value.guest))), {
+            setState { copy(isInCart = true) }
+        })
     }
 
     fun sendShowEvent(eventType: String = "show-recipe-card") {
@@ -154,8 +153,8 @@ open class RecipeCardViewModel :
         }
     }
 
-   private fun displayPrice() {
-       if (currentState.isPriceDisplayed || !currentState.isInViewport) return
-       setState { copy(isPriceDisplayed = true) }
+    private fun displayPrice() {
+        if (currentState.isPriceDisplayed || !currentState.isInViewport) return
+        setState { copy(isPriceDisplayed = true) }
     }
 }

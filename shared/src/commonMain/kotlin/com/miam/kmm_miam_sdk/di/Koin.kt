@@ -9,10 +9,7 @@ import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.RecipeDataSource
-import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.data.repository.PointOfSaleRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.*
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -36,6 +33,7 @@ startKoin {
 fun initKoin() = initKoin {}
 
 val repositoryModule = module {
+    single { PricingRepositoryImp(get())}
     single { RecipeRepositoryImp(get()) }
     single { GroceriesListRepositoryImp(get()) }
     single { PointOfSaleRepositoryImp(get()) }

@@ -15,26 +15,5 @@ fun Empty(
     msg: String = "No data to show",
     onCheckAgain: () -> Unit = {}
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-       // modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = msg,
-                style = MaterialTheme.typography.h5
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            OutlinedButton(
-                onClick = onCheckAgain
-            ) {
-                Text(
-                    text = "Check Again",
-                    style = MaterialTheme.typography.h6
-                )
-            }
-        }
-    }
+    Box{}
 }

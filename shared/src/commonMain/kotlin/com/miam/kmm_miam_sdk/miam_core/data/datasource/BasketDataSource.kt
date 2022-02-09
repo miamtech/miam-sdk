@@ -1,9 +1,11 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
-import com.miam.kmm_miam_sdk.miam_core.model.Basket
-import com.miam.kmm_miam_sdk.miam_core.model.BasketEntries
+import com.miam.kmm_miam_sdk.miam_core.model.*
 
 interface BasketDataSource {
    suspend fun getFromListAndPos(listId: Int, posId: Int): Basket
    suspend fun getBasketEntries(basketId : Int): BasketEntries
+   suspend fun getBasketEntriesbyPages(basketId : Int, pageIndex :Int, pageSize: Int):  List<BasketEntry>
+   suspend fun getBasketEntriesItems(basketEntryId :Int): List<Item>
+   suspend fun getBasketEntriesGroceriesEntry (basketEntryId: Int): GroceriesEntry
 }

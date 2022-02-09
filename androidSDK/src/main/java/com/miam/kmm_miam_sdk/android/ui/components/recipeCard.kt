@@ -96,7 +96,7 @@ class RecipeView  @JvmOverloads constructor(
 @ExperimentalCoilApi
 @Composable
 private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggleBottomSheet: () -> Job ) {
-
+    val price = Price(recipeId = recipe.id)
 
     Card(
         modifier = Modifier
@@ -198,15 +198,7 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                             Text(text = recipe.difficultyLabel ,fontSize = 16.sp, modifier= Modifier.padding(top = 4.dp))
                         }
                     }
-                    Row() {
-                        Column() {
-                            Row() {
-                                Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
-                                Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
-                            }
-                            Text("par pers.", color = Color.Gray, fontSize = 16.sp)
-                        }
-                    }
+                    price.content()
                 }
 
                 Row(

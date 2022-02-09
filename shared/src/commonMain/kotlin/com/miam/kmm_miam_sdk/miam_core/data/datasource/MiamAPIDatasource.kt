@@ -28,10 +28,11 @@ object HttpRoutes {
     const val GROCERIESLIST_ENDPOINT = "$BASE_URL/groceries-lists/"
     const val POINTOFSALE_ENDPOINT = "$BASE_URL/point-of-sales/"
     const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
+    const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
 }
 
 @OptIn(InternalAPI::class)
-class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource, KoinComponent {
+class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
 
@@ -144,18 +145,16 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
             }
     }
 
-    override suspend fun updateGroceriesList(groceriesList: GroceriesList): GroceriesList {
-        try {
+    override suspend fun updateGroceriesList(groceriesList: GroceriesListWithoutRelationship): GroceriesList {
           return  httpClient.patch<GroceriesListWrapper>{
                 headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT+"${groceriesList.id}")
-                body = GroceriesListWrapper(groceriesList)
+                body = GroceriesListWithoutRelationshipWrapper(groceriesList)
             }.data
-        } catch (c :Throwable) {
-            print(c)
-        }
+    }
 
-        return groceriesList
+    override suspend fun getRecipes(recipesInfos: List<RecipeInfos>): List<Recipe> {
+        return recipesInfos.map{ ri -> getRecipeById(ri.id) }
     }
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
@@ -184,6 +183,34 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     override suspend fun getBasketEntries(basketId : Int): BasketEntries {
         return  httpClient.get<BasketEntries>{
             url(HttpRoutes.BASKET_ENDPOINT+"$basketId/basket-entries")
+        }
+    }
+
+    override suspend fun getBasketEntriesbyPages(basketId: Int, pageIndex: Int, pagesize: Int): List<BasketEntry> {
+       val baseUrl = HttpRoutes.BASKET_ENDPOINT+"$basketId/basket-entries"
+       val pageUrl = "$baseUrl?page[number]=$pageIndex&page[size]=$pagesize"
+        return  httpClient.get<BasketEntries>{
+            url(pageUrl)
+        }.basketEntries
+    }
+
+    override suspend fun getBasketEntriesItems(basketEntryId: Int): List<Item> {
+        return  httpClient.get<Items>{
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
+        }.data
+    }
+
+    override suspend fun getBasketEntriesGroceriesEntry(basketEntryId: Int): GroceriesEntry {
+        return  httpClient.get{
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
+        }
+    }
+
+/////////////////////////////// PRICING ///////////////////////////////////////////////////
+
+    override suspend fun getRecipePrice(idRecipe: Int, idPos: Int): Pricing {
+        return  httpClient.get{
+            url(HttpRoutes.RECIPE_ENDPOINT+"$idRecipe/pricing?point_of_sale_id=$idPos")
         }
     }
 }
