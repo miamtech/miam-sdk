@@ -17,6 +17,7 @@ abstract class MiamMasterView @JvmOverloads constructor(
 
     companion object{
         val greenColor: Color = Color(0xff00af98)
+        val grayColor: Color = Color.Gray
     }
 
     @Composable

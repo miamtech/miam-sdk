@@ -1,7 +1,9 @@
 package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -24,8 +26,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
@@ -35,6 +40,7 @@ import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardContract
 import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -198,23 +204,26 @@ private fun recipeCard(
                 // Switcher ingredients preparation
 
                 // TODO: utiliser une enum dans le theme avec un state
-                var isIngredientChecked by remember { mutableStateOf(true)}
+                var isIngredientChecked by remember { mutableStateOf(true) }
 
-                Row() {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     CustomActionButton(
                         icon = R.drawable.ic_diflow,
                         text = "Ingredients",
-                        action = {isIngredientChecked = true}
+                        action = { isIngredientChecked = true }
                     )
                     CustomActionButton(
                         icon = R.drawable.ic_diflow,
                         text = "Préparation",
-                        action = {isIngredientChecked = false}
+                        action = { isIngredientChecked = false }
                     )
                 }
 
                 Row() {
-                    RecipeContent(isIngredientChecked = isIngredientChecked)
+                    RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked)
                 }
 
 
@@ -404,19 +413,39 @@ private fun recipeCard(
 }
 
 @Composable
-fun RecipeContent(isIngredientChecked: Boolean) {
+fun RecipeContent(recipe: Recipe, isIngredientChecked: Boolean) {
     if (isIngredientChecked) {
-        IngredientsList()
+        IngredientsList(recipe.attributes.ingredients!!.ingredients)
     } else
         RecipeSteps()
 }
 
 @Composable
-fun IngredientsList(){
-    Text(text = "Liste d'ingredient")
+fun IngredientsList(ingredients: List<Ingredient>) {
+    Column() {
+        ingredients.forEach {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(top = 7.dp)
+            ) {
+                Text(
+                    text = it.attributes.name!!.capitalize(),
+                    fontWeight = FontWeight.Bold
+                )
+                // TODO: Faire en sorte que ce soit ingredient qui retourne la concatenation avec gestion des float qty
+                Text(
+                    text = it.attributes.quantity!!+" "+it.attributes.unit!!,
+                    color = MiamMasterView.grayColor
+                )
+            }
+
+        }
+
+    }
 }
+
 @Composable
-fun RecipeSteps(){
+fun RecipeSteps() {
     Text(text = "Liste des steps")
 }
 
@@ -425,7 +454,7 @@ fun RecipeSteps(){
 fun CustomActionButton(action: () -> Unit, icon: Int, text: String) {
     ExtendedFloatingActionButton(
         text = {
-            Row(){
+            Row() {
                 Image(
                     painter = painterResource(icon),
                     contentDescription = null,
@@ -441,5 +470,6 @@ fun CustomActionButton(action: () -> Unit, icon: Int, text: String) {
             }
         },
         backgroundColor = MiamMasterView.greenColor,
-        onClick = action)
+        onClick = action
+    )
 }
