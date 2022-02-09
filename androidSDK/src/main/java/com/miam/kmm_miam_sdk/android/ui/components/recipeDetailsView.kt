@@ -22,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -198,34 +197,24 @@ private fun recipeCard(
 
                 // Switcher ingredients preparation
 
-                var ischecked by remember { mutableStateOf(true)}
+                // TODO: utiliser une enum dans le theme avec un state
+                var isIngredientChecked by remember { mutableStateOf(true)}
 
                 Row() {
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = "Ingredients", color = Color.White,
-                            )
-                        },
-                        backgroundColor = MiamMasterView.greenColor,
-                        onClick = {
-                            ischecked = false
-                        })
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = "Préparation", color = Color.White,
-                            )
-                        },
-                        backgroundColor = MiamMasterView.greenColor,
-                        onClick = {
-                            ischecked = true
-                        })
+                    CustomActionButton(
+                        icon = R.drawable.ic_diflow,
+                        text = "Ingredients",
+                        action = {isIngredientChecked = true}
+                    )
+                    CustomActionButton(
+                        icon = R.drawable.ic_diflow,
+                        text = "Préparation",
+                        action = {isIngredientChecked = false}
+                    )
                 }
 
-
                 Row() {
-                    MyText(ischecked = ischecked)
+                    RecipeContent(isIngredientChecked = isIngredientChecked)
                 }
 
 
@@ -415,8 +404,42 @@ private fun recipeCard(
 }
 
 @Composable
-fun MyText(ischecked: Boolean) {
-    if (ischecked) {
-        Text(text = "Depuis la fonction")
-    }
+fun RecipeContent(isIngredientChecked: Boolean) {
+    if (isIngredientChecked) {
+        IngredientsList()
+    } else
+        RecipeSteps()
+}
+
+@Composable
+fun IngredientsList(){
+    Text(text = "Liste d'ingredient")
+}
+@Composable
+fun RecipeSteps(){
+    Text(text = "Liste des steps")
+}
+
+// TODO: Ajouter la notion de selected (changer le background color et la couleur de la police)
+@Composable
+fun CustomActionButton(action: () -> Unit, icon: Int, text: String) {
+    ExtendedFloatingActionButton(
+        text = {
+            Row(){
+                Image(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier
+                        .size(24.dp)
+                        .padding(horizontal = 4.dp)
+
+                )
+                Text(
+                    text = text, color = Color.White,
+                )
+            }
+        },
+        backgroundColor = MiamMasterView.greenColor,
+        onClick = action)
 }
