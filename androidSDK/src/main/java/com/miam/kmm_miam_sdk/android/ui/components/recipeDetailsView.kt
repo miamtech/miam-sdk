@@ -33,13 +33,15 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardContract
-import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent
 
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
@@ -50,40 +52,41 @@ class RecipeDetailsView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : MiamMasterView(context, attrs, defStyleAttr) {
 
-    private var vmRecipeCard: RecipeCardViewModel = RecipeCardViewModel()
+    private var vmRecipe : RecipeViewModel = RecipeViewModel()
+    private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
 
-    init {
-        vmRecipeCard.setEvent(
-            RecipeCardContract.Event.OnGetRecipe(
-                idRecipe = 1
-            )
-        )
-    }
+    var idRecipe: Int
+        get() = idRecipeState.value ?: 0
+        set(value) {
+            idRecipeState.value = value
+            if (value != null ) {
+                vmRecipe.setEvent(
+                    RecipeContract.Event.OnGetRecipe(
+                        value
+                    )
+                )
+            }
+        }
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
 
-        val state by vmRecipeCard.uiState.collectAsState()
-        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val scope = rememberCoroutineScope()
-        val toggleBottomSheet = {
-            scope.launch {
-                bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
-            }
-        }
+        val vmBottomSheet: BottomSheetViewModel =
+            KoinJavaComponent.get(BottomSheetViewModel::class.java)
+        val state by vmRecipe.uiState.collectAsState()
 
         Box() {
             ManagementResourceState(
-                resourceState = state.recipeCard,
+                resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipeCard, toggleBottomSheet)
+                    recipeDetailCard(recipe, vmRecipe, vmBottomSheet)
                 },
-                onTryAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
-                onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
+                onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
+                onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
             )
-            BottomSheet(bottomSheetState)
+            //BottomSheet(bottomSheetState)
 
             /* BackHandler(enabled = bottomSheetState.isVisible) {
                  scope.launch {  bottomSheetState.hide() }
@@ -95,10 +98,10 @@ class RecipeDetailsView @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(
+private fun recipeDetailCard(
     recipe: Recipe,
-    vmRecipeCard: RecipeCardViewModel,
-    toggleBottomSheet: () -> Job
+    vmRecipeCard: RecipeViewModel,
+    toggleBottomSheet: BottomSheetViewModel
 ) {
 
     Card(
@@ -130,7 +133,8 @@ private fun recipeCard(
                     .size(24.dp)
                     .align(alignment = TopEnd),
                     backgroundColor = Color.Gray,
-                    onClick = { toggleBottomSheet() }) {
+                    onClick = { })
+                {
                     Text(text = "x", color = Color.White)
                 }
             }
