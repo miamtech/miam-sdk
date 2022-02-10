@@ -233,14 +233,16 @@ private fun recipeDetailCard(
             }
 
 
-            Row() {
-                Column() {
-                    Row() {
-                        Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
-                        Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
-                    }
-                    Text("par pers.", color = Color.Gray, fontSize = 16.sp)
-                }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Price(recipeId = recipe.id).content()
+                CustomActionButton(
+                    action = { /*TODO*/ },
+                    icon = R.drawable.ic_cart,
+                    text = "Sélectionner ce repas",
+                    isActive = true )
             }
 
         }

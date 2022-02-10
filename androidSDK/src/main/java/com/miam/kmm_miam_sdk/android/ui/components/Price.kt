@@ -32,7 +32,6 @@ class Price(recipeId :Int) {
         vmPrice.setEvent(
             PricingContract.Event.OnPriceUpdate
             )
-
     }
 
         @Composable
@@ -53,9 +52,6 @@ class Price(recipeId :Int) {
 
     @Composable
     fun priceView(price: Pricing, vmPrice: PricingViewModel) {
-
-
-        Row() {
             Column() {
                 Row() {
                     Text("${vmPrice.currentState.integerPart},", color = Color(0xff037E92), fontSize = 24.sp)
@@ -63,6 +59,5 @@ class Price(recipeId :Int) {
                 }
                 Text("par pers.", color = Color.Gray, fontSize = 16.sp)
             }
-        }
     }
 }
