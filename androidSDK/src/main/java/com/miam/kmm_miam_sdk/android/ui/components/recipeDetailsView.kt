@@ -55,6 +55,15 @@ class RecipeDetailsView @JvmOverloads constructor(
     private var vmRecipe : RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
 
+    init {
+        vmRecipe.setEvent(
+            RecipeContract.Event.OnGetRecipe(
+                idRecipe = 1
+            )
+        )
+    }
+
+
     var idRecipe: Int
         get() = idRecipeState.value ?: 0
         set(value) {
