@@ -23,6 +23,10 @@ abstract class MiamMasterView @JvmOverloads constructor(
         var whiteColor: Color = Color.White
     }
 
+    enum class MiamDisplayMode{
+        INGREDIENT_MODE, STEPS_MODE
+    }
+
     @Composable
     abstract override fun Content()
 }

@@ -25,7 +25,11 @@ data class CounterModifier(
 )
 
 @Composable
-fun Counter(count: Int, increase : () -> Unit , decrease: () -> Unit, counterModifier: CounterModifier ) {
+fun Counter(
+    count: Int,
+    increase : () -> Unit ,
+    decrease: () -> Unit,
+    counterModifier: CounterModifier ) {
     Row(
 
         modifier = counterModifier.rowModifier ?:

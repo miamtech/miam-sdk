@@ -1,10 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,11 +20,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
@@ -39,8 +34,6 @@ import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
 @coil.annotation.ExperimentalCoilApi
@@ -62,7 +55,6 @@ class RecipeDetailsView @JvmOverloads constructor(
             )
         )
     }
-
 
     var idRecipe: Int
         get() = idRecipeState.value ?: 0
@@ -217,7 +209,7 @@ private fun recipeDetailCard(
             // Switcher ingredients preparation
 
             // TODO: utiliser une enum dans le theme avec un state
-            var isIngredientChecked by remember { mutableStateOf(true) }
+            var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
 
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -226,12 +218,12 @@ private fun recipeDetailCard(
                 CustomActionButton(
                     icon = R.drawable.ic_ingredient,
                     text = "Ingredients",
-                    action = { isIngredientChecked = true }
+                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE }
                 )
                 CustomActionButton(
                     icon = R.drawable.ic_preparation,
                     text = "Préparation",
-                    action = { isIngredientChecked = false }
+                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE }
                 )
             }
 
@@ -372,11 +364,11 @@ private fun recipeDetailCard(
 }
 
 @Composable
-fun RecipeContent(recipe: Recipe, isIngredientChecked: Boolean, vmRecipe: RecipeViewModel) {
-    if (isIngredientChecked) {
-        IngredientsList(recipe.attributes.ingredients!!.ingredients)
-    } else
-        RecipeSteps(recipe.attributes.steps!!.steps,vmRecipe  )
+fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode) {
+    when(displayMode){
+        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> IngredientsList(recipe.attributes.ingredients!!.ingredients)
+        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps,vmRecipe)
+    }
 }
 
 @Composable
@@ -390,7 +382,7 @@ fun IngredientsList(ingredients: List<Ingredient>) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-           NumberOfEaterSelector()
+            Counter(count = 4, increase = {  }, decrease = { }, counterModifier = CounterModifier() )
             Text(
                 text = "Quantité",
                 color = MiamMasterView.grayColor
@@ -419,62 +411,6 @@ fun IngredientsLine(ingredient: String, quantity: String) {
             text = quantity,
             color = MiamMasterView.grayColor
         )
-    }
-}
-
-@Composable
-fun NumberOfEaterSelector() {
-    Row(
-        Modifier.padding(
-            horizontal = 8.dp,
-            vertical = 8.dp
-        ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_peoples),
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-
-            ) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(R.drawable.ic_less),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .height(32.dp)
-                    .width(48.dp)
-                    .border(
-                        border = BorderStroke(width = 1.dp, color = Color.Gray),
-                        shape = RoundedCornerShape(4.dp)
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                BasicTextField(
-                    value = "4",
-                    onValueChange = {/*TODO*/ },
-                    modifier = Modifier.padding(
-                        horizontal = 8.dp,
-                        vertical = 4.dp
-                    )
-                )
-            }
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(R.drawable.ic_plus),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
     }
 }
 
