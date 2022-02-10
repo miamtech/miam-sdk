@@ -14,13 +14,20 @@ interface BottomSheetContract {
         object GoToDetail: BottomSheetContract.Event()
         object GoToHelper: BottomSheetContract.Event()
         object GoToSponsor: BottomSheetContract.Event()
-        object GoToPreview: BottomSheetContract.Event()
+        object OpenBottomSheet : BottomSheetContract.Event()
+        object CloseBottomSheet : BottomSheetContract.Event()
+        data class GoToPreview(val recipeId :Int): BottomSheetContract.Event()
     }
 
     data class State(
-        val content: BottomSheetContent
+        val content: BottomSheetContent,
+        val recipeId: Int?,
+        val isOpen: Boolean
     ) : UiState
 
-    sealed class Effect : UiEffect {}
+    sealed class Effect : UiEffect {
+        object BottomSheetOpened : BottomSheetContract.Effect()
+        object BottomSheetClosed : BottomSheetContract.Effect()
+    }
 
 }

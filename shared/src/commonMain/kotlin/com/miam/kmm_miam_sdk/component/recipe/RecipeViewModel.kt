@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.component.recipeCard
+package com.miam.kmm_miam_sdk.component.recipe
 
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 
 import org.koin.core.component.inject
 
-open class RecipeCardViewModel :
-    BaseViewModel<RecipeCardContract.Event, RecipeCardContract.State, RecipeCardContract.Effect>() {
+open class RecipeViewModel :
+    BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val getRecipeUseCase: GetRecipeUseCase by inject()
     private val addRecipeUseCase: AddRecipeUseCase by inject()
@@ -23,15 +23,17 @@ open class RecipeCardViewModel :
     private var isInit: Boolean = false
     private lateinit var recipe: Recipe
 
-    override fun createInitialState(): RecipeCardContract.State =
-        RecipeCardContract.State(
-            recipeCard = BasicUiState.Loading,
+    override fun createInitialState(): RecipeContract.State =
+        RecipeContract.State(
+            recipeState = BasicUiState.Loading,
             headerText = "",
-            guest= 4,
-            isInCart= false,
+            guest = 4,
+            isInCart = false,
             analyticsEventSent = false,
-            isPriceDisplayed= false,
-            isInViewport= false,
+            isPriceDisplayed = false,
+            isInViewport = false,
+            tabState = TabEnum.INGREDIENT,
+            activeStep = 0,
         )
 
     init {
@@ -42,14 +44,17 @@ open class RecipeCardViewModel :
         }
     }
 
-    override fun handleEvent(event: RecipeCardContract.Event) {
+    override fun handleEvent(event: RecipeContract.Event) {
         when (event) {
-            is RecipeCardContract.Event.OnGetRecipe -> getRecipe(event.idRecipe)
-            is RecipeCardContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
-            RecipeCardContract.Event.OnAddRecipe -> addOrAlterRecipe()
-            RecipeCardContract.Event.DecreaseGuest -> removeGuest()
-            RecipeCardContract.Event.IncreaseGuest -> addGuest()
-            RecipeCardContract.Event.Retry -> recipeId?.let { getRecipe(it) }
+            is RecipeContract.Event.OnGetRecipe -> getRecipe(event.idRecipe)
+            is RecipeContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
+            is RecipeContract.Event.SetActiveStep -> setActiveSteps(event.stepIndex)
+            RecipeContract.Event.OnAddRecipe -> addOrAlterRecipe()
+            RecipeContract.Event.DecreaseGuest -> removeGuest()
+            RecipeContract.Event.IncreaseGuest -> addGuest()
+            RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
+            RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
+            RecipeContract.Event.Retry -> recipeId?.let { getRecipe(it) }
         }
     }
 
@@ -104,6 +109,16 @@ open class RecipeCardViewModel :
         })
     }
 
+    private fun setTab(newTab: TabEnum){
+        if (uiState.value.tabState ==  newTab) return
+        setState { copy(tabState = newTab) }
+    }
+
+    private fun setActiveSteps(newActiveStep: Int){
+        if (uiState.value.activeStep ==  newActiveStep) return
+        setState { copy(activeStep = newActiveStep) }
+    }
+
     fun sendShowEvent(eventType: String = "show-recipe-card") {
         if (this.recipe == null ) {
             return
@@ -116,10 +131,10 @@ open class RecipeCardViewModel :
 
     private fun getRecipe(recipeId: Int) {
         this.recipeId = recipeId
-        setState { copy(recipeCard = BasicUiState.Loading) }
+        setState { copy(recipeState = BasicUiState.Loading) }
         launch(getRecipeUseCase.execute(recipeId), { recipe ->
             setState { copy(
-                recipeCard = BasicUiState.Success(recipe),
+                recipeState = BasicUiState.Success(recipe),
                 guest= getGuest(recipe),
                 isInCart = checkIsInCart()
             ) }
@@ -127,8 +142,8 @@ open class RecipeCardViewModel :
             this.isInit = true
             displayPrice()
         }, {
-            setState {  copy(recipeCard = BasicUiState.Error()) }
-            setEffect { RecipeCardContract.Effect.HideCard }
+            setState {  copy(recipeState = BasicUiState.Error()) }
+            setEffect { RecipeContract.Effect.HideCard }
         })
     }
 
@@ -138,12 +153,6 @@ open class RecipeCardViewModel :
             return (currentGl?.attributes?.recipesInfos?.find { ri ->ri.id == recipeId })?.guests ?: 4
         }
         return recipe.attributes.numberOfGuests ?: 4
-    }
-
-    private fun  recipeLoaded(){
-        this.initIngredientsString();
-        // TODO handle guests count
-        //this.recipe.modifiedGuests ||= +this.recipe.guests;
     }
 
     private fun initIngredientsString() {
