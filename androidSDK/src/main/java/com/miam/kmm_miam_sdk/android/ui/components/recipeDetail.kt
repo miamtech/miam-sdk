@@ -17,13 +17,10 @@ fun RecipeDetail(goTo : (destination : BottomSheetContract.Event) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "RecipeDetail")
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
-        Button(onClick = {  goTo(BottomSheetContract.Event.GoToPreview) }) {
+       /* Button(onClick = {  goTo(BottomSheetContract.Event.GoToPreview()) }) {
             Text(text = "GotToRecipePreview")
-        }
+        }*/
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
-        Button(onClick = {  goTo(BottomSheetContract.Event.GoToHelper)}) {
-            Text(text = "GotToRecipeHelper")
-        }
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
         Button(onClick = {  goTo(BottomSheetContract.Event.GoToSponsor)}) {
             Text(text = "GotToRecipeSponsor")
