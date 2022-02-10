@@ -21,9 +21,9 @@ fun RecipeHelper(goTo : (destination : BottomSheetContract.Event) -> Unit) {
             Text(text = "GotToRecipeHelper")
         }
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
-        Button(onClick = { goTo(BottomSheetContract.Event.GoToPreview) }) {
+       /* Button(onClick = { goTo(BottomSheetContract.Event.GoToPreview) }) {
             Text(text = "GotToRecipePreview")
-        }
+        }*/
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
         Button(onClick = { goTo(BottomSheetContract.Event.GoToSponsor) }) {
             Text(text = "GotToRecipeSponsor")

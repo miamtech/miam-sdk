@@ -1,17 +1,14 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
-import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import kotlin.math.truncate
 
 interface BasketPreviewEntry
 
 class LineEntries {
-    val found: List<BasketEntry> = emptyList()
-    val notFound: List<BasketEntry> = emptyList()
-    val oftenDeleted: List<BasketEntry> = emptyList()
-    val removed: List<BasketEntry> = emptyList()
+    val found: MutableList<BasketEntry> = mutableListOf()
+    val notFound: MutableList<BasketEntry> = mutableListOf()
+    val oftenDeleted: MutableList<BasketEntry> = mutableListOf()
+    val removed: MutableList<BasketEntry> = mutableListOf()
 }
 
 data class BasketPreviewLine(
@@ -26,9 +23,7 @@ data class BasketPreviewLine(
     val count: Int,
     val entries : LineEntries?,
     val _displayMode: Boolean = false,
-) : KoinComponent{
-
-    private val groceriesListStore: GroceriesListStore by inject()
+) {
 
     fun hasEntries(): Boolean {
         return this.entries != null && (

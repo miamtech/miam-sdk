@@ -2,14 +2,10 @@ package com.miam.kmm_miam_sdk.android.ui.components
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,13 +22,14 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardContract
-import com.miam.kmm_miam_sdk.component.recipeCard.RecipeCardViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import org.koin.core.component.KoinComponent
+import org.koin.java.KoinJavaComponent
 
 
 @coil.annotation.ExperimentalCoilApi
@@ -44,46 +41,41 @@ class RecipeView  @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
-    private var vmRecipeCard : RecipeCardViewModel = RecipeCardViewModel()
+    private var vmRecipe : RecipeViewModel = RecipeViewModel()
+    private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
 
 
-    init {
-        vmRecipeCard.setEvent(
-            RecipeCardContract.Event.OnGetRecipe(
-                idRecipe = 1
-            )
-        )
-    }
-
+    var idRecipe: Int
+        get() = idRecipeState.value ?: 0
+        set(value) {
+            idRecipeState.value = value
+            if (value != null ) {
+                vmRecipe.setEvent(
+                    RecipeContract.Event.OnGetRecipe(
+                        value
+                    )
+                )
+            }
+        }
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-
-        val state by vmRecipeCard.uiState.collectAsState()
-
-        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val scope = rememberCoroutineScope()
-        val toggleBottomSheet =  {
-            scope.launch {
-                bottomSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(500))
-                println(bottomSheetState.isVisible)
-            }
-        }
+        val vmBottomSheet: BottomSheetViewModel =
+            KoinJavaComponent.get(BottomSheetViewModel::class.java)
+        val state by vmRecipe.uiState.collectAsState()
 
 
         Box( ){
             ManagementResourceState(
-                resourceState = state.recipeCard,
+                resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipeCard,  toggleBottomSheet  )
+                    recipeCard(recipe, vmRecipe,  vmBottomSheet  )
                 },
-                onTryAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
-                onCheckAgain = { vmRecipeCard.setEvent(RecipeCardContract.Event.Retry) },
+                onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
+                onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
             )
-            BottomSheet(bottomSheetState)
-
             /* BackHandler(enabled = bottomSheetState.isVisible) {
                 scope.launch {  bottomSheetState.hide() }
             }*/
@@ -95,7 +87,7 @@ class RecipeView  @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggleBottomSheet: () -> Job ) {
+private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet: BottomSheetViewModel ) {
     val price = Price(recipeId = recipe.id)
 
     Card(
@@ -125,7 +117,7 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                             .align(Alignment.Center)
                             .padding(horizontal = 30.dp)
                     )
-                    if (vmRecipeCard.currentState.isInCart) {
+                    if (vmRecipe.currentState.isInCart) {
                         Box(modifier = Modifier
                             .absoluteOffset(x = 8.dp, y = 8.dp)
                             .clip(
@@ -151,7 +143,7 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                             .size(24.dp)
                             .absoluteOffset(x = 8.dp, y = 8.dp),
                             backgroundColor = Color.Gray,
-                            onClick =  { toggleBottomSheet() }) {
+                            onClick =  {  vmBottomSheet.setEvent(BottomSheetContract.Event.GoToDetail) }) {
                             Text(text = "?", color = Color.White )
                         }
                     }
@@ -200,55 +192,12 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                     }
                     price.content()
                 }
-
-                Row(
-                    Modifier.padding(
-                        horizontal = 8.dp,
-                        vertical = 8.dp
-                    ), verticalAlignment = Alignment.CenterVertically,){
-                    Image(
-                        painter = painterResource(R.drawable.ic_peoples),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-
-                        ){
-                        IconButton(onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.DecreaseGuest) },) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_less),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .height(32.dp)
-                                .width(48.dp)
-                                .border(
-                                    border = BorderStroke(width = 1.dp, color = Color.Gray),
-                                    shape = RoundedCornerShape(4.dp)
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(text =  vmRecipeCard.currentState.guest.toString(),  modifier = Modifier
-                                .padding(
-                                    horizontal = 8.dp,
-                                    vertical = 4.dp
-                                ))
-                        }
-                        IconButton(onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.IncreaseGuest) }) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_plus),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                }
-
+                Counter(
+                    vmRecipe.currentState.guest,
+                    { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
+                    { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
+                    CounterModifier()
+                )
             }
             Box(modifier = Modifier
                 .absoluteOffset(x= 0.dp, y = 178.dp)){
@@ -270,13 +219,13 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                 }
             }
 
-            if (vmRecipeCard.currentState.isInCart) {
+            if (vmRecipe.currentState.isInCart) {
                 Box(modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 8.dp, bottom = 8.dp)) {
                     FloatingActionButton(modifier = Modifier.size(36.dp),
                         backgroundColor = Color(0xff037E92),
-                        onClick = { toggleBottomSheet() }) {
+                        onClick = { vmBottomSheet.setEvent(BottomSheetContract.Event.GoToPreview(recipeId = recipe.id)) }) {
                         Image(
                             painter = painterResource(R.drawable.ic_details),
                             contentDescription = null,
@@ -290,7 +239,10 @@ private fun recipeCard(recipe : Recipe ,vmRecipeCard: RecipeCardViewModel, toggl
                     .padding(end = 8.dp, bottom = 8.dp)) {
                     FloatingActionButton(modifier = Modifier.size(36.dp),
                         backgroundColor = Color(0xff037E92),
-                        onClick = { vmRecipeCard.setEvent(RecipeCardContract.Event.OnAddRecipe) }) {
+                        onClick = {
+                            vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
+                            vmBottomSheet.setEvent(BottomSheetContract.Event.GoToPreview(recipeId = recipe.id))
+                        }) {
                         Image(
                             painter = painterResource(R.drawable.ic_cart),
                             contentDescription = null,

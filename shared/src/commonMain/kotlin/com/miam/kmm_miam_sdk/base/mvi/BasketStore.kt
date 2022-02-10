@@ -33,6 +33,7 @@ sealed class  BasketAction : Action {
 sealed class  BasketEffect : Effect {
     data class Error(val error: Exception) :  BasketEffect()
     data class PointOfSaleChanged(val idPointOfSale: Int) :  BasketEffect()
+    object BasketPreviewChange: BasketEffect()
 }
 
 class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
@@ -74,7 +75,9 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 oldState.copy(basket = action.basket, basketPreview = basketPreview, recipeCount = state.value.groceriesList?.attributes?.recipesInfos?.size ?: 0 )
             }
             is BasketAction.SetBasketState -> {
-                setBasketStates(action.basketPreview,oldState)
+              val newState =  setBasketStates(action.basketPreview,oldState)
+              launch { sideEffect.emit(BasketEffect.BasketPreviewChange)}
+              newState
             }
             is BasketAction.ConfirmBasket -> {
                 confirmBasket()
@@ -96,18 +99,18 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
             return recipesInfos.map { ri ->
-               val lineEntries = LineEntries()
+               var lineEntries = LineEntries()
                 entries.filter { entry -> entry.attributes.recipeIds?.contains(ri.id) ?: false }
                     .forEach { matchingEntry ->
                         val available  = matchingEntry.attributes.selectedItemId
                         if(available != null){
                             when(matchingEntry.attributes.groceriesEntryStatus){
-                                 "often_deleted" -> lineEntries.oftenDeleted.plus(matchingEntry)
-                                    "deleted" -> lineEntries.removed.plus(matchingEntry)
-                                 else -> lineEntries.found
+                                 "often_deleted" -> lineEntries.oftenDeleted.add(matchingEntry)
+                                    "deleted" -> lineEntries.removed.add(matchingEntry)
+                                 else -> lineEntries.found.add(matchingEntry)
                             }
                         } else {
-                            lineEntries.notFound.plus(matchingEntry)
+                            lineEntries.notFound.add(matchingEntry)
                         }
                      }
                 lineEntries
