@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -218,12 +217,14 @@ private fun recipeDetailCard(
                 CustomActionButton(
                     icon = R.drawable.ic_ingredient,
                     text = "Ingredients",
-                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE }
+                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE},
+                    isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
                 )
                 CustomActionButton(
                     icon = R.drawable.ic_preparation,
                     text = "Préparation",
-                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE }
+                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
+                    isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
                 )
             }
 
@@ -414,27 +415,33 @@ fun IngredientsLine(ingredient: String, quantity: String) {
     }
 }
 
-// TODO: Ajouter la notion de selected (changer le background color et la couleur de la police)
 @Composable
-fun CustomActionButton(action: () -> Unit, icon: Int, text: String) {
+fun CustomActionButton(action: () -> Unit, icon: Int, text: String, isActive: Boolean) {
+    var colorFont = MiamMasterView.greenColor
+    var backgroundColor =  Color.White
+
+    if (isActive) {
+        colorFont = Color.White
+        backgroundColor = MiamMasterView.greenColor
+    }
     ExtendedFloatingActionButton(
         text = {
             Row() {
                 Image(
                     painter = painterResource(icon),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White),
+                    colorFilter = ColorFilter.tint(colorFont),
                     modifier = Modifier
                         .size(30.dp)
                         .padding(horizontal = 4.dp)
 
                 )
                 Text(
-                    text = text, color = Color.White,
+                    text = text, color = colorFont
                 )
             }
         },
-        backgroundColor = MiamMasterView.greenColor,
+        backgroundColor = backgroundColor,
         onClick = action
     )
 }
