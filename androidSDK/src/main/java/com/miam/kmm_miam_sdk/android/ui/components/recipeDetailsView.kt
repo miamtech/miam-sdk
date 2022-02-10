@@ -5,10 +5,7 @@ import android.os.Build
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -109,268 +106,217 @@ private fun recipeCard(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Box {
-            Column {
-                Box(
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .height(200.dp)
                         .fillMaxWidth()
-                ) {
-                    Image(
-                        painter = rememberImagePainter(recipe.attributes.mediaUrl),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth()
-                    )
+                )
 
-                    FloatingActionButton(modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .size(24.dp)
-                        .align(alignment = TopEnd),
-                        backgroundColor = Color.Gray,
-                        onClick = { toggleBottomSheet() }) {
-                        Text(text = "x", color = Color.White)
-                    }
+                FloatingActionButton(modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .size(24.dp)
+                    .align(alignment = TopEnd),
+                    backgroundColor = Color.Gray,
+                    onClick = { toggleBottomSheet() }) {
+                    Text(text = "x", color = Color.White)
                 }
+            }
 
-                // Temps de préparation
-                Row(
-                    Modifier
-                        .padding(end = 16.dp)
-                        .align(CenterHorizontally)
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_clock),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
-                        modifier = Modifier.size(30.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
-                        color = MiamMasterView.greenColor,
-                        fontSize = 22.sp,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .align(CenterVertically)
-                    )
-                }
-
-                // Titre
-                Row() {
-                    Text(
-                        text = recipe.attributes.title,
-                        fontFamily = FontFamily.Cursive,
-                        fontSize = 24.sp,
-                        style = MaterialTheme.typography.h5.copy(
-                            color = Color.Red,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                            .padding(horizontal = 30.dp)
-                    )
-                }
-                // Difficulte
-                Row(
-                    Modifier
-                        .padding(top = 4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_diflow),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(horizontal = 4.dp)
-
-                    )
-                    Text(
-                        text = recipe.difficultyLabel,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
-                // Description
-                Row() {
-                    Text(
-                        text = recipe.attributes.description!!,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
-                // Switcher ingredients preparation
-
-                // TODO: utiliser une enum dans le theme avec un state
-                var isIngredientChecked by remember { mutableStateOf(true) }
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    CustomActionButton(
-                        icon = R.drawable.ic_ingredient,
-                        text = "Ingredients",
-                        action = { isIngredientChecked = true }
-                    )
-                    CustomActionButton(
-                        icon = R.drawable.ic_preparation,
-                        text = "Préparation",
-                        action = { isIngredientChecked = false }
-                    )
-                }
-
-                Row() {
-                    RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked)
-                }
-
-
-                Row(
+            // Temps de préparation
+            Row(
+                Modifier
+                    .padding(end = 16.dp)
+                    .align(CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_clock),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
+                    modifier = Modifier.size(30.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
+                    color = MiamMasterView.greenColor,
+                    fontSize = 22.sp,
                     modifier = Modifier
-                        .padding(top = 8.dp)
-                        .height(32.dp)
-                ) {
+                        .padding(top = 4.dp)
+                        .align(CenterVertically)
+                )
+            }
 
-                    Box(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    bottomStart = 8.dp,
-                                    topStart = 8.dp,
-                                    topEnd = 8.dp,
-                                    bottomEnd = 8.dp
-                                )
-                            )
-                            .background(MiamMasterView.greenColor)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "Ingredients", color = Color.White,
-                                modifier = Modifier.padding(horizontal = 5.dp)
-                            )
-                        }
-                    }
-                    Divider(
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .height(32.dp)
-                            .width(1.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    bottomStart = 8.dp,
-                                    topStart = 8.dp,
-                                    topEnd = 8.dp,
-                                    bottomEnd = 8.dp
-                                )
-                            )
-                            .background(MiamMasterView.greenColor)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "Recette", color = Color.White,
-                                modifier = Modifier.padding(horizontal = 5.dp)
-                            )
-                        }
-                    }
-                }
-
-                Row(
-                    Modifier
-                        .padding(
-                            start = 8.dp,
-                            end = 8.dp,
-                            top = 32.dp,
-                            bottom = 16.dp
-                        )
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Divider(
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .height(32.dp)
-                            .width(1.dp)
-                    )
-
-                }
-                Row() {
-                    Column() {
-                        Row() {
-                            Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
-                            Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
-                        }
-                        Text("par pers.", color = Color.Gray, fontSize = 16.sp)
-                    }
-                }
-
-
-                Row(
-                    Modifier.padding(
-                        horizontal = 8.dp,
-                        vertical = 8.dp
+            // Titre
+            Row() {
+                Text(
+                    text = recipe.attributes.title,
+                    fontFamily = FontFamily.Cursive,
+                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.h5.copy(
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold
                     ),
-                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                        .padding(horizontal = 30.dp)
+                )
+            }
+            // Difficulte
+            Row(
+                Modifier
+                    .padding(top = 4.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_diflow),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .padding(horizontal = 4.dp)
+
+                )
+                Text(
+                    text = recipe.difficultyLabel,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            // Description
+            Row() {
+                Text(
+                    text = recipe.attributes.description!!,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            // Switcher ingredients preparation
+
+            // TODO: utiliser une enum dans le theme avec un state
+            var isIngredientChecked by remember { mutableStateOf(true) }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CustomActionButton(
+                    icon = R.drawable.ic_ingredient,
+                    text = "Ingredients",
+                    action = { isIngredientChecked = true }
+                )
+                CustomActionButton(
+                    icon = R.drawable.ic_preparation,
+                    text = "Préparation",
+                    action = { isIngredientChecked = false }
+                )
+            }
+
+            Row() {
+                RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked)
+            }
+
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .height(32.dp)
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                bottomStart = 8.dp,
+                                topStart = 8.dp,
+                                topEnd = 8.dp,
+                                bottomEnd = 8.dp
+                            )
+                        )
+                        .background(MiamMasterView.greenColor)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_peoples),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-
-                        ) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_less),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .height(32.dp)
-                                .width(48.dp)
-                                .border(
-                                    border = BorderStroke(width = 1.dp, color = Color.Gray),
-                                    shape = RoundedCornerShape(4.dp)
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            BasicTextField(
-                                value = "4",
-                                onValueChange = {/*TODO*/ },
-                                modifier = Modifier.padding(
-                                    horizontal = 8.dp,
-                                    vertical = 4.dp
-                                )
-                            )
-                        }
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_plus),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Ingredients", color = Color.White,
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        )
                     }
                 }
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .height(32.dp)
+                        .width(1.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                bottomStart = 8.dp,
+                                topStart = 8.dp,
+                                topEnd = 8.dp,
+                                bottomEnd = 8.dp
+                            )
+                        )
+                        .background(MiamMasterView.greenColor)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Recette", color = Color.White,
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        )
+                    }
+                }
+            }
+
+            Row(
+                Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 32.dp,
+                        bottom = 16.dp
+                    )
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .height(32.dp)
+                        .width(1.dp)
+                )
 
             }
+            Row() {
+                Column() {
+                    Row() {
+                        Text("4,", color = Color(0xff037E92), fontSize = 24.sp)
+                        Text("99€", color = Color(0xff037E92), fontSize = 16.sp)
+                    }
+                    Text("par pers.", color = Color.Gray, fontSize = 16.sp)
+                }
+            }
+
+        }
 //            Box(modifier = Modifier
 //                .absoluteOffset(x= 0.dp, y = 178.dp)){
 //
@@ -391,22 +337,22 @@ private fun recipeCard(
 //                }
 //            }
 
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 8.dp, bottom = 8.dp)
-            ) {
-                FloatingActionButton(modifier = Modifier.size(36.dp),
-                    backgroundColor = Color(0xff037E92),
-                    onClick = { /*TODO*/ }) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_cart),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-        }
+//        Box(
+//            modifier = Modifier
+//                .align(Alignment.BottomEnd)
+//                .padding(end = 8.dp, bottom = 8.dp)
+//        ) {
+//            FloatingActionButton(modifier = Modifier.size(36.dp),
+//                backgroundColor = Color(0xff037E92),
+//                onClick = { /*TODO*/ }) {
+//                Image(
+//                    painter = painterResource(R.drawable.ic_cart),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(20.dp)
+//                )
+//            }
+//        }
+
 
     }
 
@@ -423,24 +369,99 @@ fun RecipeContent(recipe: Recipe, isIngredientChecked: Boolean) {
 @Composable
 fun IngredientsList(ingredients: List<Ingredient>) {
     Column() {
+        Row(
+            Modifier.padding(
+                horizontal = 8.dp,
+                vertical = 8.dp
+            ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+           NumberOfEaterSelector()
+            Text(
+                text = "Quantité",
+                color = MiamMasterView.grayColor
+            )
+        }
         ingredients.forEach {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(top = 7.dp)
+            IngredientsLine(it.attributes.name!!.capitalize(), it.attributes.quantity!! + " " + it.attributes.unit!!)
+        }
+    }
+}
+
+@Composable
+fun IngredientsLine(ingredient: String, quantity: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 7.dp)
+    ) {
+        Text(
+            text = ingredient,
+            fontWeight = FontWeight.Bold
+        )
+        // TODO: Faire en sorte que ce soit ingredient qui retourne la concatenation avec gestion des float qty
+        Text(
+            text = quantity,
+            color = MiamMasterView.grayColor
+        )
+    }
+}
+
+@Composable
+fun NumberOfEaterSelector() {
+    Row(
+        Modifier.padding(
+            horizontal = 8.dp,
+            vertical = 8.dp
+        ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_peoples),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+
             ) {
-                Text(
-                    text = it.attributes.name!!.capitalize(),
-                    fontWeight = FontWeight.Bold
-                )
-                // TODO: Faire en sorte que ce soit ingredient qui retourne la concatenation avec gestion des float qty
-                Text(
-                    text = it.attributes.quantity!!+" "+it.attributes.unit!!,
-                    color = MiamMasterView.grayColor
+            IconButton(onClick = { /*TODO*/ }) {
+                Image(
+                    painter = painterResource(R.drawable.ic_less),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
                 )
             }
-
+            Row(
+                modifier = Modifier
+                    .height(32.dp)
+                    .width(48.dp)
+                    .border(
+                        border = BorderStroke(width = 1.dp, color = Color.Gray),
+                        shape = RoundedCornerShape(4.dp)
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                BasicTextField(
+                    value = "4",
+                    onValueChange = {/*TODO*/ },
+                    modifier = Modifier.padding(
+                        horizontal = 8.dp,
+                        vertical = 4.dp
+                    )
+                )
+            }
+            IconButton(onClick = { /*TODO*/ }) {
+                Image(
+                    painter = painterResource(R.drawable.ic_plus),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
-
     }
 }
 
