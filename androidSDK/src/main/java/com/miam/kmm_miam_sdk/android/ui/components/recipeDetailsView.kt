@@ -44,7 +44,7 @@ class RecipeDetailsView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : MiamMasterView(context, attrs, defStyleAttr) {
 
-    private var vmRecipe : RecipeViewModel = RecipeViewModel()
+    private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
 
     init {
@@ -59,7 +59,7 @@ class RecipeDetailsView @JvmOverloads constructor(
         get() = idRecipeState.value ?: 0
         set(value) {
             idRecipeState.value = value
-            if (value != null ) {
+            if (value != null) {
                 vmRecipe.setEvent(
                     RecipeContract.Event.OnGetRecipe(
                         value
@@ -217,7 +217,9 @@ private fun recipeDetailCard(
                 CustomActionButton(
                     icon = R.drawable.ic_ingredient,
                     text = "Ingredients",
-                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE},
+                    action = {
+                        isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
+                    },
                     isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
                 )
                 CustomActionButton(
@@ -242,54 +244,17 @@ private fun recipeDetailCard(
                     action = { /*TODO*/ },
                     icon = R.drawable.ic_cart,
                     text = "Sélectionner ce repas",
-                    isActive = true )
+                    isActive = true
+                )
             }
 
         }
-//            Box(modifier = Modifier
-//                .absoluteOffset(x= 0.dp, y = 178.dp)){
-//
-//                Box(modifier = Modifier
-//                    .clip(RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp))
-//                    .background(MiamMasterView.greenColor)){
-//                    Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.Center){
-//                        Image(
-//                            painter = painterResource(R.drawable.ic_cookhat),
-//                            contentDescription = null,
-//                            modifier = Modifier.size(20.dp)
-//                        )
-//                        Text(text = "Recette", color = Color.White,
-//                            modifier = Modifier.padding(horizontal = 5.dp))
-//                    }
-//                }
-//            }
-
-//        Box(
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//                .padding(end = 8.dp, bottom = 8.dp)
-//        ) {
-//            FloatingActionButton(modifier = Modifier.size(36.dp),
-//                backgroundColor = Color(0xff037E92),
-//                onClick = { /*TODO*/ }) {
-//                Image(
-//                    painter = painterResource(R.drawable.ic_cart),
-//                    contentDescription = null,
-//                    modifier = Modifier.size(20.dp)
-//                )
-//            }
-//        }
-
-
     }
-
 }
 
 @Composable
 fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode) {
-    when(displayMode){
+    when (displayMode) {
         MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> IngredientsList(recipe.attributes.ingredients!!.ingredients)
         MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps,vmRecipe)
     }
@@ -299,21 +264,26 @@ fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode) {
 fun IngredientsList(ingredients: List<Ingredient>) {
     Column() {
         Row(
-            Modifier.padding(
-                horizontal = 8.dp,
-                vertical = 8.dp
-            ),
+            modifier = Modifier
+                .padding(
+                    horizontal = 8.dp,
+                    vertical = 8.dp
+                )
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Counter(count = 4, increase = {  }, decrease = { }, counterModifier = CounterModifier() )
+            Counter(count = 4, increase = {}, decrease = {}, counterModifier = CounterModifier())
             Text(
                 text = "Quantité",
-                color = MiamMasterView.grayColor
+                color = MiamMasterView.darkGray
             )
         }
         ingredients.forEach {
-            IngredientsLine(it.attributes.name!!.capitalize(), it.attributes.quantity!! + " " + it.attributes.unit!!)
+            IngredientsLine(
+                it.attributes.name!!.capitalize(),
+                it.attributes.quantity!! + " " + it.attributes.unit!!
+            )
         }
     }
 }
@@ -341,7 +311,7 @@ fun IngredientsLine(ingredient: String, quantity: String) {
 @Composable
 fun CustomActionButton(action: () -> Unit, icon: Int, text: String, isActive: Boolean) {
     var colorFont = MiamMasterView.greenColor
-    var backgroundColor =  Color.White
+    var backgroundColor = Color.White
 
     if (isActive) {
         colorFont = Color.White

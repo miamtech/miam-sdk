@@ -21,6 +21,7 @@ abstract class MiamMasterView @JvmOverloads constructor(
         val textColor: Color = Color(0xff4B555D)
         val serviceBlueColor : Color = Color(0xff116EAA)
         var whiteColor: Color = Color.White
+        val darkGray: Color = Color.DarkGray
     }
 
     enum class MiamDisplayMode{
