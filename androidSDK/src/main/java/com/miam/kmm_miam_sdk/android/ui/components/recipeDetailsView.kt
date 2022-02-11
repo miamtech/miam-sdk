@@ -231,7 +231,7 @@ private fun recipeDetailCard(
             }
 
             Row() {
-                RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked, vmRecipeCard)
+                RecipeContent(recipe = recipe, displayMode = isIngredientChecked, vmRecipeCard)
             }
 
 
@@ -253,10 +253,11 @@ private fun recipeDetailCard(
 }
 
 @Composable
-fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode) {
+fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
+) {
     when (displayMode) {
         MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> IngredientsList(recipe.attributes.ingredients!!.ingredients)
-        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps,vmRecipe)
+        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps, vmRecipe)
     }
 }
 
