@@ -236,7 +236,7 @@ private fun recipeDetailCard(
             }
 
             Row() {
-                RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked)
+                RecipeContent(recipe = recipe, isIngredientChecked = isIngredientChecked, vmRecipeCard)
             }
 
 
@@ -372,11 +372,11 @@ private fun recipeDetailCard(
 }
 
 @Composable
-fun RecipeContent(recipe: Recipe, isIngredientChecked: Boolean) {
+fun RecipeContent(recipe: Recipe, isIngredientChecked: Boolean, vmRecipe: RecipeViewModel) {
     if (isIngredientChecked) {
         IngredientsList(recipe.attributes.ingredients!!.ingredients)
     } else
-        RecipeSteps()
+        RecipeSteps(recipe.attributes.steps!!.steps,vmRecipe  )
 }
 
 @Composable
@@ -476,11 +476,6 @@ fun NumberOfEaterSelector() {
             }
         }
     }
-}
-
-@Composable
-fun RecipeSteps() {
-    Text(text = "Liste des steps")
 }
 
 // TODO: Ajouter la notion de selected (changer le background color et la couleur de la police)
