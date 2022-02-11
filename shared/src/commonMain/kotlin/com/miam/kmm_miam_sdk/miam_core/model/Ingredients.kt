@@ -22,7 +22,6 @@ data class IngredientAttributes(
     val quantity : String?,
     val unit : String?,
     val active : Boolean = true,
-    var display : String?,
 
     @SerialName("forced-eans")
     val forcedEans: List<String>? = emptyList<String>(),
