@@ -15,20 +15,30 @@ import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 
 import com.miam.kmm_miam_sdk.component.pricing.PricingViewModel
 
-
 import com.miam.kmm_miam_sdk.miam_core.model.Pricing
 
 
-class Price(recipeId :Int) {
+class Price(
+            val recipeId :Int? = -1,
+            val price: Double? = null,
+            val isTotalPrice: Boolean = false,
+            val color: Color? = null ,
+            val fontSize: Int? = null
+    ) {
 
     private var vmPrice : PricingViewModel = PricingViewModel()
 
     init {
-        vmPrice.setEvent(
-            PricingContract.Event.OnSetRecipe(
-                idRecipe = recipeId
+        if(recipeId != -1 ){
+            vmPrice.setEvent(
+                PricingContract.Event.OnSetRecipe(recipeId!!)
             )
-        )
+        } else if(price != null) {
+            vmPrice.setEvent(
+                PricingContract.Event.SetDirectPrice(price)
+            )
+        }
+
         vmPrice.setEvent(
             PricingContract.Event.OnPriceUpdate
             )
@@ -53,16 +63,23 @@ class Price(recipeId :Int) {
 
     @Composable
     fun priceView(price: Pricing, vmPrice: PricingViewModel) {
-
-
         Row() {
             Column() {
                 Row() {
-                    Text("${vmPrice.currentState.integerPart},", color = Color(0xff037E92), fontSize = 24.sp)
-                    Text("${vmPrice.currentState.decimalPart}€", color = Color(0xff037E92), fontSize = 16.sp)
+                    Text("${vmPrice.currentState.integerPart},",
+                        color = color ?: Color(0xff037E92),
+                        fontSize = fontSize?.sp ?: 22.sp
+                    )
+                    Text("${vmPrice.currentState.decimalPart}€",
+                        color =  color ?: Color(0xff037E92),
+                        fontSize =  fontSize?.minus(6)?.sp ?: 16.sp)
                 }
-                Text("par pers.", color = Color.Gray, fontSize = 16.sp)
+                if(!isTotalPrice){
+                    Text("par pers.", color = Color.Gray, fontSize = 14.sp)
+                }
+
             }
         }
+
     }
 }

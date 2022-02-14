@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import java.lang.String
 
-
 open class PricingViewModel :
     BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
 
@@ -20,6 +19,7 @@ open class PricingViewModel :
     override fun createInitialState(): PricingContract.State =
         PricingContract.State(
             price = BasicUiState.Empty,
+            directPrice = null,
             recipeId = -1,
             integerPart = 0,
             decimalPart = 0,
@@ -29,6 +29,13 @@ open class PricingViewModel :
     override  fun handleEvent(event: PricingContract.Event) {
         when (event) {
             is PricingContract.Event.OnPriceUpdate -> getPrice()
+            is PricingContract.Event.SetPrice -> setState { copy(price = BasicUiState.Success(event.pricing))}
+            is PricingContract.Event.SetDirectPrice -> {
+                setState { copy(
+                    price = BasicUiState.Success(Pricing(directPrice ?: 0.0,1)),
+                    directPrice = event.price) }
+                getPrice()
+            }
             is PricingContract.Event.OnSetRecipe -> setState  { copy(recipeId = event.idRecipe) }
         }
     }
@@ -42,6 +49,10 @@ open class PricingViewModel :
     }
 
     private  fun getPrice() {
+        if (uiState.value.directPrice != null ) {
+            splitePrice(uiState.value.directPrice!!)
+            return
+        }
         // checkIf recipe is in basket
         // extract price
 
@@ -49,17 +60,17 @@ open class PricingViewModel :
     }
 
     private fun extactPricing() {
+        // TODO extract from basket
         val pricing = Pricing(4.15, 1)
-        splitePrice(pricing)
+       //splitePrice(pricing)
     }
 
-    private fun splitePrice(pricing : Pricing){
-        val splitedPrice = String.format("%.2f", pricing.price).split('.');
-        setState { copy(price= BasicUiState.Success(pricing),
-                        integerPart = splitedPrice[0].toInt(),
+    private fun splitePrice(price : Double){
+        // will it work each time with different region format ?
+        val splitedPrice = String.format("%.2f", price ).split('.');
+        setState { copy( integerPart = splitedPrice[0].toInt(),
                         decimalPart = splitedPrice[1].toInt()) }
     }
-
 
     private suspend fun fetchPrice() {
         val posId = pointOfSaleStore.observeState().value.idPointOfSale
@@ -69,7 +80,8 @@ open class PricingViewModel :
             launch {
                 pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
                     .collect {
-                      splitePrice(it)
+                      splitePrice(it.pricePerServe)
+                      setEvent(PricingContract.Event.SetPrice(it))
                     }
             }
         } catch (e: Exception) {

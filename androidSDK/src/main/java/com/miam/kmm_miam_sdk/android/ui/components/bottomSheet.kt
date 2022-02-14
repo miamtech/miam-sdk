@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContent
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
