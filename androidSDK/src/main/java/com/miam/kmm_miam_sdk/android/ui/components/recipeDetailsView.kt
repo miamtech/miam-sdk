@@ -256,56 +256,8 @@ private fun recipeDetailCard(
 fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
 ) {
     when (displayMode) {
-        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> IngredientsList(recipe.attributes.ingredients!!.ingredients)
+        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe,vmRecipe)
         MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps, vmRecipe)
-    }
-}
-
-@Composable
-fun IngredientsList(ingredients: List<Ingredient>) {
-    Column() {
-        Row(
-            modifier = Modifier
-                .padding(
-                    horizontal = 8.dp,
-                    vertical = 8.dp
-                )
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Counter(count = 4, increase = {}, decrease = {}, counterModifier = CounterModifier())
-            Text(
-                text = "Quantité",
-                color = MiamMasterView.darkGray
-            )
-        }
-        ingredients.forEach {
-            IngredientsLine(
-                it.attributes.name!!.capitalize(),
-                it.attributes.quantity!! + " " + it.attributes.unit!!
-            )
-        }
-    }
-}
-
-@Composable
-fun IngredientsLine(ingredient: String, quantity: String) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 7.dp)
-    ) {
-        Text(
-            text = ingredient,
-            fontWeight = FontWeight.Bold
-        )
-        // TODO: Faire en sorte que ce soit ingredient qui retourne la concatenation avec gestion des float qty
-        Text(
-            text = quantity,
-            color = MiamMasterView.grayColor
-        )
     }
 }
 
