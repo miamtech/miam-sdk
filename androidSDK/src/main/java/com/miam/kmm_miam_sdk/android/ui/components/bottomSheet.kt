@@ -3,6 +3,7 @@ package com.miam.kmm_miam_sdk.android.ui.components
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.ui.components.ItemsSelector.ItemsSelector
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContent
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
@@ -32,7 +35,8 @@ class BottomSheetView  @JvmOverloads constructor(
     private val vmBottomSheet: BottomSheetViewModel = get(BottomSheetViewModel::class.java)
 
 
-    @OptIn(ExperimentalMaterialApi::class)
+
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Expanded)
@@ -60,6 +64,7 @@ class BottomSheetView  @JvmOverloads constructor(
 
 }
 
+@ExperimentalFoundationApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(
@@ -78,6 +83,7 @@ fun BottomSheet(
     ){}
 }
 
+@ExperimentalFoundationApi
 @Composable
 private fun BottomSheetContent( contentState: BottomSheetContract.State, vmBottomSheet: BottomSheetViewModel){
 
@@ -89,8 +95,8 @@ private fun BottomSheetContent( contentState: BottomSheetContract.State, vmBotto
             BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
             BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)
             BottomSheetContent.BASKET_PREVIEW -> BasketPreview(vmBottomSheet.currentState.recipeId ?: -1 ).content(
-
             )
+            BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()
             else -> Box(){}
         }
     }
