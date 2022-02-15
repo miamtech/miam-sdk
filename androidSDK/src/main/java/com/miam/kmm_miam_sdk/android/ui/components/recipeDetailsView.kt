@@ -1,10 +1,10 @@
 package com.miam.kmm_miam_sdk.android.ui.components
 
+import androidx.compose.ui.window.Dialog
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
@@ -75,13 +75,14 @@ class RecipeDetailsView @JvmOverloads constructor(
         val vmBottomSheet: BottomSheetViewModel =
             KoinJavaComponent.get(BottomSheetViewModel::class.java)
         val state by vmRecipe.uiState.collectAsState()
+        val openDialog = remember { mutableStateOf(false) }
 
         Box() {
             ManagementResourceState(
                 resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeDetailCard(recipe, vmRecipe, vmBottomSheet)
+                    recipeDetailCard(recipe, vmRecipe, openDialog)
                 },
                 onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
                 onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
@@ -95,165 +96,195 @@ class RecipeDetailsView @JvmOverloads constructor(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeDetailCard(
+fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    toggleBottomSheet: BottomSheetViewModel
+    openDialog: MutableState<Boolean>
+) {
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
+
+    if (openDialog.value) {
+
+        if (openDialog.value) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Dialog(
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true,
+                        usePlatformDefaultWidth = false
+                    ),
+                    onDismissRequest = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        recipeDetailCard2(recipe, vmRecipeCard, openDialog)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@ExperimentalCoilApi
+@Composable
+private fun recipeDetailCard2(
+    recipe: Recipe,
+    vmRecipeCard: RecipeViewModel,
+    openDialog: MutableState<Boolean>
 ) {
 
-    Card(
+    Column(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .height(200.dp)
                 .fillMaxWidth()
         ) {
-            Box(
+            Image(
+                painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(200.dp)
                     .fillMaxWidth()
-            ) {
-                Image(
-                    painter = rememberImagePainter(recipe.attributes.mediaUrl),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(200.dp)
-                        .fillMaxWidth()
-                )
+            )
 
-                FloatingActionButton(modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .size(24.dp)
-                    .align(alignment = TopEnd),
-                    backgroundColor = Color.Gray,
-                    onClick = { })
-                {
-                    Text(text = "x", color = Color.White)
-                }
+            FloatingActionButton(modifier = Modifier
+                .align(Alignment.TopStart)
+                .size(24.dp)
+                .align(alignment = TopEnd),
+                backgroundColor = Color.Gray,
+                onClick = { openDialog.value = false })
+            {
+                Text(text = "x", color = Color.White)
             }
+        }
 
-            // Temps de préparation
-            Row(
-                Modifier
-                    .padding(end = 16.dp)
-                    .align(CenterHorizontally)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_clock),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
-                    modifier = Modifier.size(30.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
-                    color = MiamMasterView.greenColor,
-                    fontSize = 22.sp,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .align(CenterVertically)
-                )
-            }
-
-            // Titre
-            Row() {
-                Text(
-                    text = recipe.attributes.title,
-                    fontFamily = FontFamily.Cursive,
-                    fontSize = 24.sp,
-                    style = MaterialTheme.typography.h5.copy(
-                        color = Color.Red,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(horizontal = 30.dp)
-                )
-            }
-            // Difficulte
-            Row(
-                Modifier
+        // Temps de préparation
+        Row(
+            Modifier
+                .padding(end = 16.dp)
+                .align(CenterHorizontally)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_clock),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
+                modifier = Modifier.size(30.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
+                color = MiamMasterView.greenColor,
+                fontSize = 22.sp,
+                modifier = Modifier
                     .padding(top = 4.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_diflow),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .padding(horizontal = 4.dp)
+                    .align(CenterVertically)
+            )
+        }
 
-                )
-                Text(
-                    text = recipe.difficultyLabel,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
+        // Titre
+        Row() {
+            Text(
+                text = recipe.attributes.title,
+                fontFamily = FontFamily.Cursive,
+                fontSize = 24.sp,
+                style = MaterialTheme.typography.h5.copy(
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .padding(horizontal = 30.dp)
+            )
+        }
+        // Difficulte
+        Row(
+            Modifier
+                .padding(top = 4.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_diflow),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+                    .padding(horizontal = 4.dp)
 
-            // Description
-            Row() {
-                Text(
-                    text = recipe.attributes.description!!,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
+            )
+            Text(
+                text = recipe.difficultyLabel,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
 
-            // Switcher ingredients preparation
+        // Description
+        Row() {
+            Text(
+                text = recipe.attributes.description!!,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
 
-            // TODO: utiliser une enum dans le theme avec un state
-            var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
+        // Switcher ingredients preparation
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                CustomActionButton(
-                    icon = R.drawable.ic_ingredient,
-                    text = "Ingredients",
-                    action = {
-                        isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
-                    },
-                    isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
-                )
-                CustomActionButton(
-                    icon = R.drawable.ic_preparation,
-                    text = "Préparation",
-                    action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
-                    isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
-                )
-            }
+        // TODO: utiliser une enum dans le theme avec un state
+        var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
 
-            Row() {
-                RecipeContent(recipe = recipe, displayMode = isIngredientChecked, vmRecipeCard)
-            }
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            CustomActionButton(
+                icon = R.drawable.ic_ingredient,
+                text = "Ingredients",
+                action = {
+                    isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
+                },
+                isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
+            )
+            CustomActionButton(
+                icon = R.drawable.ic_preparation,
+                text = "Préparation",
+                action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
+                isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
+            )
+        }
+
+        Row() {
+            RecipeContent(recipe = recipe, displayMode = isIngredientChecked, vmRecipeCard)
+        }
 
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Price(recipeId = recipe.id).content()
-                CustomActionButton(
-                    action = { /*TODO*/ },
-                    icon = R.drawable.ic_cart,
-                    text = "Sélectionner ce repas",
-                    isActive = true
-                )
-            }
-
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Price(recipeId = recipe.id).content()
+            CustomActionButton(
+                action = { /*TODO*/ },
+                icon = R.drawable.ic_cart,
+                text = "Sélectionner ce repas",
+                isActive = true
+            )
         }
     }
 }
 
 @Composable
-fun RecipeContent(recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
+fun RecipeContent(
+    recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
 ) {
     when (displayMode) {
         MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe,vmRecipe)

@@ -18,17 +18,17 @@
         android:layout_width="wrap_content"
         android:text="@string/bonjour" />
 
-    <com.miam.kmm_miam_sdk.android.ui.components.RecipeDetailsView
-        android:id="@+id/miam3"
-        android:layout_width="match_parent"
-        android:layout_height= "wrap_content"
-        />
-
-
-<!--    <com.miam.kmm_miam_sdk.android.ui.components.RecipeView-->
-<!--        android:id="@+id/miam2"-->
+<!--    <com.miam.kmm_miam_sdk.android.ui.components.RecipeDetailsView-->
+<!--        android:id="@+id/miam3"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height= "wrap_content"-->
 <!--        />-->
+
+
+    <com.miam.kmm_miam_sdk.android.ui.components.RecipeView
+        android:id="@+id/miam2"
+        android:layout_width="match_parent"
+        android:layout_height= "wrap_content"
+        />
 
 </LinearLayout>

@@ -35,21 +35,29 @@ import org.koin.java.KoinJavaComponent
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
-class RecipeView  @JvmOverloads constructor(
+class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
-    private var vmRecipe : RecipeViewModel = RecipeViewModel()
+    private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
+
+    init {
+        vmRecipe.setEvent(
+            RecipeContract.Event.OnGetRecipe(
+                idRecipe = 1
+            )
+        )
+    }
 
 
     var idRecipe: Int
         get() = idRecipeState.value ?: 0
         set(value) {
             idRecipeState.value = value
-            if (value != null ) {
+            if (value != null) {
                 vmRecipe.setEvent(
                     RecipeContract.Event.OnGetRecipe(
                         value
@@ -66,12 +74,12 @@ class RecipeView  @JvmOverloads constructor(
         val state by vmRecipe.uiState.collectAsState()
 
 
-        Box( ){
+        Box() {
             ManagementResourceState(
                 resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipe,  vmBottomSheet  )
+                    recipeCard(recipe, vmRecipe, vmBottomSheet)
                 },
                 onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
                 onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
@@ -87,7 +95,11 @@ class RecipeView  @JvmOverloads constructor(
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet: BottomSheetViewModel ) {
+private fun recipeCard(
+    recipe: Recipe,
+    vmRecipe: RecipeViewModel,
+    vmBottomSheet: BottomSheetViewModel
+) {
     val price = Price(recipeId = recipe.id)
 
     Card(
@@ -95,11 +107,13 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Box  {
+        Box {
             Column {
-                Box ( modifier = Modifier
-                    .height(245.dp)
-                    .fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .height(245.dp)
+                        .fillMaxWidth()
+                ) {
                     Image(
                         painter = rememberImagePainter(recipe.attributes.mediaUrl),
                         contentDescription = null,
@@ -111,46 +125,72 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
                         )
                     Text(
                         text = recipe.attributes.title,
-                        style = MaterialTheme.typography.h5.copy(color = Color.White, fontSize = 27.sp ,fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.h5.copy(
+                            color = Color.White,
+                            fontSize = 27.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
                         modifier = Modifier
                             .wrapContentWidth(Alignment.CenterHorizontally)
                             .align(Alignment.Center)
                             .padding(horizontal = 30.dp)
                     )
                     if (vmRecipe.currentState.isInCart) {
-                        Box(modifier = Modifier
-                            .absoluteOffset(x = 8.dp, y = 8.dp)
-                            .clip(
-                                RoundedCornerShape(
-                                    topEnd = 4.dp,
-                                    topStart = 4.dp,
-                                    bottomStart = 4.dp,
-                                    bottomEnd = 4.dp
+                        Box(
+                            modifier = Modifier
+                                .absoluteOffset(x = 8.dp, y = 8.dp)
+                                .clip(
+                                    RoundedCornerShape(
+                                        topEnd = 4.dp,
+                                        topStart = 4.dp,
+                                        bottomStart = 4.dp,
+                                        bottomEnd = 4.dp
+                                    )
                                 )
-                            )
-                            .background(Color(0xffF47F7A))){
-                            Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
+                                .background(Color(0xffF47F7A))
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center){
+                                horizontalArrangement = Arrangement.Center
+                            ) {
 
-                                Text(text = "Déjà ajoutée", color = Color.White,
-                                    modifier = Modifier.padding(horizontal = 5.dp))
+                                Text(
+                                    text = "Déjà ajoutée", color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 5.dp)
+                                )
                             }
                         }
-                    }else {
+                    } else {
                         FloatingActionButton(modifier = Modifier
                             .align(Alignment.TopStart)
                             .size(24.dp)
                             .absoluteOffset(x = 8.dp, y = 8.dp),
                             backgroundColor = Color.Gray,
-                            onClick =  {  vmBottomSheet.setEvent(BottomSheetContract.Event.GoToDetail) }) {
-                            Text(text = "?", color = Color.White )
+                            onClick = { vmBottomSheet.setEvent(BottomSheetContract.Event.GoToDetail) }) {
+                            Text(text = "?", color = Color.White)
                         }
                     }
 
 
                 }
-                Row (
+
+                val openDialog = remember { mutableStateOf(false) }
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        openDialog.value = true
+                    }
+                ) {
+                    Text("open")
+                }
+
+                recipeDetailCard(recipe = recipe, vmRecipeCard = vmRecipe, openDialog = openDialog)
+
+
+
+
+                Row(
                     Modifier
                         .padding(
                             start = 8.dp,
@@ -160,15 +200,23 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
                         )
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Row() {
-                        Column(Modifier.padding(end = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            Modifier.padding(end = 16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Image(
                                 painter = painterResource(R.drawable.ic_clock),
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp)
                             )
-                            Text(text = recipe.totalTime ,fontSize = 16.sp,modifier= Modifier.padding(top = 4.dp))
+                            Text(
+                                text = recipe.totalTime,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
                         }
 
 
@@ -187,7 +235,11 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp)
                             )
-                            Text(text = recipe.difficultyLabel ,fontSize = 16.sp, modifier= Modifier.padding(top = 4.dp))
+                            Text(
+                                text = recipe.difficultyLabel,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
                         }
                     }
                     price.content()
@@ -199,33 +251,49 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
                     CounterModifier()
                 )
             }
-            Box(modifier = Modifier
-                .absoluteOffset(x= 0.dp, y = 178.dp)){
+            Box(
+                modifier = Modifier
+                    .absoluteOffset(x = 0.dp, y = 178.dp)
+            ) {
 
-                Box(modifier = Modifier
-                    .clip(RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp))
-                    .background(Color(0xff00af98))){
-                    Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp))
+                        .background(Color(0xff00af98))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center){
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Image(
                             painter = painterResource(R.drawable.ic_cookhat),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp)
                         )
-                        Text(text = "Recette", color = Color.White,
-                            modifier = Modifier.padding(horizontal = 5.dp))
+                        Text(
+                            text = "Recette", color = Color.White,
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        )
                     }
                 }
             }
 
             if (vmRecipe.currentState.isInCart) {
-                Box(modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 8.dp, bottom = 8.dp)) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 8.dp, bottom = 8.dp)
+                ) {
                     FloatingActionButton(modifier = Modifier.size(36.dp),
                         backgroundColor = Color(0xff037E92),
-                        onClick = { vmBottomSheet.setEvent(BottomSheetContract.Event.GoToPreview(recipeId = recipe.id)) }) {
+                        onClick = {
+                            vmBottomSheet.setEvent(
+                                BottomSheetContract.Event.GoToPreview(
+                                    recipeId = recipe.id
+                                )
+                            )
+                        }) {
                         Image(
                             painter = painterResource(R.drawable.ic_details),
                             contentDescription = null,
@@ -234,9 +302,11 @@ private fun recipeCard(recipe : Recipe, vmRecipe: RecipeViewModel, vmBottomSheet
                     }
                 }
             } else {
-                Box(modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 8.dp, bottom = 8.dp)) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 8.dp, bottom = 8.dp)
+                ) {
                     FloatingActionButton(modifier = Modifier.size(36.dp),
                         backgroundColor = Color(0xff037E92),
                         onClick = {
