@@ -3,7 +3,6 @@ package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.graphics.Color
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -60,7 +59,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                 children = { Text(
                     text = line.title,
                     maxLines = 2,
-                    color = Color(0xff037E92),
+                    color = MiamMasterView.Primary,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = 16.sp,
@@ -72,7 +71,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Text(
                     text = "${line.description?.get(0) ?: ' '}",
-                    color= Color(0xff9F9F9F),
+                    color= MiamMasterView.Grey02,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold

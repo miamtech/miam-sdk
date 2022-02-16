@@ -21,10 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
-import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.android.ui.components.common.clickable
+import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 
 @Composable
@@ -75,7 +72,7 @@ fun entriesLine(entry: BasketEntry) {
             )
             Text(
                 text = entry.id.toString(),
-                color= Color(0xff9F9F9F),
+                color= MiamMasterView.Grey02,
                 style = MaterialTheme.typography.h5.copy(
                     fontSize = 14.sp,
                 ),
