@@ -20,10 +20,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 
+@ExperimentalCoilApi
 @Composable
 fun entriesLine(entry: BasketEntry) {
     val price = Price(price = 14.00, isTotalPrice = true)
