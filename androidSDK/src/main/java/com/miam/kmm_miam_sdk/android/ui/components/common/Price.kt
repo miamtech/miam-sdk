@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.common
 
 import androidx.compose.foundation.layout.*
 

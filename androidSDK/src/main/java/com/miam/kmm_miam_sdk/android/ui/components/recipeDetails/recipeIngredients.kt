@@ -8,6 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
+import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
@@ -42,7 +45,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
         }
         val ingredients: List<Ingredient> = recipe.attributes.ingredients!!.ingredients
         ingredients.forEach {
-            IngredientsLine(
+            IngredientRow(
                 it.attributes.name!!.capitalize(),
                 ReadableFloatNumber(realQuantities(it.attributes.quantity!!,state.guest,recipe.attributes.numberOfGuests!!) , it.attributes.unit!!)
             )
@@ -51,7 +54,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
 }
 
 @Composable
-fun IngredientsLine(ingredient: String, quantity: String) {
+fun IngredientRow(ingredient: String, quantity: String) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -69,7 +72,6 @@ fun IngredientsLine(ingredient: String, quantity: String) {
     }
 }
 
-@Composable
 fun realQuantities(quantity:String, currentGuest:Int, recipeGuest:Int ) : String{
     return quantity.toFloat().toBigDecimal().multiply(currentGuest.toBigDecimal()).divide(recipeGuest.toBigDecimal(),2).toString()
 }

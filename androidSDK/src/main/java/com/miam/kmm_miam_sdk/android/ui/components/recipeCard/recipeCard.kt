@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
@@ -25,6 +25,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
+import com.miam.kmm_miam_sdk.android.ui.components.common.Price
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipeDetailCard
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract

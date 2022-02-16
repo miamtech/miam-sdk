@@ -21,9 +21,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.miam.kmm_miam_sdk.android.ui.components.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.CounterModifier
-import com.miam.kmm_miam_sdk.android.ui.components.Price
+import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
+import com.miam.kmm_miam_sdk.android.ui.components.common.Price
 import com.miam.kmm_miam_sdk.android.ui.components.common.clickable
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 

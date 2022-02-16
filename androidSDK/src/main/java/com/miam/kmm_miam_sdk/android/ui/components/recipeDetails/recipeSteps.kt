@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
