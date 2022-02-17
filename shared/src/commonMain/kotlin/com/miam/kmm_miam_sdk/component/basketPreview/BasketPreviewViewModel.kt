@@ -7,7 +7,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.InternalCoroutinesApi
 
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.core.component.inject
 
