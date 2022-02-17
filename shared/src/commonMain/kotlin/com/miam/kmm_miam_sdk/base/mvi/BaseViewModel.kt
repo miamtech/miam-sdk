@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
 import com.miam.kmm_miam_sdk.base.executor.MainIoExecutor
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

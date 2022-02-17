@@ -7,7 +7,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -18,64 +17,44 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.android.ui.components.*
 import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.android.ui.components.RecipeIngredients
-import com.miam.kmm_miam_sdk.android.ui.components.RecipeSteps
 import com.miam.kmm_miam_sdk.android.ui.components.common.CustomActionButton
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
-@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
-@ExperimentalCoilApi
 @Composable
-fun recipeDetailCard(
-    recipe: Recipe,
+fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
     openDialog: MutableState<Boolean>
 ) {
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
-
-    if (openDialog.value) {
-
-        if (openDialog.value) {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Dialog(
-                    properties = DialogProperties(
-                        dismissOnBackPress = true,
-                        dismissOnClickOutside = true,
-                        usePlatformDefaultWidth = false
-                    ),
-                    onDismissRequest = {
-                        openDialog.value = false
-                    }
-                ) {
-                    Surface(modifier = Modifier.fillMaxSize()) {
-                        recipeDetailCard2(recipe, vmRecipeCard, openDialog)
-                    }
-                }
-            }
-        }
-    }
+    val state by vmRecipeCard.uiState.collectAsState()
+    ManagementResourceState(
+        resourceState = state.recipeState,
+        successView = { recipe ->
+            requireNotNull(recipe)
+            recipeDetailCard(recipe, vmRecipeCard, openDialog)
+        },
+        onTryAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
+        onCheckAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
+    )
 }
 
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
-private fun recipeDetailCard2(
+private fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
     openDialog: MutableState<Boolean>
 ) {
-
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -222,7 +201,10 @@ fun RecipeContent(
     recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
 ) {
     when (displayMode) {
-        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe,vmRecipe)
-        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(recipe.attributes.steps!!.steps, vmRecipe)
+        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe, vmRecipe)
+        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(
+            recipe.attributes.steps!!.steps,
+            vmRecipe
+        )
     }
 }
