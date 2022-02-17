@@ -5,26 +5,39 @@
 //  Created by noe on 17/02/2022.
 //
 
+import SwiftUI
 import shared
 
-class RecipeCardVM : RecipeViewModel, ObservableObject {
-    @Published var recipe: Recipe = Recipe.companion.emptyRecipe()
+public struct RecipeCardView: View {
 
+    public var recipeId: Int
 
-    override init() {
-        super.init()
-        // TODO handle other states
-        collect(flow: uiState, collect: { data in
-            let state = data as! RecipeContractState
-            print("" + state.recipeState.debugDescription)
-            switch state.recipeState {
-                case let success as BasicUiStateSuccess<Recipe>:
-                    self.recipe = success.data!
-                default:
-                    break
-                }
-            }
-        )
+    @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
 
+    public init(recipeId: Int) {
+        self.recipeId = recipeId
+    }
+    
+
+    public var body: some View {
+        VStack {
+            Text("" + viewModel.recipe.attributes.title)
+                .font(.title)
+                .bold()
+            if(viewModel.recipe.attributes.mediaUrl != nil ) { AsyncImage(url: URL(string: "" + (viewModel.recipe.attributes.mediaUrl ?? ""))! ,
+                                                                  placeholder: { Text("loading ...")})}
+           
+
+          }
+        .onAppear(perform: {
+            viewModel.setEvent(event: RecipeContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
+        })
     }
 }
+
+struct CharacterDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        RecipeCardView(recipeId: 0)
+    }
+}
+
