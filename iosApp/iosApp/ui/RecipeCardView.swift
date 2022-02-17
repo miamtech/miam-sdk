@@ -31,7 +31,7 @@ struct RecipeCardView: View {
 
           }
         .onAppear(perform: {
-            viewModel.setEvent(event: RecipeCardContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
+            viewModel.setEvent(event: RecipeContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
         })
     }
 }

@@ -8,7 +8,7 @@
 
 import shared
 
-class RecipeCardVM : RecipeCardViewModel, ObservableObject {
+class RecipeCardVM : RecipeViewModel, ObservableObject {
     @Published var recipe: Recipe = Recipe.companion.emptyRecipe()
 
 
@@ -16,9 +16,9 @@ class RecipeCardVM : RecipeCardViewModel, ObservableObject {
         super.init()
         // TODO handle other states
         collect(flow: uiState, collect: { data in
-            let state = data as! RecipeCardContractState
-            print("" + state.recipeCard.debugDescription)
-            switch state.recipeCard {
+            let state = data as! RecipeContractState
+            print("" + state.recipeState.debugDescription)
+            switch state.recipeState {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
                 default:

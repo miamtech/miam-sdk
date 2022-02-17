@@ -15,6 +15,7 @@ struct ContentView: View {
 
     var body: some View {
             VStack {
+                Text("hellop me").padding()
                 RecipeCardView(recipeId: 1)
                 RecipeCardView(recipeId: 2)
     }
