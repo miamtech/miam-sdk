@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,7 +29,7 @@ import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
 import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipeDetailCard
+import com.miam.kmm_miam_sdk.android.ui.components.common.RouterModal
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
@@ -39,6 +40,7 @@ import org.koin.java.KoinJavaComponent
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
+@ExperimentalFoundationApi
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -70,7 +72,7 @@ class RecipeView @JvmOverloads constructor(
             }
         }
 
-    @OptIn(ExperimentalMaterialApi::class)
+
     @Composable
     override fun Content() {
         val vmBottomSheet: BottomSheetViewModel =
@@ -96,6 +98,7 @@ class RecipeView @JvmOverloads constructor(
 }
 
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
 @Composable
@@ -189,7 +192,7 @@ private fun recipeCard(
                     Text("open")
                 }
 
-                recipeDetailCard(recipe = recipe, vmRecipeCard = vmRecipe, openDialog = openDialog)
+                RouterModal( vmRecipe, openDialog = openDialog)
 
 
 
