@@ -91,7 +91,6 @@ private fun BottomSheetContent( contentState: BottomSheetContract.State, vmBotto
 
     Box(modifier = Modifier.defaultMinSize(minHeight = 1.dp)) {
         when(contentState.content) {
-            BottomSheetContent.RECIPE_DETAIL -> RecipeDetail(goTo)
             BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
             BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)
             BottomSheetContent.BASKET_PREVIEW -> BasketPreview(vmBottomSheet.currentState.recipeId ?: -1 ).content(

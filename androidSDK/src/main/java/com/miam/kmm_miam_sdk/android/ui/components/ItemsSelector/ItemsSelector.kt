@@ -16,14 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.miam.kmm_miam_sdk.android.ui.components.Price
+import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
+import com.miam.kmm_miam_sdk.android.ui.components.common.Price
 import com.miam.kmm_miam_sdk.android.ui.components.common.clickable
 /**
  * TODO AddReal Item + controller
@@ -38,7 +38,7 @@ fun ItemsSelector() {
     horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Surface(
-            border = BorderStroke(1.dp, Color(0xff007E92)),
+            border = BorderStroke(1.dp, MiamMasterView.Primary),
             shape = RoundedCornerShape(25),
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,7 +65,7 @@ fun ItemsSelector() {
                     Text(text = "DUCROS Curry tradition en poudre DUCROS, 53g | 0.053 Kg",
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
-                        color = Color(0xff4B555D))
+                        color = MiamMasterView.textColor)
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
@@ -80,7 +80,7 @@ fun ItemsSelector() {
              Modifier.fillMaxWidth() ,
              textAlign = TextAlign.Start,
              fontSize = 16.sp,
-             color = Color(0xff4B555D),
+             color = MiamMasterView.textColor,
              fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
@@ -102,7 +102,7 @@ fun ItemsSelector() {
                         onClick = { /* TODO*/ },
                         children = {
                             Surface(
-                                border = BorderStroke(1.dp, Color(0xffecf1f4)),
+                                border = BorderStroke(1.dp, MiamMasterView.lightGray),
                                 shape = RoundedCornerShape(15),
                                 modifier= Modifier.padding(8.dp)
                             ) {
@@ -111,7 +111,7 @@ fun ItemsSelector() {
                                     modifier =  Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
                                     Icon(
                                         modifier = Modifier.size(24.dp),
-                                        tint = Color(0xffE22019),
+                                        tint = MiamMasterView.Secondary,
                                         imageVector = Icons.Default.SwapHorizontalCircle,
                                         contentDescription = " swap_horizontal_circle"
                                     )
@@ -128,7 +128,7 @@ fun ItemsSelector() {
                                     Text(text = "DUCROS Curry tradition en poudre DUCROS, 53g | 0.053 Kg",
                                         fontSize = 13.sp,
                                         textAlign = TextAlign.Center,
-                                        color = Color(0xff4B555D))
+                                        color = MiamMasterView.textColor)
                                     Price(price = 4.0,isTotalPrice = true).content()
                                 }
                             }
