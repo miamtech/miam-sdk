@@ -15,6 +15,7 @@
 		DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */; };
 		DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E32127BE935B000D3EA6 /* AsyncImage.swift */; };
 		DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E32327BE937F000D3EA6 /* RecipeCardView.swift */; };
+		DCD4E32727BE9657000D3EA6 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32627BE9657000D3EA6 /* shared.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardVM.swift; sourceTree = "<group>"; };
 		DCD4E32127BE935B000D3EA6 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		DCD4E32327BE937F000D3EA6 /* RecipeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardView.swift; sourceTree = "<group>"; };
+		DCD4E32627BE9657000D3EA6 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../shared/build/XCFrameworks/release/shared.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCD4E32727BE9657000D3EA6 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +67,7 @@
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
+				DCD4E32527BE9657000D3EA6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +123,14 @@
 				DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */,
 			);
 			path = mvvm;
+			sourceTree = "<group>";
+		};
+		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DCD4E32627BE9657000D3EA6 /* shared.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
