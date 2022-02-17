@@ -6,7 +6,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.Pricing
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
-import java.lang.String
 
 open class PricingViewModel :
     BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
@@ -67,7 +66,7 @@ open class PricingViewModel :
 
     private fun splitePrice(price : Double){
         // will it work each time with different region format ?
-        val splitedPrice = String.format("%.2f", price ).split('.');
+        val splitedPrice = arrayOf("12", "50")
         setState { copy( integerPart = splitedPrice[0].toInt(),
                         decimalPart = splitedPrice[1].toInt()) }
     }

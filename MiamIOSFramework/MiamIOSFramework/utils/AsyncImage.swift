@@ -1,9 +1,8 @@
 //
 //  AsyncImage.swift
-//  iosApp
+//  MiamIOSFramework
 //
-//  Created by Miam on 22/12/2021.
-//  Copyright © 2021 orgName. All rights reserved.
+//  Created by noe on 17/02/2022.
 //
 
 import Foundation
