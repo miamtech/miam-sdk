@@ -1,5 +1,6 @@
 
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     kotlin("multiplatform")
@@ -10,14 +11,12 @@ plugins {
 
 kotlin {
     android()
+    val xcf = XCFramework()
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        //iosSimulatorArm64() sure all ios dependencies support this target
-    ).forEach {
-        it.binaries.framework {
+    ios {
+        binaries.framework {
             baseName = "shared"
+            xcf.add(this)
         }
     }
 
@@ -52,21 +51,20 @@ kotlin {
         val iosX64Main by getting
         val iosArm64Main by getting
         //val iosSimulatorArm64Main by getting
-        val iosMain by creating {
+        val iosMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-ios:1.6.7")
-
-
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             //iosSimulatorArm64Main.dependsOn(this)
         }
+//        val iosMain by getting
         val iosX64Test by getting
         val iosArm64Test by getting
         //val iosSimulatorArm64Test by getting
-        val iosTest by creating {
+        val iosTest by getting {
             dependsOn(commonTest)
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
