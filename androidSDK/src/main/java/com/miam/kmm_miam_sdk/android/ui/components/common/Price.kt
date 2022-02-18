@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.common
 
 import androidx.compose.foundation.layout.*
 
@@ -42,7 +42,6 @@ class Price(
         vmPrice.setEvent(
             PricingContract.Event.OnPriceUpdate
             )
-
     }
 
         @Composable
@@ -63,7 +62,6 @@ class Price(
 
     @Composable
     fun priceView(price: Pricing, vmPrice: PricingViewModel) {
-        Row() {
             Column() {
                 Row() {
                     Text("${vmPrice.currentState.integerPart},",
@@ -79,7 +77,5 @@ class Price(
                 }
 
             }
-        }
-
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
@@ -118,7 +119,7 @@ class BasketPreview(val recipeId :Int) {
                                 expendableEntryLine(
                                     recipeLine.entries!!.oftenDeleted,
                                     backGroundColor = Color(0xffD9EFF2),
-                                    fontColor = Color(0xff007E92),
+                                    fontColor = MiamMasterView.Primary,
                                     title = "Déjà dans vos placards ? (${recipeLine.entries!!.oftenDeleted.size})",
                                     click = {}
                                 )
@@ -154,16 +155,16 @@ class BasketPreview(val recipeId :Int) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Button(
-                    border = BorderStroke(1.dp, Color(0xff007E92)),
+                    border = BorderStroke(1.dp, MiamMasterView.Primary),
                     shape = RoundedCornerShape(50), 
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xff007E92)),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MiamMasterView.Primary),
                     onClick = { /*TODO*/ }) {
                     Text(text = "Retirer le repas")
                 }
 
                 Button(
                     shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White, backgroundColor = Color(0xff007E92)),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White, backgroundColor = MiamMasterView.Primary),
                     onClick = { /*TODO*/ }) {
                     Text(text = "Continuer mes courses")
                 }

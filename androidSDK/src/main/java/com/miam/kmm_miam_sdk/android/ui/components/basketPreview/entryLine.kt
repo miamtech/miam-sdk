@@ -20,13 +20,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.miam.kmm_miam_sdk.android.ui.components.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.CounterModifier
-import com.miam.kmm_miam_sdk.android.ui.components.Price
-import com.miam.kmm_miam_sdk.android.ui.components.common.clickable
+import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 
+@ExperimentalCoilApi
 @Composable
 fun entriesLine(entry: BasketEntry) {
     val price = Price(price = 14.00, isTotalPrice = true)
@@ -75,7 +74,7 @@ fun entriesLine(entry: BasketEntry) {
             )
             Text(
                 text = entry.id.toString(),
-                color= Color(0xff9F9F9F),
+                color= MiamMasterView.Grey02,
                 style = MaterialTheme.typography.h5.copy(
                     fontSize = 14.sp,
                 ),

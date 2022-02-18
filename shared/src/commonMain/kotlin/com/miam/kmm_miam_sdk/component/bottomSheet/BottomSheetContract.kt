@@ -5,7 +5,7 @@ import com.miam.kmm_miam_sdk.base.mvi.UiEvent
 import com.miam.kmm_miam_sdk.base.mvi.UiState
 
 enum class BottomSheetContent {
-    RECIPE_DETAIL, RECIPE_HELPER, RECIPE_SPONSOR, BASKET_PREVIEW
+    RECIPE_DETAIL, RECIPE_HELPER, RECIPE_SPONSOR, BASKET_PREVIEW , ITEMS_SELECTOR
 }
 
 interface BottomSheetContract {

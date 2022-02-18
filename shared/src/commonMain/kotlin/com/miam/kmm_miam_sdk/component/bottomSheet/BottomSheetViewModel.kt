@@ -7,6 +7,7 @@ open class BottomSheetViewModel :
     BaseViewModel<BottomSheetContract.Event, BottomSheetContract.State, BottomSheetContract.Effect>() {
 
     override fun createInitialState(): BottomSheetContract.State =
+      // TODO remove mock values
         BottomSheetContract.State(
             content= BottomSheetContent.BASKET_PREVIEW,
             recipeId = 12202,

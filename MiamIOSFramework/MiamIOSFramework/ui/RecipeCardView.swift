@@ -1,26 +1,25 @@
 //
 //  RecipeCardView.swift
-//  iosApp
+//  MiamIOSFramework
 //
-//  Created by Miam on 12/01/2022.
-//  Copyright © 2022 orgName. All rights reserved.
+//  Created by noe on 17/02/2022.
 //
 
 import SwiftUI
 import shared
 
-struct RecipeCardView: View {
+public struct RecipeCardView: View {
 
-    var recipeId: Int
+    public var recipeId: Int
 
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
 
-    init(recipeId: Int) {
+    public init(recipeId: Int) {
         self.recipeId = recipeId
     }
     
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("" + viewModel.recipe.attributes.title)
                 .font(.title)
@@ -31,7 +30,7 @@ struct RecipeCardView: View {
 
           }
         .onAppear(perform: {
-            viewModel.setEvent(event: RecipeCardContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
+            viewModel.setEvent(event: RecipeContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
         })
     }
 }
@@ -41,3 +40,4 @@ struct CharacterDetailView_Previews: PreviewProvider {
         RecipeCardView(recipeId: 0)
     }
 }
+
