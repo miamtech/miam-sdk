@@ -3,11 +3,11 @@ package com.miam.kmm_miam_sdk.component.basketPreview
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasketEffect
 import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.InternalCoroutinesApi
 
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.core.component.inject
 
@@ -42,6 +42,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.SetRecipeId -> setRecipeid(event.newRecipeId)
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
             is BasketPreviewContract.Event.toogleLine -> toogleLine()
+            is BasketPreviewContract.Event.BuildEntriesLines -> buildEntriesLines(event.basketEntries)
         }
     }
 
@@ -57,11 +58,17 @@ class BasketPreviewViewModel(val recipeId: Int?):
         setState { copy( showLines = !uiState.value.showLines)}
     }
 
+    private fun buildEntriesLines(basketEntries : List<BasketEntry>){
+    }
+
     private fun basketChange(sideEffect: BasketEffect){
         if (sideEffect == BasketEffect.BasketPreviewChange){
           setEvent(BasketPreviewContract.Event.SetLines(
               basketStore.observeState().value.basketPreview ?: emptyList())
           )
+            setEvent(BasketPreviewContract.Event.BuildEntriesLines(
+                basketStore.observeState().value.basket?._relationships?.basketEntries ?: emptyList())
+            )
         }
 
     }

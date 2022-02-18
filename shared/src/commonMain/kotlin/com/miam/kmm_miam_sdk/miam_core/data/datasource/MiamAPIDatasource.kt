@@ -32,7 +32,7 @@ object HttpRoutes {
 }
 
 @OptIn(InternalAPI::class)
-class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource, KoinComponent {
+class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
 
@@ -212,5 +212,19 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         return  httpClient.get{
             url(HttpRoutes.RECIPE_ENDPOINT+"$idRecipe/pricing?point_of_sale_id=$idPos")
         }
+    }
+
+////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
+
+    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
+        return  httpClient.get<Items>{
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
+        }.data
+    }
+
+    override suspend fun getBasketEntryGrocerieEntry(basketEntryId: Int): GroceriesEntry {
+        return  httpClient.get<GroceriesEntries>{
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/groceries-entries")
+        }.groceriesEntries[0]
     }
 }

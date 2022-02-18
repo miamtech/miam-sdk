@@ -16,6 +16,10 @@ data class BasketEntry(
 ): BasketPreviewEntry {
 
     var _relationships : BasketEntryRelationships? = null
+
+    val selectedItem : Item?
+        get() = _relationships?.items?.find { item -> item.id == attributes.selectedItemId }
+
 }
 
 @Serializable
@@ -36,7 +40,7 @@ data class BasketEntryAttributes(
 
 @Serializable
  class BasketEntryRelationships (
-        var items : List<Item> = emptyList(),
+     var items : List<Item> = emptyList(),
      var groceriesEntry: GroceriesEntry? = null
 )
 

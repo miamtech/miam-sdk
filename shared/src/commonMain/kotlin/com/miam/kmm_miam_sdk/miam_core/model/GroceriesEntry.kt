@@ -9,6 +9,8 @@ data class GroceriesEntries(
     val groceriesEntries: List<GroceriesEntry>,
 )
 
+
+
 @Serializable
 data class GroceriesEntry(
     val id: Int,
