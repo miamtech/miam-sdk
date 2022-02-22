@@ -35,7 +35,7 @@ dependencies {
 
     // as an aar extern file
     // if use you have to put manually aar file in libs folder
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+   implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     // else auto deploye add debug
     /* implementation project(":androidSDK")

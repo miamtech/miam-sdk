@@ -6,6 +6,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.Pricing
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import kotlin.math.roundToInt
 
 open class PricingViewModel :
     BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
@@ -66,9 +67,11 @@ open class PricingViewModel :
 
     private fun splitePrice(price : Double){
         // will it work each time with different region format ?
-        val splitedPrice = arrayOf("12", "50")
-        setState { copy( integerPart = splitedPrice[0].toInt(),
-                        decimalPart = splitedPrice[1].toInt()) }
+        val priceCent = (price * 100).roundToInt().toString()
+        val intergerPart = if (priceCent.length <= 2) "00" else priceCent.substring(0, priceCent.length - 2)
+        val decimalPart = if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
+        setState { copy( integerPart = intergerPart.toInt(),
+                         decimalPart = decimalPart.toInt()) }
     }
 
     private suspend fun fetchPrice() {

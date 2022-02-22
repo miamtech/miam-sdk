@@ -26,7 +26,7 @@ data class BasketAttributes(
     @SerialName("total-price")
     val totalPrice: Float? = null,
     @SerialName("capacity-factor")
-    val capacityFactor: String? =null,
+    val capacityFactor: Int? =null,
     val token :String? = null,
 )
 

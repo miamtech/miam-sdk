@@ -34,8 +34,6 @@ class BottomSheetView  @JvmOverloads constructor(
 
     private val vmBottomSheet: BottomSheetViewModel = get(BottomSheetViewModel::class.java)
 
-
-
     @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
@@ -93,8 +91,8 @@ private fun BottomSheetContent( contentState: BottomSheetContract.State, vmBotto
         when(contentState.content) {
             BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
             BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)
-            BottomSheetContent.BASKET_PREVIEW -> BasketPreview(vmBottomSheet.currentState.recipeId ?: -1 ).content(
-            )
+       /*     BottomSheetContent.BASKET_PREVIEW -> BasketPreview(vmBottomSheet.currentState.recipeId ?: -1 ).content(
+            )*/
             BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()
             else -> Box(){}
         }

@@ -61,7 +61,7 @@ fun RouterModal(
                                 //BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
                                 //BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)
                                 BottomSheetContent.BASKET_PREVIEW -> BasketPreview(
-                                    vm.currentState.recipeId ?: -1
+                                    vm.currentState.recipeId ?: -1, fun(){ openDialog.value = false}
                                 ).content(
                                 )
                                 BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()

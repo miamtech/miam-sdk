@@ -56,7 +56,6 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                 verticalArrangement = Arrangement.Top
             ) {
                 clickable(
-
                     onClick = { /*TODO*/ },
                 children = { Text(
                     text = line.title,
@@ -80,7 +79,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                     ),
                 )
                 Text(
-                    text = "${line.price}€ /personne",
+                    text = "${((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()) / 100.toBigDecimal() }€ /personne",
                     color= MiamMasterView.Grey02,
                     style = MaterialTheme.typography.h5.copy(fontSize = 14.sp)
                 )

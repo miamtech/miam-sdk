@@ -192,10 +192,7 @@ private fun recipeCard(
                     Text("open")
                 }
 
-                RouterModal( vmRecipe, openDialog = openDialog)
-
-
-
+                RouterModal( vmBottomSheet, openDialog = openDialog)
 
                 Row(
                     Modifier

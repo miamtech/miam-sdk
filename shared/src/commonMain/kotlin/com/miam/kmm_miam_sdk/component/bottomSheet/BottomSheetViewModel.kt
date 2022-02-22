@@ -10,7 +10,7 @@ open class BottomSheetViewModel :
       // TODO remove mock values
         BottomSheetContract.State(
             content= BottomSheetContent.BASKET_PREVIEW,
-            recipeId = 12202,
+            recipeId = 1,
             isOpen = false
         )
 

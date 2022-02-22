@@ -38,6 +38,7 @@ val repositoryModule = module {
     single { GroceriesListRepositoryImp(get()) }
     single { PointOfSaleRepositoryImp(get()) }
     single { BasketRepositoryImp(get()) }
+    single { BasketEntryRepositoryImp(get())}
     single { MiamAPIDatasource()}
 }
 

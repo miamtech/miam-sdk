@@ -8,6 +8,7 @@ import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 
 import io.ktor.http.*
 import io.ktor.util.*
@@ -26,6 +27,7 @@ object HttpRoutes {
     const val SPONSOR_ENDPOINT = "$BASE_URL/recipes/"
     const val TYPE_ENDPOINT = "$BASE_URL/recipes/"
     const val GROCERIESLIST_ENDPOINT = "$BASE_URL/groceries-lists/"
+    const val GROCERIES_ENTRY_ENDPOINT = "$BASE_URL/groceries-entries"
     const val POINTOFSALE_ENDPOINT = "$BASE_URL/point-of-sales/"
     const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
     const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
@@ -140,6 +142,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getGroceriesEntries(glId : Int): GroceriesEntries {
+
             return httpClient.get{
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$glId/groceries-entries")
             }
@@ -181,30 +184,24 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getBasketEntries(basketId : Int): BasketEntries {
-        return  httpClient.get<BasketEntries>{
-            url(HttpRoutes.BASKET_ENDPOINT+"$basketId/basket-entries")
+
+        return httpClient.get<BasketEntries> {
+            url(HttpRoutes.BASKET_ENDPOINT + "$basketId/basket-entries?include=groceries-entry")
         }
+        BasketEntries( emptyList<BasketEntry>())
     }
 
     override suspend fun getBasketEntriesbyPages(basketId: Int, pageIndex: Int, pagesize: Int): List<BasketEntry> {
-       val baseUrl = HttpRoutes.BASKET_ENDPOINT+"$basketId/basket-entries"
-       val pageUrl = "$baseUrl?page[number]=$pageIndex&page[size]=$pagesize"
+       val baseUrl = HttpRoutes.BASKET_ENDPOINT+"$basketId/basket-entries?include=groceries-entry"
+       val pageUrl = "$baseUrl&page[number]=$pageIndex&page[size]=$pagesize"
+
         return  httpClient.get<BasketEntries>{
             url(pageUrl)
         }.basketEntries
+
     }
 
-    override suspend fun getBasketEntriesItems(basketEntryId: Int): List<Item> {
-        return  httpClient.get<Items>{
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
-        }.data
-    }
 
-    override suspend fun getBasketEntriesGroceriesEntry(basketEntryId: Int): GroceriesEntry {
-        return  httpClient.get{
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
-        }
-    }
 
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
@@ -222,9 +219,9 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }.data
     }
 
-    override suspend fun getBasketEntryGrocerieEntry(basketEntryId: Int): GroceriesEntry {
-        return  httpClient.get<GroceriesEntries>{
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/groceries-entries")
-        }.groceriesEntries[0]
+    override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry {
+        return  httpClient.get<GroceriesEntryWrapper>{
+            url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId")
+        }.data
     }
 }
