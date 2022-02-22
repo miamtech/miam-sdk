@@ -29,7 +29,6 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
-@ExperimentalMaterialApi
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
@@ -47,8 +46,6 @@ fun recipdeDetails(
     )
 }
 
-@ExperimentalMaterialApi
-@ExperimentalCoilApi
 @Composable
 private fun recipeDetailCard(
     recipe: Recipe,

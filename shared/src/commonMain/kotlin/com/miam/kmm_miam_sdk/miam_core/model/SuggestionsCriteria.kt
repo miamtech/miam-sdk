@@ -9,11 +9,11 @@ data class SuggestionsCriteria(
     val shelfIngredientsIds: List<String>?,
 
     @SerialName("current_ingredients_ids")
-    val currentIngredientsIds: List<String>?,
+    val currentIngredientsIds: List<String>? = null,
 
     @SerialName("basket_ingredients_ids")
-    val basketIngredientsIds: List<String>?,
+    val basketIngredientsIds: List<String>? = null,
 
     @SerialName("group_id")
-    val groupId: String?
+    val groupId: String? = null
 )

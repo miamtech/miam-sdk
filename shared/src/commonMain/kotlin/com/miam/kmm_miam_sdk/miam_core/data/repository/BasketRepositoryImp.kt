@@ -14,14 +14,14 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
 
     private val entriesPerPages = 30;
 
-    override suspend fun getFromListAndPos(listId: Int, posId: Int): Flow<Basket> = flow  {
+   /* override suspend fun getFromListAndPos(listId: Int, posId: Int): Flow<Basket> = flow  {
        val basket =  basketDataSource.getFromListAndPos(listId, posId)
 
         if(basket.attributes.completion != null || (basket.attributes.completion?.total ?: 0 ) > 1 ) {
             basket._relationships = BasketRelationships( fetchBasketEntriesPage(basket) )
         }
         emit(basket)
-    }
+    }*/
 
     private suspend fun fetchBasketEntriesPage(basket: Basket) : List<BasketEntry>{
         val pagesCount = ceil((basket.attributes.completion?.total ?: 0 ).div(entriesPerPages).toDouble()).toInt()
@@ -44,5 +44,9 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
             basketDataSource.getBasketEntriesGroceriesEntry(basketEntry.id)
         )*/
         return  basketEntry
+    }
+
+    override suspend fun pointofsal(listId: Int, posId: Int): Flow<Basket> {
+        TODO("Not yet implemented")
     }
 }

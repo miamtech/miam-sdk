@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.flow
 class RecipeSuggestionsRepositoryImp(private val recipeDataSource: MiamAPIDatasource) :
     RecipeSuggestionsRepository {
 
-    override fun getRecipeSuggestions(
+    override suspend fun getRecipeSuggestions(
         customerId: Int,
         criteria: SuggestionsCriteria
-    ): Flow<Recipe> = flow {
-        val recipe = recipeDataSource.getRecipeSuggestions(customerId, criteria)
+    ) = flow {
+        val recipe = recipeDataSource.getRecipeSuggestions(customerId, criteria).get(0)
         emit(recipe)
+
     }
 }

@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeSuggestionsRepository {
 
-    fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): Flow<Recipe>
+    suspend fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): Flow<Recipe>
 
 }

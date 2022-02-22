@@ -11,5 +11,5 @@ interface RecipeDataSource {
     suspend fun getSponsor(entityId: Int): Sponsors
     suspend fun getType(entityId: Int): RecipeType
     suspend fun getRecipeById(id: Int): Recipe
-    suspend fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): Recipe
+    suspend fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): List<Recipe>
 }

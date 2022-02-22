@@ -25,10 +25,8 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 
-@ExperimentalFoundationApi
+
 @OptIn(ExperimentalComposeUiApi::class)
-@ExperimentalMaterialApi
-@ExperimentalCoilApi
 @Composable
 fun RouterModal(
     vm: BaseViewModel<*, *, *>,
@@ -64,7 +62,7 @@ fun RouterModal(
                                     vm.currentState.recipeId ?: -1
                                 ).content(
                                 )
-                                BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()
+                                //BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()
                             }
                         } else {
                             Surface() {}

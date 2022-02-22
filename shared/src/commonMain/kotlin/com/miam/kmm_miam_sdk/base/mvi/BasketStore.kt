@@ -135,7 +135,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
-        try {
+       /* try {
             launch {
                 basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
                     .collect {
@@ -144,7 +144,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             }
         } catch (e: Exception) {
             dispatch(BasketAction.Error(e))
-        }
+        }*/
     }
 
 }

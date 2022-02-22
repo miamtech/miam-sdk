@@ -133,8 +133,8 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     override suspend fun getRecipeSuggestions(
         customerId: Int,
         criteria: SuggestionsCriteria
-    ): Recipe {
-        return this.post<RecipeWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${customerId}",criteria)!!.data
+    ): List<Recipe> {
+        return this.post<RecipeListWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${customerId}",criteria)!!.data
     }
 
     override suspend fun getStep(entityId: Int): RecipeSteps {
