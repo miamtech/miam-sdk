@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SuggestionsCriteria(
     @SerialName("shelf_ingredients_ids")
-    val shelfIngredientsIds: List<String>?,
+    val shelfIngredientsIds: List<String>? = null,
 
     @SerialName("current_ingredients_ids")
     val currentIngredientsIds: List<String>? = null,

@@ -138,11 +138,10 @@ private fun recipeDetailCard(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-
         // Description
         Row() {
             Text(
-                text = recipe.attributes.description!!,
+                text = "${recipe.attributes.description ?: ' '}",
                 fontSize = 16.sp,
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -200,7 +199,7 @@ fun RecipeContent(
     when (displayMode) {
         MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe, vmRecipe)
         MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(
-            recipe.attributes.steps!!.steps,
+            recipe.attributes!!.steps!!.steps,
             vmRecipe
         )
     }

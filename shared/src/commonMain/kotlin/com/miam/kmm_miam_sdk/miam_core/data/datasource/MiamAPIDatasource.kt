@@ -7,6 +7,7 @@ import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 
 import io.ktor.http.*
@@ -48,6 +49,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
                                         ContentType.parse("application/json"))
 
         }
+        install(Logging)
     }
 
     init {
