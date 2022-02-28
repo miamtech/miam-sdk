@@ -25,6 +25,7 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 
 
+@ExperimentalFoundationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RouterModal(
