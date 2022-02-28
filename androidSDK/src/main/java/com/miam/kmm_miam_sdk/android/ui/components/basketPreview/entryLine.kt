@@ -23,13 +23,17 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
+import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import java.util.*
 
 @ExperimentalCoilApi
 @Composable
-fun entriesLine(entry: BasketPreviewLine) {
+fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, bottomSheetViewModel: BottomSheetViewModel) {
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
 
     Spacer(modifier = Modifier.padding(vertical = 4.dp))
@@ -89,8 +93,11 @@ fun entriesLine(entry: BasketPreviewLine) {
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
-            clickable(
-                onClick = { /*TODO*/ },
+            Clickable(
+                onClick = {
+                    itemSelectorVM.setEvent(ItemSelectorContract.Event.SetSelectedItem(entry))
+                    bottomSheetViewModel.setEvent(BottomSheetContract.Event.GoToItemSelector)
+                },
                 children = {
                     Text(
                         text ="Changer d'article",

@@ -38,7 +38,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
             verticalAlignment = Alignment.Top,
             modifier = Modifier.fillMaxWidth()
         ) {
-            clickable(
+            Clickable(
                 onClick = { /*TODO*/ },
                 children = {  Image(
                     painter = rememberImagePainter(line.picture),
@@ -55,7 +55,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
             Column(
                 verticalArrangement = Arrangement.Top
             ) {
-                clickable(
+                Clickable(
                     onClick = { /*TODO*/ },
                 children = { Text(
                     text = line.title,

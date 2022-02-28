@@ -22,15 +22,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.android.ui.components.common.clickable
-/**
- * TODO AddReal Item + controller
- */
+
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+
 @ExperimentalFoundationApi
+class ItemsSelector () :KoinComponent {
+
+    private  val vmItemSelector: ItemSelectorViewModel by inject()
+
 @Composable
-fun ItemsSelector() {
+fun Content () {
+
     Column( modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 16.dp, vertical = 32.dp),
@@ -43,14 +51,13 @@ fun ItemsSelector() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-
         ) {
             Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp ),
                  horizontalArrangement = Arrangement.SpaceEvenly,
                  verticalAlignment = Alignment.CenterVertically
                 ) {
                 Image(
-                    painter = rememberImagePainter("https://www.presse-citron.net/app/uploads/2019/01/oeuf-instagram.jpg"),
+                    painter = rememberImagePainter(vmItemSelector.uiState.value.selectedItem?.picture),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -62,14 +69,15 @@ fun ItemsSelector() {
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "DUCROS Curry tradition en poudre DUCROS, 53g | 0.053 Kg",
+                    Text(text = vmItemSelector.uiState.value.selectedItem?.description?.get(0) ?: " ",
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
                         color = MiamMasterView.textColor)
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        Price(price=1.0, isTotalPrice = true).content()
+                        Price(price= vmItemSelector.uiState.value.selectedItem?.price?.toDouble() ?: 0.0,
+                            isTotalPrice = true).content()
                     }
                 }
             }
@@ -95,10 +103,13 @@ fun ItemsSelector() {
             ),
             content = {
 
-                val itemsList = (1..10).map { it.toString() }
+                val itemsList = vmItemSelector.uiState.value.itemList?.filter {
+                        item -> item.id != vmItemSelector.uiState.value.selectedItem?.id
+                } ?: emptyList()
+
                 items(itemsList.size) {
                     index ->
-                    clickable(
+                    Clickable(
                         onClick = { /* TODO*/ },
                         children = {
                             Surface(
@@ -113,11 +124,11 @@ fun ItemsSelector() {
                                         modifier = Modifier.size(24.dp),
                                         tint = MiamMasterView.Secondary,
                                         imageVector = Icons.Default.SwapHorizontalCircle,
-                                        contentDescription = " swap_horizontal_circle"
+                                        contentDescription = "swap_horizontal_circle"
                                     )
 
                                     Image(
-                                        painter = rememberImagePainter("https://www.presse-citron.net/app/uploads/2019/01/oeuf-instagram.jpg"),
+                                        painter = rememberImagePainter(itemsList[index].attributes.image),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -125,11 +136,11 @@ fun ItemsSelector() {
                                             .width(72.dp)
                                             .clip(RoundedCornerShape(8.dp)),
                                     )
-                                    Text(text = "DUCROS Curry tradition en poudre DUCROS, 53g | 0.053 Kg",
-                                        fontSize = 13.sp,
+                                    Text(text = "${itemsList[index].attributes.brand ?: ' '} ${itemsList[index].attributes.name ?: ' '} | ${itemsList[index].attributes.capacityUnit}" ,                                        fontSize = 13.sp,
                                         textAlign = TextAlign.Center,
                                         color = MiamMasterView.textColor)
-                                    Price(price = 4.0,isTotalPrice = true).content()
+                                    Price(price = itemsList[index].attributes.unitPrice?.toDouble(),
+                                        isTotalPrice = true).content()
                                 }
                             }
                         }
@@ -139,6 +150,8 @@ fun ItemsSelector() {
         )
 
     }
+}
+
 }
   
 

@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
@@ -37,7 +36,7 @@ fun RouterModal(
 
     //val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
     val goTo = { destination: RecipeContract.Event -> vm.setEvent(destination as Nothing) }
-    if (openDialog.value) {
+    var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
 
         if (openDialog.value) {
             Column(
@@ -57,14 +56,15 @@ fun RouterModal(
                         if (vm is RecipeViewModel) {
                             recipdeDetails( vm, openDialog)
                         } else if (vm is BottomSheetViewModel) {
-                            when (vm.currentState.content) {
-                                //BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
-                                //BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)
+                            val state by vm.uiState.collectAsState()
+                            when (state.content) {
+                               /* BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
+                                BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)*/
                                 BottomSheetContent.BASKET_PREVIEW -> BasketPreview(
                                     vm.currentState.recipeId ?: -1, fun(){ openDialog.value = false}
                                 ).content(
                                 )
-                                BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector()
+                                BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                             }
                         } else {
                             Surface() {}
@@ -73,5 +73,5 @@ fun RouterModal(
                 }
             }
         }
-    }
+
 }

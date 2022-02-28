@@ -73,7 +73,7 @@ data class BasketPreviewLine(
                 picture = item?.attributes?.image ?: "",
                 description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit}"),
                 price= "$price",
-                count= entry?.attributes?.quantity ?: 1,
+                count= entry.attributes.quantity ?: 1,
                 entries = null,
             )
         }
