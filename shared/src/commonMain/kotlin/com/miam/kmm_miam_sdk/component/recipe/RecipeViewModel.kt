@@ -72,11 +72,11 @@ open class RecipeViewModel :
                 }
             }
             is GroceriesListEffect.RecipeAdded -> {
-                if (gl.recipeId !== recipeId) return
+                if (gl.recipeId != recipeId) return
                 setState { copy(isInCart = true, guest = gl.guests) }
             }
             is GroceriesListEffect.RecipeRemoved -> {
-                if (gl.recipeId !== recipeId) return
+                if (gl.recipeId != recipeId) return
                 setState { copy(isInCart = false) }
             }
         }
