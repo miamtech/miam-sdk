@@ -10,7 +10,7 @@ open class BottomSheetViewModel :
       // TODO remove mock values
         BottomSheetContract.State(
             content= BottomSheetContent.BASKET_PREVIEW,
-            recipeId = 12202,
+            recipeId = 1,
             isOpen = false
         )
 
@@ -19,6 +19,7 @@ open class BottomSheetViewModel :
             is BottomSheetContract.Event.GoToDetail -> navigateTo( BottomSheetContent.RECIPE_DETAIL)
             is BottomSheetContract.Event.GoToHelper -> navigateTo (BottomSheetContent.RECIPE_HELPER)
             is BottomSheetContract.Event.GoToSponsor -> navigateTo(BottomSheetContent.RECIPE_SPONSOR)
+            is BottomSheetContract.Event.GoToItemSelector -> navigateTo(BottomSheetContent.ITEMS_SELECTOR)
             is BottomSheetContract.Event.GoToPreview -> {
                 setState { copy(recipeId = event.recipeId) }
                 navigateTo( BottomSheetContent.BASKET_PREVIEW) }

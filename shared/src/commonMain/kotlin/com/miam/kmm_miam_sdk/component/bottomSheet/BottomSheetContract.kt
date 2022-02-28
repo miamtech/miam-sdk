@@ -14,6 +14,7 @@ interface BottomSheetContract {
         object GoToDetail: BottomSheetContract.Event()
         object GoToHelper: BottomSheetContract.Event()
         object GoToSponsor: BottomSheetContract.Event()
+        object GoToItemSelector: BottomSheetContract.Event()
         object OpenBottomSheet : BottomSheetContract.Event()
         object CloseBottomSheet : BottomSheetContract.Event()
         data class GoToPreview(val recipeId :Int): BottomSheetContract.Event()

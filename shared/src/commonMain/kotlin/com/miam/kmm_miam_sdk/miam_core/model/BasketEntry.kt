@@ -13,10 +13,30 @@ data class BasketEntries(
 data class BasketEntry(
     val id: Int,
     val attributes: BasketEntryAttributes,
+    val relationships: NotFilledBasketEntryRelationships
 ): BasketPreviewEntry {
 
     var _relationships : BasketEntryRelationships? = null
+
+    val selectedItem : Item?
+        get() = _relationships?.items?.find { item -> item.id == attributes.selectedItemId }
 }
+
+@Serializable
+data class NotFilledBasketEntryRelationships(
+    @SerialName("groceries-entry")
+    val groceriesEntry: NotFilledGroceriesEntryWrapper
+)
+
+@Serializable
+data class NotFilledGroceriesEntryWrapper(
+  val data: NotFilledGroceriesEntry
+)
+
+@Serializable
+data class NotFilledGroceriesEntry(
+    val id: Int
+)
 
 @Serializable
 data class BasketEntryAttributes(
@@ -33,10 +53,9 @@ data class BasketEntryAttributes(
     var  basketEntriesItems: List<BasketEntriesItem>? = null,
 )
 
-
 @Serializable
  class BasketEntryRelationships (
-        var items : List<Item> = emptyList(),
+     var items : List<Item> = emptyList(),
      var groceriesEntry: GroceriesEntry? = null
 )
 
@@ -52,7 +71,7 @@ data class BasketEntriesItem(
     val timesSelected: Int? = 0,
     val selected: Boolean = false,
     val default: Boolean = false,
-    @SerialName("unit_price")
+    @SerialName("unit-price")
     val unitPrice: Double? = null,
     val currency: String? = null,
     @SerialName("pft_plages")

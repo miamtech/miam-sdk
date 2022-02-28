@@ -66,6 +66,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
                 if(oldState.groceriesList?.id != action.gl.id ){
                     launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
+                } else {
+                    launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
                 }
                 oldState.copy(groceriesList = action.gl)
             }
@@ -74,7 +76,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 oldState
             }
             is GroceriesListAction.RemoveRecipe -> {
-                launch { removeRecipe(action.recipeId,oldState) }
+                launch {  removeRecipe(action.recipeId,oldState) }
                 oldState
             }
             is GroceriesListAction.RemoveAllRecipe -> {
@@ -105,14 +107,13 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     }
 
     private fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
-        // TODO ? add recipe in relationship
         if(states.groceriesList == null) return
-        var recipesInfos =  states.groceriesList.attributes.recipesInfos ?: emptyList()
+        var recipesInfos =  states.groceriesList.attributes.recipesInfos ?: mutableListOf()
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
-            recipesInfos?.find { it.id == recipeId }?.guests = guest
+            recipesInfos.find { it.id == recipeId }?.guests = guest
         } else {
-            recipesInfos = recipesInfos?.let { it.plus(RecipeInfos(recipeId,guest))  } ?: emptyList()
+            recipesInfos.add(RecipeInfos(recipeId,guest))
         }
         launch { sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))}
         alterRecipeInfos(recipesInfos,states)
@@ -122,20 +123,20 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         if(states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
         var recipesInfos =  states.groceriesList.attributes.recipesInfos
         launch { sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))}
-        alterRecipeInfos(recipesInfos!!.filter { el -> el.id == recipeId }, states)
+        val newRecipeInfos = recipesInfos!!.filter { el -> el.id != recipeId }.toMutableList()
+        alterRecipeInfos(newRecipeInfos, states)
     }
 
     private fun removeAllRecipe(states :GroceriesListState) {
         if(states.groceriesList == null || states.groceriesList.attributes.recipesInfos.isNullOrEmpty()) return
-        alterRecipeInfos(emptyList(), states)
+        alterRecipeInfos(mutableListOf(), states)
     }
 
-    private fun alterRecipeInfos(recipesInfos : List<RecipeInfos>, states :GroceriesListState){
+    private fun alterRecipeInfos(recipesInfos : MutableList<RecipeInfos>, states :GroceriesListState){
         var gl = states.groceriesList!!.copy(
-            attributes = states.groceriesList!!.attributes.copy(
+            attributes = states.groceriesList.attributes.copy(
                 recipesInfos =  recipesInfos,
-                appendRecipes = true))
-        gl.relationships = null
+                appendRecipes = false))
         launch { alterList(gl) }
     }
 

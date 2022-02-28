@@ -38,7 +38,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
             verticalAlignment = Alignment.Top,
             modifier = Modifier.fillMaxWidth()
         ) {
-            clickable(
+            Clickable(
                 onClick = { /*TODO*/ },
                 children = {  Image(
                     painter = rememberImagePainter(line.picture),
@@ -55,8 +55,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
             Column(
                 verticalArrangement = Arrangement.Top
             ) {
-                clickable(
-
+                Clickable(
                     onClick = { /*TODO*/ },
                 children = { Text(
                     text = line.title,
@@ -80,7 +79,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                     ),
                 )
                 Text(
-                    text = "${line.price}€ /personne",
+                    text = "${((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()) / 100.toBigDecimal() }€ /personne",
                     color= MiamMasterView.Grey02,
                     style = MaterialTheme.typography.h5.copy(fontSize = 14.sp)
                 )

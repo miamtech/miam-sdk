@@ -50,6 +50,8 @@ data class Item (
 
 @Serializable
 data class ItemAttributes (
+    @SerialName("ext_id")
+    val extId: Int? = 0,
     val name: String? = "",
     val status: String?= "",
     val description: String? = "",

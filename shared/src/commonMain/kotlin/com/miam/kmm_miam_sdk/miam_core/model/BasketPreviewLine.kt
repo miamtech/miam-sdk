@@ -59,9 +59,9 @@ data class BasketPreviewLine(
             return bpl
         }
         fun fromBasketEntry(entry: BasketEntry) : BasketPreviewLine {
-            val item = entry._relationships?.items?.find{ i -> i.id == entry.attributes.selectedItemId}
+            val item = entry.selectedItem
             val beItem = entry.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  entry.attributes.selectedItemId }
-            val price = if(beItem?.unitPrice != null && entry?.attributes?.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
+            val price = if(beItem?.unitPrice != null && entry.attributes.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
             val gEntry = entry._relationships?.groceriesEntry
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
@@ -71,9 +71,9 @@ data class BasketPreviewLine(
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
                 title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
                 picture = item?.attributes?.image ?: "",
-                description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit} ?: ' '`"),
-                price= "${truncate(price)}",
-                count= entry?.attributes?.quantity ?: 1,
+                description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit}"),
+                price= "$price",
+                count= entry.attributes.quantity ?: 1,
                 entries = null,
             )
         }

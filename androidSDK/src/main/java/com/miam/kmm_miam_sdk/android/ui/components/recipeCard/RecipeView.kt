@@ -187,12 +187,7 @@ private fun recipeCard(
                         }
                     }
                 }
-
                 RouterModal(vmRecipe, openDialog = openDialog)
-
-
-
-
                 Row(
                     Modifier
                         .padding(

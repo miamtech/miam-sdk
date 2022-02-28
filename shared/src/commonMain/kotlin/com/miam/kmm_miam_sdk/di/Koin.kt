@@ -5,6 +5,7 @@ import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
@@ -38,6 +39,7 @@ val repositoryModule = module {
     single { GroceriesListRepositoryImp(get()) }
     single { PointOfSaleRepositoryImp(get()) }
     single { BasketRepositoryImp(get()) }
+    single { BasketEntryRepositoryImp(get())}
     single { MiamAPIDatasource()}
     single { RecipeSuggestionsRepositoryImp(get())}
 }
@@ -57,6 +59,7 @@ val storeModule = module {
     single { GroceriesListStore() }
     single { BasketStore() }
     single { PointOfSaleStore() }
+    single { ItemSelectorViewModel() }
 
 }
 

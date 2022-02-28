@@ -76,7 +76,7 @@ fun expendableEntryLine(
                        modifier = Modifier.padding(8.dp).fillMaxWidth()
 
                    ) {
-                       Text(text = entry.attributes.selectedItemId.toString())
+                       Text(text = entry._relationships?.groceriesEntry?.attributes?.name ?: "")
                        if(click != null){
                            Button(
                                border = BorderStroke(1.dp, Color(0xffD9D9D9)),

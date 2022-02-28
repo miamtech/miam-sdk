@@ -10,6 +10,11 @@ data class GroceriesEntries(
 )
 
 @Serializable
+data class GroceriesEntryWrapper(
+   val data: GroceriesEntry
+)
+
+@Serializable
 data class GroceriesEntry(
     val id: Int,
     val attributes: GroceriesEntryAttributes,
@@ -23,8 +28,8 @@ data class GroceriesEntryAttributes(
     @SerialName("capacity-unit")
     val capacityUnit: String? =null,
     @SerialName("capacity-factor")
-    val capacityFactor: String? =null,
+    val capacityFactor: Int? =null,
     val status: String? =null,
     @SerialName("recipe-ids")
-    val recipeIds: List<String>? = emptyList()
+    val recipeIds: List<Int>? = emptyList()
 )
