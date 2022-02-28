@@ -10,8 +10,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,7 +31,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
@@ -47,6 +52,7 @@ fun recipdeDetails(
     )
 }
 
+@ExperimentalTime
 @Composable
 private fun recipeDetailCard(
     recipe: Recipe,
@@ -135,29 +141,33 @@ private fun recipeDetailCard(
             )
         }
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .wrapContentWidth(CenterHorizontally)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            PrepInfos(
-                R.string.miam_prep_time,
-                R.drawable.ic_knife,
-                recipe.attributes.preparationTime.toString()
-            )
-
-            PrepInfos(
-                R.string.miam_cook_time,
-                R.drawable.ic_oven,
-                recipe.attributes.cookingTime.toString()
-            )
-
-            PrepInfos(
-                R.string.miam_prehat_time,
-                R.drawable.ic_resttime,
-                recipe.attributes.preheatingTime.toString()
-            )
+            if (recipe.attributes.preparationTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_prep_time,
+                    R.drawable.ic_knife,
+                    recipe.attributes.preparationTime.toString()
+                )
+            }
+            if (recipe.attributes.cookingTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_cook_time,
+                    R.drawable.ic_oven,
+                    recipe.attributes.cookingTime.toString()
+                )
+            }
+            if (recipe.attributes.preheatingTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_prehat_time,
+                    R.drawable.ic_resttime,
+                    recipe.attributes.preheatingTime.toString()
+                )
+            }
         }
         // Titre
         Row() {
@@ -174,10 +184,23 @@ private fun recipeDetailCard(
                     .padding(horizontal = 30.dp)
             )
         }
-        // Difficulte
+        // Description
         Row(
             Modifier
                 .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "${recipe.attributes.description ?: ' '}",
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
+        // Difficulte
+        Row(
+            Modifier
+                .padding(horizontal = 16.dp, vertical = 24.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_diflow),
@@ -193,18 +216,20 @@ private fun recipeDetailCard(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-        // Description
-        Row(
+
+        Canvas(
             Modifier
-                .padding(horizontal = 8.dp)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = "${recipe.attributes.description ?: ' '}",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(top = 4.dp)
+            drawLine(
+                color = MiamMasterView.Primary,
+                start = Offset(32f, 0f),
+                end = Offset(size.width - 32, 0f),
+                pathEffect = PathEffect.dashPathEffect(floatArrayOf(12f, 12f), 0f),
+                strokeWidth = 1.5f
             )
         }
+
 
         // Switcher ingredients preparation
 
@@ -215,7 +240,7 @@ private fun recipeDetailCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(16.dp, 24.dp)
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
