@@ -73,8 +73,7 @@ dependencies {
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.databinding:databinding-runtime:4.1.3")
-
-
+    implementation("org.slf4j:slf4j-nop:1.7.25")
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")

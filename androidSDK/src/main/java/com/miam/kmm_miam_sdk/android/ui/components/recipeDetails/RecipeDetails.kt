@@ -1,13 +1,14 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.*
@@ -59,7 +59,7 @@ private fun recipeDetailCard(
     ) {
         Box(
             modifier = Modifier
-                .height(200.dp)
+                .height(245.dp)
                 .fillMaxWidth()
         ) {
             Image(
@@ -67,42 +67,52 @@ private fun recipeDetailCard(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(200.dp)
+                    .height(245.dp)
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(32.dp, 32.dp, 64.dp, 0.dp))
             )
 
             FloatingActionButton(modifier = Modifier
-                .align(Alignment.TopStart)
-                .size(24.dp)
-                .align(alignment = Alignment.TopEnd),
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .size(40.dp)
+                .alpha(0.5f),
                 backgroundColor = Color.Gray,
                 onClick = { openDialog.value = false })
             {
-                Text(text = "x", color = Color.White)
+                Text(
+                    text = "X",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
             }
         }
 
         // Temps de préparation
-        Row(
-            Modifier
-                .padding(end = 16.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_clock),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MiamMasterView.greenColor),
-                modifier = Modifier.size(30.dp)
-            )
-            Text(
-                text = stringResource(id = R.string.miam_prep_time) + recipe.totalTime,
-                color = MiamMasterView.greenColor,
-                fontSize = 22.sp,
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .align(Alignment.CenterVertically)
-            )
-        }
+        PrepInfos(
+            R.string.miam_total_time,
+            R.drawable.ic_clock,
+            recipe.totalTime
+        )
+
+        /*  PrepInfos(
+              R.string.miam_prep_time,
+              R.drawable.ic_clock,
+              recipe.attributes.preparationTime.toString()
+          )
+
+          PrepInfos(
+              R.string.miam_cook_time,
+              R.drawable.ic_clock,
+              recipe.attributes.cookingTime.toString()
+          )
+
+          PrepInfos(
+              R.string.miam_prehat_time,
+              R.drawable.ic_clock,
+              recipe.attributes.preheatingTime.toString()
+          )*/
 
         // Titre
         Row() {
@@ -153,12 +163,14 @@ private fun recipeDetailCard(
         var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
 
         Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
-                text = "Ingredients",
+                text = "Les ingredients",
                 action = {
                     isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
                 },
@@ -166,7 +178,7 @@ private fun recipeDetailCard(
             )
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
-                text = "Préparation",
+                text = "Votre recette",
                 action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
                 isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
             )
@@ -179,8 +191,11 @@ private fun recipeDetailCard(
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+
+            ) {
             Price(recipeId = recipe.id).content()
             CustomActionButton(
                 action = { /*TODO*/ },
@@ -203,4 +218,46 @@ fun RecipeContent(
             vmRecipe
         )
     }
+}
+
+@Composable
+fun PrepInfos(title: Int, icone: Int, time: String) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+    ) {
+
+        Row() {
+            Text(
+                text = stringResource(title),
+                color = MiamMasterView.Grey02,
+                fontSize = 11.sp,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .weight(400f)
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            )
+        }
+        Row() {
+            /*  Image(
+                  painter = painterResource(icone),
+                  contentDescription = null,
+                  colorFilter = ColorFilter.tint(MiamMasterView.black25),
+                  modifier = Modifier
+                      .size(22.dp)
+                      .wrapContentWidth(Alignment.CenterHorizontally)
+              )*/
+            Text(
+                text = time,
+                color = MiamMasterView.black25,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .align(Alignment.CenterVertically)
+                    .weight(400f)
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            )
+        }
+    }
+
 }

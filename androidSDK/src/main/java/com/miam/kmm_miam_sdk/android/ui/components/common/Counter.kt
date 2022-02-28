@@ -11,32 +11,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.R
 
 data class CounterModifier(
     val rowModifier: Modifier? = null,
-    val iconModifier :Modifier? = null,
-    val lessButtonModifier :Modifier? = null,
-    val countBorderModifier :Modifier? = null,
-    val countTextModifier :Modifier?= null,
-    val plusButtonModifier: Modifier? = null
+    val iconModifier: Modifier? = null,
+    val lessButtonModifier: Modifier? = null,
+    val countBorderModifier: Modifier? = null,
+    val countTextModifier: Modifier? = null,
+    val plusButtonModifier: Modifier? = null,
+    val buttonColors: Color = Color.Black
 )
 
 @Composable
 fun Counter(
     count: Int,
-    increase : () -> Unit ,
+    increase: () -> Unit,
     decrease: () -> Unit,
-    counterModifier: CounterModifier ) {
+    counterModifier: CounterModifier
+) {
     Row(
 
-        modifier = counterModifier.rowModifier ?:
-        Modifier.padding(
+        modifier = counterModifier.rowModifier ?: Modifier.padding(
             horizontal = 8.dp,
             vertical = 8.dp
-        ), verticalAlignment = Alignment.CenterVertically,){
+        ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Image(
             painter = painterResource(R.drawable.ic_peoples),
             contentDescription = null,
@@ -45,16 +49,17 @@ fun Counter(
         Row(
             verticalAlignment = Alignment.CenterVertically,
 
-            ){
-            IconButton(onClick = { decrease() },) {
+            ) {
+            IconButton(onClick = { decrease() }) {
                 Image(
                     painter = painterResource(R.drawable.ic_less),
                     contentDescription = null,
-                    modifier= counterModifier.lessButtonModifier ?: Modifier.size(16.dp)
+                    colorFilter = ColorFilter.tint(counterModifier.buttonColors),
+                    modifier = counterModifier.lessButtonModifier ?: Modifier.size(16.dp)
                 )
             }
             Row(
-                modifier= counterModifier.countBorderModifier ?: Modifier
+                modifier = counterModifier.countBorderModifier ?: Modifier
                     .height(32.dp)
                     .width(48.dp)
                     .border(
@@ -64,16 +69,20 @@ fun Counter(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = count.toString(),  modifier = counterModifier.countTextModifier ?: Modifier
-                    .padding(
-                        horizontal = 8.dp,
-                        vertical = 4.dp
-                    ))
+                Text(
+                    text = count.toString(),
+                    modifier = counterModifier.countTextModifier ?: Modifier
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 4.dp
+                        )
+                )
             }
             IconButton(onClick = { increase() }) {
                 Image(
                     painter = painterResource(R.drawable.ic_plus),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(counterModifier.buttonColors),
                     modifier = counterModifier.plusButtonModifier ?: Modifier.size(16.dp)
                 )
             }

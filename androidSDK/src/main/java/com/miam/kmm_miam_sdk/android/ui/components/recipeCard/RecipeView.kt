@@ -28,11 +28,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
+import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeSuggestionsRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.java.KoinJavaComponent
 
 
-@coil.annotation.ExperimentalCoilApi
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -59,7 +63,6 @@ class RecipeView @JvmOverloads constructor(
                 )
             )
         }
-
     }
 
 
@@ -100,7 +103,6 @@ class RecipeView @JvmOverloads constructor(
         }
     }
 }
-
 
 
 @Composable
@@ -254,7 +256,7 @@ private fun recipeCard(
             }
             Box(
                 modifier = Modifier
-                    .absoluteOffset(x = 0.dp, y = 178.dp)
+                    .absoluteOffset(x = 0.dp, y = 188.dp)
             ) {
 
                 Box(

@@ -13,7 +13,8 @@ class RecipeSuggestionsRepositoryImp(private val recipeDataSource: MiamAPIDataso
         customerId: Int,
         criteria: SuggestionsCriteria
     ) = flow {
-        val recipe = recipeDataSource.getRecipeSuggestions(customerId, criteria).get(0)
+        val recipes = recipeDataSource.getRecipeSuggestions(customerId, criteria)
+        val recipe = recipes.get(0)
         emit(recipe)
 
     }

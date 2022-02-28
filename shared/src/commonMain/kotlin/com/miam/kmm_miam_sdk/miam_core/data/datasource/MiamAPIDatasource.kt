@@ -49,7 +49,10 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
                                         ContentType.parse("application/json"))
 
         }
-        install(Logging)
+        install(Logging){
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
+        }
     }
 
     init {

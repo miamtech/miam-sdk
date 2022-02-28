@@ -25,6 +25,7 @@ abstract class MiamMasterView @JvmOverloads constructor(
         val Secondary: Color = Color(0xffE22019)
         val lightGray: Color = Color(0xffecf1f4)
         val Grey02: Color = Color(0xff9F9F9F)
+        val black25: Color = Color(0xff202020)
 
     }
 
