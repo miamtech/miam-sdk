@@ -36,19 +36,27 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 count = state.guest,
                 increase = { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
                 decrease = { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
-                counterModifier = CounterModifier()
+                counterModifier = CounterModifier(buttonColors = MiamMasterView.Primary),
             )
             Text(
                 text = "Quantité",
                 color = MiamMasterView.darkGray
             )
         }
-        val ingredients: List<Ingredient> = recipe.attributes.ingredients!!.ingredients
-        ingredients.forEach {
-            IngredientRow(
-                it.attributes.name!!.capitalize(),
-                ReadableFloatNumber(realQuantities(it.attributes.quantity!!,state.guest,recipe.attributes.numberOfGuests!!) , it.attributes.unit!!)
-            )
+        if (recipe.attributes.ingredients != null) {
+            val ingredients: List<Ingredient> = recipe.attributes.ingredients!!.ingredients
+            ingredients.forEach {
+                IngredientRow(
+                    it.attributes.name!!.capitalize(),
+                    ReadableFloatNumber(
+                        realQuantities(
+                            it.attributes.quantity!!,
+                            state.guest,
+                            recipe.attributes.numberOfGuests!!
+                        ), it.attributes.unit!!
+                    )
+                )
+            }
         }
     }
 }
@@ -59,11 +67,11 @@ fun IngredientRow(ingredient: String, quantity: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 7.dp)
+            .padding(vertical = 7.dp, horizontal = 16.dp)
     ) {
         Text(
             text = ingredient,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.W700
         )
         Text(
             text = quantity,
@@ -72,6 +80,7 @@ fun IngredientRow(ingredient: String, quantity: String) {
     }
 }
 
-fun realQuantities(quantity:String, currentGuest:Int, recipeGuest:Int ) : String{
-    return quantity.toFloat().toBigDecimal().multiply(currentGuest.toBigDecimal()).divide(recipeGuest.toBigDecimal(),2).toString()
+fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
+    return quantity.toFloat().toBigDecimal().multiply(currentGuest.toBigDecimal())
+        .divide(recipeGuest.toBigDecimal(), 2).toString()
 }

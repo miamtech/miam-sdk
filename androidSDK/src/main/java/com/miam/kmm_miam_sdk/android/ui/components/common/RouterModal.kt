@@ -24,10 +24,8 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 
-@ExperimentalFoundationApi
+
 @OptIn(ExperimentalComposeUiApi::class)
-@ExperimentalMaterialApi
-@ExperimentalCoilApi
 @Composable
 fun RouterModal(
     vm: BaseViewModel<*, *, *>,
