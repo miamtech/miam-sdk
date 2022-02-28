@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +37,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.java.KoinJavaComponent
 
-
+@ExperimentalFoundationApi
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -80,6 +81,7 @@ class RecipeView @JvmOverloads constructor(
         }
 
 
+
     @Composable
     override fun Content() {
         val vmBottomSheet: BottomSheetViewModel =
@@ -105,6 +107,7 @@ class RecipeView @JvmOverloads constructor(
 }
 
 
+@ExperimentalFoundationApi
 @Composable
 private fun recipeCard(
     recipe: Recipe,
