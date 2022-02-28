@@ -16,6 +16,7 @@ interface RecipeContract {
 
     sealed class Event : UiEvent {
         data class OnGetRecipe(val idRecipe: Int) : Event()
+        data class OnSetRecipe(val recipe: Recipe) : Event()
         data class SetHeader(val header: String) : Event()
         data class UpdateGuest(val nbGuest: Int): Event()
         data class SetActiveStep(val stepIndex:Int): Event()

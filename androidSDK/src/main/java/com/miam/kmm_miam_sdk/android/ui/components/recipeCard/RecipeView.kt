@@ -2,15 +2,14 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -20,27 +19,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.R
-import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
-import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.android.ui.components.common.RouterModal
+import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
+import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeSuggestionsRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.java.KoinJavaComponent
 
 
-@coil.annotation.ExperimentalCoilApi
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalFoundationApi
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -51,11 +47,22 @@ class RecipeView @JvmOverloads constructor(
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
 
     init {
-        vmRecipe.setEvent(
-            RecipeContract.Event.OnGetRecipe(
-                idRecipe = 1
+    }
+
+    fun bind(recipeId: Int = 0, recipe: Recipe? = null) {
+        if (recipeId != 0) {
+            vmRecipe.setEvent(
+                RecipeContract.Event.OnGetRecipe(
+                    recipeId
+                )
             )
-        )
+        } else if (recipe != null) {
+            vmRecipe.setEvent(
+                RecipeContract.Event.OnSetRecipe(
+                    recipe
+                )
+            )
+        }
     }
 
 
@@ -98,9 +105,6 @@ class RecipeView @JvmOverloads constructor(
 }
 
 
-@ExperimentalFoundationApi
-@ExperimentalMaterialApi
-@ExperimentalCoilApi
 @Composable
 private fun recipeCard(
     recipe: Recipe,
@@ -108,6 +112,7 @@ private fun recipeCard(
     vmBottomSheet: BottomSheetViewModel
 ) {
     val price = Price(recipeId = recipe.id)
+    val openDialog = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -127,9 +132,9 @@ private fun recipeCard(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .height(245.dp)
-                            .fillMaxWidth(),
-
-                        )
+                            .fillMaxWidth()
+                            .clickable(onClick = { openDialog.value = true })
+                    )
                     Text(
                         text = recipe.attributes.title,
                         style = MaterialTheme.typography.h5.copy(
@@ -157,7 +162,10 @@ private fun recipeCard(
                                 .background(Color(0xffF47F7A))
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
+                                modifier = Modifier.padding(
+                                    horizontal = 5.dp,
+                                    vertical = 10.dp
+                                ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
@@ -178,21 +186,9 @@ private fun recipeCard(
                             Text(text = "?", color = Color.White)
                         }
                     }
-
-
                 }
 
-                val openDialog = remember { mutableStateOf(false) }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        openDialog.value = true
-                    }
-                ) {
-                    Text("open")
-                }
-
-                RouterModal( vmRecipe, openDialog = openDialog)
+                RouterModal(vmRecipe, openDialog = openDialog)
 
 
 
@@ -260,7 +256,7 @@ private fun recipeCard(
             }
             Box(
                 modifier = Modifier
-                    .absoluteOffset(x = 0.dp, y = 178.dp)
+                    .absoluteOffset(x = 0.dp, y = 188.dp)
             ) {
 
                 Box(
@@ -318,7 +314,11 @@ private fun recipeCard(
                         backgroundColor = Color(0xff037E92),
                         onClick = {
                             vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
-                            vmBottomSheet.setEvent(BottomSheetContract.Event.GoToPreview(recipeId = recipe.id))
+                            vmBottomSheet.setEvent(
+                                BottomSheetContract.Event.GoToPreview(
+                                    recipeId = recipe.id
+                                )
+                            )
                         }) {
                         Image(
                             painter = painterResource(R.drawable.ic_cart),
@@ -329,7 +329,5 @@ private fun recipeCard(
                 }
             }
         }
-
     }
-
 }

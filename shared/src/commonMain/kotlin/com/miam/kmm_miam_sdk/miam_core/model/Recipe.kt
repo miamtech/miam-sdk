@@ -11,6 +11,9 @@ import kotlin.time.Duration.Companion.minutes
 data class RecipeWrapper(val data: Recipe)
 
 @Serializable
+data class RecipeListWrapper(val data: List<Recipe>)
+
+@Serializable
 data class Recipe(val id: Int, val attributes: RecipeAttributes ) : BasketPreviewEntry {
 
     val totalTime: String

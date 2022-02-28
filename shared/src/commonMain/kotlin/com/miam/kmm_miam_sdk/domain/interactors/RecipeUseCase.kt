@@ -7,6 +7,7 @@ import com.miam.kmm_miam_sdk.domain.interactors.type.UseCaseIn
 import com.miam.kmm_miam_sdk.domain.interactors.type.UseCaseInOut
 
 import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeSuggestionsRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 

@@ -7,6 +7,7 @@ import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 
 import io.ktor.http.*
@@ -29,6 +30,7 @@ object HttpRoutes {
     const val POINTOFSALE_ENDPOINT = "$BASE_URL/point-of-sales/"
     const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
     const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
+    const val RECIPE_SUGGESTIONS= "$BASE_URL/recipes/suggestions"
 }
 
 @OptIn(InternalAPI::class)
@@ -46,6 +48,10 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
             acceptContentTypes = listOf(ContentType.parse("application/vnd.api+json"),
                                         ContentType.parse("application/json"))
 
+        }
+        install(Logging){
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
         }
     }
 
@@ -87,6 +93,34 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }
     }
 
+    private suspend inline fun <reified T> post(url:String,data:Any ): T? {
+        return try {
+            httpClient.post<T>{
+                headers {
+                    append(HttpHeaders.ContentType, "application/vnd.api+json")
+                    append(HttpHeaders.Accept,"*/*")
+                }
+                url(url)
+                body=data
+            }
+        } catch(e: RedirectResponseException){
+            // 3XX
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ClientRequestException){
+            // 4xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: ServerResponseException){
+            // 5xx
+            println ("Error: ${e.response.status.description}")
+            null
+        }catch(e: Exception){
+            println ("Error: ${e.message}")
+            null
+        }
+    }
+
     override suspend fun getIngredient(entityId: Int): Ingredients {
         return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")!!
     }
@@ -99,6 +133,13 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     override suspend fun getRecipeById(id: Int): Recipe {
         return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
+    }
+
+    override suspend fun getRecipeSuggestions(
+        customerId: Int,
+        criteria: SuggestionsCriteria
+    ): List<Recipe> {
+        return this.post<RecipeListWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${customerId}",criteria)!!.data
     }
 
     override suspend fun getStep(entityId: Int): RecipeSteps {
