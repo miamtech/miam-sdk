@@ -6,11 +6,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,7 +31,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
@@ -46,16 +52,19 @@ fun recipdeDetails(
     )
 }
 
+@ExperimentalTime
 @Composable
 private fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
     openDialog: MutableState<Boolean>
 ) {
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
+
     ) {
         Box(
             modifier = Modifier
@@ -87,41 +96,87 @@ private fun recipeDetailCard(
                     fontSize = 18.sp
                 )
             }
+            if (vmRecipeCard.currentState.isInCart) {
+                Box(
+                    modifier = Modifier
+                        .absoluteOffset(x = 8.dp, y = 8.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = 4.dp,
+                                topStart = 4.dp,
+                                bottomStart = 4.dp,
+                                bottomEnd = 4.dp
+                            )
+                        )
+                        .background(Color(0xffF47F7A))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(
+                            horizontal = 5.dp,
+                            vertical = 10.dp
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+
+                        Text(
+                            text = "Déjà ajoutée", color = Color.White,
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        )
+                    }
+                }
+            }
         }
-
-        // Temps de préparation
-        PrepInfos(
-            R.string.miam_total_time,
-            R.drawable.ic_clock,
-            recipe.totalTime
-        )
-
-        /*  PrepInfos(
-              R.string.miam_prep_time,
-              R.drawable.ic_clock,
-              recipe.attributes.preparationTime.toString()
-          )
-
-          PrepInfos(
-              R.string.miam_cook_time,
-              R.drawable.ic_clock,
-              recipe.attributes.cookingTime.toString()
-          )
-
-          PrepInfos(
-              R.string.miam_prehat_time,
-              R.drawable.ic_clock,
-              recipe.attributes.preheatingTime.toString()
-          )*/
-
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .wrapContentWidth(CenterHorizontally)
+                .fillMaxWidth()
+        ) {
+            // Temps de préparation
+            PrepInfos(
+                R.string.miam_total_time,
+                R.drawable.ic_clock,
+                recipe.totalTime
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .wrapContentWidth(CenterHorizontally)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            if (recipe.attributes.preparationTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_prep_time,
+                    R.drawable.ic_knife,
+                    recipe.attributes.preparationTime.toString()
+                )
+            }
+            if (recipe.attributes.cookingTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_cook_time,
+                    R.drawable.ic_oven,
+                    recipe.attributes.cookingTime.toString()
+                )
+            }
+            if (recipe.attributes.preheatingTime?.compareTo(0.minutes) != 0) {
+                PrepInfos(
+                    R.string.miam_prehat_time,
+                    R.drawable.ic_resttime,
+                    recipe.attributes.preheatingTime.toString()
+                )
+            }
+        }
         // Titre
         Row() {
             Text(
                 text = recipe.attributes.title,
                 fontFamily = FontFamily.Cursive,
-                fontSize = 24.sp,
+                fontSize = 32.sp,
                 style = MaterialTheme.typography.h5.copy(
-                    color = Color.Red,
+                    color = MiamMasterView.Secondary,
                     fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier
@@ -129,10 +184,23 @@ private fun recipeDetailCard(
                     .padding(horizontal = 30.dp)
             )
         }
+        // Description
+        Row(
+            Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "${recipe.attributes.description ?: ' '}",
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
         // Difficulte
         Row(
             Modifier
-                .padding(top = 4.dp)
+                .padding(horizontal = 16.dp, vertical = 24.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_diflow),
@@ -148,14 +216,20 @@ private fun recipeDetailCard(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-        // Description
-        Row() {
-            Text(
-                text = "${recipe.attributes.description ?: ' '}",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(top = 4.dp)
+
+        Canvas(
+            Modifier
+                .fillMaxWidth()
+        ) {
+            drawLine(
+                color = MiamMasterView.Primary,
+                start = Offset(32f, 0f),
+                end = Offset(size.width - 32, 0f),
+                pathEffect = PathEffect.dashPathEffect(floatArrayOf(12f, 12f), 0f),
+                strokeWidth = 1.5f
             )
         }
+
 
         // Switcher ingredients preparation
 
@@ -166,7 +240,7 @@ private fun recipeDetailCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(16.dp, 24.dp)
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
@@ -193,16 +267,25 @@ private fun recipeDetailCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(5.dp, 16.dp),
 
             ) {
             Price(recipeId = recipe.id).content()
-            CustomActionButton(
-                action = { /*TODO*/ },
-                icon = R.drawable.ic_cart,
-                text = "Sélectionner ce repas",
-                isActive = true
-            )
+            if (vmRecipeCard.currentState.isInCart) {
+                CustomActionButton(
+                    action = { /*TODO*/ },
+                    icon = R.drawable.ic_cart,
+                    text = "Voir le détail",
+                    isActive = true
+                )
+            } else {
+                CustomActionButton(
+                    action = { /*TODO*/ },
+                    icon = R.drawable.ic_cart,
+                    text = "Sélectionner ce repas",
+                    isActive = true
+                )
+            }
         }
     }
 }
@@ -223,39 +306,36 @@ fun RecipeContent(
 @Composable
 fun PrepInfos(title: Int, icone: Int, time: String) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-        Row() {
-            Text(
-                text = stringResource(title),
-                color = MiamMasterView.Grey02,
-                fontSize = 11.sp,
+        Text(
+            text = stringResource(title),
+            color = MiamMasterView.Grey02,
+            fontSize = 11.sp,
+            modifier = Modifier
+                .padding(top = 4.dp)
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(icone),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MiamMasterView.black25),
                 modifier = Modifier
-                    .padding(top = 4.dp)
-                    .weight(400f)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .size(22.dp)
+
             )
-        }
-        Row() {
-            /*  Image(
-                  painter = painterResource(icone),
-                  contentDescription = null,
-                  colorFilter = ColorFilter.tint(MiamMasterView.black25),
-                  modifier = Modifier
-                      .size(22.dp)
-                      .wrapContentWidth(Alignment.CenterHorizontally)
-              )*/
             Text(
                 text = time,
                 color = MiamMasterView.black25,
                 fontSize = 16.sp,
                 modifier = Modifier
-                    .padding(top = 4.dp)
+                    .padding(4.dp, 6.dp)
                     .align(Alignment.CenterVertically)
-                    .weight(400f)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .wrapContentHeight(Alignment.Top)
             )
         }
     }
