@@ -64,11 +64,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             }
             is GroceriesListAction.SetGroceriesList -> {
                 basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
-                if(oldState.groceriesList?.id != action.gl.id ){
-                    launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
-                } else {
-                    launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
-                }
+                launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
                 oldState.copy(groceriesList = action.gl)
             }
             is GroceriesListAction.AlterRecipeList -> {

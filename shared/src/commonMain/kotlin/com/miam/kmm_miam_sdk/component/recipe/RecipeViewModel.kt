@@ -4,12 +4,12 @@ import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListEffect
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
-import com.miam.kmm_miam_sdk.component.pricing.PricingContract
+
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
-import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeSuggestionsRepositoryImp
+
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -116,6 +116,9 @@ open class RecipeViewModel :
                     )
                 )
             ), {
+                if(uiState.value.isInCart) {
+
+                }
                 setState { copy(isInCart = true) }
             })
     }

@@ -26,17 +26,16 @@ import coil.annotation.ExperimentalCoilApi
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.base.mvi.BasketStore
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListAction
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
 
 
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
+
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine.Companion.fromBasketEntry
-import com.miam.kmm_miam_sdk.miam_core.model.GroceriesList
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -46,7 +45,7 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
     private  val vmBasketPreview = BasketPreviewViewModel(recipeId)
     private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
-    private val bottomSheetViewModel :BottomSheetViewModel by inject()
+    private val routerViewModel :RouterViewModel by inject()
 
     @ExperimentalCoilApi
     @Composable
@@ -110,7 +109,7 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
                                 if (line.entries?.found?.isNotEmpty() == true) {
                                     Column {
                                         line.entries!!.found.map { entry ->  fromBasketEntry(entry) }.forEach { bpl ->
-                                            entryLine(bpl, itemSelectorViewModel, bottomSheetViewModel)
+                                            entryLine(bpl, itemSelectorViewModel, routerViewModel)
                                         }
                                     }
                                 }

@@ -31,11 +31,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-@ExperimentalFoundationApi
+
 class ItemsSelector () :KoinComponent {
 
     private  val vmItemSelector: ItemSelectorViewModel by inject()
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Content () {
 
@@ -93,7 +94,7 @@ fun Content () {
         )
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        LazyVerticalGrid (
+       LazyVerticalGrid (
              cells = GridCells.Adaptive(140.dp),
              contentPadding = PaddingValues(
                 start = 12.dp,
@@ -110,7 +111,7 @@ fun Content () {
                 items(itemsList.size) {
                     index ->
                     Clickable(
-                        onClick = { /* TODO*/ },
+                        onClick = {  /*TODO*/ },
                         children = {
                             Surface(
                                 border = BorderStroke(1.dp, MiamMasterView.lightGray),

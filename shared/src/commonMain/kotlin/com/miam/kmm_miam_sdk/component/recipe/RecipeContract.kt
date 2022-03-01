@@ -7,7 +7,6 @@ import com.miam.kmm_miam_sdk.base.mvi.UiState
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 
-
 enum class TabEnum {
     INGREDIENT, STEP
 }

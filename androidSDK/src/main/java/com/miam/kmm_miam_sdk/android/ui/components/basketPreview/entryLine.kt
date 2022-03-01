@@ -24,16 +24,17 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterContract
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import java.util.*
 
 @ExperimentalCoilApi
 @Composable
-fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, bottomSheetViewModel: BottomSheetViewModel) {
+fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, routerViewModel: RouterViewModel) {
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
 
     Spacer(modifier = Modifier.padding(vertical = 4.dp))
@@ -96,7 +97,7 @@ fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, b
             Clickable(
                 onClick = {
                     itemSelectorVM.setEvent(ItemSelectorContract.Event.SetSelectedItem(entry))
-                    bottomSheetViewModel.setEvent(BottomSheetContract.Event.GoToItemSelector)
+                    routerViewModel.setEvent(RouterContract.Event.GoToItemSelector)
                 },
                 children = {
                     Text(

@@ -1,43 +1,38 @@
 package com.miam.kmm_miam_sdk.android.ui.components.common
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ExperimentalMaterialApi
+
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import coil.annotation.ExperimentalCoilApi
+
 import com.miam.kmm_miam_sdk.android.ui.components.ItemsSelector.ItemsSelector
-import com.miam.kmm_miam_sdk.android.ui.components.RecipeHelper
-import com.miam.kmm_miam_sdk.android.ui.components.RecipeSponsor
+
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
-import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContent
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+
+import com.miam.kmm_miam_sdk.component.router.RouterContent
+import com.miam.kmm_miam_sdk.component.router.RouterContract
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
+class RouterModal :KoinComponent {
+    private val vmRouter: RouterViewModel by inject()
 
-@ExperimentalFoundationApi
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun RouterModal(
-    vm: BaseViewModel<*, *, *>,
-    openDialog: MutableState<Boolean>,
-) {
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Composable
+    fun Content()  {
 
-    //val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
-    val goTo = { destination: RecipeContract.Event -> vm.setEvent(destination as Nothing) }
-    var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
+        val state by vmRouter.uiState.collectAsState()
 
-        if (openDialog.value) {
+        if (state.isOpen) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -48,29 +43,22 @@ fun RouterModal(
                         usePlatformDefaultWidth = false
                     ),
                     onDismissRequest = {
-                        openDialog.value = false
+                        vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)
                     }
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
-                        if (vm is RecipeViewModel) {
-                            recipdeDetails( vm, openDialog)
-                        } else if (vm is BottomSheetViewModel) {
-                            val state by vm.uiState.collectAsState()
-                            when (state.content) {
-                               /* BottomSheetContent.RECIPE_HELPER -> RecipeHelper(goTo)
-                                BottomSheetContent.RECIPE_SPONSOR -> RecipeSponsor(goTo)*/
-                                BottomSheetContent.BASKET_PREVIEW -> BasketPreview(
-                                    vm.currentState.recipeId ?: -1, fun(){ openDialog.value = false}
-                                ).content(
-                                )
-                                BottomSheetContent.ITEMS_SELECTOR -> ItemsSelector().Content()
-                            }
-                        } else {
-                            Surface() {}
-                        }
+                        when(state.content){
+                          RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(state.vm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)}) }
+                          RouterContent.BASKET_PREVIEW -> state.recipeId?.let { BasketPreview(it, fun (){ vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)}).content() }
+                          RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                     }
                 }
             }
         }
 
+    }
+
 }
+}
+
+

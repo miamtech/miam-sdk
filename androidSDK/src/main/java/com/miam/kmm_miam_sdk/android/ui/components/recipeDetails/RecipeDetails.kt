@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,14 +31,14 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
-    openDialog: MutableState<Boolean>
+    closeDialogue: () -> Unit
 ) {
     val state by vmRecipeCard.uiState.collectAsState()
     ManagementResourceState(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailCard(recipe, vmRecipeCard, openDialog)
+            recipeDetailCard(recipe, vmRecipeCard, closeDialogue)
         },
         onTryAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
         onCheckAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
@@ -50,7 +49,7 @@ fun recipdeDetails(
 private fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    openDialog: MutableState<Boolean>
+    closeDialogue: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -78,7 +77,7 @@ private fun recipeDetailCard(
                 .size(40.dp)
                 .alpha(0.5f),
                 backgroundColor = Color.Gray,
-                onClick = { openDialog.value = false })
+                onClick = { closeDialogue() })
             {
                 Text(
                     text = "X",
