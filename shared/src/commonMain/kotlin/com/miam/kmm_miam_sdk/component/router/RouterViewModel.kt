@@ -6,7 +6,6 @@ open class RouterViewModel:
     BaseViewModel<RouterContract.Event, RouterContract.State, RouterContract.Effect>() {
 
     override fun createInitialState(): RouterContract.State =
-
         RouterContract.State(
             content= RouterContent.BASKET_PREVIEW,
             vm = null,

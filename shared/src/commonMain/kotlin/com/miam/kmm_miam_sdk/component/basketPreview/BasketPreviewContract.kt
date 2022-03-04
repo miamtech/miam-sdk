@@ -22,6 +22,7 @@ interface BasketPreviewContract {
         data class AddEntry(val entry:BasketEntry):Event()
         data class RemoveEntry(val entry:BasketEntry):Event()
         data class UpdateBasketEntry(val entry: BasketEntry,val deltaQty:Int): Event()
+        data class ReplaceItem(val entry: BasketEntry, val itemId :Int):Event()
         object ToogleLine :Event()
         object Reload: Event()
     }

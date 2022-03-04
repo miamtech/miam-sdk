@@ -63,6 +63,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
             is BasketPreviewContract.Event.UpdateBasketEntry -> updateBaskeyEntry(event.entry, event.deltaQty)
             is BasketPreviewContract.Event.RemoveEntry -> removeBasketEntry(event.entry)
+            is BasketPreviewContract.Event.ReplaceItem -> replaceItem(event.entry,event.itemId)
             is BasketPreviewContract.Event.ToogleLine -> toogleLine()
             is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
             is BasketPreviewContract.Event.BuildEntriesLines -> buildEntriesLines(event.bpl)
@@ -100,6 +101,11 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     private fun updateBaskeyEntry(entry: BasketEntry, deltaQty:Int){
         basketStore.dispatch(BasketAction.UpdateBasketEntries(listOf(AlterQuantityBasketEntry(entry.id,deltaQty))))
+    }
+
+    private fun replaceItem(entry: BasketEntry, itemId: Int){
+            basketStore.dispatch(BasketAction.ReplaceSelectedItem(entry,itemId)
+        )
     }
 
     private fun basketChange(){
