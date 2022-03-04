@@ -122,7 +122,7 @@ class RecipeView @JvmOverloads constructor(
         recipe: Recipe,
         vmRecipe: RecipeViewModel
     )  {
-        val price = Price(recipeId = recipe.id)
+        val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest )
         Column {
             RouterModal().Content()
             Card(

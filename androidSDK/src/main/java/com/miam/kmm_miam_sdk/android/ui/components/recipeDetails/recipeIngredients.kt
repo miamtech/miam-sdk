@@ -33,12 +33,12 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Counter(
-                count = state.guest,
+                vmRecipe.currentState.guest,
                 isDisable = false,
-                increase = { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
-                decrease = { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
-                counterModifier = CounterModifier(buttonColors = MiamMasterView.Primary),
-            )
+                { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
+                { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
+                CounterModifier(),
+                )
             Text(
                 text = "Quantité",
                 color = MiamMasterView.darkGray

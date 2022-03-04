@@ -28,8 +28,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Price
 import com.miam.kmm_miam_sdk.android.ui.components.common.CustomActionButton
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.component.recipe.TabEnum
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
@@ -221,12 +223,7 @@ private fun recipeDetailCard(
             )
         }
 
-
         // Switcher ingredients preparation
-
-        // TODO: utiliser une enum dans le theme avec un state
-        var isIngredientChecked by remember { mutableStateOf(MiamMasterView.MiamDisplayMode.INGREDIENT_MODE) }
-
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -236,24 +233,22 @@ private fun recipeDetailCard(
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
                 text = "Ingredients",
-                action = {
-                    isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
-                },
-                isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
+                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowSteps) },
+                isActive = vmRecipeCard.currentState.tabState == TabEnum.STEP
             )
             Spacer(Modifier.padding(horizontal = 8.dp))
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
                 text = "Préparation",
-                action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
-                isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
+                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowIngredient) },
+                isActive = vmRecipeCard.currentState.tabState == TabEnum.INGREDIENT
             )
         }
 
         Row() {
-            RecipeContent(recipe = recipe, displayMode = isIngredientChecked, vmRecipeCard)
+            RecipeContent(recipe = recipe, vmRecipeCard)
         }
-
+        Spacer(modifier = Modifier.padding(vertical = 50.dp))
     }
 },
         bottomBar = { BottomAppBar(backgroundColor = Color.White) {  Row(
@@ -263,7 +258,7 @@ private fun recipeDetailCard(
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
 
-                Price(recipeId = recipe.id).content()
+                Price(recipeId = recipe.id, vmRecipeCard.currentState.guest).content()
                 if (vmRecipeCard.currentState.isInCart) {
                     CustomActionButton(
                         action = { /*TODO*/ },
@@ -287,19 +282,19 @@ private fun recipeDetailCard(
 
 @Composable
 fun RecipeContent(
-    recipe: Recipe, displayMode: MiamMasterView.MiamDisplayMode, vmRecipe: RecipeViewModel
+    recipe: Recipe, vmRecipe: RecipeViewModel
 ) {
-    when (displayMode) {
-        MiamMasterView.MiamDisplayMode.INGREDIENT_MODE -> RecipeIngredients(recipe, vmRecipe)
-        MiamMasterView.MiamDisplayMode.STEPS_MODE -> RecipeSteps(
-            recipe.attributes!!.steps!!.steps,
+    when (vmRecipe.currentState.tabState) {
+        TabEnum.INGREDIENT -> RecipeIngredients(recipe, vmRecipe)
+        TabEnum.STEP -> RecipeSteps(
+            recipe.attributes.steps!!.steps,
             vmRecipe
         )
     }
 }
 
 @Composable
-fun PrepInfos(title: Int, icone: Int, time: String) {
+fun PrepInfos(title: Int, icon: Int, time: String) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -316,7 +311,7 @@ fun PrepInfos(title: Int, icone: Int, time: String) {
             horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(icone),
+                painter = painterResource(icon),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MiamMasterView.black25),
                 modifier = Modifier
