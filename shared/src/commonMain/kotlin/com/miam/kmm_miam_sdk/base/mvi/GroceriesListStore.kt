@@ -106,7 +106,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
     private fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
         if(states.groceriesList == null) return
-        var recipesInfos =  states.groceriesList.attributes.recipesInfos ?: mutableListOf()
+        val recipesInfos =  states.groceriesList.attributes.recipesInfos ?: mutableListOf()
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
             recipesInfos.find { it.id == recipeId }?.guests = guest
@@ -119,7 +119,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
     private fun removeRecipe(recipeId: Int,  states :GroceriesListState){
         if(states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
-        var recipesInfos =  states.groceriesList.attributes.recipesInfos
+        val recipesInfos =  states.groceriesList.attributes.recipesInfos
         launch { sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))}
         val newRecipeInfos = recipesInfos!!.filter { el -> el.id != recipeId }.toMutableList()
         alterRecipeInfos(newRecipeInfos, states)

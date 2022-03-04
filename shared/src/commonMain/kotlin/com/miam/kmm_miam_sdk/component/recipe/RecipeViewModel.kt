@@ -9,8 +9,10 @@ import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 import org.koin.core.component.inject
@@ -25,6 +27,7 @@ open class RecipeViewModel :
     private var recipeId: Int? = null
     private var isInit: Boolean = false
     private lateinit var recipe: Recipe
+    private val guestSubject : MutableSharedFlow<Int> = MutableSharedFlow()
 
     override fun createInitialState(): RecipeContract.State =
         RecipeContract.State(
@@ -44,6 +47,10 @@ open class RecipeViewModel :
             groceriesListStore.observeSideEffect().collect {
                 handleGLChange(it)
             }
+
+        }
+        launch {
+            listenguestSubjectChanges()
         }
     }
 
@@ -82,6 +89,12 @@ open class RecipeViewModel :
         }
     }
 
+    private suspend fun listenguestSubjectChanges() {
+        guestSubject.debounce(500).collect{
+                addOrAlterRecipe()
+            }
+        }
+
     private fun checkIsInCart(): Boolean {
         val currentGl = groceriesListStore.observeState().value.groceriesList ?: return false
         return currentGl.attributes.recipesInfos != null && currentGl.attributes.recipesInfos.any { ri -> ri.id == recipeId }
@@ -90,13 +103,17 @@ open class RecipeViewModel :
     private fun removeGuest() {
         if (uiState.value.guest == 1) return
         setState { copy(guest = uiState.value.guest - 1) }
-        if (checkIsInCart()) addOrAlterRecipe()
+        if (checkIsInCart()) launch {
+            guestSubject.emit(uiState.value.guest)
+        }
     }
 
     private fun addGuest() {
         if (uiState.value.guest == 100) return
         setState { copy(guest = uiState.value.guest + 1) }
-        if (checkIsInCart()) addOrAlterRecipe()
+        if (checkIsInCart()) launch {
+            guestSubject.emit(uiState.value.guest)
+        }
     }
 
     private fun updateGuest(nbGuest: Int) {
@@ -115,9 +132,11 @@ open class RecipeViewModel :
                         numberOfGuests = uiState.value.guest
                     )
                 )
-            ), {
+            ),
+            {
                 setState { copy(isInCart = true) }
-            })
+            }
+        )
     }
 
     private fun setTab(newTab: TabEnum) {

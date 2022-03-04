@@ -23,12 +23,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private var isFillingEntry = false
 
     init {
-        println("MIAM --> basket RecipeId : $recipeId ")
         if(recipeId != null){
+            println("MIAM --> basket RecipeId : $recipeId ")
             basketChange()
             launch {
                 basketStore.observeSideEffect().collectLatest{
                     if (it == BasketEffect.BasketPreviewChange){
+                        println("MIAM --> basket observer trigger ")
                         basketChange()
                     }
                 }
@@ -85,7 +86,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private  fun buildEntriesLines(bpl :BasketPreviewLine){
-        println("Maim -> buildEntriesLines")
+        println("Maim -> buildEntriesLines   $isFillingEntry")
        if(isFillingEntry) return
        fillBasketEntries(bpl)
     }

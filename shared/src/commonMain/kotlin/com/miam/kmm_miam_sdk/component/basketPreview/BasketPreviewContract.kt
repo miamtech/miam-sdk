@@ -16,13 +16,13 @@ interface BasketPreviewContract {
 
     sealed class Event : UiEvent {
         data class SetRecipeId(val newRecipeId: Int):  Event()
-        data class SetLines(val newlines :BasketPreviewLine):Event()
+        data class SetLines(val newlines: BasketPreviewLine):Event()
         data class BuildEntriesLines(val bpl: BasketPreviewLine):Event()
-        data class CountChange(val bpl: BasketPreviewLine, val recipeVm:RecipeViewModel): Event()
-        data class AddEntry(val entry:BasketEntry):Event()
-        data class RemoveEntry(val entry:BasketEntry):Event()
-        data class UpdateBasketEntry(val entry: BasketEntry,val deltaQty:Int): Event()
-        data class ReplaceItem(val entry: BasketEntry, val itemId :Int):Event()
+        data class CountChange(val bpl: BasketPreviewLine, val recipeVm: RecipeViewModel): Event()
+        data class AddEntry(val entry: BasketEntry):Event()
+        data class RemoveEntry(val entry: BasketEntry):Event()
+        data class UpdateBasketEntry(val entry: BasketEntry,val deltaQty: Int): Event()
+        data class ReplaceItem(val entry: BasketEntry, val itemId: Int):Event()
         object ToogleLine :Event()
         object Reload: Event()
     }

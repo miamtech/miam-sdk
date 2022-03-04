@@ -21,6 +21,7 @@ open class PricingViewModel :
             price = BasicUiState.Empty,
             directPrice = null,
             recipeId = -1,
+            guestNumber = -1,
             integerPart = 0,
             decimalPart = 0,
             isInCart= false,
@@ -36,7 +37,7 @@ open class PricingViewModel :
                     directPrice = event.price) }
                 getPrice()
             }
-            is PricingContract.Event.OnSetRecipe -> setState  { copy(recipeId = event.idRecipe) }
+            is PricingContract.Event.OnSetRecipe -> setState  { copy(recipeId = event.idRecipe, guestNumber = event.guestNumber) }
         }
     }
 
@@ -82,7 +83,7 @@ open class PricingViewModel :
             launch {
                 pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
                     .collect {
-                      splitePrice(it.pricePerServe)
+                      splitePrice(it.price / uiState.value.guestNumber)
                       setEvent(PricingContract.Event.SetPrice(it))
                     }
             }
