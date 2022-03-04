@@ -10,8 +10,6 @@ class BasketComparisonMap(val basketHandler : BasketHandler,
 
     val _extIdToComparisonItem :  MutableMap<String, BasketComparisonItem> = mutableMapOf()
 
-
-
     init {
         addEntryInMapFromRetailer(retailerBasket);
         _setFromMiam(miamBasket);

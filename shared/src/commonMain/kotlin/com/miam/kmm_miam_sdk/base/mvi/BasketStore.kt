@@ -3,11 +3,9 @@ package com.miam.kmm_miam_sdk.base.mvi
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesEntryRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -38,7 +36,8 @@ sealed class  BasketAction : Action {
     data class SetBasketState(val basketPreview: List<BasketPreviewLine>) :BasketAction()
     data class AddBasketEntry(val entry: BasketEntry): BasketAction()
     data class RemoveEntry(val entry: BasketEntry): BasketAction()
-    data class UpdateBasketEntries( val basketEntries: List<AlterQuantityBasketEntry>) : BasketAction()
+    data class UpdateBasketEntries( val basketEntries: List<AlterQuantityBasketEntry>): BasketAction()
+    data class ReplaceSelectedItem( val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     object ConfirmBasket : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
@@ -117,7 +116,11 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             is BasketAction.UpdateBasketEntries -> {
                 action.basketEntries.forEach {
                     val idx =  oldState.updateBasketEntrieQueue.indexOfFirst { aqbe -> aqbe.id == it.id }
-                    if(idx != -1){ oldState.updateBasketEntrieQueue[idx] = it } else { oldState.updateBasketEntrieQueue.add(it) }
+                    if(idx != -1) {
+                        oldState.updateBasketEntrieQueue[idx] =  it.copy( delatQty = it.delatQty + oldState.updateBasketEntrieQueue[idx].delatQty )
+                    } else {
+                        oldState.updateBasketEntrieQueue.add(it)
+                    }
                 }
                  val processingList: MutableList<AlterQuantityBasketEntry>  = mutableListOf()
                  processingList.addAll(oldState.updateBasketEntrieQueue)
@@ -133,6 +136,22 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                     }
                 }
                 oldState.copy(updateBasketEntrieQueue = mutableListOf())
+            }
+            is BasketAction.ReplaceSelectedItem -> {
+                println("Miam ---> ReplaceItem")
+                //TODO update localy
+                launch {
+                    basketEntryRepo.updateBasketEntry(
+                        action.basketEntry.copy(
+                            attributes = action.basketEntry.attributes.copy(
+                                selectedItemId = action.itemId
+                            )
+                        )
+                    ).collect {
+                        println("MIAM ----> change item ")
+                    }
+                }
+                oldState
             }
             is BasketAction.SetBasket -> {
                 println("MIAM --> basket setBasket")
@@ -208,7 +227,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         val basketEntrie =  basketEntries.find { it.id == aqbe.id }
 
         if (basketEntrie != null) {
-            val newQty = (basketEntrie.attributes.quantity ?: 0) - aqbe.delatQty
+            val newQty = (basketEntrie.attributes.quantity ?: 0) + aqbe.delatQty
 
            return basketEntrie.copy(
                 attributes = basketEntrie.attributes.copy(

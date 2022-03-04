@@ -25,16 +25,21 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.android.ui.components.common.Price
+import com.miam.kmm_miam_sdk.base.mvi.BasketAction
+import com.miam.kmm_miam_sdk.base.mvi.BasketStore
 
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterContract
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-
-
 class ItemsSelector () :KoinComponent {
 
-    private  val vmItemSelector: ItemSelectorViewModel by inject()
+    private val vmItemSelector: ItemSelectorViewModel by inject()
+    private val basketStore: BasketStore by inject()
+    private val routerViewModel: RouterViewModel by inject()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -109,7 +114,21 @@ fun Content () {
                 items(itemsList.size) {
                     index ->
                     Clickable(
-                        onClick = {  /*TODO*/ },
+                        onClick = {
+                            basketStore.dispatch(BasketAction.ReplaceSelectedItem(
+                                vmItemSelector.uiState.value.selectedItem!!.record  as BasketEntry,
+                                itemsList[index].id!!
+                                )
+                            )
+                            if(routerViewModel.currentState.recipeId != null && routerViewModel.currentState.vm != null ){
+                                routerViewModel.setEvent(
+                                    RouterContract.Event.GoToPreview(
+                                        routerViewModel.currentState.recipeId!!,
+                                        routerViewModel.currentState.vm!!
+                                    )
+                                )
+                            }
+                                  },
                         children = {
                             Surface(
                                 border = BorderStroke(1.dp, MiamMasterView.lightGray),

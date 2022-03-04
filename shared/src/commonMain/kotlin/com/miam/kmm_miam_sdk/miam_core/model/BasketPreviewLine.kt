@@ -84,7 +84,7 @@ data class BasketPreviewLine(
             val gEntry = entry._relationships?.groceriesEntry
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
-                id= entry.id,
+                id= item.id,
                 record= entry,
                 isRecipe = false,
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
