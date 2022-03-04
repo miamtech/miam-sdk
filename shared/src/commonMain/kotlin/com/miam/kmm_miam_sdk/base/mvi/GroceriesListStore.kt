@@ -55,6 +55,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
         val newState = when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
+                println("MIAM --> basket RefreshGroceriesList")
                 launch { loadGroceriesList() }
                 oldState
             }
@@ -94,6 +95,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             launch {
                 groceriesListRepo.getCurrent()
                     .collect {
+                        println("MIAM --> basket loadGroceriesList")
                         dispatch(GroceriesListAction.SetGroceriesList(it))
                     }
             }
@@ -152,6 +154,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         try {
             launch {
                 groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {
+                    println("MIAM --> basket alterList")
                     dispatch(GroceriesListAction.SetGroceriesList(it))
                 }
             }
@@ -159,6 +162,4 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             dispatch(GroceriesListAction.Error(e))
         }
     }
-
-
 }

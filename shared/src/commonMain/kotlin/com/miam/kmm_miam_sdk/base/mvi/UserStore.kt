@@ -41,6 +41,7 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
         val newState = when (action) {
             is UserAction.RefreshUser -> {
+                println("MIAM --> basket RefreshUser")
                 groceriesListStore.dispatch(GroceriesListAction.RefreshGroceriesList)
                 oldState.copy(userId = action.idUser)
             }

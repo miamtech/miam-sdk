@@ -13,9 +13,9 @@ interface RouterContract {
             object GoToHelper: RouterContract.Event()
             object GoToSponsor: RouterContract.Event()
             object OpenDialog : RouterContract.Event()
-            object CloseBottomSheet : RouterContract.Event()
+            object CloseDialog : RouterContract.Event()
             object GoToItemSelector: RouterContract.Event()
-            data class GoToPreview(val recipeId: Int?): RouterContract.Event()
+            data class GoToPreview(val recipeId: Int, val vm: RecipeViewModel): RouterContract.Event()
             data class GoToDetail (val vm: RecipeViewModel) :RouterContract.Event()
         }
 

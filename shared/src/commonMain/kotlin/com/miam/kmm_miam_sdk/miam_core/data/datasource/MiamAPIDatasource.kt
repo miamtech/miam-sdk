@@ -36,7 +36,7 @@ object HttpRoutes {
 }
 
 @OptIn(InternalAPI::class)
-class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, KoinComponent {
+class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, GrocerieEntryDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
 
@@ -242,8 +242,6 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     }
 
-
-
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
     override suspend fun getRecipePrice(idRecipe: Int, idPos: Int): Pricing {
@@ -264,5 +262,22 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         return  httpClient.get<GroceriesEntryWrapper>{
             url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId")
         }.data
+    }
+
+    override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
+        return  httpClient.patch<BasketEntryWrapper>{
+            headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?include=groceries-entry")
+            body = BasketEntryUpdateWrapper(BasketEntryUpdate(basketEntry.id, "basket-entries",basketEntry.attributes))
+        }.data
+    }
+
+    ////////////////////////////////// GROCERY ENTRY ////////////////////////////////////////
+    override suspend fun updateGroceriesEntry(ge: GroceriesEntry): GroceriesEntry {
+        return  httpClient.patch<GroceriesEntryWrapper>{
+         headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+         url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
+         body =  GroceriesEntryUpdateWrapper( GroceriesEntryUpdate(ge.id,  "groceries-entries",ge.attributes) )
+     }.data
     }
 }

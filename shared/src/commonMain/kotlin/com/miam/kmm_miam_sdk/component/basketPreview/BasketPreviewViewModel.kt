@@ -1,15 +1,16 @@
 package com.miam.kmm_miam_sdk.component.basketPreview
 
-import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
-import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
-import com.miam.kmm_miam_sdk.base.mvi.BasketEffect
-import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+import com.miam.kmm_miam_sdk.base.mvi.*
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import org.koin.core.component.inject
 
 @OptIn(InternalCoroutinesApi::class)
@@ -18,8 +19,11 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     private val basketStore : BasketStore by inject()
     private val basketEntryRepo : BasketEntryRepositoryImp by inject()
+    private val _guestChangeDebounceFlow = MutableSharedFlow<Pair<BasketPreviewLine,RecipeViewModel>>()
+    private var isFillingEntry = false
 
     init {
+        println("MIAM --> basket RecipeId : $recipeId ")
         if(recipeId != null){
             basketChange()
             launch {
@@ -29,9 +33,17 @@ class BasketPreviewViewModel(val recipeId: Int?):
                     }
                 }
             }
+            countListener()
+        }
+    }
 
-        }else {
-
+    private fun countListener() {
+        launch {
+            _guestChangeDebounceFlow.debounce(500).collect {
+                println("Miam Emmit ${it.first.count}")
+                setEvent(BasketPreviewContract.Event.Reload)
+                it.second.setEvent(RecipeContract.Event.UpdateGuest(it.first.count))
+            }
         }
     }
 
@@ -40,22 +52,30 @@ class BasketPreviewViewModel(val recipeId: Int?):
             recipeId= null,
             showLines= false,
             line= BasicUiState.Loading,
+            isReloading= false,
+            isFillingEntry= false
         )
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
         when (event) {
-            is BasketPreviewContract.Event.SetRecipeId -> setRecipeid(event.newRecipeId)
+            is BasketPreviewContract.Event.SetRecipeId -> setRecipeId(event.newRecipeId)
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
-            is BasketPreviewContract.Event.toogleLine -> toogleLine()
+            is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
+            is BasketPreviewContract.Event.UpdateBasketEntry -> updateBaskeyEntry(event.entry, event.deltaQty)
+            is BasketPreviewContract.Event.RemoveEntry -> removeBasketEntry(event.entry)
+            is BasketPreviewContract.Event.ToogleLine -> toogleLine()
+            is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
             is BasketPreviewContract.Event.BuildEntriesLines -> buildEntriesLines(event.bpl)
+            is BasketPreviewContract.Event.CountChange -> launch { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
         }
     }
 
-    private fun setRecipeid(newRecipeId :Int) {
+    private fun setRecipeId(newRecipeId :Int) {
         setState { copy(recipeId = newRecipeId)}
     }
 
     private fun setLines(newline: BasketPreviewLine) {
+        println("Miam  --> SetLine ")
         setEvent(BasketPreviewContract.Event.BuildEntriesLines(newline))
     }
 
@@ -64,21 +84,37 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private  fun buildEntriesLines(bpl :BasketPreviewLine){
-       launch { fillBasketEntries(bpl)}
+        println("Maim -> buildEntriesLines")
+       if(isFillingEntry) return
+       fillBasketEntries(bpl)
+    }
+
+    private fun addEntry(entry: BasketEntry){
+        println("Miam --> add entry")
+        basketStore.dispatch(BasketAction.AddBasketEntry(entry))
+    }
+
+    private fun removeBasketEntry(entry: BasketEntry){
+        basketStore.dispatch(BasketAction.RemoveEntry(entry))
+    }
+
+    private fun updateBaskeyEntry(entry: BasketEntry, deltaQty:Int){
+        basketStore.dispatch(BasketAction.UpdateBasketEntries(listOf(AlterQuantityBasketEntry(entry.id,deltaQty))))
     }
 
     private fun basketChange(){
-
+        println("MIAM --> basket change")
            val bpl = basketStore.observeState().value.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId }
             if(bpl != null) {
                 setEvent(BasketPreviewContract.Event.SetLines(bpl))
             }
-
     }
 
-    private suspend fun fillBasketEntries(line: BasketPreviewLine) {
+    private fun fillBasketEntries(line: BasketPreviewLine) {
+        setState { copy( isFillingEntry = true)}
 
         try {
+            println("MIAM --> basket setFillBasketEntry  ${line.id}")
             val filledFoundBasketEntries : MutableList<BasketEntry> = mutableListOf()
             val filledRevovedBasketEntries : MutableList<BasketEntry> = mutableListOf()
             val filledOftenDeletedBasketEntry : MutableList<BasketEntry> = mutableListOf()
@@ -123,11 +159,11 @@ class BasketPreviewViewModel(val recipeId: Int?):
                 line.entries?.removed?.addAll(filledRevovedBasketEntries)
                 line.entries?.oftenDeleted?.addAll(filledOftenDeletedBasketEntry)
                 line.entries?.notFound?.addAll(filledNotFoundBasketEntry)
-
-                setState { copy(line = BasicUiState.Success(line)) }
+                setState { copy(line = BasicUiState.Success(line), isReloading= false, isFillingEntry = false) }
 
         } catch (cause: Throwable) {
             print(cause.toString())
+            isFillingEntry = false
           // todo Throw error
         }
     }

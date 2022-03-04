@@ -34,6 +34,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
         ) {
             Counter(
                 count = state.guest,
+                isDisable = false,
                 increase = { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
                 decrease = { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
                 counterModifier = CounterModifier(buttonColors = MiamMasterView.Primary),

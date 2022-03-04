@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components.common
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ data class CounterModifier(
 @Composable
 fun Counter(
     count: Int,
+    isDisable: Boolean,
     increase: () -> Unit,
     decrease: () -> Unit,
     counterModifier: CounterModifier
@@ -50,7 +52,10 @@ fun Counter(
             verticalAlignment = Alignment.CenterVertically,
 
             ) {
-            IconButton(onClick = { decrease() }) {
+            IconButton(onClick = { decrease() },
+                    enabled = !isDisable,
+                    modifier = Modifier.background( if(isDisable) Color(0xffF6F6F6) else Color.Transparent),
+            ) {
                 Image(
                     painter = painterResource(R.drawable.ic_less),
                     contentDescription = null,
@@ -78,7 +83,10 @@ fun Counter(
                         )
                 )
             }
-            IconButton(onClick = { increase() }) {
+            IconButton(
+                modifier = Modifier.background( if(isDisable) Color(0xffF6F6F6) else Color.Transparent),
+                onClick = { increase() },
+                enabled = !isDisable,) {
                 Image(
                     painter = painterResource(R.drawable.ic_plus),
                     contentDescription = null,

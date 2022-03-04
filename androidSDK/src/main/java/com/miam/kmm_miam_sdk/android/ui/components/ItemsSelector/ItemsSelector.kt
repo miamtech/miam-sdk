@@ -104,9 +104,7 @@ fun Content () {
             ),
             content = {
 
-                val itemsList = vmItemSelector.uiState.value.itemList?.filter {
-                        item -> item.id != vmItemSelector.uiState.value.selectedItem?.id
-                } ?: emptyList()
+                val itemsList = vmItemSelector.uiState.value.itemList ?: emptyList()
 
                 items(itemsList.size) {
                     index ->
@@ -129,7 +127,7 @@ fun Content () {
                                     )
 
                                     Image(
-                                        painter = rememberImagePainter(itemsList[index].attributes.image),
+                                        painter = rememberImagePainter(itemsList[index].picture),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -137,10 +135,10 @@ fun Content () {
                                             .width(72.dp)
                                             .clip(RoundedCornerShape(8.dp)),
                                     )
-                                    Text(text = "${itemsList[index].attributes.brand ?: ' '} ${itemsList[index].attributes.name ?: ' '} | ${itemsList[index].attributes.capacityUnit}" ,                                        fontSize = 13.sp,
+                                    Text(text = "${itemsList[index].description?.get(0) ?: ' '}" ,                                        fontSize = 13.sp,
                                         textAlign = TextAlign.Center,
                                         color = MiamMasterView.textColor)
-                                    Price(price = itemsList[index].attributes.unitPrice?.toDouble(),
+                                    Price(price = itemsList[index].price.toDouble(),
                                         isTotalPrice = true).content()
                                 }
                             }

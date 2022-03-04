@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,19 +23,26 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetContract
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import java.util.*
 
 @ExperimentalCoilApi
 @Composable
-fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, routerViewModel: RouterViewModel) {
+fun entryLine(entry: BasketPreviewLine,
+              vmBasketPreview : BasketPreviewViewModel,
+              itemSelectorVM: ItemSelectorViewModel,
+              routerViewModel: RouterViewModel) {
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
+    var count by remember { mutableStateOf(entry.count) }
 
     Spacer(modifier = Modifier.padding(vertical = 4.dp))
     Row(
@@ -44,23 +51,21 @@ fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, r
     ) {
         IconButton(
             modifier = Modifier
-                .size(30.dp).padding(
-                    top = 30.dp
-                )
+                .size(30.dp)
                 .border(
                     border = BorderStroke(
                         width = 1.dp,
                         color = Color(0xffD9D9D9)
                     ),
-                    shape = RoundedCornerShape(100.dp)
+                    shape = CircleShape
                 ),
             onClick = {
-                //TODO
+                vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveEntry(entry.record as BasketEntry))
             }) {
             Icon(
                 tint = Color.Gray,
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Drop-Down Arrow"
+                contentDescription = "delete"
             )
         }
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
@@ -127,11 +132,22 @@ fun entryLine(entry: BasketPreviewLine, itemSelectorVM: ItemSelectorViewModel, r
                 price.content()
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                 Counter(
-                    count = entry.count,
-                    increase = { /*TODO*/ },
-                    decrease = { /*TODO*/ },
+                    count = count,
+                    increase = {
+                        count++
+                        vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, 1))},
+                    decrease = {
+                        if(count == 1 ){
+                            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveEntry(entry.record as BasketEntry))
+                        }else{
+                            count --
+                            vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, -1))
+                        }
+
+                    },
                     counterModifier = CounterModifier(
-                        iconModifier = Modifier.width(0.dp))
+                        iconModifier = Modifier.width(0.dp)),
+                    isDisable = false
                 )
             }
         }

@@ -116,9 +116,6 @@ open class RecipeViewModel :
                     )
                 )
             ), {
-                if(uiState.value.isInCart) {
-
-                }
                 setState { copy(isInCart = true) }
             })
     }

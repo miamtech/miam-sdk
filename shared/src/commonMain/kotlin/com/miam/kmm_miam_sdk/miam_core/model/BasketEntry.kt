@@ -10,6 +10,11 @@ data class BasketEntries(
 )
 
 @Serializable
+data class BasketEntryWrapper(
+   val data: BasketEntry
+)
+
+@Serializable
 data class BasketEntry(
     val id: Int,
     val attributes: BasketEntryAttributes,
@@ -78,4 +83,14 @@ data class BasketEntriesItem(
     val pftPlages: List<Int>? = emptyList<Int>(),
     @SerialName("pft_checksum")
     val pftChecksum: String? = null,
+)
+
+@Serializable
+data class BasketEntryUpdateWrapper(val data : BasketEntryUpdate)
+
+@Serializable
+data class BasketEntryUpdate(
+    val id: Int,
+    val type:String,
+    val attributes: BasketEntryAttributes
 )

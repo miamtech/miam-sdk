@@ -71,7 +71,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
         }
     }
 
-    private suspend fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {
+    private  fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {
         if(extIdPointOfSale == null || idSupplier == null ) return
 
         try {

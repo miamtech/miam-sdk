@@ -21,7 +21,7 @@ open class RouterViewModel:
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterContract.Event.GoToPreview -> {
-                setState { copy(recipeId =event.recipeId) }
+                setState { copy(recipeId =event.recipeId, vm = event.vm) }
                 navigateTo( RouterContent.BASKET_PREVIEW)
             }
             is RouterContract.Event.GoToItemSelector -> {
@@ -30,7 +30,7 @@ open class RouterViewModel:
             RouterContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
             RouterContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterContract.Event.OpenDialog ->  setState { copy(isOpen = true) }
-            RouterContract.Event.CloseBottomSheet ->  setState { copy(isOpen = false) }
+            RouterContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
         }
 
     }

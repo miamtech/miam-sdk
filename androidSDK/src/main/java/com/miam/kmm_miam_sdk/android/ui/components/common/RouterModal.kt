@@ -10,6 +10,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.annotation.ExperimentalCoilApi
 
 import com.miam.kmm_miam_sdk.android.ui.components.ItemsSelector.ItemsSelector
 
@@ -19,6 +20,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
 import com.miam.kmm_miam_sdk.component.router.RouterContent
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -26,6 +28,8 @@ import org.koin.core.component.inject
 class RouterModal :KoinComponent {
     private val vmRouter: RouterViewModel by inject()
 
+    @InternalCoroutinesApi
+    @ExperimentalCoilApi
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Content()  {
@@ -43,13 +47,13 @@ class RouterModal :KoinComponent {
                         usePlatformDefaultWidth = false
                     ),
                     onDismissRequest = {
-                        vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)
+                        vmRouter.setEvent(RouterContract.Event.CloseDialog)
                     }
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         when(state.content){
-                          RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(state.vm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)}) }
-                          RouterContent.BASKET_PREVIEW -> state.recipeId?.let { BasketPreview(it, fun (){ vmRouter.setEvent(RouterContract.Event.CloseBottomSheet)}).content() }
+                          RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(it, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
+                          RouterContent.BASKET_PREVIEW -> state.recipeId?.let { BasketPreview(it, state.vm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}).content() }
                           RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                     }
                 }
