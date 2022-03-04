@@ -52,7 +52,7 @@ class RouterModal :KoinComponent {
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         when(state.content){
-                          RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(it, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
+                          RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(it,vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
                           RouterContent.BASKET_PREVIEW -> state.recipeId?.let { BasketPreview(it, state.vm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}).content() }
                           RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                     }
