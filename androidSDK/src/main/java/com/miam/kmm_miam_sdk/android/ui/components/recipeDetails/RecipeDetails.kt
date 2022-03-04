@@ -32,6 +32,8 @@ import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.component.recipe.TabEnum
+import com.miam.kmm_miam_sdk.component.router.RouterContract
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
@@ -40,14 +42,16 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
+    vmRouter : RouterViewModel,
     closeDialogue: () -> Unit
 ) {
+
     val state by vmRecipeCard.uiState.collectAsState()
     ManagementResourceState(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailCard(recipe, vmRecipeCard, closeDialogue)
+            recipeDetailCard(recipe, vmRecipeCard,vmRouter, closeDialogue)
         },
         onTryAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
         onCheckAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
@@ -59,6 +63,7 @@ fun recipdeDetails(
 private fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
+    vmRouter : RouterViewModel,
     closeDialogue: () -> Unit
 ) {
     Scaffold(
@@ -261,14 +266,25 @@ private fun recipeDetailCard(
                 Price(recipeId = recipe.id, vmRecipeCard.currentState.guest).content()
                 if (vmRecipeCard.currentState.isInCart) {
                     CustomActionButton(
-                        action = { /*TODO*/ },
+                        action = { vmRouter.setEvent(
+                            RouterContract.Event.GoToPreview(
+                                recipeId = recipe.id,
+                                vm = vmRecipeCard
+                            )
+                        ) },
                         icon = R.drawable.ic_cart,
                         text = "Voir le détail",
                         isActive = true
                     )
                 } else {
                     CustomActionButton(
-                        action = { /*TODO*/ },
+                        action = {vmRecipeCard.setEvent(RecipeContract.Event.OnAddRecipe)
+                            vmRouter.setEvent(
+                                RouterContract.Event.GoToPreview(
+                                    recipeId = recipe.id,
+                                    vm = vmRecipeCard
+                                )
+                            ) },
                         icon = R.drawable.ic_cart,
                         text = "Sélectionner ce repas",
                         isActive = true
