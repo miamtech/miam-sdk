@@ -77,7 +77,7 @@ open class PricingViewModel :
     private suspend fun fetchPrice() {
         val posId = pointOfSaleStore.observeState().value.idPointOfSale
         if(uiState.value.recipeId == -1 || posId == null ) return
-
+        setState { copy(price = BasicUiState.Loading)}
         try {
             launch {
                 pricingRepository.getRecipePrice(uiState.value.recipeId, posId)

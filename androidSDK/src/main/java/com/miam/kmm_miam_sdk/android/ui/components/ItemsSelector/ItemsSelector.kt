@@ -31,11 +31,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-@ExperimentalFoundationApi
+
 class ItemsSelector () :KoinComponent {
 
     private  val vmItemSelector: ItemSelectorViewModel by inject()
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Content () {
 
@@ -93,7 +94,7 @@ fun Content () {
         )
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        LazyVerticalGrid (
+       LazyVerticalGrid (
              cells = GridCells.Adaptive(140.dp),
              contentPadding = PaddingValues(
                 start = 12.dp,
@@ -103,14 +104,12 @@ fun Content () {
             ),
             content = {
 
-                val itemsList = vmItemSelector.uiState.value.itemList?.filter {
-                        item -> item.id != vmItemSelector.uiState.value.selectedItem?.id
-                } ?: emptyList()
+                val itemsList = vmItemSelector.uiState.value.itemList ?: emptyList()
 
                 items(itemsList.size) {
                     index ->
                     Clickable(
-                        onClick = { /* TODO*/ },
+                        onClick = {  /*TODO*/ },
                         children = {
                             Surface(
                                 border = BorderStroke(1.dp, MiamMasterView.lightGray),
@@ -128,7 +127,7 @@ fun Content () {
                                     )
 
                                     Image(
-                                        painter = rememberImagePainter(itemsList[index].attributes.image),
+                                        painter = rememberImagePainter(itemsList[index].picture),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -136,10 +135,10 @@ fun Content () {
                                             .width(72.dp)
                                             .clip(RoundedCornerShape(8.dp)),
                                     )
-                                    Text(text = "${itemsList[index].attributes.brand ?: ' '} ${itemsList[index].attributes.name ?: ' '} | ${itemsList[index].attributes.capacityUnit}" ,                                        fontSize = 13.sp,
+                                    Text(text = "${itemsList[index].description?.get(0) ?: ' '}" ,                                        fontSize = 13.sp,
                                         textAlign = TextAlign.Center,
                                         color = MiamMasterView.textColor)
-                                    Price(price = itemsList[index].attributes.unitPrice?.toDouble(),
+                                    Price(price = itemsList[index].price.toDouble(),
                                         isTotalPrice = true).content()
                                 }
                             }

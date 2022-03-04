@@ -78,6 +78,25 @@ data class BasketPreviewLine(
             )
         }
 
+        fun fromBasketEntryItem(entry: BasketEntry, item: Item) : BasketPreviewLine{
+            val beItem = entry.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  item.id }
+            val price = if(beItem?.unitPrice != null && entry.attributes.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
+            val gEntry = entry._relationships?.groceriesEntry
+            val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
+            return BasketPreviewLine(
+                id= entry.id,
+                record= entry,
+                isRecipe = false,
+                inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
+                title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
+                picture = item.attributes.image ?: "",
+                description = listOf("${item.attributes.brand ?: ' '} ${item.attributes.name ?: ' '} | ${item.attributes.capacityUnit}"),
+                price= "$price",
+                count= entry.attributes.quantity ?: 1,
+                entries = null,
+            )
+        }
+
         fun  recipesAndLineEntriesToBasketPreviewLine(groceriesList: GroceriesList, lineEntries: List<LineEntries>) : List<BasketPreviewLine> {
             val recipes = groceriesList.relationships?.recipes ?: emptyList()
 

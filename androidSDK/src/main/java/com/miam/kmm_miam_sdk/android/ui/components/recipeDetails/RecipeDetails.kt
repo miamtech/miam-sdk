@@ -34,32 +34,33 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
+
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
-    openDialog: MutableState<Boolean>
+    closeDialogue: () -> Unit
 ) {
     val state by vmRecipeCard.uiState.collectAsState()
     ManagementResourceState(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailCard(recipe, vmRecipeCard, openDialog)
+            recipeDetailCard(recipe, vmRecipeCard, closeDialogue)
         },
         onTryAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
         onCheckAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
+        loadingView = {   CircularProgressIndicator() }
     )
 }
 
-@ExperimentalTime
 @Composable
 private fun recipeDetailCard(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    openDialog: MutableState<Boolean>
+    closeDialogue: () -> Unit
 ) {
-
+    Scaffold(
+        content = {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -87,7 +88,7 @@ private fun recipeDetailCard(
                 .size(40.dp)
                 .alpha(0.5f),
                 backgroundColor = Color.Gray,
-                onClick = { openDialog.value = false })
+                onClick = { closeDialogue() })
             {
                 Text(
                     text = "X",
@@ -174,7 +175,8 @@ private fun recipeDetailCard(
             Text(
                 text = recipe.attributes.title,
                 fontFamily = FontFamily.Cursive,
-                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                fontSize = 42.sp,
                 style = MaterialTheme.typography.h5.copy(
                     color = MiamMasterView.Secondary,
                     fontWeight = FontWeight.Bold
@@ -184,18 +186,7 @@ private fun recipeDetailCard(
                     .padding(horizontal = 30.dp)
             )
         }
-        // Description
-        Row(
-            Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = "${recipe.attributes.description ?: ' '}",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
+
 
         // Difficulte
         Row(
@@ -244,15 +235,16 @@ private fun recipeDetailCard(
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
-                text = "Les ingredients",
+                text = "Ingredients",
                 action = {
                     isIngredientChecked = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE
                 },
                 isActive = MiamMasterView.MiamDisplayMode.INGREDIENT_MODE == isIngredientChecked
             )
+            Spacer(Modifier.padding(horizontal = 8.dp))
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
-                text = "Votre recette",
+                text = "Préparation",
                 action = { isIngredientChecked = MiamMasterView.MiamDisplayMode.STEPS_MODE },
                 isActive = MiamMasterView.MiamDisplayMode.STEPS_MODE == isIngredientChecked
             )
@@ -262,33 +254,36 @@ private fun recipeDetailCard(
             RecipeContent(recipe = recipe, displayMode = isIngredientChecked, vmRecipeCard)
         }
 
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+    }
+},
+        bottomBar = { BottomAppBar(backgroundColor = Color.White) {  Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp, 16.dp),
+                .background(color = Color.White),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
 
-            ) {
-            Price(recipeId = recipe.id).content()
-            if (vmRecipeCard.currentState.isInCart) {
-                CustomActionButton(
-                    action = { /*TODO*/ },
-                    icon = R.drawable.ic_cart,
-                    text = "Voir le détail",
-                    isActive = true
-                )
-            } else {
-                CustomActionButton(
-                    action = { /*TODO*/ },
-                    icon = R.drawable.ic_cart,
-                    text = "Sélectionner ce repas",
-                    isActive = true
-                )
+                Price(recipeId = recipe.id).content()
+                if (vmRecipeCard.currentState.isInCart) {
+                    CustomActionButton(
+                        action = { /*TODO*/ },
+                        icon = R.drawable.ic_cart,
+                        text = "Voir le détail",
+                        isActive = true
+                    )
+                } else {
+                    CustomActionButton(
+                        action = { /*TODO*/ },
+                        icon = R.drawable.ic_cart,
+                        text = "Sélectionner ce repas",
+                        isActive = true
+                    )
+                }
             }
+
         }
-    }
-}
+        }
+    )}
 
 @Composable
 fun RecipeContent(

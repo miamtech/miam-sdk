@@ -55,6 +55,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
         val newState = when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
+                println("MIAM --> basket RefreshGroceriesList")
                 launch { loadGroceriesList() }
                 oldState
             }
@@ -64,11 +65,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             }
             is GroceriesListAction.SetGroceriesList -> {
                 basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
-                if(oldState.groceriesList?.id != action.gl.id ){
-                    launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
-                } else {
-                    launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
-                }
+                launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
                 oldState.copy(groceriesList = action.gl)
             }
             is GroceriesListAction.AlterRecipeList -> {
@@ -98,6 +95,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             launch {
                 groceriesListRepo.getCurrent()
                     .collect {
+                        println("MIAM --> basket loadGroceriesList")
                         dispatch(GroceriesListAction.SetGroceriesList(it))
                     }
             }
@@ -156,6 +154,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         try {
             launch {
                 groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {
+                    println("MIAM --> basket alterList")
                     dispatch(GroceriesListAction.SetGroceriesList(it))
                 }
             }
@@ -163,6 +162,4 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             dispatch(GroceriesListAction.Error(e))
         }
     }
-
-
 }

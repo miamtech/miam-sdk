@@ -23,30 +23,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
+import com.miam.kmm_miam_sdk.android.ui.components.common.AnnimatedShimmer
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.base.mvi.BasketStore
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListAction
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 
 
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine.Companion.fromBasketEntry
-import com.miam.kmm_miam_sdk.miam_core.model.GroceriesList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
+@InternalCoroutinesApi
+class BasketPreview(recipeId :Int, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent,
+    CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private  val vmBasketPreview = BasketPreviewViewModel(recipeId)
+    private val vmBasketPreview = BasketPreviewViewModel(recipeId)
     private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
-    private val bottomSheetViewModel :BottomSheetViewModel by inject()
+    private val routerViewModel :RouterViewModel by inject()
 
     @ExperimentalCoilApi
     @Composable
@@ -105,12 +117,12 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
                     successView = { line ->
                         requireNotNull(line)
                             Column() {
-                                basketPreviewLine(line = line)
+                                basketPreviewLine(line = line,recipeVm, vmBasketPreview, router = routerViewModel)
 
                                 if (line.entries?.found?.isNotEmpty() == true) {
                                     Column {
                                         line.entries!!.found.map { entry ->  fromBasketEntry(entry) }.forEach { bpl ->
-                                            entryLine(bpl, itemSelectorViewModel, bottomSheetViewModel)
+                                            if(state.isReloading)  AnnimatedShimmer() else entryLine(bpl,vmBasketPreview, itemSelectorViewModel, routerViewModel)
                                         }
                                     }
                                 }
@@ -130,7 +142,7 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
                                         backGroundColor = Color(0xffD9EFF2),
                                         fontColor = MiamMasterView.Primary,
                                         title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
-                                        click = {}
+                                        click = fun (entry : BasketEntry) { vmBasketPreview.setEvent(BasketPreviewContract.Event.AddEntry(entry)) }
                                     )
                                 }
                                 if (line.entries?.removed?.isNotEmpty() == true) {
@@ -140,7 +152,7 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
                                         backGroundColor = Color(0xffBBBBBB),
                                         fontColor = Color(0xff252525),
                                         title = "Article(s) retiré(s) du panier (${line.entries!!.removed.size})",
-                                        click = {}
+                                        click = fun (entry :BasketEntry) { vmBasketPreview.setEvent(BasketPreviewContract.Event.AddEntry(entry)) }
                                     )
                                 }
                                 Spacer(modifier = Modifier.padding(vertical = 32.dp))
@@ -150,6 +162,14 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
 
                 onTryAgain = { /*TODO*/ },
                 onCheckAgain = { /*TODO*/ },
+                    loadingView = { Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment =  Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+
+                    ){
+                        CircularProgressIndicator()
+                    } }
                 )
               }
             },
@@ -182,3 +202,4 @@ class BasketPreview(recipeId :Int ,val close: ()-> Unit) : KoinComponent {
         )
     }
 }
+

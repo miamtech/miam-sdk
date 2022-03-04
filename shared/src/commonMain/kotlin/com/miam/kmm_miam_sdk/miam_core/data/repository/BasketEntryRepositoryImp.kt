@@ -20,4 +20,10 @@ class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasou
             )
         emit(basketEntry)
     }
+
+    override suspend fun updateBasketEntry(basketEntry: BasketEntry): Flow<BasketEntry> = flow {
+       val updatedBasketEntry = basketEntryDataSource.updateBasketEntry(basketEntry)
+       updatedBasketEntry._relationships = basketEntry._relationships
+       emit(updatedBasketEntry)
+    }
 }

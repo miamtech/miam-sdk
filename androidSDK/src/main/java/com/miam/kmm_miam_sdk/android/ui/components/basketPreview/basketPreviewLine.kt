@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 
@@ -9,7 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,24 +21,32 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterContract
+import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import kotlin.math.round
+
 
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun basketPreviewLine(line: BasketPreviewLine) {
+fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBasketPreview: BasketPreviewViewModel, router:RouterViewModel)  {
 
     val price = Price(price = line.price.toDouble(), isTotalPrice = true)
 
-    Column(
+    var count by remember { mutableStateOf(line.count) }
 
-    ) {
+
+    Column() {
         Row(
             verticalAlignment = Alignment.Top,
             modifier = Modifier.fillMaxWidth()
         ) {
             Clickable(
-                onClick = { /*TODO*/ },
+                onClick = { router.setEvent(RouterContract.Event.GoToDetail(vmRecipe)) },
                 children = {  Image(
                     painter = rememberImagePainter(line.picture),
                     contentDescription = null,
@@ -56,7 +63,7 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                 verticalArrangement = Arrangement.Top
             ) {
                 Clickable(
-                    onClick = { /*TODO*/ },
+                    onClick = { router.setEvent(RouterContract.Event.GoToDetail(vmRecipe)) },
                 children = { Text(
                     text = line.title,
                     maxLines = 2,
@@ -79,18 +86,28 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                     ),
                 )
                 Text(
-                    text = "${((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()) / 100.toBigDecimal() }€ /personne",
+                    text = "${  (round(((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()).toDouble()) / 100) }€ /personne",
                     color= MiamMasterView.Grey02,
                     style = MaterialTheme.typography.h5.copy(fontSize = 14.sp)
                 )
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Counter(
-                    count = line.count,
-                    increase = { /*TODO*/ },
-                    decrease = { /*TODO*/ },
+                    count = count,
+                    increase = { if(line.count != 100) {
+                        count++
+                        vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
+                            line.copy(count = count), recipeVm = vmRecipe )
+                        )
+                    }},
+                    decrease = { if(line.count != 0) {
+                        count--
+                        vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
+                            line.copy(count = count), recipeVm = vmRecipe )
+                        ) }},
                     counterModifier = CounterModifier(
                         iconModifier = Modifier.size(30.dp),
-                    )
+                    ),
+                    isDisable = vmBasketPreview.currentState.isReloading
                 )
                 Row(
                     horizontalArrangement = Arrangement.End,
@@ -99,8 +116,6 @@ fun basketPreviewLine(line: BasketPreviewLine) {
                     price.content()
                 }
             }
-
         }
     }
-
 }

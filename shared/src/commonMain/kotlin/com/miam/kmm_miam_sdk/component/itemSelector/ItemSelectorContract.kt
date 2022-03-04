@@ -11,13 +11,13 @@ interface ItemSelectorContract {
 
     sealed class Event : UiEvent {
         object close: ItemSelectorContract.Event()
-        data class SetItemList(val items: List<Item>) : ItemSelectorContract.Event()
+        data class SetItemList(val items: List<BasketPreviewLine>) : ItemSelectorContract.Event()
         data class SetSelectedItem(val item: BasketPreviewLine) :ItemSelectorContract.Event()
     }
 
     data class State(
         val selectedItem: BasketPreviewLine? = null,
-        val itemList: List<Item>? = mutableListOf()
+        val itemList: List<BasketPreviewLine>? = mutableListOf()
     ) : UiState
 
     sealed class Effect : UiEffect {

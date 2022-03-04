@@ -10,6 +10,7 @@ import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 fun <T> ManagementResourceState(
     resourceState: BasicUiState<T>,
     successView: @Composable (data: T?) -> Unit,
+    loadingView: @Composable () -> Unit,
     onTryAgain: () -> Unit,
     onCheckAgain: () -> Unit,
     modifier: Modifier = Modifier
@@ -21,7 +22,7 @@ fun <T> ManagementResourceState(
         when (resourceState) {
             is BasicUiState.Empty -> Empty(onCheckAgain = {})
             is BasicUiState.Error -> Error(onTryAgain = {})
-            BasicUiState.Loading -> Loading()
+            BasicUiState.Loading -> loadingView()
             BasicUiState.Idle -> Unit
             is BasicUiState.Success -> {
                 successView(resourceState.data)
