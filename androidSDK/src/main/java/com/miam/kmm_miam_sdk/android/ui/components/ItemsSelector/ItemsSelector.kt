@@ -6,16 +6,21 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+
 import androidx.compose.material.icons.filled.SwapHorizontalCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,21 +30,17 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.android.ui.components.common.Price
-import com.miam.kmm_miam_sdk.base.mvi.BasketAction
-import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ItemsSelector () :KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
-    private val basketStore: BasketStore by inject()
-    private val routerViewModel: RouterViewModel by inject()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -51,6 +52,19 @@ fun Content () {
     verticalArrangement =  Arrangement.Top,
     horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                modifier = Modifier.size(36.dp),
+                onClick = {
+                    vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                }) {
+                Icon(
+                    tint = Color(0xff037E92),
+                    imageVector = Icons.Default.ChevronLeft,
+                    contentDescription = "ChevronLeft"
+                )
+            }
+        }
         Surface(
             border = BorderStroke(1.dp, MiamMasterView.Primary),
             shape = RoundedCornerShape(25),
@@ -58,7 +72,9 @@ fun Content () {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Row( modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp ),
+            Row( modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
                  horizontalArrangement = Arrangement.SpaceEvenly,
                  verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -114,21 +130,7 @@ fun Content () {
                 items(itemsList.size) {
                     index ->
                     Clickable(
-                        onClick = {
-                            basketStore.dispatch(BasketAction.ReplaceSelectedItem(
-                                vmItemSelector.uiState.value.selectedItem!!.record  as BasketEntry,
-                                itemsList[index].id!!
-                                )
-                            )
-                            if(routerViewModel.currentState.recipeId != null && routerViewModel.currentState.vm != null ){
-                                routerViewModel.setEvent(
-                                    RouterContract.Event.GoToPreview(
-                                        routerViewModel.currentState.recipeId!!,
-                                        routerViewModel.currentState.vm!!
-                                    )
-                                )
-                            }
-                                  },
+                        onClick = { vmItemSelector.choose(index) },
                         children = {
                             Surface(
                                 border = BorderStroke(1.dp, MiamMasterView.lightGray),

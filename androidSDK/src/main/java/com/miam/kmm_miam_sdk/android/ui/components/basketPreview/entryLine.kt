@@ -38,16 +38,14 @@ import java.util.*
 @ExperimentalCoilApi
 @Composable
 fun entryLine(entry: BasketPreviewLine,
-              vmBasketPreview : BasketPreviewViewModel,
-              itemSelectorVM: ItemSelectorViewModel,
-              routerViewModel: RouterViewModel) {
+              vmBasketPreview : BasketPreviewViewModel) {
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
     var count by remember { mutableStateOf(entry.count) }
 
     Spacer(modifier = Modifier.padding(vertical = 4.dp))
     Row(
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
         IconButton(
             modifier = Modifier
@@ -101,8 +99,7 @@ fun entryLine(entry: BasketPreviewLine,
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
             Clickable(
                 onClick = {
-                    itemSelectorVM.setEvent(ItemSelectorContract.Event.SetSelectedItem(entry))
-                    routerViewModel.setEvent(RouterContract.Event.GoToItemSelector)
+                    vmBasketPreview.setEvent(BasketPreviewContract.Event.OpenItemSelector(entry))
                 },
                 children = {
                     Text(
@@ -128,9 +125,12 @@ fun entryLine(entry: BasketPreviewLine,
                 }
             }
 
-            Row (verticalAlignment = Alignment.CenterVertically) {
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                 horizontalArrangement = Arrangement.SpaceBetween) {
                 price.content()
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+
                 Counter(
                     count = count,
                     increase = {

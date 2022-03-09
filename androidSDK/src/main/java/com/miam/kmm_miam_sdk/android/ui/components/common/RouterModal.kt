@@ -28,8 +28,7 @@ import org.koin.core.component.inject
 class RouterModal :KoinComponent {
     private val vmRouter: RouterViewModel by inject()
 
-    @InternalCoroutinesApi
-    @ExperimentalCoilApi
+
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Content()  {
@@ -54,7 +53,6 @@ class RouterModal :KoinComponent {
                         when(state.content){
                           RouterContent.RECIPE_DETAIL  -> state.vm?.let { recipdeDetails(it,vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
                           RouterContent.BASKET_PREVIEW -> state.recipeId?.let { BasketPreview(it, state.vm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}).content() }
-                          RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                     }
                 }
             }

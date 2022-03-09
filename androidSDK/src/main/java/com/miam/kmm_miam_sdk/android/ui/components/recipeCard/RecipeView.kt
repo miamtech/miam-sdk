@@ -29,6 +29,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.InternalCoroutinesApi
 
 import org.koin.core.component.KoinComponent
@@ -45,18 +46,17 @@ class RecipeView @JvmOverloads constructor(
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
     val routerModal : RouterViewModel by inject()
 
-
-    fun bind(recipeId: Int = 0, recipe: Recipe? = null) {
+    fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
         if (recipeId != 0) {
             vmRecipe.setEvent(
                 RecipeContract.Event.OnGetRecipe(
                     recipeId
                 )
             )
-        } else if (recipe != null) {
+        } else if (criteria != null) {
             vmRecipe.setEvent(
-                RecipeContract.Event.OnSetRecipe(
-                    recipe
+                RecipeContract.Event.OnSetCriteria(
+                    criteria
                 )
             )
         }
@@ -75,8 +75,6 @@ class RecipeView @JvmOverloads constructor(
                 )
             }
         }
-
-
 
     @Composable
     override fun Content() {

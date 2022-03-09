@@ -64,12 +64,19 @@ class Price(
                         requireNotNull(price)
                         priceView(price, vmPrice)
                     },
+                    emptyView = { emptyState() },
                     onTryAgain = { /*TODO*/ },
                     onCheckAgain = { /*TODO*/ },
                     loadingView = {   PriceShimmer()  }
                 )
             }
         }
+
+
+    @Composable
+    fun emptyState(){
+        Spacer(modifier = Modifier.padding(vertical = fontSize?.dp ?: 22.dp))
+    }
 
     @Composable
     fun priceView(price: Pricing, vmPrice: PricingViewModel) {

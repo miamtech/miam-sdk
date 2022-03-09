@@ -138,10 +138,10 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getRecipeSuggestions(
-        customerId: Int,
+        supplierId: Int,
         criteria: SuggestionsCriteria
     ): List<Recipe> {
-        return this.post<RecipeListWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${customerId}",criteria)!!.data
+        return this.post<RecipeListWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}",criteria)!!.data
     }
 
     override suspend fun getStep(entityId: Int): RecipeSteps {
@@ -273,6 +273,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     ////////////////////////////////// GROCERY ENTRY ////////////////////////////////////////
+
     override suspend fun updateGroceriesEntry(ge: GroceriesEntry): GroceriesEntry {
         return  httpClient.patch<GroceriesEntryWrapper>{
          headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )

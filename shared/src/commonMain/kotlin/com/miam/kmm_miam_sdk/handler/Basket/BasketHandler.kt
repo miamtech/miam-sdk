@@ -13,8 +13,6 @@ import org.koin.core.component.inject
 
 class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
 
-    // TODO check if usefull
-    private var firstMiamBasketReceived = true // we use a behaviourSubject and first emit value is not relevant
     private var _comparator: BasketComparator? = null
     private val basketStore: BasketStore by inject()
     private var basketEntries: List<BasketEntry>? = null
@@ -24,6 +22,7 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     var getBasketProducts: () -> List<RetailerProduct> = fun() :List<RetailerProduct> { return emptyList()}
     var pushProductsToBasket: (products: List<RetailerProduct>) -> Unit = fun(products: List<Any>) {}
     var mapEntryToProduct: (item: RetailerProduct) -> Unit = fun(item: RetailerProduct){}
+    var listenToRetailerBasket: (callback : (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){ println("Miam --> please init listenToRetailerBasket")}
 
     init {
         handlePayment(fun(){handleBasketSync()})
@@ -80,17 +79,14 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     }
 
     private fun basketChange(miamBasket: List<BasketEntry> ) {
-        if (firstMiamBasketReceived && miamBasket.isEmpty()) {
-            // Skip first empty array received
-            firstMiamBasketReceived = true;
-        } else {
         // Comparison should be initialized when first Miam basket is received, based on existing Retailer basket
         if (_comparator != null) {
             if (_comparator!!.isProcessingRetailerEvent) return
             // When comparison is already initialized, we just update it
             _comparator!!.updateReceivedFromMiam(miamBasket)
+        } else {
+            listenToRetailerBasket( ::retailerBasketChangeCallBack)
         }
-       }
     }
 
    private fun handleBasketSync() {
