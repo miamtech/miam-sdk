@@ -11,6 +11,7 @@ fun <T> ManagementResourceState(
     resourceState: BasicUiState<T>,
     successView: @Composable (data: T?) -> Unit,
     loadingView: @Composable () -> Unit,
+    emptyView: (@Composable () -> Unit)? = null,
     onTryAgain: () -> Unit,
     onCheckAgain: () -> Unit,
     modifier: Modifier = Modifier
@@ -20,7 +21,7 @@ fun <T> ManagementResourceState(
 
     ) {
         when (resourceState) {
-            is BasicUiState.Empty -> Empty(onCheckAgain = {})
+            is BasicUiState.Empty -> if (emptyView != null) emptyView() else  Empty(onCheckAgain = {})
             is BasicUiState.Error -> Error(onTryAgain = {})
             BasicUiState.Loading -> loadingView()
             BasicUiState.Idle -> Unit

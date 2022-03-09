@@ -43,7 +43,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
     Column() {
         Row(
             verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
         ) {
             Clickable(
                 onClick = { router.setEvent(RouterContract.Event.GoToDetail(vmRecipe)) },

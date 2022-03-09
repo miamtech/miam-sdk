@@ -1,14 +1,13 @@
 package com.miam.kmm_miam_sdk.component.recipe
 
-import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
-import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
-import com.miam.kmm_miam_sdk.base.mvi.GroceriesListEffect
-import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
+import com.miam.kmm_miam_sdk.base.mvi.*
 
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
+import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 import kotlinx.coroutines.flow.collect
@@ -23,6 +22,8 @@ open class RecipeViewModel :
     private val getRecipeUseCase: GetRecipeUseCase by inject()
     private val addRecipeUseCase: AddRecipeUseCase by inject()
     private val groceriesListStore: GroceriesListStore by inject()
+    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val pointOfSaleStore: PointOfSaleStore by inject()
 
     private var recipeId: Int? = null
     private var isInit: Boolean = false
@@ -60,6 +61,7 @@ open class RecipeViewModel :
             is RecipeContract.Event.OnSetRecipe -> setRecipe(event.recipe)
             is RecipeContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
             is RecipeContract.Event.SetActiveStep -> setActiveSteps(event.stepIndex)
+            is RecipeContract.Event.OnSetCriteria -> setRecipeFromSuggestion(event.crieria)
             RecipeContract.Event.OnAddRecipe -> addOrAlterRecipe()
             RecipeContract.Event.DecreaseGuest -> removeGuest()
             RecipeContract.Event.IncreaseGuest -> addGuest()
@@ -168,6 +170,17 @@ open class RecipeViewModel :
             setState { copy(recipeState = BasicUiState.Error()) }
             setEffect { RecipeContract.Effect.HideCard }
         })
+    }
+
+    private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
+        launch{
+            pointOfSaleStore.observeState().value.idSupplier?.let {
+                recipeRepositoryImp.getRecipeSuggestions(
+                    it, criteria).collect { recipe ->
+                        setRecipe(recipe)
+                }
+            }
+        }
     }
 
     private fun setRecipe(recipe: Recipe) {

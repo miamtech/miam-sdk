@@ -9,6 +9,15 @@ class LineEntries {
     val notFound: MutableList<BasketEntry> = mutableListOf()
     val oftenDeleted: MutableList<BasketEntry> = mutableListOf()
     val removed: MutableList<BasketEntry> = mutableListOf()
+
+    fun copy() : LineEntries {
+        val newEntries = LineEntries()
+        found.let { newEntries.found.addAll(it) }
+        removed.let { newEntries.removed.addAll(it) }
+        oftenDeleted.let { newEntries.oftenDeleted.addAll(it) }
+        notFound.let { newEntries.notFound.addAll(it) }
+        return  newEntries
+    }
 }
 
 data class BasketPreviewLine(

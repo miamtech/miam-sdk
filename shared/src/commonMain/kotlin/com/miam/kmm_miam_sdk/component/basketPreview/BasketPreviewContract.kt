@@ -1,15 +1,12 @@
 package com.miam.kmm_miam_sdk.component.basketPreview
 
-import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
+import com.miam.kmm_miam_sdk.base.mvi.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
 
-
-import com.miam.kmm_miam_sdk.base.mvi.UiEffect
-import com.miam.kmm_miam_sdk.base.mvi.UiEvent
-import com.miam.kmm_miam_sdk.base.mvi.UiState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
 
 
 interface BasketPreviewContract {
@@ -23,16 +20,21 @@ interface BasketPreviewContract {
         data class RemoveEntry(val entry: BasketEntry):Event()
         data class UpdateBasketEntry(val entry: BasketEntry,val deltaQty: Int): Event()
         data class ReplaceItem(val entry: BasketEntry, val itemId: Int):Event()
-        object ToogleLine :Event()
+        data class OpenItemSelector(val bpl: BasketPreviewLine): Event()
+        object CloseItemSelector: Event()
+        object ToggleLine :Event()
         object Reload: Event()
     }
 
     data class State(
         val recipeId: Int?,
         val showLines: Boolean,
-        val line: BasicUiState<BasketPreviewLine>,
+        val line: BasicUiState<BasketPreviewLine>, // ui state
+        val bpl: BasketPreviewLine?, //service state
         val isReloading: Boolean,
-        val isFillingEntry: Boolean
+        val isFillingEntry: Boolean,
+        val showItemSelector: Boolean,
+        val lastEntriesUpdate : LineEntries? //service state
     ) : UiState
 
     sealed class Effect : UiEffect {}

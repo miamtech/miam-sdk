@@ -5,6 +5,7 @@ import com.miam.kmm_miam_sdk.base.mvi.UiEffect
 import com.miam.kmm_miam_sdk.base.mvi.UiEvent
 import com.miam.kmm_miam_sdk.base.mvi.UiState
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 
 
 enum class TabEnum {
@@ -17,6 +18,7 @@ interface RecipeContract {
         data class OnGetRecipe(val idRecipe: Int) : Event()
         data class OnSetRecipe(val recipe: Recipe) : Event()
         data class SetHeader(val header: String) : Event()
+        data class OnSetCriteria(val crieria: SuggestionsCriteria): Event()
         data class UpdateGuest(val nbGuest: Int): Event()
         data class SetActiveStep(val stepIndex:Int): Event()
         object OnAddRecipe: Event()

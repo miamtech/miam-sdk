@@ -39,6 +39,7 @@ sealed class  BasketAction : Action {
     data class UpdateBasketEntries( val basketEntries: List<AlterQuantityBasketEntry>): BasketAction()
     data class ReplaceSelectedItem( val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     object ConfirmBasket : BasketAction()
+    object ResetUpdateBasketEntriesQueue : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
 
@@ -56,7 +57,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private val basketRepo : BasketRepositoryImp by inject()
     private val basketEntryRepo :BasketEntryRepositoryImp by inject()
     private val groceriesRepo : GroceriesEntryRepositoryImp by inject()
-    private val entriesSubject : MutableSharedFlow<List<BasketEntry>> = MutableSharedFlow()
+    private val entriesSubject : MutableSharedFlow< MutableList<AlterQuantityBasketEntry>> = MutableSharedFlow()
 
     init {
         launch {
@@ -65,9 +66,18 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
    private suspend fun listenEntriesChanges() {
-         entriesSubject.debounce(1000).collect{
-            runBlocking {
-                it.forEach {
+         entriesSubject.debounce(1000).collect{ mutableList ->
+             println("debounce $mutableList")
+             dispatch(BasketAction.ResetUpdateBasketEntriesQueue)
+             runBlocking {
+                 mutableList.filter {
+                     it.delatQty != 0
+                 }.mapNotNull {
+                     updatedEntry(
+                         it,
+                         state.value.basket?._relationships?.basketEntries ?: emptyList()
+                     )
+                 }.forEach {
                     launch {
                         basketEntryRepo.updateBasketEntry(it).collect {
                         }
@@ -103,14 +113,15 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 shouldUpdateBasket(tmp)
                 tmp
             }
+            is BasketAction.ResetUpdateBasketEntriesQueue -> {
+                oldState.copy(updateBasketEntrieQueue = mutableListOf())
+            }
             is BasketAction.AddBasketEntry -> {
                 alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "active")
-                //TODO update localy
                 oldState
             }
             is BasketAction.RemoveEntry -> {
                 alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "deleted")
-                //TODO update localy
                 oldState
             }
             is BasketAction.UpdateBasketEntries -> {
@@ -122,24 +133,15 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                         oldState.updateBasketEntrieQueue.add(it)
                     }
                 }
-                 val processingList: MutableList<AlterQuantityBasketEntry>  = mutableListOf()
-                 processingList.addAll(oldState.updateBasketEntrieQueue)
+                println("Miam ${oldState.updateBasketEntrieQueue}")
+
                 launch {
-                    processingList.filter {
-                        it.delatQty  != 0
-                    }.map{
-                        updatedEntry(it, oldState.basket?._relationships?.basketEntries ?: emptyList())
-                    }.let {
-                        entriesSubject.emit(
-                            it.filterNotNull()
-                        )
-                    }
+                    entriesSubject.emit(oldState.updateBasketEntrieQueue)
                 }
-                oldState.copy(updateBasketEntrieQueue = mutableListOf())
+                oldState
             }
             is BasketAction.ReplaceSelectedItem -> {
                 println("Miam ---> ReplaceItem")
-                //TODO update localy
                 launch {
                     basketEntryRepo.updateBasketEntry(
                         action.basketEntry.copy(
@@ -251,7 +253,6 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             }
         }
     }
-
 
      private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
         try {
