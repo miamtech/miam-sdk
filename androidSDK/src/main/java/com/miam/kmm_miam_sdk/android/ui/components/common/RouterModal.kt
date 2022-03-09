@@ -37,7 +37,7 @@ class RouterModal :KoinComponent {
 
         if (state.isOpen) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Dialog(
                     properties = DialogProperties(

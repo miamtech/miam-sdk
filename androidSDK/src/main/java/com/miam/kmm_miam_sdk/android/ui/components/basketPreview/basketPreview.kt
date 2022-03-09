@@ -99,7 +99,7 @@ class BasketPreview(recipeId :Int, val recipeVm: RecipeViewModel, val close: ()-
                                             width = 1.dp,
                                             color = Color(0xffD9D9D9)
                                         ),
-                                        shape = CircleShape
+
                                     ),
                                 onClick = {
                                     close()
