@@ -242,6 +242,14 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     }
 
+    override suspend fun updateBasket(basket: Basket): Basket {
+        return  httpClient.patch<BasketWrapper>{
+            headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basket.id}")
+            body = BasketWrapper(basket.copy(type = "basket"))
+        }.data
+    }
+
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
     override suspend fun getRecipePrice(idRecipe: Int, idPos: Int): Pricing {

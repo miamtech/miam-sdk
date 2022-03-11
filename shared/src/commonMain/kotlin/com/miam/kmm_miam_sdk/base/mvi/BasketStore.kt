@@ -47,6 +47,7 @@ sealed class  BasketEffect : Effect {
     data class Error(val error: Exception) :  BasketEffect()
     data class PointOfSaleChanged(val idPointOfSale: Int) :  BasketEffect()
     object BasketPreviewChange: BasketEffect()
+    object BasketComfirmed :BasketEffect()
 }
 
 class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
@@ -171,7 +172,9 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
               newState
             }
             is BasketAction.ConfirmBasket -> {
-                confirmBasket()
+                if(oldState.basket != null) {
+                    confirmBasket(oldState.basket)
+                }
                 oldState
             }
             is BasketAction.Error -> {
@@ -222,8 +225,12 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
        return oldState.copy( entriesCount = entriesFound.size, totalPrice = totalPrice)
     }
 
-    private fun confirmBasket(){
-        //TODO confimr basket
+    private fun confirmBasket(basket: Basket){
+       launch {
+           basketRepo.updateBasket(basket.copy(attributes = basket.attributes.copy(confirmed = true))).collect {
+               sideEffect.emit(BasketEffect.BasketComfirmed)
+           }
+       }
     }
 
     private fun updatedEntry(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{

@@ -1,23 +1,25 @@
 package com.miam.kmm_miam_sdk.handler.Basket
 
-import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+import com.miam.kmm_miam_sdk.base.mvi.*
+import com.miam.kmm_miam_sdk.miam_core.model.Basket
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
 
 class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
 
     private var _comparator: BasketComparator? = null
     private val basketStore: BasketStore by inject()
+    private val groceriesListStore: GroceriesListStore by inject()
     private var basketEntries: List<BasketEntry>? = null
 
-    var hasPayment : () -> Boolean = fun():Boolean{return false}
     var paymentTotal: () -> Double = fun():Double{return 0.0}
     var getBasketProducts: () -> List<RetailerProduct> = fun() :List<RetailerProduct> { return emptyList()}
     var pushProductsToBasket: (products: List<RetailerProduct>) -> Unit = fun(products: List<Any>) {}
@@ -25,7 +27,7 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     var listenToRetailerBasket: (callback : (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){ println("Miam --> please init listenToRetailerBasket")}
 
     init {
-        handlePayment(fun(){handleBasketSync()})
+       handleBasketSync()
     }
 
     fun retailerBasketChangeCallBack(retailerBasket: List<RetailerProduct>){
@@ -41,41 +43,17 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
         }
     }
 
-    fun   handlePayment(callback : () -> Unit) {
-        if (hasPayment()) {
-            val total = paymentTotal();
-
-            //TODO STORE basket token detect payment
-            val token = "token" //localStorage.getItem('_miam/basketToken');
-            if (token != null) {
-                // Miam basket that was confirmed on miam.tech => validate payment
-                // TODO   localStorage.removeItem('_miam/basketToken');
-                sendMiamOrder(total, token);
-                callback();
-            } else {
-                // Local Miam basket (with entries OR NOT) => confirm it and validate payment only if total received from miam > 0
-                confirmBasket(total, callback);
+    fun handlePayment() {
+        //TODO handle analytic
+        val total = paymentTotal()
+        launch {
+            basketStore.observeSideEffect().filter {
+                    basketEffect -> basketEffect == BasketEffect.BasketComfirmed
+            }.take(1).collect {
+                groceriesListStore.dispatch(GroceriesListAction.ResetGroceriesList)
             }
-        } else {
-            callback();
         }
-    }
-
-    fun sendMiamOrder(total : Double, token: String) {
-        // TODO send to analityc window.miam.basket.paid(total * 100); // need to pass the total in cents for analytics event
-        // TODO  window.miam.supplier.notifyBasketUpdated(token, 'PAID', total);
-    }
-
-    fun  confirmBasket(total :Double, callback : () -> Unit) {
-       /* window.miam.basket.confirm().subscribe(basket => {
-            if (basket && basket.token && basket.totalPrice > 0) {
-                const token = basket.token;
-                console.log('[Miam] Send confirmation notification', token);
-                window.miam.supplier.notifyBasketUpdated(token, 'CONFIRMED');
-                this.sendMiamOrder(total, token);
-            }
-            callback();
-        });*/
+        basketStore.dispatch(BasketAction.ConfirmBasket)
     }
 
     private fun basketChange(miamBasket: List<BasketEntry> ) {

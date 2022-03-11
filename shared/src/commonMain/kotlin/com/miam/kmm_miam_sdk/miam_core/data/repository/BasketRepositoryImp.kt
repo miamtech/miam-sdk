@@ -23,6 +23,11 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
         emit(basket)
     }
 
+    override suspend fun updateBasket(basket: Basket ) : Flow<Basket> = flow  {
+        val basket =  basketDataSource.updateBasket(basket)
+        emit(basket)
+    }
+
     private suspend fun fetchBasketEntriesPage(basket: Basket) : List<BasketEntry>{
         val pagesCount = ceil((basket.attributes.completion?.total ?: 0 ).div(entriesPerPages).toDouble()).toInt()
         var basketsEntries: MutableList<BasketEntry> = arrayListOf()
@@ -45,6 +50,9 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
         )*/
         return  basketEntry
     }
+
+
+
 
 
 }
