@@ -45,9 +45,6 @@ class BasketPreviewViewModel(val recipeId: Int?):
                 println("Miam Emmit ${it.first.count}")
                 setEvent(BasketPreviewContract.Event.Reload)
                 it.second.setEvent(RecipeContract.Event.UpdateGuest(it.first.count))
-                 /* basketStore.observeSideEffect().take(1).collect{
-                      basketChange()
-                  }*/
             }
         }
     }
