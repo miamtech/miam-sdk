@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -153,7 +154,8 @@ class RecipeView @JvmOverloads constructor(
                                                 vmRecipe
                                             )
                                         )
-                                    }).graphicsLayer { alpha = 0.99f }
+                                    })
+                                    .graphicsLayer { alpha = 0.99f }
                                     .drawWithContent {
                                         val colors = listOf(
                                             Color.Transparent,
@@ -162,11 +164,13 @@ class RecipeView @JvmOverloads constructor(
                                         drawContent()
                                         drawRect(
                                             brush = Brush.verticalGradient(colors),
-                                        )}
+                                        )
+                                    }
                             )
                             Text(
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center,
                                 text = recipe.attributes.title,
                                 style = MaterialTheme.typography.h5.copy(
                                     color = Color.White,
@@ -209,7 +213,9 @@ class RecipeView @JvmOverloads constructor(
                                     }
                                 }
                             } else {
-                                FloatingActionButton(modifier = Modifier
+                                Surface() {
+                                }
+                                /*FloatingActionButton(modifier = Modifier
                                     .align(Alignment.TopStart)
                                     .size(24.dp)
                                     .absoluteOffset(x = 8.dp, y = 8.dp),
@@ -222,7 +228,7 @@ class RecipeView @JvmOverloads constructor(
                                         )
                                     }) {
                                     Text(text = "?", color = Color.White)
-                                }
+                                }*/
                             }
                         }
                         Row(

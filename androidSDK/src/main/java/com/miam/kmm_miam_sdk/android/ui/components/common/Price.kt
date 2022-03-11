@@ -139,7 +139,8 @@ class Price(
             Row() {
 
                 Spacer(modifier = Modifier
-                    .height(fontSize?.dp ?: 22.dp)
+                    .padding(vertical = 2.dp)
+                    .height(fontSize?.minus(6)?.dp ?: 16.dp)
                     .width(30.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(brush = brush))

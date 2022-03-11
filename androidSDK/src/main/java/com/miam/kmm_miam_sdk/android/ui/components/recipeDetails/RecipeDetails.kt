@@ -12,10 +12,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -89,7 +88,17 @@ private fun recipeDetailCard(
                 modifier = Modifier
                     .height(245.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(32.dp, 32.dp, 64.dp, 0.dp))
+                    .graphicsLayer { alpha = 0.99f }
+                    .drawWithContent {
+                        val colors = listOf(
+                            Color.Transparent,
+                            Color.Black
+                        )
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(colors),
+                        )}
+                    .clip(RoundedCornerShape(0.dp, 0.dp, 64.dp, 0.dp))
             )
 
             FloatingActionButton(modifier = Modifier

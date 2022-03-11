@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 
 import androidx.compose.ui.graphics.Color
 
@@ -89,25 +90,19 @@ class BasketPreview(recipeId :Int, val recipeVm: RecipeViewModel, val close: ()-
                                 ),
                                 modifier = Modifier
                                     .wrapContentWidth(Alignment.CenterHorizontally)
-                                    .padding(horizontal = 30.dp)
+                                    .padding(horizontal = 16.dp)
                             )
-                            IconButton(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .border(
-                                        border = BorderStroke(
-                                            width = 1.dp,
-                                            color = Color(0xffD9D9D9)
-                                        ),
-
-                                    ),
-                                onClick = {
-                                    close()
-                                }) {
+                            FloatingActionButton(modifier = Modifier
+                                .padding(16.dp)
+                                .size(40.dp)
+                                .alpha(0.5f),
+                                backgroundColor = Color.Gray,
+                                onClick = { close() })
+                            {
                                 Icon(
-                                    tint = Color(0xff037E92),
+                                    tint = Color.White,
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Drop-Down Arrow"
+                                    contentDescription = "close"
                                 )
                             }
                         }
