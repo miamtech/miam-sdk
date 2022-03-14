@@ -19,6 +19,10 @@ object  PointOfSaleHandler : KoinComponent {
         triggerAction(PointOfSaleAction.SetSupplierId(supplierId))
     }
 
+    fun setSupplierOrigin(origin : String){
+        triggerAction(PointOfSaleAction.SetOrigin(origin))
+    }
+
    private fun triggerAction(action: PointOfSaleAction) {
         store.dispatch(action)
     }

@@ -6,5 +6,5 @@ interface BasketDataSource {
    suspend fun getFromListAndPos(listId: Int, posId: Int): Basket
    suspend fun getBasketEntries(basketId : Int): BasketEntries
    suspend fun getBasketEntriesbyPages(basketId : Int, pageIndex :Int, pageSize: Int):  List<BasketEntry>
-   suspend fun updateBasket(basket: Basket) :Basket
+   suspend fun updateBasket(basket: Basket, origin :String) :Basket
 }

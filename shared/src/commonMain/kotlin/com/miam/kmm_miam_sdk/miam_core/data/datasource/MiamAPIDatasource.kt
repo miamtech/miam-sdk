@@ -33,10 +33,11 @@ object HttpRoutes {
     const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
     const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
     const val RECIPE_SUGGESTIONS= "$BASE_URL/recipes/suggestions"
+    const val SUPPLIER = "$BASE_URL/suppliers/"
 }
 
 @OptIn(InternalAPI::class)
-class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, GrocerieEntryDataSource, KoinComponent {
+class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, GrocerieEntryDataSource,SupplierDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
 
@@ -242,11 +243,12 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     }
 
-    override suspend fun updateBasket(basket: Basket): Basket {
+    override suspend fun updateBasket(basket: Basket, origin:String): Basket {
         return  httpClient.patch<BasketWrapper>{
+            headers.append(HttpHeaders.Origin, origin)
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basket.id}")
-            body = BasketWrapper(basket.copy(type = "basket"))
+            url(HttpRoutes.BASKET_ENDPOINT+"${basket.id}")
+            body = BasketWrapper(basket.copy(type = "baskets"))
         }.data
     }
 
@@ -288,5 +290,16 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
          url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
          body =  GroceriesEntryUpdateWrapper( GroceriesEntryUpdate(ge.id,  "groceries-entries",ge.attributes) )
      }.data
+    }
+
+    /////////////////////////////////////SUPPLIER /////////////////////////////////////////////////
+
+
+    override suspend fun notifyBasketUpdated(basketToken: String, supplierId: Int, status: String, price: String?) {
+        return  httpClient.post{
+            headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+            url("${HttpRoutes.SUPPLIER}$supplierId/webhooks/basket_updated")
+            body = SupplierNotificationWrapper(basketToken,status, price)
+        }
     }
 }

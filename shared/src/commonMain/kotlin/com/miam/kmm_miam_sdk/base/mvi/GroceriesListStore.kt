@@ -60,7 +60,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 oldState
             }
             is GroceriesListAction.ResetGroceriesList -> {
-                launch { restGroserriesList() }
+                println("MIAM --> basket reset GroceriesList")
+                launch { restGroceriesList() }
                 oldState
             }
             is GroceriesListAction.SetGroceriesList -> {
@@ -138,7 +139,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         launch { alterList(gl) }
     }
 
-    private suspend fun restGroserriesList(){
+    private suspend fun restGroceriesList(){
         try {
             launch {
                 groceriesListRepo.getNew().collect {

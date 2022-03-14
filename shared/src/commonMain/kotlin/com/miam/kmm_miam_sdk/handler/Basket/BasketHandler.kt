@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.handler.Basket
 
 import com.miam.kmm_miam_sdk.base.mvi.*
-import com.miam.kmm_miam_sdk.miam_core.model.Basket
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
@@ -46,14 +45,16 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     fun handlePayment() {
         //TODO handle analytic
         val total = paymentTotal()
-        launch {
-            basketStore.observeSideEffect().filter {
-                    basketEffect -> basketEffect == BasketEffect.BasketComfirmed
-            }.take(1).collect {
-                groceriesListStore.dispatch(GroceriesListAction.ResetGroceriesList)
+        if (basketStore.basketIsEmpty()) { return }
+            launch {
+                basketStore.observeSideEffect().filter {
+                        basketEffect -> basketEffect == BasketEffect.BasketConfirmed
+                }.take(1).collect {
+                    println("Miam : Reset GL")
+                    groceriesListStore.dispatch(GroceriesListAction.ResetGroceriesList)
+                }
             }
-        }
-        basketStore.dispatch(BasketAction.ConfirmBasket)
+            basketStore.dispatch(BasketAction.ConfirmBasket(price = total.toString()))
     }
 
     private fun basketChange(miamBasket: List<BasketEntry> ) {
