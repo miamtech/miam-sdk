@@ -29,6 +29,11 @@ class BasketPreviewViewModel(val recipeId: Int?):
         if(recipeId != null){
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
+            launch {
+                basketStore.observeSideEffect().collect{
+                    basketChange()
+                }
+            }
             countListener()
             listenEntriesChanges()
         }
@@ -40,9 +45,6 @@ class BasketPreviewViewModel(val recipeId: Int?):
                 println("Miam Emmit ${it.first.count}")
                 setEvent(BasketPreviewContract.Event.Reload)
                 it.second.setEvent(RecipeContract.Event.UpdateGuest(it.first.count))
-                  basketStore.observeSideEffect().take(1).collect{
-                      basketChange()
-                  }
             }
         }
     }
@@ -167,7 +169,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private fun basketChange(){
         // println("Miam --> basket change")
         launch {
-            val bpl =    basketStore.observeState().first { it.basketPreview != null && it.basketPreview.isNotEmpty() }.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId }
+            val bpl = basketStore.observeState().first { it.basketPreview != null && it.basketPreview.isNotEmpty() }.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId }
             if(bpl != null) {
                 setEvent(BasketPreviewContract.Event.SetLines(bpl))
             }

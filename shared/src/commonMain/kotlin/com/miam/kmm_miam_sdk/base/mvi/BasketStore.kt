@@ -182,6 +182,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             }
             is BasketAction.SetBasketState -> {
               val newState =  setBasketStates(action.basketPreview, oldState)
+                println("Basket emit changePreview")
               launch { sideEffect.emit(BasketEffect.BasketPreviewChange)}
               newState
             }

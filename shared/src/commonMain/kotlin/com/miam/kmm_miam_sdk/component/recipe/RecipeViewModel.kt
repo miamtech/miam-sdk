@@ -41,6 +41,7 @@ open class RecipeViewModel :
             isInViewport = false,
             tabState = TabEnum.INGREDIENT,
             activeStep = 0,
+            recipeLoaded = false
         )
 
     init {
@@ -173,10 +174,13 @@ open class RecipeViewModel :
     }
 
     private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
+        println("Miam contexte ---> ${criteria.shelfIngredientsIds?.toString()}")
+        if(uiState.value.recipeLoaded) return
         launch{
             pointOfSaleStore.observeState().value.idSupplier?.let {
                 recipeRepositoryImp.getRecipeSuggestions(
                     it, criteria).collect { recipe ->
+                         println("Miam recipe ---> ${recipe.id}")
                         setRecipe(recipe)
                 }
             }
@@ -188,7 +192,8 @@ open class RecipeViewModel :
             copy(
                 recipeState = BasicUiState.Success(recipe),
                 guest = getGuest(recipe),
-                isInCart = checkIsInCart()
+                isInCart = checkIsInCart(),
+                recipeLoaded = true
             )
         }
         this.recipe = recipe

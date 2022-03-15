@@ -4,19 +4,21 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -86,7 +88,17 @@ private fun recipeDetailCard(
                 modifier = Modifier
                     .height(245.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(32.dp, 32.dp, 64.dp, 0.dp))
+                    .graphicsLayer { alpha = 0.99f }
+                    .drawWithContent {
+                        val colors = listOf(
+                            Color.Transparent,
+                            Color.Black
+                        )
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(colors),
+                        )}
+                    .clip(RoundedCornerShape(0.dp, 0.dp, 64.dp, 0.dp))
             )
 
             FloatingActionButton(modifier = Modifier
@@ -97,11 +109,10 @@ private fun recipeDetailCard(
                 backgroundColor = Color.Gray,
                 onClick = { closeDialogue() })
             {
-                Text(
-                    text = "X",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                Icon(
+                    tint = Color.White,
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "close"
                 )
             }
             if (vmRecipeCard.currentState.isInCart) {
@@ -181,9 +192,9 @@ private fun recipeDetailCard(
         Row() {
             Text(
                 text = recipe.attributes.title,
-                fontFamily = FontFamily.Cursive,
-                fontWeight = FontWeight.Bold,
-                fontSize = 42.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.satisfy_regular)),
+                fontSize = 32.sp,
                 style = MaterialTheme.typography.h5.copy(
                     color = MiamMasterView.Secondary,
                     fontWeight = FontWeight.Bold
@@ -239,14 +250,14 @@ private fun recipeDetailCard(
                 icon = R.drawable.ic_ingredient,
                 text = "Ingredients",
                 action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowSteps) },
-                isActive = vmRecipeCard.currentState.tabState == TabEnum.STEP
+                isActive = vmRecipeCard.currentState.tabState == TabEnum.INGREDIENT
             )
             Spacer(Modifier.padding(horizontal = 8.dp))
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
                 text = "Préparation",
                 action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowIngredient) },
-                isActive = vmRecipeCard.currentState.tabState == TabEnum.INGREDIENT
+                isActive = vmRecipeCard.currentState.tabState == TabEnum.STEP
             )
         }
 
