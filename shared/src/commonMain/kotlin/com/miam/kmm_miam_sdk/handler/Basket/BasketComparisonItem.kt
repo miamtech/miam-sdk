@@ -10,10 +10,14 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
    val miamBasketEntryIds : MutableMap<Int, Int> = mutableMapOf()
    val _retailerProducts : MutableList<RetailerProduct> = mutableListOf()
 
+    override fun toString(): String {
+        return "" + miamQuantity + " " + miamTargetQuantity + " " + miamBasketEntryIds + " " + _retailerProducts
+    }
+
     val retailerQuantity: Int
          get() {
              val quantities = _retailerProducts.map { retailerProduct -> retailerProduct.quantity }
-             return quantities.reduce { acc,value : Int ->  acc + value }
+             return quantities.sum()
          }
 
     val firstBasketEntryId : Int
@@ -26,14 +30,24 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
    }
 
     fun removeFirstMiamEntry(qtyToRemove :Int): Pair<Int,Int> {
-        if(miamBasketEntryIds.entries.isEmpty()) return Pair(-1, 0)
+        // println("removeFirstMiamEntry " + miamBasketEntryIds)
+        if(miamBasketEntryIds.entries.isEmpty()) {
+            // println("removeFirstMiamEntry nothing can be removed")
+            return Pair(-1, 0)
+        }
         val quantity = miamBasketEntryIds.values.first()
+        // println("removeFirstMiamEntry has quantity $quantity")
         if(quantity > qtyToRemove){
-            miamBasketEntryIds.put(firstBasketEntryId, quantity - qtyToRemove)
+            // println("removeFirstMiamEntry enough to remove")
+            miamBasketEntryIds[firstBasketEntryId] = quantity - qtyToRemove
             return Pair(firstBasketEntryId, qtyToRemove)
         }
+        // println("removeFirstMiamEntry removing first entry")
+        val toReturn = Pair(firstBasketEntryId, quantity)
         miamBasketEntryIds.remove(firstBasketEntryId)
-        return Pair(firstBasketEntryId, quantity)
+        // println("removeFirstMiamEntry remain $miamBasketEntryIds")
+        // println("removeFirstMiamEntry will return $toReturn")
+        return toReturn
     }
 
     /**
@@ -41,6 +55,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
      */
 
     fun addOrUpdateRetailerProduct(retailerProduct: RetailerProduct) {
+        // println("Miam addOrUpdateRetailerProduct " + retailerProduct + " to " + this)
         if(_retailerProducts.isEmpty() || retailerQuantity == 0){
             _retailerProducts.add(retailerProduct)
             return
@@ -53,9 +68,10 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
      */
 
     fun createRetailerProducts(basketEntry: BasketEntry, targetQuantity : Int) : MutableList<RetailerProduct> {
-        if(basketEntry.attributes.selectedItemId != null ){
-            // TODO  it extId here to change once we have selected Item /!\
-            _retailerProducts.add(RetailerProduct(basketEntry.attributes.selectedItemId.toString(), targetQuantity))
+        // println("Miam creating retailer product with " + BasketEntry + " : " + targetQuantity)
+        if(basketEntry.selectedItem != null ){
+            // println("Miam creating retailer product 2 with " + basketEntry.attributes.selectedItemId.toString() + " : " + targetQuantity)
+            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes.extId, targetQuantity))
         }
         return _retailerProducts
     }

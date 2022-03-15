@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasource): BasketEntryRepository {
 
 
-    override suspend fun getRelationships(basketEntry: BasketEntry): Flow<BasketEntry>  = flow  {
+    override suspend fun getRelationships(basketEntry: BasketEntry): Flow<BasketEntry> = flow  {
         basketEntry._relationships = BasketEntryRelationships(
             basketEntryDataSource.getBasketEntryItems(basketEntry.id),
             if(basketEntry.relationships.groceriesEntry.data.id != null) {
@@ -22,8 +22,13 @@ class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasou
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): Flow<BasketEntry> = flow {
-       val updatedBasketEntry = basketEntryDataSource.updateBasketEntry(basketEntry)
-       updatedBasketEntry._relationships = basketEntry._relationships
-       emit(updatedBasketEntry)
+        // println("Miam will update be")
+        // println("Miam will update be rels ge" + basketEntry?._relationships?.groceriesEntry)
+        // println("Miam will update be rels items" + basketEntry?._relationships?.items)
+        val updatedBasketEntry = basketEntryDataSource.updateBasketEntry(basketEntry)
+        updatedBasketEntry._relationships = basketEntry._relationships
+        // println("Miam will update be rels2 ge" + basketEntry?._relationships?.groceriesEntry)
+        // println("Miam will update be rels items" + basketEntry?._relationships?.items)
+        emit(updatedBasketEntry)
     }
 }
