@@ -52,7 +52,7 @@ data class Item (
 data class ItemAttributes (
     @SerialName("ext-id")
     val extId: String = "",
-    val name: String? = "",
+    val name: String = "",
     val status: String?= "",
     val description: String? = "",
     val brand: String? = "",

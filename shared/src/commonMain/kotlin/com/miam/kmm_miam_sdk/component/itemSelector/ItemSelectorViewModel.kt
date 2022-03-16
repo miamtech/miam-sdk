@@ -47,10 +47,7 @@ open class ItemSelectorViewModel() :
 
      fun choose(index :Int){
          val be = (currentState.selectedItem!!.record  as BasketEntry)
-         val newBe = be.copy(attributes = be.attributes.copy(
-             selectedItemId = currentState.itemList!![index].id!!
-         ))
-         newBe._relationships = be._relationships
+         val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!)
         basketStore.dispatch(
             BasketAction.ReplaceSelectedItem(
                 be,
