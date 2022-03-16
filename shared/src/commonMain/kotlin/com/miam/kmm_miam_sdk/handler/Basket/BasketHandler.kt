@@ -14,34 +14,45 @@ import org.koin.core.component.inject
 class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
 
     private var _comparator: BasketComparator? = null
-    private val basketStore: BasketStore by inject()
-    private var basketEntries: List<BasketEntry>? = null
+    val basketStore: BasketStore by inject()
+    private var _miamActiveBasket: List<BasketEntry>? = null
 
     var hasPayment : () -> Boolean = fun():Boolean{return false}
     var paymentTotal: () -> Double = fun():Double{return 0.0}
     var getBasketProducts: () -> List<RetailerProduct> = fun() :List<RetailerProduct> { return emptyList()}
-    var pushProductsToBasket: (products: List<RetailerProduct>) -> Unit = fun(products: List<Any>) {}
-    var mapEntryToProduct: (item: RetailerProduct) -> Unit = fun(item: RetailerProduct){}
-    var listenToRetailerBasket: (callback : (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){ println("Miam --> please init listenToRetailerBasket")}
+    var pushProductsToBasket: (products: List<RetailerProduct>) -> Unit = fun(products: List<Any>) {
+        throw Error("pushProductsToBasket not implemented")
+    }
+    var mapEntryToProduct: (item: RetailerProduct) -> Unit = fun(item: RetailerProduct){
+        throw Error("pushProductsToBasket not implemented")
+    }
+    var listenToRetailerBasket: (callback : (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){println("Miam --> please init listenToRetailerBasket")}
 
     init {
         handlePayment(fun(){handleBasketSync()})
     }
 
+    /*
+    Should update Miam basket accordingly, ie remove entries that are not in the basket anymore
+    */
     fun retailerBasketChangeCallBack(retailerBasket: List<RetailerProduct>){
-        println("Miam : retailer basket changed"+ retailerBasket.toString())
-        if(basketEntries != null) {
-            println("Miam : miam basket exist"+ basketEntries.toString())
-            if(_comparator == null ){
-                _comparator = BasketComparator( this, retailerBasket, basketEntries!!)
-                println("Miam : init comparator"+ _comparator.toString())
-                return
-            }
+        // println("Miam : retailer basket changed"+ retailerBasket.toString())
+        // println("current basket " + _miamActiveBasket)
+        if(_miamActiveBasket == null) {
+            // can't update Miam basket if there is nothing in there. Should not happen
+            return
+        }
+        // println("Miam : miam basket exist"+ _miamActiveBasket.toString())
+        if(_comparator == null ){
+            // create comparator that make the first sync
+            _comparator = BasketComparator( this, retailerBasket, _miamActiveBasket!!)
+            // println("Miam : init comparator"+ _comparator.toString())
+        } else {
             _comparator!!.updateReceivedFromRetailer(retailerBasket)
         }
     }
 
-    fun   handlePayment(callback : () -> Unit) {
+    fun handlePayment(callback : () -> Unit) {
         if (hasPayment()) {
             val total = paymentTotal();
 
@@ -78,24 +89,34 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
         });*/
     }
 
-    private fun basketChange(miamBasket: List<BasketEntry> ) {
+    private fun basketChange(miamActiveBasket: List<BasketEntry> ) {
+        // println("Miam basketChange " + miamActiveBasket)
+        // assign the entries so that the callback retailerBasketChangeCallBack can use them
+        // TODO : can we send them throught the callback retailerBasketChangeCallBack ??
+        _miamActiveBasket = miamActiveBasket
         // Comparison should be initialized when first Miam basket is received, based on existing Retailer basket
-        if (_comparator != null) {
-            if (_comparator!!.isProcessingRetailerEvent) return
-            // When comparison is already initialized, we just update it
-            _comparator!!.updateReceivedFromMiam(miamBasket)
-        } else {
-            listenToRetailerBasket( ::retailerBasketChangeCallBack)
+        if (_comparator == null){
+            listenToRetailerBasket(::retailerBasketChangeCallBack)
+            return
         }
+        // println("Miam basketChange processing " + _comparator!!.isProcessingRetailerEvent)
+        if (_comparator!!.isProcessingRetailerEvent) return
+
+        // println("Miam basketChange comparator ok")
+        // When comparison is already initialized, we just update it
+        _comparator!!.updateReceivedFromMiam(miamActiveBasket)
     }
 
    private fun handleBasketSync() {
+    //    println("Miam handleBasketSync")
        launch {
            basketStore.observeSideEffect().collect{
                basketStore.observeState().value.basket?._relationships?.basketEntries?.let { entries ->
-                   basketChange(
-                       entries
-                   )
+                //    println("Miam sync emited")
+                   // when user is not logged or not on valid pos, basket is not fetched and we can't get here
+                   // when user is loged on valid pos, miam basket is fetched and initial value emitted
+                   var activeEntries = entries.filter { e -> e.attributes.groceriesEntryStatus == "active" }
+                   basketChange(activeEntries)
                }
            }
        }

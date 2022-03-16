@@ -25,12 +25,12 @@ data class GroceriesEntry(
 data class GroceriesEntryAttributes(
     val name : String?,
     @SerialName("capacity-volume")
-    val capacityVolume: String? =null,
+    val capacityVolume: String? = null,
     @SerialName("capacity-unit")
-    val capacityUnit: String? =null,
+    val capacityUnit: String? = null,
     @SerialName("capacity-factor")
-    val capacityFactor: Int? =null,
-    val status: String? =null,
+    val capacityFactor: Int? = null,
+    val status: String? = null,
     @SerialName("recipe-ids")
     val recipeIds: List<Int>? = emptyList()
 )

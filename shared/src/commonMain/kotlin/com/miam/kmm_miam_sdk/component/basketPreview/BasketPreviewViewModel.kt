@@ -27,7 +27,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     init {
         if(recipeId != null){
-            println("MIAM --> basket RecipeId : $recipeId ")
+            // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
             launch {
                 basketStore.observeSideEffect().collect{
@@ -167,7 +167,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun basketChange(){
-        println("MIAM --> basket change")
+        // println("Miam --> basket change")
         launch {
             val bpl = basketStore.observeState().first { it.basketPreview != null && it.basketPreview.isNotEmpty() }.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId }
             if(bpl != null) {
@@ -180,7 +180,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
         setState { copy( isFillingEntry = true)}
 
         try {
-            println("MIAM --> basket setFillBasketEntry  ${line.id}")
+            // println("Miam --> basket setFillBasketEntry  ${line.id}")
             val filledFoundBasketEntries : MutableList<BasketEntry> = mutableListOf()
             val filledRevovedBasketEntries : MutableList<BasketEntry> = mutableListOf()
             val filledOftenDeletedBasketEntry : MutableList<BasketEntry> = mutableListOf()
