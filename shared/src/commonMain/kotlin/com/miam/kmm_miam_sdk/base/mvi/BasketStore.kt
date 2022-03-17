@@ -4,11 +4,8 @@ import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -86,10 +83,14 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 alteredEntries(it,
                     state.value.basket?._relationships?.basketEntries ?: emptyList()
                 )
-            }.forEach {
+            }.map {
                 updateBasketEntry(it)
             }
         }
+        /*dispatch(BasketAction.RefreshBasket(
+            state.value.groceriesList!!,
+            state.value.idPointOfSale!!)
+        )*/
         // println("Miam sendBasketEntriesChanges done run blocking")
         if (callback != null) {
             callback()
@@ -268,10 +269,12 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
         // println("Miam will update basket entry $basketEntry")
-        basketEntryRepo.updateBasketEntry(basketEntry).collect {}
-        val ge = basketEntry._relationships?.groceriesEntry
-        if (ge?.needPatch == true) {
-            groceriesRepo.updateGrocerieEntry(ge)
+        async {
+            basketEntryRepo.updateBasketEntry(basketEntry).first()
+            val ge = basketEntry._relationships?.groceriesEntry
+            if (ge?.needPatch == true) {
+                groceriesRepo.updateGrocerieEntry(ge)
+            }
         }
     }
 

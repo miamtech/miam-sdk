@@ -100,13 +100,12 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     private fun setLines(newline: BasketPreviewLine) {
         println("Miam  --> SetLine ")
-        if(!currentState.firstEntriesBuildDone) {
+       if(!currentState.firstEntriesBuildDone) {
             setState { copy(firstEntriesBuildDone = true)}
             setEvent(BasketPreviewContract.Event.BuildEntriesLines(newline))
-        }
-      /*  else {
+        } else {
             setEvent(BasketPreviewContract.Event.UpdateEntriesLines(newline))
-        }*/
+        }
 
     }
 
@@ -122,17 +121,21 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     private fun updateEntriesLines(bpl :BasketPreviewLine) {
         if(isFillingEntry) return
-        fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found)
 
-        val newFound = (currentState.bpl?.entries?.found ?: emptyList()) +
-                fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found)
-        val new = (currentState.bpl?.entries?.found ?: emptyList()) +
-                fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found)
+
+        runBlocking {
+            withContext(ioDispatcher){
+                currentState.bpl?.entries?.found?.addAll(fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found))
+                currentState.bpl?.entries?.removed?.addAll(fillMissing( currentState.bpl?.entries?.removed , bpl.entries?.removed))
+            }
+        }
+
+        setState { copy(line = BasicUiState.Success(bpl),bpl = bpl, isReloading= false, isFillingEntry = false) }
     }
 
-    private fun fillMissing( oldArray : List<BasketEntry>? = emptyList(), newArray: MutableList<BasketEntry>? = mutableListOf()) : MutableList<BasketEntry> {
+    private suspend fun fillMissing( oldArray : List<BasketEntry>? = emptyList(), newArray: MutableList<BasketEntry>? = mutableListOf()) : MutableList<BasketEntry> {
         val missingFilledBasketEntries = mutableListOf<BasketEntry>()
-        runBlocking {
+
             newArray!!.filter { be ->
                 oldArray!!.find { it.id == be.id } == null
             }.map {
@@ -142,7 +145,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
                     }
                 }
             }.awaitAll()
-        }
+
         return  missingFilledBasketEntries
     }
 
@@ -215,11 +218,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
         setState { copy( isFillingEntry = true)}
                 try {
                      println("MIAM --> basket setFillBasketEntry  ${line.id}")
-                     fillEntryCall(line.entries?.found)
-                     line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
-                     fillEntryCall(line.entries?.removed)
-                     fillEntryCall(line.entries?.oftenDeleted)
-                     fillEntryCall(line.entries?.notFound)
+                    runBlocking {
+                        fillEntryCall(line.entries?.found)
+                        line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
+                        fillEntryCall(line.entries?.removed)
+                        fillEntryCall(line.entries?.oftenDeleted)
+                        fillEntryCall(line.entries?.notFound)
+                    }
                      setState { copy(line = BasicUiState.Success(line),bpl = line, isReloading= false, isFillingEntry = false) }
                 } catch (cause: Throwable) {
                     print(cause.toString())
@@ -229,13 +234,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     }
 
-    private  fun fillEntryCall(list :MutableList<BasketEntry>? = mutableListOf()){
+     private suspend fun fillEntryCall(list :MutableList<BasketEntry>? = mutableListOf()){
         val filledBasketEntries : MutableList<BasketEntry> = mutableListOf()
-        runBlocking (ioDispatcher) {
+        withContext(ioDispatcher) {
             list!!.map {
                 async {
                     filledBasketEntries.add(basketEntryRepo.getRelationships(it).first())
-                    }
+                }
             }.awaitAll()
         }
         list!!.clear()
