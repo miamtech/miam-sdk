@@ -126,11 +126,11 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 oldState.copy(updateBasketEntrieQueue = mutableListOf())
             }
             is BasketAction.AddBasketEntry -> {
-                launch { alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "active") }
+                launch { updateBasketEntryStatus(action.entry, "active") }
                 oldState
             }
             is BasketAction.RemoveEntry -> {
-                launch { alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "deleted") }
+                launch { updateBasketEntryStatus(action.entry, "deleted") }
                 oldState
             }
             is BasketAction.UpdateBasketEntries -> {
@@ -260,34 +260,28 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         return basketEntry
     }
 
+    private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String) {
+        basketEntry.updateStatus(status)
+        basketEntryRepo.updateBasketEntry(basketEntry)
+        updateBasketEntry(basketEntry)
+    }
+
     private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
         // println("Miam will update basket entry $basketEntry")
         basketEntryRepo.updateBasketEntry(basketEntry).collect {}
-        val geUpdatedStatus = basketEntry.getGeUpdatedStatus()
-        if (geUpdatedStatus != null) {
-            // println("Miam will update basket entry ge status to $geUpdatedStatus")
-            alterGroceriesEntry(basketEntry._relationships!!.groceriesEntry, geUpdatedStatus)
+        val ge = basketEntry._relationships?.groceriesEntry
+        if (ge?.needPatch == true) {
+            groceriesRepo.updateGrocerieEntry(ge)
         }
     }
 
-    private suspend fun alterGroceriesEntry(ge: GroceriesEntry?, status : String) {
-        if(ge != null){
-            groceriesRepo.updateGrocerieEntry(ge.copy(attributes = ge.attributes.copy(status = status))).collect {
-                // println("updated grocerie entry -> ${it.id}")
-                if(state.value.groceriesList != null  &&  state.value.idPointOfSale != null)
-                    dispatch(BasketAction.RefreshBasket(state.value.groceriesList!!, state.value.idPointOfSale!!))
-            }
-        }
-    }
 
-     private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
+    private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
         try {
-            launch {
-                basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
-                    .collect {
-                        dispatch(BasketAction.SetBasket(it))
-                    }
-            }
+            basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
+                .collect {
+                    dispatch(BasketAction.SetBasket(it))
+                }
         } catch (e: Exception) {
             dispatch(BasketAction.Error(e))
         }

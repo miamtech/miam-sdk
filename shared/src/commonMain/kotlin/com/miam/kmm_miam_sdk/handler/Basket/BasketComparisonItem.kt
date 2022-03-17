@@ -71,7 +71,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
         // println("Miam creating retailer product with " + BasketEntry + " : " + targetQuantity)
         if(basketEntry.selectedItem != null ){
             // println("Miam creating retailer product 2 with " + basketEntry.attributes.selectedItemId.toString() + " : " + targetQuantity)
-            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes.extId, targetQuantity))
+            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes.extId, targetQuantity, basketEntry.selectedItem!!.attributes.name))
         }
         return _retailerProducts
     }

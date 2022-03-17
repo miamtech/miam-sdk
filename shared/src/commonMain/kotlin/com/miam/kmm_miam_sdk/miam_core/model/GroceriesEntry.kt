@@ -19,7 +19,27 @@ data class GroceriesEntry(
     val id: Int,
     val type: String? = "groceries-entries",
     val attributes: GroceriesEntryAttributes,
-)
+) {
+    var needPatch: Boolean = false
+
+    private fun deepCopy(
+        id: Int = this.id,
+        type: String? = this.type,
+        attributes: GroceriesEntryAttributes = this.attributes,
+    ): GroceriesEntry {
+        var copy = this.copy(id=id, type=type, attributes=attributes)
+        copy.needPatch = this.needPatch
+        return copy
+    }
+
+    fun updateStatus(status: String): GroceriesEntry {
+        needPatch = true
+        return this.deepCopy(
+        attributes = this.attributes.copy(
+            status = status
+        ))
+    }
+}
 
 @Serializable
 data class GroceriesEntryAttributes(
