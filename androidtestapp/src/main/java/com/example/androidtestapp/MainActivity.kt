@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         coursesUProducts.forEach { rp ->
           val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.retailerId }
             if(productToUpdateIdx == -1){
-                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name, rp.quantity, 0.0))
+                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name, rp.quantity, 0.0, "id_" + rp.retailerId))
             } else if( rp.quantity == 0) {
                 retailerBasketSubject.value.items.removeAt(productToUpdateIdx)
             } else {
@@ -211,27 +211,27 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
     companion object{
         val productSampleCoursesU = listOf(
-            CoursesUProduct("12726","Farine de blé T45 FRANCINE, 1k",1,0.88),
-            CoursesUProduct("484202","Lait UHT entier U, 6x1L",1,5.46),
-            CoursesUProduct("809586","Mascarpone GALBANI - 250g",1,2.14),
-            CoursesUProduct("970417","Beurre doux U, 125",1,2.12),
-            CoursesUProduct("1298293","Sucre en morceaux prédécoupé n°4 DADDY, 1kg",1,1.35),
-            CoursesUProduct("1922350","Oeufs Plein air ELEVEURS ENGAGES L'OEUF DE NOS VILLAGES - Boîte de 12",1,3.23),
-            CoursesUProduct("1941111","Chocolat noir bio 75% Pérou ALTER ECO - Tablette 100g",1,1.95),
-            CoursesUProduct("2021117","Mandarine Nadorcott à feuilles, calibre 3, catégorie 1, Espagne",1,1.79),
-            CoursesUProduct("2276426","Sucre vanillé ALSA, 12 sachets, 90g",1,1.91),
-            CoursesUProduct("2540700","Levure chimique AlSA, sachet de 8 soit 88g",1,0.62),
-            CoursesUProduct("3895532","Cassonade fine DADDY, 600g",1,1.95),
-            CoursesUProduct("4671939","Pain d'épices au miel BROSSARD, 350g",1,1.96),
-            CoursesUProduct("5068663","Huile de tournesol U, 3l",1,5.99),
-            CoursesUProduct("5774130","Cannelle moulue U, format petit, 17g",1,0.60),
-            CoursesUProduct("6134471","Banane Cavendish BIO, calibre P14, catégorie 2, Republique Dominicaine, ruban 5 fruits",1,1.99),
-            CoursesUProduct("6182231","Beurre de cacahuète creamy MENGUY'S 454g",1,3.99),
-            CoursesUProduct("352902000000909790","Baguette Triskel",1,1.0),
-            CoursesUProduct("88455","Emmental français rapé U, 29%mg, 100g",1,0.84),
-            CoursesUProduct("2107653","Lait de coco KARA, 200ml",1,0.94),
-            CoursesUProduct("5319173","Filet de blanc de poulet U, France, barquette",1,6.06),
-            CoursesUProduct("6511680","Curry tradition en poudre DUCROS, 53g",1,3.40),
+            CoursesUProduct("12726","Farine de blé T45 FRANCINE, 1k",1,0.88, "id_12726"),
+            CoursesUProduct("484202","Lait UHT entier U, 6x1L",1,5.46, "id_484202"),
+            CoursesUProduct("809586","Mascarpone GALBANI - 250g",1,2.14, "id_809586"),
+            CoursesUProduct("970417","Beurre doux U, 125",1,2.12, "id_970417"),
+            CoursesUProduct("1298293","Sucre en morceaux prédécoupé n°4 DADDY, 1kg",1,1.35, "id_1298293"),
+            CoursesUProduct("1922350","Oeufs Plein air ELEVEURS ENGAGES L'OEUF DE NOS VILLAGES - Boîte de 12",1,3.23, "id_1922350"),
+            CoursesUProduct("1941111","Chocolat noir bio 75% Pérou ALTER ECO - Tablette 100g",1,1.95, "id_1941111"),
+            CoursesUProduct("2021117","Mandarine Nadorcott à feuilles, calibre 3, catégorie 1, Espagne",1,1.79, "id_2021117"),
+            CoursesUProduct("2276426","Sucre vanillé ALSA, 12 sachets, 90g",1,1.91, "id_2276426"),
+            CoursesUProduct("2540700","Levure chimique AlSA, sachet de 8 soit 88g",1,0.62, "id_2540700"),
+            CoursesUProduct("3895532","Cassonade fine DADDY, 600g",1,1.95, "id_3895532"),
+            CoursesUProduct("4671939","Pain d'épices au miel BROSSARD, 350g",1,1.96, "id_4671939"),
+            CoursesUProduct("5068663","Huile de tournesol U, 3l",1,5.99, "id_5068663"),
+            CoursesUProduct("5774130","Cannelle moulue U, format petit, 17g",1,0.60,"id_5774130"),
+            CoursesUProduct("6134471","Banane Cavendish BIO, calibre P14, catégorie 2, Republique Dominicaine, ruban 5 fruits",1,1.99, "id_6134471"),
+            CoursesUProduct("6182231","Beurre de cacahuète creamy MENGUY'S 454g",1,3.99, "id_6182231"),
+            CoursesUProduct("352902000000909790","Baguette Triskel",1,1.0, "id_352902000000909790"),
+            CoursesUProduct("88455","Emmental français rapé U, 29%mg, 100g",1,0.84, "id_88455"),
+            CoursesUProduct("2107653","Lait de coco KARA, 200ml",1,0.94, "id_2107653"),
+            CoursesUProduct("5319173","Filet de blanc de poulet U, France, barquette",1,6.06, "id_5319173"),
+            CoursesUProduct("6511680","Curry tradition en poudre DUCROS, 53g",1,3.40, "id_6511680"),
         )
     }
 }
@@ -240,7 +240,8 @@ data class CoursesUProduct(
     val id :String,
     val name: String,
     val quantity :Int,
-    val price: Double
+    val price: Double,
+    val identifier: String
 )
 
 data class CoursesUCustomer(
