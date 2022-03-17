@@ -15,6 +15,7 @@ interface BasketPreviewContract {
         data class SetRecipeId(val newRecipeId: Int):  Event()
         data class SetLines(val newlines: BasketPreviewLine):Event()
         data class BuildEntriesLines(val bpl: BasketPreviewLine):Event()
+        data class UpdateEntriesLines(val bpl: BasketPreviewLine):Event()
         data class CountChange(val bpl: BasketPreviewLine, val recipeVm: RecipeViewModel): Event()
         data class AddEntry(val entry: BasketEntry):Event()
         data class RemoveEntry(val entry: BasketEntry):Event()
@@ -33,6 +34,7 @@ interface BasketPreviewContract {
         val bpl: BasketPreviewLine?, //service state
         val isReloading: Boolean,
         val isFillingEntry: Boolean,
+        val firstEntriesBuildDone : Boolean,
         val showItemSelector: Boolean,
         val lastEntriesUpdate : LineEntries? //service state
     ) : UiState

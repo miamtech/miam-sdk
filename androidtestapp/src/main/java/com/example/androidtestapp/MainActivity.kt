@@ -1,10 +1,9 @@
 package com.example.androidtestapp
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,6 +32,8 @@ import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 
@@ -43,7 +44,8 @@ import kotlin.random.Random
 @ExperimentalComposeUiApi
 @OptIn(InternalCoroutinesApi::class)
 class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by CoroutineScope(
-    Dispatchers.Main) {
+    Dispatchers.Main
+) {
 
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
@@ -60,25 +62,24 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
         setContent {
-            content(this.applicationContext,retailerBasketSubject)
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                content(retailerBasketSubject)
+                recipes(this@MainActivity)
+            }
+
         }
     }
 
     @Composable
-    fun content(context: Context, retailerBasketSubject : MutableStateFlow<ExampleState>){
+    fun content( retailerBasketSubject : MutableStateFlow<ExampleState>){
 
         val state = retailerBasketSubject.asStateFlow().collectAsState()
-
-        val recipe1 =  RecipeView(context)
-        val recipe2 =  RecipeView(context)
-
-        recipe1.bind(recipeId = 305)
-        recipe2.bind(criteria = RandomCriteria())
-
         Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Panier du client", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -109,9 +110,23 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
             }
             Divider()
+
+        }
+    }
+
+    @Composable
+    fun recipes(context: Context) {
+        val recipe1 =  RecipeView(context)
+        val recipe2 =  RecipeView(context)
+
+        recipe1.bind(recipeId = 305)
+        recipe2.bind(criteria = RandomCriteria())
+        Column() {
             recipe1.Content()
             recipe2.Content()
         }
+
+
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{

@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.component.router
 
 import com.miam.kmm_miam_sdk.base.mvi.*
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 enum class RouterContent {
@@ -21,7 +22,8 @@ interface RouterContract {
 
         data class State(
             val content: RouterContent,
-            val vm: RecipeViewModel?,
+            val rvm: RecipeViewModel?,
+            val bpvm :BasketPreviewViewModel?,
             val recipeId: Int?,
             val isOpen: Boolean
         ) : UiState
