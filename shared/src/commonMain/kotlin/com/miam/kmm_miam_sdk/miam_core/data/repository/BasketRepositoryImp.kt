@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.data.repository
 
+import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmm_miam_sdk.miam_core.model.Basket
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
@@ -14,11 +15,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.math.ceil
 
-class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : BasketRepository,
-    KoinComponent {
+class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : BasketRepository , KoinComponent{
 
     private val entriesPerPages = 30;
     private val basketEntryRepo : BasketEntryRepositoryImp by inject()
+
+    private val pointOfSaleStore: PointOfSaleStore by inject()
 
     override suspend fun getFromListAndPos(listId: Int, posId: Int): Flow<Basket> = flow  {
        val basket =  basketDataSource.getFromListAndPos(listId, posId)
@@ -28,6 +30,12 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
             // println("Miam basket relationships " + basket._relationships?.basketEntries)
         }
         emit(basket)
+    }
+
+    override suspend fun updateBasket(basket: Basket ) : Flow<Basket> = flow  {
+        val origin  = pointOfSaleStore.getProviderOrigin()
+        val newBasket =  basketDataSource.updateBasket(basket,origin)
+        emit(newBasket)
     }
 
     private suspend fun fetchBasketEntriesPage(basket: Basket) : List<BasketEntry>{

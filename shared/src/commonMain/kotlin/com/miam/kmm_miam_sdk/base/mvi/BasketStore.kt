@@ -3,6 +3,7 @@ package com.miam.kmm_miam_sdk.base.mvi
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesEntryRepositoryImp
+import com.miam.kmm_miam_sdk.miam_core.data.repository.SupplierRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -39,7 +40,7 @@ sealed class  BasketAction : Action {
         val callback: (()-> Unit)? = null
     ): BasketAction()
     data class ReplaceSelectedItem(val basketEntry :BasketEntry, val itemId :Int): BasketAction()
-    object ConfirmBasket : BasketAction()
+    data class ConfirmBasket(val price: String) : BasketAction()
     object ResetUpdateBasketEntriesQueue : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
@@ -48,6 +49,7 @@ sealed class  BasketEffect : Effect {
     data class Error(val error: Exception) :  BasketEffect()
     data class PointOfSaleChanged(val idPointOfSale: Int) :  BasketEffect()
     object BasketPreviewChange: BasketEffect()
+    object BasketConfirmed :BasketEffect()
 }
 
 class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
@@ -58,6 +60,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private val basketRepo : BasketRepositoryImp by inject()
     private val basketEntryRepo :BasketEntryRepositoryImp by inject()
     private val groceriesRepo : GroceriesEntryRepositoryImp by inject()
+    private val supplierRepositoryImp: SupplierRepositoryImp by inject()
     private val entriesSubject : MutableSharedFlow< MutableList<AlterQuantityBasketEntry>> = MutableSharedFlow()
 
     init {
@@ -188,7 +191,10 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
               newState
             }
             is BasketAction.ConfirmBasket -> {
-                confirmBasket()
+                if(oldState.basket != null) {
+                    println("Miam confirm basket")
+                    confirmBasket(oldState.basket, action.price)
+                }
                 oldState
             }
             is BasketAction.Error -> {
@@ -226,6 +232,11 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             }
     }
 
+    fun basketIsEmpty( ): Boolean {
+       println("Miam is basket empty ? ${state.value.basket?._relationships?.basketEntries?.isEmpty()  ==  true}")
+       return (state.value.basket?._relationships?.basketEntries?.isEmpty() == true)
+    }
+
     private fun setBasketStates(basketPreview: List<BasketPreviewLine>, oldState: BasketState) : BasketState {
 
         val entriesFound: List<BasketEntry> = basketPreview.map { bpl -> bpl.entries?.found ?: emptyList() }.flatten()
@@ -239,8 +250,20 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
        return oldState.copy( entriesCount = entriesFound.size, totalPrice = totalPrice)
     }
 
-    private fun confirmBasket(){
-        //TODO confimr basket
+    private fun confirmBasket(basket: Basket, price: String){
+       launch {
+           basketRepo.updateBasket(basket.copy(attributes = basket.attributes.copy(confirmed = true))).collect {
+               basket ->
+               println("Maim --> basket updated")
+               if(basket.attributes.token != null) {
+                   supplierRepositoryImp.notifyConfirmBasket(basket.attributes.token!!).collect {
+                       supplierRepositoryImp.notifyPaidBasket(basket.attributes.token, price).collect{
+                           sideEffect.emit(BasketEffect.BasketConfirmed)
+                       }
+                   }
+               }
+           }
+       }
     }
 
     private fun alteredEntries(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{

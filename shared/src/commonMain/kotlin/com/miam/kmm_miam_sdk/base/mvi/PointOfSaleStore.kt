@@ -14,12 +14,14 @@ data class PointOfSaleState(
     val idSupplier :Int?,
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
+    val origin: String?,
 ) : State
 
 sealed class  PointOfSaleAction : Action {
     data class RefreshPointOfSale(val idPointOfSale: Int) : PointOfSaleAction()
     data class SetExtId(val extId: String) :PointOfSaleAction()
     data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
+    data class SetOrigin(val origin: String):PointOfSaleAction()
     data class Error(val error: Exception) : PointOfSaleAction()
 }
 
@@ -31,7 +33,7 @@ sealed class  PointOfSaleEffect : Effect {
 class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val state = MutableStateFlow(PointOfSaleState(null, null, null))
+    private val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
     private val basketStore:  BasketStore by inject()
@@ -79,6 +81,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
                     oldState.copy(idSupplier = action.supplierId)
                 }
             }
+            is PointOfSaleAction.SetOrigin ->  oldState.copy(origin = action.origin)
             is PointOfSaleAction.Error -> {
                 TODO("handle errors")
                 oldState
@@ -87,6 +90,14 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
         if (newState != oldState) {
             state.value = newState
         }
+    }
+
+    fun getProviderId() : Int{
+        return state.value.idSupplier ?: -1
+    }
+
+    fun getProviderOrigin() : String{
+        return state.value.origin ?: ""
     }
 
     private  fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {

@@ -10,10 +10,15 @@ data class Baskets(
 )
 
 @Serializable
+data class BasketWrapper(
+    val data : Basket
+)
+
+@Serializable
 data class Basket(
     val id: Int,
+    val type: String? = null,
     val attributes: BasketAttributes,
-
 ){
     var _relationships: BasketRelationships? = null
 }

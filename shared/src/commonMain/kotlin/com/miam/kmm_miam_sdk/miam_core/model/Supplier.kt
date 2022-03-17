@@ -19,3 +19,10 @@ data class SupplierAttributes(
     val description: String? =null,
     val logo: String? =null,
 )
+
+@Serializable
+data class SupplierNotificationWrapper(
+    val token: String,
+    val status: String,
+    val price: String?
+)
