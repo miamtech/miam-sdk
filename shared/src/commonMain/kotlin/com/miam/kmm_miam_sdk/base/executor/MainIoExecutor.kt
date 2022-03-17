@@ -16,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 abstract class MainIoExecutor : IExecutorScope, CoroutineScope, KoinComponent {
 
     private val mainDispatcher: MainDispatcher by inject()
-    private val ioDispatcher: CoroutineDispatcher by inject()
+    val ioDispatcher: CoroutineDispatcher by inject()
 
     private var job = SupervisorJob()
 

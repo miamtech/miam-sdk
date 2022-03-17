@@ -49,10 +49,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class BasketPreview(recipeId :Int, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent,
+class BasketPreview(val vmBasketPreview :BasketPreviewViewModel, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val vmBasketPreview = BasketPreviewViewModel(recipeId)
     private val groceriesListStore: GroceriesListStore by inject()
     private val routerViewModel :RouterViewModel by inject()
 

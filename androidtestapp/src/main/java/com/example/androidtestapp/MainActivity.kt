@@ -1,10 +1,9 @@
 package com.example.androidtestapp
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi

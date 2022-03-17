@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.component.router
 
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
 open class RouterViewModel:
     BaseViewModel<RouterContract.Event, RouterContract.State, RouterContract.Effect>() {
@@ -8,7 +9,8 @@ open class RouterViewModel:
     override fun createInitialState(): RouterContract.State =
         RouterContract.State(
             content= RouterContent.BASKET_PREVIEW,
-            vm = null,
+            rvm = null,
+            bpvm = null,
             recipeId = null,
             isOpen = false
         )
@@ -16,11 +18,15 @@ open class RouterViewModel:
     override fun handleEvent(event: RouterContract.Event) {
         when (event) {
             is RouterContract.Event.GoToDetail -> {
-                setState { copy(vm = event.vm) }
+                setState { copy(rvm = event.vm) }
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterContract.Event.GoToPreview -> {
-                setState { copy(recipeId =event.recipeId, vm = event.vm) }
+                setState { copy(
+                    recipeId =event.recipeId,
+                    bpvm= BasketPreviewViewModel(event.recipeId),
+                    rvm = event.vm
+                )}
                 navigateTo( RouterContent.BASKET_PREVIEW)
             }
             is RouterContract.Event.GoToItemSelector -> {
@@ -33,7 +39,6 @@ open class RouterViewModel:
         }
 
     }
-
     private fun navigateTo( destination : RouterContent) {
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {
