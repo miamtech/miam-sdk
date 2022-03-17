@@ -55,7 +55,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
         val newState = when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
-                println("MIAM --> basket RefreshGroceriesList")
+                // println("Miam --> basket RefreshGroceriesList")
                 launch { loadGroceriesList() }
                 oldState
             }
@@ -65,6 +65,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 oldState
             }
             is GroceriesListAction.SetGroceriesList -> {
+                // println("Miam -> GroceriesListAction.SetGroceriesList")
                 basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
                 launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
                 oldState.copy(groceriesList = action.gl)
@@ -96,7 +97,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             launch {
                 groceriesListRepo.getCurrent()
                     .collect {
-                        println("MIAM --> basket loadGroceriesList")
+                        // println("Miam --> basket loadGroceriesList")
                         dispatch(GroceriesListAction.SetGroceriesList(it))
                     }
             }
@@ -143,6 +144,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         try {
             launch {
                 groceriesListRepo.getNew().collect {
+                    // println("Miam restGroserriesList")
                     dispatch(GroceriesListAction.SetGroceriesList(it))
                 }
             }
@@ -155,7 +157,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         try {
             launch {
                 groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {
-                    println("MIAM --> basket alterList")
+                    // println("Miam --> basket alterList")
                     dispatch(GroceriesListAction.SetGroceriesList(it))
                 }
             }

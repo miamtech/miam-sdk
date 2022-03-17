@@ -48,20 +48,38 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
 
         val newState = when (action) {
             is PointOfSaleAction.RefreshPointOfSale -> {
-                basketStore.dispatch(BasketAction.SetIdPointOfSale(action.idPointOfSale))
-                oldState.copy(idPointOfSale = action.idPointOfSale)
+                // println("Miam refresh pos")
+                if (oldState.idPointOfSale == action.idPointOfSale) {
+                    // println("Miam refresh pos same pos")
+                    oldState
+                } else {
+                    basketStore.dispatch(BasketAction.SetIdPointOfSale(action.idPointOfSale))
+                    oldState.copy(idPointOfSale = action.idPointOfSale)
+                }
             }
             is PointOfSaleAction.SetExtId -> {
-                launch {
-                    getPos(action.extId,oldState.idSupplier)
+                // println("Miam refresh ext_id")
+                if (oldState.extIdPointOfSale == action.extId) {
+                    // println("Miam refresh ext_id same ext_id")
+                    oldState
+                } else {
+                    launch {
+                        getPos(action.extId, oldState.idSupplier)
+                    }
+                    oldState.copy(extIdPointOfSale = action.extId)
                 }
-                oldState.copy(extIdPointOfSale = action.extId)
             }
             is PointOfSaleAction.SetSupplierId -> {
-                launch {
-                    getPos(oldState.extIdPointOfSale,action.supplierId)
+                // println("Miam refresh SetSupplierId")
+                if (oldState.idSupplier == action.supplierId) {
+                    // println("Miam refresh SetSupplierId same SetSupplierId")
+                    oldState
+                } else {
+                    launch {
+                        getPos(oldState.extIdPointOfSale, action.supplierId)
+                    }
+                    oldState.copy(idSupplier = action.supplierId)
                 }
-                oldState.copy(idSupplier = action.supplierId)
             }
             is PointOfSaleAction.SetOrigin ->  oldState.copy(origin = action.origin)
             is PointOfSaleAction.Error -> {

@@ -39,6 +39,7 @@ interface RecipeContract {
           val isInViewport : Boolean,
           val tabState : TabEnum,
           val activeStep: Int,
+          val recipeLoaded: Boolean
     ) : UiState
 
     sealed class Effect : UiEffect {

@@ -5,11 +5,8 @@ import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.SupplierRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -37,8 +34,12 @@ sealed class  BasketAction : Action {
     data class SetBasketState(val basketPreview: List<BasketPreviewLine>) :BasketAction()
     data class AddBasketEntry(val entry: BasketEntry): BasketAction()
     data class RemoveEntry(val entry: BasketEntry): BasketAction()
-    data class UpdateBasketEntries( val basketEntries: List<AlterQuantityBasketEntry>): BasketAction()
-    data class ReplaceSelectedItem( val basketEntry :BasketEntry, val itemId :Int): BasketAction()
+    data class UpdateBasketEntries(
+        val basketEntries: List<AlterQuantityBasketEntry>,
+        val withDebounce: Boolean = true,
+        val callback: (()-> Unit)? = null
+    ): BasketAction()
+    data class ReplaceSelectedItem(val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     data class ConfirmBasket(val price: String) : BasketAction()
     object ResetUpdateBasketEntriesQueue : BasketAction()
     data class Error(val error: Exception) : BasketAction()
@@ -70,23 +71,32 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
    private suspend fun listenEntriesChanges() {
          entriesSubject.debounce(1000).collect{ mutableList ->
-             println("debounce $mutableList")
-             dispatch(BasketAction.ResetUpdateBasketEntriesQueue)
-             runBlocking {
-                 mutableList.filter {
-                     it.delatQty != 0
-                 }.mapNotNull {
-                     updatedEntry(
-                         it,
-                         state.value.basket?._relationships?.basketEntries ?: emptyList()
-                     )
-                 }.forEach {
-                    launch {
-                        basketEntryRepo.updateBasketEntry(it).collect {
-                        }
-                    }
-                }
+            // println("Miam debounce $mutableList")
+            sendBasketEntriesChanges(mutableList)
+        }
+    }
+
+    private suspend fun sendBasketEntriesChanges(mutableList: MutableList<AlterQuantityBasketEntry>, callback: (()-> Unit)? = null) {
+        dispatch(BasketAction.ResetUpdateBasketEntriesQueue)
+        // println("Miam sendBasketEntriesChanges will run blocking")
+        runBlocking {
+            mutableList.filter {
+                it.delatQty != 0
+            }.mapNotNull {
+                alteredEntries(it,
+                    state.value.basket?._relationships?.basketEntries ?: emptyList()
+                )
+            }.map {
+                updateBasketEntry(it)
             }
+        }
+        /*dispatch(BasketAction.RefreshBasket(
+            state.value.groceriesList!!,
+            state.value.idPointOfSale!!)
+        )*/
+        // println("Miam sendBasketEntriesChanges done run blocking")
+        if (callback != null) {
+            callback()
         }
     }
 
@@ -99,14 +109,14 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
         val newState = when (action) {
             is BasketAction.RefreshBasket -> {
-                println("MIAM --> basket refresh")
+                // println("Miam --> basket refresh")
                 launch {
                         loadBasket(action.groceriesList.id, action.idPointOfSale)
                 }
                 oldState
             }
             is BasketAction.SetGroceriesList -> {
-                println("MIAM --> basket setGroceries")
+                // println("Miam --> basket setGroceries")
                 val tmp =  oldState.copy(groceriesList = action.groceriesList)
                 shouldUpdateBasket(tmp)
                 tmp
@@ -120,46 +130,53 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 oldState.copy(updateBasketEntrieQueue = mutableListOf())
             }
             is BasketAction.AddBasketEntry -> {
-                alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "active")
+                launch { updateBasketEntryStatus(action.entry, "active") }
                 oldState
             }
             is BasketAction.RemoveEntry -> {
-                alterGroceriesEntry(action.entry._relationships?.groceriesEntry, "deleted")
+                launch { updateBasketEntryStatus(action.entry, "deleted") }
                 oldState
             }
             is BasketAction.UpdateBasketEntries -> {
+                // println("Miam UpdateBasketEntries " + action.basketEntries)
+                // add all alter quantities in a queue updateBasketEntrieQueue
+                // the queue may contains alter quantities if it is still not processed due to debounce
                 action.basketEntries.forEach {
                     val idx =  oldState.updateBasketEntrieQueue.indexOfFirst { aqbe -> aqbe.id == it.id }
-                    if(idx != -1) {
-                        oldState.updateBasketEntrieQueue[idx] =  it.copy( delatQty = it.delatQty + oldState.updateBasketEntrieQueue[idx].delatQty )
+                    if(idx != -1) { // already have an alter quantity, sum them
+                        // println("Miam UpdateBasketEntries changing quantity")
+                        oldState.updateBasketEntrieQueue[idx] =  it.copy(delatQty = it.delatQty + oldState.updateBasketEntrieQueue[idx].delatQty)
                     } else {
+                        // println("Miam UpdateBasketEntries adding element")
                         oldState.updateBasketEntrieQueue.add(it)
                     }
                 }
-                println("Miam ${oldState.updateBasketEntrieQueue}")
+                // println("Miam UpdateBasketEntries queue ${oldState.updateBasketEntrieQueue}")
 
                 launch {
-                    entriesSubject.emit(oldState.updateBasketEntrieQueue)
+                    if (action.withDebounce) {
+                        // println("Miam sendBasketEntriesChanges with debounc")
+                        entriesSubject.emit(oldState.updateBasketEntrieQueue)
+                    } else {
+                        // println("Miam sendBasketEntriesChanges directly")
+                        sendBasketEntriesChanges(oldState.updateBasketEntrieQueue, action.callback)
+                    }
                 }
                 oldState
             }
             is BasketAction.ReplaceSelectedItem -> {
-                println("Miam ---> ReplaceItem")
+                // println("Miam ---> ReplaceItem")
                 launch {
                     basketEntryRepo.updateBasketEntry(
-                        action.basketEntry.copy(
-                            attributes = action.basketEntry.attributes.copy(
-                                selectedItemId = action.itemId
-                            )
-                        )
+                        action.basketEntry.updateSelectedItem(action.itemId)
                     ).collect {
-                        println("MIAM ----> change item ")
+                        // println("Miam ----> change item ")
                     }
                 }
                 oldState
             }
             is BasketAction.SetBasket -> {
-                println("MIAM --> basket setBasket")
+                // println("Miam --> basket setBasket")
                 val lineEntries = this.groupBasketEntries( state.value.groceriesList?.attributes?.recipesInfos ?: emptyList()
                     , action.basket._relationships?.basketEntries ?: emptyList())
                 val basketPreview = BasketPreviewLine.recipesAndLineEntriesToBasketPreviewLine(state.value.groceriesList!!, lineEntries,)
@@ -190,7 +207,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private fun shouldUpdateBasket(tmpState: BasketState){
-        println("MIAM --> sould ${tmpState.groceriesList}  ${tmpState.idPointOfSale}  ")
+        // println("Miam --> sould ${tmpState.groceriesList}  ${tmpState.idPointOfSale}  ")
         if( tmpState.groceriesList  == null  || tmpState.idPointOfSale == null ) return
         dispatch(BasketAction.RefreshBasket(tmpState.groceriesList,tmpState.idPointOfSale))
     }
@@ -249,43 +266,48 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
        }
     }
 
-    private fun updatedEntry(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{
-        val basketEntrie =  basketEntries.find { it.id == aqbe.id }
+    private fun alteredEntries(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{
+        // println("Miam updatedEntry " + aqbe)
+        // println("Miam updatedEntry " + basketEntries)
+        var basketEntry =  basketEntries.find { it.id == aqbe.id }
 
-        if (basketEntrie != null) {
-            val newQty = (basketEntrie.attributes.quantity ?: 0) + aqbe.delatQty
+        if (basketEntry != null) {
+            val newQty = (basketEntry.attributes.quantity ?: 0) + aqbe.delatQty
 
-           return basketEntrie.copy(
-                attributes = basketEntrie.attributes.copy(
-                    quantity =  newQty ,
-                    groceriesEntryStatus =  if(newQty > 0) "active" else "deleted"
-                )
-            )
+            // println("Miam updatedEntry before items " + basketEntry._relationships?.items)
+            // println("Miam updatedEntry before ge " + basketEntry._relationships?.groceriesEntry)
+            basketEntry = basketEntry.updateQuantity(newQty)
+            // println("Miam updatedEntry after items " + basketEntry._relationships?.items)
+            // println("Miam updatedEntry after ge " + basketEntry._relationships?.groceriesEntry)
         }
-
-        return basketEntrie
+        // println("Miam updatedEntry new entry " + basketEntry)
+        return basketEntry
     }
 
-    private fun alterGroceriesEntry(ge: GroceriesEntry?, status : String) {
-        if(ge != null){
-            launch {
-                groceriesRepo.updateGrocerieEntry(ge.copy(attributes = ge.attributes.copy(status = status))).collect {
-                    println("updated grocerie entry -> ${it.id}")
-                    if(state.value.groceriesList != null  &&  state.value.idPointOfSale != null)
-                        dispatch(BasketAction.RefreshBasket(state.value.groceriesList!!, state.value.idPointOfSale!!))
-                }
+    private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String) {
+        basketEntry.updateStatus(status)
+        basketEntryRepo.updateBasketEntry(basketEntry)
+        updateBasketEntry(basketEntry)
+    }
+
+    private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
+        // println("Miam will update basket entry $basketEntry")
+        async {
+            basketEntryRepo.updateBasketEntry(basketEntry).first()
+            val ge = basketEntry._relationships?.groceriesEntry
+            if (ge?.needPatch == true) {
+                groceriesRepo.updateGrocerieEntry(ge)
             }
         }
     }
 
-     private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
+
+    private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
         try {
-            launch {
-                basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
-                    .collect {
-                        dispatch(BasketAction.SetBasket(it))
-                    }
-            }
+            basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
+                .collect {
+                    dispatch(BasketAction.SetBasket(it))
+                }
         } catch (e: Exception) {
             dispatch(BasketAction.Error(e))
         }

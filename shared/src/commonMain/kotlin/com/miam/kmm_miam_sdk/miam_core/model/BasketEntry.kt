@@ -21,10 +21,54 @@ data class BasketEntry(
     val relationships: NotFilledBasketEntryRelationships
 ): BasketPreviewEntry {
 
-    var _relationships : BasketEntryRelationships? = null
+    var needPatch: Boolean = false
+    var _relationships: BasketEntryRelationships? = null
 
     val selectedItem : Item?
         get() = _relationships?.items?.find { item -> item.id == attributes.selectedItemId }
+
+
+    private fun deepCopy(
+        id: Int = this.id,
+        attributes: BasketEntryAttributes = this.attributes,
+        relationships: NotFilledBasketEntryRelationships = this.relationships
+    ): BasketEntry {
+        var copy = this.copy(id=id, attributes=attributes, relationships=relationships)
+        copy._relationships = this._relationships
+        copy.needPatch = this.needPatch
+        return copy
+    }
+
+    fun updateQuantity(qty: Int): BasketEntry {
+        needPatch = true
+        var newRecord = this.deepCopy(
+        attributes = this.attributes.copy(
+            quantity = qty,
+        ))
+        val newStatus = if(qty > 0) "active" else "deleted"
+        if (newStatus != this.attributes.groceriesEntryStatus) {
+            newRecord = newRecord.updateStatus(newStatus)
+        }
+        return newRecord
+    }
+
+    fun updateStatus(status: String): BasketEntry {
+        needPatch = true
+        this._relationships?.groceriesEntry?.updateStatus(status)
+        return this.deepCopy(
+        attributes = this.attributes.copy(
+            groceriesEntryStatus = status
+        ))
+    }
+
+    fun updateSelectedItem(selectedItemId: Int): BasketEntry {
+        needPatch = true
+        return this.deepCopy(
+            attributes = this.attributes.copy(
+                selectedItemId = selectedItemId
+            )
+        )
+    }
 }
 
 @Serializable

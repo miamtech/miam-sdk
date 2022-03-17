@@ -40,6 +40,7 @@ object HttpRoutes {
 class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, GrocerieEntryDataSource,SupplierDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
+    private var sessionId : String? = null
 
     private val httpClient = HttpClient{
         install(JsonFeature) {
@@ -50,7 +51,6 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
             )
             acceptContentTypes = listOf(ContentType.parse("application/vnd.api+json"),
                                         ContentType.parse("application/json"))
-
         }
         install(Logging){
             logger = Logger.DEFAULT
@@ -59,13 +59,22 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     init {
+        httpClient.receivePipeline.intercept(HttpReceivePipeline.State) {
+            if(sessionId == null ){
+                sessionId =   context.response.headers["set-cookie"]!!.split(';')[0]
+            }
+        }
+
        httpClient.sendPipeline.intercept(HttpSendPipeline.State) {
            context.headers.append(HttpHeaders.Accept,"*/*")
-           val userId =  userStore.observeState().value.userId
-           if(userId != null){
-               context.headers.append(HttpHeaders.Authorization, "user_id $userId" )
+           if(sessionId != null) {
+               context.headers.remove("Cookie")
+               context.headers.append(HttpHeaders.Cookie, sessionId!!)
            }
-
+         
+            userStore.observeState().value.userId.let {
+               context.headers.append(HttpHeaders.Authorization, "user_id $it" )
+           }
         }
     }
 
