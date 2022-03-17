@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun coursesUProductTORetailerProduct(product: CoursesUProduct): RetailerProduct {
-        return RetailerProduct(product.id,product.quantity)
+        return RetailerProduct(product.id, product.quantity, product.name)
     }
 
     private fun pushProduct(){
@@ -178,9 +178,9 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private fun pushProductToRetailer(coursesUProducts: List<RetailerProduct>){
 
         coursesUProducts.forEach { rp ->
-          val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.id }
+          val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.retailerId }
             if(productToUpdateIdx == -1){
-                retailerBasketSubject.value.items.add(CoursesUProduct(rp.id, rp.id, rp.quantity, 0.0))
+                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name, rp.quantity, 0.0))
             } else if( rp.quantity == 0) {
                 retailerBasketSubject.value.items.removeAt(productToUpdateIdx)
             } else {
