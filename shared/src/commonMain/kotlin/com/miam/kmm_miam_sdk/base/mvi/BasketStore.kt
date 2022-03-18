@@ -22,26 +22,34 @@ data class BasketState(
     val basketPreview : List<BasketPreviewLine>?,
     val entriesCount : Int? =0,
     val recipeCount :Int? =0,
-    val totalPrice : Double? =0.0,
-    val updateBasketEntrieQueue: MutableList<AlterQuantityBasketEntry> = mutableListOf()
+    val totalPrice : Double? =0.0
 ) : State
 
 sealed class  BasketAction : Action {
-    data class RefreshBasket(val groceriesList: GroceriesList, val idPointOfSale: Int): BasketAction()
-    data class SetBasket(val basket: Basket): BasketAction()
+    data class RefreshBasket(
+        val groceriesList: GroceriesList,
+        val idPointOfSale: Int,
+        val callback: (()-> Unit)? = null
+    ): BasketAction()
+    data class SetBasket(
+        val basket: Basket,
+        val callback: (()-> Unit)? = null
+    ): BasketAction()
     data class SetGroceriesList(val groceriesList: GroceriesList) : BasketAction()
     data class SetIdPointOfSale(val pointOfSaleId: Int) : BasketAction()
-    data class SetBasketState(val basketPreview: List<BasketPreviewLine>) :BasketAction()
+    data class SetBasketStats(val basketPreview: List<BasketPreviewLine>) :BasketAction()
     data class AddBasketEntry(val entry: BasketEntry): BasketAction()
     data class RemoveEntry(val entry: BasketEntry): BasketAction()
     data class UpdateBasketEntries(
-        val basketEntries: List<AlterQuantityBasketEntry>,
-        val withDebounce: Boolean = true,
+        val basketEntries: List<BasketEntry>,
+        val callback: (()-> Unit)? = null
+    ): BasketAction()
+    data class UpdateBasketEntriesDiff(
+        val basketEntriesDiff: List<AlterQuantityBasketEntry>,
         val callback: (()-> Unit)? = null
     ): BasketAction()
     data class ReplaceSelectedItem(val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     data class ConfirmBasket(val price: String) : BasketAction()
-    object ResetUpdateBasketEntriesQueue : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
 
@@ -61,155 +69,119 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private val basketEntryRepo :BasketEntryRepositoryImp by inject()
     private val groceriesRepo : GroceriesEntryRepositoryImp by inject()
     private val supplierRepositoryImp: SupplierRepositoryImp by inject()
-    private val entriesSubject : MutableSharedFlow< MutableList<AlterQuantityBasketEntry>> = MutableSharedFlow()
-
-    init {
-        launch {
-            listenEntriesChanges()
-        }
-    }
-
-   private suspend fun listenEntriesChanges() {
-         entriesSubject.debounce(1000).collect{ mutableList ->
-            // println("Miam debounce $mutableList")
-            sendBasketEntriesChanges(mutableList)
-        }
-    }
-
-    private suspend fun sendBasketEntriesChanges(mutableList: MutableList<AlterQuantityBasketEntry>, callback: (()-> Unit)? = null) {
-        dispatch(BasketAction.ResetUpdateBasketEntriesQueue)
-        // println("Miam sendBasketEntriesChanges will run blocking")
-        runBlocking {
-            mutableList.filter {
-                it.delatQty != 0
-            }.mapNotNull {
-                alteredEntries(it,
-                    state.value.basket?._relationships?.basketEntries ?: emptyList()
-                )
-            }.map {
-                updateBasketEntry(it)
-            }
-        }
-        /*dispatch(BasketAction.RefreshBasket(
-            state.value.groceriesList!!,
-            state.value.idPointOfSale!!)
-        )*/
-        // println("Miam sendBasketEntriesChanges done run blocking")
-        if (callback != null) {
-            callback()
-        }
-    }
 
     override fun observeState(): StateFlow<BasketState> = state
 
     override fun observeSideEffect(): Flow<BasketEffect> = sideEffect
 
     override fun dispatch(action: BasketAction) {
-        val oldState = state.value
-
-        val newState = when (action) {
+        // println("Miam basket dispatch : $action")
+        when (action) {
             is BasketAction.RefreshBasket -> {
                 // println("Miam --> basket refresh")
                 launch {
-                        loadBasket(action.groceriesList.id, action.idPointOfSale)
+                    val basket = loadBasket(action.groceriesList.id, action.idPointOfSale)
+                    dispatch(BasketAction.SetBasket(basket, action.callback)) // will set state here
                 }
-                oldState
+                // do not wait for completion
             }
             is BasketAction.SetGroceriesList -> {
                 // println("Miam --> basket setGroceries")
-                val tmp =  oldState.copy(groceriesList = action.groceriesList)
-                shouldUpdateBasket(tmp)
-                tmp
+                val newState =  state.value.copy(groceriesList = action.groceriesList)
+                if(shouldUpdateBasket(newState)){
+                    dispatch(BasketAction.RefreshBasket(newState.groceriesList!!, newState.idPointOfSale!!))
+                }
+                updateStateIfChanged(newState)
             }
             is BasketAction.SetIdPointOfSale -> {
-                val tmp = oldState.copy(idPointOfSale = action.pointOfSaleId)
-                shouldUpdateBasket(tmp)
-                tmp
-            }
-            is BasketAction.ResetUpdateBasketEntriesQueue -> {
-                oldState.copy(updateBasketEntrieQueue = mutableListOf())
+                val newState =  state.value.copy(idPointOfSale = action.pointOfSaleId)
+                if(shouldUpdateBasket(newState)){
+                    dispatch(BasketAction.RefreshBasket(newState.groceriesList!!, newState.idPointOfSale!!))
+                }
+                updateStateIfChanged(newState)
             }
             is BasketAction.AddBasketEntry -> {
-                launch { updateBasketEntryStatus(action.entry, "active") }
-                oldState
+                launch {
+                    updateBasketEntryStatus(action.entry, "active")
+                    // TODO : update state ???
+                }
+                // do not wait for completion
             }
             is BasketAction.RemoveEntry -> {
-                launch { updateBasketEntryStatus(action.entry, "deleted") }
-                oldState
+                launch {
+                    updateBasketEntryStatus(action.entry, "deleted")
+                    // TODO : update state ???
+                }
+                // do not wait for completion
             }
             is BasketAction.UpdateBasketEntries -> {
-                // println("Miam UpdateBasketEntries " + action.basketEntries)
-                // add all alter quantities in a queue updateBasketEntrieQueue
-                // the queue may contains alter quantities if it is still not processed due to debounce
-                action.basketEntries.forEach {
-                    val idx =  oldState.updateBasketEntrieQueue.indexOfFirst { aqbe -> aqbe.id == it.id }
-                    if(idx != -1) { // already have an alter quantity, sum them
-                        // println("Miam UpdateBasketEntries changing quantity")
-                        oldState.updateBasketEntrieQueue[idx] =  it.copy(delatQty = it.delatQty + oldState.updateBasketEntrieQueue[idx].delatQty)
-                    } else {
-                        // println("Miam UpdateBasketEntries adding element")
-                        oldState.updateBasketEntrieQueue.add(it)
-                    }
-                }
-                // println("Miam UpdateBasketEntries queue ${oldState.updateBasketEntrieQueue}")
-
+                // println("Miam basketStore UpdateBasketEntries " + action.basketEntries)
                 launch {
-                    if (action.withDebounce) {
-                        // println("Miam sendBasketEntriesChanges with debounc")
-                        entriesSubject.emit(oldState.updateBasketEntrieQueue)
-                    } else {
-                        // println("Miam sendBasketEntriesChanges directly")
-                        sendBasketEntriesChanges(oldState.updateBasketEntrieQueue, action.callback)
-                    }
+                    action.basketEntries.map { async { updateBasketEntry(it) } }.awaitAll()
+                    // wait for all jobs to complete
+                    // println("Miam basketStore UpdateBasketEntries will refresh basket")
+                    dispatch(
+                        // will set state
+                        BasketAction.RefreshBasket(state.value.groceriesList!!, state.value.idPointOfSale!!, action.callback)
+                    )
                 }
-                oldState
+            }
+            is BasketAction.UpdateBasketEntriesDiff -> {
+                // println("Miam basketStore UpdateBasketEntriesDiff " + action.basketEntriesDiff)
+                val basketEntries = action.basketEntriesDiff.filter { alterQty ->
+                    alterQty.delatQty != 0
+                }.mapNotNull { alterQty ->
+                    alteredEntries(alterQty, state.value.basket?._relationships?.basketEntries ?: emptyList())
+                }
+                dispatch(BasketAction.UpdateBasketEntries(basketEntries, action.callback))
             }
             is BasketAction.ReplaceSelectedItem -> {
                 // println("Miam ---> ReplaceItem")
+                action.basketEntry.updateSelectedItem(action.itemId)
                 launch {
-                    basketEntryRepo.updateBasketEntry(
-                        action.basketEntry.updateSelectedItem(action.itemId)
-                    ).collect {
-                        // println("Miam ----> change item ")
-                    }
+                    updateBasketEntry(action.basketEntry)
+                    // TODO : update state ???
                 }
-                oldState
+                // do not wait for job completion
             }
             is BasketAction.SetBasket -> {
                 // println("Miam --> basket setBasket")
                 val lineEntries = this.groupBasketEntries( state.value.groceriesList?.attributes?.recipesInfos ?: emptyList()
                     , action.basket._relationships?.basketEntries ?: emptyList())
                 val basketPreview = BasketPreviewLine.recipesAndLineEntriesToBasketPreviewLine(state.value.groceriesList!!, lineEntries,)
-                val newState = oldState.copy(basket = action.basket, basketPreview = basketPreview, recipeCount = state.value.groceriesList?.attributes?.recipesInfos?.size ?: 0 )
-                dispatch(BasketAction.SetBasketState(basketPreview))
-                newState
+                val newState = state.value.copy(basket = action.basket, basketPreview = basketPreview, recipeCount = state.value.groceriesList?.attributes?.recipesInfos?.size ?: 0 )
+                dispatch(BasketAction.SetBasketStats(basketPreview))
+                updateStateIfChanged(newState)
+                action.callback?.let { it() }
             }
-            is BasketAction.SetBasketState -> {
-              val newState =  setBasketStates(action.basketPreview, oldState)
-                println("Basket emit changePreview")
-              launch { sideEffect.emit(BasketEffect.BasketPreviewChange)}
-              newState
+            is BasketAction.SetBasketStats -> {
+                val newState =  setBasketStats(action.basketPreview, state.value)
+                // println("Basket emit changePreview")
+                launch { sideEffect.emit(BasketEffect.BasketPreviewChange) }
+                updateStateIfChanged(newState)
             }
             is BasketAction.ConfirmBasket -> {
-                if(oldState.basket != null) {
-                    println("Miam confirm basket")
-                    confirmBasket(oldState.basket, action.price)
+                if(state.value.basket != null) {
+                    // println("Miam confirm basket")
+                    confirmBasket(state.value.basket!!, action.price)
                 }
-                oldState
+                // no state to set
             }
             is BasketAction.Error -> {
-                oldState
+                // TODO
             }
         }
-        if (newState != oldState) {
+    }
+
+    private fun updateStateIfChanged(newState: BasketState) {
+        if (newState != state.value) {
             state.value = newState
         }
     }
 
-    private fun shouldUpdateBasket(tmpState: BasketState){
+    private fun shouldUpdateBasket(tmpState: BasketState): Boolean {
         // println("Miam --> sould ${tmpState.groceriesList}  ${tmpState.idPointOfSale}  ")
-        if( tmpState.groceriesList  == null  || tmpState.idPointOfSale == null ) return
-        dispatch(BasketAction.RefreshBasket(tmpState.groceriesList,tmpState.idPointOfSale))
+        return tmpState.groceriesList != null && tmpState.idPointOfSale != null
     }
 
     private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
@@ -233,11 +205,11 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     fun basketIsEmpty( ): Boolean {
-       println("Miam is basket empty ? ${state.value.basket?._relationships?.basketEntries?.isEmpty()  ==  true}")
+    //    println("Miam is basket empty ? ${state.value.basket?._relationships?.basketEntries?.isEmpty()  ==  true}")
        return (state.value.basket?._relationships?.basketEntries?.isEmpty() == true)
     }
 
-    private fun setBasketStates(basketPreview: List<BasketPreviewLine>, oldState: BasketState) : BasketState {
+    private fun setBasketStats(basketPreview: List<BasketPreviewLine>, oldState: BasketState) : BasketState {
 
         val entriesFound: List<BasketEntry> = basketPreview.map { bpl -> bpl.entries?.found ?: emptyList() }.flatten()
         var totalPrice = 0.0
@@ -254,7 +226,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
        launch {
            basketRepo.updateBasket(basket.copy(attributes = basket.attributes.copy(confirmed = true))).collect {
                basket ->
-               println("Maim --> basket updated")
+            //    println("Maim --> basket updated")
                if(basket.attributes.token != null) {
                    supplierRepositoryImp.notifyConfirmBasket(basket.attributes.token!!).collect {
                        supplierRepositoryImp.notifyPaidBasket(basket.attributes.token, price).collect{
@@ -267,13 +239,13 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private fun alteredEntries(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{
-        // println("Miam updatedEntry " + aqbe)
-        // println("Miam updatedEntry " + basketEntries)
+        // println("Miam alteredEntries " + aqbe)
+        // println("Miam alteredEntries " + basketEntries)
         var basketEntry =  basketEntries.find { it.id == aqbe.id }
 
+        // println("Miam alteredEntries found $basketEntry")
         if (basketEntry != null) {
             val newQty = (basketEntry.attributes.quantity ?: 0) + aqbe.delatQty
-
             // println("Miam updatedEntry before items " + basketEntry._relationships?.items)
             // println("Miam updatedEntry before ge " + basketEntry._relationships?.groceriesEntry)
             basketEntry = basketEntry.updateQuantity(newQty)
@@ -281,38 +253,28 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             // println("Miam updatedEntry after ge " + basketEntry._relationships?.groceriesEntry)
         }
         // println("Miam updatedEntry new entry " + basketEntry)
+        // println("Miam alteredEntries return $basketEntry")
         return basketEntry
     }
 
     private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String) {
         basketEntry.updateStatus(status)
-        basketEntryRepo.updateBasketEntry(basketEntry)
         updateBasketEntry(basketEntry)
     }
 
     private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
         // println("Miam will update basket entry $basketEntry")
-        launch {
-            basketEntryRepo.updateBasketEntry(basketEntry).first()
-            val ge = basketEntry._relationships?.groceriesEntry
-            if (ge?.needPatch == true) {
-                groceriesRepo.updateGrocerieEntry(ge)
-            }
+        // send update on ge first so if status changed you get resuts in be groceries_entry_status
+        val ge = basketEntry._relationships?.groceriesEntry
+        if (ge?.needPatch == true) {
+            groceriesRepo.updateGrocerieEntry(ge)
         }
+        basketEntryRepo.updateBasketEntry(basketEntry)
     }
 
 
-    private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
-        try {
-            withContext(Dispatchers.Default){
-                basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
-                    .collect {
-                        dispatch(BasketAction.SetBasket(it))
-                    }
-            }
-        } catch (e: Exception) {
-            dispatch(BasketAction.Error(e))
-        }
+    private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ): Basket {
+        return basketRepo.getFromListAndPos(idGroceriesList, idPointOfSale)
     }
 
 }

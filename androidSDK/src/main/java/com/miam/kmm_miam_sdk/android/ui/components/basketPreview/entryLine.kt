@@ -135,13 +135,13 @@ fun entryLine(entry: BasketPreviewLine,
                     count = count,
                     increase = {
                         count++
-                        vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, 1))},
+                        vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, count))},
                     decrease = {
                         if(count == 1 ){
                             vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveEntry(entry.record as BasketEntry))
                         }else{
                             count --
-                            vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, -1))
+                            vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, count))
                         }
 
                     },

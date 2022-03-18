@@ -284,6 +284,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
+        // println("Miam datasource updateBasketEntry $basketEntry")
         return  httpClient.patch<BasketEntryWrapper>{
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
             url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?include=groceries-entry")
@@ -294,6 +295,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     ////////////////////////////////// GROCERY ENTRY ////////////////////////////////////////
 
     override suspend fun updateGroceriesEntry(ge: GroceriesEntry): GroceriesEntry {
+        // println("Miam datasource updateGroceriesEntry $ge")
         return  httpClient.patch<GroceriesEntryWrapper>{
          headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
          url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
