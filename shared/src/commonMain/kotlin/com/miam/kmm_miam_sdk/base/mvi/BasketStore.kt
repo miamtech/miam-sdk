@@ -22,8 +22,7 @@ data class BasketState(
     val basketPreview : List<BasketPreviewLine>?,
     val entriesCount : Int? =0,
     val recipeCount :Int? =0,
-    val totalPrice : Double? =0.0,
-    val updateBasketEntrieQueue: MutableList<AlterQuantityBasketEntry> = mutableListOf()
+    val totalPrice : Double? =0.0
 ) : State
 
 sealed class  BasketAction : Action {
@@ -51,7 +50,6 @@ sealed class  BasketAction : Action {
     ): BasketAction()
     data class ReplaceSelectedItem(val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     data class ConfirmBasket(val price: String) : BasketAction()
-    object ResetUpdateBasketEntriesQueue : BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
 
@@ -71,8 +69,6 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private val basketEntryRepo :BasketEntryRepositoryImp by inject()
     private val groceriesRepo : GroceriesEntryRepositoryImp by inject()
     private val supplierRepositoryImp: SupplierRepositoryImp by inject()
-
-    init { }
 
     override fun observeState(): StateFlow<BasketState> = state
 
@@ -102,10 +98,6 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 if(shouldUpdateBasket(newState)){
                     dispatch(BasketAction.RefreshBasket(newState.groceriesList!!, newState.idPointOfSale!!))
                 }
-                updateStateIfChanged(newState)
-            }
-            is BasketAction.ResetUpdateBasketEntriesQueue -> {
-                val newState =  state.value.copy(updateBasketEntrieQueue = mutableListOf())
                 updateStateIfChanged(newState)
             }
             is BasketAction.AddBasketEntry -> {
