@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GroceriesEntryRepository {
 
-    suspend fun updateGrocerieEntry(ge : GroceriesEntry) : Flow<GroceriesEntry>
+    suspend fun updateGrocerieEntry(ge : GroceriesEntry): GroceriesEntry
 }

@@ -40,21 +40,27 @@ data class BasketEntry(
     }
 
     fun updateQuantity(qty: Int): BasketEntry {
+        // println("Miam update quantity model $qty $this")
         needPatch = true
-        var newRecord = this.deepCopy(
-        attributes = this.attributes.copy(
-            quantity = qty,
-        ))
-        val newStatus = if(qty > 0) "active" else "deleted"
-        if (newStatus != this.attributes.groceriesEntryStatus) {
-            newRecord = newRecord.updateStatus(newStatus)
+        return if (qty <= 0) {
+            // println("Miam update quantity model will delete")
+            updateStatus("deleted")
+        } else {
+            // println("Miam update quantity model will update qty")
+            var newRecord = this.deepCopy(
+                attributes = this.attributes.copy(
+                    quantity = qty,
+                ))
+            if (this.attributes.groceriesEntryStatus != "active") {
+                newRecord = newRecord.updateStatus("active")
+            }
+            newRecord
         }
-        return newRecord
     }
 
     fun updateStatus(status: String): BasketEntry {
         needPatch = true
-        this._relationships?.groceriesEntry?.updateStatus(status)
+        this._relationships?.groceriesEntry = this._relationships?.groceriesEntry?.updateStatus(status)
         return this.deepCopy(
         attributes = this.attributes.copy(
             groceriesEntryStatus = status

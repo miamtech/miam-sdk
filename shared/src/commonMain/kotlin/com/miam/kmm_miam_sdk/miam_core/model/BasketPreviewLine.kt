@@ -18,6 +18,28 @@ class LineEntries {
         notFound.let { newEntries.notFound.addAll(it) }
         return  newEntries
     }
+
+    fun updateBasketEntries(basketEntries: List<BasketEntry>) {
+        basketEntries.forEach { updateBasketEntry(it) }
+    }
+
+    private fun updateBasketEntry(basketEntry: BasketEntry) {
+        updateBasketEntryInList(found, basketEntry)
+        updateBasketEntryInList(removed, basketEntry)
+        updateBasketEntryInList(oftenDeleted, basketEntry)
+        updateBasketEntryInList(notFound, basketEntry)
+    }
+
+    private fun updateBasketEntryInList(basketEntries: MutableList<BasketEntry>, basketEntry: BasketEntry) {
+        val existingEntryIdx = basketEntries.indexOfFirst{ be ->
+            be.id == basketEntry.id
+        }
+        if (existingEntryIdx >= 0) {
+            var existingEntry = basketEntries[existingEntryIdx]
+            existingEntry = existingEntry.updateQuantity(basketEntry.attributes.quantity?: 0)
+            basketEntries[existingEntryIdx] = existingEntry
+        }
+    }
 }
 
 data class BasketPreviewLine(

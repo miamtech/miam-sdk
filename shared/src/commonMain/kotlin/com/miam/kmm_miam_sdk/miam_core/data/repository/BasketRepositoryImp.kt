@@ -22,14 +22,14 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
 
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    override suspend fun getFromListAndPos(listId: Int, posId: Int): Flow<Basket> = flow  {
+    override suspend fun getFromListAndPos(listId: Int, posId: Int): Basket  {
        val basket =  basketDataSource.getFromListAndPos(listId, posId)
 
         if(basket.attributes.completion != null || (basket.attributes.completion?.total ?: 0 ) > 1 ) {
             basket._relationships = BasketRelationships(fetchBasketEntriesPage(basket))
             // println("Miam basket relationships " + basket._relationships?.basketEntries)
         }
-        emit(basket)
+        return basket
     }
 
     override suspend fun updateBasket(basket: Basket ) : Flow<Basket> = flow  {

@@ -25,16 +25,16 @@ class   BasketComparator(
 
     fun updateReceivedFromMiam(basket: List<BasketEntry>) {
         // println("Miam updateReceivedFromMiam " + basket)
-        _comparisonMap.setTargetFromMiam(basket);
+        _comparisonMap.setTargetFromMiam(basket)
         // println("Miam updateReceivedFromMiam _comparisonMap " + _comparisonMap._extIdToComparisonItem)
         val toPushToRetailer = _comparisonMap.resolveFromMiam(basket);
         // println("Miam updateReceivedFromMiam toPushToRetailer " + toPushToRetailer)
         _comparisonMap.cleanNullProducts();
-        sendUpdateToRetailer(toPushToRetailer);
+        sendUpdateToRetailer(toPushToRetailer)
     }
 
      fun updateReceivedFromRetailer(retailerBasket: List<RetailerProduct>) {
-        //  println("Miam start processing retailer event2 comparaison1 " + _comparisonMap._extIdToComparisonItem)
+        // println("Miam start processing retailer event2 comparaison1 " + _comparisonMap._extIdToComparisonItem)
         isProcessingRetailerEvent = true
         _comparisonMap.updateMapFromRetailer(retailerBasket)
         //  println("Miam start processing retailer event2 comparaison2 " + _comparisonMap._extIdToComparisonItem)
@@ -55,9 +55,8 @@ class   BasketComparator(
 
         // println("Miam sendUpdateToMiam action to make")
         //update the entries and stop proccessing at end with a callback
-        val basketAction = BasketAction.UpdateBasketEntries(
+        val basketAction = BasketAction.UpdateBasketEntriesDiff(
             entriesToRemove,
-            false,
             fun () {
                 // println("Miam my callback")
                 this.isProcessingRetailerEvent = false;
