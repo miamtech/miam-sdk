@@ -292,7 +292,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
         // println("Miam will update basket entry $basketEntry")
-        async {
+        launch {
             basketEntryRepo.updateBasketEntry(basketEntry).first()
             val ge = basketEntry._relationships?.groceriesEntry
             if (ge?.needPatch == true) {
@@ -304,10 +304,12 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ) {
         try {
-            basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
-                .collect {
-                    dispatch(BasketAction.SetBasket(it))
-                }
+            withContext(Dispatchers.Default){
+                basketRepo.getFromListAndPos(idGroceriesList,idPointOfSale)
+                    .collect {
+                        dispatch(BasketAction.SetBasket(it))
+                    }
+            }
         } catch (e: Exception) {
             dispatch(BasketAction.Error(e))
         }

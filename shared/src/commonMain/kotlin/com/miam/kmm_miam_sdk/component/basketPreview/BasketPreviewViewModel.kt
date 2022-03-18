@@ -12,8 +12,9 @@ import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
+import java.lang.Thread
 
-@OptIn(InternalCoroutinesApi::class)
+
 class BasketPreviewViewModel(val recipeId: Int?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
@@ -30,7 +31,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
             launch {
-                basketStore.observeSideEffect().collect{
+                basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange  }.collect{
                     basketChange()
                 }
             }
@@ -58,7 +59,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
                    entries =  entries ,
                    price = updatePrice(entries.found).toString(),
 
-               )), lastEntriesUpdate = null) }
+               ))) }
             }
         }
     }
@@ -73,7 +74,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             isFillingEntry= false,
             firstEntriesBuildDone = false,
             showItemSelector= false,
-            lastEntriesUpdate = null
+
         )
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
@@ -99,14 +100,15 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun setLines(newline: BasketPreviewLine) {
-        println("Miam  --> SetLine ")
+        println("Miam  --> SetLine  ${currentState.firstEntriesBuildDone}")
        if(!currentState.firstEntriesBuildDone) {
             setState { copy(firstEntriesBuildDone = true)}
+           println("Miam  --> BuildEntriesLines  ${currentState.firstEntriesBuildDone}")
             setEvent(BasketPreviewContract.Event.BuildEntriesLines(newline))
         } else {
+           println("Miam  --> UpdateEntriesLines  ${currentState.firstEntriesBuildDone}")
             setEvent(BasketPreviewContract.Event.UpdateEntriesLines(newline))
         }
-
     }
 
     private fun toggleLine() {
@@ -114,35 +116,40 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun buildEntriesLines(bpl :BasketPreviewLine){
-        println("Maim -> buildEntriesLines   $isFillingEntry")
+        println("Miam -> buildEntriesLines   $isFillingEntry")
        if(isFillingEntry) return
        fillBasketEntries(bpl)
     }
 
     private fun updateEntriesLines(bpl :BasketPreviewLine) {
+        println("Miam -> updateEntriesLines   $isFillingEntry")
         if(isFillingEntry) return
+        isFillingEntry = true
 
-
-        runBlocking {
+      launch {
             withContext(ioDispatcher){
-                currentState.bpl?.entries?.found?.addAll(fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found))
-                currentState.bpl?.entries?.removed?.addAll(fillMissing( currentState.bpl?.entries?.removed , bpl.entries?.removed))
+                val coco = fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found)
+                val tata = fillMissing( currentState.bpl?.entries?.removed , bpl.entries?.removed)
+                currentState.bpl?.entries?.found?.addAll(coco)
+                currentState.bpl?.entries?.removed?.addAll(tata)
             }
         }
-
-        setState { copy(line = BasicUiState.Success(bpl),bpl = bpl, isReloading= false, isFillingEntry = false) }
+        isFillingEntry = false
+        setState { copy( line = BasicUiState.Success(bpl), bpl = bpl, isReloading= false, isFillingEntry = false) }
     }
 
     private suspend fun fillMissing( oldArray : List<BasketEntry>? = emptyList(), newArray: MutableList<BasketEntry>? = mutableListOf()) : MutableList<BasketEntry> {
         val missingFilledBasketEntries = mutableListOf<BasketEntry>()
+        val newProducts = newArray!!.filter { be ->
+            oldArray!!.find { it.id == be.id } == null
+        }
 
-            newArray!!.filter { be ->
-                oldArray!!.find { it.id == be.id } == null
-            }.map {
+        if(newProducts.isEmpty()) return missingFilledBasketEntries
+
+        newProducts.map {
                async {
-                    basketEntryRepo.getRelationships(it).collect {
-                        missingFilledBasketEntries.add(it)
-                    }
+                   println("Miam  async ${Thread.currentThread().name} ")
+                   missingFilledBasketEntries.add(basketEntryRepo.getRelationships(it).first())
                 }
             }.awaitAll()
 
@@ -180,7 +187,10 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private suspend fun updateBasketEntry(entry: BasketEntry, deltaQty:Int){
-            val entries = currentState.lastEntriesUpdate ?: currentState.bpl?.entries
+            val entries = lastEntriesUpdate ?: currentState.bpl?.entries
+        mutableListOf(*entries!!.found.toTypedArray())
+
+
             val idx = entries?.found?.indexOfFirst { be -> be.id == entry.id }
             if(idx != -1 && idx!= null) {
                 entries.found[idx] = entries.found[idx].copy(attributes = entries.found[idx].attributes.copy(
@@ -217,34 +227,49 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private fun fillBasketEntries(line: BasketPreviewLine) {
         setState { copy( isFillingEntry = true)}
                 try {
-                     println("MIAM --> basket setFillBasketEntry  ${line.id}")
-                    runBlocking {
-                        fillEntryCall(line.entries?.found)
-                        line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
-                        fillEntryCall(line.entries?.removed)
-                        fillEntryCall(line.entries?.oftenDeleted)
-                        fillEntryCall(line.entries?.notFound)
+                    println("Miam --> basket setFillBasketEntry  ${line.id}")
+
+                    launch{
+                        withContext(ioDispatcher) {
+                            println("Miam --> Start runing block")
+                            println("Miam --> ${Thread.currentThread().name}")
+
+                            // launch all retrieve async
+                            val foundEntries = retrieveBasketEntries(line.entries?.found)
+                            val removedEntries = retrieveBasketEntries(line.entries?.removed)
+                            val oftenDeletedEntries = retrieveBasketEntries(line.entries?.removed)
+                            val notFoundEntries = retrieveBasketEntries(line.entries?.notFound)
+
+                            //fill the result, will wait synchronous job ended
+                            replaceBasketEntries(line.entries?.found, foundEntries.awaitAll())
+                            line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
+                            replaceBasketEntries(line.entries?.removed, removedEntries.awaitAll())
+                            replaceBasketEntries(line.entries?.removed, oftenDeletedEntries.awaitAll())
+                            replaceBasketEntries(line.entries?.notFound, notFoundEntries.awaitAll())
+
+                            println("Miam will set state")
+                            setState { copy(line = BasicUiState.Success(line),bpl = line, isReloading= false, isFillingEntry = false) }
+                        }
                     }
-                     setState { copy(line = BasicUiState.Success(line),bpl = line, isReloading= false, isFillingEntry = false) }
+
                 } catch (cause: Throwable) {
                     print(cause.toString())
                     isFillingEntry = false
                     // todo Throw error
                 }
-
     }
 
-     private suspend fun fillEntryCall(list :MutableList<BasketEntry>? = mutableListOf()){
-        val filledBasketEntries : MutableList<BasketEntry> = mutableListOf()
-        withContext(ioDispatcher) {
-            list!!.map {
-                async {
-                    filledBasketEntries.add(basketEntryRepo.getRelationships(it).first())
-                }
-            }.awaitAll()
+    private suspend fun retrieveBasketEntries(list :MutableList<BasketEntry>? = mutableListOf(), id: String = ""): List<Deferred<BasketEntry>> {
+        return list!!.map {
+            async {
+                basketEntryRepo.getRelationships(it).first()
+            }
         }
-        list!!.clear()
-        list.addAll(filledBasketEntries)
+    }
+
+    private fun replaceBasketEntries(inputList :MutableList<BasketEntry>? = mutableListOf(), resList: List<BasketEntry>) {
+        inputList!!.clear()
+        inputList.addAll(resList)
     }
 
     private fun updatePrice(foundEntries: MutableList<BasketEntry>) : Double{

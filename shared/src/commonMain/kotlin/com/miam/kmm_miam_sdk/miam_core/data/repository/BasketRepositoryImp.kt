@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.math.ceil
@@ -23,13 +24,13 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
     override suspend fun getFromListAndPos(listId: Int, posId: Int): Flow<Basket> = flow  {
-       val basket =  basketDataSource.getFromListAndPos(listId, posId)
+            val basket =  basketDataSource.getFromListAndPos(listId, posId)
 
-        if(basket.attributes.completion != null || (basket.attributes.completion?.total ?: 0 ) > 1 ) {
-            basket._relationships = BasketRelationships(fetchBasketEntriesPage(basket))
-            // println("Miam basket relationships " + basket._relationships?.basketEntries)
-        }
-        emit(basket)
+            if(basket.attributes.completion != null || (basket.attributes.completion?.total ?: 0 ) > 1 ) {
+                basket._relationships = BasketRelationships(fetchBasketEntriesPage(basket))
+                // println("Miam basket relationships " + basket._relationships?.basketEntries)
+            }
+            emit(basket)
     }
 
     override suspend fun updateBasket(basket: Basket ) : Flow<Basket> = flow  {

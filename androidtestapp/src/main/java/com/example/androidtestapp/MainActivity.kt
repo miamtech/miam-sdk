@@ -196,7 +196,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         coursesUProducts.forEach { rp ->
           val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.retailerId }
             if(productToUpdateIdx == -1){
-                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name, rp.quantity, 0.0, "id_" + rp.retailerId))
+                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name!!, rp.quantity, 0.0, "id_" + rp.retailerId))
             } else if( rp.quantity == 0) {
                 retailerBasketSubject.value.items.removeAt(productToUpdateIdx)
             } else {

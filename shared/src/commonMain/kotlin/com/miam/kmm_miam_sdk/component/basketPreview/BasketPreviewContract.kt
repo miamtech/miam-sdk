@@ -36,7 +36,7 @@ interface BasketPreviewContract {
         val isFillingEntry: Boolean,
         val firstEntriesBuildDone : Boolean,
         val showItemSelector: Boolean,
-        val lastEntriesUpdate : LineEntries? //service state
+
     ) : UiState
 
     sealed class Effect : UiEffect {}
