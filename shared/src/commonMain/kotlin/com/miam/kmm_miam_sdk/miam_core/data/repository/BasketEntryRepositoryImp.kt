@@ -8,8 +8,14 @@ import kotlinx.coroutines.flow.flow
 
 class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasource): BasketEntryRepository {
 
+    override suspend fun getRelationshipsIfNecessary(basketEntry: BasketEntry): BasketEntry {
+        if (basketEntry.relathionshipsRetrieved()) {
+            return basketEntry
+        }
+        return getRelationships(basketEntry)
+    }
 
-    override suspend fun getRelationships(basketEntry: BasketEntry): Flow<BasketEntry> = flow  {
+    override suspend fun getRelationships(basketEntry: BasketEntry): BasketEntry {
         basketEntry._relationships = BasketEntryRelationships(
             basketEntryDataSource.getBasketEntryItems(basketEntry.id),
             if(basketEntry.relationships.groceriesEntry.data.id != null) {
@@ -18,7 +24,7 @@ class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasou
               null
              }
             )
-        emit(basketEntry)
+        return basketEntry
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
