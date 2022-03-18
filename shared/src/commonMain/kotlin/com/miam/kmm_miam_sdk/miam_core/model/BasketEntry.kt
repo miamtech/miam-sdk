@@ -27,6 +27,9 @@ data class BasketEntry(
     val selectedItem : Item?
         get() = _relationships?.items?.find { item -> item.id == attributes.selectedItemId }
 
+    fun relathionshipsRetrieved(): Boolean {
+        return _relationships != null
+    }
 
     private fun deepCopy(
         id: Int = this.id,

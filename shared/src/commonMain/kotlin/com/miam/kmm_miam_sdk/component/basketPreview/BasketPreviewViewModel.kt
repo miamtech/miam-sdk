@@ -12,8 +12,9 @@ import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
+import java.lang.Thread
 
-@OptIn(InternalCoroutinesApi::class)
+
 class BasketPreviewViewModel(val recipeId: Int?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
@@ -30,7 +31,8 @@ class BasketPreviewViewModel(val recipeId: Int?):
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
             launch {
-                basketStore.observeSideEffect().collect{
+                basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange  }.collect{
+                    println("I'm Alive !!!!!!")
                     basketChange()
                 }
             }
@@ -59,7 +61,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
                        line = BasicUiState.Success(updateBplEntries(entries))
                    )
                }
-            //    println("Miam listenEntriesChanges will dispatch with $entries")
+               //  println("Miam listenEntriesChanges will dispatch with $entries")
                // create a copy of the list so you can clear it here
                val copiedList = mutableListOf<BasketEntry>()
                copiedList.addAll(entries)
@@ -104,7 +106,6 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.ToggleLine -> toggleLine()
             is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
             is BasketPreviewContract.Event.BuildEntriesLines -> buildEntriesLines(event.bpl)
-            is BasketPreviewContract.Event.UpdateEntriesLines -> updateEntriesLines(event.bpl)
             is BasketPreviewContract.Event.CountChange -> launch { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
             is BasketPreviewContract.Event.CloseItemSelector ->  setState { copy(showItemSelector = false)}
@@ -115,15 +116,14 @@ class BasketPreviewViewModel(val recipeId: Int?):
         setState { copy(recipeId = newRecipeId)}
     }
 
+    /**
+     * BPL comes from the basket store that does not get relathionships
+     * Will get them all at need only and then fill the entryLines with this basket entries
+     * TODO : if we have include request working the get of relationships can be done in basket store directly
+     */
     private fun setLines(newline: BasketPreviewLine) {
-        println("Miam  --> SetLine ")
-       if(!currentState.firstEntriesBuildDone) {
-            setState { copy(firstEntriesBuildDone = true)}
-            setEvent(BasketPreviewContract.Event.BuildEntriesLines(newline))
-        } else {
-            setEvent(BasketPreviewContract.Event.UpdateEntriesLines(newline))
-        }
-
+        println("Miam  --> SetLine  ${currentState.firstEntriesBuildDone}")
+        setEvent(BasketPreviewContract.Event.BuildEntriesLines(newline))
     }
 
     private fun toggleLine() {
@@ -136,34 +136,42 @@ class BasketPreviewViewModel(val recipeId: Int?):
        fillBasketEntries(bpl)
     }
 
-    private fun updateEntriesLines(bpl :BasketPreviewLine) {
-        if(isFillingEntry) return
+    /**
+     * Will retrieve all relathionships and replace basket entries in entryLines
+     */
+    private fun fillBasketEntries(bpl: BasketPreviewLine) {
+        setState { copy( isFillingEntry = true)}
+        try {
+            println("Miam --> basket setFillBasketEntry  ${bpl.id}")
 
+            launch{
+                withContext(ioDispatcher) {
+                    println("Miam --> Start runing block")
+                    println("Miam --> ${Thread.currentThread().name}")
 
-        runBlocking {
-            withContext(ioDispatcher){
-                currentState.bpl?.entries?.found?.addAll(fillMissing( currentState.bpl?.entries?.found , bpl.entries?.found))
-                currentState.bpl?.entries?.removed?.addAll(fillMissing( currentState.bpl?.entries?.removed , bpl.entries?.removed))
-            }
-        }
+                    // launch all retrieve async
+                    val foundEntries = retrieveBasketEntries(bpl.entries?.found)
+                    val removedEntries = retrieveBasketEntries(bpl.entries?.removed)
+                    val oftenDeletedEntries = retrieveBasketEntries(bpl.entries?.removed)
+                    val notFoundEntries = retrieveBasketEntries(bpl.entries?.notFound)
 
-        setState { copy(line = BasicUiState.Success(bpl),bpl = bpl, isReloading= false, isFillingEntry = false) }
-    }
+                    //fill the result, will wait synchronous job ended
+                    replaceBasketEntries(bpl.entries?.found, foundEntries.awaitAll())
+                    bpl.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
+                    replaceBasketEntries(bpl.entries?.removed, removedEntries.awaitAll())
+                    replaceBasketEntries(bpl.entries?.removed, oftenDeletedEntries.awaitAll())
+                    replaceBasketEntries(bpl.entries?.notFound, notFoundEntries.awaitAll())
 
-    private suspend fun fillMissing( oldArray : List<BasketEntry>? = emptyList(), newArray: MutableList<BasketEntry>? = mutableListOf()) : MutableList<BasketEntry> {
-        val missingFilledBasketEntries = mutableListOf<BasketEntry>()
-
-            newArray!!.filter { be ->
-                oldArray!!.find { it.id == be.id } == null
-            }.map {
-               async {
-                    basketEntryRepo.getRelationships(it).collect {
-                        missingFilledBasketEntries.add(it)
-                    }
+                    println("Miam will set state")
+                    setState { copy(line = BasicUiState.Success(bpl),bpl = bpl, isReloading= false, isFillingEntry = false) }
                 }
-            }.awaitAll()
+            }
 
-        return  missingFilledBasketEntries
+        } catch (cause: Throwable) {
+            print(cause.toString())
+            isFillingEntry = false
+            // todo Throw error
+        }
     }
 
     private fun addEntry(entry: BasketEntry){
@@ -238,37 +246,17 @@ class BasketPreviewViewModel(val recipeId: Int?):
         }
     }
 
-    private fun fillBasketEntries(line: BasketPreviewLine) {
-        setState { copy( isFillingEntry = true)}
-                try {
-                    //  println("Miam --> basket setFillBasketEntry  ${line.id}")
-                    runBlocking {
-                        fillEntryCall(line.entries?.found)
-                        line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
-                        fillEntryCall(line.entries?.removed)
-                        fillEntryCall(line.entries?.oftenDeleted)
-                        fillEntryCall(line.entries?.notFound)
-                    }
-                     setState { copy(line = BasicUiState.Success(line),bpl = line, isReloading= false, isFillingEntry = false) }
-                } catch (cause: Throwable) {
-                    print(cause.toString())
-                    isFillingEntry = false
-                    // todo Throw error
-                }
-
+    private suspend fun retrieveBasketEntries(list :MutableList<BasketEntry>? = mutableListOf(), id: String = ""): List<Deferred<BasketEntry>> {
+        return list!!.map { basketEntry ->
+            async {
+                basketEntryRepo.getRelationshipsIfNecessary(basketEntry)
+            }
+        }
     }
 
-     private suspend fun fillEntryCall(list :MutableList<BasketEntry>? = mutableListOf()){
-        val filledBasketEntries : MutableList<BasketEntry> = mutableListOf()
-        withContext(ioDispatcher) {
-            list!!.map {
-                async {
-                    filledBasketEntries.add(basketEntryRepo.getRelationships(it).first())
-                }
-            }.awaitAll()
-        }
-        list!!.clear()
-        list.addAll(filledBasketEntries)
+    private fun replaceBasketEntries(inputList :MutableList<BasketEntry>? = mutableListOf(), resList: List<BasketEntry>) {
+        inputList!!.clear()
+        inputList.addAll(resList)
     }
 
     private fun updatePrice(foundEntries: MutableList<BasketEntry>) : Double{
