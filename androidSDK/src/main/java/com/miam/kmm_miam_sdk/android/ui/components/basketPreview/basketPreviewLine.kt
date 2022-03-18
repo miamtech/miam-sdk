@@ -46,7 +46,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
             modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
         ) {
             Clickable(
-                onClick = { router.setEvent(RouterContract.Event.GoToDetail(vmRecipe)) },
+                onClick = { router.setEvent(RouterContract.Event.GoToDetailFromPreview(vmRecipe)) },
                 children = {  Image(
                     painter = rememberImagePainter(line.picture),
                     contentDescription = null,
@@ -63,7 +63,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                 verticalArrangement = Arrangement.Top
             ) {
                 Clickable(
-                    onClick = { router.setEvent(RouterContract.Event.GoToDetail(vmRecipe)) },
+                    onClick = { router.setEvent(RouterContract.Event.GoToDetailFromPreview(vmRecipe)) },
                 children = { Text(
                     text = line.title,
                     maxLines = 2,

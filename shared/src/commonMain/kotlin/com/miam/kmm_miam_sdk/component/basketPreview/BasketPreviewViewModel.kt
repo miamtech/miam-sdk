@@ -8,7 +8,6 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
-import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.inject
@@ -26,16 +25,29 @@ class BasketPreviewViewModel(val recipeId: Int?):
     var lastEntriesUpdate: MutableList<BasketEntry> = mutableListOf()
     private var isFillingEntry = false
 
+    override fun createInitialState(): BasketPreviewContract.State =
+        BasketPreviewContract.State(
+            recipeId= null,
+            showLines= false,
+            line= BasicUiState.Loading,
+            bpl= null,
+            isReloading= false,
+            isFillingEntry= false,
+            firstEntriesBuildDone = false,
+            showItemSelector= false,
+            job = null
+        )
+
     init {
         if(recipeId != null){
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
-            launch {
+          val job = launch {
                 basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange  }.collect{
-                    println("I'm Alive !!!!!!")
                     basketChange()
                 }
             }
+            setState { copy(job = job) }
             countListener()
             listenEntriesChanges()
         }
@@ -53,7 +65,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     private fun listenEntriesChanges() {
        launch {
-           lineEntriesSubject.debounce(1000).collect { entries ->
+           lineEntriesSubject.debounce(500).collect { entries ->
             //    println("Miam listenEntriesChanges debounced with $entries")
             //    println("Miam update ui $entries")
                setState {
@@ -83,17 +95,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
         return currentState.bpl!!
     }
 
-    override fun createInitialState(): BasketPreviewContract.State =
-        BasketPreviewContract.State(
-            recipeId= null,
-            showLines= false,
-            line= BasicUiState.Loading,
-            bpl= null,
-            isReloading= false,
-            isFillingEntry= false,
-            firstEntriesBuildDone = false,
-            showItemSelector= false
-        )
+
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
         when (event) {
@@ -109,6 +111,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.CountChange -> launch { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
             is BasketPreviewContract.Event.CloseItemSelector ->  setState { copy(showItemSelector = false)}
+            is BasketPreviewContract.Event.KillJob -> uiState.value.job?.cancel()
         }
     }
 
@@ -157,7 +160,6 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
                     //fill the result, will wait synchronous job ended
                     replaceBasketEntries(bpl.entries?.found, foundEntries.awaitAll())
-                    bpl.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
                     replaceBasketEntries(bpl.entries?.removed, removedEntries.awaitAll())
                     replaceBasketEntries(bpl.entries?.removed, oftenDeletedEntries.awaitAll())
                     replaceBasketEntries(bpl.entries?.notFound, notFoundEntries.awaitAll())
@@ -254,9 +256,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
         }
     }
 
+    /**
+     * Replace BasketEntry with filled BasketEntry and sort
+     * them by id to have the same order after each refresh
+     */
     private fun replaceBasketEntries(inputList :MutableList<BasketEntry>? = mutableListOf(), resList: List<BasketEntry>) {
         inputList!!.clear()
-        inputList.addAll(resList)
+        inputList.addAll(resList.sortedBy { basketEntry -> basketEntry.id })
     }
 
     private fun updatePrice(foundEntries: MutableList<BasketEntry>) : Double{
