@@ -51,6 +51,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
      **/
 
     override fun dispatch(action: GroceriesListAction) {
+        // println("Miam gl dispatch $action")
         val oldState = state.value
 
         val newState = when (action) {

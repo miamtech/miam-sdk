@@ -21,8 +21,8 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private val basketEntryRepo : BasketEntryRepositoryImp by inject()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
     private val _guestChangeDebounceFlow = MutableSharedFlow<Pair<BasketPreviewLine,RecipeViewModel>>()
-    private val lineEntriesSubject  = MutableSharedFlow<LineEntries>()
-    var lastEntriesUpdate: LineEntries? = null
+    private val lineEntriesSubject  = MutableSharedFlow<MutableList<BasketEntry>>()
+    var lastEntriesUpdate: MutableList<BasketEntry> = mutableListOf()
     private var isFillingEntry = false
 
     init {
@@ -49,18 +49,36 @@ class BasketPreviewViewModel(val recipeId: Int?):
         }
     }
 
-    private  fun listenEntriesChanges() {
+    private fun listenEntriesChanges() {
        launch {
-           lineEntriesSubject.debounce(1000).collect{ entries ->
-               lastEntriesUpdate = null
-                println("update ui $entries")
-               setState { copy(line = BasicUiState.Success( currentState.bpl!!.copy(
-                   entries =  entries ,
-                   price = updatePrice(entries.found).toString(),
-
-               )), lastEntriesUpdate = null) }
+           lineEntriesSubject.debounce(1000).collect { entries ->
+            //    println("Miam listenEntriesChanges debounced with $entries")
+            //    println("Miam update ui $entries")
+               setState {
+                   copy(
+                       line = BasicUiState.Success(updateBplEntries(entries))
+                   )
+               }
+            //    println("Miam listenEntriesChanges will dispatch with $entries")
+               // create a copy of the list so you can clear it here
+               val copiedList = mutableListOf<BasketEntry>()
+               copiedList.addAll(entries)
+               basketStore.dispatch(
+                   BasketAction.UpdateBasketEntries(copiedList)
+               )
+               lastEntriesUpdate.clear()
             }
         }
+    }
+
+    private fun updateBplEntries(basketEntries: MutableList<BasketEntry>): BasketPreviewLine {
+        var newBplEntries = currentState.bpl!!.entries!!.copy()
+        newBplEntries.updateBasketEntries(basketEntries)
+        currentState.bpl!!.copy(
+            entries=newBplEntries,
+            price=updatePrice(basketEntries).toString()
+        )
+        return currentState.bpl!!
     }
 
     override fun createInitialState(): BasketPreviewContract.State =
@@ -72,8 +90,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             isReloading= false,
             isFillingEntry= false,
             firstEntriesBuildDone = false,
-            showItemSelector= false,
-            lastEntriesUpdate = null
+            showItemSelector= false
         )
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
@@ -81,7 +98,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.SetRecipeId -> setRecipeId(event.newRecipeId)
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
             is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
-            is BasketPreviewContract.Event.UpdateBasketEntry ->launch { updateBasketEntry(event.entry, event.deltaQty)}
+            is BasketPreviewContract.Event.UpdateBasketEntry ->launch { updateBasketEntry(event.entry, event.finalQty)}
             is BasketPreviewContract.Event.RemoveEntry -> removeBasketEntry(event.entry)
             is BasketPreviewContract.Event.ReplaceItem -> replaceItem(event.entry)
             is BasketPreviewContract.Event.ToggleLine -> toggleLine()
@@ -114,7 +131,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun buildEntriesLines(bpl :BasketPreviewLine){
-        println("Maim -> buildEntriesLines   $isFillingEntry")
+        // println("Miam -> buildEntriesLines   $isFillingEntry")
        if(isFillingEntry) return
        fillBasketEntries(bpl)
     }
@@ -179,17 +196,24 @@ class BasketPreviewViewModel(val recipeId: Int?):
         }
     }
 
-    private suspend fun updateBasketEntry(entry: BasketEntry, deltaQty:Int){
-            val entries = currentState.lastEntriesUpdate ?: currentState.bpl?.entries
-            val idx = entries?.found?.indexOfFirst { be -> be.id == entry.id }
-            if(idx != -1 && idx!= null) {
-                entries.found[idx] = entries.found[idx].copy(attributes = entries.found[idx].attributes.copy(
-                    quantity =  (entries.found[idx].attributes.quantity ?: 0 ) + deltaQty))
-                entries.found[idx]._relationships = entry._relationships
-                lastEntriesUpdate = entries.copy()
-                lineEntriesSubject.emit(lastEntriesUpdate!!)
-            }
-        basketStore.dispatch(BasketAction.UpdateBasketEntries(listOf(AlterQuantityBasketEntry(entry.id,deltaQty))))
+    private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
+        // println("Miam updateBasketEntry $BasketEntry $finalQty")
+        // println("Miam updateBasketEntry already got $lastEntriesUpdate")
+        val existingEntryIdx = lastEntriesUpdate.indexOfFirst{ be ->
+            be.id == entry.id
+        }
+        if (existingEntryIdx >= 0) {
+            // println("Miam updateBasketEntry updating")
+            var existingEntry = lastEntriesUpdate[existingEntryIdx]
+            existingEntry = existingEntry.updateQuantity(finalQty)
+            lastEntriesUpdate[existingEntryIdx] = existingEntry
+        } else {
+            // println("Miam updateBasketEntry creating")
+            val newEntry = entry.updateQuantity(finalQty)
+            lastEntriesUpdate.add(newEntry)
+        }
+        // println("Miam updateBasketEntry will emit $lastEntriesUpdate")
+        lineEntriesSubject.emit(lastEntriesUpdate)
     }
 
     private fun replaceItem(entry: BasketEntry){
@@ -217,7 +241,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private fun fillBasketEntries(line: BasketPreviewLine) {
         setState { copy( isFillingEntry = true)}
                 try {
-                     println("MIAM --> basket setFillBasketEntry  ${line.id}")
+                    //  println("Miam --> basket setFillBasketEntry  ${line.id}")
                     runBlocking {
                         fillEntryCall(line.entries?.found)
                         line.entries?.found?.sortedBy { basketEntry -> basketEntry.id }

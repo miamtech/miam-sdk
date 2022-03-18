@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GroceriesEntryRepositoryImp(private val grocerieEntryDataSource: MiamAPIDatasource) : GroceriesEntryRepository {
-    override suspend fun updateGrocerieEntry(ge: GroceriesEntry): Flow<GroceriesEntry> = flow {
+    override suspend fun updateGrocerieEntry(ge: GroceriesEntry): GroceriesEntry {
         ge.needPatch = false
-        val newGl = grocerieEntryDataSource.updateGroceriesEntry(ge)
-        emit(newGl)
+        return grocerieEntryDataSource.updateGroceriesEntry(ge)
     }
 }
