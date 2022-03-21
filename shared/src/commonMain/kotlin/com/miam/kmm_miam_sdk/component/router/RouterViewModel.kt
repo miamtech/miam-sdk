@@ -1,7 +1,9 @@
 package com.miam.kmm_miam_sdk.component.router
 
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import kotlinx.coroutines.Job
 
 open class RouterViewModel:
     BaseViewModel<RouterContract.Event, RouterContract.State, RouterContract.Effect>() {
@@ -32,13 +34,26 @@ open class RouterViewModel:
             is RouterContract.Event.GoToItemSelector -> {
                 navigateTo(RouterContent.ITEMS_SELECTOR)
             }
+            is RouterContract.Event.CloseDialogFromPreview ->  {
+                killBasketPreviewViewModel()
+                setEvent(RouterContract.Event.CloseDialog)
+            }
+            is RouterContract.Event.GoToDetailFromPreview -> {
+                killBasketPreviewViewModel()
+                setEvent(RouterContract.Event.GoToDetail(event.vm))
+            }
             RouterContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
             RouterContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterContract.Event.OpenDialog ->  setState { copy(isOpen = true) }
             RouterContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
         }
-
     }
+
+    private fun  killBasketPreviewViewModel(){
+        uiState.value.bpvm?.setEvent(BasketPreviewContract.Event.KillJob)
+        setState { copy(bpvm = null) }
+    }
+
     private fun navigateTo( destination : RouterContent) {
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {

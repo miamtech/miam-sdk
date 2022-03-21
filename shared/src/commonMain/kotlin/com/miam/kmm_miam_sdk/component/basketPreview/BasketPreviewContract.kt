@@ -7,6 +7,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
+import kotlinx.coroutines.Job
 
 
 interface BasketPreviewContract {
@@ -15,7 +16,6 @@ interface BasketPreviewContract {
         data class SetRecipeId(val newRecipeId: Int):  Event()
         data class SetLines(val newlines: BasketPreviewLine):Event()
         data class BuildEntriesLines(val bpl: BasketPreviewLine):Event()
-        data class UpdateEntriesLines(val bpl: BasketPreviewLine):Event()
         data class CountChange(val bpl: BasketPreviewLine, val recipeVm: RecipeViewModel): Event()
         data class AddEntry(val entry: BasketEntry):Event()
         data class RemoveEntry(val entry: BasketEntry):Event()
@@ -23,6 +23,7 @@ interface BasketPreviewContract {
         data class ReplaceItem(val entry: BasketEntry, val itemId: Int):Event()
         data class OpenItemSelector(val bpl: BasketPreviewLine): Event()
         object CloseItemSelector: Event()
+        object KillJob: Event()
         object ToggleLine :Event()
         object Reload: Event()
     }
@@ -35,6 +36,7 @@ interface BasketPreviewContract {
         val isReloading: Boolean,
         val isFillingEntry: Boolean,
         val firstEntriesBuildDone : Boolean,
+        val job: Job?,
         val showItemSelector: Boolean
     ) : UiState
 
