@@ -193,7 +193,6 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getGroceriesEntries(glId : Int): GroceriesEntries {
-
             return httpClient.get{
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$glId/groceries-entries")
             }
@@ -272,15 +271,25 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
     override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
-        return  httpClient.get<Items>{
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
-        }.data
+        try {
+            return  httpClient.get<Items>{
+                url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
+            }.data
+        } catch(cause: Throwable) {
+            print(cause)
+            throw cause
+        }
     }
 
-    override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry {
-        return  httpClient.get<GroceriesEntryWrapper>{
-            url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId")
-        }.data
+    override suspend fun getBasketEntryGrocerieEntry(basketEntryId: Int): GroceriesEntry {
+        try {
+            return  httpClient.get<GroceriesEntryWrapper>{
+                url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$basketEntryId")
+            }.data
+        } catch(cause: Throwable) {
+           print(cause)
+            throw cause
+        }
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {

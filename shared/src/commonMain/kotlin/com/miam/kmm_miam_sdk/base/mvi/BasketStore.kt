@@ -50,6 +50,7 @@ sealed class  BasketAction : Action {
     ): BasketAction()
     data class ReplaceSelectedItem(val basketEntry :BasketEntry, val itemId :Int): BasketAction()
     data class ConfirmBasket(val price: String) : BasketAction()
+    data class RemoveBasketPreviewLine(val recipeId: Int): BasketAction()
     data class Error(val error: Exception) : BasketAction()
 }
 
@@ -84,6 +85,10 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                     dispatch(BasketAction.SetBasket(basket, action.callback)) // will set state here
                 }
                 // do not wait for completion
+            }
+            is BasketAction.RemoveBasketPreviewLine -> {
+                val newState =  state.value.copy(basketPreview = state.value.basketPreview?.filter { bpl -> bpl.id != action.recipeId })
+                updateStateIfChanged(newState)
             }
             is BasketAction.SetGroceriesList -> {
                 // println("Miam --> basket setGroceries")
