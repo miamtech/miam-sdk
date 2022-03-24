@@ -3,42 +3,55 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.addToCartFloatingButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.difficulty
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.recipeCardFlagIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.showRecipeFloatingButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.time
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.cardLayout
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.image
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.imageContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.inCartTagBox
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.inCartTagPadding
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.metricsDivider
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.metricsIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.moreInfoButton
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagImage
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagPositionContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeMetricsRow
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeTitle
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.alreadyInCart
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.recipeFlag
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import com.miam.kmm_miam_sdk.android.ui.theme.Colors.grey
+import com.miam.kmm_miam_sdk.android.ui.theme.Colors.primary
+import com.miam.kmm_miam_sdk.android.ui.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.bigPadding
+import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.mediumPadding
+import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.smallPadding
+import com.miam.kmm_miam_sdk.android.ui.theme.Typography.body1
+import com.miam.kmm_miam_sdk.android.ui.theme.Typography.body1White
+import com.miam.kmm_miam_sdk.android.ui.theme.Typography.whiteRecipeTitle
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
-import kotlinx.coroutines.InternalCoroutinesApi
-
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -51,7 +64,7 @@ class RecipeView @JvmOverloads constructor(
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
-    val routerModal : RouterViewModel by inject()
+    private val routerModal : RouterViewModel by inject()
 
     fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
         if (recipeId != 0) {
@@ -68,7 +81,6 @@ class RecipeView @JvmOverloads constructor(
             )
         }
     }
-
 
     var idRecipe: Int
         get() = idRecipeState.value ?: 0
@@ -93,9 +105,9 @@ class RecipeView @JvmOverloads constructor(
                 resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipe)
+                    RecipeCard(recipe, vmRecipe)
                 },
-                loadingView = { recipeCardLoading() },
+                loadingView = { RecipeCardLoading() },
                 onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
                 onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
             )
@@ -103,185 +115,120 @@ class RecipeView @JvmOverloads constructor(
     }
 
     @Composable
-    private fun recipeCardLoading(){
-       Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ){
+    private fun RecipeCardLoading(){
+        Card(modifier = cardLayout)
+        {
             Column {
                 Box(
-                    modifier = Modifier
-                        .height(245.dp)
-                        .fillMaxWidth()
-
+                    modifier = image
                 )
+            }
         }
-     }
     }
 
-
     @Composable
-    private fun recipeCard(
+    private fun RecipeCard(
         recipe: Recipe,
         vmRecipe: RecipeViewModel
     )  {
         val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest )
         Column {
             RouterModal().Content()
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
+            Card( modifier = cardLayout) {
                 Box {
                     Column {
-                        Box(
-                            modifier = Modifier
-                                .height(245.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Image(
-                                painter = rememberImagePainter(recipe.attributes.mediaUrl),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .height(245.dp)
-                                    .fillMaxWidth()
-                                    .clickable(onClick = {
-                                        routerModal.setEvent(
-                                            RouterContract.Event.GoToDetail(
-                                                vmRecipe
-                                            )
-                                        )
-                                    })
-                                    .graphicsLayer { alpha = 0.99f }
-                                    .drawWithContent {
-                                        val colors = listOf(
-                                            Color.Transparent,
-                                            Color.Black
-                                        )
-                                        drawContent()
-                                        drawRect(
-                                            brush = Brush.verticalGradient(colors),
-                                        )
-                                    }
+                        Box( modifier = imageContainer ) {
+                            Clickable(
+                                onClick = {  routerModal.setEvent(
+                                    RouterContract.Event.GoToDetail(
+                                        vmRecipe
+                                    )
+                                )
+                                },
+                                children =  {
+                                    Image(
+                                        painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = image
+                                    )
+                                }
                             )
                             Text(
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 textAlign = TextAlign.Center,
                                 text = recipe.attributes.title,
-                                style = MaterialTheme.typography.h5.copy(
-                                    color = Color.White,
-                                    fontSize = 32.sp,
-                                    fontFamily = FontFamily(Font(R.font.satisfy_regular)),
-
-                                ),
-                                modifier = Modifier
-                                    .wrapContentWidth(Alignment.CenterHorizontally)
-                                    .align(Alignment.Center)
-                                    .padding(horizontal = 30.dp)
+                                style = whiteRecipeTitle,
+                                modifier = recipeTitle.align(Alignment.Center)
                             )
                             if (vmRecipe.currentState.isInCart) {
-                                Box(
-                                    modifier = Modifier
-                                        .absoluteOffset(x = 8.dp, y = 8.dp)
-                                        .clip(
-                                            RoundedCornerShape(
-                                                topEnd = 4.dp,
-                                                topStart = 4.dp,
-                                                bottomStart = 4.dp,
-                                                bottomEnd = 4.dp
-                                            )
-                                        )
-                                        .background(Color(0xffF47F7A))
-                                ) {
+                                Box( modifier = inCartTagBox ) {
                                     Row(
-                                        modifier = Modifier.padding(
-                                            horizontal = 5.dp,
-                                            vertical = 10.dp
-                                        ),
+                                        modifier = inCartTagPadding,
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.Center
                                     ) {
-
                                         Text(
-                                            text = "Déjà ajoutée", color = Color.White,
-                                            modifier = Modifier.padding(horizontal = 5.dp)
+                                            text = alreadyInCart,
+                                            style = body1White,
+                                            modifier = Modifier.padding(horizontal = smallPadding)
                                         )
                                     }
                                 }
                             } else {
-                                Surface() {
-                                }
-                                /*
-                                keep for later
-                                FloatingActionButton(modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .size(24.dp)
-                                    .absoluteOffset(x = 8.dp, y = 8.dp),
-                                    backgroundColor = Color.Gray,
+                                FloatingActionButton(
+                                    modifier =  moreInfoButton,
+                                    backgroundColor= grey,
                                     onClick = {
                                         routerModal.setEvent(
                                             RouterContract.Event.GoToDetail(
                                                 vmRecipe
                                             )
                                         )
-                                    }) {
-                                    Text(text = "?", color = Color.White)
-                                }*/
+                                    }
+                                ) {
+                                    Text(text = "?", color = white)
+                                }
                             }
                         }
                         Row(
-                            Modifier
-                                .padding(
-                                    start = 8.dp,
-                                    end = 8.dp,
-                                    top = 32.dp,
-                                    bottom = 16.dp
-                                )
-                                .fillMaxWidth(),
+                            modifier = recipeMetricsRow,
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Row() {
                                 Column(
-                                    Modifier.padding(end = 16.dp),
+                                    Modifier.padding(end = bigPadding),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
-                                        painter = painterResource(R.drawable.ic_clock),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(24.dp)
+                                        painter = painterResource(time),
+                                        contentDescription = "time metric",
+                                        modifier = metricsIcon
                                     )
                                     Text(
                                         text = recipe.totalTime,
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.padding(top = 4.dp)
+                                        style = body1,
+                                        modifier = Modifier.padding(top = smallPadding)
                                     )
                                 }
-
-
                                 Divider(
-                                    color = Color.Gray,
-                                    modifier = Modifier
-                                        .height(32.dp)
-                                        .width(1.dp)
+                                    modifier = metricsDivider
                                 )
                                 Column(
-                                    Modifier.padding(start = 16.dp),
+                                    Modifier.padding(start = bigPadding),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
-                                        painter = painterResource(R.drawable.ic_diflow),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(24.dp)
+                                        painter = painterResource(difficulty),
+                                        contentDescription = "difficulty metric",
+                                        modifier = metricsIcon
                                     )
                                     Text(
                                         text = recipe.difficultyLabel,
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.padding(top = 4.dp)
+                                        style = body1,
+                                        modifier = Modifier.padding(top = smallPadding)
                                     )
                                 }
                             }
@@ -294,44 +241,37 @@ class RecipeView @JvmOverloads constructor(
                             { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
                             CounterModifier(),
 
-                        )
+                            )
                     }
-                    Box(
-                        modifier = Modifier
-                            .absoluteOffset(x = 0.dp, y = 188.dp)
-                    ) {
-
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp))
-                                .background(Color(0xff00af98))
-                        ) {
+                    Box( modifier = recipeCardFlagPositionContainer ) {
+                        Box( modifier = recipeCardFlagContainer ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
+                                modifier = Modifier.padding(horizontal = smallPadding, vertical = mediumPadding),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Image(
-                                    painter = painterResource(R.drawable.ic_cookhat),
+                                    painter = painterResource(recipeCardFlagIcon),
                                     contentDescription = null,
-                                    modifier = Modifier.size(20.dp)
+                                    modifier = recipeCardFlagImage
                                 )
                                 Text(
-                                    text = "Recette", color = Color.White,
-                                    modifier = Modifier.padding(horizontal = 5.dp)
+                                    text = recipeFlag,
+                                    style = body1White,
+                                    modifier = Modifier.padding(horizontal = smallPadding)
                                 )
                             }
                         }
                     }
-
                     if (vmRecipe.currentState.isInCart) {
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 8.dp, bottom = 8.dp)
+                                .padding(end = mediumPadding, bottom = mediumPadding)
                         ) {
-                            FloatingActionButton(modifier = Modifier.size(36.dp),
-                                backgroundColor = Color(0xff037E92),
+                            FloatingActionButton(
+                                modifier = Modifier.size(36.dp),
+                                backgroundColor = primary,
                                 onClick = {
                                     routerModal.setEvent(
                                         RouterContract.Event.GoToPreview(
@@ -341,8 +281,8 @@ class RecipeView @JvmOverloads constructor(
                                     )
                                 }) {
                                 Image(
-                                    painter = painterResource(R.drawable.ic_details),
-                                    contentDescription = null,
+                                    painter = painterResource(showRecipeFloatingButtonIcon),
+                                    contentDescription = "Show recipe action",
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
@@ -351,10 +291,10 @@ class RecipeView @JvmOverloads constructor(
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 8.dp, bottom = 8.dp)
+                                .padding(end = mediumPadding, bottom = mediumPadding)
                         ) {
                             FloatingActionButton(modifier = Modifier.size(36.dp),
-                                backgroundColor = Color(0xff037E92),
+                                backgroundColor = primary,
                                 onClick = {
                                     vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
                                     routerModal.setEvent(
@@ -365,7 +305,7 @@ class RecipeView @JvmOverloads constructor(
                                     )
                                 }) {
                                 Image(
-                                    painter = painterResource(R.drawable.ic_cart),
+                                    painter = painterResource(addToCartFloatingButtonIcon),
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp)
                                 )
