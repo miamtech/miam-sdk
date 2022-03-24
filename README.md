@@ -15,9 +15,9 @@ and then launch a build as production. it'll generate a `miam-sdk-release.aar` i
 
 You can then put it in your project in the folder `libs` if you dont have one yet create one.
 
-Had `implementation(name:'miam-SDK-release', ext:'aar')` in the dependencies section of your sub `build.gradle`
+Add `implementation(name:'miam-SDK-release', ext:'aar')` in the dependencies section of your sub `build.gradle` file.
 
-Our component are using [Jetpack Compose](https://developer.android.com/jetpack/compose?gclsrc=aw.ds&gclid=CjwKCAjwrfCRBhAXEiwAnkmKmWkwGezGLmmfauda5_ACVVNtTVPUw576netuScD2mLnGacjr2cB30RoCC24QAvD_BwE) it require flolowing third party libraries :
+Our component are using [Jetpack Compose](https://developer.android.com/jetpack/compose?gclsrc=aw.ds&gclid=CjwKCAjwrfCRBhAXEiwAnkmKmWkwGezGLmmfauda5_ACVVNtTVPUw576netuScD2mLnGacjr2cB30RoCC24QAvD_BwE) it require following third party libraries :
 
 ```kotlin
     implementation("androidx.appcompat:appcompat:1.3.1")
@@ -57,15 +57,13 @@ We are also using our own HttpClient [Ktor]("https://ktor.io/docs/welcome.html")
     implementation("io.ktor:ktor-client-logging:1.6.7")
 ```
 
-We are also using [Koin]("https://insert-koin.io/") for dependency injection inside of the core but it's embed and dont need to add extra dependencies. 
+We are also using [Koin]("https://insert-koin.io/") for dependency injection inside of the CORE but it's embed and dont need to add extra dependencies. 
 
 > If you are already using Koin into your project it can cause issues 
 
-
-
 ### Init Miam
 
-Before using Miam you have configure special Miam function, as we're runing in parallel of your app and to interacting with the basket, the store or the user , you have to provide Miam those information.
+Before using Miam you have configure special Miam function, as we're runing in parallel of your app and to interacting with the basket, the store or the user , you have to provide to Miam a way to interact with them.
 
 For that we are using `StoreHandler`, `UserHandler` and `BasketHandler` class. They are singleton you only have to provide setting once.
 
@@ -89,7 +87,7 @@ class Miam() {
     }
 }
 ```
-Inside the `init` function of this class we can now configure our threre handler
+Inside the `init` function of this class we can now configure our three handlers
 
 #### Handle User
 
@@ -97,7 +95,7 @@ To use Miam you have to be logged and linked to a valid Store
 
 To alow miam to recognize your custommer we need at least a custommer id
 
-it can be set by using
+it can be set by using :
 
 ```kotlin
 Miam.getInstance().UserHandler.updateUserId(user.id)
@@ -175,7 +173,7 @@ Miam also provide an `isAvailable` option that will enable or disable the SDK
 
 #### Handle basket
 
-For a mapping purpose we'll creat a function that will tranform your product into  `RetailerProduct`
+For a mapping purpose we'll create a function that will tranform your product into  `RetailerProduct`
 
 ```kotlin
 data class RetailerProduct(val retailerId :String , val quantity: Int, val name: String?)
@@ -200,6 +198,8 @@ you have to passe a function to `BasketHandler` with the flowing signature:
 ```kotlin
 class Miam() {
 
+   private val basketHandler: BasketHandler = BasketHandler()
+
    init {
      basketHandler.listenToRetailerBasket = ::initBasketListener
 
@@ -222,30 +222,91 @@ class Miam() {
 }
 ```
 
-Next will add a function to push product update or delete product in your basket
+Next will add a function to push product update or delete product in your basket, with the following signature `(products: List<RetailerProduct>) -> Unit`. This function will be call if miam want to add 
+update or delete a product.  
 
 ```kotlin
+class Miam() {
 
+   private val basketHandler: BasketHandler = BasketHandler()
+
+   init {
+      basketHandler.pushProductsToBasket = ::pushProductsToYourBasket
+
+    [ ... ]
+   }
+
+   private fun pushProductsToYourBasket (products: List<RetailerProduct>){
+     for(product in Products) { 
+       if(it.quantity <= 0){
+         yourDeleteFunction(it)
+       } else if (yourTestFunctionAlreadyInBasket(it.id)){
+         yourUpdateFunction(it)
+       } else {
+         yourAddFunction(it)
+       }
+     }
+   }
+   
 ```
 
+And finaly we have to detect payment to reset Miam's basket
 
-### Use and inject Miam component
+
+```kotlin
+class Miam() {
+
+   private val basketHandler: BasketHandler = BasketHandler()
+
+   init {
+      basketHandler.paymentTotal = fun(): Double { return getYourBasketTotalPaid() }
+    [ ... ]
+   }
+
+   fun confirmBasket() {
+        basketHandler.handlePayment()
+  }
+}
+```
+
+You'll have to call `Miam.getInstance().confirmBasket()` in your app at the end of your client order
+
+### Use and inject Miam SDK component
+
+Currently there is only one component to inject : `recipeCard`
 
 #### Miam in a Jetpack Compose app
 
+> Comming soon
+
 #### Miam in a regular android app
+
+> Comming soon
 
 ### Miam customization 
 
+> Comming soon
+
 #### Theme color
+
+> Comming soon
 
 #### Typography
 
+> Comming soon
+
 #### Icon / Image
+
+> Comming soon
 
 #### Dimension
 
+> Comming soon
+
 #### Component customization
+
+> Comming soon
+
 ## Getting started for IOS
 
 > Comming soon
