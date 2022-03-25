@@ -101,18 +101,21 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 updateStateIfChanged(newState)
             }
             is BasketAction.AddBasketEntry -> {
+                // basket preview is already updated by the view
                 launch {
-                    updateBasketEntryStatus(action.entry, "active")
-                    // TODO : update state ???
+                    val newEntry = updateBasketEntryStatus(action.entry, "active")
+                    val newBasket = state.value.basket?.updateBasketEntry(newEntry)
+                    dispatch(BasketAction.SetBasket(newBasket!!))
                 }
                 // do not wait for completion
             }
             is BasketAction.RemoveEntry -> {
+                // basket preview is already updated by the view
                 launch {
-                    updateBasketEntryStatus(action.entry, "deleted")
-                    // TODO : update state ???
+                    val newEntry = updateBasketEntryStatus(action.entry, "deleted")
+                    val newBasket = state.value.basket?.updateBasketEntry(newEntry)
+                    dispatch(BasketAction.SetBasket(newBasket!!))
                 }
-                // do not wait for completion
             }
             is BasketAction.UpdateBasketEntries -> {
                 // println("Miam basketStore UpdateBasketEntries " + action.basketEntries)
@@ -140,7 +143,9 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 action.basketEntry.updateSelectedItem(action.itemId)
                 launch {
                     updateBasketEntry(action.basketEntry)
-                    // TODO : update state ???
+                    val newEntry = updateBasketEntry(action.basketEntry)
+                    val newBasket = state.value.basket?.updateBasketEntry(newEntry)
+                    dispatch(BasketAction.SetBasket(newBasket!!))
                 }
                 // do not wait for job completion
             }
@@ -215,11 +220,10 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         var totalPrice = 0.0
 
         entriesFound.forEach { e ->
-            val item = e.attributes.basketEntriesItems?.find { bei ->  bei.itemId != null && bei.itemId == e.attributes.selectedItemId }
-            totalPrice +=  (e.attributes.quantity ?: 0) * (item?.unitPrice ?: 0.0)
+            val item = e.attributes.basketEntriesItems?.find { bei -> bei.itemId != null && bei.itemId == e.attributes.selectedItemId }
+            totalPrice += (e.attributes.quantity ?: 0) * (item?.unitPrice ?: 0.0)
         }
-
-       return oldState.copy( entriesCount = entriesFound.size, totalPrice = totalPrice)
+        return oldState.copy(entriesCount = entriesFound.size, totalPrice = totalPrice)
     }
 
     private fun confirmBasket(basket: Basket, price: String){
@@ -257,19 +261,19 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         return basketEntry
     }
 
-    private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String) {
+    private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String): BasketEntry {
         basketEntry.updateStatus(status)
-        updateBasketEntry(basketEntry)
+        return updateBasketEntry(basketEntry)
     }
 
-    private suspend fun updateBasketEntry(basketEntry: BasketEntry) {
+    private suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
         // println("Miam will update basket entry $basketEntry")
         // send update on ge first so if status changed you get resuts in be groceries_entry_status
         val ge = basketEntry._relationships?.groceriesEntry
         if (ge?.needPatch == true) {
             groceriesRepo.updateGrocerieEntry(ge)
         }
-        basketEntryRepo.updateBasketEntry(basketEntry)
+        return basketEntryRepo.updateBasketEntry(basketEntry)
     }
 
 
