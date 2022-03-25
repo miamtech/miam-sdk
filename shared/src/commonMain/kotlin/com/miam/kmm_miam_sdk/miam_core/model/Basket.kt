@@ -21,6 +21,27 @@ data class Basket(
     val attributes: BasketAttributes,
 ){
     var _relationships: BasketRelationships? = null
+
+    private fun deepCopy(
+        id: Int = this.id,
+        type: String? = this.type,
+        attributes: BasketAttributes = this.attributes,
+    ): Basket {
+        val copy = this.copy(id=id, type=type, attributes=attributes)
+        copy._relationships = this._relationships
+        return copy
+    }
+
+    fun updateBasketEntry(newBe: BasketEntry): Basket {
+        var copy = this.deepCopy()
+        val entryToUpdateIndex = copy._relationships?.basketEntries?.indexOfFirst { be -> be.id == newBe.id }
+        if (entryToUpdateIndex != null && entryToUpdateIndex >= 0) {
+            val newBasketEntries = copy._relationships!!.basketEntries!!.toMutableList()
+            newBasketEntries[entryToUpdateIndex] = newBe
+            copy._relationships!!.basketEntries = newBasketEntries
+        }
+        return copy
+    }
 }
 
 @Serializable
