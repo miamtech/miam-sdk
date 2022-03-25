@@ -249,14 +249,14 @@ private fun recipeDetailCard(
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
                 text = "Ingredients",
-                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowSteps) },
+                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowIngredient) },
                 isActive = vmRecipeCard.currentState.tabState == TabEnum.INGREDIENT
             )
             Spacer(Modifier.padding(horizontal = 8.dp))
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
                 text = "Préparation",
-                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowIngredient) },
+                action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowSteps) },
                 isActive = vmRecipeCard.currentState.tabState == TabEnum.STEP
             )
         }
