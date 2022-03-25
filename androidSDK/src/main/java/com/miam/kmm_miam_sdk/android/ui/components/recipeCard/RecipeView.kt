@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -93,7 +95,7 @@ class RecipeView @JvmOverloads constructor(
                 resourceState = state.recipeState,
                 successView = { recipe ->
                     requireNotNull(recipe)
-                    recipeCard(recipe, vmRecipe)
+                   recipeCard(recipe, vmRecipe)
                 },
                 loadingView = { recipeCardLoading() },
                 onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
@@ -104,20 +106,162 @@ class RecipeView @JvmOverloads constructor(
 
     @Composable
     private fun recipeCardLoading(){
+
+        val shimerColors = listOf(
+            Color.LightGray.copy(alpha = 0.6F),
+            Color.LightGray.copy(alpha = 0.2F),
+            Color.LightGray.copy(alpha = 0.6F)
+        )
+
+        val transition = rememberInfiniteTransition()
+        val translateAnimation = transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1000f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = FastOutLinearInEasing
+                )
+            )
+        )
+
+        val brush = Brush.linearGradient(
+            colors = shimerColors,
+            start = Offset.Zero,
+            end= Offset(
+                x= translateAnimation.value,
+                y=translateAnimation.value
+            )
+        )
        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ){
-            Column {
-                Box(
-                    modifier = Modifier
-                        .height(245.dp)
-                        .fillMaxWidth()
-
-                )
+           shimmerRecipeCard(brush)
         }
      }
+
+
+    @Composable
+    fun shimmerRecipeCard(brush: Brush){
+
+        Column() {
+            Spacer(modifier = Modifier
+                .height(245.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(brush = brush))
+            Row(
+                Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 32.dp,
+                        bottom = 16.dp
+                    )
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Row() {
+                    Column(
+                        Modifier.padding(end = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(12.dp)
+                            .clip(RoundedCornerShape(100))
+                            .background(brush = brush))
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(30.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush = brush))
+                    }
+                    Divider(
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(1.dp)
+                    )
+                    Column(
+                        Modifier.padding(start = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(12.dp)
+                            .clip(RoundedCornerShape(100))
+                            .background(brush = brush))
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(30.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush = brush))
+
+                    }
+                }
+                Row() {
+                    Spacer(modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .height( 12.dp)
+                        .width(30.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .height( 12.dp)
+                        .width(30.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                }
+
+            }
+            Row( Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(Modifier.padding(
+                    horizontal = 8.dp,
+                    vertical = 8.dp,
+                ),verticalAlignment = Alignment.CenterVertically) {
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(24.dp)
+                        .width(24.dp)
+                        .clip(RoundedCornerShape(100))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(48.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                }
+                Spacer(modifier = Modifier
+                    .padding(start = 4.dp)
+                    .height(36.dp)
+                    .width(36.dp)
+                    .clip(RoundedCornerShape(100))
+                    .background(brush = brush))
+
+            }
+        }
     }
 
 
