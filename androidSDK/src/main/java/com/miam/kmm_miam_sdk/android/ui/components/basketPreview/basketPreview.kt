@@ -49,10 +49,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class BasketPreview(val vmBasketPreview :BasketPreviewViewModel, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent {
+class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :BasketPreviewViewModel, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent {
 
     private val groceriesListStore: GroceriesListStore by inject()
-    private val routerViewModel :RouterViewModel by inject()
 
     @ExperimentalCoilApi
     @Composable
@@ -70,12 +69,10 @@ class BasketPreview(val vmBasketPreview :BasketPreviewViewModel, val recipeVm: R
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        Row(
+                        Box(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
                         )
                         {
                             Text(
@@ -87,12 +84,12 @@ class BasketPreview(val vmBasketPreview :BasketPreviewViewModel, val recipeVm: R
                                 ),
                                 modifier = Modifier
                                     .wrapContentWidth(Alignment.CenterHorizontally)
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 16.dp).align(Alignment.CenterStart)
                             )
                             FloatingActionButton(modifier = Modifier
                                 .padding(16.dp)
                                 .size(40.dp)
-                                .alpha(0.5f),
+                                .alpha(0.5f).align(Alignment.CenterEnd),
                                 backgroundColor = Color.Gray,
                                 onClick = { close() })
                             {

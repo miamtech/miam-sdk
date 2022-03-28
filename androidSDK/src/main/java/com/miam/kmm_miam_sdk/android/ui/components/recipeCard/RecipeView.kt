@@ -2,12 +2,20 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
@@ -64,7 +72,7 @@ class RecipeView @JvmOverloads constructor(
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
-    private val routerModal : RouterViewModel by inject()
+    private val modal = RouterModal()
 
     fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
         if (recipeId != 0) {
@@ -100,7 +108,8 @@ class RecipeView @JvmOverloads constructor(
 
         val state by vmRecipe.uiState.collectAsState()
 
-        Box() {
+        Column {
+            modal.Content()
             ManagementResourceState(
                 resourceState = state.recipeState,
                 successView = { recipe ->
@@ -116,12 +125,160 @@ class RecipeView @JvmOverloads constructor(
 
     @Composable
     private fun RecipeCardLoading(){
-        Card(modifier = cardLayout)
-        {
-            Column {
-                Box(
-                    modifier = image
+
+        val shimerColors = listOf(
+            Color.LightGray.copy(alpha = 0.6F),
+            Color.LightGray.copy(alpha = 0.2F),
+            Color.LightGray.copy(alpha = 0.6F)
+        )
+
+        val transition = rememberInfiniteTransition()
+        val translateAnimation = transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1000f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = FastOutLinearInEasing
                 )
+            )
+        )
+
+        val brush = Brush.linearGradient(
+            colors = shimerColors,
+            start = Offset.Zero,
+            end= Offset(
+                x= translateAnimation.value,
+                y=translateAnimation.value
+            )
+        )
+       Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ){
+           shimmerRecipeCard(brush)
+        }
+     }
+
+
+    @Composable
+    fun shimmerRecipeCard(brush: Brush){
+
+        Column() {
+            Spacer(modifier = Modifier
+                .height(245.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(brush = brush))
+            Row(
+                Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 32.dp,
+                        bottom = 16.dp
+                    )
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Row() {
+                    Column(
+                        Modifier.padding(end = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(12.dp)
+                            .clip(RoundedCornerShape(100))
+                            .background(brush = brush))
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(30.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush = brush))
+                    }
+                    Divider(
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(1.dp)
+                    )
+                    Column(
+                        Modifier.padding(start = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(12.dp)
+                            .clip(RoundedCornerShape(100))
+                            .background(brush = brush))
+                        Spacer(modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .height(12.dp)
+                            .width(30.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(brush = brush))
+
+                    }
+                }
+                Row() {
+                    Spacer(modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .height(12.dp)
+                        .width(30.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .height(12.dp)
+                        .width(30.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                }
+
+            }
+            Row( Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(Modifier.padding(
+                    horizontal = 8.dp,
+                    vertical = 8.dp,
+                ),verticalAlignment = Alignment.CenterVertically) {
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(24.dp)
+                        .width(24.dp)
+                        .clip(RoundedCornerShape(100))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(48.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                    Spacer(modifier = Modifier
+                        .padding(start = 4.dp)
+                        .height(32.dp)
+                        .width(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(brush = brush))
+                }
+                Spacer(modifier = Modifier
+                    .padding(start = 4.dp)
+                    .height(36.dp)
+                    .width(36.dp)
+                    .clip(RoundedCornerShape(100))
+                    .background(brush = brush))
+
             }
         }
     }
@@ -133,26 +290,23 @@ class RecipeView @JvmOverloads constructor(
     )  {
         val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest )
         Column {
-            RouterModal().Content()
-            Card( modifier = cardLayout) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Box {
                     Column {
-                        Box( modifier = imageContainer ) {
-                            Clickable(
-                                onClick = {  routerModal.setEvent(
-                                    RouterContract.Event.GoToDetail(
-                                        vmRecipe
-                                    )
-                                )
-                                },
-                                children =  {
-                                    Image(
-                                        painter = rememberImagePainter(recipe.attributes.mediaUrl),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = image
-                                    )
-                                }
+                        Box(
+                            modifier = Modifier
+                                .height(245.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Image(
+                                painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = image
                             )
                             Text(
                                 maxLines = 2,
@@ -273,12 +427,7 @@ class RecipeView @JvmOverloads constructor(
                                 modifier = Modifier.size(36.dp),
                                 backgroundColor = primary,
                                 onClick = {
-                                    routerModal.setEvent(
-                                        RouterContract.Event.GoToPreview(
-                                            recipeId = recipe.id,
-                                            vm = vmRecipe
-                                        )
-                                    )
+                                    modal.goToPreview(recipe.id,vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(showRecipeFloatingButtonIcon),
@@ -297,12 +446,7 @@ class RecipeView @JvmOverloads constructor(
                                 backgroundColor = primary,
                                 onClick = {
                                     vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
-                                    routerModal.setEvent(
-                                        RouterContract.Event.GoToPreview(
-                                            recipeId = recipe.id,
-                                            vm = vmRecipe
-                                        )
-                                    )
+                                    modal.goToPreview(recipe.id,vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(addToCartFloatingButtonIcon),

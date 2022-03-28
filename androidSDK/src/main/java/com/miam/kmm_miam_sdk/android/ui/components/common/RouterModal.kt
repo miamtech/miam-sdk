@@ -1,32 +1,55 @@
 package com.miam.kmm_miam_sdk.android.ui.components.common
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 
-import androidx.compose.material.Surface
 import androidx.compose.runtime.*
+
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import coil.annotation.ExperimentalCoilApi
+import androidx.compose.ui.graphics.Color
 
-import com.miam.kmm_miam_sdk.android.ui.components.ItemsSelector.ItemsSelector
+import androidx.compose.ui.unit.dp
+
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
+
 
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 import com.miam.kmm_miam_sdk.component.router.RouterContent
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
 class RouterModal :KoinComponent {
-    private val vmRouter: RouterViewModel by inject()
+
+    private var vmRouter: RouterViewModel = RouterViewModel()
+
+
+    fun goToDetail(vmRecipe :RecipeViewModel){
+        vmRouter.setEvent(
+            RouterContract.Event.GoToDetail(
+                vmRecipe
+            )
+        )
+    }
+
+    fun goToPreview(recipeId: Int ,vmRecipe :RecipeViewModel) {
+        vmRouter.setEvent(
+            RouterContract.Event.GoToPreview(
+                recipeId = recipeId,
+                vm = vmRecipe
+            )
+        )
+    }
+
+
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
@@ -36,10 +59,12 @@ class RouterModal :KoinComponent {
 
         if (state.isOpen) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
-                Dialog(
-                    properties = DialogProperties(
+                Popup(
+                    properties = PopupProperties(
+                        clippingEnabled= true,
                         dismissOnBackPress = true,
                         dismissOnClickOutside = true,
                         usePlatformDefaultWidth = false
@@ -48,12 +73,14 @@ class RouterModal :KoinComponent {
                         vmRouter.setEvent(RouterContract.Event.CloseDialog)
                     }
                 ) {
-                    Surface(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = Modifier.fillMaxSize().offset(0.dp , (-48).dp)){
                         when(state.content){
-                          RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
-                          RouterContent.BASKET_PREVIEW -> state.bpvm?.let { BasketPreview(it, state.rvm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)}).content() }
+                            RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
+                            RouterContent.BASKET_PREVIEW -> state.bpvm?.let { BasketPreview(vmRouter ,it, state.rvm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)}).content() }
+
+                        }
                     }
-                }
+
             }
         }
 
