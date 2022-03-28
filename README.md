@@ -259,7 +259,9 @@ class Miam() {
    private val basketHandler: BasketHandler = BasketHandler()
 
    init {
-      basketHandler.paymentTotal = fun(): Double { return getYourBasketTotalPaid() }
+      basketHandler.paymentTotal = fun(): Double { 
+        return getYourBasketTotalPaid() 
+      }
     [ ... ]
    }
 
@@ -278,19 +280,115 @@ you can both implement it in a app using compose or in a classique one
 
 #### Miam in a Jetpack Compose app
 
+First init an object recipe with current context
+
+```kotlin
+  val recipe =  RecipeView(this@MainActivity)
+```
+
+Then you can choose between fixed recipe or suggestion
 
 
+```kotlin
+        val recipe1 =  RecipeView(this@MainActivity)
+        val recipe2 =  RecipeView(this@MainActivity)
+
+        // will load recipe with given id
+        recipe1.bind(recipeId = 305)
+
+        // will load a suggested recipe
+        recipe2.bind(
+          criteria = SuggestionsCriteria(
+            shelfIngredientsIds= listOf(
+              "your_local_id_1",
+              "your_local_id_2"     
+            )
+          )
+        )
+        
+/** Already in MIAM */
+data class SuggestionsCriteria(
+    val shelfIngredientsIds: List<String>? = null,
+    val currentIngredientsIds: List<String>? = null,
+    val basketIngredientsIds: List<String>? = null,
+    val groupId: String? = null
+)
+```
+then just add it into your compose function :
+
+```kotlin
+        val recipe1 =  RecipeView(this@MainActivity)
+        val recipe2 =  RecipeView(this@MainActivity)
+
+        [...]
+
+        setContent {
+          Column {
+            recipe1.Content()
+            recipe2.Content()
+          }
+        }
+```
 #### Miam in a regular android app
 
-> Comming soon
+If you're using a regular app you can inject miam recipecard in yout XML view
 
+```xml
+<com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+```
+
+And then bind property like this 
+
+```kotlin
+ 
+ val miamCard = R.layout.item_miam as RecipeView
+ miamCard.bind(criteria = criteria)
+
+```
+> you can achived it by using an `id` and a `findViewById` too
 ### Miam customization 
+ 
+ There is two level of customization :  
+  - top level that'll override the whole application
+  - component level that 'll overrive for a specific component
 
-> Comming soon
+  > if you override both level, compoment'll have it's custom style
+  > other'll get top level style
+
+  > if you don't override a property you'll have miam's default setted
 
 #### Theme color
 
-> Comming soon
+> Not available at component level yet
+
+  you can override a color by :
+
+  ```kotlin
+    Colors.primary = Color( 0xFF44D6B3)
+  ``` 
+
+> `0x` means hexa , `FF` stand for opacity , `44D6B3` is the color
+
+List of color you can override
+
+| Name |  Default value | Use |
+ |:-------------|:-------------:|:-------------:|
+ | primary | `#037E92` | 
+ | secondary | `#209B8F` | 
+ | ternary | `#E61845` | 
+ | success | `#44D6B3` | 
+ | info | `#44D6B3` | 
+ | warning | `#FFDAA3` | 
+ | danger | `#F47F7A` | 
+ | grey | `#676767` | 
+ | white | `#FAFCFE` | 
+ | unpureWhite | `#fefefe` | 
+ | black | `#252525` |
+
 
 #### Typography
 
