@@ -154,7 +154,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         }
     }
 
-    private  suspend fun alterList(gl :GroceriesList){
+    private   fun alterList(gl :GroceriesList){
         try {
             launch {
                 groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {

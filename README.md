@@ -273,11 +273,12 @@ You'll have to call `Miam.getInstance().confirmBasket()` in your app at the end 
 
 ### Use and inject Miam SDK component
 
-Currently there is only one component to inject : `recipeCard`
+Currently there is only one component to inject : `recipeCard` if you want to use our SDK
+you can both implement it in a app using compose or in a classique one
 
 #### Miam in a Jetpack Compose app
 
-> Comming soon
+
 
 #### Miam in a regular android app
 

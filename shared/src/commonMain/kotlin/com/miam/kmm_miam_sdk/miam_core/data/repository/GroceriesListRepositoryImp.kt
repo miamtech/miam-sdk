@@ -16,7 +16,7 @@ class GroceriesListRepositoryImp (
     override suspend fun getCurrent(): Flow<GroceriesList> = flow {
        val gl = groceriesListDataSource.getCurrent()
        //val groceriesEntries = groceriesListDataSource.getGroceriesEntries(gl.id)
-       val recipes = groceriesListDataSource.getRecipes(gl.attributes?.recipesInfos ?: emptyList())
+       val recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())
         gl.apply {
             //relationships.groceriesEntries = groceriesEntries.groceriesEntries
         relationships?.recipes = recipes}
@@ -30,9 +30,9 @@ class GroceriesListRepositoryImp (
 
     override suspend fun updateGroceriesList(gl : GroceriesListWithoutRelationship): Flow<GroceriesList> = flow {
         val newGl = groceriesListDataSource.updateGroceriesList(gl)
-        val recipes = groceriesListDataSource.getRecipes(gl.attributes?.recipesInfos ?: emptyList())
+        val recipes =
         newGl.apply {
-            relationships?.recipes = recipes}
+            relationships?.recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())}
         emit(newGl)
     }
 

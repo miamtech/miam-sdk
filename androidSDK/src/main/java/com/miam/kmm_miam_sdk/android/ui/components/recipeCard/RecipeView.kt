@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -302,11 +304,16 @@ class RecipeView @JvmOverloads constructor(
                                 .height(245.dp)
                                 .fillMaxWidth()
                         ) {
-                            Image(
-                                painter = rememberImagePainter(recipe.attributes.mediaUrl),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = image
+                            Clickable(
+                                onClick = { modal.goToDetail(vmRecipe)},
+                                children = {
+                                    Image(
+                                        painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = image
+                                    )
+                                }
                             )
                             Text(
                                 maxLines = 2,
@@ -335,11 +342,6 @@ class RecipeView @JvmOverloads constructor(
                                     modifier =  moreInfoButton,
                                     backgroundColor= grey,
                                     onClick = {
-                                        routerModal.setEvent(
-                                            RouterContract.Event.GoToDetail(
-                                                vmRecipe
-                                            )
-                                        )
                                     }
                                 ) {
                                     Text(text = "?", color = white)
