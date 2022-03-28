@@ -111,6 +111,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             recipesInfos.add(RecipeInfos(recipeId,guest))
         }
         launch {
+            // side Effect only to refresh UI of c
             sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))
             alterRecipeInfos(recipesInfos,states).await()
             dispatch(GroceriesListAction.RefreshGroceriesList)
@@ -160,7 +161,9 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         var gl = states.groceriesList!!.copy(
             attributes = states.groceriesList.attributes.copy(
                 recipesInfos =  recipesInfos,
-                appendRecipes = false))
+                appendRecipes = false
+            )
+        )
         return alterList(gl)
     }
 

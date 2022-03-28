@@ -5,11 +5,10 @@ import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
@@ -81,12 +80,8 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun updateBplEntries(basketEntries: MutableList<BasketEntry>): BasketPreviewLine {
-        val newBplEntries = currentState.bpl!!.entries!!.copy()
-        newBplEntries.updateBasketEntries(basketEntries)
-        return  currentState.bpl!!.copy(
-            entries=newBplEntries,
-            price=updatePrice(basketEntries).toString()
-        )
+        currentState.bpl!!.entries!!.updateBasketEntries(basketEntries)
+        return  currentState.bpl!!.updateEntries()
     }
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
@@ -131,10 +126,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
         currentState.bpl?.entries?.removed?.removeAll { be -> be.id == entry.id }
 
         if(currentState.bpl != null ) {
-            setState { copy(line = BasicUiState.Success(currentState.bpl!!.copy(
-                entries = currentState.bpl!!.entries!!.copy(),
-                price = updatePrice(currentState.bpl!!.entries!!.found).toString()
-            )))}
+            setState {
+                copy(
+                    line = BasicUiState.Success(
+                        currentState.bpl!!.updateEntries()
+                    )
+                )
+            }
             basketStore.dispatch(BasketAction.AddBasketEntry(entry))
         }
 
@@ -144,11 +142,13 @@ class BasketPreviewViewModel(val recipeId: Int?):
         currentState.bpl?.entries?.found?.removeAll { be -> be.id == entry.id }
         currentState.bpl?.entries?.removed?.add(entry)
         if(currentState.bpl != null ) {
-            setState { copy(line = BasicUiState.Success(currentState.bpl!!.copy(
-                entries = currentState.bpl!!.entries!!.copy(),
-                price = updatePrice(currentState.bpl!!.entries!!.found).toString()
+            setState {
+                copy(
+                    line = BasicUiState.Success(
+                        currentState.bpl!!.updateEntries()
+                    )
                 )
-            ) ) }
+            }
             basketStore.dispatch(BasketAction.RemoveEntry(entry))
         }
     }
@@ -174,14 +174,17 @@ class BasketPreviewViewModel(val recipeId: Int?):
     }
 
     private fun replaceItem(entry: BasketEntry){
-            val idx = currentState.bpl?.entries?.found?.indexOfFirst { be -> be.id == entry.id }
-            if(idx != -1 && idx!= null){
-                currentState.bpl!!.entries!!.found[idx] = entry
-                setState { copy(line = BasicUiState.Success( currentState.bpl!!.copy(
-                    entries = currentState.bpl!!.entries!!.copy(),
-                    price = updatePrice(currentState.bpl!!.entries!!.found).toString()
-                ))) }
+        val idx = currentState.bpl?.entries?.found?.indexOfFirst { be -> be.id == entry.id }
+        if(idx != -1 && idx!= null){
+            currentState.bpl!!.entries!!.found[idx] = entry
+            setState {
+                copy(
+                    line = BasicUiState.Success(
+                        currentState.bpl!!.updateEntries()
+                    )
+                )
             }
+        }
         setEvent(BasketPreviewContract.Event.CloseItemSelector)
     }
 
@@ -195,15 +198,6 @@ class BasketPreviewViewModel(val recipeId: Int?):
         }
     }
 
-    private fun updatePrice(foundEntries: MutableList<BasketEntry>) : Double{
-        var total = 0.0
-        foundEntries.forEach { fe ->
-            val beItem = fe.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  fe.attributes.selectedItemId }
-            val price = if(beItem?.unitPrice != null && fe.attributes.quantity != null ) beItem.unitPrice * fe.attributes.quantity else 0.0
-                total+= price
-            }
-        return total
-    }
 
     private fun openItemSelector(bpl: BasketPreviewLine){
         itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetSelectedItem(bpl))
