@@ -49,10 +49,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class BasketPreview(val vmBasketPreview :BasketPreviewViewModel, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent {
+class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :BasketPreviewViewModel, val recipeVm: RecipeViewModel, val close: ()-> Unit) : KoinComponent {
 
     private val groceriesListStore: GroceriesListStore by inject()
-    private val routerViewModel :RouterViewModel by inject()
 
     @ExperimentalCoilApi
     @Composable

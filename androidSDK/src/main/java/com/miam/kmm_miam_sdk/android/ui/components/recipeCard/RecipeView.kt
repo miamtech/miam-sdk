@@ -53,7 +53,7 @@ class RecipeView @JvmOverloads constructor(
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
-    val routerModal : RouterViewModel by inject()
+    private val modal = RouterModal()
 
     fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
         if (recipeId != 0) {
@@ -90,7 +90,8 @@ class RecipeView @JvmOverloads constructor(
 
         val state by vmRecipe.uiState.collectAsState()
 
-        Box() {
+        Column {
+            modal.Content()
             ManagementResourceState(
                 resourceState = state.recipeState,
                 successView = { recipe ->
@@ -209,12 +210,12 @@ class RecipeView @JvmOverloads constructor(
                 Row() {
                     Spacer(modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .height( 12.dp)
+                        .height(12.dp)
                         .width(30.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(brush = brush))
                     Spacer(modifier = Modifier
-                        .height( 12.dp)
+                        .height(12.dp)
                         .width(30.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(brush = brush))
@@ -272,7 +273,6 @@ class RecipeView @JvmOverloads constructor(
     )  {
         val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest )
         Column {
-            RouterModal().Content()
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -293,11 +293,7 @@ class RecipeView @JvmOverloads constructor(
                                     .height(245.dp)
                                     .fillMaxWidth()
                                     .clickable(onClick = {
-                                        routerModal.setEvent(
-                                            RouterContract.Event.GoToDetail(
-                                                vmRecipe
-                                            )
-                                        )
+                                        modal.goToDetail(vmRecipe)
                                     })
                                     .graphicsLayer { alpha = 0.99f }
                                     .drawWithContent {
@@ -477,12 +473,7 @@ class RecipeView @JvmOverloads constructor(
                             FloatingActionButton(modifier = Modifier.size(36.dp),
                                 backgroundColor = Color(0xff037E92),
                                 onClick = {
-                                    routerModal.setEvent(
-                                        RouterContract.Event.GoToPreview(
-                                            recipeId = recipe.id,
-                                            vm = vmRecipe
-                                        )
-                                    )
+                                    modal.goToPreview(recipe.id,vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_details),
@@ -501,12 +492,7 @@ class RecipeView @JvmOverloads constructor(
                                 backgroundColor = Color(0xff037E92),
                                 onClick = {
                                     vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
-                                    routerModal.setEvent(
-                                        RouterContract.Event.GoToPreview(
-                                            recipeId = recipe.id,
-                                            vm = vmRecipe
-                                        )
-                                    )
+                                    modal.goToPreview(recipe.id,vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_cart),
