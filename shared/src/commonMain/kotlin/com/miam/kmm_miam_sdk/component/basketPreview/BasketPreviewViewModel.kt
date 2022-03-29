@@ -90,7 +90,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
             is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
             is BasketPreviewContract.Event.UpdateBasketEntry ->launch { updateBasketEntry(event.entry, event.finalQty)}
-            is BasketPreviewContract.Event.RemoveEntry -> removeBasketEntry(event.entry)
+            is BasketPreviewContract.Event.RemoveEntry -> launch { removeBasketEntry(event.entry) }
             is BasketPreviewContract.Event.ReplaceItem -> replaceItem(event.entry)
             is BasketPreviewContract.Event.ToggleLine -> toggleLine()
             is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
@@ -138,7 +138,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
 
     }
 
-    private fun removeBasketEntry(entry: BasketEntry){
+    private suspend fun removeBasketEntry(entry: BasketEntry){
         currentState.bpl?.entries?.found?.removeAll { be -> be.id == entry.id }
         currentState.bpl?.entries?.removed?.add(entry)
         if(currentState.bpl != null ) {
@@ -149,7 +149,7 @@ class BasketPreviewViewModel(val recipeId: Int?):
                     )
                 )
             }
-            basketStore.dispatch(BasketAction.RemoveEntry(entry))
+            updateBasketEntry(entry, 0)
         }
     }
 
