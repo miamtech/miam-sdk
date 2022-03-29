@@ -55,7 +55,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             is GroceriesListAction.RefreshGroceriesList -> {
                 // println("Miam --> basket RefreshGroceriesList")
                 launch {
-                    val gl = loadGroceriesList().await()
+                    val gl = loadGroceriesList()
                     dispatch(GroceriesListAction.SetGroceriesList(gl))
                 }
                 oldState
@@ -97,48 +97,34 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         }
     }
 
-    private suspend fun loadGroceriesList(): Deferred<GroceriesList> {
-      return async { groceriesListRepo.getCurrent() }
+    private suspend fun loadGroceriesList(): GroceriesList {
+      return groceriesListRepo.getCurrent()
     }
 
-    private fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
+    private suspend fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
         if(states.groceriesList == null) return
         val recipesInfos =  states.groceriesList.attributes.recipesInfos ?: mutableListOf()
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
             recipesInfos.find { it.id == recipeId }?.guests = guest
         } else {
-            recipesInfos.add(RecipeInfos(recipeId,guest))
+            recipesInfos.add(RecipeInfos(recipeId, guest))
         }
-        launch {
-            // side Effect only to refresh UI of c
-            sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))
-            alterRecipeInfos(recipesInfos,states).await()
-            dispatch(GroceriesListAction.RefreshGroceriesList)
-        }
-
+        // side Effect only to refresh UI of c
+        sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))
+        alterRecipeInfos(recipesInfos, states)
+        dispatch(GroceriesListAction.RefreshGroceriesList)
     }
 
-    private fun removeRecipe(recipeId: Int,  states :GroceriesListState){
+    private suspend fun removeRecipe(recipeId: Int,  states :GroceriesListState){
         if(states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
         val recipesInfos =  states.groceriesList.attributes.recipesInfos
 
         val newRecipeInfos = recipesInfos!!.filter { el -> el.id != recipeId }.toMutableList()
 
-        dispatch(GroceriesListAction.SetGroceriesList(
-            gl = states.groceriesList.copy(
-                attributes= states.groceriesList.attributes.copy(
-                    recipesInfos = newRecipeInfos,
-                ),
-            relationships = states.groceriesList.relationships!!.copy(
-              recipes =  states.groceriesList.relationships!!.recipes?.filter { recipe -> recipe.id != recipeId }
-            ))))
-
-        launch {
-            sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))
-            alterRecipeInfos(newRecipeInfos, states)
-        }
-
+        sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))
+        alterRecipeInfos(newRecipeInfos, states)
+        dispatch(GroceriesListAction.RefreshGroceriesList)
     }
     
 
@@ -161,14 +147,15 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
     }
 
-    private fun alterRecipeInfos(recipesInfos : MutableList<RecipeInfos>, states :GroceriesListState): Deferred<GroceriesList> {
-        var gl = states.groceriesList!!.copy(
+    private suspend fun alterRecipeInfos(recipesInfos : MutableList<RecipeInfos>, states :GroceriesListState): GroceriesList
+    {
+        val gl = states.groceriesList!!.copy(
             attributes = states.groceriesList.attributes.copy(
                 recipesInfos =  recipesInfos,
                 appendRecipes = false
             )
         )
-        return alterList(gl)
+        return groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id, gl.type, gl.attributes))
     }
 
     private suspend fun restGroceriesList(){
@@ -182,9 +169,5 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         } catch (e: Exception) {
             dispatch(GroceriesListAction.Error(e))
         }
-    }
-
-    private fun alterList(gl :GroceriesList): Deferred<GroceriesList> {
-        return async {  groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)) }
     }
 }
