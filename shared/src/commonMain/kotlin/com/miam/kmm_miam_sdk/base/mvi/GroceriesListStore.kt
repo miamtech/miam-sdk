@@ -140,7 +140,11 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         }
 
     }
+    
 
+    /**
+     * not use yet should call reset gl
+     */
     private fun removeAllRecipe(states :GroceriesListState) {
         if(states.groceriesList == null || states.groceriesList.attributes.recipesInfos.isNullOrEmpty()) return
         dispatch(GroceriesListAction.SetGroceriesList(
