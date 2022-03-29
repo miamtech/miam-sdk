@@ -270,12 +270,12 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
-    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
+    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item>? {
         try {
             // TODO no need for this page size once we got include
             return  this.get<Items>(
                 HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items?page[size]=30"
-            )?.data ?: emptyList()
+            )?.data
         } catch(cause: Throwable) {
             print(cause)
             throw cause
