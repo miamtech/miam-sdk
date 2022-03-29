@@ -60,7 +60,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
             _retailerProducts.add(retailerProduct)
             return
         }
-        _retailerProducts[0] = _retailerProducts[0].copy(quantity = retailerProduct.quantity)
+        _retailerProducts[0] = _retailerProducts[0].copy(quantity = retailerProduct.quantity, productIdentifier = retailerProduct.productIdentifier)
     }
 
     /**
