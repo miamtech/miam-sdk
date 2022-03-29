@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miam.kmm_miam_sdk.android.di.KoinInitilizer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
@@ -62,7 +61,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.setSupplier(7)
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
-        RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = CircleShape)
 
         initFakeBasket()
         setContent {

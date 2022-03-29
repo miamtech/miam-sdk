@@ -1,14 +1,32 @@
-# kmm-miam-sdk
-
-Miam's Kmm sdk provide logic add component for ios and android native app
-
-> Minimum requirement Kotlin version is `1.6.10`
+# KMM Miam SDK
 
 [[_TOC_]]
+## Introduction
 
-## Getting started for Android
+Miam's Kmm sdk provide logic add component for ios and android native app.
 
-### Adding Miam in your app
+But how does it work ?! 🪄
+
+Our SDK is divide in threre main module
+  
+  - Shared Module
+  - Android SDK
+  - IOS Framwork
+
+### Shared module
+
+Basicly all the work is done here. The porpuse of our architecture is to share all the logic between Android
+and IOS
+
+You'll find in this module our service, our object mapper , our component view Model and our data class.
+
+This module is imported in both android SDK and IOS framwork and you can imagine create your own compoment lib and map them with our view model.
+
+
+## Android integration (Kotlin)
+
+> Minimum requirement Kotlin version is `1.6.10`
+### Initialization
 
 Miam SDK is not web hosted yet, so you first need to download our repository
 and then launch a build as production. it'll generate a `miam-sdk-release.aar` in `/androidSDK/build/outputs`
@@ -61,7 +79,7 @@ We are also using [Koin]("https://insert-koin.io/") for dependency injection ins
 
 > If you are already using Koin into your project it can cause issues 
 
-### Init Miam
+ #### Main class
 
 Before using Miam you have configure special Miam function, as we're runing in parallel of your app and to interacting with the basket, the store or the user , you have to provide to Miam a way to interact with them.
 
@@ -89,7 +107,9 @@ class Miam() {
 ```
 Inside the `init` function of this class we can now configure our three handlers
 
-#### Handle User
+#### Connection to Miam API
+
+#### User
 
 To use Miam you have to be logged and linked to a valid Store
 
@@ -122,7 +142,7 @@ class Miam() {
 }
 ```
 
-#### Handle Store and Retailer
+#### Store and Retailer
 
 As every retailer have there own product price and store, you'll have to passe to Miam your Retailer Id.
 You can find your Id by using a REST client and get :
@@ -171,7 +191,7 @@ Miam also provide an `isAvailable` option that will enable or disable the SDK
 
 ```
 
-#### Handle basket
+#### Basket synchronization
 
 For a mapping purpose we'll create a function that will tranform your product into  `RetailerProduct`
 
@@ -273,12 +293,12 @@ class Miam() {
 
 You'll have to call `Miam.getInstance().confirmBasket()` in your app at the end of your client order
 
-### Use and inject Miam SDK component
+### Components injection
 
 Currently there is only one component to inject : `recipeCard` if you want to use our SDK
 you can both implement it in a app using compose or in a classique one
 
-#### Miam in a Jetpack Compose app
+#### With Jetpack (preferred)
 
 First init an object recipe with current context
 
@@ -329,7 +349,7 @@ then just add it into your compose function :
           }
         }
 ```
-#### Miam in a regular android app
+#### With XML injection
 
 If you're using a regular app you can inject miam recipecard in yout XML view
 
@@ -350,7 +370,7 @@ And then bind property like this
 
 ```
 > you can achived it by using an `id` and a `findViewById` too
-### Miam customization 
+### Styling
  
  There is two level of customization :  
   - top level that'll override the whole application
@@ -363,7 +383,7 @@ And then bind property like this
 
   At this point there no more differents between app using jepack compose or not.
 
-#### Theme color
+#### Colors
 
 > Not available at component level yet
 
@@ -391,7 +411,7 @@ List of color you can override
  | unpureWhite | `#fefefe` | 
  | black | `#252525` |
 
-#### Text 
+#### Wording
 
 All text comme from miam object `Text`, you can override a text in the whole application by 
 setting a value : 
@@ -409,26 +429,20 @@ You can find all available custom texts in `androidSDK/src/main/ressource/text.k
 
 #### Icon / Image
 
-> Comming soon
+All text comme from miam object `Image`, you can override a text in the whole application by 
+setting a value : 
+
+```kotlin
+  Text.alreadyInCart = "ajoutée"
+```
+
+> if you override this property in a lower level the lower level win
 
 #### Dimension
 
 > Comming soon
 
-#### Component customization
-
-Component available for low level customization :
-
-| Name | Style | Color | Icon | Text | 
-|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
-| Recipe card |✅ | ❌ | ✅ |✅
-| Basket preview |❌ | ❌ |❌ | ❌
-| Price | ❌ | ❌ |❌|❌
-| Item selector |❌ | ❌ |❌|❌
-| Recipe detail |❌ | ❌ |❌|❌
-| Counter | ❌| ❌ |❌|❌
-| PopUp |❌ | ❌ |❌|❌
-
+#### Component (example: customize the RecipeCard component)
 
 Each time a customization is a available for a component you'll find a file starting by the name a of the component and ending by customization category like : `recipeCardStyle.kt` 
 
@@ -446,6 +460,45 @@ RecipeCardImage.time = R.drawable.your_time_icon
 
 You can override style too,for that we are using  [Modifier]("https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier") several container Modifier are exposed and alow you to change there container style , you'll find the complet list in `ComponentNameStyle.kt`
 
+```kotlin
+   // you can set those option in Miam class 
+   RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = CircleShape)
+```
+
+| *before* | *after* | 
+|:-------------|:-------------:|
+|![alt text](pic/defaultCard.png "default card") | ![alt text](pic/alteredStyle.png "custom card")|
+
+
+  ### Planned improvements
+  #### Architecture readability
+  - Reduce `Flow` use accrose SDK
+  #### Deployment and hosting
+  - Hosted dependency 
+  #### More components styling
+
+Component available for low level customization :
+
+| Name | Style | Color | Icon | Text | 
+|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
+| Recipe card |✅ | ❌ | ✅ |✅
+| Basket preview |❌ | ❌ |❌ | ❌
+| Price | ❌ | ❌ |❌|❌
+| Item selector |❌ | ❌ |❌|❌
+| Recipe detail |❌ | ❌ |❌|❌
+| Counter | ❌| ❌ |❌|❌
+| PopUp |❌ | ❌ |❌|❌
+
+they 'll all avaible soon
+
+  #### SDK: performance
+  - Improve build 
+  - Improve feches and cache
+  #### SDK: new components
+  - Catalog
+  - My dinner page
+  - Favorite page
+  - Recipe Creator
 
 ## Getting started for IOS
 
