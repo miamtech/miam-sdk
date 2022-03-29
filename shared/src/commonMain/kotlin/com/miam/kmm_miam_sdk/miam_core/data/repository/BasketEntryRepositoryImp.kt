@@ -18,11 +18,7 @@ class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasou
     override suspend fun getRelationships(basketEntry: BasketEntry): BasketEntry {
         basketEntry._relationships = BasketEntryRelationships(
             basketEntryDataSource.getBasketEntryItems(basketEntry.id),
-            if(basketEntry.relationships.groceriesEntry.data.id != null) {
-                basketEntryDataSource.getBasketEntryGrocerieEntry(basketEntry.relationships.groceriesEntry.data.id)
-            } else {
-              null
-             }
+            basketEntryDataSource.getBasketEntryGrocerieEntry(basketEntry.relationships.groceriesEntry.data.id)
             )
         return basketEntry
     }

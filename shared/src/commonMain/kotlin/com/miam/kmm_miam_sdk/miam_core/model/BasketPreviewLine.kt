@@ -64,6 +64,20 @@ data class BasketPreviewLine(
                         this.entries.removed.isNotEmpty())
     }
 
+    fun updatePrice() :BasketPreviewLine {
+        var total = 0.0
+        this.entries!!.found.forEach { fe ->
+            val beItem = fe.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  fe.attributes.selectedItemId }
+            val price = if(beItem?.unitPrice != null && fe.attributes.quantity != null ) beItem.unitPrice * fe.attributes.quantity else 0.0
+            total+= price
+        }
+        return  this.copy(price = total.toString())
+    }
+
+    fun updateEntries() : BasketPreviewLine {
+        return this.copy(entries = this.entries!!.copy()).updatePrice()
+    }
+
     companion object {
         fun fromRecipe( recipe: Recipe,
                         itemsCount: Int,
