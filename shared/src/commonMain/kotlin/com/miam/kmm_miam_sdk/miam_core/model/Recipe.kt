@@ -1,25 +1,45 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
 import com.miam.kmm_miam_sdk.miam_core.model.utils.DurationSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
 
 @Serializable
-data class RecipeWrapper(val data: Recipe)
+@SerialName(Recipe.TYPE)
+data class Recipe private constructor(
+    override val id: String,
+    override val attributes: RecipeAttributes? = null,
+    override  val relationships: RecipeRelationships? = null
+): Record(), BasketPreviewEntry {
 
-@Serializable
-data class RecipeListWrapper(val data: List<Recipe>)
+    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+        id,
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeAttributes>(attributes),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+    ) {
+        relationships?.buildFromIncluded(includedRecords)
+    }
 
-@Serializable
-data class Recipe(val id: Int, val attributes: RecipeAttributes ) : BasketPreviewEntry {
+    override fun toString(): String {
+        return "Recipe: $id - $attributes - $relationships"
+    }
+
+    companion object {
+        const val TYPE: String = "recipes"
+    }
 
     val totalTime: String
         get() {
             var duration : Duration = 0.minutes
-            duration = duration.plus(this.attributes.preheatingTime ?: 0.minutes)
+            duration = duration.plus(this.attributes!!.preheatingTime ?: 0.minutes)
             duration = duration.plus(this.attributes.cookingTime  ?: 0.minutes )
             duration =  duration.plus(this.attributes.restingTime  ?: 0.minutes)
             if (duration.inWholeMinutes < 10) {
@@ -30,7 +50,7 @@ data class Recipe(val id: Int, val attributes: RecipeAttributes ) : BasketPrevie
 
     val difficultyLabel : String
         get () {
-            return when(this.attributes.difficulty) {
+            return when(this.attributes!!.difficulty) {
                 1 -> "facile"
                 2 -> "moyen"
                 3-> "difficile"
@@ -40,23 +60,17 @@ data class Recipe(val id: Int, val attributes: RecipeAttributes ) : BasketPrevie
 
     val costLabel : String
         get () {
-            return when(this.attributes.difficulty) {
+            return when(this.attributes!!.difficulty) {
                 1 -> "faible"
                 2 -> "moyen"
                 3-> "difficile"
                 else -> "moyen"
             }
         }
-
-    companion object {
-        fun emptyRecipe() = Recipe(1,RecipeAttributes(""))
-    }
 }
 
-
 @Serializable
-data class RecipeAttributes (
-
+data class RecipeAttributes constructor(
     val title: String,
 
     @SerialName("ext-id")
@@ -116,8 +130,6 @@ data class RecipeAttributes (
 
     val promoted: Boolean? = false,
 
-    var ingredients : Ingredients? = null,
-
     var provider : RecipeProvider? = null,
 
     var status : RecipeStatus? = null,
@@ -127,14 +139,40 @@ data class RecipeAttributes (
     var steps: RecipeSteps? = null,
 
     var type: RecipeType? = null,
+): Attributes()
 
-)
+@Serializable
+data class RecipeRelationships (
+    var ingredients: IngredientListRelationship = IngredientListRelationship(listOf())
+): Relationships() {
+    override fun buildFromIncluded(includedRecords: List<Record>) {
+        ingredients.buildFromIncluded(includedRecords)
+    }
+}
 
 @Serializable
 data class RecipeInfos (
     val id: Int,
     var guests: Int,
 )
+
+@Serializable(with = RecipeRelationshipListSerializer::class)
+class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
+    fun buildFromIncluded(includedRecords: List<Record>) {
+        data = data.map { ge ->
+            val existingEntry = includedRecords.find { record -> record is Recipe && record.id == ge.id }
+            if (existingEntry != null) ge.copy(attributes = (existingEntry as Recipe).attributes) else ge
+        }
+    }
+}
+
+@Serializer(forClass = RecipeRelationshipList::class)
+object RecipeRelationshipListSerializer : KSerializer<RecipeRelationshipList> {
+    override fun serialize(encoder: Encoder, value: RecipeRelationshipList) {
+        // super method call to only keep types and id
+        value.serialize(encoder)
+    }
+}
 
 
 
