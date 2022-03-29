@@ -361,6 +361,8 @@ And then bind property like this
 
   > if you don't override a property you'll have miam's default setted
 
+  At this point there no more differents between app using jepack compose or not.
+
 #### Theme color
 
 > Not available at component level yet
@@ -389,7 +391,18 @@ List of color you can override
  | unpureWhite | `#fefefe` | 
  | black | `#252525` |
 
+#### Text 
 
+All text comme from miam object `Text`, you can override a text in the whole application by 
+setting a value : 
+
+```kotlin
+  Text.alreadyInCart = "ajoutée"
+```
+
+> if you override this property in a lower level the lower level win
+
+You can find all available custom texts in `androidSDK/src/main/ressource/text.kt`
 #### Typography
 
 > Comming soon
@@ -404,7 +417,35 @@ List of color you can override
 
 #### Component customization
 
-> Comming soon
+Component available for low level customization :
+
+| Name | Style | Color | Icon | Text | 
+|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
+| Recipe card |✅ | ❌ | ✅ |✅
+| Basket preview |❌ | ❌ |❌ | ❌
+| Price | ❌ | ❌ |❌|❌
+| Item selector |❌ | ❌ |❌|❌
+| Recipe detail |❌ | ❌ |❌|❌
+| Counter | ❌| ❌ |❌|❌
+| PopUp |❌ | ❌ |❌|❌
+
+
+Each time a customization is a available for a component you'll find a file starting by the name a of the component and ending by customization category like : `recipeCardStyle.kt` 
+
+You can override property by setting a new value :
+
+```kotlin
+ RecipeCardText.alreadyInCart = "ok c'est dedans"
+```
+
+To customise a icon passe your ressource to the right property :
+
+```kotlin
+RecipeCardImage.time = R.drawable.your_time_icon
+```
+
+You can override style too,for that we are using  [Modifier]("https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier") several container Modifier are exposed and alow you to change there container style , you'll find the complet list in `ComponentNameStyle.kt`
+
 
 ## Getting started for IOS
 

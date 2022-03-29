@@ -27,7 +27,7 @@ import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.mediumPadding
  *
  *  RecipeCardStyleComponent.cardLayout =  Modifier.fillMaxSize().backgroundColor(Color.Blue)
  */
-object RecipeCardStyleComponent {
+object RecipeCardStyle {
 
     /**
      * cardLayout is a Manager apply on Material Card

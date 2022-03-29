@@ -12,12 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
@@ -26,24 +23,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.addToCartFloatingButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.difficulty
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.recipeCardFlagIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.showRecipeFloatingButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardRessource.time
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.cardLayout
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.image
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.imageContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.inCartTagBox
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.inCartTagPadding
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.metricsDivider
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.metricsIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.moreInfoButton
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagImage
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeCardFlagPositionContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeMetricsRow
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyleComponent.recipeTitle
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.addToCartFloatingButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.difficulty
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.recipeCardFlagIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.showRecipeFloatingButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.time
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.image
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.inCartTagBox
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.inCartTagPadding
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.metricsDivider
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.metricsIcon
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.moreInfoButton
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagImage
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagPositionContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeMetricsRow
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeTitle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.alreadyInCart
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.recipeFlag
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
@@ -58,12 +53,9 @@ import com.miam.kmm_miam_sdk.android.ui.theme.Typography.body1White
 import com.miam.kmm_miam_sdk.android.ui.theme.Typography.whiteRecipeTitle
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 class RecipeView @JvmOverloads constructor(
