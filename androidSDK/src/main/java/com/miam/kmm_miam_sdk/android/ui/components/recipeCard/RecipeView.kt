@@ -51,6 +51,8 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Typography.body1
 import com.miam.kmm_miam_sdk.android.theme.Typography.body1White
 import com.miam.kmm_miam_sdk.android.theme.Typography.whiteRecipeTitle
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -284,18 +286,10 @@ class RecipeView @JvmOverloads constructor(
     )  {
         val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest )
         Column {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
+            Card( modifier =  cardLayout ) {
                 Box {
                     Column {
-                        Box(
-                            modifier = Modifier
-                                .height(245.dp)
-                                .fillMaxWidth()
-                        ) {
+                        Box( modifier = imageContainer ) {
                             Clickable(
                                 onClick = { modal.goToDetail(vmRecipe)},
                                 children = {
@@ -388,8 +382,7 @@ class RecipeView @JvmOverloads constructor(
                             { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
                             { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
                             CounterModifier(),
-
-                            )
+                        )
                     }
                     Box( modifier = recipeCardFlagPositionContainer ) {
                         Box( modifier = recipeCardFlagContainer ) {
