@@ -11,17 +11,14 @@ class SupplierRepositoryImp( private val recipeDataSource: MiamAPIDatasource) :K
 
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    fun notifyConfirmBasket(basketToken: String) : Flow<Unit> = flow{
+    suspend fun notifyConfirmBasket(basketToken: String) {
         val providerId =  pointOfSaleStore.getProviderId()
 
-        recipeDataSource.notifyBasketUpdated(basketToken,providerId,"CONFIRMED")
-        emit(Unit)
+        recipeDataSource.notifyBasketUpdated(basketToken, providerId,"CONFIRMED")
     }
 
-    fun notifyPaidBasket(basketToken: String, price: String) : Flow<Unit> = flow{
+    suspend fun notifyPaidBasket(basketToken: String, price: String) {
         val providerId =  pointOfSaleStore.getProviderId()
-        val origin  = pointOfSaleStore.getProviderOrigin()
-        recipeDataSource.notifyBasketUpdated(basketToken,providerId,"PAID",price)
-        emit(Unit)
+        recipeDataSource.notifyBasketUpdated(basketToken, providerId,"PAID", price)
     }
 }

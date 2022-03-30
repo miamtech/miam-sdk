@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface GroceriesListRepository {
     suspend fun getCurrent(): GroceriesList
-    suspend fun getNew(): Flow<GroceriesList>
+    suspend fun reset(): GroceriesList
     suspend fun updateGroceriesList(gl : GroceriesListWithoutRelationship) : GroceriesList
     suspend fun removeRecipeFromList() : Flow<GroceriesList>
     suspend fun updateRecipeGuests() : Flow<GroceriesList>

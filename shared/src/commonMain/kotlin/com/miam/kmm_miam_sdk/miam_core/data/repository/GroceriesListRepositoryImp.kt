@@ -23,9 +23,8 @@ class GroceriesListRepositoryImp (
        return gl
     }
 
-    override suspend fun getNew(): Flow<GroceriesList> = flow {
-       val gl = groceriesListDataSource.getNew()
-       emit(gl)
+    override suspend fun reset(): GroceriesList {
+       return groceriesListDataSource.reset()
     }
 
     override suspend fun updateGroceriesList(gl : GroceriesListWithoutRelationship): GroceriesList {

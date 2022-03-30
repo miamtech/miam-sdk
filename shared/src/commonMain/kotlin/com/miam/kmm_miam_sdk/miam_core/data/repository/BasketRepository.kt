@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface BasketRepository {
     suspend fun getFromListAndPos(listId :Int, posId :Int): Basket
-    suspend fun updateBasket(basket: Basket):Flow<Basket>
+    suspend fun updateBasket(basket: Basket): Basket
 }
