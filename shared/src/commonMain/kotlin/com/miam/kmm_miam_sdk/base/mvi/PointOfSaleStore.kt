@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.base.mvi
 
 
 import com.miam.kmm_miam_sdk.miam_core.data.repository.PointOfSaleRepositoryImp
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,10 @@ sealed class  PointOfSaleEffect : Effect {
 class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in BasketStore $exception")
+    }
+
     private val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
@@ -63,7 +68,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
                     // println("Miam refresh ext_id same ext_id")
                     oldState
                 } else {
-                    launch {
+                    launch(coroutineHandler) {
                         getPos(action.extId, oldState.idSupplier)
                     }
                     oldState.copy(extIdPointOfSale = action.extId)
@@ -75,7 +80,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
                     // println("Miam refresh SetSupplierId same SetSupplierId")
                     oldState
                 } else {
-                    launch {
+                    launch(coroutineHandler) {
                         getPos(oldState.extIdPointOfSale, action.supplierId)
                     }
                     oldState.copy(idSupplier = action.supplierId)
@@ -100,18 +105,10 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
         return state.value.origin ?: ""
     }
 
-    private  fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {
+    private suspend fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {
         if(extIdPointOfSale == null || idSupplier == null ) return
 
-        try {
-            launch {
-                pointOfSaleRepository.getPosFormExtId(extIdPointOfSale,idSupplier)
-                    .collect {
-                        dispatch(PointOfSaleAction.RefreshPointOfSale(it.id))
-                    }
-            }
-        } catch (e: Exception) {
-            dispatch(PointOfSaleAction.Error(e))
-        }
+        val pos = pointOfSaleRepository.getPosFormExtId(extIdPointOfSale,idSupplier)
+        dispatch(PointOfSaleAction.RefreshPointOfSale(pos.id))
     }
 }

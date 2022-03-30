@@ -181,12 +181,12 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     ///////// GroceriesList ///////////////
 
     override suspend fun getCurrent(): GroceriesList {
-            return httpClient.get<GroceriesListWrapper> {
-                url(HttpRoutes.GROCERIESLIST_ENDPOINT+"current")
-            }.data
+        return httpClient.get<GroceriesListWrapper> {
+            url(HttpRoutes.GROCERIESLIST_ENDPOINT+"current")
+        }.data
     }
 
-    override suspend fun getNew(): GroceriesList {
+    override suspend fun reset(): GroceriesList {
         return httpClient.get<GroceriesListWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"reset")
         }.data

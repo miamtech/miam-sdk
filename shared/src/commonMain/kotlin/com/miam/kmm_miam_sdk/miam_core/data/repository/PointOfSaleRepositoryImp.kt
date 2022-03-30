@@ -6,8 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class PointOfSaleRepositoryImp ( private val pointOfSaleDataSource: MiamAPIDatasource) : PointOfSaleRepository {
-    override suspend fun getPosFormExtId(extId: String, supplierId: Int) : Flow<PointOfSale> = flow {
-       val pos = pointOfSaleDataSource.getPosFormExtId(extId, supplierId)
-        emit(pos)
+    override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale {
+       return pointOfSaleDataSource.getPosFormExtId(extId, supplierId)
     }
 }
