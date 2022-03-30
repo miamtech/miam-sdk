@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.ressource
+package com.miam.kmm_miam_sdk.android.ressource
 
 import com.miam.kmm_miam_sdk.android.R
 

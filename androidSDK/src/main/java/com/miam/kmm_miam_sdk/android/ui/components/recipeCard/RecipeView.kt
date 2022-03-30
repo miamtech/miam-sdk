@@ -42,15 +42,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.re
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.alreadyInCart
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.recipeFlag
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.grey
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.primary
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.white
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.bigPadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.mediumPadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.smallPadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Typography.body1
-import com.miam.kmm_miam_sdk.android.ui.theme.Typography.body1White
-import com.miam.kmm_miam_sdk.android.ui.theme.Typography.whiteRecipeTitle
+import com.miam.kmm_miam_sdk.android.theme.Colors.grey
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
+import com.miam.kmm_miam_sdk.android.theme.Typography.body1
+import com.miam.kmm_miam_sdk.android.theme.Typography.body1White
+import com.miam.kmm_miam_sdk.android.theme.Typography.whiteRecipeTitle
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -325,7 +325,7 @@ class RecipeView @JvmOverloads constructor(
                                         Text(
                                             text = alreadyInCart,
                                             style = body1White,
-                                            modifier = Modifier.padding(horizontal = smallPadding)
+                                            modifier = Modifier.padding(horizontal = sPadding)
                                         )
                                     }
                                 }
@@ -347,7 +347,7 @@ class RecipeView @JvmOverloads constructor(
                         ) {
                             Row() {
                                 Column(
-                                    Modifier.padding(end = bigPadding),
+                                    Modifier.padding(end = lPadding),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
@@ -358,14 +358,14 @@ class RecipeView @JvmOverloads constructor(
                                     Text(
                                         text = recipe.totalTime,
                                         style = body1,
-                                        modifier = Modifier.padding(top = smallPadding)
+                                        modifier = Modifier.padding(top = sPadding)
                                     )
                                 }
                                 Divider(
                                     modifier = metricsDivider
                                 )
                                 Column(
-                                    Modifier.padding(start = bigPadding),
+                                    Modifier.padding(start = lPadding),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Image(
@@ -376,7 +376,7 @@ class RecipeView @JvmOverloads constructor(
                                     Text(
                                         text = recipe.difficultyLabel,
                                         style = body1,
-                                        modifier = Modifier.padding(top = smallPadding)
+                                        modifier = Modifier.padding(top = sPadding)
                                     )
                                 }
                             }
@@ -394,7 +394,7 @@ class RecipeView @JvmOverloads constructor(
                     Box( modifier = recipeCardFlagPositionContainer ) {
                         Box( modifier = recipeCardFlagContainer ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = smallPadding, vertical = mediumPadding),
+                                modifier = Modifier.padding(horizontal = sPadding, vertical = mPadding),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
@@ -406,7 +406,7 @@ class RecipeView @JvmOverloads constructor(
                                 Text(
                                     text = recipeFlag,
                                     style = body1White,
-                                    modifier = Modifier.padding(horizontal = smallPadding)
+                                    modifier = Modifier.padding(horizontal = sPadding)
                                 )
                             }
                         }
@@ -415,7 +415,7 @@ class RecipeView @JvmOverloads constructor(
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = mediumPadding, bottom = mediumPadding)
+                                .padding(end = mPadding, bottom = mPadding)
                         ) {
                             FloatingActionButton(
                                 modifier = Modifier.size(36.dp),
@@ -434,7 +434,7 @@ class RecipeView @JvmOverloads constructor(
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = mediumPadding, bottom = mediumPadding)
+                                .padding(end = mPadding, bottom = mPadding)
                         ) {
                             FloatingActionButton(modifier = Modifier.size(36.dp),
                                 backgroundColor = primary,

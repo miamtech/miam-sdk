@@ -38,7 +38,7 @@ data class GroceriesListAttributes(
     @SerialName("updated-at")
     val updatedAt: String? =null,
     @SerialName("recipes-infos")
-    val recipesInfos: MutableList<RecipeInfos>? = mutableListOf(),
+    val recipesInfos: MutableList<RecipeInfos>,
     @SerialName("user-id")
     val userId: String? = null,
     @SerialName("append-recipes")

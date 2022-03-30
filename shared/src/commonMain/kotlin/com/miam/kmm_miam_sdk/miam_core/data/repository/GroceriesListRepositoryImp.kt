@@ -13,14 +13,14 @@ class GroceriesListRepositoryImp (
     private val groceriesListDataSource: MiamAPIDatasource
 ): GroceriesListRepository {
 
-    override suspend fun getCurrent(): Flow<GroceriesList> = flow {
+    override suspend fun getCurrent(): GroceriesList {
        val gl = groceriesListDataSource.getCurrent()
        //val groceriesEntries = groceriesListDataSource.getGroceriesEntries(gl.id)
        val recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())
         gl.apply {
             //relationships.groceriesEntries = groceriesEntries.groceriesEntries
         relationships?.recipes = recipes}
-       emit(gl)
+       return gl
     }
 
     override suspend fun getNew(): Flow<GroceriesList> = flow {
@@ -28,12 +28,12 @@ class GroceriesListRepositoryImp (
        emit(gl)
     }
 
-    override suspend fun updateGroceriesList(gl : GroceriesListWithoutRelationship): Flow<GroceriesList> = flow {
+    override suspend fun updateGroceriesList(gl : GroceriesListWithoutRelationship): GroceriesList {
         val newGl = groceriesListDataSource.updateGroceriesList(gl)
-        val recipes =
+        val recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())
         newGl.apply {
-            relationships?.recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())}
-        emit(newGl)
+            relationships?.recipes = recipes}
+        return newGl
     }
 
     override suspend fun removeRecipeFromList(): Flow<GroceriesList> {

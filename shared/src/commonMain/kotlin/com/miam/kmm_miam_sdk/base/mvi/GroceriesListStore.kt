@@ -4,16 +4,14 @@ import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryIm
 import com.miam.kmm_miam_sdk.miam_core.model.GroceriesList
 import com.miam.kmm_miam_sdk.miam_core.model.GroceriesListWithoutRelationship
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeInfos
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
 data class GroceriesListState(
-    val groceriesList : GroceriesList?,
+    val groceriesList : GroceriesList?
 ) : State
 
 sealed class  GroceriesListAction : Action {
@@ -35,11 +33,10 @@ sealed class  GroceriesListEffect : Effect {
 class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val state = MutableStateFlow(GroceriesListState( null))
+    private val state = MutableStateFlow(GroceriesListState(null))
     private val sideEffect = MutableSharedFlow<GroceriesListEffect>()
-
-    private val groceriesListRepo : GroceriesListRepositoryImp by inject()
-    private val basketStore:  BasketStore by inject()
+    private val groceriesListRepo: GroceriesListRepositoryImp by inject()
+    private val basketStore: BasketStore by inject()
 
     override fun observeState(): StateFlow<GroceriesListState> = state
 
@@ -57,7 +54,10 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         val newState = when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
                 // println("Miam --> basket RefreshGroceriesList")
-                launch { loadGroceriesList() }
+                launch {
+                    val gl = loadGroceriesList()
+                    dispatch(GroceriesListAction.SetGroceriesList(gl))
+                }
                 oldState
             }
             is GroceriesListAction.ResetGroceriesList -> {
@@ -68,15 +68,18 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             is GroceriesListAction.SetGroceriesList -> {
                 // println("Miam -> GroceriesListAction.SetGroceriesList")
                 basketStore.dispatch(BasketAction.SetGroceriesList(action.gl))
-                launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)}
+                launch { sideEffect.emit(GroceriesListEffect.GroceriesListLoaded) }
                 oldState.copy(groceriesList = action.gl)
             }
             is GroceriesListAction.AlterRecipeList -> {
-               launch { appendRecipe(action.recipeId,action.guests,oldState)}
+                launch { appendRecipe(action.recipeId, action.guests, oldState) }
                 oldState
             }
             is GroceriesListAction.RemoveRecipe -> {
-                launch {  removeRecipe(action.recipeId,oldState) }
+                basketStore.dispatch(BasketAction.RemoveBasketPreviewLine(action.recipeId))
+                launch {
+                    removeRecipe(action.recipeId, oldState)
+                }
                 oldState
             }
             is GroceriesListAction.RemoveAllRecipe -> {
@@ -88,60 +91,86 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 oldState
             }
         }
+
         if (newState != oldState) {
             state.value = newState
         }
     }
 
-    private suspend fun loadGroceriesList() {
-        try {
-            launch {
-                groceriesListRepo.getCurrent()
-                    .collect {
-                        // println("Miam --> basket loadGroceriesList")
-                        dispatch(GroceriesListAction.SetGroceriesList(it))
-                    }
-            }
-        } catch (e: Exception) {
-            dispatch(GroceriesListAction.Error(e))
-        }
+    private suspend fun loadGroceriesList(): GroceriesList {
+        return groceriesListRepo.getCurrent()
     }
 
-    private fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
-        if(states.groceriesList == null) return
-        val recipesInfos =  states.groceriesList.attributes.recipesInfos ?: mutableListOf()
-        if(states.groceriesList.hasRecipe(recipeId)) {
-            if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
+    private suspend fun appendRecipe(recipeId: Int, guest: Int, states: GroceriesListState) {
+        if (states.groceriesList == null) return
+        val recipesInfos = states.groceriesList.attributes.recipesInfos ?: mutableListOf()
+        if (states.groceriesList.hasRecipe(recipeId)) {
+            if (states.groceriesList.guestsForRecipe(recipeId) == guest) return
             recipesInfos.find { it.id == recipeId }?.guests = guest
         } else {
-            recipesInfos.add(RecipeInfos(recipeId,guest))
+            recipesInfos.add(RecipeInfos(recipeId, guest))
         }
-        launch { sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId,guest))}
-        alterRecipeInfos(recipesInfos,states)
+        // side Effect only to refresh UI of c
+        sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId, guest))
+        alterRecipeInfos(recipesInfos, states)
+        dispatch(GroceriesListAction.RefreshGroceriesList)
     }
 
-    private fun removeRecipe(recipeId: Int,  states :GroceriesListState){
-        if(states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
-        val recipesInfos =  states.groceriesList.attributes.recipesInfos
-        launch { sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))}
+    private suspend fun removeRecipe(recipeId: Int, states: GroceriesListState) {
+        if (states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
+        val recipesInfos = states.groceriesList.attributes.recipesInfos
+
         val newRecipeInfos = recipesInfos!!.filter { el -> el.id != recipeId }.toMutableList()
+
+        sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))
         alterRecipeInfos(newRecipeInfos, states)
+        dispatch(GroceriesListAction.RefreshGroceriesList)
     }
 
-    private fun removeAllRecipe(states :GroceriesListState) {
-        if(states.groceriesList == null || states.groceriesList.attributes.recipesInfos.isNullOrEmpty()) return
-        alterRecipeInfos(mutableListOf(), states)
+
+    /**
+     * not use yet should call reset gl
+     */
+    private fun removeAllRecipe(states: GroceriesListState) {
+        if (states.groceriesList == null || states.groceriesList.attributes.recipesInfos.isNullOrEmpty()) return
+        dispatch(
+            GroceriesListAction.SetGroceriesList(
+                gl = states.groceriesList.copy(
+                    attributes = states.groceriesList.attributes.copy(
+                        recipesInfos = mutableListOf()
+                    ),
+                    relationships = states.groceriesList.relationships!!.copy(
+                        recipes = emptyList()
+                    )
+                )
+            )
+        )
+        launch {
+            alterRecipeInfos(mutableListOf(), states)
+        }
+
     }
 
-    private fun alterRecipeInfos(recipesInfos : MutableList<RecipeInfos>, states :GroceriesListState){
-        var gl = states.groceriesList!!.copy(
+    private suspend fun alterRecipeInfos(
+        recipesInfos: MutableList<RecipeInfos>,
+        states: GroceriesListState
+    ): GroceriesList {
+        val gl = states.groceriesList!!.copy(
             attributes = states.groceriesList.attributes.copy(
-                recipesInfos =  recipesInfos,
-                appendRecipes = false))
-        launch { alterList(gl) }
+                recipesInfos = recipesInfos,
+                appendRecipes = false
+            )
+        )
+        return groceriesListRepo.updateGroceriesList(
+            GroceriesListWithoutRelationship(
+                gl.id,
+                gl.type,
+                gl.attributes
+            )
+        )
     }
 
-    private suspend fun restGroceriesList(){
+    private suspend fun restGroceriesList() {
         try {
             launch {
                 groceriesListRepo.getNew().collect {
@@ -150,19 +179,6 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 }
             }
         } catch (e: Exception) {
-            dispatch(GroceriesListAction.Error(e))
-        }
-    }
-
-    private   fun alterList(gl :GroceriesList){
-        try {
-            launch {
-                groceriesListRepo.updateGroceriesList(GroceriesListWithoutRelationship(gl.id,gl.type,gl.attributes)).collect {
-                    // println("Miam --> basket alterList")
-                    dispatch(GroceriesListAction.SetGroceriesList(it))
-                }
-            }
-        }  catch (e: Exception) {
             dispatch(GroceriesListAction.Error(e))
         }
     }

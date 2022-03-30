@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.theme
+package com.miam.kmm_miam_sdk.android.theme
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -6,9 +6,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.miam.kmm_miam_sdk.android.R
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 
 object Typography {
+
+    var h1 : TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 80.sp
+    )
 
     var body1 = TextStyle(
         fontFamily = FontFamily.Default,

@@ -11,14 +11,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.black
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.danger
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.grey
-import com.miam.kmm_miam_sdk.android.ui.theme.Colors.info
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.bigPadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.largePadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.smallPadding
-import com.miam.kmm_miam_sdk.android.ui.theme.Dimension.mediumPadding
+import com.miam.kmm_miam_sdk.android.theme.Colors.black
+import com.miam.kmm_miam_sdk.android.theme.Colors.danger
+import com.miam.kmm_miam_sdk.android.theme.Colors.grey
+import com.miam.kmm_miam_sdk.android.theme.Colors.info
+import com.miam.kmm_miam_sdk.android.theme.Dimension.bigPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.largePadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.smallPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.mediumPadding
 
 /**
  * RecipeCardStyleComponent hold all RecipeCard compose Manager

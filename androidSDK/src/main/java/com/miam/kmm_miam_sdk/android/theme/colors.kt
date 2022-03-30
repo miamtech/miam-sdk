@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.theme
+package com.miam.kmm_miam_sdk.android.theme
 
 import androidx.compose.ui.graphics.Color
 

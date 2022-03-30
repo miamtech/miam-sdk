@@ -1,10 +1,10 @@
-package com.miam.kmm_miam_sdk.android.ui.theme
+package com.miam.kmm_miam_sdk.android.theme
 
 import androidx.compose.ui.unit.dp
 
 object Dimension {
-    var smallPadding = 4.dp
-    var mediumPadding = 8.dp
-    var bigPadding = 16.dp
-    var largePadding = 32.dp
+    var sPadding = 4.dp
+    var mPadding = 8.dp
+    var lPadding = 16.dp
+    var xlPadding = 32.dp
 }

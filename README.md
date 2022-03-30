@@ -1,41 +1,55 @@
 # KMM Miam SDK
 
 [[_TOC_]]
+
 ## Introduction
 
-Miam's Kmm sdk provide logic add component for ios and android native app.
+This SDK aims to facilitate the integration of Miam eCommerce to any grocery shopping mobile application.
 
-But how does it work ?! 🪄
+It implements a series of components that can be re-styled to your standards, and injected into your app. Miam Components interact with each other and take care of the communication with Miam API. Using this SDK, you should not need to communicate with Miam API directly from your app.
 
-Our SDK is divide in threre main module
-  
-  - Shared Module
-  - Android SDK
-  - IOS Framwork
+### 3 steps integration
 
-### Shared module
+The integration of the SDK into your app will take three steps:
+1. **Initialization** : define the few mapping functions the SDK needs to interact with your app (push products to basket, retrieve the user unique id...)
+2. **Components injection** : fill your app with Miam components wherever relevant (recipe cards in search results grids, recipes catalog on a dedicated page...)
+3. **Styling** : apply your own stylesheets, globally at the SDK level, and specifically for each component 
 
-Basicly all the work is done here. The porpuse of our architecture is to share all the logic between Android
-and IOS
+### Project architecture
 
-You'll find in this module our service, our object mapper , our component view Model and our data class.
+This SDK is leveraging Kotlin Multiplatform Mobile so most of the Models, Controllers, and Services (interactions with Miam API) can be implemented only once and reused both in iOS and Android apps. Only the Views have to be implemented separately for each platform.
 
-This module is imported in both android SDK and IOS framwork and you can imagine create your own compoment lib and map them with our view model.
+Consequently, this SDK is organized in three main modules (TODO: naming to be reviewed):
+- /shared : contains the core logic shared between the two platforms
+- /androidSDK : the SDK to be built and imported in an Android app, containing the core logic + Android-related Views
+- /MiamIOSFramework : same thing, but for iOS apps
 
+For instance, in the case of an Android application, you shouldn't have to import the built archive of /shared and /androidSDK : building /androidSDK to an APK and importing it will be enough, as this APK will contain the whole logic (/shared + Android views).
 
 ## Android integration (Kotlin)
 
-> Minimum requirement Kotlin version is `1.6.10`
+> Minimum required Kotlin version is `1.6.10`
+
 ### Initialization
 
-Miam SDK is not web hosted yet, so you first need to download our repository
-and then launch a build as production. it'll generate a `miam-sdk-release.aar` in `/androidSDK/build/outputs`
+#### Build and import
 
-You can then put it in your project in the folder `libs` if you dont have one yet create one.
+CI/CD is not setup yet and the built archived are not hosted anywhere. You will need to clone this repository and build the archive in production mode.
 
-Add `implementation(name:'miam-SDK-release', ext:'aar')` in the dependencies section of your sub `build.gradle` file.
+The archive will be generated as `miam-sdk-release.aar` in `/androidSDK/build/outputs`.
 
-Our component are using [Jetpack Compose](https://developer.android.com/jetpack/compose?gclsrc=aw.ds&gclid=CjwKCAjwrfCRBhAXEiwAnkmKmWkwGezGLmmfauda5_ACVVNtTVPUw576netuScD2mLnGacjr2cB30RoCC24QAvD_BwE) it require following third party libraries :
+Import it into your project, in the `libs` folder.
+
+Finally, import it to your Gradle configuration:
+
+```kotlin
+// In the app build.gradle file
+implementation(name:'miam-SDK-release', ext:'aar')
+```
+
+#### Dependencies
+
+Our components are using [Jetpack Compose](https://developer.android.com/jetpack/compose?gclsrc=aw.ds&gclid=CjwKCAjwrfCRBhAXEiwAnkmKmWkwGezGLmmfauda5_ACVVNtTVPUw576netuScD2mLnGacjr2cB30RoCC24QAvD_BwE) which requires the following third-party libraries:
 
 ```kotlin
     implementation("androidx.appcompat:appcompat:1.3.1")
@@ -48,7 +62,7 @@ Our component are using [Jetpack Compose](https://developer.android.com/jetpack/
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation("androidx.compose.foundation:foundation:1.0.5")
 
-all    // Material Design
+    // Material Design
     implementation("androidx.compose.material:material:1.0.5")
 
     // Material design icons
@@ -64,9 +78,9 @@ all    // Material Design
     implementation ("io.coil-kt:coil-svg:1.3.1")
 ```
 
-> Use Jetpack is not mandatory it's just our implemation of miam CORE
+> Jetpack is not mandatory but facilitates the injection of Miam components - See part 2 Components injection
 
-We are also using our own HttpClient [Ktor]("https://ktor.io/docs/welcome.html") whitch need :
+We are using [Ktor]("https://ktor.io/docs/welcome.html") as a Http client, which requires:
 
 ```kotlin
     implementation("io.ktor:ktor-client-android:1.6.7")
@@ -75,285 +89,305 @@ We are also using our own HttpClient [Ktor]("https://ktor.io/docs/welcome.html")
     implementation("io.ktor:ktor-client-logging:1.6.7")
 ```
 
-We are also using [Koin]("https://insert-koin.io/") for dependency injection inside of the CORE but it's embed and dont need to add extra dependencies. 
+As a side note, the SDK embeds [Koin]("https://insert-koin.io/") for dependency injection. as it is embedded, no extra import is needed.
 
-> If you are already using Koin into your project it can cause issues 
+> Caveat: we've noticed potential compatibility issues if you are already using Koin in your own app... TODO: improve dependency injection
 
- #### Main class
+#### Main class
 
-Before using Miam you have configure special Miam function, as we're runing in parallel of your app and to interacting with the basket, the store or the user , you have to provide to Miam a way to interact with them.
+We recommend that all the mapping functions that will define the interactions between the SDK and the host app be wrapped in a main "Miam" class.
 
-For that we are using `StoreHandler`, `UserHandler` and `BasketHandler` class. They are singleton you only have to provide setting once.
+This class will use methods and attributes defined in SDK "handler" classes to manage objects such as the User profile, the Basket, or the selected Store. These haldlers are all singletons.
 
-One way of achevied it is to create in your app a class `Miam`
-witch 'll a sigleton to and be availabe across your app.
+Make sure this main "Miam" class is a singleton and instantiated only once in your runtime. Here is a basic implementation:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.android.di.KoinInitilizer
+
 class Miam() {
 
-     init {
-       KoinInitilizer.init(context = yourAppContext)
-     }
+  // Will contain calls to Miam SDK handler classes (User, Basket, Store...)
+  init {
+    KoinInitilizer.init(context = yourAppContext)
+  }
 
-    companion object {
-        private var instance: Miam? = null
-        fun getInstance(): Miam {
-            if (instance != null) return instance!!
-            instance = Miam()
-            return instance!!
-        }
+  companion object {
+    private var instance: Miam? = null
+    fun getInstance(): Miam {
+      if (instance != null) return instance!!
+      instance = Miam()
+      return instance!!
     }
+  }
 }
 ```
-Inside the `init` function of this class we can now configure our three handlers
 
 #### Connection to Miam API
 
+**TODO**
+
 #### User
 
-To use Miam you have to be logged and linked to a valid Store
+Miam initialization process will start only after the user is **logged**.
 
-To alow miam to recognize your custommer we need at least a custommer id
-
-it can be set by using :
+Here is how to pass the user ID to the SDK, directly within the host app:
 
 ```kotlin
-Miam.getInstance().UserHandler.updateUserId(user.id)
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
+// Reference to your main "Miam" class
+Miam.getInstance().UserHandler.updateUserId(USER_ID_IN_HOST_APP (string))
 ```
-
-> user id is a String
-
-We have to kown if the user is logging in,logging out or has changed, so to achived it we recomend to use a observable as [MutableSharedFlow]("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/") and call our function in the call back.
+Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end. For instance : [MutableSharedFlow]("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/").
 
 ```kotlin 
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
 class Miam() {
+  init {
+    // CODE
 
-   init {
-     [ ... ]
-
-     yourUser.collect { user ->
-        UserHandler.updateUserId(user.id)
-     }
-
-    [ ... ]
-   }
-
-   [ ... ]
-}
-```
-
-#### Store and Retailer
-
-As every retailer have there own product price and store, you'll have to passe to Miam your Retailer Id.
-You can find your Id by using a REST client and get :
-
-`https://api.miam.tech/api/v1/suppliers/?filter[active]=true,false`
-
-then pass the config to miam 
-
-
-```kotlin 
-class Miam() {
-
-   init {
-      PointOfSaleHandler.setSupplier(Retailer_ID)
-      PointOfSaleHandler.setSupplierOrigin("https://yourOrigin.com")
-   }
-
-   [ ... ]
-}
-```
-
-> Your origin must be different between development and production environment
-
-Now as user we have to set Store Id by using
-
-```kotlin
-Miam.getInstance().updateStoreId(store.id)
-```
-
-> store id is a String
-
-
-Miam also provide an `isAvailable` option that will enable or disable the SDK 
-
-```kotlin
-
- private const val availableStoreIdLists = listof("454", "652")
-
- private fun isActiveOnStore(): Boolean {
-      return availableStoreIdLists.contains(getCurrentStore().id)   
+    OBSERVABLE_ON_USER_OBJECT.collect { user ->
+      UserHandler.updateUserId(<string>user.id)
+    }
   }
 
- // config miam
+  // CODE
+}
+```
 
- PointOfSaleHandler.isAvailable = ::isActiveOnStore
+#### Store
 
+Miam initialization process will start only after the user has **selected a valid store**.
+
+Firstly, ask Miam team for your "supplier id" (unique for all your apps and websites integrations). We will also spoof the origin header of all the requests sent to Miam API.
+
+Then, initialize the PointOfSaleHandler with this information:
+
+```kotlin 
+import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+
+class Miam() {
+  init {
+    //  CODE
+    PointOfSaleHandler.setSupplier(<string>YOUR_SUPPLIER_ID)
+    PointOfSaleHandler.setSupplierOrigin(<string>YOUR_SUPPLIER_ORIGIN)
+  }
+
+  //  CODE
+}
+```
+
+> Make sure to specify a different origin between your development and production environments
+
+Finally, send the store ID to the SDK (in the example, from the host app):
+```kotlin
+Miam.getInstance().PointOfSaleHandler.updateStoreId(<string>STORE_ID_IN_HOST_APP)
+```
+
+It is possible to define a store as "active" or "inactive". When a store is inactive, Miam initialization process won't start even if the store is selected by the user. 
+
+```kotlin
+import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+
+// List of store ids in the host app referential
+private const val availableStoreIdLists = listof("454", "652")
+
+private fun isActiveOnStore(): Boolean {
+  return availableStoreIdLists.contains(<string>STORE_ID_IN_HOST_APP)   
+}
+
+Miam.getInstance().PointOfSaleHandler.isAvailable = ::isActiveOnStore
 ```
 
 #### Basket synchronization
 
-For a mapping purpose we'll create a function that will tranform your product into  `RetailerProduct`
+Last but not least, the SDK embeds a complex synchronization system that will ensure Miam always keeps the knowledge of what products have been pushed to or removed from the in-app basket. This mechanism is **mandatory** to ensure products added via Miam recipes are kept consistent with the interactions users will have with the basket outside of Miam components.
+
+> If at some point, you feel like products magically disappear from Miam recipes, or are not removed from the app basket while they should be, this is probably related to this part.
+
+By convenience, we recommend to define a mapping function that transforms the host app YourProduct objects to "Miam products" objects (named `RetailerProduct` in the SDK). The opposite function can also be defined:
 
 ```kotlin
-data class RetailerProduct(val retailerId :String , val quantity: Int, val name: String?)
+import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
+
+// Defined in the SDK
+data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
+
+private fun yourProductsToRetailerProducts(products: List<YourProduct>): List<RetailerProduct> {
+  return YourProduct.map { yourP ->
+    RetailerProduct(
+      yourP.id,
+      yourP.quantity,
+      yourP.name
+    )
+  }
+}
+
+private fun retailerProductsToYourProducts(products: List<RetailerProduct>): List<YourProduct> {
+  return RetailerProduct.map { product ->
+    YourProduct(
+      product.id,
+      product.quantity,
+      product.name
+    )
+  }
+}     
 ```
 
-```kotlin
-private fun yourProductTORetailerProduct(Products: List<YourProduct>): List<RetailerProduct> {
-        return YourProduct.map { yourP ->
-            RetailerProduct(
-                yourP.id,
-                yourP.quantity,
-                yourP.name
-            )
-        }
-    }    
-```
-
-As Miam is only going to listen to your basket if it's ready or avaible
-you have to passe a function to `BasketHandler` with the flowing signature: 
+Miam needs to listen to any change applied to the basket in the host app. To that end, you have to pass a function to `BasketHandler` with the flowing signature: 
 `(callback : (products: List<RetailerProduct>) -> Unit) -> Unit`
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
    private val basketHandler: BasketHandler = BasketHandler()
 
-   init {
-     basketHandler.listenToRetailerBasket = ::initBasketListener
+  init {
+    basketHandler.listenToRetailerBasket = ::initBasketListener
 
-    [ ... ]
-   }
+    // CODE
+  }
 
   private fun initBasketListener(
-        callback: (
-            products: List<RetailerProduct>
-        ) -> Unit
-    ){
-        yourBasket.collect { basket ->
-
-          // call the signature's callback here
-          callback(yourProductTORetailerProduct(basket.productsList))
-      }
+    callback: (products: List<RetailerProduct>) -> Unit
+  ) {
+    OBSERVABLE_ON_BASKET_OBJECT.collect { basket ->
+      // callback will be triggered on every basket change
+      callback(yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList))
     }
-  
-   [ ... ]
+  }
+
+  // CODE
 }
 ```
 
-Next will add a function to push product update or delete product in your basket, with the following signature `(products: List<RetailerProduct>) -> Unit`. This function will be call if miam want to add 
-update or delete a product.  
+Now, the other way around : everytime Miam's basket changes (every time a recipe is added or removed for example), the added or removed subsequent products have to be pushed to the in-app basket. Another function has to be defined on BasketHandler, with the signature: `(products: List<RetailerProduct>) -> Unit`.
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
-   private val basketHandler: BasketHandler = BasketHandler()
+  private val basketHandler: BasketHandler = BasketHandler()
 
-   init {
-      basketHandler.pushProductsToBasket = ::pushProductsToYourBasket
+  init {
+    basketHandler.pushProductsToBasket = ::pushProductsToYourBasket
+    // CODE
+  }
 
-    [ ... ]
-   }
+  private fun pushProductsToYourBasket (products: List<RetailerProduct>) {
+    // Convert "Miam products" to your own product objects
+    for (product in retailerProductsToYourProducts(products)) { 
+      if (it.quantity <= 0) {
+        // Removes product from host app basket
+        yourDeleteFunction(it)
+      } else if (yourTestFunctionAlreadyInBasket(it.id)){
+        // Updates quantity of product in host app basket
+        yourUpdateFunction(it)
+      } else {
+        // Add product to host app basket
+        yourAddFunction(it)
+      }
+    }
+  }
 
-   private fun pushProductsToYourBasket (products: List<RetailerProduct>){
-     for(product in Products) { 
-       if(it.quantity <= 0){
-         yourDeleteFunction(it)
-       } else if (yourTestFunctionAlreadyInBasket(it.id)){
-         yourUpdateFunction(it)
-       } else {
-         yourAddFunction(it)
-       }
-     }
-   }
-   
+  // CODE
+}   
 ```
 
-And finaly we have to detect payment to reset Miam's basket
-
+Finally, Miam basket will be confirmed and cleared once the payment has been validated by the user. We have to trigger this event on the BasketHandler as well:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
-   private val basketHandler: BasketHandler = BasketHandler()
+  private val basketHandler: BasketHandler = BasketHandler()
 
-   init {
-      basketHandler.paymentTotal = fun(): Double { 
-        return getYourBasketTotalPaid() 
-      }
-    [ ... ]
-   }
+  init {
+    // CODE
 
-   fun confirmBasket() {
-        basketHandler.handlePayment()
+    basketHandler.paymentTotal = fun(): Double { 
+      return ORDER_PAID_AMOUNT_IN_APP()
+    }
+  }
+
+  // CODE
+}
+
+// Confirm basket when payment confirmed in app:
+Miam.getInstance().basketHandler.handlePayment()
+```
+
+### Components injection
+
+There are two ways to inject Miam components into the host app:
+- with **Jetpack Compose** (preferred as nothing has to be changed on the component itself, except styling adjustments)
+- by injecting **your own full XML** version of the component (a bit more complex, but lets you the full flexibility of changing every aspects of the component)
+
+#### With Jetpack Compose (preferred)
+
+For the sake of the example, we will inject a component showing a recipe card in the host app.
+
+Initialize a RecipeView object, passing your current context:
+
+```kotlin
+val recipe = RecipeView(this@MainActivity)
+```
+
+In Miam, recipe cards can either be "fixed" (= fetched by on a predefined ID) or "suggested" (= fetched based on the user navigation context)
+
+```kotlin
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+
+// Implemented in Miam SDK
+data class SuggestionsCriteria(
+  // Ids of products displayed in the search results, right before and after the recipe card
+  val shelfIngredientsIds: List<String>? = null,
+  // Ids of products displayed on a product details page (optional)
+  val currentIngredientsIds: List<String>? = null,
+  // Ids of products already in app basket (optional)
+  val basketIngredientsIds: List<String>? = null,
+  // (optional)
+  val groupId: String? = null
+)
+
+val recipe1 = RecipeView(this@MainActivity)
+val recipe2 = RecipeView(this@MainActivity)
+
+// Instanciate a fixed recipe card
+recipe1.bind(recipeId = 305)
+
+// Instanciate a suggested recipe card
+recipe2.bind(
+  criteria = SuggestionsCriteria(
+    shelfIngredientsIds = listOf(
+      PRODUCT_ID_IN_APP,
+      PRODUCT_ID_IN_APP     
+    )
+  )
+)
+
+// Inject in the page using Compose
+setContent {
+  Column {
+    recipe1.Content()
+    recipe2.Content()
   }
 }
 ```
 
-You'll have to call `Miam.getInstance().confirmBasket()` in your app at the end of your client order
+> All injectable components definitions can be found in the /androidSDK folder => have a look at each View file to discover which attributes must be passed to instantiate the view. 
 
-### Components injection
-
-Currently there is only one component to inject : `recipeCard` if you want to use our SDK
-you can both implement it in a app using compose or in a classique one
-
-#### With Jetpack (preferred)
-
-First init an object recipe with current context
-
-```kotlin
-  val recipe =  RecipeView(this@MainActivity)
-```
-
-Then you can choose between fixed recipe or suggestion
-
-
-```kotlin
-        val recipe1 =  RecipeView(this@MainActivity)
-        val recipe2 =  RecipeView(this@MainActivity)
-
-        // will load recipe with given id
-        recipe1.bind(recipeId = 305)
-
-        // will load a suggested recipe
-        recipe2.bind(
-          criteria = SuggestionsCriteria(
-            shelfIngredientsIds= listOf(
-              "your_local_id_1",
-              "your_local_id_2"     
-            )
-          )
-        )
-        
-/** Already in MIAM */
-data class SuggestionsCriteria(
-    val shelfIngredientsIds: List<String>? = null,
-    val currentIngredientsIds: List<String>? = null,
-    val basketIngredientsIds: List<String>? = null,
-    val groupId: String? = null
-)
-```
-then just add it into your compose function :
-
-```kotlin
-        val recipe1 =  RecipeView(this@MainActivity)
-        val recipe2 =  RecipeView(this@MainActivity)
-
-        [...]
-
-        setContent {
-          Column {
-            recipe1.Content()
-            recipe2.Content()
-          }
-        }
-```
 #### With XML injection
 
-If you're using a regular app you can inject miam recipecard in yout XML view
+If you are not using Jetpack Compose, you can inject Miam recipe cards directly into your own XML View:
 
 ```xml
+<!-- defined in layout/item_miam.xml -->
 <com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -361,108 +395,156 @@ If you're using a regular app you can inject miam recipecard in yout XML view
     android:layout_height="wrap_content"/>
 ```
 
-And then bind property like this 
+And then bind the properties like this: 
 
 ```kotlin
- 
- val miamCard = R.layout.item_miam as RecipeView
- miamCard.bind(criteria = criteria)
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 
+// Implemented in Miam SDK
+data class SuggestionsCriteria(
+  // Ids of products displayed in the search results, right before and after the recipe card
+  val shelfIngredientsIds: List<String>? = null,
+  // Ids of products displayed on a product details page (optional)
+  val currentIngredientsIds: List<String>? = null,
+  // Ids of products already in app basket (optional)
+  val basketIngredientsIds: List<String>? = null,
+  // (optional)
+  val groupId: String? = null
+)
+
+val miamCard = R.layout.item_miam as RecipeView
+
+miamCard.bind(criteria = SuggestionsCriteria(
+  shelfIngredientsIds = listOf(
+    PRODUCT_ID_IN_APP,
+    PRODUCT_ID_IN_APP     
+  )
+))
 ```
-> you can achived it by using an `id` and a `findViewById` too
+
+> Can also be done by replacing `R.layout.item_miam` by the usual `findViewById`...
+
 ### Styling
- 
- There is two level of customization :  
-  - top level that'll override the whole application
-  - component level that 'll overrive for a specific component
 
-  > if you override both level, compoment'll have it's custom style
-  > other'll get top level style
+This SDK lets you adjust the components styling so they can be naturally inserted in your app without confusing the end user. 
 
-  > if you don't override a property you'll have miam's default setted
+There are two level of customization:  
+- Globally: styles defined here will be applied to all components
+- Per component: styles defined here will be applied to a specific component only
 
-  At this point there no more differents between app using jepack compose or not.
+**Note**:
+- Component styling overrides global styling
+- Properties that aren't overriden neither globally nor per component will keep their default values defined by Miam in the SDK
+
+> Components injected using Jetpack or XML can both have their styling customized the same way
 
 #### Colors
 
-> Not available at component level yet
+> Global variables only!!
 
-  you can override a color by :
+Here is how to override a color variable globally:
 
-  ```kotlin
-    Colors.primary = Color( 0xFF44D6B3)
-  ``` 
+```kotlin
+import com.miam.kmm_miam_sdk.android.theme.Colors
 
-> `0x` means hexa , `FF` stand for opacity , `44D6B3` is the color
+// Colors object is defined in SDK
+Colors.primary = Color(0xFF44D6B3)
+``` 
 
-List of color you can override
+> Hint: `0x` means hexa , `FF` stands for opacity , `44D6B3` is the color code
 
-| Name |  Default value | Use |
- |:-------------|:-------------:|:-------------:|
- | primary | `#037E92` | 
- | secondary | `#209B8F` | 
- | ternary | `#E61845` | 
- | success | `#44D6B3` | 
- | info | `#44D6B3` | 
- | warning | `#FFDAA3` | 
- | danger | `#F47F7A` | 
- | grey | `#676767` | 
- | white | `#FAFCFE` | 
- | unpureWhite | `#fefefe` | 
- | black | `#252525` |
+List of colors you can override:
+
+| Name |  Default value | Use (TODO) |
+|:-------------|:-------------:|:-------------:|
+| primary | `#037E92` | 
+| secondary | `#209B8F` | 
+| ternary | `#E61845` | 
+| success | `#44D6B3` | 
+| info | `#44D6B3` | 
+| warning | `#FFDAA3` | 
+| danger | `#F47F7A` | 
+| grey | `#676767` | 
+| white | `#FAFCFE` | 
+| unpureWhite | `#FEFEFE` | 
+| black | `#252525` |
 
 #### Wording
 
-All text comme from miam object `Text`, you can override a text in the whole application by 
-setting a value : 
+All wordings are injected using Miam `Text` objects, which can be overriden globally or component by component as follows:
 
 ```kotlin
-  Text.alreadyInCart = "ajoutée"
+import com.miam.kmm_miam_sdk.android.ressource.Text
+
+Text.alreadyInCart = "ajoutée"
 ```
 
-> if you override this property in a lower level the lower level win
+The full list of customizable wordings can be found in file: `androidSDK/src/main/ressource/text.kt`
 
-You can find all available custom texts in `androidSDK/src/main/ressource/text.kt`
 #### Typography
 
-> Comming soon
+All font use across SDK are defined here they can be override globaly in `androidSDK/src/main/theme/typography.kt` or in lower level
+Our typography are of type [TextStyle]("https://www.jetpackcompose.net/textstyle-in-jetpack-compose")
 
-#### Icon / Image
-
-All text comme from miam object `Image`, you can override a text in the whole application by 
-setting a value : 
 
 ```kotlin
-  Text.alreadyInCart = "ajoutée"
+import com.miam.kmm_miam_sdk.android.theme.Typography
+
+typography.h1 = TextStyle(
+        color = Color.Red,
+        fontSize = 16.sp,
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.W800,
+        fontStyle = FontStyle.Italic,
+        letterSpacing = 0.5.em,
+        background = Color.LightGray,
+        textDecoration = TextDecoration.Underline
+    )
 ```
 
-> if you override this property in a lower level the lower level win
+#### Icon / Images
 
-#### Dimension
-
-> Comming soon
-
-#### Component (example: customize the RecipeCard component)
-
-Each time a customization is a available for a component you'll find a file starting by the name a of the component and ending by customization category like : `recipeCardStyle.kt` 
-
-You can override property by setting a new value :
+All icons and images are injected using Miam `Image` objects, which can be overriden globally or component by component as follows:
 
 ```kotlin
- RecipeCardText.alreadyInCart = "ok c'est dedans"
+import com.miam.kmm_miam_sdk.android.ressource.Image
+
+Image.basketIcon = R.drawable.your_basket_icon
 ```
 
-To customise a icon passe your ressource to the right property :
+#### Dimensions
+
+All padding, width or height are injected using Miam `Dimension` object, which can be overriden globally or component by component as follows:
+
+```kotlin
+import com.miam.kmm_miam_sdk.android.theme.Dimension
+
+Dimension.xlPadding = 40.dp
+```
+
+#### Component-specific properties (example: customize the RecipeCard component)
+
+Everytime a component has customizable properties, its folder will contain a `componentStyle.kt` file describing these properties. eg: `recipeCardStyle.kt`.
+
+You can override property by changing its value:
+
+```kotlin
+RecipeCardText.alreadyInCart = "ok c'est dedans"
+```
+
+Here is an example to customize the time icon on the RecipeCard component:
 
 ```kotlin
 RecipeCardImage.time = R.drawable.your_time_icon
 ```
 
-You can override style too,for that we are using  [Modifier]("https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier") several container Modifier are exposed and alow you to change there container style , you'll find the complet list in `ComponentNameStyle.kt`
+We recommend using [Modifier]("https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier") to override other styles. The full list is available in `ComponentNameStyle.kt`.
+
+Example:
 
 ```kotlin
-   // you can set those option in Miam class 
-   RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = CircleShape)
+// You can set those option in Miam class 
+RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = CircleShape)
 ```
 
 | *before* | *after* | 
@@ -470,12 +552,20 @@ You can override style too,for that we are using  [Modifier]("https://developer.
 |![alt text](pic/defaultCard.png "default card") | ![alt text](pic/alteredStyle.png "custom card")|
 
 
-  ### Planned improvements
-  #### Architecture readability
-  - Reduce `Flow` use accrose SDK
-  #### Deployment and hosting
-  - Hosted dependency 
-  #### More components styling
+### Planned improvements
+
+#### Architecture readability
+
+- Reduce use of `Flow` pattern accross SDK
+- Review naming of mapping functions
+- Simplify mapping functions to be defined in host apps
+
+#### Deployment and hosting
+
+- CI/CD using Gitlab
+- Expose archives in hosted dependency management services 
+
+#### More components styling
 
 Component available for low level customization :
 
@@ -489,17 +579,18 @@ Component available for low level customization :
 | Counter | ❌| ❌ |❌|❌
 | PopUp |❌ | ❌ |❌|❌
 
-they 'll all avaible soon
+#### SDK: performance
 
-  #### SDK: performance
-  - Improve build 
-  - Improve feches and cache
-  #### SDK: new components
-  - Catalog
-  - My dinner page
-  - Favorite page
-  - Recipe Creator
+- Improve build
+- Improve fetches and add cache
 
-## Getting started for IOS
+#### SDK: new components
 
-> Comming soon
+- Recipes catalog
+- Selected recipes history page
+- Favorites recipes
+- Personal recipes creation
+
+## iOS integration (Swift)
+
+> Coming soon
