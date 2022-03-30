@@ -145,9 +145,9 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             }
             is BasketAction.ReplaceSelectedItem -> {
                 // println("Miam ---> ReplaceItem")
-                action.basketEntry.updateSelectedItem(action.itemId)
+                val replacedEntry = action.basketEntry.updateSelectedItem(action.itemId)
                 launch {
-                    val newEntry = updateBasketEntry(action.basketEntry)
+                    val newEntry = updateBasketEntry(replacedEntry)
                     val newBasket = state.value.basket?.updateBasketEntry(newEntry)
                     dispatch(BasketAction.SetBasket(newBasket!!))
                 }
