@@ -60,8 +60,7 @@ class RouterModal :KoinComponent {
 
         if (state.isOpen) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Popup(
                     properties = PopupProperties(

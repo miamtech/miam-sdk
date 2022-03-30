@@ -72,7 +72,7 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
                         Box(
                             Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(8.dp),
                         )
                         {
                             Text(
@@ -91,7 +91,9 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
                                 .size(40.dp)
                                 .alpha(0.5f).align(Alignment.CenterEnd),
                                 backgroundColor = Color.Gray,
-                                onClick = { close() })
+                                onClick = { close() },
+                                elevation =  FloatingActionButtonDefaults.elevation(0.dp)
+                            )
                             {
                                 Icon(
                                     tint = Color.White,
