@@ -15,10 +15,10 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.black
 import com.miam.kmm_miam_sdk.android.theme.Colors.danger
 import com.miam.kmm_miam_sdk.android.theme.Colors.grey
 import com.miam.kmm_miam_sdk.android.theme.Colors.info
-import com.miam.kmm_miam_sdk.android.theme.Dimension.bigPadding
-import com.miam.kmm_miam_sdk.android.theme.Dimension.largePadding
-import com.miam.kmm_miam_sdk.android.theme.Dimension.smallPadding
-import com.miam.kmm_miam_sdk.android.theme.Dimension.mediumPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.xlPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 
 /**
  * RecipeCardStyleComponent hold all RecipeCard compose Manager
@@ -32,7 +32,7 @@ object RecipeCardStyle {
     /**
      * cardLayout is a Manager apply on Material Card
      */
-    var cardLayout = Modifier.fillMaxWidth().padding(bigPadding)
+    var cardLayout = Modifier.fillMaxWidth().padding(lPadding)
 
     /**
      * imageContainer is a Manager for a Box
@@ -62,20 +62,20 @@ object RecipeCardStyle {
      * recipeTitle is a Manager for a Text container
      * note that all text style is not handle here only container appearance
      */
-    var recipeTitle = Modifier.wrapContentWidth(Alignment.CenterHorizontally).padding(horizontal = largePadding)
+    var recipeTitle = Modifier.wrapContentWidth(Alignment.CenterHorizontally).padding(horizontal = xlPadding)
 
     /**
      * inCartTagBox is a Manager for a Box
      * it's for shape and position
      */
     var inCartTagBox = Modifier
-        .absoluteOffset(x = mediumPadding, y = mediumPadding)
+        .absoluteOffset(x = mPadding, y = mPadding)
         .clip(
             RoundedCornerShape(
-                topEnd = smallPadding,
-                topStart = smallPadding,
-                bottomStart = smallPadding,
-                bottomEnd = smallPadding
+                topEnd = sPadding,
+                topStart = sPadding,
+                bottomStart = sPadding,
+                bottomEnd = sPadding
             )
         ).background(danger)
 
@@ -83,13 +83,13 @@ object RecipeCardStyle {
      * inCartTagPadding is a Manager for a Row
      * use to handle inner padding
      */
-    var inCartTagPadding = Modifier.padding( horizontal = smallPadding, vertical = mediumPadding)
+    var inCartTagPadding = Modifier.padding( horizontal = sPadding, vertical = mPadding)
 
     /**
      * moreInfoButton is a Manager for a FloatingActionButton
      * use for position
      */
-    var moreInfoButton = Modifier.size(24.dp).absoluteOffset(x = mediumPadding, y = mediumPadding)
+    var moreInfoButton = Modifier.size(24.dp).absoluteOffset(x = mPadding, y = mPadding)
 
     /**
      * recipeMetricsRow is a Manager for a Column
@@ -97,10 +97,10 @@ object RecipeCardStyle {
      */
     var recipeMetricsRow = Modifier
         .padding(
-            start = mediumPadding,
-            end = mediumPadding,
-            top = largePadding,
-            bottom = bigPadding
+            start = mPadding,
+            end = mPadding,
+            top = xlPadding,
+            bottom = xlPadding
         ).fillMaxWidth()
 
     /**
@@ -124,7 +124,7 @@ object RecipeCardStyle {
      * recipeCardFlagContainer is a Manager for a Box
      * it's use for shape of the flag
      */
-    var recipeCardFlagContainer = Modifier.clip(RoundedCornerShape(topEnd = mediumPadding, bottomEnd = mediumPadding)).background(info)
+    var recipeCardFlagContainer = Modifier.clip(RoundedCornerShape(topEnd = mPadding, bottomEnd = mPadding)).background(info)
 
     /**
      * recipeMetricsRow is a Manager for an Image
