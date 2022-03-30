@@ -54,16 +54,30 @@ open class PricingViewModel :
             splitePrice(uiState.value.directPrice!!)
             return
         }
-        // checkIf recipe is in basket
-        // extract price
+        if( checkIsInCart()){
+            extactPricing()
+        } else {
+            launch { fetchPrice()}
+        }
+    }
 
-        launch { fetchPrice()}
+    private fun checkIsInCart(): Boolean {
+        if(currentState.recipeId == -1 ) return false
+        return basketStore.recipeInBasket(currentState.recipeId)
     }
 
     private fun extactPricing() {
-        // TODO extract from basket
-        val pricing = Pricing(4.15, 1)
-       //splitePrice(pricing)
+      val recipeBPL = basketStore.observeState().value.basketPreview?.first { it.isRecipe && it.id == currentState.recipeId }
+        if(recipeBPL != null){
+            setState {
+                copy(
+                    price = BasicUiState.Success(
+                        Pricing(recipeBPL.price.toDouble() ,currentState.guestNumber)
+                    )
+                )
+            }
+            splitePrice(recipeBPL.price.toDouble() / currentState.guestNumber)
+        }
     }
 
     private fun splitePrice(price : Double){
