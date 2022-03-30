@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.common
+package com.miam.kmm_miam_sdk.android.ui.components.Counter
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -16,6 +16,17 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterColor.lessButtonBackgroundColor
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterColor.lessButtonBackgroundDisableColor
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterColor.lessIconColor
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterImage.guests
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterImage.less
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.guestIcon
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.iconModifier
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.lessButton
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.lessButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.mainRowContainer
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.rowModifier
 
 data class CounterModifier(
     val rowModifier: Modifier? = null,
@@ -36,31 +47,29 @@ fun Counter(
     counterModifier: CounterModifier
 ) {
     Row(
-
-        modifier = counterModifier.rowModifier ?: Modifier.padding(
-            horizontal = 8.dp,
-            vertical = 8.dp
-        ),
+        modifier = mainRowContainer,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_peoples),
-            contentDescription = null,
-            modifier = counterModifier.iconModifier ?: Modifier.size(24.dp)
+            painter = painterResource(guests),
+            contentDescription = "guests icon",
+            modifier = guestIcon
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-
             ) {
-            IconButton(onClick = { decrease() },
+            IconButton(
+                    onClick = { decrease() },
                     enabled = !isDisable,
-                    modifier = Modifier.background( if(isDisable) Color(0xffF6F6F6) else Color.Transparent),
+                    modifier = lessButton.background(
+                        if(isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
+                    )
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_less),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(counterModifier.buttonColors),
-                    modifier = counterModifier.lessButtonModifier ?: Modifier.size(16.dp)
+                    painter = painterResource(less),
+                    contentDescription = "less icon",
+                    colorFilter = ColorFilter.tint(lessIconColor),
+                    modifier = lessButtonIcon
                 )
             }
             Row(

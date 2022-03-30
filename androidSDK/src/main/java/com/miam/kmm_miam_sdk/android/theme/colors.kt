@@ -11,6 +11,7 @@ object Colors {
     var warning :Color = Color(0xFFFFDAA3)
     var danger :Color = Color(0xffF47F7A)
     var grey:Color = Color(0xFF676767)
+    var lightgrey:Color = Color(0xffF6F6F6)
     var white : Color = Color(0xFFFAFCFE)
     var unpureWhite:Color = Color(0xFFfefefe);
     var black: Color = Color(0xFF252525);
