@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -16,6 +17,13 @@ import io.ktor.util.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
+
+class MiamResponseException(response: HttpResponse, cachedResponseText: String) :
+    ResponseException(response, cachedResponseText) {
+    override val message: String = "Custom server error: ${response.call.request.url}. " +
+            "Status: ${response.status}. Text: \"$cachedResponseText\""
+}
 
 
 object HttpRoutes {
@@ -98,10 +106,10 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }catch(e: ServerResponseException){
             // 5xx
             println ("Error: ${e.response.status.description}")
-            null
+            throw e
         }catch(e: Exception){
             println ("Error: ${e.message}")
-            null
+            throw e
         }
     }
 
@@ -271,26 +279,13 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
     override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
-        try {
-            return  httpClient.get<Items>{
-                // TODO no need for this page size once we got include
-                url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items?page[size]=30")
-            }.data
-        } catch(cause: Throwable) {
-            print(cause)
-            throw cause
-        }
+            return  this.get<Items>("${HttpRoutes.BASKET_ENTRIES_ENDPOINT}$basketEntryId/items?page[size]=30")?.data ?: emptyList()
     }
 
-    override suspend fun getBasketEntryGrocerieEntry(basketEntryId: Int): GroceriesEntry {
-        try {
-            return  httpClient.get<GroceriesEntryWrapper>{
-                url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$basketEntryId")
-            }.data
-        } catch(cause: Throwable) {
-           print(cause)
-            throw cause
-        }
+    override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry? {
+        return  this.get<GroceriesEntryWrapper>(
+            HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId"
+        )?.data
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {

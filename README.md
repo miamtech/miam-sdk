@@ -102,6 +102,8 @@ This class will use methods and attributes defined in SDK "handler" classes to m
 Make sure this main "Miam" class is a singleton and instantiated only once in your runtime. Here is a basic implementation:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.android.di.KoinInitilizer
+
 class Miam() {
 
   // Will contain calls to Miam SDK handler classes (User, Basket, Store...)
@@ -131,12 +133,16 @@ Miam initialization process will start only after the user is **logged**.
 Here is how to pass the user ID to the SDK, directly within the host app:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
 // Reference to your main "Miam" class
 Miam.getInstance().UserHandler.updateUserId(USER_ID_IN_HOST_APP (string))
 ```
 Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end. For instance : [MutableSharedFlow]("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/").
 
 ```kotlin 
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
 class Miam() {
   init {
     // CODE
@@ -159,6 +165,8 @@ Firstly, ask Miam team for your "supplier id" (unique for all your apps and webs
 Then, initialize the PointOfSaleHandler with this information:
 
 ```kotlin 
+import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+
 class Miam() {
   init {
     //  CODE
@@ -180,6 +188,8 @@ Miam.getInstance().PointOfSaleHandler.updateStoreId(<string>STORE_ID_IN_HOST_APP
 It is possible to define a store as "active" or "inactive". When a store is inactive, Miam initialization process won't start even if the store is selected by the user. 
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+
 // List of store ids in the host app referential
 private const val availableStoreIdLists = listof("454", "652")
 
@@ -199,6 +209,8 @@ Last but not least, the SDK embeds a complex synchronization system that will en
 By convenience, we recommend to define a mapping function that transforms the host app YourProduct objects to "Miam products" objects (named `RetailerProduct` in the SDK). The opposite function can also be defined:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
+
 // Defined in the SDK
 data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
 
@@ -227,6 +239,8 @@ Miam needs to listen to any change applied to the basket in the host app. To tha
 `(callback : (products: List<RetailerProduct>) -> Unit) -> Unit`
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
    private val basketHandler: BasketHandler = BasketHandler()
@@ -253,6 +267,8 @@ class Miam() {
 Now, the other way around : everytime Miam's basket changes (every time a recipe is added or removed for example), the added or removed subsequent products have to be pushed to the in-app basket. Another function has to be defined on BasketHandler, with the signature: `(products: List<RetailerProduct>) -> Unit`.
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
   private val basketHandler: BasketHandler = BasketHandler()
@@ -285,6 +301,8 @@ class Miam() {
 Finally, Miam basket will be confirmed and cleared once the payment has been validated by the user. We have to trigger this event on the BasketHandler as well:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+
 class Miam() {
 
   private val basketHandler: BasketHandler = BasketHandler()
@@ -323,6 +341,8 @@ val recipe = RecipeView(this@MainActivity)
 In Miam, recipe cards can either be "fixed" (= fetched by on a predefined ID) or "suggested" (= fetched based on the user navigation context)
 
 ```kotlin
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+
 // Implemented in Miam SDK
 data class SuggestionsCriteria(
   // Ids of products displayed in the search results, right before and after the recipe card
@@ -378,6 +398,8 @@ If you are not using Jetpack Compose, you can inject Miam recipe cards directly 
 And then bind the properties like this: 
 
 ```kotlin
+import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+
 // Implemented in Miam SDK
 data class SuggestionsCriteria(
   // Ids of products displayed in the search results, right before and after the recipe card
@@ -423,6 +445,8 @@ There are two level of customization:
 Here is how to override a color variable globally:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.android.theme.Colors
+
 // Colors object is defined in SDK
 Colors.primary = Color(0xFF44D6B3)
 ``` 
@@ -450,6 +474,8 @@ List of colors you can override:
 All wordings are injected using Miam `Text` objects, which can be overriden globally or component by component as follows:
 
 ```kotlin
+import com.miam.kmm_miam_sdk.android.ressource.Text
+
 Text.alreadyInCart = "ajoutée"
 ```
 
@@ -457,20 +483,44 @@ The full list of customizable wordings can be found in file: `androidSDK/src/mai
 
 #### Typography
 
-> Coming soon
+All font use across SDK are defined here they can be override globaly in `androidSDK/src/main/theme/typography.kt` or in lower level
+Our typography are of type [TextStyle]("https://www.jetpackcompose.net/textstyle-in-jetpack-compose")
+
+
+```kotlin
+import com.miam.kmm_miam_sdk.android.theme.Typography
+
+typography.h1 = TextStyle(
+        color = Color.Red,
+        fontSize = 16.sp,
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.W800,
+        fontStyle = FontStyle.Italic,
+        letterSpacing = 0.5.em,
+        background = Color.LightGray,
+        textDecoration = TextDecoration.Underline
+    )
+```
 
 #### Icon / Images
 
 All icons and images are injected using Miam `Image` objects, which can be overriden globally or component by component as follows:
 
 ```kotlin
-// TODO: Thibault
+import com.miam.kmm_miam_sdk.android.ressource.Image
+
 Image.basketIcon = R.drawable.your_basket_icon
 ```
 
 #### Dimensions
 
-> Coming soon
+All padding, width or height are injected using Miam `Dimension` object, which can be overriden globally or component by component as follows:
+
+```kotlin
+import com.miam.kmm_miam_sdk.android.theme.Dimension
+
+Dimension.xlPadding = 40.dp
+```
 
 #### Component-specific properties (example: customize the RecipeCard component)
 
