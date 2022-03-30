@@ -16,7 +16,7 @@ class GroceriesListRepositoryImp (
     override suspend fun getCurrent(): GroceriesList {
        val gl = groceriesListDataSource.getCurrent()
        //val groceriesEntries = groceriesListDataSource.getGroceriesEntries(gl.id)
-       val recipes = groceriesListDataSource.getRecipes(gl.attributes?.recipesInfos ?: emptyList())
+       val recipes = groceriesListDataSource.getRecipes(gl.attributes.recipesInfos ?: emptyList())
         gl.apply {
             //relationships.groceriesEntries = groceriesEntries.groceriesEntries
         relationships?.recipes = recipes}
