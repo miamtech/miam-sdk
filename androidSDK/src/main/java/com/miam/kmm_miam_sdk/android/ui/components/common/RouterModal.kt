@@ -16,6 +16,7 @@ import androidx.compose.ui.window.PopupProperties
 
 
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.dialog.DialogStyle.dialogContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
@@ -59,8 +60,7 @@ class RouterModal :KoinComponent {
 
         if (state.isOpen) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Popup(
                     properties = PopupProperties(
@@ -73,7 +73,7 @@ class RouterModal :KoinComponent {
                         vmRouter.setEvent(RouterContract.Event.CloseDialog)
                     }
                 ) {
-                    Box(modifier = Modifier.fillMaxSize()){
+                    Box(modifier = dialogContainer){
                         when(state.content){
                             RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
                             RouterContent.BASKET_PREVIEW -> state.bpvm?.let { BasketPreview(vmRouter ,it, state.rvm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)}).content() }

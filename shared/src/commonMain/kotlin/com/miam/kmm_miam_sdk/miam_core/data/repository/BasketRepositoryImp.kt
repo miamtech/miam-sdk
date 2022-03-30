@@ -33,10 +33,9 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
         return basket
     }
 
-    override suspend fun updateBasket(basket: Basket ) : Flow<Basket> = flow  {
+    override suspend fun updateBasket(basket: Basket): Basket {
         val origin  = pointOfSaleStore.getProviderOrigin()
-        val newBasket =  basketDataSource.updateBasket(basket,origin)
-        emit(newBasket)
+        return basketDataSource.updateBasket(basket,origin)
     }
 
     private suspend fun fetchBasketEntriesPage(basket: Basket) : List<BasketEntry>{
