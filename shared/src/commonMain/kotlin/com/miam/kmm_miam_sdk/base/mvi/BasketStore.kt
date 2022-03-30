@@ -218,6 +218,10 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
        return (state.value.basket?._relationships?.basketEntries?.isEmpty() == true)
     }
 
+    fun recipeInBasket(recipeId: Int): Boolean{
+       return  state.value.basketPreview?.any { it.isRecipe && it.id == recipeId } == true
+    }
+
     private fun setBasketStats(basketPreview: List<BasketPreviewLine>, oldState: BasketState) : BasketState {
 
         val entriesFound: List<BasketEntry> = basketPreview.map { bpl -> bpl.entries?.found ?: emptyList() }.flatten()
