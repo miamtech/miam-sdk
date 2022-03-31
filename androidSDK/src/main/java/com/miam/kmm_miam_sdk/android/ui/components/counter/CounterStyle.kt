@@ -13,6 +13,7 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.grey
 import com.miam.kmm_miam_sdk.android.theme.Dimension.borderWidth
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lIconHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mButtonHeight
+import com.miam.kmm_miam_sdk.android.theme.Dimension.mIconHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sRoundedCorner
@@ -42,7 +43,7 @@ object CounterStyle {
      * Modifier for an Image
      * icon color is handle in CounterColor.kt
      */
-    var lessButtonIcon: Modifier = Modifier.size(mButtonHeight)
+    var lessButtonIcon: Modifier = Modifier.size(mIconHeight)
 
     /**
      * Modifier for a Row
@@ -75,9 +76,7 @@ object CounterStyle {
      * Modifier for an Image
      * icon color is handle in CounterColor.kt
      */
-    var plusButtonIcon: Modifier = Modifier.size(lIconHeight)
-
-
+    var plusButtonIcon: Modifier = Modifier.size(mIconHeight)
 
     /**
      * use for smaller component
@@ -88,5 +87,20 @@ object CounterStyle {
     )
     var guestIconLight: Modifier = Modifier.size(0.dp)
     var lessButtonLight: Modifier = Modifier
+    var lessButtonIconLight: Modifier = Modifier.size(mButtonHeight)
+    var countBorderLight: Modifier = Modifier
+        .height(32.dp)
+        .width(48.dp)
+        .border(
+            border = BorderStroke(width = borderWidth, color = grey),
+            shape = RoundedCornerShape(sRoundedCorner)
+        )
+    var countTextLight: Modifier = Modifier
+        .padding(
+            horizontal = mPadding,
+            vertical = sPadding
+        )
+    var plusButtonLight: Modifier = Modifier
+    var plusButtonIconLight: Modifier = Modifier.size(mIconHeight)
 
 }

@@ -8,9 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.ui.components.common.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.common.CounterModifier
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
+import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
@@ -37,7 +36,6 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 isDisable = false,
                 { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
                 { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
-                CounterModifier(),
                 )
             Text(
                 text = "Quantité",

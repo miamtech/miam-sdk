@@ -19,16 +19,21 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.guests
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.less
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.plus
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countBorder
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countBorderLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countText
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countTextLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.guestIcon
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.guestIconLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButton
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonIconLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.mainRowContainer
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.mainRowContainerLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButton
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIcon
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIconLight
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonLight
 
 @Composable
 fun Counter(
@@ -53,7 +58,7 @@ fun Counter(
             IconButton(
                     onClick = { decrease() },
                     enabled = !isDisable,
-                    modifier = (if(lightMode) lessButtonLight else lessButton ).background(
+                    modifier = ( if(lightMode) lessButtonLight else lessButton ).background(
                         if(isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
                     )
             ) {
@@ -61,28 +66,30 @@ fun Counter(
                     painter = painterResource(less),
                     contentDescription = "less icon",
                     colorFilter = ColorFilter.tint(lessIconColor),
-                    modifier = lessButtonIcon
+                    modifier = if(lightMode) lessButtonIconLight else lessButtonIcon
                 )
             }
             Row(
-                modifier = countBorder,
+                modifier = if(lightMode) countBorderLight else countBorder,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = count.toString(),
-                    modifier = countText
+                    modifier = if(lightMode) countTextLight else countText
                 )
             }
             IconButton(
-                modifier = plusButton.background( if(isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor),
+                modifier =( if(lightMode) plusButtonLight else plusButton).background(
+                    if(isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
+                ),
                 onClick = { increase() },
-                enabled = !isDisable,) {
+                enabled = !isDisable) {
                 Image(
                     painter = painterResource(plus),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(plusIconColor),
-                    modifier = plusButtonIcon
+                    modifier = if(lightMode) plusButtonIconLight else plusButtonIcon
                 )
             }
         }
