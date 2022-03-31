@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.Counter
+package com.miam.kmm_miam_sdk.android.ui.components.counter
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors.grey
 import com.miam.kmm_miam_sdk.android.theme.Dimension.borderWidth
@@ -19,33 +18,75 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sRoundedCorner
 
 object CounterStyle {
+
+    /**
+     * Main container row
+     */
     var mainRowContainer: Modifier = Modifier.padding(
         horizontal = mPadding,
         vertical = mPadding
     )
+
+    /**
+     * Main container Icon
+     */
     var guestIcon: Modifier = Modifier.size(lIconHeight)
 
-    var lessButton : Modifier = Modifier
+    /**
+     * Modifier for an IconButton
+     * button color is handle in CounterColor.kt
+     */
+    var lessButton: Modifier = Modifier
+
+    /**
+     * Modifier for an Image
+     * icon color is handle in CounterColor.kt
+     */
     var lessButtonIcon: Modifier = Modifier.size(mButtonHeight)
 
-    var countBorderModifier: Modifier = Modifier
+    /**
+     * Modifier for a Row
+     * parent container of countText
+     */
+    var countBorder: Modifier = Modifier
         .height(32.dp)
         .width(48.dp)
         .border(
             border = BorderStroke(width = borderWidth, color = grey),
             shape = RoundedCornerShape(sRoundedCorner)
         )
-    var countTextModifier: Modifier = Modifier
+
+    /**
+     * Modifier for a Text
+     */
+    var countText: Modifier = Modifier
         .padding(
             horizontal = mPadding,
             vertical = sPadding
         )
-    var plusButtonModifier: Modifier = null,
 
-    var rowModifierLight: Modifier = null,
-    var iconModifierLight: Modifier = null,
-    var lessButtonModifierLight: Modifier = null,
-    var countBorderModifierLight: Modifier = null,
-    var countTextModifierLight: Modifier = null,
-    var plusButtonModifierLight: Modifier = null,
+    /**
+     * Modifier for an IconButton
+     * button color is handle in CounterColor.kt
+     */
+    var plusButton: Modifier = Modifier
+
+    /**
+     * Modifier for an Image
+     * icon color is handle in CounterColor.kt
+     */
+    var plusButtonIcon: Modifier = Modifier.size(lIconHeight)
+
+
+
+    /**
+     * use for smaller component
+     * */
+    var mainRowContainerLight: Modifier = Modifier.padding(
+        horizontal = mPadding,
+        vertical = mPadding
+    )
+    var guestIconLight: Modifier = Modifier.size(0.dp)
+    var lessButtonLight: Modifier = Modifier
+
 }

@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.Counter
+package com.miam.kmm_miam_sdk.android.ui.components.counter
 
 import androidx.compose.ui.graphics.Color
 
@@ -12,10 +12,8 @@ object CounterColor {
     var lessButtonBackgroundColor : Color = white
     var lessIconColor : Color = black
 
-
     var plusButtonBackgroundDisableColor : Color = lightgrey
     var plusButtonBackgroundColor : Color = white
     var plusIconColor : Color = black
-
 
 }
