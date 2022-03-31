@@ -51,6 +51,7 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Typography.body1
 import com.miam.kmm_miam_sdk.android.theme.Typography.body1White
 import com.miam.kmm_miam_sdk.android.theme.Typography.whiteRecipeTitle
+import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
@@ -381,7 +382,6 @@ class RecipeView @JvmOverloads constructor(
                             isDisable = false,
                             { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
                             { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
-                            CounterModifier(),
                         )
                     }
                     Box( modifier = recipeCardFlagPositionContainer ) {

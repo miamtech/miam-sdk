@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
+import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
@@ -147,8 +148,7 @@ fun entryLine(entry: BasketPreviewLine,
                         }
 
                     },
-                    counterModifier = CounterModifier(
-                        iconModifier = Modifier.width(0.dp)),
+                    lightMode = true,
                     isDisable = false
                 )
             }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
+import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
@@ -104,9 +105,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                         vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
                             line.copy(count = count), recipeVm = vmRecipe )
                         ) }},
-                    counterModifier = CounterModifier(
-                        iconModifier = Modifier.size(30.dp),
-                    ),
+                    lightMode = false,
                     isDisable = vmBasketPreview.currentState.isReloading
                 )
                 Row(
