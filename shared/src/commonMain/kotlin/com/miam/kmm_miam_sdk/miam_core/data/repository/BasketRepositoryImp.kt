@@ -23,7 +23,7 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
 
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    override suspend fun getFromListAndPos(listId: Int, posId: Int): Basket  {
+    override suspend fun getFromListAndPos(listId: String, posId: Int): Basket  {
        val basket =  basketDataSource.getFromListAndPos(listId, posId)
 
         if(basket.attributes.completion != null || (basket.attributes.completion?.total ?: 0 ) > 1 ) {

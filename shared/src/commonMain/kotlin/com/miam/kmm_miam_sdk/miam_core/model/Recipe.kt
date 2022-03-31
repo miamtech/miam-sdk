@@ -13,7 +13,7 @@ import kotlin.time.Duration.Companion.minutes
 
 
 @Serializable
-@SerialName(Recipe.TYPE)
+@SerialName("recipes")
 data class Recipe private constructor(
     override val id: String,
     override val attributes: RecipeAttributes? = null,
@@ -26,14 +26,6 @@ data class Recipe private constructor(
         if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeRelationships>(Relationships.filterEmptyRelationships(json_relationships))
     ) {
         relationships?.buildFromIncluded(includedRecords)
-    }
-
-    override fun toString(): String {
-        return "Recipe: $id - $attributes - $relationships"
-    }
-
-    companion object {
-        const val TYPE: String = "recipes"
     }
 
     val totalTime: String
@@ -129,24 +121,28 @@ data class RecipeAttributes constructor(
     val videoId: String? = "",
 
     val promoted: Boolean? = false,
-
-    var provider : RecipeProvider? = null,
-
-    var status : RecipeStatus? = null,
-
-    var sponsor: Sponsors? = null,
-
-    var steps: RecipeSteps? = null,
-
-    var type: RecipeType? = null,
 ): Attributes()
 
 @Serializable
 data class RecipeRelationships (
-    var ingredients: IngredientListRelationship = IngredientListRelationship(listOf())
+    var ingredients: IngredientListRelationship? = null,
+    @SerialName("recipe-provider")
+    var recipeProvider: RecipeProviderRelationship? = null,
+    @SerialName("recipe-status")
+    var recipeStatus: RecipeStatusRelationship? = null,
+    var sponsors: SponsorListRelationship? = null,
+    @SerialName("recipe-steps")
+    var recipeSteps: RecipeStepListRelationship? = null,
+    @SerialName("recipe-type")
+    var recipeType: RecipeTypeRelationship? = null
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
-        ingredients.buildFromIncluded(includedRecords)
+        ingredients?.buildFromIncluded(includedRecords)
+        recipeProvider?.buildFromIncluded(includedRecords)
+        recipeStatus?.buildFromIncluded(includedRecords)
+        sponsors?.buildFromIncluded(includedRecords)
+        recipeSteps?.buildFromIncluded(includedRecords)
+        recipeType?.buildFromIncluded(includedRecords)
     }
 }
 
@@ -155,6 +151,10 @@ data class RecipeInfos (
     val id: Int,
     var guests: Int,
 )
+
+/**
+ * Used from others relations
+ */
 
 @Serializable(with = RecipeRelationshipListSerializer::class)
 class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {

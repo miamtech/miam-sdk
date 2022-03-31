@@ -14,7 +14,7 @@ import org.koin.core.component.inject
 import java.lang.Thread
 
 
-class BasketPreviewViewModel(val recipeId: Int?):
+class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val basketStore : BasketStore by inject()
@@ -241,7 +241,12 @@ class BasketPreviewViewModel(val recipeId: Int?):
     private fun basketChange(){
         // println("Miam --> basket change")
         launch {
-            val bpl = basketStore.observeState().first { it.basketPreview != null && it.basketPreview.isNotEmpty() }.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId }
+            val bpl = basketStore.observeState().first {
+                it.basketPreview != null && it.basketPreview.isNotEmpty()
+            }.basketPreview?.find {
+                // TODO : recipeId is string
+                    basketPreviewLine -> basketPreviewLine.id == recipeId.toString()
+            }
             if(bpl != null) {
                 setEvent(BasketPreviewContract.Event.SetLines(bpl))
             }

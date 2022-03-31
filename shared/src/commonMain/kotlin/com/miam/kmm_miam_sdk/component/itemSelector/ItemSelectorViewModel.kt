@@ -47,11 +47,11 @@ open class ItemSelectorViewModel() :
 
      fun choose(index :Int){
          val be = (currentState.selectedItem!!.record  as BasketEntry)
-         val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!)
+         val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!.toInt())
         basketStore.dispatch(
             BasketAction.ReplaceSelectedItem(
                 be,
-            currentState.itemList!![index].id!!
+            currentState.itemList!![index].id!!.toInt()
         ))
 
          currentState.itemList!![index].id!!

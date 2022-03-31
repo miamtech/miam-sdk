@@ -5,6 +5,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
-    fun getRecipeById(recipeId: Int): Flow<Recipe>
-    fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): Flow<Recipe>
+    suspend fun getRecipeById(recipeId: String): Recipe
+    suspend fun getRecipeSuggestions(customerId: Int, criteria: SuggestionsCriteria): Recipe
 }

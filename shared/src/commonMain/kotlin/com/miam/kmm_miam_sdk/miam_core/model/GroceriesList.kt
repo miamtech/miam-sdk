@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
-@SerialName(GroceriesList.TYPE)
+@SerialName("groceries-lists")
 data class GroceriesList private constructor(
     override val id: String,
     override var attributes: GroceriesListAttributes? = null,
@@ -19,10 +19,6 @@ data class GroceriesList private constructor(
         if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<GroceriesListRelationships>(Relationships.filterEmptyRelationships(json_relationships))
     ) {
         relationships?.buildFromIncluded(includedRecords)
-    }
-
-    companion object {
-        const val TYPE: String = "groceries-lists"
     }
 
     fun hasRecipe(recipeId: String): Boolean {
@@ -61,24 +57,6 @@ data class GroceriesListRelationships constructor(
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         groceriesEntries?.buildFromIncluded(includedRecords)
-    }
-}
-
-@Serializable(with = GroceriesEntryRelationshipListSerializer::class)
-class GroceriesEntryRelationshipList(override var data: List<GroceriesEntry2>): RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { ge ->
-            val existingEntry = includedRecords.find { record -> record is GroceriesEntry2 && record.id == ge.id }
-            if (existingEntry != null) ge.copy(attributes = (existingEntry as GroceriesEntry2).attributes) else ge
-        }
-    }
-}
-
-@Serializer(forClass = GroceriesEntryRelationshipList::class)
-object GroceriesEntryRelationshipListSerializer : KSerializer<GroceriesEntryRelationshipList> {
-    override fun serialize(encoder: Encoder, value: GroceriesEntryRelationshipList) {
-        // super method call to only keep types and id
-        value.serialize(encoder)
     }
 }
 

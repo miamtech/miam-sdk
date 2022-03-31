@@ -37,7 +37,9 @@ object HttpRoutes {
 }
 
 @OptIn(InternalAPI::class)
-class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleDataSource,BasketDataSource,PricingDataSource,BasketEntryDataSource, GrocerieEntryDataSource,SupplierDataSource, KoinComponent {
+class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
+    BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
+    SupplierDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
     private var sessionId : String? = null
@@ -133,82 +135,46 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
         }
     }
 
-    override suspend fun getIngredient(entityId: Int): Ingredients {
-        return this.get<Ingredients>(HttpRoutes.INGREDIENT_ENDPOINT+"${entityId}/ingredients")!!
-    }
-
-    override suspend fun getProvider(entityId: Int): RecipeProvider {
-        return httpClient.get<RecipeProviderWrapper>{
-            url(HttpRoutes.PROVIDER_ENDPOINT+"${entityId}/recipe-provider")
-        }.data
-    }
-
-    override suspend fun getRecipeById(id: Int): Recipe {
-        return this.get<RecipeWrapper>(HttpRoutes.RECIPE_ENDPOINT + "$id")!!.data
+    override suspend fun getRecipeById(id: String, included: List<String>): Recipe {
+        val includedStr = if (included.isEmpty()) "" else "?include=" + included.joinToString(",")
+        return this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + id + includedStr)!!.toRecord() as Recipe
     }
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
-        criteria: SuggestionsCriteria
+        criteria: SuggestionsCriteria,
+        included: List<String>
     ): List<Recipe> {
-        return this.post<RecipeListWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}",criteria)!!.data
-    }
-
-    override suspend fun getStep(entityId: Int): RecipeSteps {
-        return httpClient.get{
-            url(HttpRoutes.STEP_ENDPOINT+"${entityId}/recipe-steps")
-        }
-    }
-
-    override suspend fun getStatus(entityId: Int): RecipeStatus {
-        return httpClient.get<RecipeStatusWrapper>{
-            url(HttpRoutes.STATUS_ENDPOINT+"${entityId}/recipe-status")
-        }.data
-    }
-
-    override suspend fun getSponsor(entityId: Int): Sponsors {
-        return httpClient.get<Sponsors>{
-            url(HttpRoutes.SPONSOR_ENDPOINT+"${entityId}/sponsors")
-        }
-    }
-
-    override suspend fun getType(entityId: Int): RecipeType {
-        return httpClient.get<RecipeTypeWrapper>{
-            url(HttpRoutes.TYPE_ENDPOINT+"${entityId}/recipe-type")
-        }.data
+        val includedStr = if (included.isEmpty()) "" else "&include=" + included.joinToString(",")
+        return this.post<RecordWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}$includedStr", criteria)!!.toRecords() as List<Recipe>
     }
 
     ///////// GroceriesList ///////////////
 
-    override suspend fun getCurrent(): GroceriesList {
-            return httpClient.get<GroceriesListWrapper> {
-                url(HttpRoutes.GROCERIESLIST_ENDPOINT+"current")
-            }.data
+    override suspend fun getCurrent(included: List<String>): GroceriesList {
+        val includedStr = if (included.isEmpty()) "" else "?include=" + included.joinToString(",")
+        return httpClient.get<RecordWrapper> {
+            url(HttpRoutes.GROCERIESLIST_ENDPOINT + "current" + includedStr)
+        }.toRecord() as GroceriesList
     }
 
     override suspend fun getNew(): GroceriesList {
-        return httpClient.get<GroceriesListWrapper>{
+        return httpClient.get<RecordWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"reset")
-        }.data
+        }.toRecord() as GroceriesList
     }
 
-    override suspend fun getGroceriesEntries(glId : Int): GroceriesEntries {
-
-            return httpClient.get{
-                url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$glId/groceries-entries")
-            }
-    }
-
-    override suspend fun updateGroceriesList(groceriesList: GroceriesListWithoutRelationship): GroceriesList {
-          return  httpClient.patch<GroceriesListWrapper>{
+    override suspend fun updateGroceriesList(groceriesList: GroceriesList, included: List<String>): GroceriesList {
+        val includedStr = if (included.isEmpty()) "" else "?include=" + included.joinToString(",")
+        return  httpClient.patch<RecordWrapper>{
                 headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
-                url(HttpRoutes.GROCERIESLIST_ENDPOINT+"${groceriesList.id}")
-                body = GroceriesListWithoutRelationshipWrapper(groceriesList)
-            }.data
+                url(HttpRoutes.GROCERIESLIST_ENDPOINT + groceriesList.id + includedStr)
+                body = RecordWrapper.fromRecord(groceriesList)
+            }.toRecord() as GroceriesList
     }
 
     override suspend fun getRecipes(recipesInfos: List<RecipeInfos>): List<Recipe> {
-        return recipesInfos.map{ ri -> getRecipeById(ri.id) }
+        return recipesInfos.map{ ri -> getRecipeById(ri.id.toString()) }
     }
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
@@ -226,7 +192,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 /////////////////////// BASKET ////////////////////////////////////////////////
 
 
-    override suspend fun getFromListAndPos(listId: Int, posId: Int): Basket {
+    override suspend fun getFromListAndPos(listId: String, posId: Int): Basket {
         val baskets = httpClient.get<Baskets>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$listId/baskets?filter[point_of_sale_id]=$posId")
         }
@@ -263,7 +229,7 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
-    override suspend fun getRecipePrice(idRecipe: Int, idPos: Int): Pricing {
+    override suspend fun getRecipePrice(idRecipe: String, idPos: Int): Pricing {
         return  httpClient.get{
             url(HttpRoutes.RECIPE_ENDPOINT+"$idRecipe/pricing?point_of_sale_id=$idPos")
         }
@@ -278,9 +244,9 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry {
-        return  httpClient.get<GroceriesEntryWrapper>{
+        return  httpClient.get<RecordWrapper>{
             url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId")
-        }.data
+        }.toRecord() as GroceriesEntry
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
@@ -296,11 +262,11 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
     override suspend fun updateGroceriesEntry(ge: GroceriesEntry): GroceriesEntry {
         // println("Miam datasource updateGroceriesEntry $ge")
-        return  httpClient.patch<GroceriesEntryWrapper>{
+        return  httpClient.patch<RecordWrapper>{
          headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
          url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
-         body =  GroceriesEntryUpdateWrapper( GroceriesEntryUpdate(ge.id,  "groceries-entries",ge.attributes) )
-     }.data
+         body =  RecordWrapper.fromRecord((ge))
+     }.toRecord() as GroceriesEntry
     }
 
     /////////////////////////////////////SUPPLIER /////////////////////////////////////////////////

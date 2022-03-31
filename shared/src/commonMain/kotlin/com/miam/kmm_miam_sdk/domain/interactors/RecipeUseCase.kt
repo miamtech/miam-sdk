@@ -17,19 +17,17 @@ import org.koin.core.component.inject
 
 class GetRecipeUseCase(
     private val miamRepository: RecipeRepositoryImp
-): UseCaseInOut<Int, Recipe> {
-    override fun execute(param: Int): Flow<Recipe> = miamRepository.getRecipeById(param)
+): UseCaseInOut<String, Recipe> {
+    override suspend fun execute(param: String): Recipe = miamRepository.getRecipeById(param)
 }
 
 class AddRecipeUseCase () : UseCaseIn<Recipe>, KoinComponent {
     private val groceriesListStore : GroceriesListStore by inject()
-    override fun execute(recipe: Recipe)= flow {
-        emit(
+    override suspend fun execute(recipe: Recipe) {
             groceriesListStore.dispatch(
                 GroceriesListAction.AlterRecipeList(
-                    recipe.id , recipe.attributes.numberOfGuests ?: 4)
+                    recipe.id , recipe.attributes!!.numberOfGuests ?: 4)
             )
-        )
     }
 }
 

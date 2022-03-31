@@ -25,7 +25,7 @@ open class RecipeViewModel :
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    private var recipeId: Int? = null
+    private var recipeId: String? = null
     private var isInit: Boolean = false
     private lateinit var recipe: Recipe
     private val guestSubject : MutableSharedFlow<Int> = MutableSharedFlow()
@@ -100,7 +100,7 @@ open class RecipeViewModel :
 
     private fun checkIsInCart(): Boolean {
         val currentGl = groceriesListStore.observeState().value.groceriesList ?: return false
-        return currentGl.attributes.recipesInfos != null && currentGl.attributes.recipesInfos.any { ri -> ri.id == recipeId }
+        return currentGl.attributes!!.recipesInfos.isNotEmpty() && currentGl.attributes!!.recipesInfos.any { ri -> ri.id.toString() == recipeId }
     }
 
     private fun removeGuest() {
@@ -128,18 +128,16 @@ open class RecipeViewModel :
     }
 
     private fun addOrAlterRecipe() {
-        launch(
+        launch {
             addRecipeUseCase.execute(
                 recipe.copy(
-                    attributes = recipe.attributes.copy(
+                    attributes = recipe.attributes!!.copy(
                         numberOfGuests = uiState.value.guest
                     )
                 )
-            ),
-            {
-                setState { copy(isInCart = true) }
-            }
-        )
+            )
+            setState { copy(isInCart = true) }
+        }
     }
 
     private fun setTab(newTab: TabEnum) {
@@ -162,15 +160,14 @@ open class RecipeViewModel :
         }
     }
 
-    private fun getRecipe(recipeId: Int) {
+    private fun getRecipe(recipeId: String) {
         this.recipeId = recipeId
         setState { copy(recipeState = BasicUiState.Loading) }
-        launch(getRecipeUseCase.execute(recipeId), { recipe ->
+        launch{
+            val recipe = getRecipeUseCase.execute(recipeId)
             setRecipe(recipe)
-        }, {
-            setState { copy(recipeState = BasicUiState.Error()) }
-            setEffect { RecipeContract.Effect.HideCard }
-        })
+        }
+        // TODO manage errors
     }
 
     private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
@@ -178,11 +175,8 @@ open class RecipeViewModel :
         if(uiState.value.recipeLoaded) return
         launch{
             pointOfSaleStore.observeState().value.idSupplier?.let {
-                recipeRepositoryImp.getRecipeSuggestions(
-                    it, criteria).collect { recipe ->
-                         println("Miam recipe ---> ${recipe.id}")
-                        setRecipe(recipe)
-                }
+                val recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
+                setRecipe(recipe)
             }
         }
     }
@@ -205,10 +199,10 @@ open class RecipeViewModel :
     private fun getGuest(recipe: Recipe): Int {
         if (checkIsInCart()) {
             val currentGl = groceriesListStore.observeState().value.groceriesList
-            return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id == recipeId })?.guests
+            return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id.toString() == recipeId })?.guests
                 ?: 4
         }
-        return recipe.attributes.numberOfGuests ?: 4
+        return recipe.attributes!!.numberOfGuests ?: 4
     }
 
     private fun initIngredientsString() {

@@ -43,7 +43,7 @@ class LineEntries {
 }
 
 data class BasketPreviewLine(
-    val id : Int? = null,
+    val id : String? = null,
     val record : BasketPreviewEntry,
     val isRecipe: Boolean,
     val inlineTag : String? = null,
@@ -75,8 +75,8 @@ data class BasketPreviewLine(
                 id= recipe.id,
                 record= recipe,
                 isRecipe= true,
-                title= recipe.attributes.title,
-                picture= recipe.attributes.mediaUrl ?: "",
+                title= recipe.attributes!!.title,
+                picture= recipe.attributes!!.mediaUrl ?: "",
                 description=  listOf("$itemsCount article${if (itemsCount > 1) 's' else ' '}"),
                 count= guestNum ?: 4 ,
                 entries = entries,
@@ -96,8 +96,9 @@ data class BasketPreviewLine(
             val gEntry = entry._relationships?.groceriesEntry
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
-                id= entry.id,
-                record= entry,
+                // TODO : id is string
+                id = entry.id.toString(),
+                record = entry,
                 isRecipe = false,
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
                 title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
@@ -115,7 +116,7 @@ data class BasketPreviewLine(
             val gEntry = entry._relationships?.groceriesEntry
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
-                id= item.id,
+                id = item.id.toString(),
                 record= entry,
                 isRecipe = false,
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
@@ -129,9 +130,9 @@ data class BasketPreviewLine(
         }
 
         fun  recipesAndLineEntriesToBasketPreviewLine(groceriesList: GroceriesList, lineEntries: List<LineEntries>) : List<BasketPreviewLine> {
-            val recipes = groceriesList.relationships?.recipes ?: emptyList()
+            val recipes = groceriesList.recipes
 
-            return recipes.mapIndexed { idx,recipe ->
+            return recipes.mapIndexed { idx, recipe ->
                 val itemsCount = lineEntries[idx].found.size
                 var recipePrice = 0.0
                 val guests =  groceriesList.guestsForRecipe(recipe.id)

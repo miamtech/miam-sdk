@@ -11,33 +11,16 @@ class RecipeRepositoryImp(
     private val recipeDataSource: MiamAPIDatasource
 ): RecipeRepository {
 
-    override fun getRecipeById(recipeId: Int): Flow<Recipe> = flow{
-        val recipe = recipeDataSource.getRecipeById(recipeId)
-        emit(fillRecipe(recipe))
+    override suspend fun getRecipeById(recipeId: String): Recipe {
+        println("Miam getting recipe $recipeId")
+        return recipeDataSource.getRecipeById(recipeId, listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type"))
     }
 
-    override  fun getRecipeSuggestions(
+    override suspend fun getRecipeSuggestions(
         supplierId: Int,
         criteria: SuggestionsCriteria
-    ) = flow {
-        val recipes = recipeDataSource.getRecipeSuggestions(supplierId, criteria)
-        val recipe = recipes[0]
-        emit(fillRecipe(recipe))
-    }
-
-    private suspend fun fillRecipe(recipe :Recipe ): Recipe {
-        val ingredients = recipeDataSource.getIngredient(recipe.id)
-        val steps = recipeDataSource.getStep(recipe.id)
-        val provider = recipeDataSource.getProvider(recipe.id)
-        //val sponsors = recipeDataSource.getSponsor(recipeId)
-        val status = recipeDataSource.getStatus(recipe.id)
-        val type = recipeDataSource.getType(recipe.id)
-        ingredients.also { recipe.attributes.ingredients = it }
-        steps.also { recipe.attributes.steps = it }
-        provider.also { recipe.attributes.provider = it }
-        //sponsors.also { recipe.attributes.sponsor = it }
-        status.also { recipe.attributes.status = it }
-        type.also { recipe.attributes.type = it }
-        return recipe
+    ): Recipe {
+        val recipes = recipeDataSource.getRecipeSuggestions(supplierId, criteria, listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type"))
+        return recipes[0]
     }
 }

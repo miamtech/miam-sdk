@@ -9,30 +9,24 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
-@SerialName(Ingredient.TYPE)
+@SerialName("ingredients")
 data class Ingredient private constructor(
     override val id: String,
     override val attributes: IngredientAttributes? = null,
-    override  val relationships: GroceriesEntry2Relationships? = null
+    override  val relationships: IngredientRelationships? = null
 ): Record() {
 
-    constructor(id: String, attributes: JsonElement?, relationships: JsonElement?, includedRecords: List<Record>?) : this(
+    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
         id,
         if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<IngredientAttributes>(attributes),
-        null,
-    )
-
-    override fun toString(): String {
-        return "GroceriesEntry2: $id - $attributes - $relationships"
-    }
-
-    companion object {
-        const val TYPE: String = "ingredients"
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<IngredientRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+    ) {
+        relationships?.buildFromIncluded(includedRecords)
     }
 }
 
 @Serializable
-data class IngredientAttributes constructor(
+data class IngredientAttributes (
     val name : String?,
     val quantity : String?,
     val unit : String?,
@@ -42,14 +36,15 @@ data class IngredientAttributes constructor(
     val forcedEans: List<String>? = emptyList<String>(),
 ): Attributes()
 
-
-@Serializer(forClass = IngredientListRelationship::class)
-object IngredientListSerializer : KSerializer<IngredientListRelationship> {
-    override fun serialize(encoder: Encoder, value: IngredientListRelationship) {
-        // super method call to only keep types and id
-        value.serialize(encoder)
+@Serializable
+class IngredientRelationships: Relationships() {
+    override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
+
+/**
+ * Used from others relations
+ */
 
 @Serializable(with = IngredientListSerializer::class)
 class IngredientListRelationship(override var data: List<Ingredient>): RelationshipList() {
@@ -58,5 +53,13 @@ class IngredientListRelationship(override var data: List<Ingredient>): Relations
             val existingEntry = includedRecords.find { record -> record is Ingredient && record.id == ing.id }
             if (existingEntry != null) ing.copy(attributes = (existingEntry as Ingredient).attributes) else ing
         }
+    }
+}
+
+@Serializer(forClass = IngredientListRelationship::class)
+object IngredientListSerializer : KSerializer<IngredientListRelationship> {
+    override fun serialize(encoder: Encoder, value: IngredientListRelationship) {
+        // super method call to only keep types and id
+        value.serialize(encoder)
     }
 }

@@ -50,11 +50,11 @@ class RecipeView @JvmOverloads constructor(
 ) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
-    private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
+    private val idRecipeState: MutableState<String?> = mutableStateOf(null)
     val routerModal : RouterViewModel by inject()
 
-    fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
-        if (recipeId != 0) {
+    fun bind(recipeId: String = "", criteria: SuggestionsCriteria? = null) {
+        if (recipeId != "") {
             vmRecipe.setEvent(
                 RecipeContract.Event.OnGetRecipe(
                     recipeId
@@ -70,8 +70,8 @@ class RecipeView @JvmOverloads constructor(
     }
 
 
-    var idRecipe: Int
-        get() = idRecipeState.value ?: 0
+    var idRecipe: String
+        get() = idRecipeState.value ?: ""
         set(value) {
             idRecipeState.value = value
             if (value != null) {
@@ -142,7 +142,7 @@ class RecipeView @JvmOverloads constructor(
                                 .fillMaxWidth()
                         ) {
                             Image(
-                                painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                                painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -171,7 +171,7 @@ class RecipeView @JvmOverloads constructor(
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 textAlign = TextAlign.Center,
-                                text = recipe.attributes.title,
+                                text = recipe.attributes!!.title,
                                 style = MaterialTheme.typography.h5.copy(
                                     color = Color.White,
                                     fontSize = 32.sp,

@@ -82,7 +82,7 @@ private fun recipeDetailCard(
                 .fillMaxWidth()
         ) {
             Image(
-                painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -166,32 +166,32 @@ private fun recipeDetailCard(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            if (recipe.attributes.preparationTime?.compareTo(0.minutes) != 0) {
+            if (recipe.attributes!!.preparationTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
                     R.string.miam_prep_time,
                     R.drawable.ic_knife,
-                    recipe.attributes.preparationTime.toString()
+                    recipe.attributes!!.preparationTime.toString()
                 )
             }
-            if (recipe.attributes.cookingTime?.compareTo(0.minutes) != 0) {
+            if (recipe.attributes!!.cookingTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
                     R.string.miam_cook_time,
                     R.drawable.ic_oven,
-                    recipe.attributes.cookingTime.toString()
+                    recipe.attributes!!.cookingTime.toString()
                 )
             }
-            if (recipe.attributes.preheatingTime?.compareTo(0.minutes) != 0) {
+            if (recipe.attributes!!.preheatingTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
                     R.string.miam_prehat_time,
                     R.drawable.ic_resttime,
-                    recipe.attributes.preheatingTime.toString()
+                    recipe.attributes!!.preheatingTime.toString()
                 )
             }
         }
         // Titre
         Row() {
             Text(
-                text = recipe.attributes.title,
+                text = recipe.attributes!!.title,
                 fontFamily = FontFamily(
                     Font(R.font.satisfy_regular)),
                 fontSize = 32.sp,
@@ -314,7 +314,7 @@ fun RecipeContent(
     when (vmRecipe.currentState.tabState) {
         TabEnum.INGREDIENT -> RecipeIngredients(recipe, vmRecipe)
         TabEnum.STEP -> RecipeSteps(
-            recipe.attributes.steps!!.steps,
+            recipe.relationships!!.recipeSteps!!.data,
             vmRecipe
         )
     }

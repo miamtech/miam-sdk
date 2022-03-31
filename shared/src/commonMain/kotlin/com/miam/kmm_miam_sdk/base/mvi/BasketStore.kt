@@ -273,7 +273,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
 
-    private suspend fun loadBasket(idGroceriesList: Int,idPointOfSale :Int ): Basket {
+    private suspend fun loadBasket(idGroceriesList: String, idPointOfSale :Int ): Basket {
         return basketRepo.getFromListAndPos(idGroceriesList, idPointOfSale)
     }
 

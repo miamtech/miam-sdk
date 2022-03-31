@@ -1,16 +1,8 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
-import io.ktor.util.reflect.*
 import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.*
-import kotlin.reflect.KClass
 
 fun JsonObject.getStringValueOrNull(attribute: String): String? {
     return this[attribute]?.jsonPrimitive?.content
@@ -28,6 +20,11 @@ val jsonFormat = Json {
     ignoreUnknownKeys = true
 }
 
+/**
+ * Wrapper to collect or send you records
+ * use functions toRecord(s) and fromRecord(s) to receive or send to jsonapi with format "data : {...}"
+ * for receiving you can receive format "data:{...}, included: {...}"
+ */
 @Serializable
 data class RecordWrapper(var data: JsonElement? = null, var included: JsonElement? = null) {
 
@@ -65,11 +62,16 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
 
     private fun createRecord(type: String, id: String, attributes: JsonElement?, relationships: JsonElement?, includedRecords: List<Record>): Record {
         return when(type) {
-            GroceriesList.TYPE -> GroceriesList(id, attributes, relationships, includedRecords)
-            GroceriesEntry2.TYPE -> GroceriesEntry2(id, attributes, relationships, includedRecords)
-            Recipe.TYPE -> Recipe(id, attributes, relationships, includedRecords)
-            Ingredient.TYPE -> Ingredient(id, attributes, relationships, includedRecords)
-            else -> throw Exception("Unsuported record type")
+            GroceriesList.serializer().descriptor.serialName -> GroceriesList(id, attributes, relationships, includedRecords)
+            GroceriesEntry.serializer().descriptor.serialName -> GroceriesEntry(id, attributes, relationships, includedRecords)
+            Recipe.serializer().descriptor.serialName -> Recipe(id, attributes, relationships, includedRecords)
+            Ingredient.serializer().descriptor.serialName -> Ingredient(id, attributes, relationships, includedRecords)
+            RecipeProvider.serializer().descriptor.serialName -> RecipeProvider(id, attributes, relationships, includedRecords)
+            RecipeStatus.serializer().descriptor.serialName -> RecipeStatus(id, attributes, relationships, includedRecords)
+            Sponsor.serializer().descriptor.serialName -> Sponsor(id, attributes, relationships, includedRecords)
+            RecipeStep.serializer().descriptor.serialName -> RecipeStep(id, attributes, relationships, includedRecords)
+            RecipeType.serializer().descriptor.serialName -> RecipeType(id, attributes, relationships, includedRecords)
+            else -> throw Exception("Unsuported record type $type")
         }
     }
 
@@ -84,7 +86,9 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
     }
 }
 
-
+/**
+ * Any record should extend this class that describe any records
+ */
 @Serializable
 sealed class Record {
     abstract val id: String
@@ -99,6 +103,9 @@ sealed class Record {
 @Serializable
 sealed class Attributes
 
+/**
+ * got many relations that will be Relationship or RelationshipList
+ */
 @Serializable
 sealed class Relationships {
     abstract fun buildFromIncluded(includedRecords: List<Record>)
@@ -113,9 +120,22 @@ sealed class Relationships {
     }
 }
 
+/**
+ * present in record to wrap the record when coming from a relationship
+ */
 @Serializable
 sealed class Relationship {
     abstract val data: Record
+
+    fun serialize(encoder: Encoder) {
+        require(encoder is JsonEncoder)
+
+
+        val relRecords = JsonObject(data.toJsonElement().jsonObject.filter { entry ->
+            entry.key == "id" || entry.key == "type"
+        })
+        encoder.encodeJsonElement(JsonObject(mapOf("data" to JsonObject(relRecords))))
+    }
 }
 
 @Serializable
@@ -131,46 +151,5 @@ sealed class RelationshipList {
             })
         }
         encoder.encodeJsonElement(JsonObject(mapOf("data" to JsonArray(relRecords))))
-    }
-}
-
-
-
-@Serializable
-@SerialName(GroceriesEntry2.TYPE)
-data class GroceriesEntry2 private constructor(
-    override val id: String,
-    override val attributes: GroceriesEntry2Attributes? = null,
-    override  val relationships: GroceriesEntry2Relationships? = null
-): Record() {
-
-    constructor(id: String, attributes: JsonElement?, relationships: JsonElement?, includedRecords: List<Record>?) : this(
-        id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<GroceriesEntry2Attributes>(attributes),
-        null,
-    ) {
-
-    }
-
-    override fun toString(): String {
-        return "GroceriesEntry2: $id - $attributes - $relationships"
-    }
-
-    companion object {
-        const val TYPE: String = "groceries-entries"
-    }
-}
-
-@Serializable
-data class GroceriesEntry2Attributes constructor(
-    var name: String,
-    @SerialName("capacity-volume")
-    var capacity_volume: String,
-): Attributes() {
-}
-
-@Serializable
-class GroceriesEntry2Relationships: Relationships() {
-    override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
