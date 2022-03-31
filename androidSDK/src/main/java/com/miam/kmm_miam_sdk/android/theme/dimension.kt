@@ -17,6 +17,10 @@ object Dimension {
     var mIconHeight = 16.dp
     var lIconHeight = 24.dp
 
+    var borderWidth = 1.dp
+
+
+    var sRoundedCorner = 4.dp
 
 
 }

@@ -21,12 +21,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterColor.lessButt
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterColor.lessIconColor
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterImage.guests
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterImage.less
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.countBorderModifier
+import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.countTextModifier
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.guestIcon
-import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.iconModifier
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.lessButton
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.lessButtonIcon
 import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.mainRowContainer
-import com.miam.kmm_miam_sdk.android.ui.components.Counter.CounterStyle.rowModifier
+
 
 data class CounterModifier(
     val rowModifier: Modifier? = null,
@@ -73,23 +74,13 @@ fun Counter(
                 )
             }
             Row(
-                modifier = counterModifier.countBorderModifier ?: Modifier
-                    .height(32.dp)
-                    .width(48.dp)
-                    .border(
-                        border = BorderStroke(width = 1.dp, color = Color.Gray),
-                        shape = RoundedCornerShape(4.dp)
-                    ),
+                modifier = countBorderModifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = count.toString(),
-                    modifier = counterModifier.countTextModifier ?: Modifier
-                        .padding(
-                            horizontal = 8.dp,
-                            vertical = 4.dp
-                        )
+                    modifier = countTextModifier
                 )
             }
             IconButton(

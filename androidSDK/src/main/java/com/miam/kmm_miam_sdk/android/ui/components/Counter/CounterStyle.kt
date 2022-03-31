@@ -10,9 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.theme.Colors.grey
+import com.miam.kmm_miam_sdk.android.theme.Dimension.borderWidth
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lIconHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mButtonHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
+import com.miam.kmm_miam_sdk.android.theme.Dimension.sRoundedCorner
 
 object CounterStyle {
     var mainRowContainer: Modifier = Modifier.padding(
@@ -28,10 +32,14 @@ object CounterStyle {
         .height(32.dp)
         .width(48.dp)
         .border(
-            border = BorderStroke(width = 1.dp, color = Color.Gray),
-            shape = RoundedCornerShape(4.dp)
+            border = BorderStroke(width = borderWidth, color = grey),
+            shape = RoundedCornerShape(sRoundedCorner)
         )
-    var countTextModifier: Modifier = null,
+    var countTextModifier: Modifier = Modifier
+        .padding(
+            horizontal = mPadding,
+            vertical = sPadding
+        )
     var plusButtonModifier: Modifier = null,
 
     var rowModifierLight: Modifier = null,
