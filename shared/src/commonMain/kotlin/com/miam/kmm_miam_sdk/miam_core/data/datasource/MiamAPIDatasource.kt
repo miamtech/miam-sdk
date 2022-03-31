@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -16,6 +17,13 @@ import io.ktor.util.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
+
+class MiamResponseException(response: HttpResponse, cachedResponseText: String) :
+    ResponseException(response, cachedResponseText) {
+    override val message: String = "Custom server error: ${response.call.request.url}. " +
+            "Status: ${response.status}. Text: \"$cachedResponseText\""
+}
 
 
 object HttpRoutes {
@@ -100,10 +108,10 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         }catch(e: ServerResponseException){
             // 5xx
             println ("Error: ${e.response.status.description}")
-            null
+            throw e
         }catch(e: Exception){
             println ("Error: ${e.message}")
-            null
+            throw e
         }
     }
 
@@ -158,7 +166,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         }.toRecord() as GroceriesList
     }
 
-    override suspend fun getNew(): GroceriesList {
+    override suspend fun reset(): GroceriesList {
         return httpClient.get<RecordWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"reset")
         }.toRecord() as GroceriesList
@@ -237,21 +245,19 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
-    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
-        return  httpClient.get<Items>{
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"$basketEntryId/items")
-        }.data
+    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item>? {
+            return  this.get<Items>("${HttpRoutes.BASKET_ENTRIES_ENDPOINT}$basketEntryId/items?page[size]=30")?.data 
     }
 
     override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry {
-        return  httpClient.get<RecordWrapper>{
-            url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId")
-        }.toRecord() as GroceriesEntry
+        return this.get<RecordWrapper>(
+            HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/$groceriesEntryId"
+        )?.toRecord() as GroceriesEntry
     }
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
         // println("Miam datasource updateBasketEntry $basketEntry")
-        return  httpClient.patch<BasketEntryWrapper>{
+        return httpClient.patch<BasketEntryWrapper>{
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
             url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?include=groceries-entry")
             body = BasketEntryUpdateWrapper(BasketEntryUpdate(basketEntry.id, "basket-entries",basketEntry.attributes))

@@ -22,8 +22,8 @@ interface PricingContract {
         val isInCart : Boolean,
         val recipeId: String,
         val guestNumber: Int,
-        val integerPart : Int,
-        val decimalPart: Int
+        val integerPart : String,
+        val decimalPart: String
     ) : UiState
 
     sealed class Effect : UiEffect {

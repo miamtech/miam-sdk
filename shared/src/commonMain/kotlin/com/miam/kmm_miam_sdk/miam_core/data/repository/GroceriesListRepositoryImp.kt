@@ -11,18 +11,20 @@ class GroceriesListRepositoryImp (
 ): GroceriesListRepository {
 
     override suspend fun getCurrent(): GroceriesList {
-        val gl = groceriesListDataSource.getCurrent()
-        val recipes = groceriesListDataSource.getRecipes(gl.attributes?.recipesInfos ?: emptyList())
+       val gl = groceriesListDataSource.getCurrent()
+       val recipes = groceriesListDataSource.getRecipes(gl.attributes?.recipesInfos ?: emptyList())
         gl.recipes = recipes
         return gl
     }
 
-    override suspend fun getNew(): GroceriesList {
-       return groceriesListDataSource.getNew()
+    override suspend fun reset(): GroceriesList {
+       return groceriesListDataSource.reset()
     }
 
-    override suspend fun updateGroceriesList(gl : GroceriesList): GroceriesList {
-        return groceriesListDataSource.updateGroceriesList(gl)
+    override suspend fun updateGroceriesList(gl: GroceriesList): GroceriesList {
+        val newGl = groceriesListDataSource.updateGroceriesList(gl)
+        newGl.recipes = groceriesListDataSource.getRecipes(gl.attributes!!.recipesInfos)
+        return newGl
     }
 
     override suspend fun removeRecipeFromList(): GroceriesList {

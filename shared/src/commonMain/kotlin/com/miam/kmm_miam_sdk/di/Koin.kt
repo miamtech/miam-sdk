@@ -62,7 +62,6 @@ val storeModule = module {
     single { BasketStore() }
     single { PointOfSaleStore() }
     single { ItemSelectorViewModel() }
-    single { RouterViewModel() }
 }
 
 val bottomSheetModule = module {

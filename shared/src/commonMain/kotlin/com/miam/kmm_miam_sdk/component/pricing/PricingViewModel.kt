@@ -22,8 +22,8 @@ open class PricingViewModel :
             directPrice = null,
             recipeId = "",
             guestNumber = -1,
-            integerPart = 0,
-            decimalPart = 0,
+            integerPart = "0",
+            decimalPart = "00",
             isInCart= false,
         )
 
@@ -54,25 +54,39 @@ open class PricingViewModel :
             splitePrice(uiState.value.directPrice!!)
             return
         }
-        // checkIf recipe is in basket
-        // extract price
+        if( checkIsInCart()){
+            extactPricing()
+        } else {
+            launch { fetchPrice()}
+        }
+    }
 
-        launch { fetchPrice()}
+    private fun checkIsInCart(): Boolean {
+        if(currentState.recipeId == "" ) return false
+        return basketStore.recipeInBasket(currentState.recipeId)
     }
 
     private fun extactPricing() {
-        // TODO extract from basket
-        val pricing = Pricing(4.15, 1)
-       //splitePrice(pricing)
+      val recipeBPL = basketStore.observeState().value.basketPreview?.first { it.isRecipe && it.id == currentState.recipeId }
+        if(recipeBPL != null){
+            setState {
+                copy(
+                    price = BasicUiState.Success(
+                        Pricing(recipeBPL.price.toDouble() ,currentState.guestNumber)
+                    )
+                )
+            }
+            splitePrice(recipeBPL.price.toDouble() / currentState.guestNumber)
+        }
     }
 
     private fun splitePrice(price : Double){
         // will it work each time with different region format ?
         val priceCent = (price * 100).roundToInt().toString()
-        val intergerPart = if (priceCent.length <= 2) "00" else priceCent.substring(0, priceCent.length - 2)
+        val intergerPart = if (priceCent.length <= 2) "0" else priceCent.substring(0, priceCent.length - 2)
         val decimalPart = if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
-        setState { copy( integerPart = intergerPart.toInt(),
-                         decimalPart = decimalPart.toInt()) }
+        setState { copy( integerPart = intergerPart.toInt().toString(),
+                         decimalPart = decimalPart) }
     }
 
     private suspend fun fetchPrice() {
