@@ -101,10 +101,10 @@ data class BasketEntryAttributes(
     @SerialName("selected-item-id")
     val selectedItemId: Int? = null,
     @SerialName("learning-factor")
-    val learningFactor: Int? = 1,
-    val quantity: Int? = 1,
+    val learningFactor: Int?,
+    val quantity: Int?,
     @SerialName("recipe-ids")
-    val recipeIds: List<Int>? = emptyList(),
+    val recipeIds: List<Int>?,
     @SerialName("groceries-entry-status")
     val groceriesEntryStatus: String? = "active",
     @SerialName("basket-entries-items")
