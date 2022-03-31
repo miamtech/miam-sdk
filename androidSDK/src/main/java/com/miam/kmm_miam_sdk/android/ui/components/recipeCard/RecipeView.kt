@@ -415,7 +415,7 @@ class RecipeView @JvmOverloads constructor(
                                 modifier = Modifier.size(36.dp),
                                 backgroundColor = primary,
                                 onClick = {
-                                    modal.goToPreview(recipe.id,vmRecipe)
+                                    modal.goToPreview(recipe.id, vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(showRecipeFloatingButtonIcon),

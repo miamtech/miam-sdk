@@ -41,7 +41,7 @@ class RouterModal :KoinComponent {
         )
     }
 
-    fun goToPreview(recipeId: Int ,vmRecipe :RecipeViewModel) {
+    fun goToPreview(recipeId: String ,vmRecipe :RecipeViewModel) {
         vmRouter.setEvent(
             RouterContract.Event.GoToPreview(
                 recipeId = recipeId,
