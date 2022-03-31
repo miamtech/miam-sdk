@@ -54,13 +54,13 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
 
     private suspend fun fillBasketEntryRelationships(basketEntry: BasketEntry): BasketEntry {
         // println("Miam fillBasketEntryRelationships start " + basketEntry._relationships)
+
+        val items = basketDataSource.getBasketEntryItems(basketEntry.id)
+        val groceriesEntry = basketDataSource.getBasketEntryGrocerieEntry(basketEntry.relationships.groceriesEntry.data.id)
+        if (items != null && groceriesEntry != null )
         basketEntry._relationships = BasketEntryRelationships(
-            basketDataSource.getBasketEntryItems(basketEntry.id),
-            if(basketEntry.relationships.groceriesEntry.data.id != null) {
-                basketDataSource.getBasketEntryGrocerieEntry(basketEntry.relationships.groceriesEntry.data.id)
-            } else {
-                null
-            }
+            items,
+            groceriesEntry
         )
         // println("Miam fillBasketEntryRelationships " + basketEntry._relationships?.items)
         // println("Miam fillBasketEntryRelationships " + basketEntry._relationships?.groceriesEntry)

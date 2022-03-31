@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ChevronLeft
 
 import androidx.compose.material.icons.filled.SwapHorizontalCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +46,8 @@ class ItemsSelector () :KoinComponent {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Content () {
+
+    val state  = vmItemSelector.uiState.collectAsState()
 
     Column( modifier = Modifier
         .fillMaxSize()
@@ -79,7 +82,7 @@ fun Content () {
                  verticalAlignment = Alignment.CenterVertically
                 ) {
                 Image(
-                    painter = rememberImagePainter(vmItemSelector.uiState.value.selectedItem?.picture),
+                    painter = rememberImagePainter(state.value.selectedItem?.picture),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -91,14 +94,14 @@ fun Content () {
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = vmItemSelector.uiState.value.selectedItem?.description?.get(0) ?: " ",
+                    Text(text = state.value.selectedItem?.description?.get(0) ?: " ",
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
                         color = MiamMasterView.textColor)
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        Price(price= vmItemSelector.uiState.value.selectedItem?.price?.toDouble() ?: 0.0,
+                        Price(price= state.value.selectedItem?.price?.toDouble() ?: 0.0,
                             isTotalPrice = true).content()
                     }
                 }
@@ -125,7 +128,7 @@ fun Content () {
             ),
             content = {
 
-                val itemsList = vmItemSelector.uiState.value.itemList ?: emptyList()
+                val itemsList = state.value.itemList ?: emptyList()
 
                 items(itemsList.size) {
                     index ->

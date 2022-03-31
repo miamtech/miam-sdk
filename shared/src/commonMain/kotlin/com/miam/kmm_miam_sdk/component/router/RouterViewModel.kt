@@ -3,7 +3,6 @@ package com.miam.kmm_miam_sdk.component.router
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import kotlinx.coroutines.Job
 
 open class RouterViewModel:
     BaseViewModel<RouterContract.Event, RouterContract.State, RouterContract.Effect>() {

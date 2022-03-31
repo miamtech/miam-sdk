@@ -278,8 +278,8 @@ class MiamAPIDatasource: RecipeDataSource ,GroceriesListDataSource, PointOfSaleD
 
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
-    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item> {
-            return  this.get<Items>("${HttpRoutes.BASKET_ENTRIES_ENDPOINT}$basketEntryId/items?page[size]=30")?.data ?: emptyList()
+    override suspend fun getBasketEntryItems(basketEntryId: Int): List<Item>? {
+            return  this.get<Items>("${HttpRoutes.BASKET_ENTRIES_ENDPOINT}$basketEntryId/items?page[size]=30")?.data 
     }
 
     override suspend fun getBasketEntryGrocerieEntry(groceriesEntryId: Int): GroceriesEntry? {
