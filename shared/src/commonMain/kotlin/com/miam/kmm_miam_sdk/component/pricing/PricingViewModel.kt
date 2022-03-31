@@ -22,8 +22,8 @@ open class PricingViewModel :
             directPrice = null,
             recipeId = -1,
             guestNumber = -1,
-            integerPart = 0,
-            decimalPart = 0,
+            integerPart = "0",
+            decimalPart = "00",
             isInCart= false,
         )
 
@@ -83,10 +83,10 @@ open class PricingViewModel :
     private fun splitePrice(price : Double){
         // will it work each time with different region format ?
         val priceCent = (price * 100).roundToInt().toString()
-        val intergerPart = if (priceCent.length <= 2) "00" else priceCent.substring(0, priceCent.length - 2)
+        val intergerPart = if (priceCent.length <= 2) "0" else priceCent.substring(0, priceCent.length - 2)
         val decimalPart = if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
-        setState { copy( integerPart = intergerPart.toInt(),
-                         decimalPart = decimalPart.toInt()) }
+        setState { copy( integerPart = intergerPart.toInt().toString(),
+                         decimalPart = decimalPart) }
     }
 
     private suspend fun fetchPrice() {
