@@ -22,6 +22,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel

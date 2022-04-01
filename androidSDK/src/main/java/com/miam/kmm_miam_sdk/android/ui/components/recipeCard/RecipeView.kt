@@ -48,10 +48,10 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
-import com.miam.kmm_miam_sdk.android.theme.Typography.body1
-import com.miam.kmm_miam_sdk.android.theme.Typography.body1White
+import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.whiteRecipeTitle
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
@@ -319,7 +319,8 @@ class RecipeView @JvmOverloads constructor(
                                     ) {
                                         Text(
                                             text = alreadyInCart,
-                                            style = body1White,
+                                            style = body,
+                                            color= white,
                                             modifier = Modifier.padding(horizontal = sPadding)
                                         )
                                     }
@@ -352,7 +353,7 @@ class RecipeView @JvmOverloads constructor(
                                     )
                                     Text(
                                         text = recipe.totalTime,
-                                        style = body1,
+                                        style = body,
                                         modifier = Modifier.padding(top = sPadding)
                                     )
                                 }
@@ -370,7 +371,7 @@ class RecipeView @JvmOverloads constructor(
                                     )
                                     Text(
                                         text = recipe.difficultyLabel,
-                                        style = body1,
+                                        style = body,
                                         modifier = Modifier.padding(top = sPadding)
                                     )
                                 }
@@ -398,7 +399,8 @@ class RecipeView @JvmOverloads constructor(
                                 )
                                 Text(
                                     text = recipeFlag,
-                                    style = body1White,
+                                    style = body,
+                                    color= white,
                                     modifier = Modifier.padding(horizontal = sPadding)
                                 )
                             }
