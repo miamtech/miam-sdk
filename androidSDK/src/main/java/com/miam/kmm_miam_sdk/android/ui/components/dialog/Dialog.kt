@@ -1,15 +1,12 @@
-package com.miam.kmm_miam_sdk.android.ui.components.common
+package com.miam.kmm_miam_sdk.android.ui.components.dialog
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-
-import androidx.compose.ui.unit.dp
 
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
@@ -25,10 +22,9 @@ import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
-class RouterModal :KoinComponent {
+class Dialog :KoinComponent {
 
     private var vmRouter: RouterViewModel = RouterViewModel()
 
