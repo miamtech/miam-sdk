@@ -574,10 +574,12 @@ Component available for low level customization :
 | Recipe card |✅ | ❌ | ✅ |✅
 | Basket preview |❌ | ❌ |❌ | ❌
 | Price |  ✅ |  ✅ |➖| ✅
-| Item selector |❌ | ❌ |❌|❌
+| Item selector |✅ | ✅ |✅ |✅
 | Recipe detail |❌ | ❌ |❌|❌
 | Counter | ✅| ✅ |✅|➖
 | PopUp |❌ | ❌ |❌|❌
+
+- Add component preview for development
 
 #### SDK: performance
 

@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.Color.Companion.LightGray
 
 object Colors {
     var primary :Color = Color(0xff037E92)
-    var secondary :Color = Color(0xFF209B8F)
-    var ternary:Color = Color(0xFFE61845)
+    var secondary :Color = Color(0xFFE61845)
+    var ternary:Color =  Color(0xFF209B8F)
     var success :Color = Color( 0xFF44D6B3)
     var info :Color = Color(0xFF44D6B3)
     var warning :Color = Color(0xFFFFDAA3)

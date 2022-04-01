@@ -12,6 +12,7 @@ object Dimension {
     var sButtonHeight = 8.dp
     var mButtonHeight = 16.dp
     var lButtonHeight = 32.dp
+    var xlButtonHeight = 40.dp
 
     var sIconHeight = 8.dp
     var mIconHeight = 16.dp
@@ -21,6 +22,7 @@ object Dimension {
 
     var sRoundedCorner = 4.dp
     var mRoundedCorner = 8.dp
+    var lRoundedCorner = 15   // in % when dp is not set
 
     var sSpacerHeight = 12.dp
     var mSpacerHeight = 16.dp
