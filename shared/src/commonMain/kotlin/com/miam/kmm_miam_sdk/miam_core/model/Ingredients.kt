@@ -49,10 +49,7 @@ class IngredientRelationships: Relationships() {
 @Serializable(with = IngredientListSerializer::class)
 class IngredientListRelationship(override var data: List<Ingredient>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { ing ->
-            val existingEntry = includedRecords.find { record -> record is Ingredient && record.id == ing.id }
-            if (existingEntry != null) ing.copy(attributes = (existingEntry as Ingredient).attributes) else ing
-        }
+        data = buildedFromIncluded(includedRecords, Ingredient::class) as List<Ingredient>
     }
 }
 

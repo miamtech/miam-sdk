@@ -7,7 +7,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
 
    var miamQuantity :Int = 0;
    var miamTargetQuantity: Int = 0;
-   val miamBasketEntryIds : MutableMap<Int, Int> = mutableMapOf()
+   val miamBasketEntryIds : MutableMap<String, Int> = mutableMapOf()
    val _retailerProducts : MutableList<RetailerProduct> = mutableListOf()
 
     override fun toString(): String {
@@ -20,7 +20,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
              return quantities.sum()
          }
 
-    val firstBasketEntryId : Int
+    val firstBasketEntryId : String
         get() {
             return  miamBasketEntryIds.keys.first()
         }
@@ -29,11 +29,11 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
        _retailerProducts.clear()
    }
 
-    fun removeFirstMiamEntry(qtyToRemove :Int): Pair<Int,Int> {
+    fun removeFirstMiamEntry(qtyToRemove :Int): Pair<String, Int> {
         // println("removeFirstMiamEntry " + miamBasketEntryIds)
         if(miamBasketEntryIds.entries.isEmpty()) {
             // println("removeFirstMiamEntry nothing can be removed")
-            return Pair(-1, 0)
+            return Pair("", 0)
         }
         val quantity = miamBasketEntryIds.values.first()
         // println("removeFirstMiamEntry has quantity $quantity")
@@ -69,9 +69,9 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
 
     fun createRetailerProducts(basketEntry: BasketEntry, targetQuantity : Int) : MutableList<RetailerProduct> {
         // println("Miam creating retailer product with " + BasketEntry + " : " + targetQuantity)
-        if(basketEntry.selectedItem != null ){
+        if(basketEntry.selectedItem != null && basketEntry.selectedItem!!.attributes?.extId != null){
             // println("Miam creating retailer product 2 with " + basketEntry.attributes.selectedItemId.toString() + " : " + targetQuantity)
-            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes.extId, targetQuantity, basketEntry.selectedItem!!.attributes.name))
+            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes!!.extId!!, targetQuantity, basketEntry.selectedItem!!.attributes!!.name))
         }
         return _retailerProducts
     }

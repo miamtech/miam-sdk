@@ -36,7 +36,7 @@ open class ItemSelectorViewModel() :
 
     private fun fillItem(basketEntry: BasketPreviewLine): MutableList<BasketPreviewLine> {
         val itemList = mutableListOf<BasketPreviewLine>()
-        (basketEntry.record as BasketEntry)._relationships?.items?.forEach {
+        (basketEntry.record as BasketEntry).relationships?.items?.data?.forEach {
             item ->
             if(item.id != basketEntry.record.selectedItem?.id){
                 itemList.add(BasketPreviewLine.fromBasketEntryItem(basketEntry.record,item))

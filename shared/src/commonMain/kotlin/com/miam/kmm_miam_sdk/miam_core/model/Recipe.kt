@@ -159,10 +159,7 @@ data class RecipeInfos (
 @Serializable(with = RecipeRelationshipListSerializer::class)
 class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { ge ->
-            val existingEntry = includedRecords.find { record -> record is Recipe && record.id == ge.id }
-            if (existingEntry != null) ge.copy(attributes = (existingEntry as Recipe).attributes) else ge
-        }
+        data = buildedFromIncluded(includedRecords, Recipe::class) as List<Recipe>
     }
 }
 

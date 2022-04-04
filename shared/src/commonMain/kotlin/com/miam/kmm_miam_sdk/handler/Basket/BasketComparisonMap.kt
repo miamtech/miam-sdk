@@ -123,7 +123,7 @@ class BasketComparisonMap(val basketHandler: BasketHandler,
             val beId = pairDeleteReturn.first
             val quantityRemoved = pairDeleteReturn.second
 
-            if (beId == -1 || quantityRemoved == 0){
+            if (beId == "" || quantityRemoved == 0){
                 _stillToRemove = 0
             } else {
                 _stillToRemove -= quantityRemoved;
@@ -195,7 +195,7 @@ class BasketComparisonMap(val basketHandler: BasketHandler,
             val extId = basketEntry.selectedItem?.attributes?.extId ?: return@forEach
             val compItem = _fetchComparisonItem(extId)
             // may already exist if two different ingredients matched same item
-            compItem.miamQuantity += basketEntry.attributes.quantity ?: 0
+            compItem.miamQuantity += basketEntry.attributes!!.quantity ?: 0
             compItem.miamBasketEntryIds[basketEntry.id] = basketEntry.attributes.quantity ?: 0
         }
     }
@@ -211,10 +211,10 @@ class BasketComparisonMap(val basketHandler: BasketHandler,
             }
             // println("Miam _updateTargetFromMiam found existing " + miamBasketEntries)
             if (miamBasketEntries.isNotEmpty()) {
-                val quantities = miamBasketEntries.map { be -> be.attributes.quantity}
+                val quantities = miamBasketEntries.map { be -> be.attributes!!.quantity }
                 compItem.miamTargetQuantity = quantities.reduce { a, b  -> (a ?: 0) + (b ?: 0)} ?: 0
-                val tempMap = mutableMapOf<Int,Int>()
-                miamBasketEntries.forEach { be -> tempMap[be.id] = be.attributes.quantity ?: 0 }
+                val tempMap = mutableMapOf<String, Int>()
+                miamBasketEntries.forEach { be -> tempMap[be.id] = be.attributes!!.quantity ?: 0 }
                 compItem.miamBasketEntryIds.clear()
                 compItem.miamBasketEntryIds.putAll(tempMap)
             } else {
@@ -238,7 +238,7 @@ class BasketComparisonMap(val basketHandler: BasketHandler,
             // println("Miam _addTargetFromMiam will create")
             val compItem = _fetchComparisonItem(extId);
             // here in fact the target quantity is useless as we we will need to create a product, we can use basketEntry.quantity
-            compItem.miamTargetQuantity += basketEntry.attributes.quantity ?: 0
+            compItem.miamTargetQuantity += basketEntry.attributes!!.quantity ?: 0
             compItem.miamBasketEntryIds[basketEntry.id] = basketEntry.attributes.quantity ?: 0
             // println("Miam _addTargetFromMiam created " + compItem)
         }

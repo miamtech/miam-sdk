@@ -44,10 +44,7 @@ class SponsorRelationships: Relationships() {
 @Serializable(with = SponsorListSerializer::class)
 class SponsorListRelationship(override var data: List<Sponsor>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { spo ->
-            val existingEntry = includedRecords.find { record -> record is Sponsor && record.id == spo.id }
-            if (existingEntry != null) spo.copy(attributes = (existingEntry as Sponsor).attributes) else spo
-        }
+        data = buildedFromIncluded(includedRecords, Sponsor::class) as List<Sponsor>
     }
 }
 

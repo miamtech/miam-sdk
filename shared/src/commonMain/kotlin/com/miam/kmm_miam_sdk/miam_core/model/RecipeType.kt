@@ -42,8 +42,7 @@ class RecipeTypeRelationships: Relationships() {
 @Serializable(with = RecipeTypeSerializer::class)
 class RecipeTypeRelationship(override var data: RecipeType): Relationship() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        val existingEntry = includedRecords.find { record -> record is RecipeType && record.id == data.id }
-        if (existingEntry != null) data = data.copy(attributes = (existingEntry as RecipeType).attributes)
+        data = buildedFromIncluded(includedRecords, RecipeType::class) as RecipeType
     }
 }
 

@@ -91,12 +91,14 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     //    println("Miam handleBasketSync")
        launch {
            basketStore.observeSideEffect().collect{
-               basketStore.observeState().value.basket?._relationships?.basketEntries?.let { entries ->
+               basketStore.observeState().value.basket?.relationships?.basketEntries?.data.let { entries ->
                 //    println("Miam sync emited " + entries)
                    // when user is not logged or not on valid pos, basket is not fetched and we can't get here
                    // when user is loged on valid pos, miam basket is fetched and initial value emitted
-                   var activeEntries = entries.filter { e -> e.attributes.groceriesEntryStatus == "active" }
-                   basketChange(activeEntries)
+                   if (entries != null) {
+                       val activeEntries = entries.filter { e -> e.attributes!!.groceriesEntryStatus == "active" }
+                       basketChange(activeEntries)
+                   }
                }
            }
        }

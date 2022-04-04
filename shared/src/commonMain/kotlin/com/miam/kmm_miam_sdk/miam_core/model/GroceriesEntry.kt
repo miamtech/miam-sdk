@@ -63,16 +63,28 @@ class GroceriesEntryRelationships: Relationships() {
 @Serializable(with = GroceriesEntryRelationshipListSerializer::class)
 class GroceriesEntryRelationshipList(override var data: List<GroceriesEntry>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { ge ->
-            val existingEntry = includedRecords.find { record -> record is GroceriesEntry && record.id == ge.id }
-            if (existingEntry != null) ge.copy(attributes = (existingEntry as GroceriesEntry).attributes) else ge
-        }
+        data = buildedFromIncluded(includedRecords, GroceriesEntry::class) as List<GroceriesEntry>
     }
 }
 
 @Serializer(forClass = GroceriesEntryRelationshipList::class)
 object GroceriesEntryRelationshipListSerializer : KSerializer<GroceriesEntryRelationshipList> {
     override fun serialize(encoder: Encoder, value: GroceriesEntryRelationshipList) {
+        // super method call to only keep types and id
+        value.serialize(encoder)
+    }
+}
+
+@Serializable(with = GroceriesEntryRelationshipSerializer::class)
+class GroceriesEntryRelationship(override var data: GroceriesEntry): Relationship() {
+    fun buildFromIncluded(includedRecords: List<Record>) {
+        data = buildedFromIncluded(includedRecords, GroceriesEntry::class) as GroceriesEntry
+    }
+}
+
+@Serializer(forClass = GroceriesEntryRelationship::class)
+object GroceriesEntryRelationshipSerializer : KSerializer<GroceriesEntryRelationship> {
+    override fun serialize(encoder: Encoder, value: GroceriesEntryRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)
     }

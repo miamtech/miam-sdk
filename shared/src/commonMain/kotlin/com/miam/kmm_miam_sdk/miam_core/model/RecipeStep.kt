@@ -47,10 +47,7 @@ class RecipeStepRelationships: Relationships() {
 @Serializable(with = RecipeStepListListSerializer::class)
 class RecipeStepListRelationship(override var data: List<RecipeStep>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
-        data = data.map { spo ->
-            val existingEntry = includedRecords.find { record -> record is RecipeStep && record.id == spo.id }
-            if (existingEntry != null) spo.copy(attributes = (existingEntry as RecipeStep).attributes) else spo
-        }
+        data = buildedFromIncluded(includedRecords, RecipeStep::class) as List<RecipeStep>
     }
 }
 

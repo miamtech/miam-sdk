@@ -1,8 +1,10 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
+import io.ktor.util.reflect.*
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
+import kotlin.reflect.KClass
 
 fun JsonObject.getStringValueOrNull(attribute: String): String? {
     return this[attribute]?.jsonPrimitive?.content
@@ -29,7 +31,7 @@ val jsonFormat = Json {
 data class RecordWrapper(var data: JsonElement? = null, var included: JsonElement? = null) {
 
     private fun includedRecords(): List<Record> {
-        println("Miam RecordWrapper included $included")
+        // println("Miam RecordWrapper included $included")
         if (included == null) return listOf()
 
         return included!!.jsonArray.map { jsonElt ->
@@ -38,6 +40,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
     }
 
     fun toRecords(): List<Record> {
+        // println("Miam construct recordS whole object " + data + " " + included)
         val dataObject = data!!.jsonArray
         return dataObject.map { jsonElt ->
             createRecord(jsonElt, includedRecords())
@@ -45,7 +48,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
     }
 
     fun toRecord(): Record {
-        println("Miam construct record whole object " + data + " " + included)
+        // println("Miam construct record whole object " + data + " " + included)
         return createRecord(data!!, includedRecords())
     }
 
@@ -71,6 +74,9 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
             Sponsor.serializer().descriptor.serialName -> Sponsor(id, attributes, relationships, includedRecords)
             RecipeStep.serializer().descriptor.serialName -> RecipeStep(id, attributes, relationships, includedRecords)
             RecipeType.serializer().descriptor.serialName -> RecipeType(id, attributes, relationships, includedRecords)
+            Basket.serializer().descriptor.serialName -> Basket(id, attributes, relationships, includedRecords)
+            BasketEntry.serializer().descriptor.serialName -> BasketEntry(id, attributes, relationships, includedRecords)
+            Item.serializer().descriptor.serialName -> Item(id, attributes, relationships, includedRecords)
             else -> throw Exception("Unsuported record type $type")
         }
     }
@@ -127,6 +133,17 @@ sealed class Relationships {
 sealed class Relationship {
     abstract val data: Record
 
+    fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): Record {
+        // println("Miam Relationship start buildFromIncluded $subClass")
+        val existingEntry = includedRecords.find { record -> record.instanceOf(subClass) && record.id == data.id }
+        // println("Miam Relationship buildFromIncluded $subClass found $existingEntry")
+        if (existingEntry != null) {
+            // println("Miam existing relations " + existingEntry.relationships)
+            existingEntry.relationships?.buildFromIncluded(includedRecords)
+            return existingEntry
+        } else return data
+    }
+
     fun serialize(encoder: Encoder) {
         require(encoder is JsonEncoder)
 
@@ -141,6 +158,19 @@ sealed class Relationship {
 @Serializable
 sealed class RelationshipList {
     abstract val data: List<Record>
+
+    fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): List<Record> {
+        // println("Miam RelationshipList start buildFromIncluded $subClass")
+        return data.map { entry ->
+            val existingEntry = includedRecords.find { record -> record.instanceOf(subClass) && record.id == entry.id }
+            // println("Miam RelationshipList buildFromIncluded $subClass found $existingEntry")
+            if (existingEntry != null) {
+                // println("Miam existing relations " + existingEntry.relationships)
+                existingEntry.relationships?.buildFromIncluded(includedRecords)
+                existingEntry
+            } else entry
+        }
+    }
 
     fun serialize(encoder: Encoder) {
         require(encoder is JsonEncoder)
