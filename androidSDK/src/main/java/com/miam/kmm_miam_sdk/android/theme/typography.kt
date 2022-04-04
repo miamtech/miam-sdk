@@ -38,6 +38,8 @@ object Typography {
 
     var bodySmall : TextStyle = body.copy(fontSize = 14.sp)
 
+    var bodySmallBold : TextStyle = bodySmall.copy(fontWeight = FontWeight.Bold)
+
     var button: TextStyle  = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,

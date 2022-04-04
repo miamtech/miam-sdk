@@ -1,5 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ressource
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
 import com.miam.kmm_miam_sdk.android.R
 
 object Image {
@@ -12,5 +14,7 @@ object Image {
     var guests : Int = R.drawable.ic_peoples
     var less : Int = R.drawable.ic_less
     var plus : Int = R.drawable.ic_plus
+    var previous : Int = R.drawable.ic_back
+    var swap :Int = R.drawable.ic_swap
 
 }

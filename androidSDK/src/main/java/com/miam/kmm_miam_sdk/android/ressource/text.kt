@@ -5,4 +5,5 @@ object Text {
     var currency = "€"
     var preGuests = "par pers."
     var recipeFlag = "Recette"
+    var replaceBy = "Remplacer cet article par : "
 }
