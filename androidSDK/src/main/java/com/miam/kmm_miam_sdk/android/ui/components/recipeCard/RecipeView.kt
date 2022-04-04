@@ -54,6 +54,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
+import com.miam.kmm_miam_sdk.android.ui.components.dialog.Dialog
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -69,7 +70,7 @@ class RecipeView @JvmOverloads constructor(
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
-    private val modal = RouterModal()
+    private val modal = Dialog()
 
     fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
         if (recipeId != 0) {

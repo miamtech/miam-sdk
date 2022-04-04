@@ -577,7 +577,7 @@ Component available for low level customization :
 | Item selector |❌ | ❌ |❌|❌
 | Recipe detail |❌ | ❌ |❌|❌
 | Counter | ✅| ✅ |✅|➖
-| PopUp |❌ | ❌ |❌|❌
+| Dialog |✅ | ➖|➖|➖
 
 #### SDK: performance
 
