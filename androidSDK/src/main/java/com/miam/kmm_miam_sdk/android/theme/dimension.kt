@@ -20,4 +20,13 @@ object Dimension {
     var borderWidth = 1.dp
 
     var sRoundedCorner = 4.dp
+    var mRoundedCorner = 8.dp
+
+    var sSpacerHeight = 12.dp
+    var mSpacerHeight = 16.dp
+    var lSpacerHeight = 24.dp
+    var xlSpacerHeight = 32.dp
+
+    var sSpacerWidth = 30.dp
+
 }

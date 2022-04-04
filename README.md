@@ -573,7 +573,7 @@ Component available for low level customization :
 |:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
 | Recipe card |✅ | ❌ | ✅ |✅
 | Basket preview |❌ | ❌ |❌ | ❌
-| Price | ❌ | ❌ |❌|❌
+| Price |  ✅ |  ✅ |➖| ✅
 | Item selector |❌ | ❌ |❌|❌
 | Recipe detail |❌ | ❌ |❌|❌
 | Counter | ✅| ✅ |✅|➖
