@@ -25,24 +25,27 @@ class   BasketComparator(
 
     fun updateReceivedFromMiam(basket: List<BasketEntry>) {
         // println("Miam updateReceivedFromMiam " + basket)
+        // println("Miam updateReceivedFromMiam _comparisonMap before " + _comparisonMap._extIdToComparisonItem)
         _comparisonMap.setTargetFromMiam(basket)
         // println("Miam updateReceivedFromMiam _comparisonMap " + _comparisonMap._extIdToComparisonItem)
         val toPushToRetailer = _comparisonMap.resolveFromMiam(basket);
         // println("Miam updateReceivedFromMiam toPushToRetailer " + toPushToRetailer)
         _comparisonMap.cleanNullProducts();
+        // println("Miam updateReceivedFromMiam _comparisonMap after " + _comparisonMap._extIdToComparisonItem)
         sendUpdateToRetailer(toPushToRetailer)
     }
 
      fun updateReceivedFromRetailer(retailerBasket: List<RetailerProduct>) {
-        // println("Miam start processing retailer event2 comparaison1 " + _comparisonMap._extIdToComparisonItem)
-        isProcessingRetailerEvent = true
-        _comparisonMap.updateMapFromRetailer(retailerBasket)
-        //  println("Miam start processing retailer event2 comparaison2 " + _comparisonMap._extIdToComparisonItem)
-        val toRemoveFromMiam = _comparisonMap.resolveFromRetailer()
-        //  println("Miam start processing retailer event2 to remove " + toRemoveFromMiam)
-        _comparisonMap.cleanNullProducts()
-        //  println("Miam start processing retailer event2 comparaison cleaned " + _comparisonMap._extIdToComparisonItem)
-        sendUpdateToMiam(toRemoveFromMiam)
+        //  println("Miam updateReceivedFromRetailer " + retailerBasket)
+        //  println("Miam start processing retailer event comparaison before " + _comparisonMap._extIdToComparisonItem)
+         isProcessingRetailerEvent = true
+         _comparisonMap.updateMapFromRetailer(retailerBasket)
+         //  println("Miam start processing retailer event2 comparaison2 " + _comparisonMap._extIdToComparisonItem)
+         val toRemoveFromMiam = _comparisonMap.resolveFromRetailer()
+         //  println("Miam start processing retailer event2 to remove " + toRemoveFromMiam)
+         _comparisonMap.cleanNullProducts()
+        //  println("Miam start processing retailer event comparaison after " + _comparisonMap._extIdToComparisonItem)
+         sendUpdateToMiam(toRemoveFromMiam)
     }
 
     fun  sendUpdateToMiam(entriesToRemove : List<AlterQuantityBasketEntry>) {
