@@ -5,6 +5,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
@@ -28,10 +29,17 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
     var mapEntryToProduct: (item: RetailerProduct) -> Unit = fun(item: RetailerProduct){
         throw Error("pushProductsToBasket not implemented")
     }
-    var listenToRetailerBasket: (callback : (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){println("Miam --> please init listenToRetailerBasket")}
+    var listenToRetailerBasket: (callback: (products: List<RetailerProduct>) -> Unit) -> Unit = fun(callback : (products: List<RetailerProduct>) -> Unit){println("Miam --> please init listenToRetailerBasket")}
+
+    private var basketListnerJob: Job? = null
 
     init {
        handleBasketSync()
+    }
+
+    fun dispose() {
+        basketListnerJob?.cancel()
+        _comparator = null
     }
 
     /*
@@ -89,13 +97,13 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
 
    private fun handleBasketSync() {
     //    println("Miam handleBasketSync")
-       launch {
+       basketListnerJob = launch {
            basketStore.observeSideEffect().collect{
                basketStore.observeState().value.basket?._relationships?.basketEntries?.let { entries ->
                 //    println("Miam sync emited " + entries)
                    // when user is not logged or not on valid pos, basket is not fetched and we can't get here
                    // when user is loged on valid pos, miam basket is fetched and initial value emitted
-                   var activeEntries = entries.filter { e -> e.attributes.groceriesEntryStatus == "active" }
+                   val activeEntries = entries.filter { e -> e.attributes.groceriesEntryStatus == "active" }
                    basketChange(activeEntries)
                }
            }
