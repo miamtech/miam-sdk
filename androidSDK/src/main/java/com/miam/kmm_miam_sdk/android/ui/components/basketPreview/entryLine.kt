@@ -95,7 +95,7 @@ fun entryLine(entry: BasketPreviewLine,
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
-            if((entry.record as BasketEntry)._relationships!!.items.size > 1) {
+            if((entry.record as BasketEntry).relationships!!.items!!.data.size > 1) {
             Clickable(
                 onClick = {
                     vmBasketPreview.setEvent(BasketPreviewContract.Event.OpenItemSelector(entry))

@@ -69,11 +69,11 @@ class RecipeView @JvmOverloads constructor(
 ) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
-    private val idRecipeState: MutableState<Int?> = mutableStateOf(null)
+    private val idRecipeState: MutableState<String?> = mutableStateOf(null)
     private val modal = Dialog()
 
-    fun bind(recipeId: Int = 0, criteria: SuggestionsCriteria? = null) {
-        if (recipeId != 0) {
+    fun bind(recipeId: String = "", criteria: SuggestionsCriteria? = null) {
+        if (recipeId != "") {
             vmRecipe.setEvent(
                 RecipeContract.Event.OnGetRecipe(
                     recipeId
@@ -88,8 +88,9 @@ class RecipeView @JvmOverloads constructor(
         }
     }
 
-    var idRecipe: Int
-        get() = idRecipeState.value ?: 0
+
+    var idRecipe: String
+        get() = idRecipeState.value ?: ""
         set(value) {
             idRecipeState.value = value
             if (value != null) {
@@ -296,7 +297,7 @@ class RecipeView @JvmOverloads constructor(
                                 onClick = { modal.goToDetail(vmRecipe)},
                                 children = {
                                     Image(
-                                        painter = rememberImagePainter(recipe.attributes.mediaUrl),
+                                        painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = image
@@ -307,7 +308,7 @@ class RecipeView @JvmOverloads constructor(
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 textAlign = TextAlign.Center,
-                                text = recipe.attributes.title,
+                                text = recipe.attributes!!.title,
                                 style = whiteRecipeTitle,
                                 modifier = recipeTitle.align(Alignment.Center)
                             )
@@ -417,7 +418,7 @@ class RecipeView @JvmOverloads constructor(
                                 modifier = Modifier.size(36.dp),
                                 backgroundColor = primary,
                                 onClick = {
-                                    modal.goToPreview(recipe.id,vmRecipe)
+                                    modal.goToPreview(recipe.id, vmRecipe)
                                 }) {
                                 Image(
                                     painter = painterResource(showRecipeFloatingButtonIcon),

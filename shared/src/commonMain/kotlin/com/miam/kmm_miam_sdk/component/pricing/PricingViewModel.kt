@@ -20,7 +20,7 @@ open class PricingViewModel :
         PricingContract.State(
             price = BasicUiState.Empty,
             directPrice = null,
-            recipeId = -1,
+            recipeId = "",
             guestNumber = -1,
             integerPart = "0",
             decimalPart = "00",
@@ -62,7 +62,7 @@ open class PricingViewModel :
     }
 
     private fun checkIsInCart(): Boolean {
-        if(currentState.recipeId == -1 ) return false
+        if(currentState.recipeId == "" ) return false
         return basketStore.recipeInBasket(currentState.recipeId)
     }
 
@@ -91,15 +91,13 @@ open class PricingViewModel :
 
     private suspend fun fetchPrice() {
         val posId = pointOfSaleStore.observeState().value.idPointOfSale
-        if(uiState.value.recipeId == -1 || posId == null ) return
+        if(uiState.value.recipeId == "" || posId == null ) return
         setState { copy(price = BasicUiState.Loading)}
         try {
             launch {
-                pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
-                    .collect {
-                      splitePrice(it.price / uiState.value.guestNumber)
-                      setEvent(PricingContract.Event.SetPrice(it))
-                    }
+                val recipePrice = pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
+                splitePrice(recipePrice.price / uiState.value.guestNumber)
+                setEvent(PricingContract.Event.SetPrice(recipePrice))
             }
         } catch (e: Exception) {
             setState { copy(price =  BasicUiState.Empty ) }

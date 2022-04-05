@@ -36,14 +36,14 @@ class LineEntries {
         }
         if (existingEntryIdx >= 0) {
             var existingEntry = basketEntries[existingEntryIdx]
-            existingEntry = existingEntry.updateQuantity(basketEntry.attributes.quantity?: 0)
+            existingEntry = existingEntry.updateQuantity(basketEntry.attributes!!.quantity ?: 0)
             basketEntries[existingEntryIdx] = existingEntry
         }
     }
 }
 
 data class BasketPreviewLine(
-    val id : Int? = null,
+    val id : String? = null,
     val record : BasketPreviewEntry,
     val isRecipe: Boolean,
     val inlineTag : String? = null,
@@ -67,7 +67,7 @@ data class BasketPreviewLine(
     fun updatePrice() :BasketPreviewLine {
         var total = 0.0
         this.entries!!.found.forEach { fe ->
-            val beItem = fe.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  fe.attributes.selectedItemId }
+            val beItem = fe.attributes!!.basketEntriesItems?.find { bei ->bei.itemId ==  fe.attributes.selectedItemId }
             val price = if(beItem?.unitPrice != null && fe.attributes.quantity != null ) beItem.unitPrice * fe.attributes.quantity else 0.0
             total+= price
         }
@@ -89,8 +89,8 @@ data class BasketPreviewLine(
                 id= recipe.id,
                 record= recipe,
                 isRecipe= true,
-                title= recipe.attributes.title,
-                picture= recipe.attributes.mediaUrl ?: "",
+                title= recipe.attributes!!.title,
+                picture= recipe.attributes!!.mediaUrl ?: "",
                 description=  listOf("$itemsCount article${if (itemsCount > 1) 's' else ' '}"),
                 count= guestNum ?: 4 ,
                 entries = entries,
@@ -105,16 +105,17 @@ data class BasketPreviewLine(
         }
         fun fromBasketEntry(entry: BasketEntry) : BasketPreviewLine {
             val item = entry.selectedItem
-            val beItem = entry.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  entry.attributes.selectedItemId }
+            val beItem = entry.attributes!!.basketEntriesItems?.find { bei ->bei.itemId ==  entry.attributes.selectedItemId }
             val price = if(beItem?.unitPrice != null && entry.attributes.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
-            val gEntry = entry._relationships?.groceriesEntry
+            val gEntry = entry.relationships?.groceriesEntry?.data
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
-                id= entry.id,
-                record= entry,
+                // TODO : id is string
+                id = entry.id.toString(),
+                record = entry,
                 isRecipe = false,
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
-                title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
+                title= entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
                 picture = item?.attributes?.image ?: "",
                 description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit}"),
                 price= "$price",
@@ -124,17 +125,17 @@ data class BasketPreviewLine(
         }
 
         fun fromBasketEntryItem(entry: BasketEntry, item: Item) : BasketPreviewLine{
-            val beItem = entry.attributes.basketEntriesItems?.find { bei ->bei.itemId ==  item.id }
+            val beItem = entry.attributes!!.basketEntriesItems?.find { bei ->bei.itemId.toString() ==  item.id }
             val price = if(beItem?.unitPrice != null && entry.attributes.quantity != null ) beItem.unitPrice * entry.attributes.quantity else 0.0
-            val gEntry = entry._relationships?.groceriesEntry
+            val gEntry = entry.relationships?.groceriesEntry?.data
             val recipesCount =  gEntry?.attributes?.recipeIds?.size ?: 1
             return BasketPreviewLine(
-                id= item.id,
+                id = item.id.toString(),
                 record= entry,
                 isRecipe = false,
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
-                title= entry._relationships?.groceriesEntry?.attributes?.name ?: "",
-                picture = item.attributes.image ?: "",
+                title= entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
+                picture = item.attributes!!.image ?: "",
                 description = listOf("${item.attributes.brand ?: ' '} ${item.attributes.name ?: ' '} | ${item.attributes.capacityUnit}"),
                 price= "$price",
                 count= entry.attributes.quantity ?: 1,
@@ -143,15 +144,15 @@ data class BasketPreviewLine(
         }
 
         fun  recipesAndLineEntriesToBasketPreviewLine(groceriesList: GroceriesList, lineEntries: List<LineEntries>) : List<BasketPreviewLine> {
-            val recipes = groceriesList.relationships?.recipes ?: emptyList()
+            val recipes = groceriesList.recipes
 
-            return recipes.mapIndexed { idx,recipe ->
+            return recipes.mapIndexed { idx, recipe ->
                 val itemsCount = lineEntries[idx].found.size
                 var recipePrice = 0.0
                 val guests =  groceriesList.guestsForRecipe(recipe.id)
                 lineEntries[idx].found.forEach { entry ->
                         val selectedItem =
-                            entry.attributes.basketEntriesItems?.find { item -> item.itemId == entry.attributes.selectedItemId }
+                            entry.attributes!!.basketEntriesItems?.find { item -> item.itemId == entry.attributes.selectedItemId }
                                 ?: null
                         val qty = entry.attributes.quantity ?: 1
                         val unitPrice = selectedItem?.unitPrice ?: 0.0

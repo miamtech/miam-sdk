@@ -2,43 +2,34 @@ package com.miam.kmm_miam_sdk.miam_core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
+
 
 @Serializable
-data class Baskets(
-    @SerialName("data")
-    val baskets: List<Basket>,
-)
-
-@Serializable
-data class BasketWrapper(
-    val data : Basket
-)
-
-@Serializable
-data class Basket(
-    val id: Int,
-    val type: String? = null,
-    val attributes: BasketAttributes,
-){
-    var _relationships: BasketRelationships? = null
-
-    private fun deepCopy(
-        id: Int = this.id,
-        type: String? = this.type,
-        attributes: BasketAttributes = this.attributes,
-    ): Basket {
-        val copy = this.copy(id=id, type=type, attributes=attributes)
-        copy._relationships = this._relationships
-        return copy
+@SerialName("baskets")
+data class Basket private constructor(
+    override val id: String,
+    override var attributes: BasketAttributes? = null,
+    override val relationships: BasketRelationships? = null,
+    @Transient var recipes : List<Recipe> = listOf()
+): Record() {
+    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+        id,
+        if (attributes == null) null else jsonFormat.decodeFromJsonElement<BasketAttributes>(attributes),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<BasketRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+    ) {
+        relationships?.buildFromIncluded(includedRecords)
     }
 
     fun updateBasketEntry(newBe: BasketEntry): Basket {
-        var copy = this.deepCopy()
-        val entryToUpdateIndex = copy._relationships?.basketEntries?.indexOfFirst { be -> be.id == newBe.id }
+        val copy = this.copy()
+        val entryToUpdateIndex = copy.relationships?.basketEntries?.data?.indexOfFirst { be -> be.id == newBe.id }
         if (entryToUpdateIndex != null && entryToUpdateIndex >= 0) {
-            val newBasketEntries = copy._relationships!!.basketEntries!!.toMutableList()
+            val newBasketEntries = copy.relationships.basketEntries!!.data.toMutableList()
             newBasketEntries[entryToUpdateIndex] = newBe
-            copy._relationships!!.basketEntries = newBasketEntries
+            copy.relationships.basketEntries!!.data = newBasketEntries
         }
         return copy
     }
@@ -54,12 +45,17 @@ data class BasketAttributes(
     @SerialName("capacity-factor")
     val capacityFactor: Int? =null,
     val token :String? = null,
-)
+): Attributes()
 
 @Serializable
-data class BasketRelationships(
-    var basketEntries: List<BasketEntry>? = emptyList<BasketEntry>(),
-)
+data class BasketRelationships constructor(
+    @SerialName("basket-entries") var basketEntries: BasketEntryRelationshipList? = null,
+): Relationships() {
+    override fun buildFromIncluded(includedRecords: List<Record>) {
+        // println("Miam will build basket entries $basketEntries")
+        basketEntries?.buildFromIncluded(includedRecords)
+    }
+}
 
 @Serializable
 data class  BasketCompletion(

@@ -9,8 +9,7 @@ class PricingRepositoryImp (
     private val priceDataSource: MiamAPIDatasource
         ) : PricingRepository {
 
-    override fun getRecipePrice(recipeId: Int, posId: Int): Flow<Pricing> = flow{
-        val pricing = priceDataSource.getRecipePrice(recipeId,posId)
-        emit(pricing)
+    override suspend fun getRecipePrice(recipeId: String, posId: Int): Pricing {
+        return priceDataSource.getRecipePrice(recipeId, posId)
     }
 }

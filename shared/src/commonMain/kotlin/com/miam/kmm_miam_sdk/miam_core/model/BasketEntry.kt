@@ -1,46 +1,31 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
-data class BasketEntries(
-    @SerialName("data")
-    val basketEntries: List<BasketEntry>,
-)
-
-@Serializable
-data class BasketEntryWrapper(
-   val data: BasketEntry
-)
-
-@Serializable
-data class BasketEntry(
-    val id: Int,
-    val attributes: BasketEntryAttributes,
-    val relationships: NotFilledBasketEntryRelationships
-): BasketPreviewEntry {
-
+@SerialName("basket-entries")
+data class BasketEntry private constructor(
+    override val id: String,
+    override val attributes: BasketEntryAttributes? = null,
+    override  val relationships: BasketEntryRelationships? = null
+): Record(), BasketPreviewEntry {
+    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+        id,
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<BasketEntryAttributes>(attributes),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<BasketEntryRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+    ) {
+        relationships?.buildFromIncluded(includedRecords)
+    }
     var needPatch: Boolean = false
-    var _relationships: BasketEntryRelationships? = null
 
     val selectedItem : Item?
-        get() = _relationships?.items?.find { item -> item.id == attributes.selectedItemId }
-
-    fun relathionshipsRetrieved(): Boolean {
-        return _relationships != null
-    }
-
-    private fun deepCopy(
-        id: Int = this.id,
-        attributes: BasketEntryAttributes = this.attributes,
-        relationships: NotFilledBasketEntryRelationships = this.relationships
-    ): BasketEntry {
-        var copy = this.copy(id=id, attributes=attributes, relationships=relationships)
-        copy._relationships = this._relationships
-        copy.needPatch = this.needPatch
-        return copy
-    }
+        get() = relationships!!.items!!.data.find { item -> item.id == attributes!!.selectedItemId.toString() }
 
     fun updateQuantity(qty: Int): BasketEntry {
         // println("Miam update quantity model $qty $this")
@@ -50,10 +35,11 @@ data class BasketEntry(
             updateStatus("deleted")
         } else {
             // println("Miam update quantity model will update qty")
-            var newRecord = this.deepCopy(
-                attributes = this.attributes.copy(
+            var newRecord = this.copy(
+                attributes = this.attributes!!.copy(
                     quantity = qty,
-                ))
+                )
+            )
             if (this.attributes.groceriesEntryStatus != "active") {
                 newRecord = newRecord.updateStatus("active")
             }
@@ -63,38 +49,23 @@ data class BasketEntry(
 
     fun updateStatus(status: String): BasketEntry {
         needPatch = true
-        this._relationships?.groceriesEntry = this._relationships?.groceriesEntry?.updateStatus(status)
-        return this.deepCopy(
-        attributes = this.attributes.copy(
-            groceriesEntryStatus = status
-        ))
+        if (this.relationships?.groceriesEntry?.data != null) this.relationships.groceriesEntry!!.data = this.relationships.groceriesEntry!!.data.updateStatus(status)
+        return this.copy(
+            attributes = this.attributes!!.copy(
+                groceriesEntryStatus = status
+            )
+        )
     }
 
     fun updateSelectedItem(selectedItemId: Int): BasketEntry {
         needPatch = true
-        return this.deepCopy(
-            attributes = this.attributes.copy(
+        return this.copy(
+            attributes = this.attributes!!.copy(
                 selectedItemId = selectedItemId
             )
         )
     }
 }
-
-@Serializable
-data class NotFilledBasketEntryRelationships(
-    @SerialName("groceries-entry")
-    val groceriesEntry: NotFilledGroceriesEntryWrapper
-)
-
-@Serializable
-data class NotFilledGroceriesEntryWrapper(
-  val data: NotFilledGroceriesEntry
-)
-
-@Serializable
-data class NotFilledGroceriesEntry(
-    val id: Int
-)
 
 @Serializable
 data class BasketEntryAttributes(
@@ -109,13 +80,19 @@ data class BasketEntryAttributes(
     val groceriesEntryStatus: String? = "active",
     @SerialName("basket-entries-items")
     var  basketEntriesItems: List<BasketEntriesItem>? = null,
-)
+): Attributes()
 
 @Serializable
- class BasketEntryRelationships (
-     var items : List<Item> = emptyList(),
-     var groceriesEntry: GroceriesEntry? = null
-)
+data class BasketEntryRelationships constructor(
+    var items: ItemRelationshipList? = null,
+    @SerialName("groceries-entry") var groceriesEntry: GroceriesEntryRelationship? = null,
+): Relationships() {
+    override fun buildFromIncluded(includedRecords: List<Record>) {
+        // println("Miam will build BE relationships $items $groceriesEntry")
+        items?.buildFromIncluded(includedRecords)
+        groceriesEntry?.buildFromIncluded(includedRecords)
+    }
+}
 
 @Serializable
 data class BasketEntriesItem(
@@ -138,12 +115,21 @@ data class BasketEntriesItem(
     val pftChecksum: String? = null,
 )
 
-@Serializable
-data class BasketEntryUpdateWrapper(val data : BasketEntryUpdate)
+/**
+ * Used from others relations
+ */
 
-@Serializable
-data class BasketEntryUpdate(
-    val id: Int,
-    val type:String,
-    val attributes: BasketEntryAttributes
-)
+@Serializable(with = BasketEntryRelationshipListSerializer::class)
+class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
+    fun buildFromIncluded(includedRecords: List<Record>) {
+        data = buildedFromIncluded(includedRecords, BasketEntry::class) as List<BasketEntry>
+    }
+}
+
+@Serializer(forClass = BasketEntryRelationshipList::class)
+object BasketEntryRelationshipListSerializer : KSerializer<BasketEntryRelationshipList> {
+    override fun serialize(encoder: Encoder, value: BasketEntryRelationshipList) {
+        // super method call to only keep types and id
+        value.serialize(encoder)
+    }
+}

@@ -2,10 +2,12 @@ package com.miam.kmm_miam_sdk.base.mvi
 
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.GroceriesList
-import com.miam.kmm_miam_sdk.miam_core.model.GroceriesListWithoutRelationship
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeInfos
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -18,15 +20,15 @@ sealed class  GroceriesListAction : Action {
     object RefreshGroceriesList : GroceriesListAction()
     object ResetGroceriesList : GroceriesListAction()
     data class SetGroceriesList(val gl :GroceriesList) : GroceriesListAction()
-    data class AlterRecipeList(val recipeId : Int, val guests: Int) : GroceriesListAction()
-    data class RemoveRecipe(val recipeId: Int): GroceriesListAction()
+    data class AlterRecipeList(val recipeId : String, val guests: Int) : GroceriesListAction()
+    data class RemoveRecipe(val recipeId: String): GroceriesListAction()
     data class Error(val error: Exception) : GroceriesListAction()
 }
 sealed class  GroceriesListEffect : Effect {
     data class Error(val error: Exception) :  GroceriesListEffect()
     object GroceriesListLoaded :  GroceriesListEffect()
-    data class RecipeAdded(val recipeId: Int,val guests: Int): GroceriesListEffect()
-    data class RecipeRemoved(val recipeId: Int) :GroceriesListEffect()
+    data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
+    data class RecipeRemoved(val recipeId: String) :GroceriesListEffect()
 }
 
 class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>, KoinComponent,
@@ -98,14 +100,14 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         }
     }
 
-    private suspend fun appendRecipe(recipeId :Int, guest: Int, states :GroceriesListState)  {
+    private suspend fun appendRecipe(recipeId :String, guest: Int, states :GroceriesListState)  {
         if(states.groceriesList == null) return
-        val recipesInfos =  states.groceriesList.attributes.recipesInfos
+        val recipesInfos =  states.groceriesList.attributes!!.recipesInfos
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
-            recipesInfos.find { it.id == recipeId }?.guests = guest
+            recipesInfos.find { it.id.toString() == recipeId }?.guests = guest
         } else {
-            recipesInfos.add(RecipeInfos(recipeId, guest))
+            recipesInfos.add(RecipeInfos(recipeId.toInt(), guest))
         }
         // side Effect only to refresh UI of c
         sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId, guest))
@@ -113,33 +115,24 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         dispatch(GroceriesListAction.RefreshGroceriesList)
     }
 
-    private suspend fun removeRecipe(recipeId: Int, states: GroceriesListState) {
+    private suspend fun removeRecipe(recipeId: String, states: GroceriesListState) {
         if (states.groceriesList == null || !states.groceriesList.hasRecipe(recipeId)) return
-        val recipesInfos = states.groceriesList.attributes.recipesInfos
+        val recipesInfos = states.groceriesList.attributes!!.recipesInfos
 
-        val newRecipeInfos = recipesInfos!!.filter { el -> el.id != recipeId }.toMutableList()
+        val newRecipeInfos = recipesInfos!!.filter { el -> el.id.toString() != recipeId }.toMutableList()
 
         sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))
         alterRecipeInfos(newRecipeInfos, states)
         dispatch(GroceriesListAction.RefreshGroceriesList)
     }
 
-    private suspend fun alterRecipeInfos(
-        recipesInfos: MutableList<RecipeInfos>,
-        states: GroceriesListState
-    ): GroceriesList {
+    private suspend fun alterRecipeInfos(recipesInfos: MutableList<RecipeInfos>, states: GroceriesListState): GroceriesList {
         val gl = states.groceriesList!!.copy(
-            attributes = states.groceriesList.attributes.copy(
+            attributes = states.groceriesList.attributes!!.copy(
                 recipesInfos = recipesInfos,
                 appendRecipes = false
             )
         )
-        return groceriesListRepo.updateGroceriesList(
-            GroceriesListWithoutRelationship(
-                gl.id,
-                gl.type,
-                gl.attributes
-            )
-        )
+        return groceriesListRepo.updateGroceriesList(gl)
     }
 }

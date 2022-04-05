@@ -42,17 +42,17 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 color = MiamMasterView.darkGray
             )
         }
-        if (recipe.attributes.ingredients != null) {
-            val ingredients: List<Ingredient> = recipe.attributes.ingredients!!.ingredients
+        if (recipe.relationships?.ingredients?.data != null) {
+            val ingredients: List<Ingredient> = recipe.relationships!!.ingredients!!.data
             ingredients.forEach {
                 IngredientRow(
-                    it.attributes.name!!.capitalize(),
+                    it.attributes!!.name!!.capitalize(),
                     ReadableFloatNumber(
                         realQuantities(
-                            it.attributes.quantity!!,
+                            it.attributes!!.quantity!!,
                             state.guest,
-                            recipe.attributes.numberOfGuests!!
-                        ), it.attributes.unit!!
+                            recipe.attributes!!.numberOfGuests!!
+                        ), it.attributes!!.unit!!
                     )
                 )
             }

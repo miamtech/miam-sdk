@@ -7,35 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasource): BasketEntryRepository {
-
-    override suspend fun getRelationshipsIfNecessary(basketEntry: BasketEntry): BasketEntry {
-        if (basketEntry.relathionshipsRetrieved()) {
-            return basketEntry
-        }
-        return getRelationships(basketEntry)
-    }
-
-    override suspend fun getRelationships(basketEntry: BasketEntry): BasketEntry {
-        val items = basketEntryDataSource.getBasketEntryItems(basketEntry.id)
-        val groceriesEntry =   basketEntryDataSource.getBasketEntryGrocerieEntry(basketEntry.relationships.groceriesEntry.data.id)
-        if (items != null  || groceriesEntry !=  null) {
-            basketEntry._relationships = BasketEntryRelationships(
-                items!!,
-                groceriesEntry
-            )
-        }
-        return basketEntry
-    }
-
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
         // println("Miam will update be")
         // println("Miam will update be rels ge" + basketEntry?._relationships?.groceriesEntry)
         // println("Miam will update be rels items" + basketEntry?._relationships?.items)
         basketEntry.needPatch = false
-        val updatedBasketEntry = basketEntryDataSource.updateBasketEntry(basketEntry)
-        updatedBasketEntry._relationships = basketEntry._relationships
-        // println("Miam will update be rels2 ge" + basketEntry?._relationships?.groceriesEntry)
-        // println("Miam will update be rels items" + basketEntry?._relationships?.items)
-        return updatedBasketEntry
+        return basketEntryDataSource.updateBasketEntry(basketEntry, listOf("groceries-entry", "items"))
     }
 }

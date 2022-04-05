@@ -36,7 +36,7 @@ open class ItemSelectorViewModel() :
 
     private fun fillItem(basketEntry: BasketPreviewLine): MutableList<BasketPreviewLine> {
         val itemList = mutableListOf<BasketPreviewLine>()
-        (basketEntry.record as BasketEntry)._relationships?.items?.forEach {
+        (basketEntry.record as BasketEntry).relationships?.items?.data?.forEach {
             item ->
             if(item.id != basketEntry.record.selectedItem?.id){
                 itemList.add(BasketPreviewLine.fromBasketEntryItem(basketEntry.record,item))
@@ -47,11 +47,11 @@ open class ItemSelectorViewModel() :
 
      fun choose(index :Int){
          val be = (currentState.selectedItem!!.record  as BasketEntry)
-         val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!)
+         val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!.toInt())
         basketStore.dispatch(
             BasketAction.ReplaceSelectedItem(
                 be,
-            currentState.itemList!![index].id!!
+            currentState.itemList!![index].id!!.toInt()
         ))
 
          currentState.itemList!![index].id!!
