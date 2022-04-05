@@ -218,11 +218,11 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
-    override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
+    override suspend fun updateBasketEntry(basketEntry: BasketEntry, included: List<String>): BasketEntry {
         // println("Miam datasource updateBasketEntry $basketEntry")
         return httpClient.patch<RecordWrapper>{
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
-            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?include=groceries-entry")
+            url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?${includedToString(included)}")
             body = RecordWrapper.fromRecord(basketEntry)
         }.toRecord() as BasketEntry
     }

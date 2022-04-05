@@ -221,7 +221,7 @@ class BasketComparisonMap(val basketHandler: BasketHandler,
                 compItem.miamTargetQuantity = 0;
                 compItem.miamBasketEntryIds.clear();
             }
-            println("Miam _updateTargetFromMiam updated " + compItem)
+            // println("Miam _updateTargetFromMiam updated " + compItem)
         }
     }
 

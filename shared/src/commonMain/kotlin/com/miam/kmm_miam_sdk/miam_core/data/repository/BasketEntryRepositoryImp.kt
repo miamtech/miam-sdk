@@ -12,9 +12,6 @@ class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasou
         // println("Miam will update be rels ge" + basketEntry?._relationships?.groceriesEntry)
         // println("Miam will update be rels items" + basketEntry?._relationships?.items)
         basketEntry.needPatch = false
-        val updatedBasketEntry = basketEntryDataSource.updateBasketEntry(basketEntry)
-        // println("Miam will update be rels2 ge" + basketEntry?._relationships?.groceriesEntry)
-        // println("Miam will update be rels items" + basketEntry?._relationships?.items)
-        return updatedBasketEntry
+        return basketEntryDataSource.updateBasketEntry(basketEntry, listOf("groceries-entry", "items"))
     }
 }

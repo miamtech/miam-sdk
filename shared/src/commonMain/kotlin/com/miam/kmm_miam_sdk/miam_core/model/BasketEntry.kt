@@ -25,7 +25,7 @@ data class BasketEntry private constructor(
     var needPatch: Boolean = false
 
     val selectedItem : Item?
-        get() = relationships!!.items!!.data!!.find { item -> item.id == attributes!!.selectedItemId.toString() }
+        get() = relationships!!.items!!.data.find { item -> item.id == attributes!!.selectedItemId.toString() }
 
     fun updateQuantity(qty: Int): BasketEntry {
         // println("Miam update quantity model $qty $this")
