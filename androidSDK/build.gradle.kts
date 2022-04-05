@@ -33,6 +33,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.activity:activity-compose:1.4.0")
     embed(project(":shared"))
 
     // dependency injection
