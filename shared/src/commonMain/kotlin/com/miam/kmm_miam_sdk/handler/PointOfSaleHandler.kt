@@ -11,7 +11,7 @@ object  PointOfSaleHandler : KoinComponent {
     var isAvailable = fun():Boolean{return true}
     private val store: PointOfSaleStore by inject()
 
-    fun updateStoreId(storeId :String){
+    fun updateStoreId(storeId :String?){
         triggerAction(PointOfSaleAction.SetExtId(storeId))
     }
 
