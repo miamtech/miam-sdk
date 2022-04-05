@@ -26,11 +26,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.*
-import com.miam.kmm_miam_sdk.android.ui.components.common.Price
+import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import com.miam.kmm_miam_sdk.android.ui.components.common.CustomActionButton
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.component.recipe.TabEnum
@@ -38,7 +37,6 @@ import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
 
 @Composable

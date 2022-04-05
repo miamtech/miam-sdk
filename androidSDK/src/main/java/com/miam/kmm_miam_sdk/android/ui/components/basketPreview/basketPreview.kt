@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import com.miam.kmm_miam_sdk.android.ui.components.ItemsSelector.ItemsSelector
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 

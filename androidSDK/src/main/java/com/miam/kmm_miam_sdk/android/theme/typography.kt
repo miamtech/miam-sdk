@@ -16,19 +16,37 @@ object Typography {
         fontSize = 80.sp
     )
 
-    var body1 = TextStyle(
+    var h2 : TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 60.sp
+    )
+
+    var subtitle : TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
+    )
+
+    var body = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     )
 
-    var body1White =  body1.copy(color = white)
+    var bodyBold: TextStyle = body.copy(fontWeight = FontWeight.Bold)
 
-    var button = TextStyle(
+    var bodySmall : TextStyle = body.copy(fontSize = 14.sp)
+
+    var bodySmallBold : TextStyle = bodySmall.copy(fontWeight = FontWeight.Bold)
+
+    var button: TextStyle  = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
+        fontSize = 15.sp
     )
+
+    var overLine: TextStyle = body.copy(fontSize = 11.sp)
 
     var link = TextStyle(
         fontFamily = FontFamily.Default,

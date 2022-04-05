@@ -7,6 +7,6 @@ import androidx.compose.ui.unit.dp
 
 object DialogStyle{
 
-    var dialogContainer = Modifier.fillMaxSize().offset(0.dp , (-48).dp)
+    var dialogContainer = Modifier 
 
 }

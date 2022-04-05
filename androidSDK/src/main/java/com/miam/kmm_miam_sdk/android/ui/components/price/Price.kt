@@ -1,10 +1,9 @@
-package com.miam.kmm_miam_sdk.android.ui.components.common
+package com.miam.kmm_miam_sdk.android.ui.components.price
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +18,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 import androidx.compose.ui.unit.sp
+import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
+import com.miam.kmm_miam_sdk.android.theme.Typography.subtitle
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.mainContainer
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceContainer
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceEmptyState
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.loaderColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimalColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.subtitleColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderDecimal
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderInteger
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.currency
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.preGuests
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 
@@ -57,7 +69,7 @@ class Price(
         @Composable
         fun content(){
             val state by vmPrice.uiState.collectAsState()
-            Box( ){
+            Box(){
                 ManagementResourceState(
                     resourceState = state.price,
                     successView = { price ->
@@ -67,7 +79,7 @@ class Price(
                     emptyView = { emptyState() },
                     onTryAgain = { /*TODO*/ },
                     onCheckAgain = { /*TODO*/ },
-                    loadingView = {   PriceShimmer()  }
+                    loadingView = { PriceShimmer() }
                 )
             }
         }
@@ -75,25 +87,30 @@ class Price(
 
     @Composable
     fun emptyState(){
-        Spacer(modifier = Modifier.padding(vertical = fontSize?.dp ?: 22.dp))
+        Spacer(modifier = priceEmptyState)
     }
 
     @Composable
     fun priceView(price: Pricing, vmPrice: PricingViewModel) {
-            Column() {
-                Row() {
+            Column( modifier= mainContainer ) {
+                Row( modifier= priceContainer ) {
                     Text("${vmPrice.currentState.integerPart},",
-                        color = color ?: Color(0xff037E92),
-                        fontSize = fontSize?.sp ?: 22.sp
+                        color = priceIntegerColor,
+                        style = subtitle
                     )
-                    Text("${vmPrice.currentState.decimalPart}€",
-                        color =  color ?: Color(0xff037E92),
-                        fontSize =  fontSize?.minus(6)?.sp ?: 16.sp)
+                    Text(
+                        "${vmPrice.currentState.decimalPart}$currency",
+                        color = priceDecimalColor,
+                        style = bodySmall
+                    )
                 }
                 if(!isTotalPrice){
-                    Text("par pers.", color = Color.Gray, fontSize = 14.sp)
+                    Text(
+                        preGuests,
+                        color = subtitleColor,
+                        style = bodySmall
+                    )
                 }
-
             }
     }
 
@@ -102,9 +119,9 @@ class Price(
     fun PriceShimmer(){
 
         val shimerColors = listOf(
-            Color.LightGray.copy(alpha = 0.6F),
-            Color.LightGray.copy(alpha = 0.2F),
-            Color.LightGray.copy(alpha = 0.6F)
+            loaderColor.copy(alpha = 0.6F),
+            loaderColor.copy(alpha = 0.2F),
+            loaderColor.copy(alpha = 0.6F)
         )
 
         val transition = rememberInfiniteTransition()
@@ -129,7 +146,6 @@ class Price(
         )
 
         shimmerPriceItem(brush)
-
     }
 
     @Composable
@@ -137,21 +153,15 @@ class Price(
 
         Column() {
             Row() {
-
-                Spacer(modifier = Modifier
-                    .padding(vertical = 2.dp)
-                    .height(fontSize?.minus(6)?.dp ?: 16.dp)
-                    .width(30.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(brush = brush))
-                Spacer(modifier = Modifier
-                    .height(fontSize?.minus(6)?.dp ?: 16.dp)
-                    .width(30.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(brush = brush))
+                Spacer(modifier = loaderInteger.background(brush = brush))
+                Spacer(modifier = loaderDecimal.background(brush = brush))
             }
             if(!isTotalPrice){
-                Text("par pers.", color = Color.Gray, fontSize = 14.sp)
+                Text(
+                    preGuests,
+                    color = subtitleColor,
+                    style = bodySmall
+                )
             }
 
         }
