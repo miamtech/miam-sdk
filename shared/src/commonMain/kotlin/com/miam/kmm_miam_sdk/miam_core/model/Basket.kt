@@ -52,7 +52,7 @@ data class BasketRelationships constructor(
     @SerialName("basket-entries") var basketEntries: BasketEntryRelationshipList? = null,
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
-        println("Miam will build basket entries $basketEntries")
+        // println("Miam will build basket entries $basketEntries")
         basketEntries?.buildFromIncluded(includedRecords)
     }
 }
