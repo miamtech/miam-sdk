@@ -17,7 +17,7 @@ data class UserState(
 ) : State
 
 sealed class  UserAction : Action {
-    data class RefreshUser(val idUser: String) : UserAction()
+    data class RefreshUser(val idUser: String?) : UserAction()
 }
 sealed class  UserEffect : Effect {
     data class Error(val error: Exception) :  UserEffect()

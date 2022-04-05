@@ -20,7 +20,7 @@ data class PointOfSaleState(
 
 sealed class  PointOfSaleAction : Action {
     data class RefreshPointOfSale(val idPointOfSale: Int) : PointOfSaleAction()
-    data class SetExtId(val extId: String) :PointOfSaleAction()
+    data class SetExtId(val extId: String?) :PointOfSaleAction()
     data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
     data class SetOrigin(val origin: String):PointOfSaleAction()
     data class Error(val error: Exception) : PointOfSaleAction()

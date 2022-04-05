@@ -64,7 +64,6 @@ class Dialog : KoinComponent {
         if (state.isOpen) {
             Box(){
                 BackHandler {
-                    println("Miam ok")
                     vmRouter.setEvent(RouterContract.Event.CloseDialog)
                 }
                 FullScreen {

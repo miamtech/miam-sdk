@@ -9,7 +9,7 @@ object UserHandler : KoinComponent {
 
     private val store: UserStore by inject()
 
-    fun updateUserId(userId: String){
+    fun updateUserId(userId: String?){
         triggerAction(UserAction.RefreshUser(userId))
     }
 
