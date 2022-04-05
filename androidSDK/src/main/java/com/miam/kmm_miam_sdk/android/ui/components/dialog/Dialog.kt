@@ -63,10 +63,6 @@ class Dialog : KoinComponent {
 
         if (state.isOpen) {
             Box(){
-           /*     BackPressHandler{
-                    println("Miam ok")
-                    vmRouter.setEvent(RouterContract.Event.CloseDialog)
-                }*/
                 BackHandler {
                     println("Miam ok")
                     vmRouter.setEvent(RouterContract.Event.CloseDialog)
@@ -151,16 +147,6 @@ private class FullScreenLayout(
         setTag(R.id.compose_view_saveable_id_tag, "dialogLayout")
     }
 
-/*    fun Context.getActivity(): AppCompatActivity? {
-        var currentContext = this
-        while (currentContext is ContextWrapper) {
-            if (currentContext is AppCompatActivity) {
-                return currentContext
-            }
-            currentContext = currentContext.baseContext
-        }
-        return null
-    }*/
 
     private var content: @Composable () -> Unit by mutableStateOf({})
 
@@ -197,29 +183,5 @@ private class FullScreenLayout(
     }
 }
 
-/*@Composable
-fun BackPressHandler(
-    backPressedDispatcher: OnBackPressedDispatcher? =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
-    onBackPressed: () -> Unit
-) {
-    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-
-    val backCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                currentOnBackPressed()
-            }
-        }
-    }
-
-    DisposableEffect(key1 = backPressedDispatcher) {
-        backPressedDispatcher?.addCallback(backCallback)
-
-        onDispose {
-            backCallback.remove()
-        }
-    }
-}*/
 
 
