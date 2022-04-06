@@ -1,8 +1,0 @@
-<resources>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="miam_total_time">Temps total</string>
-    <string name="miam_prep_time">Temps de préparation</string>
-    <string name="miam_cook_time">Temps de cuisson</string>
-    <string name="miam_prehat_time">Temps de repos</string>
-</resources>
