@@ -3,6 +3,7 @@ package com.miam.kmm_miam_sdk.component.pricing
 import com.miam.kmm_miam_sdk.base.mvi.*
 import com.miam.kmm_miam_sdk.miam_core.data.repository.PricingRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.Pricing
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -10,6 +11,10 @@ import kotlin.math.roundToInt
 
 open class PricingViewModel :
     BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
+
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in Pricing view $exception")
+    }
 
     private val basketStore : BasketStore by inject()
 
@@ -42,7 +47,7 @@ open class PricingViewModel :
     }
 
     init {
-        launch {
+        launch(coroutineHandler) {
             basketStore.observeSideEffect().collect {
                 setEvent(PricingContract.Event.OnPriceUpdate)
             }
@@ -57,7 +62,7 @@ open class PricingViewModel :
         if( checkIsInCart()){
             extactPricing()
         } else {
-            launch { fetchPrice()}
+            launch(coroutineHandler) { fetchPrice()}
         }
     }
 
@@ -94,7 +99,7 @@ open class PricingViewModel :
         if(uiState.value.recipeId == "" || posId == null ) return
         setState { copy(price = BasicUiState.Loading)}
         try {
-            launch {
+            launch(coroutineHandler) {
                 val recipePrice = pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
                 splitePrice(recipePrice.price / uiState.value.guestNumber)
                 setEvent(PricingContract.Event.SetPrice(recipePrice))
