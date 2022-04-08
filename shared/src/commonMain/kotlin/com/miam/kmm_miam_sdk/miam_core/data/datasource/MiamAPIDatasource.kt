@@ -14,6 +14,7 @@ import io.ktor.client.statement.*
 
 import io.ktor.http.*
 import io.ktor.util.*
+import io.ktor.utils.io.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -39,6 +40,7 @@ object HttpRoutes {
     const val SUPPLIER = "$BASE_URL/suppliers/"
 }
 
+
 @OptIn(InternalAPI::class)
 class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
@@ -51,17 +53,17 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         install(JsonFeature) {
             serializer = KotlinxSerializer(
                 kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true // if the server sends extra fields, ignore them
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                    allowSpecialFloatingPointValues = true
+                    useArrayPolymorphism = true// if the server sends extra fields, ignore them
+
                 }
             )
             acceptContentTypes = listOf(ContentType.parse("application/vnd.api+json"),
                                         ContentType.parse("application/json"))
         }
-        install(Logging){
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-    }
+    }.also { initLogger()}
 
     init {
         httpClient.receivePipeline.intercept(HttpReceivePipeline.State) {

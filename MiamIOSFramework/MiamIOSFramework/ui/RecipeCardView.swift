@@ -2,7 +2,7 @@
 //  RecipeCardView.swift
 //  MiamIOSFramework
 //
-//  Created by noe on 17/02/2022.
+//  Created by miam on 17/02/2022.
 //
 
 import SwiftUI
@@ -10,34 +10,41 @@ import shared
 
 public struct RecipeCardView: View {
 
-    public var recipeId: Int
+    public var recipeId: String
 
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
 
-    public init(recipeId: Int) {
+    public init(recipeId: String) {
         self.recipeId = recipeId
     }
     
 
     public var body: some View {
         VStack {
-            Text("" + viewModel.recipe.attributes.title)
-                .font(.title)
-                .bold()
-            if(viewModel.recipe.attributes.mediaUrl != nil ) { AsyncImage(url: URL(string: "" + (viewModel.recipe.attributes.mediaUrl ?? ""))! ,
-                                                                  placeholder: { Text("loading ...")})}
-           
-
+            if(viewModel.recipe ?? nil != nil) {
+                Text(viewModel.recipe!.attributes?.title ?? "")
+                    .font(.title)
+                    .bold()
+                if(viewModel.recipe!.attributes?.mediaUrl ?? nil != nil ) {
+                    AsyncImage(
+                        url: URL(
+                            string: viewModel.recipe!.attributes?.mediaUrl ?? ""
+                        )! ,
+                    placeholder: { Text("loading ...")}
+                    )
+                }
+            }
           }
         .onAppear(perform: {
-            viewModel.setEvent(event: RecipeContractEvent.OnGetRecipe(idRecipe: Int32(self.recipeId)))
+            viewModel.setEvent(
+                event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId))
         })
     }
 }
 
-struct CharacterDetailView_Previews: PreviewProvider {
+struct RecipeCardView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeCardView(recipeId: 0)
+        RecipeCardView(recipeId: "0")
     }
 }
 

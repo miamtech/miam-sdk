@@ -2,11 +2,16 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
+val kotlin_version: String by extra
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 
+}
+apply {
+    plugin("kotlin-android")
 }
 
 kotlin {
@@ -26,8 +31,9 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:1.6.7")
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
                 implementation("io.ktor:ktor-client-logging:1.6.7")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
                 implementation("io.insert-koin:koin-core:3.1.2")
+                implementation("io.github.aakira:napier:2.5.0")
             }
         }
         val commonTest by getting {
@@ -83,3 +89,10 @@ android {
     }
 }
 
+dependencies {
+    implementation("androidx.core:core-ktx:+")
+    implementation(kotlinModule("stdlib-jdk7", kotlin_version))
+}
+repositories {
+    mavenCentral()
+}

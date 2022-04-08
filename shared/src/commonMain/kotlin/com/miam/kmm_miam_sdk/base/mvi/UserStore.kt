@@ -41,7 +41,7 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
         val newState = when (action) {
             is UserAction.RefreshUser -> {
-                // println("Miam --> basket RefreshUser")
+                //println("Miam --> basket RefreshUser")
                 if (oldState.userId == action.idUser) {
                     // println("Miam --> same user")
                     oldState

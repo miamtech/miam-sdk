@@ -2,13 +2,13 @@
 //  RecipeCardVM.swift
 //  MiamIOSFramework
 //
-//  Created by noe on 17/02/2022.
+//  Created by miam on 17/02/2022.
 //
 
 import shared
 
 public class RecipeCardVM : RecipeViewModel, ObservableObject {
-    @Published var recipe: Recipe = Recipe.companion.emptyRecipe()
+    @Published var recipe: Recipe?
 
 
     override init() {

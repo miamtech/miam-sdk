@@ -5,7 +5,6 @@ class ViewModel : ObservableObject {
 
     init(){
         let a = Analytics()
-        a.log(message: "toto")
     }
 
 }
@@ -20,9 +19,8 @@ struct ContentView: View {
 
     var body: some View {
             VStack {
-                Text("hellop me").padding()
-                RecipeCardView(recipeId: 1)
-                RecipeCardView(recipeId: 2)
+//                RecipeCardView(recipeId: "1")
+//                RecipeCardView(recipeId: "2")
     }
     
 }

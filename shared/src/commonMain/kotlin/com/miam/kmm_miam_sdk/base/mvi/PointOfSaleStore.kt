@@ -109,6 +109,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
         if(extIdPointOfSale == null || idSupplier == null ) return
 
         val pos = pointOfSaleRepository.getPosFormExtId(extIdPointOfSale,idSupplier)
+        println(pos)
         dispatch(PointOfSaleAction.RefreshPointOfSale(pos.id))
     }
 }

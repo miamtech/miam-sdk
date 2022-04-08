@@ -19,7 +19,10 @@ fun JsonObject.getIntValueOrThrow(attribute: String): Int {
 }
 
 val jsonFormat = Json {
+    isLenient = true
     ignoreUnknownKeys = true
+    allowSpecialFloatingPointValues = true
+    useArrayPolymorphism = true
 }
 
 /**

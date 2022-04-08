@@ -595,4 +595,5 @@ Component available for low level customization :
 
 ## iOS integration (Swift)
 
-> Coming soon
+run ./gradlew assembleXCFramework
+
