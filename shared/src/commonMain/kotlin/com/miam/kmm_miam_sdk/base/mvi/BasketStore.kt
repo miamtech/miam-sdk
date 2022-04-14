@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesEntryRepositoryImp
@@ -83,7 +84,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         // println("Miam basket dispatch : $action")
         when (action) {
             is BasketAction.RefreshBasket -> {
-                // println("Miam --> basket refresh")
+                LogHandler.debug("[Miam] RefreshBasket")
                 launch(coroutineHandler) {
                     val basket = basketRepo.getFromListAndPos(action.groceriesList.id, action.idPointOfSale)
                     dispatch(BasketAction.SetBasket(basket, action.callback)) // will set state here
@@ -158,7 +159,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 // do not wait for job completion
             }
             is BasketAction.SetBasket -> {
-                // println("Miam --> basket setBasket")
+                LogHandler.debug("[Miam] SetBasket")
                 val lineEntries = this.groupBasketEntries( state.value.groceriesList?.attributes?.recipesInfos ?: emptyList()
                     , action.basket.relationships?.basketEntries?.data ?: emptyList())
                 val basketPreview = BasketPreviewLine.recipesAndLineEntriesToBasketPreviewLine(state.value.groceriesList!!, lineEntries,)
@@ -168,8 +169,8 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
                 action.callback?.let { it() }
             }
             is BasketAction.SetBasketStats -> {
+                LogHandler.debug("[Miam] SetBasketStats")
                 val newState =  setBasketStats(action.basketPreview, state.value)
-                // println("Basket emit changePreview")
                 launch(coroutineHandler) { sideEffect.emit(BasketEffect.BasketPreviewChange) }
                 updateStateIfChanged(newState)
             }
@@ -200,23 +201,23 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
-            return recipesInfos.map { ri ->
-               var lineEntries = LineEntries()
-                entries.filter { entry -> entry.attributes!!.recipeIds?.contains(ri.id) ?: false }
-                    .forEach { matchingEntry ->
-                        val available  = matchingEntry.attributes!!.selectedItemId
-                        if(available != null){
-                            when(matchingEntry.attributes.groceriesEntryStatus){
-                                 "often_deleted" -> lineEntries.oftenDeleted.add(matchingEntry)
-                                    "deleted" -> lineEntries.removed.add(matchingEntry)
-                                 else -> lineEntries.found.add(matchingEntry)
-                            }
-                        } else {
-                            lineEntries.notFound.add(matchingEntry)
+        return recipesInfos.map { ri ->
+            val lineEntries = LineEntries()
+            entries.filter { entry -> entry.attributes!!.recipeIds?.contains(ri.id) ?: false }
+                .forEach { matchingEntry ->
+                    val available  = matchingEntry.attributes!!.selectedItemId
+                    if(available != null) {
+                        when(matchingEntry.attributes.groceriesEntryStatus){
+                            "often_deleted" -> lineEntries.oftenDeleted.add(matchingEntry)
+                            "deleted" -> lineEntries.removed.add(matchingEntry)
+                            else -> lineEntries.found.add(matchingEntry)
                         }
-                     }
-                lineEntries
-            }
+                    } else {
+                        lineEntries.notFound.add(matchingEntry)
+                    }
+                }
+            lineEntries
+        }
     }
 
     fun basketIsEmpty( ): Boolean {

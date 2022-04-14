@@ -5,6 +5,7 @@ import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.flow.*
@@ -37,9 +38,9 @@ class BasketPreviewViewModel(val recipeId: String?):
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
           val job = launch {
-                basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange  }.collect{
-                    basketChange()
-                }
+              basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
+                  basketChange()
+              }
             }
             setState { copy(job = job) }
             countListener()
@@ -119,7 +120,6 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun addEntry(entry: BasketEntry){
-        println("Miam --> add entry")
         currentState.bpl?.entries?.found?.add(entry)
         currentState.bpl?.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
         currentState.bpl?.entries?.oftenDeleted?.removeAll { be -> be.id == entry.id }
@@ -189,13 +189,11 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun basketChange(){
-        // println("Miam --> basket change")
         launch {
             val bpl = basketStore.observeState().first {
                 it.basketPreview != null && it.basketPreview.isNotEmpty()
             }.basketPreview?.find {
-                // TODO : recipeId is string
-                    basketPreviewLine -> basketPreviewLine.id == recipeId.toString()
+                basketPreviewLine -> basketPreviewLine.id == recipeId.toString()
             }
             if(bpl != null) {
                 setEvent(BasketPreviewContract.Event.SetLines(bpl))

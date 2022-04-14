@@ -111,8 +111,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         }
         // side Effect only to refresh UI of c
         sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId, guest))
-        alterRecipeInfos(recipesInfos, states)
-        dispatch(GroceriesListAction.RefreshGroceriesList)
+        val newGl = alterRecipeInfos(recipesInfos, states)
+        dispatch(GroceriesListAction.SetGroceriesList(newGl))
     }
 
     private suspend fun removeRecipe(recipeId: String, states: GroceriesListState) {
@@ -122,8 +122,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         val newRecipeInfos = recipesInfos!!.filter { el -> el.id.toString() != recipeId }.toMutableList()
 
         sideEffect.emit(GroceriesListEffect.RecipeRemoved(recipeId))
-        alterRecipeInfos(newRecipeInfos, states)
-        dispatch(GroceriesListAction.RefreshGroceriesList)
+        val newGl = alterRecipeInfos(newRecipeInfos, states)
+        dispatch(GroceriesListAction.SetGroceriesList(newGl))
     }
 
     private suspend fun alterRecipeInfos(recipesInfos: MutableList<RecipeInfos>, states: GroceriesListState): GroceriesList {
