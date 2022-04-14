@@ -8,6 +8,7 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -15,6 +16,11 @@ import org.koin.core.component.inject
 
 class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
+
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in basket preview $exception")
+    }
+
 
     private val basketStore : BasketStore by inject()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
@@ -37,10 +43,10 @@ class BasketPreviewViewModel(val recipeId: String?):
         if(recipeId != null){
             // println("Miam --> basket RecipeId : $recipeId ")
             basketChange()
-          val job = launch {
-              basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
-                  basketChange()
-              }
+          val job = launch(coroutineHandler) {
+                basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
+                    basketChange()
+                }
             }
             setState { copy(job = job) }
             countListener()
@@ -49,7 +55,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun countListener() {
-        launch {
+        launch(coroutineHandler) {
             _guestChangeDebounceFlow.debounce(500).collect {
                 println("Miam Emmit ${it.first.count}")
                 setEvent(BasketPreviewContract.Event.Reload)
@@ -59,7 +65,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun listenEntriesChanges() {
-       launch {
+       launch(coroutineHandler) {
            lineEntriesSubject.debounce(500).collect { entries ->
             //    println("Miam listenEntriesChanges debounced with $entries")
             //    println("Miam update ui $entries")
@@ -90,12 +96,12 @@ class BasketPreviewViewModel(val recipeId: String?):
             is BasketPreviewContract.Event.SetRecipeId -> setRecipeId(event.newRecipeId)
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
             is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
-            is BasketPreviewContract.Event.UpdateBasketEntry ->launch { updateBasketEntry(event.entry, event.finalQty)}
-            is BasketPreviewContract.Event.RemoveEntry -> launch { removeBasketEntry(event.entry) }
+            is BasketPreviewContract.Event.UpdateBasketEntry ->launch(coroutineHandler) { updateBasketEntry(event.entry, event.finalQty)}
+            is BasketPreviewContract.Event.RemoveEntry -> launch(coroutineHandler) { removeBasketEntry(event.entry) }
             is BasketPreviewContract.Event.ReplaceItem -> replaceItem(event.entry)
             is BasketPreviewContract.Event.ToggleLine -> toggleLine()
             is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
-            is BasketPreviewContract.Event.CountChange -> launch { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
+            is BasketPreviewContract.Event.CountChange -> launch(coroutineHandler) { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
             is BasketPreviewContract.Event.CloseItemSelector ->  setState { copy(showItemSelector = false)}
             is BasketPreviewContract.Event.KillJob -> uiState.value.job?.cancel()
@@ -189,7 +195,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun basketChange(){
-        launch {
+        launch(coroutineHandler) {
             val bpl = basketStore.observeState().first {
                 it.basketPreview != null && it.basketPreview.isNotEmpty()
             }.basketPreview?.find {
