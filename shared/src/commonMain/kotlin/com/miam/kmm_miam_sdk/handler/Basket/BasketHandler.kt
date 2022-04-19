@@ -3,17 +3,18 @@ package com.miam.kmm_miam_sdk.handler.Basket
 import com.miam.kmm_miam_sdk.base.mvi.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
+
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in basket preview $exception")
+    }
 
     private var _comparator: BasketComparator? = null
     val basketStore: BasketStore by inject()
@@ -66,7 +67,7 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
         //TODO handle analytic
         val total = paymentTotal()
         if (basketStore.basketIsEmpty()) { return }
-            launch {
+            launch(coroutineHandler) {
                 basketStore.observeSideEffect().filter {
                         basketEffect -> basketEffect == BasketEffect.BasketConfirmed
                 }.take(1).collect {
@@ -97,7 +98,7 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
 
    private fun handleBasketSync() {
     //    println("Miam handleBasketSync")
-       basketListnerJob = launch {
+       basketListnerJob = launch(coroutineHandler) {
            basketStore.observeSideEffect().collect{
                basketStore.observeState().value.basket?.relationships?.basketEntries?.data.let { entries ->
                    println("Miam sync emited " + entries)

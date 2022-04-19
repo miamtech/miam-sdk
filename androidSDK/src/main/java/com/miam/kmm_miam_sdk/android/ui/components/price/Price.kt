@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import androidx.compose.ui.unit.sp
@@ -44,18 +45,16 @@ class Price(
             val guestNumber:Int? = -1,
             val price: Double? = null,
             val isTotalPrice: Boolean = false,
-            val color: Color? = null ,
-            val fontSize: Int? = null
     ) {
 
-    private var vmPrice : PricingViewModel = PricingViewModel()
+    private var vmPrice: PricingViewModel = PricingViewModel()
 
     init {
-        if(recipeId != "" && guestNumber != -1 ){
+        if (recipeId != "" && guestNumber != -1) {
             vmPrice.setEvent(
                 PricingContract.Event.OnSetRecipe(recipeId!!, guestNumber!!)
             )
-        } else if(price != null) {
+        } else if (price != null) {
             vmPrice.setEvent(
                 PricingContract.Event.SetDirectPrice(price)
             )
@@ -63,43 +62,47 @@ class Price(
 
         vmPrice.setEvent(
             PricingContract.Event.OnPriceUpdate
-            )
+        )
     }
 
-        @Composable
-        fun content(){
-            val state by vmPrice.uiState.collectAsState()
-            Box(){
-                ManagementResourceState(
-                    resourceState = state.price,
-                    successView = { price ->
-                        requireNotNull(price)
-                        priceView(price, vmPrice)
-                    },
-                    emptyView = { emptyState() },
-                    onTryAgain = { /*TODO*/ },
-                    onCheckAgain = { /*TODO*/ },
-                    loadingView = { PriceShimmer() }
-                )
-            }
-        }
-
-
     @Composable
-    fun emptyState(){
+    fun content() {
+        val state by vmPrice.uiState.collectAsState()
+        Box() {
+            ManagementResourceState(
+                resourceState = state.price,
+                successView = { price ->
+                    requireNotNull(price)
+                    PriceView(
+                        vmPrice.currentState.integerPart,
+                        vmPrice.currentState.decimalPart,
+                        isTotalPrice
+                    )
+                },
+                emptyView = { EmptyState() },
+                onTryAgain = { /*TODO*/ },
+                onCheckAgain = { /*TODO*/ },
+                loadingView = { PriceShimmer(isTotalPrice) }
+            )
+        }
+    }
+
+}
+    @Composable
+    fun EmptyState(){
         Spacer(modifier = priceEmptyState)
     }
 
     @Composable
-    fun priceView(price: Pricing, vmPrice: PricingViewModel) {
+    fun PriceView( integerPart : String , decimalPart : String, isTotalPrice: Boolean) {
             Column( modifier= mainContainer ) {
                 Row( modifier= priceContainer ) {
-                    Text("${vmPrice.currentState.integerPart},",
+                    Text("${integerPart},",
                         color = priceIntegerColor,
                         style = subtitle
                     )
                     Text(
-                        "${vmPrice.currentState.decimalPart}$currency",
+                        "${decimalPart}$currency",
                         color = priceDecimalColor,
                         style = bodySmall
                     )
@@ -116,7 +119,7 @@ class Price(
 
 
     @Composable
-    fun PriceShimmer(){
+    fun PriceShimmer(isTotalPrice: Boolean){
 
         val shimerColors = listOf(
             loaderColor.copy(alpha = 0.6F),
@@ -145,11 +148,11 @@ class Price(
             )
         )
 
-        shimmerPriceItem(brush)
+        shimmerPriceItem(brush, isTotalPrice)
     }
 
     @Composable
-    fun shimmerPriceItem(brush: Brush){
+    fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean){
 
         Column() {
             Row() {
@@ -166,8 +169,25 @@ class Price(
 
         }
     }
+
+
+@Preview
+@Composable
+fun PricePreview() {
+    PriceView("10","05", false)
 }
 
+@Preview
+@Composable
+fun TotalPricePreview() {
+    PriceView("10","05", true)
+}
+
+@Preview
+@Composable
+fun PriceLoadingPreview() {
+    PriceShimmer( false)
+}
 
 
 

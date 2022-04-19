@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
@@ -31,6 +32,26 @@ data class GroceriesList private constructor(
         val recipeInfo = this.attributes!!.recipesInfos.find { recipeInfos -> recipeInfos.id.toString() == recipeId }
             ?: return -1
         return recipeInfo.guests
+    }
+
+    fun missingRecipesIds(existingRecipes: List<Recipe>): List<String> {
+        val missingIds = mutableListOf<String>()
+        val allIds = this.attributes?.recipesInfos?.map { ri -> ri.id.toString() } ?: emptyList()
+        val existingIds = existingRecipes.map { recipe -> recipe.id }
+        allIds.forEach { recipeId ->
+            if (existingIds.indexOf(recipeId) < 0 ) {
+                missingIds.add(recipeId)
+            }
+        }
+        return missingIds
+    }
+
+    fun rebuildRecipesRelationships(missingRecipes: List<Recipe>, existingRecipes: List<Recipe>) {
+        val newRecipesList = mutableListOf<Recipe>()
+        val existingPresentRecipes = existingRecipes.filter { recipe -> this.hasRecipe(recipe.id) }
+        newRecipesList.addAll(existingPresentRecipes)
+        newRecipesList.addAll(missingRecipes)
+        this.recipes = newRecipesList
     }
 }
 

@@ -29,6 +29,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.*
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import com.miam.kmm_miam_sdk.android.ui.components.common.CustomActionButton
 import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.addRecipe
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.alreadyInCart
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.checkBasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.cookTime
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.ingredient
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.prepTime
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.restingTime
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.steps
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.totalTime
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
@@ -137,7 +146,7 @@ private fun recipeDetailCard(
                     ) {
 
                         Text(
-                            text = "Déjà ajoutée", color = Color.White,
+                            text = alreadyInCart, color = Color.White,
                             modifier = Modifier.padding(horizontal = 5.dp)
                         )
                     }
@@ -150,9 +159,8 @@ private fun recipeDetailCard(
                 .wrapContentWidth(CenterHorizontally)
                 .fillMaxWidth()
         ) {
-            // Temps de préparation
             PrepInfos(
-                R.string.miam_total_time,
+                totalTime,
                 R.drawable.ic_clock,
                 recipe.totalTime
             )
@@ -166,27 +174,26 @@ private fun recipeDetailCard(
         ) {
             if (recipe.attributes!!.preparationTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
-                    R.string.miam_prep_time,
+                    prepTime,
                     R.drawable.ic_knife,
                     recipe.attributes!!.preparationTime.toString()
                 )
             }
             if (recipe.attributes!!.cookingTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
-                    R.string.miam_cook_time,
+                    cookTime,
                     R.drawable.ic_oven,
                     recipe.attributes!!.cookingTime.toString()
                 )
             }
             if (recipe.attributes!!.preheatingTime?.compareTo(0.minutes) != 0) {
                 PrepInfos(
-                    R.string.miam_prehat_time,
+                    restingTime,
                     R.drawable.ic_resttime,
                     recipe.attributes!!.preheatingTime.toString()
                 )
             }
         }
-        // Titre
         Row() {
             Text(
                 text = recipe.attributes!!.title,
@@ -202,9 +209,6 @@ private fun recipeDetailCard(
                     .padding(horizontal = 30.dp)
             )
         }
-
-
-        // Difficulte
         Row(
             Modifier
                 .padding(horizontal = 16.dp, vertical = 24.dp)
@@ -246,14 +250,14 @@ private fun recipeDetailCard(
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
-                text = "Ingredients",
+                text = ingredient,
                 action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowIngredient) },
                 isActive = vmRecipeCard.currentState.tabState == TabEnum.INGREDIENT
             )
             Spacer(Modifier.padding(horizontal = 8.dp))
             CustomActionButton(
                 icon = R.drawable.ic_preparation,
-                text = "Préparation",
+                text = steps,
                 action = { vmRecipeCard.setEvent(RecipeContract.Event.ShowSteps) },
                 isActive = vmRecipeCard.currentState.tabState == TabEnum.STEP
             )
@@ -282,7 +286,7 @@ private fun recipeDetailCard(
                             )
                         ) },
                         icon = R.drawable.ic_cart,
-                        text = "Voir le détail",
+                        text = checkBasketPreview,
                         isActive = true
                     )
                 } else {
@@ -295,7 +299,7 @@ private fun recipeDetailCard(
                                 )
                             ) },
                         icon = R.drawable.ic_cart,
-                        text = "Sélectionner ce repas",
+                        text = addRecipe,
                         isActive = true
                     )
                 }
@@ -319,13 +323,13 @@ fun RecipeContent(
 }
 
 @Composable
-fun PrepInfos(title: Int, icon: Int, time: String) {
+fun PrepInfos(title: String, icon: Int, time: String) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(title),
+            text = title,
             color = MiamMasterView.Grey02,
             fontSize = 11.sp,
             modifier = Modifier

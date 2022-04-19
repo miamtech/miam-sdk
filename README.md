@@ -569,15 +569,15 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 
 Component available for low level customization :
 
-| Name | Style | Color | Icon | Text | 
-|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
-| Recipe card |✅ | ❌ | ✅ |✅
-| Basket preview |❌ | ❌ |❌ | ❌
-| Price |  ✅ |  ✅ |➖| ✅
-| Item selector |✅ | ✅ |✅ |✅
-| Recipe detail |❌ | ❌ |❌|❌
-| Counter | ✅| ✅ |✅|➖
-| Dialog |✅ | ➖|➖|➖
+| Name | Style | Color | Icon | Text | Preview |
+|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| Recipe card |✅ | ❌ | ✅ |✅ | ❌
+| Basket preview |❌ | ❌ |❌ | ❌ | ❌
+| Price |  ✅ |  ✅ |➖| ✅ | ✅
+| Item selector |✅ | ✅ |✅ |✅ | ❌
+| Recipe detail |❌ | ❌ |❌|❌ | ❌
+| Counter | ✅| ✅ |✅|➖ |❌
+| Dialog |✅ | ➖|➖|➖ | ❌
 
 - Add component preview for development
 
@@ -592,6 +592,7 @@ Component available for low level customization :
 - Selected recipes history page
 - Favorites recipes
 - Personal recipes creation
+- Recipe tags
 
 ## iOS integration (Swift)
 

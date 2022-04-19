@@ -14,3 +14,4 @@ iosApp/iosApp.xcodeproj/project.xcworkspace/xcuserdata/noe.xcuserdatad/UserInter
 iosApp/iosApp.xcodeproj/xcuserdata/noe.xcuserdatad/xcschemes/xcschememanagement.plist
 MiamIOSFramework/MiamIOSFramework.xcodeproj/xcuserdata/noe.xcuserdatad/xcschemes/xcschememanagement.plist
 androidtestapp/libs/androidSDK-debug.aar
+after_build.sh
