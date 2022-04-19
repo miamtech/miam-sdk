@@ -572,7 +572,7 @@ Component available for low level customization :
 | Name | Style | Color | Icon | Text | 
 |:-------------|:-------------:|:-------------:|:-------------:|:-------------:|
 | Recipe card |✅ | ❌ | ✅ |✅
-| Basket preview |❌ | ❌ |❌ | ❌
+| Basket preview |❌ | ❌ |❌ | ✅
 | Price |  ✅ |  ✅ |➖| ✅
 | Item selector |✅ | ✅ |✅ |✅
 | Recipe detail |❌ | ❌ |❌|❌
@@ -592,6 +592,7 @@ Component available for low level customization :
 - Selected recipes history page
 - Favorites recipes
 - Personal recipes creation
+- Recipe tags
 
 ## iOS integration (Swift)
 
