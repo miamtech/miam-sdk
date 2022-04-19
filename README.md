@@ -592,6 +592,7 @@ Component available for low level customization :
 - Selected recipes history page
 - Favorites recipes
 - Personal recipes creation
+- Recipe tags
 
 ## iOS integration (Swift)
 

@@ -8,6 +8,7 @@ import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 import kotlinx.coroutines.flow.collect
@@ -18,6 +19,10 @@ import org.koin.core.component.inject
 
 open class RecipeViewModel :
     BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in Pricing view $exception")
+    }
 
     private val getRecipeUseCase: GetRecipeUseCase by inject()
     private val addRecipeUseCase: AddRecipeUseCase by inject()
@@ -45,13 +50,13 @@ open class RecipeViewModel :
         )
 
     init {
-        launch {
+        launch(coroutineHandler) {
             groceriesListStore.observeSideEffect().collect {
                 handleGLChange(it)
             }
 
         }
-        launch {
+        launch(coroutineHandler) {
             listenguestSubjectChanges()
         }
     }
@@ -106,7 +111,7 @@ open class RecipeViewModel :
     private fun removeGuest() {
         if (uiState.value.guest == 1) return
         setState { copy(guest = uiState.value.guest - 1) }
-        if (checkIsInCart()) launch {
+        if (checkIsInCart()) launch(coroutineHandler) {
             guestSubject.emit(uiState.value.guest)
         }
     }
@@ -114,7 +119,7 @@ open class RecipeViewModel :
     private fun addGuest() {
         if (uiState.value.guest == 100) return
         setState { copy(guest = uiState.value.guest + 1) }
-        if (checkIsInCart()) launch {
+        if (checkIsInCart()) launch(coroutineHandler) {
             guestSubject.emit(uiState.value.guest)
         }
     }
@@ -128,7 +133,7 @@ open class RecipeViewModel :
     }
 
     private fun addOrAlterRecipe() {
-        launch {
+        launch(coroutineHandler) {
             addRecipeUseCase.execute(
                 recipe.copy(
                     attributes = recipe.attributes!!.copy(
@@ -163,7 +168,7 @@ open class RecipeViewModel :
     private fun getRecipe(recipeId: String) {
         this.recipeId = recipeId
         setState { copy(recipeState = BasicUiState.Loading) }
-        launch{
+        launch(coroutineHandler) {
             val recipe = getRecipeUseCase.execute(recipeId)
             setRecipe(recipe)
         }
@@ -173,7 +178,7 @@ open class RecipeViewModel :
     private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
         println("Miam contexte ---> ${criteria.shelfIngredientsIds?.toString()}")
         if(uiState.value.recipeLoaded) return
-        launch{
+        launch(coroutineHandler){
             pointOfSaleStore.observeState().value.idSupplier?.let {
                 val recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
                 setRecipe(recipe)

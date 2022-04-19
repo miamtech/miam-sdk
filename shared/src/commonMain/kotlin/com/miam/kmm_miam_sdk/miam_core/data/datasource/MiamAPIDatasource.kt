@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
@@ -139,7 +140,10 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getRecipeById(id: String, included: List<String>): Recipe {
-        return this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + id + "?" + includedToString(included))!!.toRecord() as Recipe
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $id")
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + id + "?" + includedToString(included))!!.toRecord() as Recipe
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $id")
+        return returnValue
     }
 
     override suspend fun getRecipeSuggestions(
@@ -147,33 +151,49 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         criteria: SuggestionsCriteria,
         included: List<String>
     ): List<Recipe> {
-        return this.post<RecordWrapper>("${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&${includedToString(included)}", criteria)!!.toRecords() as List<Recipe>
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
+        val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&${includedToString(included)}"
+        val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords() as List<Recipe>
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria")
+        return returnValue
     }
 
     ///////// GroceriesList ///////////////
 
     override suspend fun getCurrent(included: List<String>): GroceriesList {
-        return httpClient.get<RecordWrapper> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getCurrent")
+        val returnValue =  httpClient.get<RecordWrapper> {
             url(HttpRoutes.GROCERIESLIST_ENDPOINT + "current?" + includedToString(included))
         }.toRecord() as GroceriesList
+        LogHandler.info("[Miam][MiamAPIDatasource] end getCurrent")
+        return returnValue
     }
 
     override suspend fun reset(): GroceriesList {
-        return httpClient.get<RecordWrapper>{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting reset")
+        val returnValue =   httpClient.get<RecordWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"reset")
         }.toRecord() as GroceriesList
+        LogHandler.info("[Miam][MiamAPIDatasource] end reset")
+        return returnValue
     }
 
     override suspend fun updateGroceriesList(groceriesList: GroceriesList, included: List<String>): GroceriesList {
-        return  httpClient.patch<RecordWrapper>{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting updateGroceriesList $groceriesList")
+        val returnValue = httpClient.patch<RecordWrapper>{
                 headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
                 url(HttpRoutes.GROCERIESLIST_ENDPOINT + groceriesList.id + "?" + includedToString(included))
                 body = RecordWrapper.fromRecord(groceriesList)
             }.toRecord() as GroceriesList
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesList $groceriesList")
+        return returnValue
     }
 
-    override suspend fun getRecipes(recipesInfos: List<RecipeInfos>): List<Recipe> {
-        return recipesInfos.map{ ri -> getRecipeById(ri.id.toString()) }
+    override suspend fun getRecipes(recipesIds: List<String>): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $recipesIds")
+        val returnValue = recipesIds.map{ rid -> getRecipeById(rid) }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
+        return returnValue
     }
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
@@ -181,10 +201,12 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale {
         // this filter is suppose to return a single result or nothing
-      val posList =  httpClient.get<PointOfSales>{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getPosFormExtId $extId $supplierId")
+        val posList =  httpClient.get<PointOfSales>{
             url(HttpRoutes.POINTOFSALE_ENDPOINT+"?filter[ext-id]=$extId&filter[supplier-id]=$supplierId")
         }
-      if(posList.data.isEmpty()) throw Exception("Point of sale not found or incorrect")
+        if(posList.data.isEmpty()) throw Exception("Point of sale not found or incorrect")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId")
         return posList.data[0]
     }
 
@@ -192,58 +214,71 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
 
     override suspend fun getFromListAndPos(listId: String, posId: Int, included: List<String>): Basket {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getFromListAndPos $listId $posId")
         val baskets = httpClient.get<RecordWrapper>{
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$listId/baskets?filter[point_of_sale_id]=$posId&${includedToString(included)}")
         }.toRecords() as List<Basket>
         if(baskets.isEmpty()) throw Exception("basket not found or incorrect")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getFromListAndPos $listId $posId")
         return baskets[0]
     }
 
     override suspend fun updateBasket(basket: Basket, origin:String): Basket {
-        return  httpClient.patch<RecordWrapper>{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting updateBasket $basket")
+        val returnValue = httpClient.patch<RecordWrapper>{
             headers.append(HttpHeaders.Origin, origin)
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
             url(HttpRoutes.BASKET_ENDPOINT+"${basket.id}")
             body = RecordWrapper.fromRecord(basket)
         }.toRecord() as Basket
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasket $basket")
+        return returnValue
     }
 
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
     override suspend fun getRecipePrice(idRecipe: String, idPos: Int): Pricing {
-        return  httpClient.get{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipePrice $idRecipe $idPos")
+        val returnValue = httpClient.get<Pricing> {
             url(HttpRoutes.RECIPE_ENDPOINT+"$idRecipe/pricing?point_of_sale_id=$idPos")
         }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipePrice $idRecipe $idPos")
+        return returnValue
     }
 
 ////////////////////////////////// BASKET ENTRY ////////////////////////////////////////
 
     override suspend fun updateBasketEntry(basketEntry: BasketEntry, included: List<String>): BasketEntry {
-        // println("Miam datasource updateBasketEntry $basketEntry")
-        return httpClient.patch<RecordWrapper>{
+        LogHandler.info("[Miam][MiamAPIDatasource] starting updateBasketEntry $basketEntry")
+        val returnValue = httpClient.patch<RecordWrapper>{
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
             url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?${includedToString(included)}")
             body = RecordWrapper.fromRecord(basketEntry)
         }.toRecord() as BasketEntry
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasketEntry $basketEntry")
+        return returnValue
     }
 
     ////////////////////////////////// GROCERY ENTRY ////////////////////////////////////////
 
     override suspend fun updateGroceriesEntry(ge: GroceriesEntry): GroceriesEntry {
-        // println("Miam datasource updateGroceriesEntry $ge")
-        return  httpClient.patch<RecordWrapper>{
-         headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
-         url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
-         body =  RecordWrapper.fromRecord((ge))
-     }.toRecord() as GroceriesEntry
+        LogHandler.info("[Miam][MiamAPIDatasource] starting updateGroceriesEntry $ge")
+        val returnValue = httpClient.patch<RecordWrapper>{
+            headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+            url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
+            body =  RecordWrapper.fromRecord((ge))
+        }.toRecord() as GroceriesEntry
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesEntry $ge")
+        return returnValue
     }
 
     /////////////////////////////////////SUPPLIER /////////////////////////////////////////////////
 
 
     override suspend fun notifyBasketUpdated(basketToken: String, supplierId: Int, status: String, price: String?) {
-        return  httpClient.post{
-            headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
+        LogHandler.info("[Miam][MiamAPIDatasource] starting notifyBasketUpdated $basketToken $supplierId $status")
+        return httpClient.post {
+            headers.append(HttpHeaders.ContentType, "application/vnd.api+json" )
             url("${HttpRoutes.SUPPLIER}$supplierId/webhooks/basket_updated")
             body = SupplierNotificationWrapper(basketToken,status, price)
         }

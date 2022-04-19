@@ -48,6 +48,9 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     Dispatchers.Main
 ) {
 
+    private val coroutineHandler = CoroutineExceptionHandler {
+            _, exception -> println("Miam error in main activity $exception")
+    }
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private val basketHandler = BasketHandler()
@@ -149,7 +152,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         }
 
         retailerBasketSubject.value.items.addAll(initialBasket)
-        launch {
+        launch(coroutineHandler) {
             retailerBasketSubject.emit(retailerBasketSubject.value)
         }
     }
@@ -159,7 +162,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun initBasketListener(callback: (products: List<RetailerProduct>) -> Unit) {
-        launch {
+        launch(coroutineHandler) {
             retailerBasketSubject.collect {
                 print("DEMO basket EMT")
                 callback(it.items.map { product -> coursesUProductTORetailerProduct(product)  })
@@ -172,7 +175,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun pushProduct(){
-        launch {
+        launch(coroutineHandler) {
             val randomElement = productSampleCoursesU.random()
             retailerBasketSubject.value.items.add(randomElement.copy(quantity = Random.nextInt(1,4)))
             retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
@@ -180,7 +183,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun removeProduct(){
-        launch {
+        launch(coroutineHandler) {
             if(retailerBasketSubject.value.items.isNotEmpty()) {
                 retailerBasketSubject.value.items.removeAt(Random.nextInt(retailerBasketSubject.value.items.size))
                 retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
@@ -206,7 +209,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
             }
 
         }
-        launch {
+        launch(coroutineHandler) {
             retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
         }
     }
