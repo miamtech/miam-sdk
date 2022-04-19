@@ -82,7 +82,6 @@ dependencies {
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
     implementation("androidx.core:core-ktx:+")
-    implementation(kotlinModule("stdlib-jdk7", kotlin_version))
 
 
 }

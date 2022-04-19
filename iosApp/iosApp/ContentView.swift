@@ -4,7 +4,6 @@ import MiamIOSFramework
 class ViewModel : ObservableObject {
 
     init(){
-        let a = Analytics()
     }
 
 }

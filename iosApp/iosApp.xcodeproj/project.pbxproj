@@ -11,9 +11,8 @@
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
-		DC2FED5727BE9F6D00F53F37 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32E27BE979A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E33127BE980E000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32E27BE979A000D3EA6 /* MiamIOSFramework.framework */; };
-		DCD4E33227BE980E000D3EA6 /* MiamIOSFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32E27BE979A000D3EA6 /* MiamIOSFramework.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DCD4E33227BE980E000D3EA6 /* MiamIOSFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32E27BE979A000D3EA6 /* MiamIOSFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +62,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCD4E33127BE980E000D3EA6 /* MiamIOSFramework.framework in Frameworks */,
-				DC2FED5727BE9F6D00F53F37 /* MiamIOSFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,7 +151,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1330;
 				ORGANIZATIONNAME = orgName;
 				TargetAttributes = {
 					7555FF7A242A565900829871 = {
