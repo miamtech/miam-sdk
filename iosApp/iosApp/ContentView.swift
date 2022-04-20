@@ -12,14 +12,12 @@ struct ContentView: View {
         
      @ObservedObject
      var viewModel = ViewModel()
-    
-    
-//    analytics.log(message: "analytics initialized")
+
 
     var body: some View {
             VStack {
-//                RecipeCardView(recipeId: "1")
-//                RecipeCardView(recipeId: "2")
+                RecipeCardView(recipeId: "1")
+                RecipeCardView(recipeId: "2")
     }
     
 }

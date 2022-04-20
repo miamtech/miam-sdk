@@ -596,5 +596,57 @@ Component available for low level customization :
 
 ## iOS integration (Swift)
 
-run ./gradlew assembleXCFramework
+### Initialization
 
+#### Build and import
+
+CI/CD is not setup yet and the built archived are not hosted anywhere. You will need to clone this repository and build the archive in production mode.
+
+run `./gradlew assembleXCFramework`
+
+The archive will be generated as `` in ``.
+
+#### Main class
+
+We recommend that all the mapping functions that will define the interactions between the SDK and the host app be wrapped in a main "Miam" class.
+
+This class will use methods and attributes defined in SDK "handler" classes to manage objects such as the User profile, the Basket, or the selected Store. These haldlers are all singletons.
+
+Make sure this main "Miam" class is a singleton and instantiated only once in your runtime. Here is a basic implementation
+
+```swift
+// file Miam.swift
+import Foundation
+
+public class Miam {
+  public static let sharedInstance = Miam()
+
+  private init() {
+    // need to be private
+  }
+}
+```
+
+```swift
+//IosApp.swift
+
+import SwiftUI
+
+@main
+struct ios_miam_integrationApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // init miam
+        let _ = Miam.sharedInstance
+        return true
+    }
+}
+```

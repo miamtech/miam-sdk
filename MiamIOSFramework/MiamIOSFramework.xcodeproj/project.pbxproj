@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B19B72127FDCFEE002AFDE8 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32627BE9657000D3EA6 /* shared.xcframework */; };
 		0B19B72227FDCFEE002AFDE8 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32627BE9657000D3EA6 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DC2FED5427BE9EE000F53F37 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2FED5327BE9EE000F53F37 /* Analytics.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -44,7 +43,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DC2FED5327BE9EE000F53F37 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = SOURCE_ROOT; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 				DCD4E31C27BE92AC000D3EA6 /* ui */,
 				DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */,
 				DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */,
-				DC2FED5327BE9EE000F53F37 /* Analytics.swift */,
 			);
 			path = MiamIOSFramework;
 			sourceTree = "<group>";
@@ -282,7 +279,6 @@
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
-				DC2FED5427BE9EE000F53F37 /* Analytics.swift in Sources */,
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

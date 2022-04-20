@@ -5,7 +5,9 @@ import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleAction
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.native.concurrent.ThreadLocal
 
+@ThreadLocal
 object  PointOfSaleHandler: KoinComponent {
 
     var isAvailable = fun():Boolean{return true}
