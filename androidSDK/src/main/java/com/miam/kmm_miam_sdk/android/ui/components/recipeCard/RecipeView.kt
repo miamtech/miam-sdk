@@ -88,6 +88,9 @@ class RecipeView @JvmOverloads constructor(
         }
     }
 
+    fun unbind() {
+        vmRecipe.setEvent(RecipeContract.Event.OnUnbind)
+    }
 
     var idRecipe: String
         get() = idRecipeState.value ?: ""
