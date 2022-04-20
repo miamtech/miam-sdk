@@ -37,8 +37,8 @@ dependencies {
     embed(project(":shared"))
 
     // dependency injection
-    embed("io.insert-koin:koin-android:3.1.2")
-    embed("io.insert-koin:koin-core:3.1.2")
+    implementation("io.insert-koin:koin-android:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.2")
 
     // Http Client
     implementation( "io.ktor:ktor-client-android:1.6.7")
