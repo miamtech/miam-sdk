@@ -604,7 +604,13 @@ CI/CD is not setup yet and the built archived are not hosted anywhere. You will 
 
 run `./gradlew assembleXCFramework`
 
-The archive will be generated as `` in ``.
+Then go in your project click on your app name with two fingers, add select `add file to`
+![alt text](pic/addFrameworkStep1.png "add framework step 1")
+
+Navigate to miam kmm repo and select `MiamIOSFramework.xcodeproj`
+
+![alt text](pic/addFrameworkStep2.png "add framework step 2")
+
 
 #### Main class
 
