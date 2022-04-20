@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.base.mvi.*
 
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -35,8 +36,10 @@ open class RecipeViewModel :
     private lateinit var recipe: Recipe
     private val guestSubject : MutableSharedFlow<Int> = MutableSharedFlow()
 
-    override fun createInitialState(): RecipeContract.State =
-        RecipeContract.State(
+    override fun createInitialState(): RecipeContract.State = defaultState()
+
+    private fun defaultState(): RecipeContract.State {
+        return RecipeContract.State(
             recipeState = BasicUiState.Loading,
             headerText = "",
             guest = 4,
@@ -48,6 +51,7 @@ open class RecipeViewModel :
             activeStep = 0,
             recipeLoaded = false
         )
+    }
 
     init {
         launch(coroutineHandler) {
@@ -68,6 +72,7 @@ open class RecipeViewModel :
             is RecipeContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
             is RecipeContract.Event.SetActiveStep -> setActiveSteps(event.stepIndex)
             is RecipeContract.Event.OnSetCriteria -> setRecipeFromSuggestion(event.crieria)
+            RecipeContract.Event.OnUnbind -> unBindRecipe()
             RecipeContract.Event.OnAddRecipe -> addOrAlterRecipe()
             RecipeContract.Event.DecreaseGuest -> removeGuest()
             RecipeContract.Event.IncreaseGuest -> addGuest()
@@ -176,8 +181,7 @@ open class RecipeViewModel :
     }
 
     private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
-        println("Miam contexte ---> ${criteria.shelfIngredientsIds?.toString()}")
-        if(uiState.value.recipeLoaded) return
+        LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
         launch(coroutineHandler){
             pointOfSaleStore.observeState().value.idSupplier?.let {
                 val recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
@@ -220,5 +224,10 @@ open class RecipeViewModel :
     private fun displayPrice() {
         if (currentState.isPriceDisplayed || !currentState.isInViewport) return
         setState { copy(isPriceDisplayed = true) }
+    }
+
+    private fun unBindRecipe() {
+        setState { defaultState() }
+        this.isInit = false
     }
 }

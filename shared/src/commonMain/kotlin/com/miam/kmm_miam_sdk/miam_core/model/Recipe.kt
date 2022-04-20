@@ -31,7 +31,7 @@ data class Recipe private constructor(
     val totalTime: String
         get() {
             var duration : Duration = 0.minutes
-            duration = duration.plus(this.attributes!!.preheatingTime ?: 0.minutes)
+            duration = duration.plus(this.attributes!!.preparationTime ?: 0.minutes)
             duration = duration.plus(this.attributes.cookingTime  ?: 0.minutes )
             duration =  duration.plus(this.attributes.restingTime  ?: 0.minutes)
             if (duration.inWholeMinutes < 10) {

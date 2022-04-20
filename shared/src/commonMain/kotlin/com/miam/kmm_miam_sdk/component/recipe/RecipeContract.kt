@@ -19,6 +19,7 @@ interface RecipeContract {
         data class OnSetRecipe(val recipe: Recipe) : Event()
         data class SetHeader(val header: String) : Event()
         data class OnSetCriteria(val crieria: SuggestionsCriteria): Event()
+        object OnUnbind: Event()
         data class UpdateGuest(val nbGuest: Int): Event()
         data class SetActiveStep(val stepIndex:Int): Event()
         object OnAddRecipe: Event()
