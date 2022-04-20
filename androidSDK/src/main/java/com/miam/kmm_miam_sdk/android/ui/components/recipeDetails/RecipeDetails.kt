@@ -246,7 +246,7 @@ private fun recipeDetailCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp, 24.dp)
+                .padding(16.dp, 24.dp).horizontalScroll(rememberScrollState())
         ) {
             CustomActionButton(
                 icon = R.drawable.ic_ingredient,
