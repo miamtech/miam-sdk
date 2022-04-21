@@ -26,7 +26,6 @@ startKoin {
         dispatcherModule,
         useCasesModule,
         storeModule,
-        bottomSheetModule,
         platformModule()
     )
 }
@@ -49,7 +48,6 @@ val repositoryModule = module {
 val useCasesModule: Module = module {
     factory { GetRecipeUseCase(get()) }
     factory { AddRecipeUseCase() }
-
 }
 
 val dispatcherModule = module {
@@ -64,9 +62,6 @@ val storeModule = module {
     single { ItemSelectorViewModel() }
 }
 
-val bottomSheetModule = module {
-    single { BottomSheetViewModel() }
-}
 
 
 
