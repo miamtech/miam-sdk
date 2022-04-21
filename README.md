@@ -94,7 +94,19 @@ We are using [Ktor]("https://ktor.io/docs/welcome.html") as a Http client, which
 ```
 
 
-> Caveat: we've noticed potential compatibility issues if you are already using Koin in your own app... TODO: improve dependency injection
+> Caveat: we've noticed potential compatibility issues if you are already using Koin in your own app, if so just add our module in your koin conf
+
+```kotlin
+startKoin {
+    appDeclaration()
+    modules(
+        KoinInitializer.miamModuleList
+    )
+}
+
+```
+
+> Koin must be init before using any miam element
 
 #### Main class
 
@@ -111,6 +123,8 @@ class Miam() {
 
   // Will contain calls to Miam SDK handler classes (User, Basket, Store...)
   init {
+    
+    // if you have already init koin in your app you don't need this line
     KoinInitilizer.init(context = yourAppContext)
   }
 
