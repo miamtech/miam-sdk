@@ -40,25 +40,33 @@ public struct RecipeCardView: View {
                                 .font(.title)
                                 .padding(.horizontal,20).multilineTextAlignment(.center)
                                 .foregroundColor(Color.white)
-                            Button(action: {
-                                
-                                
-                            }, label: {
-                                Text("?")
-                                    .font(.system(size: 16))
-                                    .frame(width: 24, height: 24)
+                            if(viewModel.currentState.isInCart) {
+                                Text("Déjà ajouté")
+                                    .background(Color.blue)
                                     .foregroundColor(Color.white)
-                                
-                                
-                            })
-                            .background(Color.gray)
-                            .cornerRadius(38.5)
-                            .padding()
-                            .offset(x: -130, y: -100)
-                            .shadow(color: Color.black.opacity(0.3),
-                                    radius: 3,
-                                    x: 3,
-                                    y: 3)
+                                    .padding()
+                                    .cornerRadius(10)
+                                    .offset(x: -100, y: -100)
+                            } else {
+                                Button(action: {
+                                }, label: {
+                                    Text("?")
+                                        .font(.system(size: 16))
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(Color.white)
+                                    
+                                    
+                                })
+                                .background(Color.gray)
+                                .cornerRadius(38.5)
+                                .padding()
+                                .offset(x: -130, y: -100)
+                                .shadow(color: Color.black.opacity(0.3),
+                                        radius: 3,
+                                        x: 3,
+                                        y: 3)
+                            }
+                           
                         }
                         
                     }
@@ -96,10 +104,11 @@ public struct RecipeCardView: View {
                         }
                         Spacer()
                         Button(action: {
-                            
-                            
+                           
+                            viewModel.setEvent(event:
+                                                RecipeContractEvent.OnAddRecipe.shared)
                         }){
-                            Image(systemName: "cart") .frame(width: 30, height: 30)
+                            Image(systemName: "cart").frame(width: 30, height: 30)
                                 .foregroundColor(Color.white)
                             
                         }
@@ -123,7 +132,7 @@ public struct RecipeCardView: View {
                     event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))
             } else if (criteria != nil) {
                 viewModel.setEvent(
-                    event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!)                )
+                    event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
             }
             
         })
