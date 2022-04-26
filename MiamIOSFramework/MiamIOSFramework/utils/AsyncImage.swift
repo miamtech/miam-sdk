@@ -49,7 +49,24 @@ struct AsyncImage<Placeholder:View> : View {
     private var content : some View {
         Group {
             if loader.image != nil {
-                Image(uiImage: loader.image!).resizable()
+                GeometryReader { geo in
+                    Image(uiImage: loader.image!).resizable().scaledToFill().frame(width: geo.size.width * 1, height: 245)
+//                        .mask(
+//                        LinearGradient:(
+//                            gradient: Gradient(
+//                                colors: [
+//                                    .black,
+//                                          .white
+//                                        ]
+//                                ),
+//                                startPoint: .top,
+//                                endPoint:.bottom
+//                            )
+//                                               
+//                        
+//                      )
+                    
+                }
             } else {
                 placeholder
             }

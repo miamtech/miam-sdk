@@ -611,6 +611,10 @@ Navigate to miam kmm repo and select `MiamIOSFramework.xcodeproj`
 
 ![alt text](pic/addFrameworkStep2.png "add framework step 2")
 
+You can now select your project and select **Build Phases** tab open "Link Binaries With Libraries" expander.
+then click on **+** button and select your framwork
+
+![alt text](pic/addFrameworkStep3.png "add framework step 3")
 
 #### Main class
 
@@ -623,12 +627,14 @@ Make sure this main "Miam" class is a singleton and instantiated only once in yo
 ```swift
 // file Miam.swift
 import Foundation
+import shared
 
 public class Miam {
   public static let sharedInstance = Miam()
-
+    
+ // need to be private
   private init() {
-    // need to be private
+      KoinKt.doInitKoin() 
   }
 }
 ```
@@ -656,3 +662,273 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 ```
+
+
+#### Connection to Miam API
+
+**TODO**
+
+#### User
+Miam initialization process will start only after the user is **logged**.
+
+Here is how to pass the user ID to the SDK, directly within the host app:
+
+```swift
+// From anywhere
+import shared
+
+// USER_ID_IN_HOST_APP is your user id type String is expected
+UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
+```
+
+> ⚠️ before ussing UserHandler you have to be sure that Koin is init
+
+Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end.
+
+```swift
+// file Miam.swift
+import shared
+
+public class Miam {
+  // CODE
+
+  private init() {
+    // CODE
+
+    OBSERVABLE_ON_USER_OBJECT.sink { _  in
+      // USER_ID_IN_HOST_APP is your user id type String is expected
+      UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
+    }
+  }
+
+  // CODE
+}
+```
+
+#### Store
+
+Miam initialization process will start only after the user has **selected a valid store**.
+
+Firstly, ask Miam team for your "supplier id" (unique for all your apps and websites integrations). We will also spoof the origin header of all the requests sent to Miam API.
+
+Then, initialize the PointOfSaleHandler with this information:
+
+```swift
+// file Miam.swift
+import shared
+
+class Miam {
+  
+  private init() {
+    //  CODE
+      PointOfSaleHandler.shared.setSupplierOrigin(origin : <string>YOUR_SUPPLIER_ORIGIN)
+      PointOfSaleHandler.shared.setSupplier(supplierId: <string>YOUR_SUPPLIER_ID)
+  }
+
+  //  CODE
+}
+```
+
+> Make sure to specify a different origin between your development and production environments
+Finally, send the store ID to the SDK (in the example, from the host app):
+
+```swift
+// From anywhere
+import shared
+
+// STORE_ID_IN_HOST_APP is your user id type String is expected
+PointOfSaleHandler.updateStoreId(storeId: <string>STORE_ID_IN_HOST_APP)
+```
+> ⚠️ before ussing UserHandler you have to be sure that Koin is init
+
+
+It is possible to define a store as "active" or "inactive". When a store is inactive, Miam initialization process won't start even if the store is selected by the user. 
+
+```swift
+// file Miam.swift
+
+// List of store ids in the host app referential
+private  let availableStoreIdLists = ["454", "652"]
+
+func isActiveOnStore() -> KotlinBoolean {
+        return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
+}
+    
+PointOfSaleHandler.shared.isAvailable = isActiveOnStore
+```
+
+#### Basket synchronization
+
+Last but not least, the SDK embeds a complex synchronization system that will ensure Miam always keeps the knowledge of what products have been pushed to or removed from the in-app basket. This mechanism is **mandatory** to ensure products added via Miam recipes are kept consistent with the interactions users will have with the basket outside of Miam components.
+
+> If at some point, you feel like products magically disappear from Miam recipes, or are not removed from the app basket while they should be, this is probably related to this part.
+
+By convenience, we recommend to define a mapping function that transforms the host app YourProduct objects to "Miam products" objects (named `RetailerProduct` in the SDK). The opposite function can also be defined:
+
+```swift
+import shared
+
+// Defined in the kotlin SDK can be use in swift
+// data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
+
+ private func yourProductsToRetailerProducts(products: Array<YourProduct>) -> Array<RetailerProduct> {
+      return products.map {
+       return RetailerProduct(
+            retailerId: $0.id,
+            quantity: Int32($0.quantity),
+            name: $0.name,
+            productIdentifier: nil
+        )
+      }
+    }
+
+private func retailerProductsToYourProducts(products: Array<RetailerProduct>) -> Array<YourProduct> {
+  return RetailerProduct.map { 
+    return YourProduct(
+       id: $0.retailerId,
+       name: "\($0.name)",
+       quantity: Int($0.quantity)
+    )
+  }
+}     
+```
+
+Miam needs to listen to any change applied to the basket in the host app. To that end, you have to pass a function to `BasketHandler` with the flowing signature: 
+`(callback: @escaping ([RetailerProduct]) -> KotlinUnit) -> Void`
+
+```swift
+
+class Miam {
+
+   private let basketHandler: BasketHandler = BasketHandler()
+
+  init {
+    basketHandler.listenToRetailerBasket = initBasketListener
+
+    // CODE
+  }
+
+  private func initBasketListener(
+    callback: @escaping ([RetailerProduct]) -> KotlinUnit
+  ) {
+    OBSERVABLE_ON_BASKET_OBJECT.sink  { receiveValue in
+            // callback will be triggered on every basket change
+             callback(
+                self.yourProductsToRetailerProducts(products:  receiveValue)
+             )
+       }
+  }
+
+  // CODE
+}
+```
+
+Now, the other way around : everytime Miam's basket changes (every time a recipe is added or removed for example), the added or removed subsequent products have to be pushed to the in-app basket. Another function has to be defined on BasketHandler, with the signature: ` ([RetailerProduct]) -> Void`.
+
+```swift
+// file Miam.swift
+import shared
+
+class Miam {
+   // CODE
+  private let basketHandler: BasketHandler = BasketHandler()
+
+  private init() {
+    basketHandler.pushProductsToBasket = pushProductsToYourBasket
+    // CODE
+  }
+
+  private func pushProductsToYourBasket (products: [RetailerProduct]) {
+    // Convert "Miam products" to your own product objects
+    retailerProductsToYourProducts(products).foreach( { 
+      if ($0.quantity <= 0) {
+        // Removes product from host app basket
+        yourDeleteFunction($0)
+      } else if (yourTestFunctionAlreadyInBasket($0.id)){
+        // Updates quantity of product in host app basket
+        yourUpdateFunction($0)
+      } else {
+        // Add product to host app basket
+        yourAddFunction($0)
+      }
+    })
+  }
+
+  // CODE
+}   
+```
+
+Finally, Miam basket will be confirmed and cleared once the payment has been validated by the user. We have to trigger this event on the BasketHandler as well:
+
+```kotlin
+
+class Miam() {
+
+  private let basketHandler: BasketHandler = BasketHandler()
+
+  private init() {
+    // CODE
+    basketHandler.paymentTotal = getTotalPayment
+  }
+
+  private func getTotalPayment() -> KotlinDouble {
+      return ORDER_PAID_AMOUNT_IN_APP()
+  }
+
+  // CODE
+}
+
+// Confirm basket when payment confirmed in app:
+Miam.getInstance().basketHandler.handlePayment()
+```
+### Components injection
+
+There are two ways to inject Miam components into the host app:
+- with **SwiftUi** (preferred as nothing has to be changed on the component itself, except styling adjustments)
+- Or with **UIKit**
+
+#### With SwiftUi (preferred)
+
+For the sake of the example, we will inject a component showing a recipe card in the host app.
+In Miam, recipe cards can either be "fixed" (= fetched by on a predefined ID) or "suggested" (= fetched based on the user navigation context)
+
+
+```swift
+// ContentView.swift
+
+// Implemented in Shared can be use directly
+data class SuggestionsCriteria(
+  // Ids of products displayed in the search results, right before and after the recipe card
+  val shelfIngredientsIds: List<String>? = null,
+  // Ids of products displayed on a product details page (optional)
+  val currentIngredientsIds: List<String>? = null,
+  // Ids of products already in app basket (optional)
+  val basketIngredientsIds: List<String>? = null,
+  // (optional)
+  val groupId: String? = null
+)
+
+ var criteria = SuggestionsCriteria(
+        shelfIngredientsIds: ["5319173","970417"],
+            currentIngredientsIds:nil,
+            basketIngredientsIds: nil,
+            groupId: nil
+        
+    )
+
+ var body: some View {
+      VStack {
+          // Direct recipe load
+          RecipeCardView(recipeId: "1")
+          // load recipe with criteria
+          RecipeCardView(criteria: criteria)
+      }
+```
+
+#### With UIKit 
+
+> comming soon
+
+### Styling
+
+> comming soon

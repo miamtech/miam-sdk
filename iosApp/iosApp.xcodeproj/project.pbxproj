@@ -9,22 +9,23 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		0B7C9BD62812E98500BFC7F8 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */; };
 		0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEEA6B7280F138E00291155 /* MiamManager.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0BEEA6BE281046ED00291155 /* PBXContainerItemProxy */ = {
+		0B7C9BD22812E74E00BFC7F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0BEEA6B9281046ED00291155 /* MiamIOSFramework.xcodeproj */;
+			containerPortal = 0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = DCD4E30027BE914A000D3EA6;
 			remoteInfo = MiamIOSFramework;
 		};
-		0BEEA6C0281046ED00291155 /* PBXContainerItemProxy */ = {
+		0B7C9BD42812E74E00BFC7F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0BEEA6B9281046ED00291155 /* MiamIOSFramework.xcodeproj */;
+			containerPortal = 0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = DCD4E30A27BE914A000D3EA6;
 			remoteInfo = MiamIOSFrameworkTests;
@@ -47,8 +48,8 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MiamIOSFramework.xcodeproj; path = ../../MiamIOSFramework/MiamIOSFramework.xcodeproj; sourceTree = "<group>"; };
 		0BEEA6B7280F138E00291155 /* MiamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamManager.swift; sourceTree = "<group>"; };
-		0BEEA6B9281046ED00291155 /* MiamIOSFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MiamIOSFramework.xcodeproj; path = ../MiamIOSFramework/MiamIOSFramework.xcodeproj; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B7C9BD62812E98500BFC7F8 /* MiamIOSFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,11 +76,11 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		0BEEA6BA281046ED00291155 /* Products */ = {
+		0B7C9BCE2812E74E00BFC7F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0BEEA6BF281046ED00291155 /* MiamIOSFramework.framework */,
-				0BEEA6C1281046ED00291155 /* MiamIOSFrameworkTests.xctest */,
+				0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */,
+				0B7C9BD52812E74E00BFC7F8 /* MiamIOSFrameworkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,7 +88,6 @@
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
-				0BEEA6B9281046ED00291155 /* MiamIOSFramework.xcodeproj */,
 				7555FF7D242A565900829871 /* iosApp */,
 				7555FF7C242A565900829871 /* Products */,
 				7555FFB0242A642200829871 /* Frameworks */,
@@ -104,6 +105,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -171,8 +173,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 0BEEA6BA281046ED00291155 /* Products */;
-					ProjectRef = 0BEEA6B9281046ED00291155 /* MiamIOSFramework.xcodeproj */;
+					ProductGroup = 0B7C9BCE2812E74E00BFC7F8 /* Products */;
+					ProjectRef = 0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -183,18 +185,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		0BEEA6BF281046ED00291155 /* MiamIOSFramework.framework */ = {
+		0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = MiamIOSFramework.framework;
-			remoteRef = 0BEEA6BE281046ED00291155 /* PBXContainerItemProxy */;
+			remoteRef = 0B7C9BD22812E74E00BFC7F8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0BEEA6C1281046ED00291155 /* MiamIOSFrameworkTests.xctest */ = {
+		0B7C9BD52812E74E00BFC7F8 /* MiamIOSFrameworkTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = MiamIOSFrameworkTests.xctest;
-			remoteRef = 0BEEA6C0281046ED00291155 /* PBXContainerItemProxy */;
+			remoteRef = 0B7C9BD42812E74E00BFC7F8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
