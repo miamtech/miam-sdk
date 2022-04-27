@@ -617,7 +617,7 @@ Component available for low level customization :
 
 #### Build and import
 
-CI/CD is not setup yet and the built archived are not hosted anywhere. You will need to clone this repository and build the archive in production mode.
+CI/CD is not setup yet and the built archives are not hosted anywhere. You will need to clone this repository and build the archive in production mode.
 
 run `./gradlew assembleXCFramework`
 
@@ -698,7 +698,7 @@ import shared
 UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
 ```
 
-> ⚠️ before ussing UserHandler you have to be sure that Koin is init
+> ⚠️ before using UserHandler, make sure Koin is initialized
 
 Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end.
 
@@ -756,7 +756,7 @@ import shared
 // STORE_ID_IN_HOST_APP is your user id type String is expected
 PointOfSaleHandler.updateStoreId(storeId: <string>STORE_ID_IN_HOST_APP)
 ```
-> ⚠️ before ussing UserHandler you have to be sure that Koin is init
+> ⚠️ before using UserHandler, make sure Koin is initialized
 
 
 It is possible to define a store as "active" or "inactive". When a store is inactive, Miam initialization process won't start even if the store is selected by the user. 
@@ -785,7 +785,7 @@ By convenience, we recommend to define a mapping function that transforms the ho
 ```swift
 import shared
 
-// Defined in the kotlin SDK can be use in swift
+// Defined in the kotlin SDK, but can be used in swift
 // data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
 
  private func yourProductsToRetailerProducts(products: Array<YourProduct>) -> Array<RetailerProduct> {
@@ -944,8 +944,8 @@ data class SuggestionsCriteria(
 
 #### With UIKit 
 
-> comming soon
+> coming soon
 
 ### Styling
 
-> comming soon
+> coming soon
