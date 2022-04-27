@@ -119,13 +119,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
           LogHandler.debug("[Miam] recipesInfos after alter $recipesInfos")
         // side Effect only to refresh UI of c
         sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId, guest))
-        val newGl = alterRecipeInfos(recipesInfos, states.copy(
-           groceriesList = states.groceriesList.copy(
-               attributes = states.groceriesList.attributes!!.copy(
-                   recipesInfos = recipesInfos
-                )
-            )
-        ))
+        val newGl = alterRecipeInfos(recipesInfos, states)
         dispatch(GroceriesListAction.SetGroceriesList(newGl))
     }
 

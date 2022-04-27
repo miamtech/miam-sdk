@@ -44,13 +44,9 @@ dependencies {
     // if use you have to put manually aar file in libs folder
    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
-    // else auto deploye add debug
-/*     implementation project(":androidSDK")
-    implementation("io.insert-koin:koin-android:3.1.2")
-    implementation("io.insert-koin:koin-core:3.1.2")*/
-    //////////////////////////////////
 
     implementation("io.insert-koin:koin-android:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.2")
     implementation 'androidx.compose.ui:ui-tooling:1.0.5'
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
