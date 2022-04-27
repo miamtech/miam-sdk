@@ -285,7 +285,4 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return if (included.isEmpty()) "" else "include=" + included.joinToString(",")
     }
 
-    companion object {
-
-    }
 }

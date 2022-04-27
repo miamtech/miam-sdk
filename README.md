@@ -76,6 +76,10 @@ Our components are using [Jetpack Compose](https://developer.android.com/jetpack
     // async image
     implementation("io.coil-kt:coil-compose:1.3.1")
     implementation ("io.coil-kt:coil-svg:1.3.1")
+
+    // dependency injection
+    implementation("io.insert-koin:koin-android:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.2")
 ```
 
 > Jetpack is not mandatory but facilitates the injection of Miam components - See part 2 Components injection
@@ -89,9 +93,20 @@ We are using [Ktor]("https://ktor.io/docs/welcome.html") as a Http client, which
     implementation("io.ktor:ktor-client-logging:1.6.7")
 ```
 
-As a side note, the SDK embeds [Koin]("https://insert-koin.io/") for dependency injection. as it is embedded, no extra import is needed.
 
-> Caveat: we've noticed potential compatibility issues if you are already using Koin in your own app... TODO: improve dependency injection
+> Caveat: we've noticed potential compatibility issues if you are already using Koin in your own app, if so just add our module in your koin conf
+
+```kotlin
+startKoin {
+    appDeclaration()
+    modules(
+        KoinInitializer.miamModuleList
+    )
+}
+
+```
+
+> Koin must be init before using any miam element
 
 #### Main class
 
@@ -108,6 +123,8 @@ class Miam() {
 
   // Will contain calls to Miam SDK handler classes (User, Basket, Store...)
   init {
+    
+    // if you have already init koin in your app you don't need this line
     KoinInitilizer.init(context = yourAppContext)
   }
 

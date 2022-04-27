@@ -10,7 +10,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -23,19 +22,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miam.kmm_miam_sdk.android.di.KoinInitilizer
+import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
-import com.miam.kmm_miam_sdk.miam_core.data.repository.BasketRepositoryImp
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.*
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
 
 import kotlin.random.Random
@@ -58,7 +56,12 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        KoinInitilizer.init(this)
+        initKoin{
+            androidContext(this@MainActivity)
+            modules(
+                KoinInitializer.miamModuleList
+            )
+        }
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         PointOfSaleHandler.updateStoreId("35290")

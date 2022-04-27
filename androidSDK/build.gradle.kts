@@ -1,12 +1,9 @@
-val kotlin_version: String by extra
+
 plugins {
     id("com.android.library")
     kotlin("android")
     id("kotlin-android")
     id("com.kezong.fat-aar")
-}
-apply {
-    plugin("kotlin-android")
 }
 
 android {
@@ -40,9 +37,8 @@ dependencies {
     embed(project(":shared"))
 
     // dependency injection
-    embed("io.insert-koin:koin-android:3.1.2")
-    embed("io.insert-koin:koin-core:3.1.2")
-
+    implementation("io.insert-koin:koin-android:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.2")
     // Http Client
     implementation( "io.ktor:ktor-client-android:1.6.7")
     implementation("io.ktor:ktor-client-serialization:1.6.7")
@@ -87,7 +83,4 @@ dependencies {
     implementation("androidx.core:core-ktx:+")
 
 
-}
-repositories {
-    mavenCentral()
 }

@@ -29,7 +29,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-logging:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
                 implementation("io.insert-koin:koin-core:3.1.2")
-                implementation("io.github.aakira:napier:2.5.0")
             }
         }
         val commonTest by getting {
