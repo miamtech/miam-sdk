@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
+import com.miam.kmm_miam_sdk.base.mvi.UserAction
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.*
@@ -15,16 +16,13 @@ import io.ktor.client.statement.*
 
 import io.ktor.http.*
 import io.ktor.util.*
+import io.ktor.utils.io.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class MiamResponseException(response: HttpResponse, cachedResponseText: String) :
-    ResponseException(response, cachedResponseText) {
-    override val message: String = "Custom server error: ${response.call.request.url}. " +
-            "Status: ${response.status}. Text: \"$cachedResponseText\""
-}
+
 
 
 object HttpRoutes {
@@ -40,13 +38,13 @@ object HttpRoutes {
     const val SUPPLIER = "$BASE_URL/suppliers/"
 }
 
+
 @OptIn(InternalAPI::class)
 class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
     SupplierDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
-    private var sessionId : String? = null
 
     private val httpClient = HttpClient{
         install(JsonFeature) {
@@ -58,26 +56,25 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             acceptContentTypes = listOf(ContentType.parse("application/vnd.api+json"),
                                         ContentType.parse("application/json"))
         }
-        install(Logging){
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
     }
 
     init {
         httpClient.receivePipeline.intercept(HttpReceivePipeline.State) {
-            if(sessionId == null ){
-                sessionId =   context.response.headers["set-cookie"]!!.split(';')[0]
+        if(userStore.observeState().value.sessionId == null ){
+            userStore.dispatch(UserAction.SetSessionId(("${context.response.headers["set-cookie"]}".split(';')[0])))
             }
         }
 
        httpClient.sendPipeline.intercept(HttpSendPipeline.State) {
            context.headers.append(HttpHeaders.Accept,"*/*")
-           if(sessionId != null) {
-               context.headers.remove("Cookie")
-               context.headers.append(HttpHeaders.Cookie, sessionId!!)
-           }
-         
+
+               userStore.observeState().value.sessionId.let {
+                   context.headers.remove("Cookie")
+                   if (it != null ){
+                       context.headers.append(HttpHeaders.Cookie, it)
+                   }
+
+               }
             userStore.observeState().value.userId.let {
                context.headers.append(HttpHeaders.Authorization, "user_id $it" )
            }
@@ -287,4 +284,5 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     private fun includedToString(included: List<String>): String {
         return if (included.isEmpty()) "" else "include=" + included.joinToString(",")
     }
+
 }

@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import com.miam.kmm_miam_sdk.handler.LogHandler
+
 
 
 data class GroceriesListState(
@@ -35,7 +37,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in GroceriesListStore $exception")
+            _, exception -> println("[ERROR][Miam][GroceriesListStore] $exception")
     }
 
     private val state = MutableStateFlow(GroceriesListState( null))
@@ -79,6 +81,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 oldState.copy(groceriesList = action.gl)
             }
             is GroceriesListAction.AlterRecipeList -> {
+                 LogHandler.debug("[Miam] add recipe")
                 launch(coroutineHandler) { appendRecipe(action.recipeId, action.guests, oldState)}
                 oldState
             }
@@ -101,14 +104,19 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     }
 
     private suspend fun appendRecipe(recipeId :String, guest: Int, states :GroceriesListState)  {
+        LogHandler.debug("[Miam] appendRecipe $recipeId")
+         LogHandler.debug("[Miam] states $states")
         if(states.groceriesList == null) return
-        val recipesInfos =  states.groceriesList.attributes!!.recipesInfos
+        val recipesInfos = mutableListOf(*states.groceriesList.attributes!!.recipesInfos.toTypedArray())
+        LogHandler.debug("[Miam] recipesInfos $recipesInfos")
         if(states.groceriesList.hasRecipe(recipeId)) {
             if(states.groceriesList.guestsForRecipe(recipeId) == guest) return
             recipesInfos.find { it.id.toString() == recipeId }?.guests = guest
         } else {
+            LogHandler.debug("[Miam] recipesInfos $recipesInfos")
             recipesInfos.add(RecipeInfos(recipeId.toInt(), guest))
         }
+          LogHandler.debug("[Miam] recipesInfos after alter $recipesInfos")
         // side Effect only to refresh UI of c
         sideEffect.emit(GroceriesListEffect.RecipeAdded(recipeId, guest))
         val newGl = alterRecipeInfos(recipesInfos, states)
@@ -133,6 +141,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 appendRecipes = false
             )
         )
+         LogHandler.debug("[Miam] gl $gl")
         return groceriesListRepo.updateGroceriesList(gl)
     }
 }

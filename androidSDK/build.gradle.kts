@@ -39,7 +39,6 @@ dependencies {
     // dependency injection
     implementation("io.insert-koin:koin-android:3.1.2")
     implementation("io.insert-koin:koin-core:3.1.2")
-
     // Http Client
     implementation( "io.ktor:ktor-client-android:1.6.7")
     implementation("io.ktor:ktor-client-serialization:1.6.7")
@@ -81,8 +80,7 @@ dependencies {
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
-
-
+    implementation("androidx.core:core-ktx:+")
 
 
 }

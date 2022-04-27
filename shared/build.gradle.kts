@@ -2,10 +2,11 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 
 }
 
@@ -82,4 +83,3 @@ android {
         targetSdk = 31
     }
 }
-

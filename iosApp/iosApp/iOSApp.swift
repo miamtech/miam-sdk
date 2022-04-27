@@ -3,20 +3,58 @@ import shared
 
 @main
 struct ios_miam_integrationApp: App {
+    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
+    
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        KoinKt.doInitKoin()
-        PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
-        PointOfSaleHandler.shared.setSupplier(supplierId: 7)
-        UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        let _ = MiamManager.sharedInstance
         return true
     }
+}
+
+
+class Basket {
+    @Published var items = [TestProduct]()
+
+    init(items: Array<TestProduct>) {
+        self.items = items
+    }
+
+    func add(addedProduct: TestProduct) -> Void {
+        
+        let results = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }  )
+        
+        if(results != nil ){
+            // TODO update quantity
+        } else {
+            items.append(addedProduct)
+            self.items = items
+        }
+    }
+    
+    func remove(removedProduct : TestProduct){
+        let results = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } )
+        if(results == nil ){ return }
+        items.remove(at: results!)
+    }
+}
+
+
+public class AppBasket {
+    
+    public static let sharedInstance = AppBasket()
+    let basket = Basket(items:[])
+    
+    private init(){
+        
+    }
+    
 }

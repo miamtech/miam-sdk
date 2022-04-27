@@ -2,7 +2,7 @@
 //  AsyncImage.swift
 //  MiamIOSFramework
 //
-//  Created by noe on 17/02/2022.
+//  Created by miam on 17/02/2022.
 //
 
 import Foundation
@@ -49,7 +49,24 @@ struct AsyncImage<Placeholder:View> : View {
     private var content : some View {
         Group {
             if loader.image != nil {
-                Image(uiImage: loader.image!).resizable()
+                GeometryReader { geo in
+                    Image(uiImage: loader.image!).resizable().scaledToFill().frame(width: geo.size.width * 1, height: 245)
+//                        .mask(
+//                        LinearGradient:(
+//                            gradient: Gradient(
+//                                colors: [
+//                                    .black,
+//                                          .white
+//                                        ]
+//                                ),
+//                                startPoint: .top,
+//                                endPoint:.bottom
+//                            )
+//                                               
+//                        
+//                      )
+                    
+                }
             } else {
                 placeholder
             }
