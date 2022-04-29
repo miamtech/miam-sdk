@@ -13,6 +13,7 @@ class KoinInitializer {
             dispatcherModule,
             useCasesModule,
             storeModule,
+            platformModule()
         )
         fun init(context: Context){
             initKoin {
