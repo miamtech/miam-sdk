@@ -445,6 +445,15 @@ miamCard.bind(criteria = SuggestionsCriteria(
 
 This SDK lets you adjust the components styling so they can be naturally inserted in your app without confusing the end user. 
 
+There is two way to customise our component :
+- By passing a template and mapping our controler on it 
+- By overriding our style properties
+
+> You can use both at the same time , note that your template 'll not consider our style variables
+
+
+### Overriding style properties
+
 There are two level of customization:  
 - Globally: styles defined here will be applied to all components
 - Per component: styles defined here will be applied to a specific component only
@@ -568,6 +577,65 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 |:-------------|:-------------:|
 |![alt text](pic/defaultCard.png "default card") | ![alt text](pic/alteredStyle.png "custom card")|
 
+### Customize with a template
+
+All components avalaible for template customization can be find in `theme/template.kt`
+
+```kotlin
+  // def of your new template
+  private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
+        { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
+            Column() {
+                Clickable(
+                    onClick = {look()},
+                    children = {
+                        Image(
+                            painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .height(150.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = "time"
+                    )
+                    Text(text = recipe.totalTime)
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "person"
+                    )
+                    Text(text = recipe.attributes!!.numberOfGuests.toString())
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.School,
+                        contentDescription = "hat"
+                    )
+                    Text(text ="Difficulté  ${recipe.difficultyLabel}")
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                    Text(text = recipe.attributes!!.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                }
+
+
+            }
+        }
+    
+
+    // Then You just need to pass this `var` into our template holder
+    Template.recipeCardTemplate = recipeFunctionTemplateVariable
+
+```
+
+> As Compose doesn't support yet passing reference of a `@Compose` function we have to pass it throw a variable
+
+
 
 ### Planned improvements
 
@@ -586,15 +654,15 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 
 Component available for low level customization :
 
-| Name | Style | Color | Icon | Text | Preview |
-|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
-| Recipe card |✅ | ❌ | ✅ |✅ | ❌
-| Basket preview |❌ | ❌ |❌ | ❌ | ❌
-| Price |  ✅ |  ✅ |➖| ✅ | ✅
-| Item selector |✅ | ✅ |✅ |✅ | ❌
-| Recipe detail |❌ | ❌ |❌|❌ | ❌
-| Counter | ✅| ✅ |✅|➖ |❌
-| Dialog |✅ | ➖|➖|➖ | ❌
+| Name | Style | Color | Icon | Text | Preview | Template |
+|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| Recipe card |✅ | ❌ | ✅ |✅ | ❌ | ✅
+| Basket preview |❌ | ❌ |❌ | ❌ | ❌| ❌
+| Price |  ✅ |  ✅ |➖| ✅ | ✅| ❌
+| Item selector |✅ | ✅ |✅ |✅ | ❌| ❌
+| Recipe detail |❌ | ❌ |❌|❌ | ❌| ❌
+| Counter | ✅| ✅ |✅|➖ |❌| ❌
+| Dialog |✅ | ➖|➖|➖ | ❌| ❌
 
 - Add component preview for development
 

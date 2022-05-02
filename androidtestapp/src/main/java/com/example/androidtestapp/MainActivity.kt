@@ -6,28 +6,37 @@ import android.os.Bundle
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.School
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
+import com.miam.kmm_miam_sdk.android.theme.Template
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
@@ -35,6 +44,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
+import javax.xml.transform.Templates
 
 import kotlin.random.Random
 
@@ -52,6 +62,51 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private val basketHandler = BasketHandler()
+
+
+    private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
+        { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
+            Column() {
+                Clickable(
+                    onClick = {look()},
+                    children = {
+                        Image(
+                            painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .height(150.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = "time"
+                    )
+                    Text(text = recipe.totalTime)
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "person"
+                    )
+                    Text(text = recipe.attributes!!.numberOfGuests.toString())
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.School,
+                        contentDescription = "hat"
+                    )
+                    Text(text ="Difficulté  ${recipe.difficultyLabel}")
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                    Text(text = recipe.attributes!!.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                }
+
+
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +136,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
             }
 
         }
+        initTemplate()
     }
 
     @Composable
@@ -104,10 +160,13 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
             }
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 state.value.items.forEach{
-                    Box(modifier = Modifier.padding(4.dp).clip(RoundedCornerShape(16.dp))) {
+                    Box(modifier = Modifier
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(16.dp))) {
                         Box(
                             Modifier
-                                .background(Color.Gray).padding(vertical =  4.dp , horizontal = 8.dp) ,
+                                .background(Color.Gray)
+                                .padding(vertical = 4.dp, horizontal = 8.dp) ,
                         ) {
                             Column() {
                                 Text(text = it.name, color = Color.White, fontWeight = FontWeight.Bold)
@@ -126,15 +185,23 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     fun recipes(context: Context) {
         val recipe1 =  RecipeView(context)
         val recipe2 =  RecipeView(context)
+        val recipe3 =  RecipeView(context)
 
         recipe1.bind(recipeId = "305")
         recipe2.bind(criteria = RandomCriteria())
+        recipe3.bind(recipeId = "1")
+
         Column() {
             recipe1.Content()
             recipe2.Content()
+            recipe3.Content()
         }
 
 
+    }
+
+    private fun initTemplate(){
+        Template.recipeCardTemplate = recipeFunctionTemplateVariable
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{
@@ -263,3 +330,4 @@ data class CoursesUPointOfSale(
 class ExampleState(
      val items: MutableList<CoursesUProduct> = mutableListOf()
 )
+

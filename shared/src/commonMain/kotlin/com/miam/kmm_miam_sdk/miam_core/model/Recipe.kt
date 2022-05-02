@@ -74,7 +74,7 @@ data class RecipeAttributes constructor(
     val description: String? = null,
 
     @SerialName("number-of-guests")
-    val numberOfGuests: Int? = 4,
+    val numberOfGuests: Int = 4,
 
     @SerialName("ingredients-str")
     val ingredientsStr: List<String>? = emptyList(),
@@ -96,7 +96,7 @@ data class RecipeAttributes constructor(
     val restingTime: Duration? = 0.minutes,
 
     @SerialName("media-url")
-    val mediaUrl: String? = null,
+    val mediaUrl: String ,
 
     val source : String? = "",
 
