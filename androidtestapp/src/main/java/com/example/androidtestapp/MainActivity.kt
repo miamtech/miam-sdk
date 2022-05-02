@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
@@ -29,7 +28,6 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
@@ -44,7 +42,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
-import javax.xml.transform.Templates
 
 import kotlin.random.Random
 

@@ -579,7 +579,7 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 
 ### Customize with a template
 
-All components avalaible for template customization can be find in `theme/template.kt`
+All components avalaible for template customization can be found in `theme/template.kt`
 
 ```kotlin
   // def of your new template
@@ -633,7 +633,7 @@ All components avalaible for template customization can be find in `theme/templa
 
 ```
 
-> As Compose doesn't support yet passing reference of a `@Compose` function we have to pass it throw a variable
+> As Compose doesn't support yet passing reference of a `@Compose` function we have to pass it through a variable
 
 
 
