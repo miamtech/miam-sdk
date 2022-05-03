@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B19B72127FDCFEE002AFDE8 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32627BE9657000D3EA6 /* shared.xcframework */; };
-		0B19B72227FDCFEE002AFDE8 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E32627BE9657000D3EA6 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */; };
+		0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* Text.swift */; };
+		0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */; };
+		0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BE12819929200BFC7F8 /* CounterColor.swift */; };
+		0B7C9BE42819933D00BFC7F8 /* MiamColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BE32819933D00BFC7F8 /* MiamColors.swift */; };
+		0B7C9BEC28199EFE00BFC7F8 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0B7C9BEB28199EFE00BFC7F8 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BED2819A11E00BFC7F8 /* Color.swift */; };
+		0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BEF281A7CB400BFC7F8 /* CounterStyle.swift */; };
+		0B7C9BF2281A7EF700BFC7F8 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */; };
+		0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BF6281FCC6800BFC7F8 /* Template.swift */; };
+		0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA665282017C5007D6C8A /* PriceView.swift */; };
+		0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA667282019D2007D6C8A /* PriceVM.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -35,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0B19B72227FDCFEE002AFDE8 /* shared.xcframework in Embed Frameworks */,
+				0B7C9BEC28199EFE00BFC7F8 /* shared.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,6 +53,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardText.swift; sourceTree = "<group>"; };
+		0B7C9BDB28196BAB00BFC7F8 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
+		0B7C9BE12819929200BFC7F8 /* CounterColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterColor.swift; sourceTree = "<group>"; };
+		0B7C9BE32819933D00BFC7F8 /* MiamColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamColors.swift; sourceTree = "<group>"; };
+		0B7C9BEB28199EFE00BFC7F8 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../shared/build/XCFrameworks/release/shared.xcframework; sourceTree = "<group>"; };
+		0B7C9BED2819A11E00BFC7F8 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		0B7C9BEF281A7CB400BFC7F8 /* CounterStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterStyle.swift; sourceTree = "<group>"; };
+		0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
+		0B7C9BF6281FCC6800BFC7F8 /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
+		0B9AA665282017C5007D6C8A /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
+		0B9AA667282019D2007D6C8A /* PriceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceVM.swift; sourceTree = "<group>"; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -51,7 +73,6 @@
 		DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardVM.swift; sourceTree = "<group>"; };
 		DCD4E32127BE935B000D3EA6 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		DCD4E32327BE937F000D3EA6 /* RecipeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardView.swift; sourceTree = "<group>"; };
-		DCD4E32627BE9657000D3EA6 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../shared/build/XCFrameworks/release/shared.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B19B72127FDCFEE002AFDE8 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,9 +94,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B7C9BD728196A6300BFC7F8 /* RecipeCard */ = {
+			isa = PBXGroup;
+			children = (
+				DCD4E32327BE937F000D3EA6 /* RecipeCardView.swift */,
+				0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */,
+			);
+			path = RecipeCard;
+			sourceTree = "<group>";
+		};
+		0B7C9BDA28196B9300BFC7F8 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+				0B7C9BE32819933D00BFC7F8 /* MiamColors.swift */,
+				0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */,
+				0B7C9BF6281FCC6800BFC7F8 /* Template.swift */,
+			);
+			path = theme;
+			sourceTree = "<group>";
+		};
+		0B7C9BDD28196BED00BFC7F8 /* ressource */ = {
+			isa = PBXGroup;
+			children = (
+				0B7C9BDB28196BAB00BFC7F8 /* Text.swift */,
+			);
+			path = ressource;
+			sourceTree = "<group>";
+		};
+		0B7C9BDE28197A1700BFC7F8 /* Counter */ = {
+			isa = PBXGroup;
+			children = (
+				0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */,
+				0B7C9BE12819929200BFC7F8 /* CounterColor.swift */,
+				0B7C9BEF281A7CB400BFC7F8 /* CounterStyle.swift */,
+			);
+			path = Counter;
+			sourceTree = "<group>";
+		};
+		0B7C9BF8282016BF00BFC7F8 /* Price */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AA665282017C5007D6C8A /* PriceView.swift */,
+			);
+			path = Price;
+			sourceTree = "<group>";
+		};
 		DCD4E2F627BE914A000D3EA6 = {
 			isa = PBXGroup;
 			children = (
+				0B7C9BEB28199EFE00BFC7F8 /* shared.xcframework */,
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
@@ -96,6 +162,8 @@
 		DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */ = {
 			isa = PBXGroup;
 			children = (
+				0B7C9BDD28196BED00BFC7F8 /* ressource */,
+				0B7C9BDA28196B9300BFC7F8 /* theme */,
 				DCD4E31E27BE92C8000D3EA6 /* mvvm */,
 				DCD4E31D27BE92B2000D3EA6 /* utils */,
 				DCD4E31C27BE92AC000D3EA6 /* ui */,
@@ -116,7 +184,9 @@
 		DCD4E31C27BE92AC000D3EA6 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				DCD4E32327BE937F000D3EA6 /* RecipeCardView.swift */,
+				0B7C9BF8282016BF00BFC7F8 /* Price */,
+				0B7C9BDE28197A1700BFC7F8 /* Counter */,
+				0B7C9BD728196A6300BFC7F8 /* RecipeCard */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -125,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				DCD4E32127BE935B000D3EA6 /* AsyncImage.swift */,
+				0B7C9BED2819A11E00BFC7F8 /* Color.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -133,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */,
+				0B9AA667282019D2007D6C8A /* PriceVM.swift */,
 			);
 			path = mvvm;
 			sourceTree = "<group>";
@@ -140,7 +212,6 @@
 		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DCD4E32627BE9657000D3EA6 /* shared.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -276,9 +347,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B7C9BE42819933D00BFC7F8 /* MiamColors.swift in Sources */,
+				0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */,
+				0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */,
+				0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */,
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
+				0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
+				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
+				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
+				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
+				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
+				0B7C9BF2281A7EF700BFC7F8 /* Dimension.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
+				0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */,
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

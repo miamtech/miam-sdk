@@ -948,4 +948,31 @@ data class SuggestionsCriteria(
 
 ### Styling
 
-> coming soon
+### Template injection
+
+You can provide your own swiftUi template and map it with our controller 
+
+All cutomizable elements are availables in `theme/Template.swift`
+
+```swift
+
+Template.sharedInstance.counterTemplate =
+        {(count: Int,
+          increase: @escaping () -> Void,
+          decrease: @escaping () -> Void ) -> AnyView in
+            AnyView(
+               HStack{
+                   Button(action: {
+                       decrease()
+                   }) {
+                       Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                   }
+                   Text(String(count))
+                   Button(action: {
+                       increase()
+                   }) {
+                       Image(systemName: "plus.circle").foregroundColor(.blue)
+                   }
+                }
+          )}
+```

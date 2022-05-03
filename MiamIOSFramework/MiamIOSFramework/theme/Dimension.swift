@@ -1,0 +1,27 @@
+//
+//  Dimension.swift
+//  MiamIOSFramework
+//
+//  Created by Miam on 28/04/2022.
+//
+
+import Foundation
+import SwiftUI
+
+
+public class Dimension {
+    
+    public static let sharedInstance = Dimension()
+
+    var sPadding : CGFloat = 4
+     var mPadding : CGFloat = 8
+     var lPadding : CGFloat = 16
+     var xlPadding : CGFloat = 32
+    
+     var sButtonHeight : CGFloat = 8
+     var mButtonHeight : CGFloat = 16
+     var lButtonHeight : CGFloat = 32
+     var xlButtonHeight : CGFloat = 40
+    
+}
+

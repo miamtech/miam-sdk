@@ -8,6 +8,8 @@
 
 import Foundation
 import shared
+import MiamIOSFramework
+import SwiftUI
 
 
 public class TestProduct {
@@ -39,11 +41,9 @@ var identifier: String?;
 public class MiamManager {
     
   public static let sharedInstance = MiamManager()
-  private  let availableStoreIdLists = ["454", "652"]
+  private let availableStoreIdLists = ["454", "652"]
   private let basketHandler: BasketHandler = BasketHandler()
   
-    
-    //TODO test call in kotlin
     func isActiveOnStore() -> KotlinBoolean {
         return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
     }
@@ -59,7 +59,7 @@ public class MiamManager {
       basketHandler.listenToRetailerBasket = initBasketListener
       basketHandler.pushProductsToBasket = pushProductToBasket
       basketHandler.paymentTotal = getTotalPayment
-     
+      //initCustomText()
   }
     
     private func yourProductsToRetailerProducts(products: Array<TestProduct>) -> Array<RetailerProduct> {
@@ -109,5 +109,31 @@ public class MiamManager {
     private func getTotalPayment() -> KotlinDouble {
         return 2.0
       }
+    
+    private func initCustomText() {
+        MiamText.sharedInstance.alreadyInCart = "c'est dans la boite"
+    }
+    
+    private func initTemplate(){
+        Template.sharedInstance.counterTemplate =
+        {(count: Int,
+          increase: @escaping () -> Void,
+          decrease: @escaping () -> Void ) -> AnyView in
+            AnyView(
+               HStack{
+                   Button(action: {
+                       decrease()
+                   }) {
+                       Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                   }
+                   Text(String(count))
+                   Button(action: {
+                       increase()
+                   }) {
+                       Image(systemName: "plus.circle").foregroundColor(.blue)
+                   }
+                }
+                )}
+    }
 }
 
