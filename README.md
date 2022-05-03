@@ -445,14 +445,14 @@ miamCard.bind(criteria = SuggestionsCriteria(
 
 This SDK lets you adjust the components styling so they can be naturally inserted in your app without confusing the end user. 
 
-There is two way to customise our component :
-- By passing a template and mapping our controler on it 
-- By overriding our style properties
+Components styling can be customized by either:
+- Passing a whole template and mapping it to the controller inputs/outputs 
+- Overriding the style properties
 
-> You can use both at the same time , note that your template 'll not consider our style variables
+> A combination of both ways can be used. Note that in this case, the default style variables won't be taken into account
 
 
-### Overriding style properties
+#### Overriding style properties
 
 There are two level of customization:  
 - Globally: styles defined here will be applied to all components
@@ -464,7 +464,7 @@ There are two level of customization:
 
 > Components injected using Jetpack or XML can both have their styling customized the same way
 
-#### Colors
+##### Colors
 
 > Global variables only!!
 
@@ -495,7 +495,7 @@ List of colors you can override:
 | unpureWhite | `#FEFEFE` | 
 | black | `#252525` |
 
-#### Wording
+##### Wording
 
 All wordings are injected using Miam `Text` objects, which can be overriden globally or component by component as follows:
 
@@ -507,7 +507,7 @@ Text.alreadyInCart = "ajoutée"
 
 The full list of customizable wordings can be found in file: `androidSDK/src/main/ressource/text.kt`
 
-#### Typography
+##### Typography
 
 All font use across SDK are defined here they can be override globaly in `androidSDK/src/main/theme/typography.kt` or in lower level
 Our typography are of type [TextStyle]("https://www.jetpackcompose.net/textstyle-in-jetpack-compose")
@@ -528,7 +528,7 @@ typography.h1 = TextStyle(
     )
 ```
 
-#### Icon / Images
+##### Icons / Images
 
 All icons and images are injected using Miam `Image` objects, which can be overriden globally or component by component as follows:
 
@@ -538,7 +538,7 @@ import com.miam.kmm_miam_sdk.android.ressource.Image
 Image.basketIcon = R.drawable.your_basket_icon
 ```
 
-#### Dimensions
+##### Dimensions
 
 All padding, width or height are injected using Miam `Dimension` object, which can be overriden globally or component by component as follows:
 
@@ -548,7 +548,7 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension
 Dimension.xlPadding = 40.dp
 ```
 
-#### Component-specific properties (example: customize the RecipeCard component)
+##### Component-specific properties (example: customize the RecipeCard component)
 
 Everytime a component has customizable properties, its folder will contain a `componentStyle.kt` file describing these properties. eg: `recipeCardStyle.kt`.
 
@@ -577,7 +577,7 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 |:-------------|:-------------:|
 |![alt text](pic/defaultCard.png "default card") | ![alt text](pic/alteredStyle.png "custom card")|
 
-### Customize with a template
+#### Customize using a template
 
 All components avalaible for template customization can be found in `theme/template.kt`
 
