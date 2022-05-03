@@ -445,6 +445,15 @@ miamCard.bind(criteria = SuggestionsCriteria(
 
 This SDK lets you adjust the components styling so they can be naturally inserted in your app without confusing the end user. 
 
+Components styling can be customized by either:
+- Passing a whole template and mapping it to the controller inputs/outputs 
+- Overriding the style properties
+
+> A combination of both ways can be used. Note that in this case, the default style variables won't be taken into account
+
+
+#### Overriding style properties
+
 There are two level of customization:  
 - Globally: styles defined here will be applied to all components
 - Per component: styles defined here will be applied to a specific component only
@@ -455,7 +464,7 @@ There are two level of customization:
 
 > Components injected using Jetpack or XML can both have their styling customized the same way
 
-#### Colors
+##### Colors
 
 > Global variables only!!
 
@@ -486,7 +495,7 @@ List of colors you can override:
 | unpureWhite | `#FEFEFE` | 
 | black | `#252525` |
 
-#### Wording
+##### Wording
 
 All wordings are injected using Miam `Text` objects, which can be overriden globally or component by component as follows:
 
@@ -498,7 +507,7 @@ Text.alreadyInCart = "ajoutée"
 
 The full list of customizable wordings can be found in file: `androidSDK/src/main/ressource/text.kt`
 
-#### Typography
+##### Typography
 
 All font use across SDK are defined here they can be override globaly in `androidSDK/src/main/theme/typography.kt` or in lower level
 Our typography are of type [TextStyle]("https://www.jetpackcompose.net/textstyle-in-jetpack-compose")
@@ -519,7 +528,7 @@ typography.h1 = TextStyle(
     )
 ```
 
-#### Icon / Images
+##### Icons / Images
 
 All icons and images are injected using Miam `Image` objects, which can be overriden globally or component by component as follows:
 
@@ -529,7 +538,7 @@ import com.miam.kmm_miam_sdk.android.ressource.Image
 Image.basketIcon = R.drawable.your_basket_icon
 ```
 
-#### Dimensions
+##### Dimensions
 
 All padding, width or height are injected using Miam `Dimension` object, which can be overriden globally or component by component as follows:
 
@@ -539,7 +548,7 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension
 Dimension.xlPadding = 40.dp
 ```
 
-#### Component-specific properties (example: customize the RecipeCard component)
+##### Component-specific properties (example: customize the RecipeCard component)
 
 Everytime a component has customizable properties, its folder will contain a `componentStyle.kt` file describing these properties. eg: `recipeCardStyle.kt`.
 
@@ -568,6 +577,65 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 |:-------------|:-------------:|
 |![alt text](pic/defaultCard.png "default card") | ![alt text](pic/alteredStyle.png "custom card")|
 
+#### Customize using a template
+
+All components avalaible for template customization can be found in `theme/template.kt`
+
+```kotlin
+  // def of your new template
+  private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
+        { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
+            Column() {
+                Clickable(
+                    onClick = {look()},
+                    children = {
+                        Image(
+                            painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .height(150.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = "time"
+                    )
+                    Text(text = recipe.totalTime)
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "person"
+                    )
+                    Text(text = recipe.attributes!!.numberOfGuests.toString())
+                    Icon(
+                        tint = Color.Gray,
+                        imageVector = Icons.Default.School,
+                        contentDescription = "hat"
+                    )
+                    Text(text ="Difficulté  ${recipe.difficultyLabel}")
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                    Text(text = recipe.attributes!!.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                }
+
+
+            }
+        }
+    
+
+    // Then You just need to pass this `var` into our template holder
+    Template.recipeCardTemplate = recipeFunctionTemplateVariable
+
+```
+
+> As Compose doesn't support yet passing reference of a `@Compose` function we have to pass it through a variable
+
+
 
 ### Planned improvements
 
@@ -586,15 +654,15 @@ RecipeCardStyle.image = Modifier.height(245.dp).width(245.dp).clip(shape = Circl
 
 Component available for low level customization :
 
-| Name | Style | Color | Icon | Text | Preview |
-|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
-| Recipe card |✅ | ❌ | ✅ |✅ | ❌
-| Basket preview |❌ | ❌ |❌ | ❌ | ❌
-| Price |  ✅ |  ✅ |➖| ✅ | ✅
-| Item selector |✅ | ✅ |✅ |✅ | ❌
-| Recipe detail |❌ | ❌ |❌|❌ | ❌
-| Counter | ✅| ✅ |✅|➖ |❌
-| Dialog |✅ | ➖|➖|➖ | ❌
+| Name | Style | Color | Icon | Text | Preview | Template |
+|:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| Recipe card |✅ | ❌ | ✅ |✅ | ❌ | ✅
+| Basket preview |❌ | ❌ |❌ | ❌ | ❌| ❌
+| Price |  ✅ |  ✅ |➖| ✅ | ✅| ❌
+| Item selector |✅ | ✅ |✅ |✅ | ❌| ❌
+| Recipe detail |❌ | ❌ |❌|❌ | ❌| ❌
+| Counter | ✅| ✅ |✅|➖ |❌| ❌
+| Dialog |✅ | ➖|➖|➖ | ❌| ❌
 
 - Add component preview for development
 
