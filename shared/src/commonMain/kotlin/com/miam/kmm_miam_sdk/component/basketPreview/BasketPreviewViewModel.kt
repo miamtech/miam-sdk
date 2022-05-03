@@ -18,9 +18,8 @@ class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in basket preview $exception")
+            _, exception -> println(" [ERROR][Miam][Basket preview] $exception")
     }
-
 
     private val basketStore : BasketStore by inject()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
@@ -42,7 +41,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     init {
         if(recipeId != null){
             // println("Miam --> basket RecipeId : $recipeId ")
-            basketChange()
+                basketChange()
           val job = launch(coroutineHandler) {
                 basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
                     basketChange()
@@ -118,6 +117,7 @@ class BasketPreviewViewModel(val recipeId: String?):
      * TODO : if we have include request working the get of relationships can be done in basket store directly
      */
     private fun setLines(newline: BasketPreviewLine) {
+        LogHandler.debug("[Miam] newline $newline")
         setState { copy(line = BasicUiState.Success(newline),bpl = newline, isReloading= false) }
     }
 
@@ -126,10 +126,12 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun addEntry(entry: BasketEntry){
+        LogHandler.debug("[Miam] add entry $entry")
         currentState.bpl?.entries?.found?.add(entry)
         currentState.bpl?.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
         currentState.bpl?.entries?.oftenDeleted?.removeAll { be -> be.id == entry.id }
         currentState.bpl?.entries?.removed?.removeAll { be -> be.id == entry.id }
+        LogHandler.debug("[Miam] add after entry $entry")
 
         if(currentState.bpl != null ) {
             setState {
@@ -145,8 +147,10 @@ class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private suspend fun removeBasketEntry(entry: BasketEntry){
+        LogHandler.debug("[Miam] remove entry $entry")
         currentState.bpl?.entries?.found?.removeAll { be -> be.id == entry.id }
         currentState.bpl?.entries?.removed?.add(entry)
+        LogHandler.debug("[Miam] remove end entry $entry")
         if(currentState.bpl != null ) {
             setState {
                 copy(
@@ -162,6 +166,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
         // println("Miam updateBasketEntry $BasketEntry $finalQty")
         // println("Miam updateBasketEntry already got $lastEntriesUpdate")
+        LogHandler.debug("[Miam] update entry $entry")
         val existingEntryIdx = lastEntriesUpdate.indexOfFirst{ be ->
             be.id == entry.id
         }
@@ -176,6 +181,7 @@ class BasketPreviewViewModel(val recipeId: String?):
             lastEntriesUpdate.add(newEntry)
         }
         // println("Miam updateBasketEntry will emit $lastEntriesUpdate")
+        LogHandler.debug("[Miam] update end entry $entry")
         lineEntriesSubject.emit(lastEntriesUpdate)
     }
 
@@ -196,11 +202,14 @@ class BasketPreviewViewModel(val recipeId: String?):
 
     private fun basketChange(){
         launch(coroutineHandler) {
+
+
             val bpl = basketStore.observeState().first {
                 it.basketPreview != null && it.basketPreview.isNotEmpty()
             }.basketPreview?.find {
                 basketPreviewLine -> basketPreviewLine.id == recipeId.toString()
             }
+            LogHandler.debug("[Miam] bpl $bpl")
             if(bpl != null) {
                 setEvent(BasketPreviewContract.Event.SetLines(bpl))
             }

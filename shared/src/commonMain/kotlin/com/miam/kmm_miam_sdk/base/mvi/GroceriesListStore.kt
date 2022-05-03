@@ -105,7 +105,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
 
     private suspend fun appendRecipe(recipeId :String, guest: Int, states :GroceriesListState)  {
         LogHandler.debug("[Miam] appendRecipe $recipeId")
-         LogHandler.debug("[Miam] states $states")
+        LogHandler.debug("[Miam] states $states")
         if(states.groceriesList == null) return
         val recipesInfos = mutableListOf(*states.groceriesList.attributes!!.recipesInfos.toTypedArray())
         LogHandler.debug("[Miam] recipesInfos $recipesInfos")

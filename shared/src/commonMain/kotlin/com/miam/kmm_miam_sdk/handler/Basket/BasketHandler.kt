@@ -10,12 +10,17 @@ import kotlinx.coroutines.flow.take
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+class testToto() {
+    var toto: String = "toto"
+}
+
 class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
 
     private val coroutineHandler = CoroutineExceptionHandler {
             _, exception -> println("Miam error in basket preview $exception")
     }
 
+    private var toto = testToto()
     private var _comparator: BasketComparator? = null
     val basketStore: BasketStore by inject()
     private val groceriesListStore: GroceriesListStore by inject()
@@ -36,6 +41,11 @@ class BasketHandler () : KoinComponent, CoroutineScope by CoroutineScope(Dispatc
 
     init {
        handleBasketSync()
+        println("toto1 ${toto.toto}")
+        launch {
+            toto.toto = "tata"
+        }
+        println("toto2 ${toto.toto}")
     }
 
     fun dispose() {
