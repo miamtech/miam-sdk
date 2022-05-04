@@ -13,7 +13,10 @@ public struct RecipeCardView: View {
     public var recipeId: String?
     public var criteria: SuggestionsCriteria?
     
+    @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
+    @SwiftUI.State var showingPopup = false
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
+   
     
     public init(recipeId: String) {
         self.recipeId = recipeId
@@ -91,7 +94,8 @@ public struct RecipeCardView: View {
                                .offset(x: 0 , y: 120)
                                
                             }.onTapGesture {
-                                
+                                initialDialogScreen = RouterContent.recipeDetail
+                                showingPopup = true
                              }
                             
                         }
@@ -123,7 +127,8 @@ public struct RecipeCardView: View {
                                 )
                             Spacer()
                             Button(action: {
-                                
+                                self.initialDialogScreen = RouterContent.basketPreview
+                                showingPopup = true
                                 viewModel.setEvent(event:
                                                     RecipeContractEvent.OnAddRecipe.shared)
                             }){
@@ -149,7 +154,13 @@ public struct RecipeCardView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color(.sRGB, red: 150/255, green: 150/255, blue: 150/255, opacity: 0.1), lineWidth: 1)
                     )}
-            .padding([.top, .horizontal],8).onAppear(perform: {
+            .padding([.top, .horizontal],8).popover(isPresented: $showingPopup) {
+                Dialog(
+                    close: { showingPopup = false },
+                    initialRoute : initialDialogScreen  ,
+                    recipeVm: viewModel
+                )
+            }.onAppear(perform: {
                 if(recipeId != nil){
                     viewModel.setEvent(
                         event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))

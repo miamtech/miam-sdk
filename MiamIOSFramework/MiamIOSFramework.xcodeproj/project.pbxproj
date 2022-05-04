@@ -19,6 +19,10 @@
 		0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BF6281FCC6800BFC7F8 /* Template.swift */; };
 		0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA665282017C5007D6C8A /* PriceView.swift */; };
 		0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA667282019D2007D6C8A /* PriceVM.swift */; };
+		0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA66C28215A83007D6C8A /* Dialog.swift */; };
+		0B9AA66F28215B4D007D6C8A /* DialogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA66E28215B4D007D6C8A /* DialogVM.swift */; };
+		0B9AA67328216B31007D6C8A /* RecipeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA67228216B31007D6C8A /* RecipeDetail.swift */; };
+		0B9AA67528216B79007D6C8A /* BasketPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA67428216B79007D6C8A /* BasketPreview.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -65,6 +69,10 @@
 		0B7C9BF6281FCC6800BFC7F8 /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
 		0B9AA665282017C5007D6C8A /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
 		0B9AA667282019D2007D6C8A /* PriceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceVM.swift; sourceTree = "<group>"; };
+		0B9AA66C28215A83007D6C8A /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		0B9AA66E28215B4D007D6C8A /* DialogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogVM.swift; sourceTree = "<group>"; };
+		0B9AA67228216B31007D6C8A /* RecipeDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetail.swift; sourceTree = "<group>"; };
+		0B9AA67428216B79007D6C8A /* BasketPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreview.swift; sourceTree = "<group>"; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -139,6 +147,30 @@
 			path = Price;
 			sourceTree = "<group>";
 		};
+		0B9AA66B28215A69007D6C8A /* Dialog */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AA66C28215A83007D6C8A /* Dialog.swift */,
+			);
+			path = Dialog;
+			sourceTree = "<group>";
+		};
+		0B9AA67028216AE1007D6C8A /* BasketPreview */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AA67428216B79007D6C8A /* BasketPreview.swift */,
+			);
+			path = BasketPreview;
+			sourceTree = "<group>";
+		};
+		0B9AA67128216AF6007D6C8A /* RecipeDetail */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AA67228216B31007D6C8A /* RecipeDetail.swift */,
+			);
+			path = RecipeDetail;
+			sourceTree = "<group>";
+		};
 		DCD4E2F627BE914A000D3EA6 = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +216,9 @@
 		DCD4E31C27BE92AC000D3EA6 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				0B9AA67128216AF6007D6C8A /* RecipeDetail */,
+				0B9AA67028216AE1007D6C8A /* BasketPreview */,
+				0B9AA66B28215A69007D6C8A /* Dialog */,
 				0B7C9BF8282016BF00BFC7F8 /* Price */,
 				0B7C9BDE28197A1700BFC7F8 /* Counter */,
 				0B7C9BD728196A6300BFC7F8 /* RecipeCard */,
@@ -205,6 +240,7 @@
 			children = (
 				DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */,
 				0B9AA667282019D2007D6C8A /* PriceVM.swift */,
+				0B9AA66E28215B4D007D6C8A /* DialogVM.swift */,
 			);
 			path = mvvm;
 			sourceTree = "<group>";
@@ -354,10 +390,14 @@
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
 				0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
+				0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */,
 				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
+				0B9AA67528216B79007D6C8A /* BasketPreview.swift in Sources */,
 				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
+				0B9AA67328216B31007D6C8A /* RecipeDetail.swift in Sources */,
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
 				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
+				0B9AA66F28215B4D007D6C8A /* DialogVM.swift in Sources */,
 				0B7C9BF2281A7EF700BFC7F8 /* Dimension.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
 				0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */,
