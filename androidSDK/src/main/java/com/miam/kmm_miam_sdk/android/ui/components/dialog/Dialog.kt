@@ -34,7 +34,7 @@ import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import org.koin.core.component.KoinComponent
 
 
-class Dialog : KoinComponent {
+class Dialog  {
 
     private var vmRouter: RouterViewModel = RouterViewModel()
 
@@ -68,7 +68,6 @@ class Dialog : KoinComponent {
                 }
                 FullScreen {
                     Box(){
-
                         when(state.content){
                             RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
                             RouterContent.BASKET_PREVIEW -> state.bpvm?.let { BasketPreview(vmRouter ,it, state.rvm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)}).content() }

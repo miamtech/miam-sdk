@@ -49,7 +49,8 @@ open class RecipeViewModel :
             isInViewport = false,
             tabState = TabEnum.INGREDIENT,
             activeStep = 0,
-            recipeLoaded = false
+            recipeLoaded = false,
+            isLiked = false
         )
     }
 
@@ -79,6 +80,7 @@ open class RecipeViewModel :
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.Retry -> recipeId?.let { getRecipe(it) }
+            RecipeContract.Event.OnToggleLike -> toggleLike()
         }
     }
 
@@ -177,6 +179,10 @@ open class RecipeViewModel :
             val recipe = getRecipeUseCase.execute(recipeId)
             setRecipe(recipe)
         }
+        // TODO alexis get recipe like
+        // if recipe doesn't have reicpe like -> not like
+        // if recipelike.isPast == true -> not like
+        // else like
         // TODO manage errors
     }
 
@@ -214,11 +220,9 @@ open class RecipeViewModel :
         return recipe.attributes!!.numberOfGuests ?: 4
     }
 
-    private fun initIngredientsString() {
-        var ingredientsConcatName = ""
-        if (recipe != null) {
-
-        }
+    private fun toggleLike(){
+        setState { copy(isLiked =  !currentState.isLiked) }
+        // TODO Alex call update/create recipe like
     }
 
     private fun displayPrice() {

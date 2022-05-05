@@ -198,7 +198,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun initTemplate(){
-        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+       // Template.recipeCardTemplate = recipeFunctionTemplateVariable
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{
