@@ -62,8 +62,8 @@ fun recipdeDetails(
             requireNotNull(recipe)
             recipeDetailCard(recipe, vmRecipeCard,vmRouter, closeDialogue)
         },
-        onTryAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
-        onCheckAgain = { vmRecipeCard.setEvent(RecipeContract.Event.Retry) },
+        onTryAgain = { },
+        onCheckAgain = { },
         loadingView = {   CircularProgressIndicator() }
     )
 }

@@ -6,6 +6,8 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 object Template {
 
+////////////////// Recipe Card //////////////////
+
     /**
      * recipe allow you to access all recipe object property as image, title ...
      * vmRecipe is a view controller share between recipeCard and recipeDetail, you'll find state of the recipe
@@ -21,5 +23,19 @@ object Template {
         buy : () -> Unit
         ) -> Unit
     )? = null
+
+    /**
+     * view when recipe is fetching
+     */
+    var recipeLoaderTemplate : (
+    @Composable() () -> Unit
+    ) ? = null
+
+    /**
+     * view when miam fail to fetch
+     */
+    var recipeEmptyTemplate: (
+      @Composable() () -> Unit
+    ) ? = null
 
 }
