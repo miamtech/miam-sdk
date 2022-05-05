@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private val basketHandler = BasketHandler()
 
+    private val recipeloader:  @Composable () -> Unit = { Box(Modifier.size(40.dp).background(Color.Blue)) }
 
     private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
         { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
@@ -117,7 +118,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         PointOfSaleHandler.updateStoreId("35290")
-        PointOfSaleHandler.setSupplier(7)
+        PointOfSaleHandler.setSupplier(9)
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
@@ -197,8 +198,10 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
     }
 
+
     private fun initTemplate(){
         Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        Template.recipeLoaderTemplate = recipeloader
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{

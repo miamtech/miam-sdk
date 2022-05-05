@@ -120,9 +120,22 @@ class RecipeView @JvmOverloads constructor(
                     requireNotNull(recipe)
                     RecipeCard(recipe, vmRecipe)
                 },
-                loadingView = { RecipeCardLoading() },
-                onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
-                onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
+                loadingView = {
+                    if(Template.recipeLoaderTemplate != null){
+                        Template.recipeLoaderTemplate?.let { it() }
+                    } else {
+                        RecipeCardLoading()
+                    }
+                },
+                emptyView =  {
+                    if(Template.recipeEmptyTemplate !=  null){
+                        Template.recipeEmptyTemplate?.let {it()}
+                    } else {
+                        Box{}
+                    }
+                },
+                onTryAgain = { },
+                onCheckAgain = {  },
             )
         }
     }

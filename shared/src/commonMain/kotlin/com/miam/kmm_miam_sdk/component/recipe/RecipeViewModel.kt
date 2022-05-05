@@ -22,7 +22,9 @@ open class RecipeViewModel :
     BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in Pricing view $exception")
+            _, exception ->
+                println("Miam error in Pricing view $exception")
+                setEvent(RecipeContract.Event.Error)
     }
 
     private val getRecipeUseCase: GetRecipeUseCase by inject()
@@ -78,7 +80,7 @@ open class RecipeViewModel :
             RecipeContract.Event.IncreaseGuest -> addGuest()
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
-            RecipeContract.Event.Retry -> recipeId?.let { getRecipe(it) }
+            RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty)  }
         }
     }
 
