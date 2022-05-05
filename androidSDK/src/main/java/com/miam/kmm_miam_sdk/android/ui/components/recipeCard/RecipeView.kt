@@ -127,7 +127,13 @@ class RecipeView @JvmOverloads constructor(
                         RecipeCardLoading()
                     }
                 },
-                emptyView =  { Box{} },
+                emptyView =  {
+                    if(Template.recipeEmptyTemplate !=  null){
+                        Template.recipeEmptyTemplate?.let {it()}
+                    } else {
+                        Box{}
+                    }
+                },
                 onTryAgain = { },
                 onCheckAgain = {  },
             )
