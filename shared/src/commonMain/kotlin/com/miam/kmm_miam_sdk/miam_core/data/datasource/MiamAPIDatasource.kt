@@ -66,16 +66,17 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
        httpClient.sendPipeline.intercept(HttpSendPipeline.State) {
            context.headers.append(HttpHeaders.Accept,"*/*")
-
-               userStore.observeState().value.sessionId.let {
-                   context.headers.remove("Cookie")
-                   if (it != null ){
-                       context.headers.append(HttpHeaders.Cookie, it)
-                   }
-
+           userStore.observeState().value.sessionId.let {
+               context.headers.remove("Cookie")
+               if (it != null ){
+                   context.headers.append(HttpHeaders.Cookie, it)
                }
-            userStore.observeState().value.userId.let {
+           }
+           userStore.observeState().value.userId.let {
                context.headers.append(HttpHeaders.Authorization, "user_id $it" )
+           }
+           if (userStore.ProfilingForbiden()) {
+               context.url.parameters["profiling"] = "off"
            }
         }
     }

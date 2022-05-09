@@ -14,4 +14,8 @@ object UserHandler: KoinComponent {
 
         store.dispatch(UserAction.RefreshUser(userId))
     }
+
+    fun setProfilingAllowed(allowance: Boolean) {
+        store.setProfilingAllowed(allowance)
+    }
 }
