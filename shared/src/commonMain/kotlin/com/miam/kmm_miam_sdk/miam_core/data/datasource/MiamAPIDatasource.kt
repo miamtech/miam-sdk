@@ -1,22 +1,18 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
-import com.miam.kmm_miam_sdk.base.mvi.UserAction
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 import io.ktor.http.*
 import io.ktor.util.*
-import io.ktor.utils.io.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -60,8 +56,11 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     init {
         httpClient.receivePipeline.intercept(HttpReceivePipeline.State) {
-        if(userStore.observeState().value.sessionId == null ){
-            userStore.dispatch(UserAction.SetSessionId(("${context.response.headers["set-cookie"]}".split(';')[0])))
+            if(userStore.getSessionId() == null) {
+                val newSessionId = "${context.response.headers["set-cookie"]}".split(';')[0]
+                if (userStore.sameSession(newSessionId)) return@intercept
+
+                userStore.setSessionId(newSessionId)
             }
         }
 

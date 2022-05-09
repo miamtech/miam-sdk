@@ -4,11 +4,12 @@ import com.miam.kmm_miam_sdk.base.mvi.*
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.take
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
+object BasketHandlerInstance: KoinComponent {
+    val instance: BasketHandler by inject()
+}
 
 class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
     private val basketStore: BasketStore by inject()
@@ -83,6 +84,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
     /**
      * called from app
      */
+
     fun dispose() {
         basketListnerJob?.cancel()
         comparator = null

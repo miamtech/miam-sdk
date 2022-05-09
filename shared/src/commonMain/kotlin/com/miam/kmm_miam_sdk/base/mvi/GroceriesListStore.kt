@@ -19,10 +19,8 @@ sealed class  GroceriesListAction : Action {
     object ResetGroceriesList : GroceriesListAction()
     data class AlterRecipeList(val recipeId : String, val guests: Int) : GroceriesListAction()
     data class RemoveRecipe(val recipeId: String): GroceriesListAction()
-    data class Error(val error: Exception) : GroceriesListAction()
 }
 sealed class  GroceriesListEffect : Effect {
-    data class Error(val error: Exception) :  GroceriesListEffect()
     object GroceriesListLoaded :  GroceriesListEffect()
     data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
     data class RecipeRemoved(val recipeId: String) :GroceriesListEffect()
@@ -35,7 +33,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             _, exception -> println("[ERROR][Miam][GroceriesListStore] $exception")
     }
 
-    private val state = MutableStateFlow(GroceriesListState( null))
+    override val state = MutableStateFlow(GroceriesListState( null))
     private val sideEffect = MutableSharedFlow<GroceriesListEffect>()
     private val groceriesListRepo: GroceriesListRepositoryImp by inject()
     private val basketStore: BasketStore by inject()
@@ -52,7 +50,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
      * save current flow if loading cancel and launch new flow
      **/
 
-    override fun dispatch(action: GroceriesListAction): Job? {
+    override fun dispatch(action: GroceriesListAction): Job {
         when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
                 return launch(coroutineHandler) {
@@ -76,7 +74,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             }
             is GroceriesListAction.RemoveRecipe -> {
                 basketStore.fastRemoveRecipeFromBpl(action.recipeId)
-                launch(coroutineHandler) {
+                return launch(coroutineHandler) {
                     val newGl = removeRecipe(state.value.groceriesList, action.recipeId)
                     if (newGl != null) {
                         sideEffect.emit(GroceriesListEffect.RecipeRemoved(newGl.id))
@@ -84,16 +82,6 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                     }
                 }
             }
-            is GroceriesListAction.Error -> {
-                TODO("handle errors")
-            }
-        }
-        return null
-    }
-
-    private fun updateStateIfChanged(newState: GroceriesListState) {
-        if (newState != state.value) {
-            state.value = newState
         }
     }
 
