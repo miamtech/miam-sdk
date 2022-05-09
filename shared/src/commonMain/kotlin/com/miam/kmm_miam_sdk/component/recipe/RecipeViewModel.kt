@@ -24,7 +24,7 @@ open class RecipeViewModel :
     private val coroutineHandler = CoroutineExceptionHandler {
             _, exception ->
                 println("Miam error in Pricing view $exception")
-                setEvent(RecipeContract.Event.Error)
+                //setEvent(RecipeContract.Event.Error)
     }
 
     private val getRecipeUseCase: GetRecipeUseCase by inject()
