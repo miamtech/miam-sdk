@@ -16,7 +16,8 @@ import org.koin.core.component.inject
 
 data class UserState(
     val userId: String?,
-    val sessionId: String?
+    val sessionId: String?,
+    val profilingAllowed: Boolean = true
 ) : State
 
 sealed class  UserAction : Action {
@@ -29,7 +30,7 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
     override val state = MutableStateFlow(UserState( null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()
-    private val  groceriesListStore:  GroceriesListStore by inject()
+    private val groceriesListStore:  GroceriesListStore by inject()
 
 
     override fun observeState(): StateFlow<UserState> = state
@@ -63,5 +64,13 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
     fun sameUser(userId: String?): Boolean {
         return userId == state.value.userId;
+    }
+
+    fun setProfilingAllowed(allowance: Boolean) {
+        updateStateIfChanged(state.value.copy(profilingAllowed = allowance))
+    }
+
+    fun ProfilingForbiden(): Boolean {
+        return !state.value.profilingAllowed
     }
 }
