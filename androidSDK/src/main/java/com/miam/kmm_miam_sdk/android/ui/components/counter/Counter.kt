@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.countTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundDisableColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessIconColor
@@ -34,6 +36,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButt
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIcon
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIconLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonLight
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceShimmer
 
 @Composable
 fun Counter(
@@ -44,7 +47,7 @@ fun Counter(
     lightMode: Boolean = false
 ) {
     Row(
-        modifier = if(lightMode) mainRowContainerLight else mainRowContainer,
+        modifier =  mainRowContainer,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -58,7 +61,7 @@ fun Counter(
             IconButton(
                     onClick = { decrease() },
                     enabled = !isDisable,
-                    modifier = ( if(lightMode) lessButtonLight else lessButton ).background(
+                    modifier =  lessButton.background(
                         if(isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
                     )
             ) {
@@ -66,21 +69,22 @@ fun Counter(
                     painter = painterResource(less),
                     contentDescription = "less icon",
                     colorFilter = ColorFilter.tint(lessIconColor),
-                    modifier = if(lightMode) lessButtonIconLight else lessButtonIcon
+                    modifier =  lessButtonIcon
                 )
             }
             Row(
-                modifier = if(lightMode) countBorderLight else countBorder,
+                modifier = countBorder,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = count.toString(),
-                    modifier = if(lightMode) countTextLight else countText
+                    text = count.toString()+ if (lightMode) "" else  " pers.",
+                    color = countTextColor,
+                    modifier =  countText
                 )
             }
             IconButton(
-                modifier =( if(lightMode) plusButtonLight else plusButton).background(
+                modifier =plusButton.background(
                     if(isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
                 ),
                 onClick = { increase() },
@@ -89,9 +93,22 @@ fun Counter(
                     painter = painterResource(plus),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(plusIconColor),
-                    modifier = if(lightMode) plusButtonIconLight else plusButtonIcon
+                    modifier =  plusButtonIcon
                 )
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun CounterPreview() {
+    Counter( 12, false, {},{} ,false)
+}
+
+@Preview
+@Composable
+fun lightCounterPreview() {
+    Counter( 12, false, {},{} ,true)
 }

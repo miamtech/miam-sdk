@@ -14,9 +14,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -82,7 +80,7 @@ fun expendableEntryLine(
                            Button(
                                border = BorderStroke(1.dp, Color(0xffD9D9D9)),
                                shape = RoundedCornerShape(50),
-                               colors = ButtonDefaults.outlinedButtonColors(contentColor = MiamMasterView.textColor),
+                               colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray),
                                onClick = { click(entry) }) {
                                Text(text = "Ajouter au panier")
                            }

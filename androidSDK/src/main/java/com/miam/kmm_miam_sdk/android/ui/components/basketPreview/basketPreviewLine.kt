@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
@@ -69,7 +71,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                 children = { Text(
                     text = line.title,
                     maxLines = 2,
-                    color = MiamMasterView.Primary,
+                    color = primary,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = 16.sp,
@@ -81,7 +83,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Text(
                     text = "${line.description?.get(0) ?: ' '}",
-                    color= MiamMasterView.Grey02,
+                    color= Color.Gray,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -89,7 +91,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                 )
                 Text(
                     text = "${  (round(((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()).toDouble()) / 100) }€ /personne",
-                    color= MiamMasterView.Grey02,
+                    color= Color.Gray,
                     style = MaterialTheme.typography.h5.copy(fontSize = 14.sp)
                 )
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))

@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitle
+import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.mainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceContainer
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceEmptyState
@@ -95,16 +97,18 @@ class Price(
 
     @Composable
     fun PriceView( integerPart : String , decimalPart : String, isTotalPrice: Boolean) {
-            Column( modifier= mainContainer ) {
+            Column( modifier= mainContainer,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Row( modifier= priceContainer ) {
                     Text("${integerPart},",
                         color = priceIntegerColor,
-                        style = subtitle
+                        style = subtitleBold
                     )
                     Text(
                         "${decimalPart}$currency",
                         color = priceDecimalColor,
-                        style = bodySmall
+                        style = subtitleBold
                     )
                 }
                 if(!isTotalPrice){
@@ -154,10 +158,11 @@ class Price(
     @Composable
     fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean){
 
-        Column() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row() {
                 Spacer(modifier = loaderInteger.background(brush = brush))
-                Spacer(modifier = loaderDecimal.background(brush = brush))
             }
             if(!isTotalPrice){
                 Text(

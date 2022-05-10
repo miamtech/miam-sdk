@@ -4,7 +4,6 @@ import androidx.compose.foundation.*
 
 import androidx.compose.foundation.layout.*
 
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material.*
@@ -24,9 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
-
-import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListAction
@@ -43,8 +41,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 
 
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine.Companion.fromBasketEntry
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -114,7 +110,7 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
                                              horizontalAlignment = Alignment.CenterHorizontally,
                                             verticalArrangement = Arrangement.Center) {
                                             CircularProgressIndicator()
-                                            Text(text = "Chargement du repas", color= MiamMasterView.Grey02,
+                                            Text(text = "Chargement du repas", color= Color.Gray ,
                                                 style = MaterialTheme.typography.h5.copy(
                                                     fontSize = 14.sp,
                                                     fontWeight = FontWeight.Bold
@@ -144,7 +140,7 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
                                         expendableEntryLine(
                                             line.entries!!.oftenDeleted,
                                             backGroundColor = Color(0xffD9EFF2),
-                                            fontColor = MiamMasterView.Primary,
+                                            fontColor = primary,
                                             title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
                                             click = fun (entry : BasketEntry) { vmBasketPreview.setEvent(BasketPreviewContract.Event.AddEntry(entry)) }
                                         )
@@ -194,9 +190,9 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Button(
-                    border = BorderStroke(1.dp, MiamMasterView.Primary),
+                    border = BorderStroke(1.dp, primary),
                     shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MiamMasterView.Primary),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = primary),
                     onClick = {
                         groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = vmBasketPreview.recipeId!! ))
                         close()
@@ -206,7 +202,7 @@ class BasketPreview(val routerViewModel: RouterViewModel,  val vmBasketPreview :
 
                 Button(
                     shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White, backgroundColor = MiamMasterView.Primary),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White, backgroundColor = primary),
                     onClick = {close() }) {
                     Text(text = "Continuer mes courses")
                 }
