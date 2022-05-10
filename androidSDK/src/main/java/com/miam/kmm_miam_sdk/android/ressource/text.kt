@@ -1,17 +1,18 @@
 package com.miam.kmm_miam_sdk.android.ressource
 
 object Text {
-    var addRecipe = "Sélectionner ce repas"
+    var addRecipe = "Ajouter les ingrédients"
     var alreadyInCart = "Déjà ajoutée"
-    var cookTime = "Temps de cuisson"
-    var checkBasketPreview = "Voir le détail"
+    var cookTime = "Cuisson : "
+    var checkBasketPreview = "Voir les produits"
     var currency = "€"
     var ingredient = "Ingredients"
-    var preGuests = "par pers."
-    var prepTime = "Temps de préparation"
+    var moreInfo = "Plus d'informations"
+    var preGuests = "par personne."
+    var prepTime = "Préparation : "
     var recipeFlag = "Recette"
     var replaceBy = "Remplacer cet article par : "
-    var restingTime = "Temps de repos"
-    var steps = "Préparation"
+    var restingTime = "Repos : "
+    var steps = "Étapes"
     var totalTime = "Temps total"
 }

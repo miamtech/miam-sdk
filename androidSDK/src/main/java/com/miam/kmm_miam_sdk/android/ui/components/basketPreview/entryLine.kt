@@ -88,7 +88,7 @@ fun entryLine(entry: BasketPreviewLine,
             entry.description?.get(0)?.let {
                 Text(
                     text = it,
-                    color= MiamMasterView.Grey02,
+                    color= Color.Gray,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = 14.sp,
                     ),

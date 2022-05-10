@@ -10,15 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miam.kmm_miam_sdk.android.ui.components.common.MiamMasterView
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
+
+import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 
 @Composable
 fun CircleChips(label: String) {
-    Box(modifier = Modifier.padding(8.dp)) {
+    Box(modifier = Modifier.padding(4.dp)) {
         Surface(
             shape = CircleShape,
-            color = MiamMasterView.serviceBlueColor,
-            modifier = Modifier.size(40.dp)
+            color = primary,
+            modifier = Modifier.size(24.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -26,7 +29,7 @@ fun CircleChips(label: String) {
             ) {
                 Text(
                     label,
-                    color = MiamMasterView.whiteColor,
+                    color = white,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W700
 

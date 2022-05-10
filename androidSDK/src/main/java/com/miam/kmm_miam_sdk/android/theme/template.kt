@@ -3,6 +3,7 @@ package com.miam.kmm_miam_sdk.android.theme
 import androidx.compose.runtime.Composable
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
 
 object Template {
 
@@ -37,5 +38,38 @@ object Template {
     var recipeEmptyTemplate: (
       @Composable() () -> Unit
     ) ? = null
+
+////////////////// Recipe details //////////////////
+
+    /**
+     * sticky header
+     */
+    var recipeDetailHeaderTemplate : (
+    @Composable() (
+        closeDetail : () -> Unit,
+        recipe: Recipe
+            ) -> Unit
+    ) ? = null
+
+    var recipeDetailInfosTemplate : (
+    @Composable() (recipe : Recipe) -> Unit
+    ) ? = null
+
+    var recipeDetailStepsTemplate : (@Composable() (
+        recipe: Recipe,
+        vmRecipe : RecipeViewModel
+            ) -> Unit )? = null
+
+    var recipeDetailIngredientTemplate :  (@Composable() (
+        steps : List<RecipeStep>,
+        vmRecipe : RecipeViewModel
+            ) -> Unit )? =  null
+
+    var recipeDetailFooterTemplate : (@Composable() (
+        recipe: Recipe,
+        vmRecipe : RecipeViewModel,
+        look : () -> Unit,
+        buy : () -> Unit
+            ) -> Unit )? =  null
 
 }
