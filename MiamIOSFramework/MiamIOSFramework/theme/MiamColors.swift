@@ -27,5 +27,8 @@ public class MiamColor {
     var white = Color(hex:"#FAFCFE")
     var unpureWhite = Color(hex:"#fefefe")
     var black = Color(hex:"#252525")
+    let musterd = Color(hex:"#FFAB08")
+    let greySurface = Color(hex: "#EDEDED")
+    let bodyText = Color(hex:"#4B555D")
 
 }
