@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 public class MiamColor {
     
     public static let sharedInstance = MiamColor()
@@ -30,5 +29,9 @@ public class MiamColor {
     let musterd = Color(hex:"#FFAB08")
     let greySurface = Color(hex: "#EDEDED")
     let bodyText = Color(hex:"#4B555D")
-
+    let borderColor = Color(hex:"#D9D9D9")
+    let primaryText = Color(hex:"#007e92")
+    let borderBottom = Color(hex:"#e9e9e9")
+    let lightPrimaryBg = Color(hex:"#F3F9FA")
+    let black20 = Color(hex:"#202020")
 }

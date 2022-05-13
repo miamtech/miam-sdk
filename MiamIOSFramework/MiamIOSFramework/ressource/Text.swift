@@ -27,7 +27,8 @@ public class MiamText {
     public var totalTime = "Temps total"
     public let recpieDetailTitle = "Welsh royal à la 3 Monts sur 2 moyennement longues lignes"
     public let recpeitDetailsSubtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum dictum turpis nec in viverra..."
-    
+    public let recpeitDetailsInfo = "Plus d’informations"
+
     private init(){}
 
 }
