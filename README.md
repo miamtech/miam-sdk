@@ -264,6 +264,7 @@ class Miam() {
   private val basketHandler: BasketHandler = BasketHandlerInstance.instance
 
   init {
+    // give miam a function walled when everything is ready to listen to your basket
     basketHandler.listenToRetailerBasket = ::initBasketListener
     // push a first basket to Miam so we can sync your current basket we Miam ones
     // then Miam will call initBasketListener function to listen to any change
@@ -274,7 +275,7 @@ class Miam() {
 
   private fun initBasketListener() {
     OBSERVABLE_ON_BASKET_OBJECT.collect { basket ->
-      // callback will be triggered on every basket change
+      // function will be triggered on every basket change
       val yourBasketAsRetailerproducts = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
       basketHandler.pushProductsToMiamBasket(yourBasketAsRetailerproducts)
     }
