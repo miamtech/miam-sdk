@@ -265,7 +265,10 @@ class Miam() {
 
   init {
     basketHandler.listenToRetailerBasket = ::initBasketListener
-
+    // push a first basket to Miam so we can sync your current basket we Miam ones
+    // then Miam will call initBasketListener function to listen to any change
+    val firstRetailerbasket = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
+    basketHandler.pushProductsToMiamBasket(firstRetailerbasket)
     // CODE
   }
 
