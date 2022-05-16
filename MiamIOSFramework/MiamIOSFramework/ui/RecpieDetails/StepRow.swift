@@ -30,4 +30,3 @@ struct StepRow_Previews: PreviewProvider {
         StepRow()
     }
 }
-

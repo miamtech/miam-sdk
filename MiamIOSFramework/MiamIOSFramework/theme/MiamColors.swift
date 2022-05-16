@@ -34,4 +34,5 @@ public class MiamColor {
     let borderBottom = Color(hex:"#e9e9e9")
     let lightPrimaryBg = Color(hex:"#F3F9FA")
     let black20 = Color(hex:"#202020")
+    let primaryLight = Color(hex: "#BED5DC")
 }

@@ -30,4 +30,3 @@ struct IngredientRow_Previews: PreviewProvider {
         IngredientRow()
     }
 }
-

@@ -264,3 +264,4 @@ struct RecpieDetailsView_Previews: PreviewProvider {
         RecpieDetailsView().previewDevice("iPhone 8")
     }
 }
+
