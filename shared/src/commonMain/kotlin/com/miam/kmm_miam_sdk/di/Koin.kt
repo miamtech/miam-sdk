@@ -9,6 +9,7 @@ import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmm_miam_sdk.handler.ContextHandler
 import com.miam.kmm_miam_sdk.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmm_miam_sdk.miam_core.data.repository.*
 import kotlinx.coroutines.Dispatchers
@@ -59,5 +60,6 @@ val storeModule = module {
     single { BasketStore() }
     single { PointOfSaleStore() }
     single { BasketHandler() }
+    single { ContextHandler() }
     single { ItemSelectorViewModel() }
 }

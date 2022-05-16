@@ -5,10 +5,7 @@ import com.miam.kmm_miam_sdk.base.mvi.BasketAction
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 
-class BasketComparator(
-    private val basketHandler: BasketHandler,
-    existingRetailerBasket: List<RetailerProduct> ,
-    firstMiamBasket:List<BasketEntry>)
+class BasketComparator(existingRetailerBasket: List<RetailerProduct>, firstMiamBasket:List<BasketEntry>)
 {
     private val comparisonMap: BasketComparisonMap = BasketComparisonMap(existingRetailerBasket, firstMiamBasket)
 

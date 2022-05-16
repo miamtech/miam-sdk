@@ -1,7 +1,7 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
 
-import com.miam.kmm_miam_sdk.handler.LogHandler
+import com.miam.kmm_miam_sdk.base.executor.ExecutorHelper
 import com.miam.kmm_miam_sdk.miam_core.data.repository.PointOfSaleRepositoryImp
 import kotlinx.coroutines.*
 
@@ -14,7 +14,8 @@ data class PointOfSaleState(
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
     val origin: String?,
-) : State
+    val currentJob: Job? = null
+): State
 
 sealed class  PointOfSaleAction : Action {
     data class SetExtId(val extId: String?) :PointOfSaleAction()
@@ -44,29 +45,15 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
         when (action) {
             is PointOfSaleAction.SetExtId -> {
                 updateStateIfChanged(state.value.copy(extIdPointOfSale = action.extId))
-                return launch(coroutineHandler) {
-                    if (action.extId != null && state.value.idSupplier != null) {
-                        val pos = pointOfSaleRepository.getPosFormExtId(action.extId, state.value.idSupplier!!)
-                        updateStateIfChanged(state.value.copy(
-                            extIdPointOfSale = action.extId,
-                            idPointOfSale = pos.id
-                        ))
-                        basketStore.dispatch(BasketAction.RefreshBasket)
-                    }
-                }
+                if (!canFetch()) return ExecutorHelper.emptyJob()
+
+                return launchNewPosRefresh()
             }
             is PointOfSaleAction.SetSupplierId -> {
                 updateStateIfChanged(state.value.copy(idSupplier = action.supplierId))
-                return launch(coroutineHandler) {
-                    if (state.value.extIdPointOfSale != null) {
-                        val pos = pointOfSaleRepository.getPosFormExtId(state.value.extIdPointOfSale!!, action.supplierId)
-                        updateStateIfChanged(state.value.copy(
-                            idSupplier = action.supplierId,
-                            idPointOfSale = pos.id
-                        ))
-                        basketStore.dispatch(BasketAction.RefreshBasket)
-                    }
-                }
+                if (!canFetch()) return ExecutorHelper.emptyJob()
+
+                return launchNewPosRefresh()
             }
         }
     }
@@ -93,5 +80,23 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
 
     fun getProviderOrigin(): String {
         return state.value.origin ?: ""
+    }
+
+    private fun canFetch(): Boolean {
+        return state.value.extIdPointOfSale != null && state.value.idSupplier != null
+    }
+
+    private fun launchNewPosRefresh(): Job {
+        ExecutorHelper.cancelRunningJob(state.value.currentJob)
+        val currentJob = launch(coroutineHandler) {
+            val pos = pointOfSaleRepository.getPosFormExtId(
+                state.value.extIdPointOfSale!!,
+                state.value.idSupplier!!
+            )
+            updateStateIfChanged(state.value.copy(idPointOfSale = pos.id))
+            basketStore.dispatch(BasketAction.RefreshBasket)
+        }
+        updateStateIfChanged(state.value.copy(currentJob = currentJob))
+        return currentJob
     }
 }

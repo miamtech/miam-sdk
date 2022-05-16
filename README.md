@@ -260,20 +260,24 @@ import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 
 class Miam() {
 
-   private val basketHandler: BasketHandler = BasketHandler()
+  // to do after koin initialization, use lateinit var if necessary
+  private val basketHandler: BasketHandler = BasketHandlerInstance.instance
 
   init {
+    // give miam a function walled when everything is ready to listen to your basket
     basketHandler.listenToRetailerBasket = ::initBasketListener
-
+    // push a first basket to Miam so we can sync your current basket we Miam ones
+    // then Miam will call initBasketListener function to listen to any change
+    val firstRetailerbasket = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
+    basketHandler.pushProductsToMiamBasket(firstRetailerbasket)
     // CODE
   }
 
-  private fun initBasketListener(
-    callback: (products: List<RetailerProduct>) -> Unit
-  ) {
+  private fun initBasketListener() {
     OBSERVABLE_ON_BASKET_OBJECT.collect { basket ->
-      // callback will be triggered on every basket change
-      callback(yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList))
+      // function will be triggered on every basket change
+      val yourBasketAsRetailerproducts = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
+      basketHandler.pushProductsToMiamBasket(yourBasketAsRetailerproducts)
     }
   }
 
@@ -288,7 +292,8 @@ import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 
 class Miam() {
 
-  private val basketHandler: BasketHandler = BasketHandler()
+  // to do after koin initialization, use lateinit var if necessary
+  private val basketHandler: BasketHandler = BasketHandlerInstance.instance
 
   init {
     basketHandler.pushProductsToBasket = ::pushProductsToYourBasket
@@ -337,6 +342,25 @@ class Miam() {
 
 // Confirm basket when payment confirmed in app:
 Miam.getInstance().basketHandler.handlePayment()
+```
+
+#### Miam readiness
+
+You have two ways to check Miam readiness : either call a direct function or listen to Miam event
+
+
+
+```kotlin
+  val miamContext = ContextHandlerInstance.instance
+  // miamContext.isReady() return a bool
+  prtinln("is Miam ready ? ${miamContext.isReady()}")
+
+  miamContext.observeReadyEvent().collect { event ->
+    val isReady = event == ReadyEvent.isReady
+    val isNotReady = event == ReadyEvent.isNotReady
+    // Do stuff
+  }
+
 ```
 
 ### Components injection
@@ -919,7 +943,7 @@ class Miam {
   private let basketHandler: BasketHandler = BasketHandler()
 
   private init() {
-    basketHandler.pushProductsToBasket = pushProductsToYourBasket
+    basketHandler.pushProductsToRetailerBasket = pushProductsToYourBasket
     // CODE
   }
 
