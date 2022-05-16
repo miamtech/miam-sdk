@@ -1,9 +1,14 @@
 package com.miam.kmm_miam_sdk.handler.Basket
 
 import com.miam.kmm_miam_sdk.base.mvi.*
+import com.miam.kmm_miam_sdk.handler.ContextHandlerInstance
+import com.miam.kmm_miam_sdk.handler.LogHandler
+import com.miam.kmm_miam_sdk.miam_core.model.Basket
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -11,35 +16,59 @@ object BasketHandlerInstance: KoinComponent {
     val instance: BasketHandler by inject()
 }
 
+data class BasketHandlerState(
+    val comparator: BasketComparator? = null,
+    val isProcessingRetailerEvent: Boolean = false,
+    val firstMiamBasket: List<BasketEntry>? = null,
+    val firstRetailerBasket: List<RetailerProduct>? = null
+): State
+
 class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
     private val basketStore: BasketStore by inject()
 
-    private var comparator: BasketComparator? = null
-    var isProcessingRetailerEvent : Boolean = false
-    private var miamActiveBasket: List<BasketEntry>? = null
+    val state = MutableStateFlow(BasketHandlerState())
 
     var paymentTotal: () -> Double = fun():Double{return 0.0}
-    var pushProductsToBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
+    var pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
         throw Error("pushProductsToBasket not implemented")
     }
-    var listenToRetailerBasket: (_: (products: List<RetailerProduct>) -> Unit) -> Unit = fun(_ : (products: List<RetailerProduct>) -> Unit){
-        println("Miam --> please init listenToRetailerBasket")
+    var listenToRetailerBasket: () -> Unit = fun(){
+        throw Error("listenToRetailerBasket not implemented")
     }
 
-    private var basketListnerJob: Job? = null
+    fun isReady(): Boolean {
+        return state.value.comparator != null
+    }
 
-    fun basketChange(miamActiveBasket: List<BasketEntry> ) {
-        // assign the entries so that the callback retailerBasketChangeCallBack can use them
-        this.miamActiveBasket = miamActiveBasket
-        // Comparison should be initialized when first Miam basket is received, based on existing Retailer basket
-        if (comparator == null){
-            listenToRetailerBasket(::retailerBasketChangeCallBack)
-            return
-        }
-        if (isProcessingRetailerEvent) return
+    private fun initFirstMiamBasket(miamActiveBasket: List<BasketEntry>) {
+        state.value = state.value.copy(firstMiamBasket = miamActiveBasket)
+        initIfPossible()
+    }
+
+    private fun initFirstRetailerBasket(retailerBasket: List<RetailerProduct>) {
+        state.value = state.value.copy(firstRetailerBasket = retailerBasket)
+        initIfPossible()
+    }
+
+    private fun initIfPossible() {
+        LogHandler.info("Will try to init handler ${state.value.firstMiamBasket} ${state.value.firstRetailerBasket}")
+        if (state.value.firstMiamBasket == null || state.value.firstRetailerBasket == null) return
+
+        val newComparator = BasketComparator(state.value.firstRetailerBasket!!, state.value.firstMiamBasket!!)
+        state.value = state.value.copy(comparator = newComparator)
+        processRetailerEvent(state.value.firstRetailerBasket!!)
+        listenToRetailerBasket()
+        ContextHandlerInstance.instance.getReady()
+    }
+
+    fun basketChange(miamActiveBasket: List<BasketEntry>) {
+        LogHandler.info("Miam basket changed $miamActiveBasket")
+        if(!isReady()) return initFirstMiamBasket(miamActiveBasket)
+
+        if (state.value.isProcessingRetailerEvent) return
 
         // When comparison is already initialized, we just update it
-        val toPushToRetailer = comparator!!.updateReceivedFromMiam(miamActiveBasket)
+        val toPushToRetailer = state.value.comparator!!.updateReceivedFromMiam(miamActiveBasket)
         sendUpdateToRetailer(toPushToRetailer)
     }
 
@@ -47,37 +76,26 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         if (itemsToAdd.isEmpty()) {
             return
         }
-        pushProductsToBasket(itemsToAdd)
+        pushProductsToRetailerBasket(itemsToAdd)
     }
 
-    /*
-    Should update Miam basket accordingly, ie remove entries that are not in the basket anymore
-    */
-    private fun retailerBasketChangeCallBack(retailerBasket: List<RetailerProduct>){
-        if(miamActiveBasket == null) {
-            // can't update Miam basket if there is nothing in there. Should not happen
-            return
-        }
-        if(comparator == null ){
-            // create comparator that make the first sync
-            comparator = BasketComparator( this, retailerBasket, miamActiveBasket!!)
-        }
-        isProcessingRetailerEvent = true
-        val toRemoveFromMiam = comparator!!.updateReceivedFromRetailer(retailerBasket)
+    private fun processRetailerEvent(retailerBasket: List<RetailerProduct>) {
+        state.value = state.value.copy(isProcessingRetailerEvent = true)
+        val toRemoveFromMiam = state.value.comparator!!.updateReceivedFromRetailer(retailerBasket)
         sendUpdateToMiam(toRemoveFromMiam)
     }
 
     private fun sendUpdateToMiam(entriesToRemove : List<AlterQuantityBasketEntry>) {
         if (entriesToRemove.isEmpty()){
-            this.isProcessingRetailerEvent = false;
-            return;
+            state.value = state.value.copy(isProcessingRetailerEvent = false)
+            return
         }
 
         //update the entries and stop proccessing at end
         val basketAction = BasketAction.UpdateBasketEntriesDiff(entriesToRemove)
         val job = basketStore.dispatch(basketAction)
-        job?.invokeOnCompletion {
-            this.isProcessingRetailerEvent = false
+        job.invokeOnCompletion {
+            state.value = state.value.copy(isProcessingRetailerEvent = false)
         }
     }
 
@@ -85,9 +103,15 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
      * called from app
      */
 
+    fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
+        LogHandler.info("Retailer basket changed $retailerBasket")
+        if(!isReady()) return initFirstRetailerBasket(retailerBasket)
+
+        processRetailerEvent(retailerBasket)
+    }
+
     fun dispose() {
-        basketListnerJob?.cancel()
-        comparator = null
+        state.value = state.value.copy(comparator = null)
     }
 
     fun handlePayment() {
