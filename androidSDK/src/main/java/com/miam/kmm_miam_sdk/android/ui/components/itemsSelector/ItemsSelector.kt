@@ -130,7 +130,7 @@ class ItemsSelector () :KoinComponent {
 
             if(Template.productOptionListTemplate != null ){
                 Template.productOptionListTemplate?.let {
-                    it(state.value.itemList ?: emptyList())
+                    it(state.value.itemList ?: emptyList()) { index -> vmItemSelector.choose(index) }
                 }
             } else {
 

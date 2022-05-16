@@ -81,7 +81,8 @@ object Template {
             ) -> Unit )? =  null
 
     var  productOptionListTemplate :  (@Composable() (
-             options: List<BasketPreviewLine>
+             options: List<BasketPreviewLine>,
+             choose:(index :Int) -> Unit
             ) -> Unit )? =  null
 
 
