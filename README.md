@@ -939,7 +939,7 @@ class Miam {
   private let basketHandler: BasketHandler = BasketHandler()
 
   private init() {
-    basketHandler.pushProductsToBasket = pushProductsToYourBasket
+    basketHandler.pushProductsToRetailerBasket = pushProductsToYourBasket
     // CODE
   }
 
