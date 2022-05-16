@@ -2,6 +2,8 @@ package com.miam.kmm_miam_sdk.android.theme
 
 import androidx.compose.runtime.Composable
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import com.miam.kmm_miam_sdk.miam_core.model.Item
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
 
@@ -71,5 +73,16 @@ object Template {
         look : () -> Unit,
         buy : () -> Unit
             ) -> Unit )? =  null
+
+////////////////// Product Selector //////////////////
+
+    var  currentProductTemplate :  (@Composable() (
+            selectedItem: BasketPreviewLine
+            ) -> Unit )? =  null
+
+    var  productOptionListTemplate :  (@Composable() (
+             options: List<BasketPreviewLine>
+            ) -> Unit )? =  null
+
 
 }

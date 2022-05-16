@@ -22,6 +22,7 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sSpacerHeight
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmallBold
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.previousIconColor
@@ -84,99 +85,117 @@ class ItemsSelector () :KoinComponent {
                     )
                 }
             }
-            Surface( modifier = selectedItemContainerBorder ) {
-                Row(
-                    modifier = selectedItemContainer,
-                    horizontalArrangement = selectedItemContainerArrangement,
-                    verticalAlignment = selectedItemContainerAlignment
-                ) {
-                    Image(
-                        painter = rememberImagePainter(state.value.selectedItem?.picture),
-                        contentDescription = "product image",
-                        contentScale = ContentScale.Crop,
-                        modifier = selectedItemImage,
-                    )
-                    Column(
-                        modifier = selectedItemInfosContainer,
-                        verticalArrangement = Arrangement.SpaceBetween
+
+            if(Template.currentProductTemplate != null) {
+                Template.currentProductTemplate?.let {
+                    it(state.value.selectedItem!!)
+                }
+            }
+            else {
+                Surface( modifier = selectedItemContainerBorder ) {
+                    Row(
+                        modifier = selectedItemContainer,
+                        horizontalArrangement = selectedItemContainerArrangement,
+                        verticalAlignment = selectedItemContainerAlignment
                     ) {
-                        Text(
-                            text = state.value.selectedItem?.description?.get(0) ?: " ",
-                            textAlign = TextAlign.Center,
-                            style = bodySmallBold
+                        Image(
+                            painter = rememberImagePainter(state.value.selectedItem?.picture),
+                            contentDescription = "product image",
+                            contentScale = ContentScale.Crop,
+                            modifier = selectedItemImage,
                         )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = pricePosition
+                        Column(
+                            modifier = selectedItemInfosContainer,
+                            verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Price(
-                                price= state.value.selectedItem?.price?.toDouble() ?: 0.0,
-                                isTotalPrice = true
-                            ).content()
+                            Text(
+                                text = state.value.selectedItem?.description?.get(0) ?: " ",
+                                textAlign = TextAlign.Center,
+                                style = bodySmallBold
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = pricePosition
+                            ) {
+                                Price(
+                                    price= state.value.selectedItem?.price?.toDouble() ?: 0.0,
+                                    isTotalPrice = true
+                                ).content()
+                            }
                         }
                     }
                 }
             }
             Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
-            Text(
-                text = replaceBy,
-                textAlign = TextAlign.Start,
-                style = bodyBold,
-                modifier =  Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
-            LazyVerticalGrid (
-                cells = GridCells.Adaptive(itemsWidth.dp),
-                contentPadding = PaddingValues(
-                    start = mPadding,
-                    top = lPadding,
-                    end = mPadding,
-                    bottom = 0.dp
-                ),
-                content = {
-                    val itemsList = state.value.itemList ?: emptyList()
-                    items(itemsList.size) {
-                            index ->
-                        Clickable(
-                            onClick = { vmItemSelector.choose(index) },
-                            children = {
-                                Surface( modifier= itemsBorder ) {
-                                    Column(
-                                        modifier = itemColumnContainer ,
-                                        verticalArrangement =  Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Box(modifier = swapIconContainer ){
+
+            if(Template.productOptionListTemplate != null ){
+                Template.productOptionListTemplate?.let {
+                    it(state.value.itemList ?: emptyList())
+                }
+            } else {
+
+
+                Text(
+                    text = replaceBy,
+                    textAlign = TextAlign.Start,
+                    style = bodyBold,
+                    modifier =  Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
+
+
+                LazyVerticalGrid (
+                    cells = GridCells.Adaptive(itemsWidth.dp),
+                    contentPadding = PaddingValues(
+                        start = mPadding,
+                        top = lPadding,
+                        end = mPadding,
+                        bottom = 0.dp
+                    ),
+                    content = {
+                        val itemsList = state.value.itemList ?: emptyList()
+                        items(itemsList.size) {
+                                index ->
+                            Clickable(
+                                onClick = { vmItemSelector.choose(index) },
+                                children = {
+                                    Surface( modifier= itemsBorder ) {
+                                        Column(
+                                            modifier = itemColumnContainer ,
+                                            verticalArrangement =  Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Box(modifier = swapIconContainer ){
+                                                Image(
+                                                    painter = rememberImagePainter(swap),
+                                                    modifier = swapIcon.align(Alignment.Center),
+                                                    colorFilter = ColorFilter.tint(swapIconColor),
+                                                    contentDescription = "swap"
+                                                )
+                                            }
                                             Image(
-                                                painter = rememberImagePainter(swap),
-                                                modifier = swapIcon.align(Alignment.Center),
-                                                colorFilter = ColorFilter.tint(swapIconColor),
-                                                contentDescription = "swap"
+                                                painter = rememberImagePainter(itemsList[index].picture),
+                                                contentDescription = "product image",
+                                                contentScale = ContentScale.Crop,
+                                                modifier = itemsImage,
                                             )
+                                            Text(
+                                                text = "${itemsList[index].description?.get(0) ?: ' '}" ,
+                                                textAlign = TextAlign.Center,
+                                                style = bodySmallBold
+                                            )
+                                            Price(
+                                                price = itemsList[index].price.toDouble(),
+                                                isTotalPrice = true
+                                            ).content()
                                         }
-                                        Image(
-                                            painter = rememberImagePainter(itemsList[index].picture),
-                                            contentDescription = "product image",
-                                            contentScale = ContentScale.Crop,
-                                            modifier = itemsImage,
-                                        )
-                                        Text(
-                                            text = "${itemsList[index].description?.get(0) ?: ' '}" ,
-                                            textAlign = TextAlign.Center,
-                                            style = bodySmallBold
-                                        )
-                                        Price(
-                                            price = itemsList[index].price.toDouble(),
-                                            isTotalPrice = true
-                                        ).content()
                                     }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
-                }
-            )
-
+                )
+            }
         }
     }
 }
