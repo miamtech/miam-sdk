@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import com.miam.kmm_miam_sdk.android.R
 
 object Image {
-
+    var delete: Int = R.drawable.ic_bin
     var time : Int = R.drawable.ic_clock
     var difficulty : Int = R.drawable.ic_diflow
     var difficultyLow : Int = R.drawable.ic_easy
@@ -20,9 +20,9 @@ object Image {
     var guests : Int = R.drawable.ic_peoples
     var less : Int = R.drawable.ic_less
     var plus : Int = R.drawable.ic_plus
-    var previous : Int = R.drawable.ic_back
+    var previous : Int = R.drawable.ic_arrow
     var recipeIcon : Int = R.drawable.ic_recipe
     var resttime : Int = R.drawable.ic_resttime
-    var swap :Int = R.drawable.ic_swap
-
+    var swap :Int = R.drawable.ic_switch
+    var toggleCaret: Int = R.drawable.ic_caret
 }
