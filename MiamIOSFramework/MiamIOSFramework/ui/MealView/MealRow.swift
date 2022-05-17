@@ -11,22 +11,17 @@ struct MealRow: View {
     var body: some View {
         VStack {
             //Product View
-            HStack(alignment: .center) {
-                Spacer()
-                VStack {
-                    Spacer()
+            ZStack(alignment: .center) {
+                
                     Text("Product").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16.0, weight: .bold, design: .default))
-                    Spacer()
-                }
-                Spacer()
-            }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 250.0, maxHeight: 250.0, alignment: .topLeading).background(MiamColor.sharedInstance.primaryLight).cornerRadius(12.0).padding([.horizontal, .bottom] ,Dimension.sharedInstance.lPadding)
+            }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 250.0, maxHeight: 250.0, alignment: .center).background(MiamColor.sharedInstance.primaryLight).cornerRadius(12.0).padding([.horizontal, .bottom] ,Dimension.sharedInstance.lPadding)
             
             //Product Detail
             VStack {
                 
                 ZStack(alignment: .topLeading) {
                     
-                    Image("test").frame( maxWidth: .infinity, minHeight: 250, maxHeight: 250, alignment: .topLeading)
+                    Image("test").resizable().frame( maxWidth: .infinity, minHeight: 250, maxHeight: 250, alignment: .center)
                     
                     VStack(alignment: .trailing){
                         HStack {
@@ -63,3 +58,4 @@ struct MealRow_Previews: PreviewProvider {
         MealRow()
     }
 }
+

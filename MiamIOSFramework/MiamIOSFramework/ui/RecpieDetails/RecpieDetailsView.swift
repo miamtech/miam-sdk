@@ -178,16 +178,7 @@ struct RecpieDetailsView: View {
                 }.frame(height: 60.0, alignment: .topLeading)
                 
                 //Divider
-                HStack {
-                    HStack  {
-                        
-                    }.frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 0,
-                        maxHeight: .infinity,
-                        alignment: .topLeading)
-                }.background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                Divider().background(MiamColor.sharedInstance.borderBottom).padding(.horizontal, Dimension.sharedInstance.lPadding)
                 
                 //Ingredeients ListView
                 VStack {
@@ -214,16 +205,7 @@ struct RecpieDetailsView: View {
                 }.frame(height: 60.0, alignment: .topLeading).padding(.top, Dimension.sharedInstance.lPadding)
                 
                 //Steps
-                HStack {
-                    HStack  {
-                        
-                    }.frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 0,
-                        maxHeight: .infinity,
-                        alignment: .topLeading)
-                }.background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                Divider().background(MiamColor.sharedInstance.borderBottom).padding(.horizontal, Dimension.sharedInstance.lPadding)
                 
                 //Steps ListView
                 VStack {

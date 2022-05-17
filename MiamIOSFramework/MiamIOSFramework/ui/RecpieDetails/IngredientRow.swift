@@ -15,13 +15,7 @@ struct IngredientRow: View {
             Spacer()
             
             Text("40 cL").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16, weight: .bold, design: .default)).cornerRadius(25.0).padding(Dimension.sharedInstance.mPadding)
-        }.frame(
-            minWidth: 0,
-            maxWidth: .infinity,
-            minHeight: 0,
-            maxHeight: .infinity,
-            alignment: .topLeading
-        )
+        }
     }
 }
 

@@ -98,7 +98,7 @@ struct ProductView: View {
                 }
                 HStack {
                     HStack {
-                        Text("Déjà dans vos placards").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
+                        Text(MiamText.sharedInstance.mealRowAlready).font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
                         
                         Spacer()
                         

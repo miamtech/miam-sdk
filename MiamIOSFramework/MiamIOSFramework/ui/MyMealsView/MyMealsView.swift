@@ -37,3 +37,4 @@ struct MyMealsView_Previews: PreviewProvider {
         MyMealsView()
     }
 }
+

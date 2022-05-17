@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProductRow: View {
+    @State var stepperValue: Float = 0.0
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
@@ -45,10 +47,9 @@ struct ProductRow: View {
                         
                     }) {
                         Image("sync").resizable()
-                            .renderingMode(.original)
-                    }.frame(width: 30, height: 30, alignment: .topTrailing)
-                    
-                    Text("Remplacer").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default))
+                            .renderingMode(.original).frame(width: 30, height: 30, alignment: .topTrailing)
+                        Text("Remplacer").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default))
+                    }.frame(width: 145, height: 30, alignment: .topTrailing)
                     
                     Spacer()
                     
@@ -78,17 +79,7 @@ struct ProductRow: View {
             }.frame(height: 50.0, alignment: .topLeading)
             
             //Divider
-            HStack {
-                HStack  {
-                    
-                }.frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading)
-            }.background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading).padding(.top, Dimension.sharedInstance.mPadding)
-            
+            Divider().background(MiamColor.sharedInstance.borderBottom).padding(.top, Dimension.sharedInstance.mPadding)
         }.padding([.horizontal, .top], Dimension.sharedInstance.lPadding).frame(alignment: .topLeading)
     }
 }
@@ -98,3 +89,4 @@ struct ProductRow_Previews: PreviewProvider {
         ProductRow()
     }
 }
+

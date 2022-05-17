@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MyMealRow: View {
     @State private var isExpanded: Bool = false
-    //    let task: Task
     
     var body: some View {
         content
@@ -21,29 +20,26 @@ struct MyMealRow: View {
             header
             if isExpanded {
                 Group {
-                    ForEach(0 ..< 5) { subtask in
+                    ForEach(0 ..< 5) { _ in
                         MyMealItemRow()
                     }
                     HStack {
                         HStack {
-                            Text("Déjà dans vos placards").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
+                            Text(MiamText.sharedInstance.mealRowAlready).font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
                             
                             Spacer()
                             
                             Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
-                        }.padding(Dimension.sharedInstance.lPadding+7)
+                        }.padding(Dimension.sharedInstance.lPadding)
                     }.background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading).padding(Dimension.sharedInstance.lPadding)
                     
                     HStack {
                         HStack {
-                            Text("Déjà dans vos placards").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
+                            Text(MiamText.sharedInstance.mealRowAlready).font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
                             
                             Spacer()
-                            if #available(iOS 15.0, *) {
-                                Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center).tint(MiamColor.sharedInstance.musterd)
-                            } else {
-                                // Fallback on earlier versions
-                            }
+                            
+                            Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
                         }.padding(Dimension.sharedInstance.lPadding+7)
                     }.background(MiamColor.sharedInstance.borderBottom).cornerRadius(10).frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading).padding([.bottom, .horizontal],Dimension.sharedInstance.lPadding)
                 }
@@ -108,16 +104,7 @@ struct MyMealRow: View {
             }.padding().background(MiamColor.sharedInstance.lightPrimaryBg).padding(.top, -8)
             
             //Divider
-            HStack {
-                HStack  {
-                    
-                }.frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading)
-            }.background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading).padding(.top, -8)
+            Divider().background(MiamColor.sharedInstance.borderBottom).padding(.top, -8)
         }
         .onTapGesture {
             withAnimation { isExpanded.toggle() }

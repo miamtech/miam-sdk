@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MyMealItemRow: View {
-    
     var body: some View {
         VStack {
             ProductRow()
