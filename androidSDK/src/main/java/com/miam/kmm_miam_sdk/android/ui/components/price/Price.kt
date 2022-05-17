@@ -28,7 +28,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceContain
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceEmptyState
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.loaderColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimalColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimalTotalPriceColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerColor
+import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerTotalPriceColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.subtitleColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderDecimal
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderInteger
@@ -43,10 +45,10 @@ import com.miam.kmm_miam_sdk.miam_core.model.Pricing
 
 
 class Price(
-            val recipeId :String? = "",
-            val guestNumber:Int? = -1,
-            val price: Double? = null,
-            val isTotalPrice: Boolean = false,
+    val recipeId :String? = "",
+    private val guestNumber:Int? = -1,
+    val price: Double? = null,
+    val isTotalPrice: Boolean = false,
     ) {
 
     private var vmPrice: PricingViewModel = PricingViewModel()
@@ -102,12 +104,12 @@ class Price(
             ) {
                 Row( modifier= priceContainer ) {
                     Text("${integerPart},",
-                        color = priceIntegerColor,
+                        color =  if(isTotalPrice) priceIntegerTotalPriceColor else priceIntegerColor,
                         style = subtitleBold
                     )
                     Text(
                         "${decimalPart}$currency",
-                        color = priceDecimalColor,
+                        color = if(isTotalPrice) priceDecimalTotalPriceColor else priceDecimalColor,
                         style = subtitleBold
                     )
                 }

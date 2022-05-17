@@ -11,6 +11,8 @@ object PriceColor {
     var loaderColor : Color = lightgrey
     var priceIntegerColor: Color = black
     var priceDecimalColor: Color = black
+    var priceIntegerTotalPriceColor: Color = primary
+    var priceDecimalTotalPriceColor: Color = primary
 
     var subtitleColor: Color = grey
 

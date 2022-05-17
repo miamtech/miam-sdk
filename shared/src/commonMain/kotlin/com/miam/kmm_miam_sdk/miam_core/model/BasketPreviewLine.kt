@@ -49,7 +49,7 @@ data class BasketPreviewLine(
     val inlineTag : String? = null,
     val title: String,
     val picture: String,
-    val description: List<String>? = emptyList(),
+    val description: List<String> = emptyList(),
     val price: String,
     val count: Int,
     val entries : LineEntries?,
