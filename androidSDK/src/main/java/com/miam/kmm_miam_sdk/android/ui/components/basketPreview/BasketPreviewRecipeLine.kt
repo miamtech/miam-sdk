@@ -40,7 +40,12 @@ import kotlin.math.round
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBasketPreview: BasketPreviewViewModel, router:RouterViewModel)  {
+fun basketPreviewRecipeLine(
+    line: BasketPreviewLine,
+    addGuest: (count:Int) -> Unit ,
+    removeGuest: (count:Int) -> Unit,
+    goToDetail: () -> Unit
+)  {
 
     val price = Price(price = line.price.toDouble(), isTotalPrice = true)
     val recipeName = line.title
@@ -49,29 +54,26 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
     var count by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail(){
-        router.setEvent(RouterContract.Event.GoToDetailFromPreview(vmRecipe))
+        goToDetail()
     }
 
     fun increase() {
         if(line.count != 100) {
             count++
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = vmRecipe )
-            )
+            addGuest(count)
         }
     }
 
     fun decrease(){
         if(line.count != 0) {
             count--
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = vmRecipe )
-            ) }
+            removeGuest(count)
+            }
     }
 
 
-    if(Template.basketPreviewLineTemplate != null){
-        Template.basketPreviewLineTemplate?.let {
+    if(Template.basketPreviewRecipeLineTemplate != null){
+        Template.basketPreviewRecipeLineTemplate?.let {
             it(
                 recipeName,
                 recipeDescription,
@@ -145,7 +147,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                     increase = { increase() },
                     decrease = { decrease() },
                     lightMode = false,
-                    isDisable = vmBasketPreview.currentState.isReloading
+                    isDisable = false
                 )
             }
             Divider(Modifier.fillMaxWidth())

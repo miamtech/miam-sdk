@@ -100,7 +100,7 @@ object Template {
 
 /////////////// Basket Preview //////////////////////
 
-    var basketPreviewLineTemplate  :  (@Composable() (
+    var basketPreviewRecipeLineTemplate  :  (@Composable() (
         recipeName: String,
         recipeDescription: String,
         pricePerGuest: String,
@@ -132,6 +132,9 @@ object Template {
         productName: String,
         add : () -> Unit,
     ) -> Unit)? = null
-                                                                       
+
+/////////////// My Meal Page  //////////////////////
+
+    var myMealLoaderTemplate :  (@Composable() () -> Unit)? = null
 
 }

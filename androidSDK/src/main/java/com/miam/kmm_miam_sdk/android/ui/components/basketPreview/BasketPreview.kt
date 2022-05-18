@@ -45,6 +45,7 @@ import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 
 
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 
 
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
@@ -73,6 +74,18 @@ class BasketPreview(
     fun content() {
 
         val state by vmBasketPreview.uiState.collectAsState()
+
+        fun addGuest(count :Int){
+            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
+                line.copy(count = count), recipeVm = recipeVm )
+            )
+        }
+
+        fun removeGuest(count: Int){
+            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
+                line.copy(count = count), recipeVm = recipeVm )
+            )
+        }
 
         Scaffold(
             topBar = {
@@ -127,10 +140,15 @@ class BasketPreview(
                                 requireNotNull(line)
                                 BasketPreviewSucessView(
                                     line ,
-                                    recipeVm,
-                                    vmBasketPreview ,
-                                    routerViewModel
-                                )
+                                    ::addGuest,
+                                    ::removeGuest
+                                ) {
+                                    routerViewModel.setEvent(
+                                        RouterContract.Event.GoToDetailFromPreview(
+                                            recipeVm
+                                        )
+                                    )
+                                }
                             },
                             onTryAgain = { /*TODO*/ },
                             onCheckAgain = { /*TODO*/ },
@@ -198,12 +216,18 @@ class BasketPreview(
 @Composable
 private fun BasketPreviewSucessView(
     line : BasketPreviewLine,
-    recipeVm: RecipeViewModel,
-    vmBasketPreview : BasketPreviewViewModel,
-    routerViewModel: RouterViewModel
+    addGuest: (count: Int) -> Unit,
+    removeGuest: (count: Int) -> Unit,
+    goToDetail: () -> Unit
 ) {
+
     Column() {
-        basketPreviewLine(line = line,recipeVm, vmBasketPreview, router = routerViewModel)
+        basketPreviewRecipeLine(
+            line = line,
+            { count -> addGuest(count)},
+            { count -> removeGuest(count)},
+            goToDetail
+        )
         if(vmBasketPreview.currentState.isReloading){
             BasketPreviewLoader()
         } else {
@@ -211,7 +235,7 @@ private fun BasketPreviewSucessView(
             if (line.entries?.found?.isNotEmpty() == true) {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                     line.entries!!.found.map { entry ->  fromBasketEntry(entry) }.forEach { bpl ->
-                        EntryLine(bpl,vmBasketPreview)
+                        EntryLine(bpl, vmBasketPreview)
                     }
                 }
             }
