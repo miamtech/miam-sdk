@@ -19,19 +19,19 @@ class LogHandler {
         }
 
         var debug = fun(msg: String) {
-            println("[DEBUG] $msg")
+            println("[Miam][DEBUG] $msg")
         }
 
         var info = fun(msg: String) {
-            println("[INFO] $msg")
+            println("[Miam][INFO] $msg")
         }
 
         var warn = fun(msg: String) {
-            println("[WARN] $msg")
+            println("[Miam][WARN] $msg")
         }
 
         var error = fun(msg: String) {
-            println("[ERROR] $msg")
+            println("[Miam][ERROR] $msg")
         }
     }
 }

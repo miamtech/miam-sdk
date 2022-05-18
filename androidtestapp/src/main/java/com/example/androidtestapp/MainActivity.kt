@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
-import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandlerInstance
+import com.miam.kmm_miam_sdk.handler.ContextHandlerInstance
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
-    private val basketHandler = BasketHandler()
+    private lateinit var basketHandler: BasketHandler
 
     private val recipeloader:  @Composable () -> Unit = { Box(Modifier.size(40.dp).background(Color.Blue)) }
 
@@ -115,10 +117,23 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 KoinInitializer.miamModuleList
             )
         }
+
+        basketHandler = BasketHandlerInstance.instance
+        LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
+        launch {
+            ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
+                LogHandler.info("I know you are readdy !!! $it")
+            }
+        }
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
-        PointOfSaleHandler.updateStoreId("35290")
-        PointOfSaleHandler.setSupplier(9)
+        // this set on inexisting pos will be cancelled by second one
+        PointOfSaleHandler.updateStoreId("35291")
+        PointOfSaleHandler.setSupplier(7)
+        launch {
+            delay(200)
+            PointOfSaleHandler.updateStoreId("35290")
+        }
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
@@ -200,8 +215,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
 
     private fun initTemplate(){
-        Template.recipeCardTemplate = recipeFunctionTemplateVariable
-        Template.recipeLoaderTemplate = recipeloader
+   /*     Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        Template.recipeLoaderTemplate = recipeloader*/
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{
@@ -229,13 +244,14 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
     private fun setListenToRetailerBasket(basketHandler: BasketHandler) {
         basketHandler.listenToRetailerBasket = ::initBasketListener
+        basketHandler.pushProductsToMiamBasket(retailerBasketSubject.value.items.map { product -> coursesUProductTORetailerProduct(product) })
     }
 
-    private fun initBasketListener(callback: (products: List<RetailerProduct>) -> Unit) {
+    private fun initBasketListener() {
         launch(coroutineHandler) {
             retailerBasketSubject.collect {
-                print("DEMO basket EMT")
-                callback(it.items.map { product -> coursesUProductTORetailerProduct(product)  })
+                LogHandler.debug("Demo basket emit")
+                basketHandler.pushProductsToMiamBasket(it.items.map { product -> coursesUProductTORetailerProduct(product) })
             }
         }
     }
@@ -262,8 +278,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun setPushProductToBasket(basketHandler: BasketHandler) {
-        basketHandler.pushProductsToBasket = ::pushProductToRetailer
-
+        basketHandler.pushProductsToRetailerBasket = ::pushProductToRetailer
     }
 
     private fun pushProductToRetailer(coursesUProducts: List<RetailerProduct>){

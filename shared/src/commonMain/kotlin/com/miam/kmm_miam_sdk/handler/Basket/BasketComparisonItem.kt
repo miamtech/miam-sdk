@@ -3,7 +3,7 @@ package com.miam.kmm_miam_sdk.handler.Basket
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 
-class BasketComparisonItem(val basketHandler : BasketHandler) {
+class BasketComparisonItem() {
 
    var miamQuantity :Int = 0;
    var miamTargetQuantity: Int = 0;
@@ -30,23 +30,16 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
    }
 
     fun removeFirstMiamEntry(qtyToRemove :Int): Pair<String, Int> {
-        // println("removeFirstMiamEntry " + miamBasketEntryIds)
         if(miamBasketEntryIds.entries.isEmpty()) {
-            // println("removeFirstMiamEntry nothing can be removed")
             return Pair("", 0)
         }
         val quantity = miamBasketEntryIds.values.first()
-        // println("removeFirstMiamEntry has quantity $quantity")
         if(quantity > qtyToRemove){
-            // println("removeFirstMiamEntry enough to remove")
             miamBasketEntryIds[firstBasketEntryId] = quantity - qtyToRemove
             return Pair(firstBasketEntryId, qtyToRemove)
         }
-        // println("removeFirstMiamEntry removing first entry")
         val toReturn = Pair(firstBasketEntryId, quantity)
         miamBasketEntryIds.remove(firstBasketEntryId)
-        // println("removeFirstMiamEntry remain $miamBasketEntryIds")
-        // println("removeFirstMiamEntry will return $toReturn")
         return toReturn
     }
 
@@ -55,7 +48,6 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
      */
 
     fun addOrUpdateRetailerProduct(retailerProduct: RetailerProduct) {
-        // println("Miam addOrUpdateRetailerProduct " + retailerProduct + " to " + this)
         if(_retailerProducts.isEmpty() || retailerQuantity == 0){
             _retailerProducts.add(retailerProduct)
             return
@@ -68,9 +60,7 @@ class BasketComparisonItem(val basketHandler : BasketHandler) {
      */
 
     fun createRetailerProducts(basketEntry: BasketEntry, targetQuantity : Int) : MutableList<RetailerProduct> {
-        // println("Miam creating retailer product with " + BasketEntry + " : " + targetQuantity)
         if(basketEntry.selectedItem != null && basketEntry.selectedItem!!.attributes?.extId != null){
-            // println("Miam creating retailer product 2 with " + basketEntry.attributes.selectedItemId.toString() + " : " + targetQuantity)
             _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes!!.extId!!, targetQuantity, basketEntry.selectedItem!!.attributes!!.name))
         }
         return _retailerProducts

@@ -10,24 +10,22 @@ import kotlin.native.concurrent.ThreadLocal
 @ThreadLocal
 object  PointOfSaleHandler: KoinComponent {
 
-    var isAvailable = fun():Boolean{return true}
+    var isAvailable = fun():Boolean { return true }
     private val store: PointOfSaleStore by inject()
 
     fun updateStoreId(storeId :String?){
-        triggerAction(PointOfSaleAction.SetExtId(storeId))
+        if (store.samePos(storeId)) return;
+
+        store.dispatch(PointOfSaleAction.SetExtId(storeId))
     }
 
     fun setSupplier(supplierId: Int){
-        triggerAction(PointOfSaleAction.SetSupplierId(supplierId))
+        if (store.sameSupplier(supplierId)) return;
+
+        store.dispatch(PointOfSaleAction.SetSupplierId(supplierId))
     }
 
     fun setSupplierOrigin(origin : String){
-        triggerAction(PointOfSaleAction.SetOrigin(origin))
+        store.setOrigin(origin)
     }
-
-   private fun triggerAction(action: PointOfSaleAction) {
-        store.dispatch(action)
-    }
-
 }
-
