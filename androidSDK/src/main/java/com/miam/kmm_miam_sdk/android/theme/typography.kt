@@ -28,6 +28,8 @@ object Typography {
         fontSize = 20.sp
     )
 
+    var subtitleBold : TextStyle = subtitle.copy(fontWeight = FontWeight.Bold)
+
     var body = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -37,6 +39,7 @@ object Typography {
     var bodyBold: TextStyle = body.copy(fontWeight = FontWeight.Bold)
 
     var bodySmall : TextStyle = body.copy(fontSize = 14.sp)
+
 
     var bodySmallBold : TextStyle = bodySmall.copy(fontWeight = FontWeight.Bold)
 

@@ -28,7 +28,7 @@ interface RecipeContract {
         object IncreaseGuest: Event()
         object ShowIngredient: Event()
         object ShowSteps: Event()
-        object Retry : Event()
+        object Error : Event()
     }
 
       data class State(

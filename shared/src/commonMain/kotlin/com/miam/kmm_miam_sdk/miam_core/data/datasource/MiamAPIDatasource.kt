@@ -1,22 +1,18 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
-import com.miam.kmm_miam_sdk.base.mvi.UserAction
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.*
 
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 import io.ktor.http.*
 import io.ktor.util.*
-import io.ktor.utils.io.*
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -60,23 +56,27 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     init {
         httpClient.receivePipeline.intercept(HttpReceivePipeline.State) {
-        if(userStore.observeState().value.sessionId == null ){
-            userStore.dispatch(UserAction.SetSessionId(("${context.response.headers["set-cookie"]}".split(';')[0])))
+            if(userStore.getSessionId() == null) {
+                val newSessionId = "${context.response.headers["set-cookie"]}".split(';')[0]
+                if (userStore.sameSession(newSessionId)) return@intercept
+
+                userStore.setSessionId(newSessionId)
             }
         }
 
        httpClient.sendPipeline.intercept(HttpSendPipeline.State) {
            context.headers.append(HttpHeaders.Accept,"*/*")
-
-               userStore.observeState().value.sessionId.let {
-                   context.headers.remove("Cookie")
-                   if (it != null ){
-                       context.headers.append(HttpHeaders.Cookie, it)
-                   }
-
+           userStore.observeState().value.sessionId.let {
+               context.headers.remove("Cookie")
+               if (it != null ){
+                   context.headers.append(HttpHeaders.Cookie, it)
                }
-            userStore.observeState().value.userId.let {
+           }
+           userStore.observeState().value.userId.let {
                context.headers.append(HttpHeaders.Authorization, "user_id $it" )
+           }
+           if (userStore.ProfilingForbiden()) {
+               context.url.parameters["profiling"] = "off"
            }
         }
     }
