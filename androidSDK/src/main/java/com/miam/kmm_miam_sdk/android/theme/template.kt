@@ -85,5 +85,53 @@ object Template {
              choose:(index :Int) -> Unit
             ) -> Unit )? =  null
 
+////////////////// Product Selector //////////////////
+
+    var basketPreviewHeaderTemplate  : (@Composable() (
+        recipeVm : RecipeViewModel,
+        goBackToRecipeDetails: ()-> Unit
+            ) -> Unit)? = null
+
+
+    var basketPreviewLineFooterTemplate :  (@Composable() (
+        removeAddClose :  ()-> Unit,
+        close : ()-> Unit
+    ) -> Unit)? = null
+
+/////////////// Basket Preview //////////////////////
+
+    var basketPreviewLineTemplate  :  (@Composable() (
+        recipeName: String,
+        recipeDescription: String,
+        pricePerGuest: String,
+        guestCount:  Int,
+        goToRecipeDetail : () -> Unit,
+        increaseGuest: () -> Unit,
+        decreaseGuest: () ->  Unit
+    ) -> Unit)? = null
+
+    var basketPreviewLoadingTemplate :  (@Composable() () -> Unit)? = null
+
+    var basketPreviewProductLine : (@Composable() (
+        productName: String,
+        description: String,
+        quantity: Int,
+        sharingCount: String, // ex : partager avec x recette
+        delete : () -> Unit,
+        replace: () -> Unit,
+        increaseQty: () -> Unit,
+        decreaseQty: () ->  Unit
+            ) -> Unit)? = null
+
+    var basketPreviewExpendHeaderTemplate :  (@Composable() (
+        isOpen: Boolean,
+        toggle : () -> Unit,
+    ) -> Unit)? = null
+
+    var basketPreviewExpendRowTemplate :  (@Composable() (
+        productName: String,
+        add : () -> Unit,
+    ) -> Unit)? = null
+                                                                       
 
 }
