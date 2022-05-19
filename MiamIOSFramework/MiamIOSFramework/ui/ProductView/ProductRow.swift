@@ -19,11 +19,11 @@ struct ProductRow: View {
                     
                     Text("Bière blonde (40 cl)").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16, weight: .bold, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding)
                     
-                    Text("3 MONTS").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13, weight: .medium, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.xsPadding)
+                    Text("3 MONTS").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13, weight: .medium, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.borderWidth)
                     
-                    Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus. 0.15 kg").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.xsPadding)
+                    Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus. 0.15 kg").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.borderWidth)
                     
-                    Text("Plus d’infos").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 13, weight: .medium, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.xsPadding).padding(.top, Dimension.sharedInstance.xsPadding)
+                    Text("Plus d’infos").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 13, weight: .medium, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.borderWidth).padding(.top, Dimension.sharedInstance.borderWidth)
                 }
                 
                 Spacer()
@@ -38,7 +38,7 @@ struct ProductRow: View {
             //Price
             VStack {
                 Text("1,59 €").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default))
-            }.frame(maxWidth: .infinity, alignment: .trailing).padding(.top, Dimension.sharedInstance.xsPadding)
+            }.frame(maxWidth: .infinity, alignment: .trailing).padding(.top, Dimension.sharedInstance.borderWidth)
             
             //Ingredeient View
             HStack {
