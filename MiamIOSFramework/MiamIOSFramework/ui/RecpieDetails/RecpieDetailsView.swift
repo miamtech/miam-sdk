@@ -16,13 +16,13 @@ struct RecpieDetailsView: View {
             ScrollView {
                 VStack {
                     HStack {
-                        Image(systemName: "heart").resizable().aspectRatio(contentMode: .fit)
+                        Image(systemName: "Like").resizable().aspectRatio(contentMode: .fit)
                             .background(MiamColor.sharedInstance.musterd).frame(width: 50, height: 50, alignment: .center).padding(.leading, Dimension.sharedInstance.lPadding)
                         Spacer()
                         Button(action: {
                             
                         }) {
-                            Image(systemName: "heart")
+                            Image(systemName: "Like")
                                 .renderingMode(.original)
                         }.frame(width: 50, height: 50, alignment: .center).background(MiamColor.sharedInstance.musterd).padding(.trailing, Dimension.sharedInstance.lPadding)
                     }.frame(height: 50.0, alignment: .topLeading)
@@ -38,7 +38,7 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "heart")
+                                Image(systemName: "Like")
                                     .renderingMode(.original)
                             }
                             .padding(.leading).frame(width: 50.0, height: 50.0, alignment: .leading).background(Color.green)
@@ -46,7 +46,7 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "heart")
+                                Image(systemName: "Like")
                                     .renderingMode(.original)
                             }
                             .padding(.leading).frame(width: 50.0, height: 50.0, alignment: .leading).background(Color.green)
@@ -56,7 +56,7 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "heart")
+                                Image(systemName: "Like")
                                     .renderingMode(.original)
                             }
                             .padding(.trailing).frame(width: 50.0, height: 50.0, alignment: .trailing).background(Color.green)
@@ -137,7 +137,7 @@ struct RecpieDetailsView: View {
                     Button(action: {
                         
                     }) {
-                        Image(systemName: "heart")
+                        Image(systemName: "Like")
                             .renderingMode(.original)
                     }.padding(.trailing, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                 }
@@ -231,7 +231,7 @@ struct RecpieDetailsView: View {
                 
                 HStack {
                     Text("Ajouter les ingrédients").foregroundColor(MiamColor.sharedInstance.white).padding(.horizontal, Dimension.sharedInstance.sPadding).font(.system(size: 16.0, weight: .bold, design: .default))
-                    Image(systemName: "heart").aspectRatio(contentMode: .fit)
+                    Image(systemName: "Like").aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40, alignment: .center).foregroundColor(Color.white)
                 }.frame(maxWidth: .infinity).frame(height: 100.0).background(MiamColor.sharedInstance.primaryText)
             }.frame(maxWidth: .infinity, alignment: .bottom).background(MiamColor.sharedInstance.white)

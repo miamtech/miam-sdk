@@ -53,18 +53,26 @@ struct MyMealRow: View {
                     
                     VStack (alignment: .leading){
                         
-                        Text("Welsh royal à la 3 Monts").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16, weight: .heavy, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding)
+                        Text("Welsh royal à la 3 Monts")
+                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .font(.system(size: 16, weight: .heavy, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
                         
                         Text("6 articles").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.borderWidth)
                         
-                        Text("4,93 € par personne").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding)
+                        Text("4,93 € par personne")
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .font(.system(size: 16, weight: .light, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
                     }
                 }
                 
                 //Ingredeient View
                 HStack {
                     HStack {
-                        Text("19,72 €").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default))
+                        Text("19,72 €")
+                            .foregroundColor(MiamColor.sharedInstance.primaryText)
+                            .font(.system(size: 20, weight: .heavy, design: .default))
                         
                         Spacer()
                         
@@ -73,10 +81,12 @@ struct MyMealRow: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "minus").foregroundColor(MiamColor.sharedInstance.white)
+                                Image(systemName: "minus")
+                                    .foregroundColor(MiamColor.sharedInstance.white)
                             }.padding(.leading, Dimension.sharedInstance.lPadding)
                             
-                            Text("4 pers.").foregroundColor(MiamColor.sharedInstance.white).font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                            Text("4 pers.").foregroundColor(MiamColor.sharedInstance.white)
+                                .font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
                             
                             Button(action: {
                                 
@@ -93,7 +103,8 @@ struct MyMealRow: View {
                         }else{
                             Image("down").resizable()
                                 .frame(width: 20.0, height: 12.0, alignment: .center)
-                                .background(MiamColor.sharedInstance.white).padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(0))
+                                .background(MiamColor.sharedInstance.white)
+                                .padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(0))
                         }
                     }
                 }.padding(.top, Dimension.sharedInstance.mPadding)
