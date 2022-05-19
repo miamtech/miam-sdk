@@ -1,5 +1,5 @@
 //
-//  MealRow.swift
+//  RecipeCard.swift
 //  MiamIOSFramework
 //
 //  Created by John on 13/05/2022.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MealRow: View {
+struct RecipeCard: View {
     var body: some View {
         VStack {
             //Product View
@@ -54,7 +54,7 @@ struct MealRow: View {
 
 struct MealRow_Previews: PreviewProvider {
     static var previews: some View {
-        MealRow()
+        RecipeCard()
     }
 }
 

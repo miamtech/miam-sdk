@@ -11,7 +11,7 @@ struct MealView: View {
     var body: some View {
         ScrollView {
             ForEach(["","",""], id: \.self) { ingr in
-                MealRow()
+                RecipeCard()
             }
         }
     }
