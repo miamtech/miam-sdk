@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct MyMealsView: View {
     
     init() {
@@ -37,4 +39,3 @@ struct MyMealsView_Previews: PreviewProvider {
         MyMealsView()
     }
 }
-

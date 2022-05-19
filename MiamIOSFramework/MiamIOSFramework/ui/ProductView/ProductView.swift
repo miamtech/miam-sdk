@@ -93,30 +93,26 @@ struct ProductView: View {
             
             //List
             ScrollView {
-                ForEach(["","","","",""], id: \.self) { ingr in
+                ForEach([""], id: \.self) { ingr in
                     ProductRow()
                 }
                 HStack {
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowAlready).font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
-                    }.padding(Dimension.sharedInstance.lPadding+7)
-                }.background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading).padding(Dimension.sharedInstance.lPadding)
+                    Text(MiamText.sharedInstance.mealRowAlready).font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
+                    
+                    Spacer()
+                    
+                    Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
+                }.padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
                 
                 HStack {
-                    HStack {
-                        Text("Oeufs").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "plus").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center).foregroundColor(MiamColor.sharedInstance.primary)
-                        
-                        Text("Ajouter").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.primary)
-                    }
-                }.cornerRadius(10).frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding).padding(.bottom, Dimension.sharedInstance.lPadding)
+                    Text("Oeufs").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.bodyText)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "plus").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center).foregroundColor(MiamColor.sharedInstance.primary)
+                    
+                    Text("Ajouter").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.primary)
+                }.padding(.horizontal, Dimension.sharedInstance.lPadding).padding(.bottom, Dimension.sharedInstance.lPadding)
             }
             
             //Bottom View

@@ -20,8 +20,7 @@ struct MealRow: View {
             VStack {
                 
                 ZStack(alignment: .topLeading) {
-                    
-                    Image("test").resizable().frame( maxWidth: .infinity, minHeight: 250, maxHeight: 250, alignment: .center)
+                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame( maxWidth: .infinity, minHeight: 250, maxHeight: 250, alignment: .center)
                     
                     VStack(alignment: .trailing){
                         HStack {
@@ -35,13 +34,13 @@ struct MealRow: View {
                     
                     HStack(alignment: .center) {
                         HStack(alignment: .center) {
-                            Image("basket").resizable().aspectRatio( contentMode: .fit).frame( maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).padding(Dimension.sharedInstance.mlPadding)
+                            Image("Color").resizable().aspectRatio( contentMode: .fit).frame( maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).padding(Dimension.sharedInstance.mlPadding)
                         }.background(MiamColor.sharedInstance.musterd).frame(width: 70, height: 70, alignment: .center).cornerRadius(35)
                     }.frame(width: 75, height: 75, alignment: .center).background(MiamColor.sharedInstance.white).cornerRadius(37.5).padding(.top,  Dimension.sharedInstance.lPadding + 8).padding(.leading, Dimension.sharedInstance.mPadding)
                 }.background(MiamColor.sharedInstance.greySurface)
                 
                 VStack {
-                    Text("Poêlée de pates dindes et épinards sur deux grandes grandes lignes").lineLimit(nil).foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                    Text("Poêlée de pates dindes et épinards sur deux grandes grandes lignes asdf asdf asdf asdf asdf asdf sadf asdf sdf asfd").lineLimit(2).foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
                 }
                 
                 Button("Découvrir la recette") {

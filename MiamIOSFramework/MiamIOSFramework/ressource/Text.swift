@@ -29,7 +29,6 @@ public class MiamText {
     public let recpeitDetailsSubtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum dictum turpis nec in viverra..."
     public let recpeitDetailsInfo = "Plus d'informatations"
     public let mealRowAlready = "Déjà dans vos placards"
-    
     private init(){}
 
 }

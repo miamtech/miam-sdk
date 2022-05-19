@@ -26,15 +26,13 @@ struct RecpieDetailsView: View {
                                 .renderingMode(.original)
                         }.frame(width: 50, height: 50, alignment: .center).background(MiamColor.sharedInstance.musterd).padding(.trailing, Dimension.sharedInstance.lPadding)
                     }.frame(height: 50.0, alignment: .topLeading)
-                    Image(systemName: "heart").frame(
+                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(
                         minWidth: 0,
                         maxWidth: .infinity,
                         minHeight: 0,
                         maxHeight: .infinity,
                         alignment: .topLeading
                     ).aspectRatio(contentMode: .fit).padding()
-                        .background(MiamColor.sharedInstance.musterd)
-                    
                     HStack {
                         HStack {
                             Button(action: {
@@ -246,4 +244,5 @@ struct RecpieDetailsView_Previews: PreviewProvider {
         RecpieDetailsView().previewDevice("iPhone 8")
     }
 }
+
 

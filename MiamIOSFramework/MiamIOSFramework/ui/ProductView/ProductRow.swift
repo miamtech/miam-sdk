@@ -13,7 +13,7 @@ struct ProductRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                Image("product").resizable().aspectRatio( contentMode: .fit).frame(width: 100, height: 100, alignment: .topLeading)
+                WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).aspectRatio( contentMode: .fit).frame(width: 120, height: 120, alignment: .topLeading)
                 
                 VStack (alignment: .leading){
                     
@@ -69,14 +69,8 @@ struct ProductRow: View {
                             Image(systemName: "plus").foregroundColor(MiamColor.sharedInstance.white)
                         }.padding(.trailing, Dimension.sharedInstance.mPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                     }.frame(width: 120.0, height: 50.0, alignment: .center).background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0)
-                }.frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading
-                )
-            }.frame(height: 50.0, alignment: .topLeading)
+                }
+            }
             
             //Divider
             Divider().background(MiamColor.sharedInstance.borderBottom).padding(.top, Dimension.sharedInstance.mPadding)
@@ -89,4 +83,5 @@ struct ProductRow_Previews: PreviewProvider {
         ProductRow()
     }
 }
+
 
