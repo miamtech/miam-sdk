@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -110,7 +111,8 @@ fun recipdeDetails(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun recipeDetailCard(
     recipe: Recipe,
