@@ -98,10 +98,10 @@ struct MyMealRow: View {
                         .cornerRadius(25.0)
                         
                         if isExpanded {
-                            Image("down").resizable()
+                            Image(systemName: "down").resizable()
                                 .background(MiamColor.sharedInstance.white).padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(180))
                         }else{
-                            Image("down").resizable()
+                            Image(systemName: "down").resizable()
                                 .frame(width: 20.0, height: 12.0, alignment: .center)
                                 .background(MiamColor.sharedInstance.white)
                                 .padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(0))
