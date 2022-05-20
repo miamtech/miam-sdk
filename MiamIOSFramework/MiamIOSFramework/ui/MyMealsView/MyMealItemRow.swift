@@ -20,3 +20,4 @@ struct MyMealItemRow_Previews: PreviewProvider {
         MyMealItemRow()
     }
 }
+

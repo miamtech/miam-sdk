@@ -12,7 +12,7 @@ struct ProductView: View {
         VStack {
             // Top Bar
             HStack {
-                Image(systemName: "arrow.left").resizable().aspectRatio(contentMode: .fit)
+                Image("Arrow").resizable().aspectRatio(contentMode: .fit)
                     .frame(width: 30, height: 30, alignment: .center).padding(.leading, Dimension.sharedInstance.lPadding)
                 
                 Text("6 produits ajoutés à votre panier").font(.system(size: 16.0, weight: .bold, design: .default)).padding(.leading, Dimension.sharedInstance.lPadding)
@@ -58,7 +58,7 @@ struct ProductView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "minus").foregroundColor(MiamColor.sharedInstance.white)
+                                Image("Minus").foregroundColor(MiamColor.sharedInstance.white)
                             }.padding(.leading, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .leading)
                             
                             Text("4 pers.").foregroundColor(MiamColor.sharedInstance.white).font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
@@ -66,7 +66,7 @@ struct ProductView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "plus").foregroundColor(MiamColor.sharedInstance.white)
+                                Image("Plus").foregroundColor(MiamColor.sharedInstance.white)
                             }.padding(.trailing, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                         }.frame(width: 140.0, height: 50.0, alignment: .center).background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0)
                     }.frame(
@@ -101,7 +101,7 @@ struct ProductView: View {
                     
                     Spacer()
                     
-                    Image("right").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
+                    Image("Caret").resizable().aspectRatio( contentMode: .fit).frame(width: 30, height: 30, alignment: .center)
                 }.padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
                 
                 HStack {
@@ -109,7 +109,7 @@ struct ProductView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "plus").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center).foregroundColor(MiamColor.sharedInstance.primary)
+                    Image("PlusGreen").resizable().aspectRatio( contentMode: .fit).frame(width: 30, height: 30, alignment: .center).foregroundColor(MiamColor.sharedInstance.primary)
                     
                     Text("Ajouter").font(.system(size: 16.0, weight: .bold, design: .default)).foregroundColor(MiamColor.sharedInstance.primary)
                 }.padding(.horizontal, Dimension.sharedInstance.lPadding).padding(.bottom, Dimension.sharedInstance.lPadding)
@@ -134,3 +134,4 @@ struct ProductView_Previews: PreviewProvider {
         ProductView()
     }
 }
+

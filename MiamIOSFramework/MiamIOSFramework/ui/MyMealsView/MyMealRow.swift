@@ -28,7 +28,7 @@ struct MyMealRow: View {
                         
                         Spacer()
                         
-                        Image("right").resizable().aspectRatio( contentMode: .fit)
+                        Image("Caret").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
                     }.padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
                     
                     HStack {
@@ -36,8 +36,8 @@ struct MyMealRow: View {
                         
                         Spacer()
                         
-                        Image("right").resizable().aspectRatio( contentMode: .fit)
-                    }.padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.borderBottom).cornerRadius(10).padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
+                        Image("CaretGrey").resizable().aspectRatio( contentMode: .fit).frame(width: 20, height: 20, alignment: .center)
+                    }.padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.borderBottom).cornerRadius(10).padding( Dimension.sharedInstance.lPadding)
                 }
             }
         }
@@ -47,32 +47,30 @@ struct MyMealRow: View {
         VStack {
             //Product View
             VStack(alignment: .leading) {
-                HStack {
-                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!)
-                        .frame(width: 120, height: 120, alignment: .topLeading)
+                HStack(alignment: .top) {
+                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(width: 120, height: 120, alignment: .topLeading)
                     
                     VStack (alignment: .leading){
                         
-                        Text("Welsh royal à la 3 Monts")
-                            .foregroundColor(MiamColor.sharedInstance.black)
-                            .font(.system(size: 16, weight: .heavy, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                        Text("Welsh royal à la 3 Monts").foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 16, weight: .heavy, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding)
                         
                         Text("6 articles").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding).padding(.top, Dimension.sharedInstance.borderWidth)
                         
-                        Text("4,93 € par personne")
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                            .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                        Text("4,93 € par personne").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 16, weight: .light, design: .default)).padding(.leading, Dimension.sharedInstance.sPadding)
                     }
+                    Spacer()
+                    Button(action: {
+                        
+                    }) {
+                        Image("Bin").resizable()
+                            .renderingMode(.original)
+                    }.frame(width: 30, height: 30, alignment: .topTrailing)
                 }
                 
                 //Ingredeient View
                 HStack {
                     HStack {
-                        Text("19,72 €")
-                            .foregroundColor(MiamColor.sharedInstance.primaryText)
-                            .font(.system(size: 20, weight: .heavy, design: .default))
+                        Text("19,72 €").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default))
                         
                         Spacer()
                         
@@ -81,30 +79,22 @@ struct MyMealRow: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "minus")
-                                    .foregroundColor(MiamColor.sharedInstance.white)
-                            }.padding(.leading, Dimension.sharedInstance.lPadding)
+                                Image("Minus").foregroundColor(MiamColor.sharedInstance.white)
+                            }.padding(.leading, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .leading)
                             
-                            Text("4 pers.").foregroundColor(MiamColor.sharedInstance.white)
-                                .font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                            Text("4 pers.").foregroundColor(MiamColor.sharedInstance.white).font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.lPadding)
                             
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "plus").foregroundColor(MiamColor.sharedInstance.white)
-                            }.padding(.trailing, Dimension.sharedInstance.lPadding)
-                        }
-                        .background(MiamColor.sharedInstance.primaryText)
-                        .cornerRadius(25.0)
+                                Image("Plus").foregroundColor(MiamColor.sharedInstance.white)
+                            }.padding(.trailing, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
+                        }.frame(width: 140.0, height: 50.0, alignment: .center).background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0)
                         
                         if isExpanded {
-                            Image(systemName: "down").resizable()
-                                .background(MiamColor.sharedInstance.white).padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(180))
+                            Image("chevron-down").resizable().frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.white).padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(180))
                         }else{
-                            Image(systemName: "down").resizable()
-                                .frame(width: 20.0, height: 12.0, alignment: .center)
-                                .background(MiamColor.sharedInstance.white)
-                                .padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(0))
+                            Image("chevron-down").resizable().frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.white).padding(.vertical, Dimension.sharedInstance.lPadding+4).rotationEffect(.degrees(0))
                         }
                     }
                 }.padding(.top, Dimension.sharedInstance.mPadding)

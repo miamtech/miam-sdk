@@ -14,7 +14,7 @@ public class Dimension {
     public static let sharedInstance = Dimension()
     
     var borderWidth : CGFloat = 1
-    var sPadding : CGFloat = 4
+    var sPadding : CGFloat = 4 
     var mPadding : CGFloat = 8
     var lPadding : CGFloat = 16
     var xlPadding : CGFloat = 32
@@ -26,5 +26,3 @@ public class Dimension {
     var xlButtonHeight : CGFloat = 40
     
 }
-
-

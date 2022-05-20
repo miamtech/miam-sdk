@@ -16,16 +16,17 @@ struct RecpieDetailsView: View {
             ScrollView {
                 VStack {
                     HStack {
-                        Image(systemName: "Like").resizable().aspectRatio(contentMode: .fit)
-                            .background(MiamColor.sharedInstance.musterd).frame(width: 50, height: 50, alignment: .center).padding(.leading, Dimension.sharedInstance.lPadding)
+                        Image( "bucket").resizable().aspectRatio(contentMode: .fit)
+                            .padding(Dimension.sharedInstance.sPadding).padding([.bottom], 5).padding(.trailing, 2).frame(width: 40, height: 40, alignment: .center).background(MiamColor.sharedInstance.musterd).cornerRadius(25).padding([.leading], Dimension.sharedInstance.lPadding)
                         Spacer()
                         Button(action: {
                             
                         }) {
-                            Image(systemName: "Like")
-                                .renderingMode(.original)
-                        }.frame(width: 50, height: 50, alignment: .center).background(MiamColor.sharedInstance.musterd).padding(.trailing, Dimension.sharedInstance.lPadding)
+                            Image("cross")
+                                .renderingMode(.original).frame(width: 14, height: 14, alignment: .center)
+                        }.frame(width: 40, height: 40, alignment: .center)
                     }.frame(height: 50.0, alignment: .topLeading)
+                    Divider().background(MiamColor.sharedInstance.borderBottom)
                     WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(
                         minWidth: 0,
                         maxWidth: .infinity,
@@ -38,28 +39,28 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "Like")
+                                Image("Like")
                                     .renderingMode(.original)
                             }
-                            .padding(.leading).frame(width: 50.0, height: 50.0, alignment: .leading).background(Color.green)
+                            .padding(.leading).frame(width: 40, height: 40, alignment: .leading)
                             
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "Like")
+                                Image("Print")
                                     .renderingMode(.original)
                             }
-                            .padding(.leading).frame(width: 50.0, height: 50.0, alignment: .leading).background(Color.green)
+                            .padding(.leading).frame(width: 40, height: 40, alignment: .leading)
                             
                             Spacer()
                             
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "Like")
+                                Image("Help")
                                     .renderingMode(.original)
                             }
-                            .padding(.trailing).frame(width: 50.0, height: 50.0, alignment: .trailing).background(Color.green)
+                            .frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.greySurface).cornerRadius(25)
                         }.frame(
                             minWidth: 0,
                             maxWidth: .infinity,
@@ -71,15 +72,7 @@ struct RecpieDetailsView: View {
                     
                     Spacer()
                     
-                    HStack {
-                        Text(MiamText.sharedInstance.recpieDetailTitle).foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 20, weight: .heavy, design: .default)).padding(.horizontal, Dimension.sharedInstance.lPadding).frame(
-                            minWidth: 0,
-                            maxWidth: .infinity,
-                            minHeight: 0,
-                            maxHeight: .infinity,
-                            alignment: .topLeading
-                        )
-                    }.frame(
+                    Text(MiamText.sharedInstance.recpieDetailTitle).foregroundColor(MiamColor.sharedInstance.black).font(.system(size: 20, weight: .heavy, design: .default)).padding(.horizontal, Dimension.sharedInstance.lPadding).frame(
                         minWidth: 0,
                         maxWidth: .infinity,
                         minHeight: 0,
@@ -87,57 +80,53 @@ struct RecpieDetailsView: View {
                         alignment: .topLeading
                     )
                     
-                    HStack {
-                        Text(MiamText.sharedInstance.recpeitDetailsSubtitle).foregroundColor(MiamColor.sharedInstance.bodyText).padding(.horizontal, Dimension.sharedInstance.lPadding).font(.system(size: 16.0, weight: .regular, design: .default)).frame(
-                            minWidth: 0,
-                            maxWidth: .infinity,
-                            minHeight: 0,
-                            maxHeight: .infinity,
-                            alignment: .topLeading)
-                    }.frame(
+                    Text(MiamText.sharedInstance.recpeitDetailsSubtitle).foregroundColor(MiamColor.sharedInstance.bodyText).padding(.horizontal, Dimension.sharedInstance.lPadding).font(.system(size: 16.0, weight: .regular, design: .default)).frame(
                         minWidth: 0,
                         maxWidth: .infinity,
                         minHeight: 0,
                         maxHeight: .infinity,
-                        alignment: .topLeading
-                    )
+                        alignment: .topLeading)
                     
-                    
-                    HStack {
-                        Spacer()
-                        VStack {
+                    ZStack {
+                        HStack(alignment: .center) {
                             HStack {
-                                Image(systemName: "pencil").padding(.trailing).frame(width: 40.0, height: 40.0, alignment: .trailing).background(Color.green)
-                                Image(systemName: "pencil").padding(.trailing).frame(width: 40.0, height: 40.0, alignment: .trailing).background(Color.green).opacity(0.7)
-                                Image(systemName: "pencil").padding(.trailing).frame(width: 40.0, height: 40.0, alignment: .trailing).background(Color.green).opacity(0.7)
+                                Spacer()
+                                VStack {
+                                    HStack{
+                                        Image( "Difficulty").frame(width: 24.0, height: 24.0, alignment: .center)
+                                        Image( "Difficulty").frame(width: 24.0, height: 24.0, alignment: .center).opacity(0.7)
+                                        Image( "Difficulty").frame(width: 24.0, height: 24.0, alignment: .center).opacity(0.7)
+                                    }
+                                    Text("Chef débutant").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
+                                }
+                                Spacer()
                             }
-                            Text("Chef débutant").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                VStack(alignment: .center) {
+                                    Image( "Clock").frame(width: 25, height:25, alignment: .center)
+                                    Text("25 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
+                                }
+                                Spacer()
+                            }
                         }
                         
-                        VStack {
+                        HStack {
                             
-                        }.frame(width: 1.0, height: 20.0, alignment: .center).background(MiamColor.sharedInstance.borderColor).padding(.horizontal, Dimension.sharedInstance.lPadding).padding(.bottom, 5.0)
+                        }.frame(width: 1, height: 15, alignment: .center).background(MiamColor.sharedInstance.borderBottom)
                         
-                        VStack {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "alarm").padding(.trailing).frame(width: 40.0, height: 40.0, alignment: .trailing).background(Color.green).opacity(0.7)
-                                Spacer()
-                            }
-                            Text("25 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
-                        }
-                        Spacer()
-                    }.padding(.horizontal, Dimension.sharedInstance.lPadding*2)
+                    }.padding(.top, Dimension.sharedInstance.lPadding)
                 }
                 
                 //Expand/Collapse Heading
                 HStack {
-                    Text(MiamText.sharedInstance.recpeitDetailsInfo).foregroundColor(MiamColor.sharedInstance.grey).font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mPadding).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                    Text(MiamText.sharedInstance.recpeitDetailsInfo).foregroundColor(MiamColor.sharedInstance.grey).font(.system(size: 13, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mPadding).padding(.leading, Dimension.sharedInstance.lPadding)
                     
                     Button(action: {
                         
                     }) {
-                        Image(systemName: "Like")
+                        Image("chevron-down-grey")
                             .renderingMode(.original)
                     }.padding(.trailing, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                 }
@@ -154,7 +143,7 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "minus").foregroundColor(MiamColor.sharedInstance.white)
+                                Image("Minus").foregroundColor(MiamColor.sharedInstance.white)
                             }.padding(.leading, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .leading)
                             
                             
@@ -163,7 +152,7 @@ struct RecpieDetailsView: View {
                             Button(action: {
                                 
                             }) {
-                                Image(systemName: "plus").foregroundColor(MiamColor.sharedInstance.white)
+                                Image("Plus").foregroundColor(MiamColor.sharedInstance.white)
                             }.padding(.trailing, Dimension.sharedInstance.lPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                         }.frame(width: 140.0, height: 50.0, alignment: .center).background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.lPadding)
                     }.frame(
@@ -231,7 +220,7 @@ struct RecpieDetailsView: View {
                 
                 HStack {
                     Text("Ajouter les ingrédients").foregroundColor(MiamColor.sharedInstance.white).padding(.horizontal, Dimension.sharedInstance.sPadding).font(.system(size: 16.0, weight: .bold, design: .default))
-                    Image(systemName: "Like").aspectRatio(contentMode: .fit)
+                    Image("Cart").aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40, alignment: .center).foregroundColor(Color.white)
                 }.frame(maxWidth: .infinity).frame(height: 100.0).background(MiamColor.sharedInstance.primaryText)
             }.frame(maxWidth: .infinity, alignment: .bottom).background(MiamColor.sharedInstance.white)

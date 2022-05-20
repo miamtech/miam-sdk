@@ -30,7 +30,7 @@ struct ProductRow: View {
                 Button(action: {
                     
                 }) {
-                    Image("bin").resizable()
+                    Image("Bin").resizable()
                         .renderingMode(.original)
                 }.frame(width: 30, height: 30, alignment: .topTrailing)
             }
@@ -58,7 +58,7 @@ struct ProductRow: View {
                         Button(action: {
                             
                         }) {
-                            Image(systemName: "minus").foregroundColor(MiamColor.sharedInstance.white)
+                            Image("Minus").foregroundColor(MiamColor.sharedInstance.white)
                         }.padding(.leading, Dimension.sharedInstance.mPadding).frame(width: 20.0, height: 20.0, alignment: .leading)
                         
                         Text("1").foregroundColor(MiamColor.sharedInstance.white).font(.system(size: 13, weight: .medium, design: .default)).padding(Dimension.sharedInstance.lPadding)
@@ -66,7 +66,7 @@ struct ProductRow: View {
                         Button(action: {
                             
                         }) {
-                            Image(systemName: "plus").foregroundColor(MiamColor.sharedInstance.white)
+                            Image("Plus").foregroundColor(MiamColor.sharedInstance.white)
                         }.padding(.trailing, Dimension.sharedInstance.mPadding).frame(width: 20.0, height: 20.0, alignment: .trailing)
                     }.frame(width: 120.0, height: 50.0, alignment: .center).background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0)
                 }
@@ -83,5 +83,6 @@ struct ProductRow_Previews: PreviewProvider {
         ProductRow()
     }
 }
+
 
 
