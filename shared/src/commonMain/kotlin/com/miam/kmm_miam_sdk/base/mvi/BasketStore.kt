@@ -49,7 +49,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in BasketStore $exception")
+            _, exception -> println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
     override val state = MutableStateFlow(BasketState( null, emptyList()))

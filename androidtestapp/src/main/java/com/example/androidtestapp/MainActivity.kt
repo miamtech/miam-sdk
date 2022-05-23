@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 ) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in main activity $exception")
+            _, exception -> println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
