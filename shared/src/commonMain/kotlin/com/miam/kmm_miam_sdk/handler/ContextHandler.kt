@@ -29,7 +29,7 @@ sealed class ReadyEvent: Effect {
 
 class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in BasketStore $exception")
+            _, exception -> println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
     private val basketHandler: BasketHandler by inject()

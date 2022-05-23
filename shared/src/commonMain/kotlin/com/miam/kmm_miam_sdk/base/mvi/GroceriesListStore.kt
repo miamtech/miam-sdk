@@ -30,7 +30,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("[ERROR][Miam][GroceriesListStore] $exception")
+            _, exception -> println("[ERROR][Miam][GroceriesListStore] $exception ${exception.stackTraceToString()}")
     }
 
     override val state = MutableStateFlow(GroceriesListState( null))
