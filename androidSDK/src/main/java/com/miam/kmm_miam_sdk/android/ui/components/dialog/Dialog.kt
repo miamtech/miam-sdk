@@ -1,29 +1,23 @@
 package com.miam.kmm_miam_sdk.android.ui.components.dialog
 
+
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.view.View
 import android.view.WindowManager
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
-
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
@@ -144,6 +138,7 @@ private class FullScreenLayout(
 
         setTag(R.id.compose_view_saveable_id_tag, "dialogLayout")
     }
+
 
 
     private var content: @Composable () -> Unit by mutableStateOf({})
