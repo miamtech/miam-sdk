@@ -9,7 +9,7 @@ open class FavoritePageViewModel :
 
     override fun createInitialState(): FavoritePageContract.State =
         FavoritePageContract.State(
-            favoritesRecipes= BasicUiState.Loading,
+            favoritesRecipes = BasicUiState.Loading,
             currentPage = 1,
             isFetchingNewPage = false,
             noMoreData = false

@@ -17,7 +17,8 @@ import kotlin.time.Duration.Companion.minutes
 data class Recipe private constructor(
     override val id: String,
     override val attributes: RecipeAttributes? = null,
-    override  val relationships: RecipeRelationships? = null
+    override  val relationships: RecipeRelationships? = null,
+    val recipeLike: RecipeLike? = null
 ): Record(), BasketPreviewEntry {
 
     constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(

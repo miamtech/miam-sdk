@@ -25,6 +25,7 @@ object HttpRoutes {
     private const val BASE_URL = "https://api.miam.tech/api/v1"
     // private const val BASE_URL = "http://192.168.1.21:3000/api/v1"
     const val RECIPE_ENDPOINT = "$BASE_URL/recipes/"
+    const val RECIPE_LIKE_ENDPOINT = "$BASE_URL/recipe-likes/"
     const val GROCERIESLIST_ENDPOINT = "$BASE_URL/groceries-lists/"
     const val GROCERIES_ENTRY_ENDPOINT = "$BASE_URL/groceries-entries"
     const val POINTOFSALE_ENDPOINT = "$BASE_URL/point-of-sales/"
@@ -143,6 +144,24 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return returnValue
     }
 
+    private suspend fun getRecipeByIds(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $recipesIds")
+        val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters&" + includedToString(included))!!.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds")
+        return returnValue.map { record -> record as Recipe }
+    }
+
+    override suspend fun getRecipes(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $recipesIds")
+        val returnValue: MutableList<Recipe> = mutableListOf()
+        recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
+            returnValue.addAll(getRecipeByIds(recipesIdsChunck, included, pageSize))
+        }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
+        return returnValue
+    }
+
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
         criteria: SuggestionsCriteria,
@@ -150,8 +169,50 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     ): List<Recipe> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
         val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&${includedToString(included)}"
-        val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords() as List<Recipe>
+        val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria")
+        return returnValue.map { record -> record as Recipe }
+    }
+
+    ///////// RecipeLike ///////////////
+
+    private suspend fun getRecipeLikesByRecipeIds(recipesIds: List<String>, pageSize: Int): List<RecipeLike> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeLikesByRecipeIds $recipesIds")
+        val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters")!!.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds")
+        return returnValue.map { record -> record as RecipeLike }
+    }
+
+    override suspend fun getRecipeLikes(recipesIds: List<String>, pageSize: Int): List<RecipeLike> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeLikes $recipesIds")
+        val returnValue: MutableList<RecipeLike> = mutableListOf()
+        recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
+            returnValue.addAll(getRecipeLikesByRecipeIds(recipesIdsChunck, pageSize))
+        }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
+        return returnValue
+    }
+
+    override suspend fun createRecipeLike(recipeLike: RecipeLike): RecipeLike {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting createRecipeLike $recipeLike")
+        val returnValue: RecipeLike = httpClient.post {
+            headers.append(HttpHeaders.ContentType, "application/vnd.api+json" )
+            url(HttpRoutes.RECIPE_LIKE_ENDPOINT)
+            body = RecordWrapper.fromRecord(recipeLike)
+        }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipeLike")
+        return returnValue
+    }
+
+    override suspend fun updateRecipeLike(recipeLike: RecipeLike): RecipeLike {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting updateRecipeLike $recipeLike")
+        val returnValue: RecipeLike = httpClient.patch {
+            headers.append(HttpHeaders.ContentType, "application/vnd.api+json" )
+            url(HttpRoutes.RECIPE_LIKE_ENDPOINT)
+            body = RecordWrapper.fromRecord(recipeLike)
+        }
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateRecipeLike $recipeLike")
         return returnValue
     }
 
@@ -183,13 +244,6 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
                 body = RecordWrapper.fromRecord(groceriesList)
             }.toRecord() as GroceriesList
         LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesList $groceriesList")
-        return returnValue
-    }
-
-    override suspend fun getRecipes(recipesIds: List<String>): List<Recipe> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $recipesIds")
-        val returnValue = recipesIds.map{ rid -> getRecipeById(rid) }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
         return returnValue
     }
 
