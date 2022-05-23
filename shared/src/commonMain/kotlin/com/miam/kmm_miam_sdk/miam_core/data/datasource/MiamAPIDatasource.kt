@@ -144,22 +144,32 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return returnValue
     }
 
-    private suspend fun getRecipeByIds(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $recipesIds")
+    private suspend fun getRecipeByIdsChunck(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeByIdsChunck $recipesIds")
         val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
         val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters&" + includedToString(included))!!.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds")
         return returnValue.map { record -> record as Recipe }
     }
 
-    override suspend fun getRecipes(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $recipesIds")
+    override suspend fun getRecipeByIds(recipesIds: List<String>, included: List<String>, pageSize: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeByIds $recipesIds")
         val returnValue: MutableList<Recipe> = mutableListOf()
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
-            returnValue.addAll(getRecipeByIds(recipesIdsChunck, included, pageSize))
+            returnValue.addAll(getRecipeByIdsChunck(recipesIdsChunck, included, pageSize))
         }
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
         return returnValue
+    }
+
+    override suspend fun getRecipes(filters: Map<String, String>, included: List<String>, pageSize: Int, pageNumber: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters $included")
+        val pageFilter = "page[size]=$pageSize&page[number]=$pageNumber"
+        val includedStr = if(included.isEmpty()) "" else "&${includedToString(included)}"
+        val filtersStr = if(filters.isEmpty()) "" else "&${filtersToString(filters)}"
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$pageFilter$includedStr$filtersStr")!!.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $filters $included")
+        return returnValue.map { record -> record as Recipe }
     }
 
     override suspend fun getRecipeSuggestions(
@@ -180,7 +190,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeLikesByRecipeIds $recipesIds")
         val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
         val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters")!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds $recipesIds")
         return returnValue.map { record -> record as RecipeLike }
     }
 
@@ -190,7 +200,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
             returnValue.addAll(getRecipeLikesByRecipeIds(recipesIdsChunck, pageSize))
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes $recipesIds")
         return returnValue
     }
 
@@ -337,6 +347,10 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     private fun includedToString(included: List<String>): String {
         return if (included.isEmpty()) "" else "include=" + included.joinToString(",")
+    }
+
+    private fun filtersToString(filters: Map<String, String>): String {
+        return filters.toList().fold(""){ res, filter -> res + "filter[${filter.first}]=${filter.second}" }
     }
 
 }

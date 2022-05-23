@@ -429,7 +429,3 @@ class RecipeView @JvmOverloads constructor(
         }
     }
 }
-
-
-
-

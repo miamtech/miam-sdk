@@ -12,9 +12,18 @@ class RecipeRepositoryImp(
     private val recipeDataSource: MiamAPIDatasource
 ): RecipeRepository {
 
+    companion object {
+        val DEFAULT_INCLUDED = listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+        val DEFAULT_PAGESIZE = 20
+    }
+
     override suspend fun getRecipeById(recipeId: String): Recipe {
         println("Miam getting recipe $recipeId")
-        return recipeDataSource.getRecipeById(recipeId, listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type"))
+        return recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)
+    }
+
+    suspend fun getRecipes(filters: Map<String, String>, included: List<String>, pageSize: Int, pageNumber: Int): List<Recipe> {
+        return recipeDataSource.getRecipes(filters, included, pageSize, pageNumber)
     }
 
     override suspend fun getRecipeSuggestions(
