@@ -8,7 +8,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 @Serializable
 @SerialName("recipe-likes")
 data class RecipeLike private constructor(
-    override val id: String?,
+    override val id: String? = null,
     override val attributes: RecipeLikeAttributes? = null,
     override  val relationships: RecipeLikeRelationships? = null
 ): Record(), BasketPreviewEntry {

@@ -23,7 +23,7 @@ open class RecipeViewModel :
 
     private val coroutineHandler = CoroutineExceptionHandler {
             _, exception ->
-                LogHandler.error("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
+                LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
                 //setEvent(RecipeContract.Event.Error)
     }
 

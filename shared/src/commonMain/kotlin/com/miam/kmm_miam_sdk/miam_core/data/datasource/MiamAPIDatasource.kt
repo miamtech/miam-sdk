@@ -23,7 +23,7 @@ import org.koin.core.component.inject
 
 object HttpRoutes {
     private const val BASE_URL = "https://api.miam.tech/api/v1"
-    // private const val BASE_URL = "http://192.168.1.21:3000/api/v1"
+    // private const val BASE_URL = "http://127.0.0.1:3000/api/v1"
     const val RECIPE_ENDPOINT = "$BASE_URL/recipes/"
     const val RECIPE_LIKE_ENDPOINT = "$BASE_URL/recipe-likes/"
     const val GROCERIESLIST_ENDPOINT = "$BASE_URL/groceries-lists/"
@@ -188,9 +188,10 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     private suspend fun getRecipeLikesByRecipeIds(recipesIds: List<String>, pageSize: Int): List<RecipeLike> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeLikesByRecipeIds $recipesIds")
-        val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
-        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters")!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds $recipesIds")
+        val pageFilter = "page[size]=$pageSize"
+        val idFilters = "filter[recipe_id]=${recipesIds.joinToString(",")}&filter[is_past]=true,false"
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_LIKE_ENDPOINT + "?$pageFilter&$idFilters")!!.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds $recipesIds $returnValue")
         return returnValue.map { record -> record as RecipeLike }
     }
 
@@ -200,30 +201,31 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
             returnValue.addAll(getRecipeLikesByRecipeIds(recipesIdsChunck, pageSize))
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes $recipesIds $returnValue")
         return returnValue
     }
 
     override suspend fun createRecipeLike(recipeLike: RecipeLike): RecipeLike {
         LogHandler.info("[Miam][MiamAPIDatasource] starting createRecipeLike $recipeLike")
-        val returnValue: RecipeLike = httpClient.post {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting createRecipeLike ${RecordWrapper.fromRecord(recipeLike)}")
+        val returnValue = httpClient.post<RecordWrapper> {
             headers.append(HttpHeaders.ContentType, "application/vnd.api+json" )
             url(HttpRoutes.RECIPE_LIKE_ENDPOINT)
             body = RecordWrapper.fromRecord(recipeLike)
-        }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipeLike")
-        return returnValue
+        }.toRecord()
+        LogHandler.info("[Miam][MiamAPIDatasource] end createRecipeLike $returnValue")
+        return returnValue as RecipeLike
     }
 
     override suspend fun updateRecipeLike(recipeLike: RecipeLike): RecipeLike {
         LogHandler.info("[Miam][MiamAPIDatasource] starting updateRecipeLike $recipeLike")
-        val returnValue: RecipeLike = httpClient.patch {
+        val returnValue = httpClient.patch<RecordWrapper> {
             headers.append(HttpHeaders.ContentType, "application/vnd.api+json" )
-            url(HttpRoutes.RECIPE_LIKE_ENDPOINT)
+            url("${HttpRoutes.RECIPE_LIKE_ENDPOINT}${recipeLike.id}")
             body = RecordWrapper.fromRecord(recipeLike)
-        }
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateRecipeLike $recipeLike")
-        return returnValue
+        }.toRecord()
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateRecipeLike $returnValue")
+        return returnValue as RecipeLike
     }
 
     ///////// GroceriesList ///////////////
