@@ -56,9 +56,10 @@ open class FavoritePageViewModel :
             noMoreData = fetchedRecipes.size < RecipeRepositoryImp.DEFAULT_PAGESIZE
         }.invokeOnCompletion { error ->
             if (error == null) {
+                val uiState = if(newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
                 setState {
                     copy(
-                        favoritesRecipes = BasicUiState.Success(newRecipes),
+                        favoritesRecipes = uiState,
                         noMoreData = noMoreData,
                         currentPage = currentPage + 1,
                         isFetchingNewPage = false
