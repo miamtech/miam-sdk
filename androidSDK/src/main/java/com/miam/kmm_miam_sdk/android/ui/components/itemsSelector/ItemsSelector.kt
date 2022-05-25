@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -65,138 +66,156 @@ class ItemsSelector () :KoinComponent {
     fun Content () {
 
         val state  = vmItemSelector.uiState.collectAsState()
-
-        Column(
-            modifier = mainContainer,
-            verticalArrangement =  mainContainerArrangement,
-            horizontalAlignment = mainContainerAlignment,
-        ) {
-            Row(modifier = previousButtonContainer ) {
-                IconButton(
-                    modifier = previousButton,
-                    onClick = {
-                        vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
-                    }
-                ) {
-                    Image(
-                        colorFilter = ColorFilter.tint(previousIconColor),
-                        painter = painterResource(previous),
-                        contentDescription = "Previous"
-                    )
-                }
-            }
-
-            if(Template.currentProductTemplate != null) {
-                Template.currentProductTemplate?.let {
-                    it(state.value.selectedItem!!)
-                }
-            }
-            else {
-                Surface( modifier = selectedItemContainerBorder ) {
-                    Row(
-                        modifier = selectedItemContainer,
-                        horizontalArrangement = selectedItemContainerArrangement,
-                        verticalAlignment = selectedItemContainerAlignment
+        Scaffold(
+            topBar = {
+                Row(modifier = previousButtonContainer) {
+                    IconButton(
+                        modifier = previousButton,
+                        onClick = {
+                            vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                        }
                     ) {
                         Image(
-                            painter = rememberImagePainter(state.value.selectedItem?.picture),
-                            contentDescription = "product image",
-                            contentScale = ContentScale.Crop,
-                            modifier = selectedItemImage,
+                            colorFilter = ColorFilter.tint(previousIconColor),
+                            painter = painterResource(previous),
+                            contentDescription = "Previous"
                         )
-                        Column(
-                            modifier = selectedItemInfosContainer,
-                            verticalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = state.value.selectedItem?.description?.get(0) ?: " ",
-                                textAlign = TextAlign.Center,
-                                style = bodySmallBold
-                            )
+                    }
+                }
+            },
+            content =
+            {
+                Column(
+                    modifier = mainContainer,
+                    verticalArrangement = mainContainerArrangement,
+                    horizontalAlignment = mainContainerAlignment,
+                ) {
+                    if (Template.currentProductTemplate != null) {
+                        Template.currentProductTemplate?.let {
+                            it(state.value.selectedItem!!)
+                        }
+                    } else {
+                        Surface(modifier = selectedItemContainerBorder) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = pricePosition
+                                modifier = selectedItemContainer,
+                                horizontalArrangement = selectedItemContainerArrangement,
+                                verticalAlignment = selectedItemContainerAlignment
                             ) {
-                                Price(
-                                    price= state.value.selectedItem?.price?.toDouble() ?: 0.0,
-                                    isTotalPrice = true
-                                ).content()
+                                Image(
+                                    painter = rememberImagePainter(state.value.selectedItem?.picture),
+                                    contentDescription = "product image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = selectedItemImage,
+                                )
+                                Column(
+                                    modifier = selectedItemInfosContainer,
+                                    verticalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = state.value.selectedItem?.description?.get(0) ?: " ",
+                                        textAlign = TextAlign.Center,
+                                        style = bodySmallBold
+                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = pricePosition
+                                    ) {
+                                        Price(
+                                            price = state.value.selectedItem?.price?.toDouble()
+                                                ?: 0.0,
+                                            isTotalPrice = true
+                                        ).content()
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-            Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
+                    Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
 
-            if(Template.productOptionListTemplate != null ){
-                Template.productOptionListTemplate?.let {
-                    it(state.value.itemList ?: emptyList()) { index -> vmItemSelector.choose(index) }
-                }
-            } else {
-
-
-                Text(
-                    text = replaceBy,
-                    textAlign = TextAlign.Start,
-                    style = bodyBold,
-                    modifier =  Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
-
-
-                LazyVerticalGrid (
-                    cells = GridCells.Adaptive(itemsWidth.dp),
-                    contentPadding = PaddingValues(
-                        start = mPadding,
-                        top = lPadding,
-                        end = mPadding,
-                        bottom = 0.dp
-                    ),
-                    content = {
-                        val itemsList = state.value.itemList ?: emptyList()
-                        items(itemsList.size) {
-                                index ->
-                            Clickable(
-                                onClick = { vmItemSelector.choose(index) },
-                                children = {
-                                    Surface( modifier= itemsBorder ) {
-                                        Column(
-                                            modifier = itemColumnContainer ,
-                                            verticalArrangement =  Arrangement.Center,
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            Box(modifier = swapIconContainer ){
-                                                Image(
-                                                    painter = rememberImagePainter(swap),
-                                                    modifier = swapIcon.align(Alignment.Center),
-                                                    colorFilter = ColorFilter.tint(swapIconColor),
-                                                    contentDescription = "swap"
-                                                )
-                                            }
-                                            Image(
-                                                painter = rememberImagePainter(itemsList[index].picture),
-                                                contentDescription = "product image",
-                                                contentScale = ContentScale.Crop,
-                                                modifier = itemsImage,
-                                            )
-                                            Text(
-                                                text = "${itemsList[index].description?.get(0) ?: ' '}" ,
-                                                textAlign = TextAlign.Center,
-                                                style = bodySmallBold
-                                            )
-                                            Price(
-                                                price = itemsList[index].price.toDouble(),
-                                                isTotalPrice = true
-                                            ).content()
-                                        }
-                                    }
-                                }
-                            )
+                    if (Template.productOptionListTemplate != null) {
+                        Template.productOptionListTemplate?.let {
+                            it(
+                                state.value.itemList ?: emptyList()
+                            ) { index ->
+                                vmItemSelector.choose(index)
+                                vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                            }
                         }
+                    } else {
+
+
+                        Text(
+                            text = replaceBy,
+                            textAlign = TextAlign.Start,
+                            style = bodyBold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
+
+
+                        LazyVerticalGrid(
+                            cells = GridCells.Adaptive(itemsWidth.dp),
+                            contentPadding = PaddingValues(
+                                start = mPadding,
+                                top = lPadding,
+                                end = mPadding,
+                                bottom = 0.dp
+                            ),
+                            content = {
+                                val itemsList = state.value.itemList ?: emptyList()
+                                items(itemsList.size) { index ->
+                                    Clickable(
+                                        onClick = {
+                                            vmItemSelector.choose(index)
+                                            vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                                                  },
+                                        children = {
+                                            Surface(modifier = itemsBorder) {
+                                                Column(
+                                                    modifier = itemColumnContainer,
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Box(modifier = swapIconContainer) {
+                                                        Image(
+                                                            painter = rememberImagePainter(swap),
+                                                            modifier = swapIcon.align(Alignment.Center),
+                                                            colorFilter = ColorFilter.tint(
+                                                                swapIconColor
+                                                            ),
+                                                            contentDescription = "swap"
+                                                        )
+                                                    }
+                                                    Image(
+                                                        painter = rememberImagePainter(itemsList[index].picture),
+                                                        contentDescription = "product image",
+                                                        contentScale = ContentScale.Crop,
+                                                        modifier = itemsImage,
+                                                    )
+                                                    Text(
+                                                        text = "${
+                                                            itemsList[index].description?.get(
+                                                                0
+                                                            ) ?: ' '
+                                                        }",
+                                                        textAlign = TextAlign.Center,
+                                                        style = bodySmallBold
+                                                    )
+                                                    Price(
+                                                        price = itemsList[index].price.toDouble(),
+                                                        isTotalPrice = true
+                                                    ).content()
+                                                }
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        )
                     }
-                )
+                }
             }
-        }
+        )
     }
 }
   

@@ -25,6 +25,8 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.black
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
+import com.miam.kmm_miam_sdk.android.theme.Typography.link
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText.moreDetail
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
@@ -40,10 +42,9 @@ import kotlin.math.round
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun basketPreviewRecipeLine(
+fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,
-    addGuest: (count:Int) -> Unit ,
-    removeGuest: (count:Int) -> Unit,
+    guestChange: (count:Int) -> Unit ,
     goToDetail: () -> Unit
 )  {
 
@@ -60,14 +61,14 @@ fun basketPreviewRecipeLine(
     fun increase() {
         if(line.count != 100) {
             count++
-            addGuest(count)
+            guestChange(count)
         }
     }
 
     fun decrease(){
         if(line.count != 0) {
             count--
-            removeGuest(count)
+            guestChange(count)
             }
     }
 
@@ -86,8 +87,8 @@ fun basketPreviewRecipeLine(
         }
     } else {
 
-        Column(Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
-            Divider(Modifier.fillMaxWidth())
+        Column(modifier = Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
+            Divider(Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier
@@ -134,10 +135,23 @@ fun basketPreviewRecipeLine(
                         color= Colors.grey,
                         style = body
                     )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    Clickable(
+                        onClick = { goToRecipeDetail() },
+                        children =  {
+                            Text(
+                                text = moreDetail,
+                                color= Colors.primary,
+                                style = link
+                            )
+                        }
+                    )
                 }
             }
             Row(
-                Modifier.fillMaxWidth().padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -152,5 +166,6 @@ fun basketPreviewRecipeLine(
             }
             Divider(Modifier.fillMaxWidth())
         }
+        
     }
 }

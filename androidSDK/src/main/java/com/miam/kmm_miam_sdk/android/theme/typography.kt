@@ -53,8 +53,8 @@ object Typography {
 
     var link = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
     )
 
     var whiteRecipeTitle = TextStyle(

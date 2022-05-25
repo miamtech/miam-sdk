@@ -9,6 +9,7 @@ object Text {
     var continueShopping = "Continuer mes courses"
     var currency = "€"
     var ingredient = "Ingredients"
+    var moreDetail = "Voir le détail"
     var moreInfo = "Plus d'informations"
     var preGuests = "par personne."
     var prepTime = "Préparation : "
@@ -18,4 +19,5 @@ object Text {
     var restingTime = "Repos : "
     var steps = "Étapes"
     var totalTime = "Temps total"
+    var swap = "Remplacer"
 }

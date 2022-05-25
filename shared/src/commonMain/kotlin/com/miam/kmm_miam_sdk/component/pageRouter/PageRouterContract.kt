@@ -3,7 +3,7 @@ package com.miam.kmm_miam_sdk.component.pageRouter
 import com.miam.kmm_miam_sdk.base.mvi.UiEffect
 import com.miam.kmm_miam_sdk.base.mvi.UiEvent
 import com.miam.kmm_miam_sdk.base.mvi.UiState
-import com.miam.kmm_miam_sdk.component.recapPage.RecapPageViewModel
+import com.miam.kmm_miam_sdk.component.myMeal.MyMealViewModel
 
 
 enum class RouterPageContent {
@@ -19,7 +19,7 @@ interface PageRouterContract {
 
     data class State(
         val content: RouterPageContent,
-        val vmRecap: RecapPageViewModel?,
+        val vmRecap: MyMealViewModel?,
     ) : UiState
 
     sealed class Effect : UiEffect {

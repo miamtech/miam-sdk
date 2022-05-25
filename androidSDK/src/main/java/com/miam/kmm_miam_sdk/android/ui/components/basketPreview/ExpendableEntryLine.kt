@@ -124,7 +124,7 @@ fun expendableEntryLine(
                                 Clickable(
                                     onClick = { click(entry) },
                                     children = {
-                                        Row{
+                                        Row(verticalAlignment = Alignment.CenterVertically){
                                             Image(
                                                 painter = painterResource(add),
                                                 contentDescription = null,

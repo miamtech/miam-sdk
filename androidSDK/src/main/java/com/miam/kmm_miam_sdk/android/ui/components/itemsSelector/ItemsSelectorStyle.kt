@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Dimension.borderWidth
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lIconHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
@@ -30,7 +31,7 @@ object ItemsSelectorStyle {
      * mainContainer is a Column modifier
      * wrap all other element
      */
-    var mainContainer : Modifier = Modifier.fillMaxSize().padding(horizontal = lPadding, vertical = xlPadding)
+    var mainContainer : Modifier = Modifier.fillMaxSize().padding(horizontal = lPadding, vertical = xlPadding).background(Colors.white)
     // column vertical alignment
     var mainContainerArrangement : Arrangement.Vertical = Arrangement.Top
     // column horizontal alignment

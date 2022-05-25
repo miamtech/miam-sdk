@@ -4,7 +4,6 @@ import com.miam.kmm_miam_sdk.base.mvi.BasketStore
 import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
-import com.miam.kmm_miam_sdk.component.bottomSheet.BottomSheetViewModel
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
 import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase

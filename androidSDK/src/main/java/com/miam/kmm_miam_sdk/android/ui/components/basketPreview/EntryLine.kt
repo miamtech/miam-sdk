@@ -2,13 +2,12 @@ package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,16 +15,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
+
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewColor.BPPLDescriptionColor
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.delete
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.swap
@@ -43,7 +41,9 @@ import java.util.*
 @ExperimentalCoilApi
 @Composable
 fun EntryLine(entry: BasketPreviewLine,
-              vmBasketPreview : BasketPreviewViewModel) {
+              vmBasketPreview : BasketPreviewViewModel,
+              goToItemSelector: () -> Unit
+) {
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
     val productName = entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1)
         .lowercase(Locale.getDefault())
@@ -57,6 +57,7 @@ fun EntryLine(entry: BasketPreviewLine,
 
     fun replace(){
         vmBasketPreview.setEvent(BasketPreviewContract.Event.OpenItemSelector(entry))
+        goToItemSelector()
     }
 
     fun increaseQty(){
@@ -72,7 +73,6 @@ fun EntryLine(entry: BasketPreviewLine,
             vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, count))
         }
     }
-
 
     if(Template.basketPreviewProductLine != null){
 
@@ -97,6 +97,7 @@ fun EntryLine(entry: BasketPreviewLine,
                         .width(80.dp)
                         .clip(RoundedCornerShape(8.dp))
                 )
+                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
                 Column() {
                     Text(text = productName ,
                         style = bodyBold
@@ -154,7 +155,7 @@ fun EntryLine(entry: BasketPreviewLine,
                                         contentDescription = "swap"
                                     )
                                     Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                                    Text(text = "Remplacer", color = Color(0xff037E92), style = bodyBold)
+                                    Text(text = BasketPreviewText.swap, color = Color(0xff037E92), style = bodyBold)
                                 }
                             }
                         )

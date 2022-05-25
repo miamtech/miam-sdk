@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
@@ -62,7 +63,10 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private lateinit var basketHandler: BasketHandler
 
-    private val recipeloader:  @Composable () -> Unit = { Box(Modifier.size(40.dp).background(Color.Blue)) }
+    private val recipeloader:  @Composable () -> Unit = { Box(
+        Modifier
+            .size(40.dp)
+            .background(Color.Blue)) }
 
     private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
         { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
@@ -105,6 +109,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
 
 
+
             }
         }
 
@@ -128,7 +133,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.updateStoreId("35291")
+//        PointOfSaleHandler.updateStoreId("35291")
         PointOfSaleHandler.setSupplier(7)
         launch {
             delay(200)
@@ -190,7 +195,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
             }
             Divider()
-
         }
     }
 
@@ -204,15 +208,13 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         recipe2.bind(criteria = RandomCriteria())
         recipe3.bind(recipeId = "1")
 
-        Column() {
+        Column {
+            MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
         }
-
-
     }
-
 
     private fun initTemplate(){
    /*     Template.recipeCardTemplate = recipeFunctionTemplateVariable

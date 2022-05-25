@@ -13,13 +13,14 @@ open class RouterViewModel:
             rvm = null,
             bpvm = null,
             recipeId = null,
-            isOpen = false
+            isOpen = false,
+            showDetailsFooter = true
         )
 
     override fun handleEvent(event: RouterContract.Event) {
         when (event) {
             is RouterContract.Event.GoToDetail -> {
-                setState { copy(rvm = event.vm) }
+                setState { copy(rvm = event.vm, showDetailsFooter = event.withFooter) }
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterContract.Event.GoToPreview -> {

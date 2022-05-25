@@ -19,7 +19,7 @@ interface RouterContract {
             object CloseDialogFromPreview : RouterContract.Event()
             object GoToItemSelector: RouterContract.Event()
             data class GoToPreview(val recipeId: String, val vm: RecipeViewModel): RouterContract.Event()
-            data class GoToDetail (val vm: RecipeViewModel) :RouterContract.Event()
+            data class GoToDetail (val vm: RecipeViewModel, val withFooter: Boolean = true) :RouterContract.Event()
             data class GoToDetailFromPreview (val vm: RecipeViewModel ) :RouterContract.Event()
         }
 
@@ -28,7 +28,8 @@ interface RouterContract {
             val rvm: RecipeViewModel?,
             val bpvm :BasketPreviewViewModel?,
             val recipeId: String?,
-            val isOpen: Boolean
+            val isOpen: Boolean,
+            val showDetailsFooter:Boolean
         ) : UiState
 
         sealed class Effect : UiEffect {

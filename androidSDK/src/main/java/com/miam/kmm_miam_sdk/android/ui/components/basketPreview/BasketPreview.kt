@@ -1,6 +1,8 @@
 package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
 
+
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 
 import androidx.compose.foundation.layout.*
@@ -34,40 +36,31 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewSt
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText.addedRecipe
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText.continueShopping
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText.removeRecipe
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.base.mvi.GroceriesListAction
-import com.miam.kmm_miam_sdk.base.mvi.GroceriesListStore
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 
-
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-
 
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
-
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine.Companion.fromBasketEntry
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 class BasketPreview(
-    private val routerViewModel: RouterViewModel,
-    private val vmBasketPreview :BasketPreviewViewModel,
+    private val recipeId: String,
     private val recipeVm: RecipeViewModel,
-    val close: ()-> Unit
-) : KoinComponent {
+    val goToDetail: () -> Unit,
+    val close: ()-> Unit,
+    val goToItemSelector: () -> Unit,
+) {
 
-    private val groceriesListStore: GroceriesListStore by inject()
+    private val vmBasketPreview :BasketPreviewViewModel = BasketPreviewViewModel(recipeId)
 
     @ExperimentalCoilApi
     @Composable
@@ -75,32 +68,17 @@ class BasketPreview(
 
         val state by vmBasketPreview.uiState.collectAsState()
 
-        fun addGuest(count :Int){
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = recipeVm )
-            )
-        }
 
-        fun removeGuest(count: Int){
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = recipeVm )
-            )
+        fun removeRecipeAndClose(){
+            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveRecipe)
+            close()
         }
-
         Scaffold(
             topBar = {
-                if (state.showItemSelector) {
-                    Surface {}
-                } else {
+
                     if (Template.basketPreviewHeaderTemplate != null) {
                         Template.basketPreviewHeaderTemplate?.let {
-                            it( recipeVm ) {
-                                routerViewModel.setEvent(
-                                    RouterContract.Event.GoToDetailFromPreview(
-                                        recipeVm
-                                    )
-                                )
-                            }
+                            it( recipeVm ) { goToDetail() }
                         }
                     } else {
                        Row(
@@ -110,7 +88,7 @@ class BasketPreview(
                         {
                             IconButton(
                                 modifier = headerPreviousButton,
-                                onClick = { routerViewModel.setEvent(RouterContract.Event.GoToDetailFromPreview(recipeVm)) }
+                                onClick = { goToDetail() }
                             ) {
                                 Image(
                                     painter = painterResource(previous),
@@ -123,12 +101,9 @@ class BasketPreview(
                             )
                         }
                     }
-                }
             },
             content = {
-                if (state.showItemSelector) {
-                    ItemsSelector().Content()
-                } else {
+
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -140,35 +115,24 @@ class BasketPreview(
                                 requireNotNull(line)
                                 BasketPreviewSucessView(
                                     line ,
-                                    ::addGuest,
-                                    ::removeGuest
-                                ) {
-                                    routerViewModel.setEvent(
-                                        RouterContract.Event.GoToDetailFromPreview(
-                                            recipeVm
-                                        )
-                                    )
-                                }
+                                    recipeVm,
+                                    { goToDetail() },
+                                    { goToItemSelector()},
+                                    vmBasketPreview
+                                )
                             },
                             onTryAgain = { /*TODO*/ },
                             onCheckAgain = { /*TODO*/ },
                             loadingView = { BasketPreviewLoader() }
                         )
                     }
-                }
-
             },
             bottomBar = {
-                if(state.showItemSelector){
-                   Surface {}
-                }
-                else{
                     BottomAppBar(backgroundColor = RecipeDetailsColor.footerSectionBackgroundColor) {
                         if(Template.basketPreviewLineFooterTemplate != null){
                             Template.basketPreviewLineFooterTemplate!!(
                                 {
-                                    groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = vmBasketPreview.recipeId!! ))
-                                    close()
+                                   removeRecipeAndClose()
                                 },
                                 { close() }
                             )
@@ -177,10 +141,12 @@ class BasketPreview(
                                 modifier = RecipeDetailsStyle.footerMainContainer,
                                 horizontalArrangement = Arrangement.End,
                             ) {
-                                Row(footerRemoveButton.weight(1F).clickable {
-                                    groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = vmBasketPreview.recipeId!! ))
-                                    close()
-                                },
+                                Row(
+                                    footerRemoveButton
+                                        .weight(1F)
+                                        .clickable {
+                                            removeRecipeAndClose()
+                                        },
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment =  Alignment.CenterVertically
                                 ) {
@@ -191,7 +157,9 @@ class BasketPreview(
                                     )
                                 }
                                     Row(
-                                        modifier = footerContinueButton.weight(1f).clickable { close() },
+                                        modifier = footerContinueButton
+                                            .weight(1f)
+                                            .clickable { close() },
                                         horizontalArrangement = Arrangement.SpaceEvenly,
                                         verticalAlignment = Alignment.CenterVertically,
                                     ) {
@@ -204,38 +172,62 @@ class BasketPreview(
                                     }
                             }
                         }
-
                     }
-                }
 
             }
         )
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun BasketPreviewSucessView(
+ fun BasketPreviewSucessView(
     line : BasketPreviewLine,
-    addGuest: (count: Int) -> Unit,
-    removeGuest: (count: Int) -> Unit,
-    goToDetail: () -> Unit
+    recipeVm: RecipeViewModel,
+    goToDetail: () -> Unit,
+    goToItemSelector: () -> Unit,
+    vmBasketPreview: BasketPreviewViewModel,
 ) {
 
+
     Column() {
-        basketPreviewRecipeLine(
+        BasketPreviewRecipeLine(
             line = line,
-            { count -> addGuest(count)},
-            { count -> removeGuest(count)},
+            { count ->
+                vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
+                line.copy(count = count), recipeVm = recipeVm, )
+             )
+            },
             goToDetail
         )
-        if(vmBasketPreview.currentState.isReloading){
-            BasketPreviewLoader()
-        } else {
+            BasketPreviewContent(
+                line = line,
+                vmBasketPreview= vmBasketPreview,
+                goToItemSelector = {goToItemSelector()}
+            )
+        Spacer(modifier = Modifier.padding(vertical = 32.dp))
+    }
+}
 
+
+@Composable
+fun BasketPreviewContent(
+    line : BasketPreviewLine,
+    vmBasketPreview: BasketPreviewViewModel,
+    goToItemSelector : () -> Unit
+
+                            ) {
+    if(vmBasketPreview.currentState.isReloading){
+        BasketPreviewLoader()
+    } else {
+        Column() {
             if (line.entries?.found?.isNotEmpty() == true) {
-                Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)) {
                     line.entries!!.found.map { entry ->  fromBasketEntry(entry) }.forEach { bpl ->
-                        EntryLine(bpl, vmBasketPreview)
+                        EntryLine(bpl, vmBasketPreview, goToItemSelector)
                     }
                 }
             }
@@ -269,9 +261,10 @@ private fun BasketPreviewSucessView(
                 )
             }
         }
-        Spacer(modifier = Modifier.padding(vertical = 32.dp))
     }
 }
+
+
 
 @Composable
 private fun BasketPreviewLoader(){
@@ -287,4 +280,6 @@ private fun BasketPreviewLoader(){
         }
     }
 }
+
+
 

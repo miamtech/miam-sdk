@@ -2,21 +2,15 @@ package com.miam.kmm_miam_sdk.android.ui.components.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.view.View
 import android.view.WindowManager
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
@@ -26,22 +20,27 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
+import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.component.router.RouterContent
 import com.miam.kmm_miam_sdk.component.router.RouterContract
 import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
 class Dialog : KoinComponent {
 
     private var vmRouter: RouterViewModel = RouterViewModel()
+    private val itemSelectorViewModel : ItemSelectorViewModel by inject()
 
-    fun goToDetail(vmRecipe :RecipeViewModel){
+    fun goToDetail(vmRecipe :RecipeViewModel, showDetailsFooter: Boolean = true){
         vmRouter.setEvent(
             RouterContract.Event.GoToDetail(
-                vmRecipe
+                vmRecipe, showDetailsFooter
             )
         )
     }
@@ -55,6 +54,30 @@ class Dialog : KoinComponent {
         )
     }
 
+
+    fun goToReplaceItem() {
+        itemSelectorViewModel.setEvent(
+            ItemSelectorContract.Event.SetReturnToBasketPreview(
+                returnToPreview = {
+                    if(vmRouter.currentState.recipeId != null && vmRouter.currentState.rvm != null){
+                        goToPreview(
+                            vmRouter.currentState.recipeId!!,
+                            vmRouter.currentState.rvm!!
+                        )
+                    } else {
+                        close()
+                    }
+                }
+            )
+        )
+        vmRouter.setEvent(
+            RouterContract.Event.GoToItemSelector
+            )
+    }
+
+    fun close(){
+        vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)
+    }
 
     @Composable
     fun Content()  {
@@ -71,7 +94,8 @@ class Dialog : KoinComponent {
 
                         when(state.content){
                             RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
-                            RouterContent.BASKET_PREVIEW -> state.bpvm?.let { BasketPreview(vmRouter ,it, state.rvm!!, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)}).content() }
+                            RouterContent.BASKET_PREVIEW -> state.rvm?.let { BasketPreview( recipeId = state.recipeId!! ,it, {goToDetail(it)} ,::close,::goToReplaceItem).content() }
+                            RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                         }
                     }
                 }
