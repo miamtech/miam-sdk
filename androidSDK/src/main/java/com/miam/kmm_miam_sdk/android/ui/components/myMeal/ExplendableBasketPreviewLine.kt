@@ -47,7 +47,7 @@ fun ExpendableBasketPreviewLine(
                     Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
-                      ) {
+                ) {
                     Column( Modifier.weight(1f)) {
                         BasketPreviewRecipeLine(
                             line = line,
@@ -77,20 +77,20 @@ fun ExpendableBasketPreviewLine(
                                 contentDescription = "delete"
                             )
                         }
-                            IconButton(
-                                modifier = Modifier
-                                    .size(30.dp)
-                                    .rotate(rotationState),
-                                onClick = {
-                                    expandedState = !expandedState
-                                }
-                            ) {
-                                Image(
-                                    painter = painterResource(BasketPreviewImage.toggleCaret),
-                                    contentDescription = null,
-                                    modifier =  RecipeDetailsStyle.totalTimeIcon
-                                )
+                        IconButton(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .rotate(rotationState),
+                            onClick = {
+                                expandedState = !expandedState
                             }
+                        ) {
+                            Image(
+                                painter = painterResource(BasketPreviewImage.toggleCaret),
+                                contentDescription = null,
+                                modifier =  RecipeDetailsStyle.totalTimeIcon
+                            )
+                        }
                     }
                 }
 

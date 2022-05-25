@@ -64,7 +64,7 @@ fun BasketPreviewRecipeLine(
         if(line.count != 0) {
             count--
             guestChange(count)
-            }
+        }
     }
 
 

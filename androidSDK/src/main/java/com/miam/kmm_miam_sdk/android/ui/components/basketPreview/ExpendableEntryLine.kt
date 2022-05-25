@@ -43,11 +43,10 @@ fun expendableEntryLine(
         expandedState = !expandedState
     }
 
-    Column() {
-
+    Column {
         if(Template.basketPreviewExpendHeaderTemplate != null ){
             Template.basketPreviewExpendHeaderTemplate?.let {
-               it(expandedState) { toggle() }
+                it(expandedState) { toggle() }
             }
         } else {
             Card(
@@ -60,7 +59,6 @@ fun expendableEntryLine(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp)
-
                 ) {
                     Text(
                         modifier = Modifier

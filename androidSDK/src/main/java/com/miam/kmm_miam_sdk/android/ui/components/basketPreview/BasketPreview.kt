@@ -16,13 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 
 
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.continueButtonTextColor
@@ -46,10 +44,8 @@ import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
-import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine.Companion.fromBasketEntry
 
 
 class BasketPreview(
@@ -76,103 +72,103 @@ class BasketPreview(
         Scaffold(
             topBar = {
 
-                    if (Template.basketPreviewHeaderTemplate != null) {
-                        Template.basketPreviewHeaderTemplate?.let {
-                            it( recipeVm ) { goToDetail() }
-                        }
-                    } else {
-                       Row(
-                           modifier =  headerRowModifier,
-                           verticalAlignment = headerRowVerticalAlignment
-                        )
-                        {
-                            IconButton(
-                                modifier = headerPreviousButton,
-                                onClick = { goToDetail() }
-                            ) {
-                                Image(
-                                    painter = painterResource(previous),
-                                    contentDescription = "Previous"
-                                )
-                            }
-                            Text(
-                                text = addedRecipe,
-                                style = Typography.bodyBold
+                if (Template.basketPreviewHeaderTemplate != null) {
+                    Template.basketPreviewHeaderTemplate?.let {
+                        it( recipeVm ) { goToDetail() }
+                    }
+                } else {
+                    Row(
+                        modifier =  headerRowModifier,
+                        verticalAlignment = headerRowVerticalAlignment
+                    )
+                    {
+                        IconButton(
+                            modifier = headerPreviousButton,
+                            onClick = { goToDetail() }
+                        ) {
+                            Image(
+                                painter = painterResource(previous),
+                                contentDescription = "Previous"
                             )
                         }
+                        Text(
+                            text = addedRecipe,
+                            style = Typography.bodyBold
+                        )
                     }
+                }
             },
             content = {
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        ManagementResourceState(
-                            resourceState = state.line,
-                            successView = { line ->
-                                requireNotNull(line)
-                                BasketPreviewSucessView(
-                                    line ,
-                                    recipeVm,
-                                    { goToDetail() },
-                                    { goToItemSelector()},
-                                    vmBasketPreview
-                                )
-                            },
-                            onTryAgain = { /*TODO*/ },
-                            onCheckAgain = { /*TODO*/ },
-                            loadingView = { BasketPreviewLoader() }
-                        )
-                    }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    ManagementResourceState(
+                        resourceState = state.line,
+                        successView = { line ->
+                            requireNotNull(line)
+                            BasketPreviewSucessView(
+                                line ,
+                                recipeVm,
+                                { goToDetail() },
+                                { goToItemSelector()},
+                                vmBasketPreview
+                            )
+                        },
+                        onTryAgain = { /*TODO*/ },
+                        onCheckAgain = { /*TODO*/ },
+                        loadingView = { BasketPreviewLoader() }
+                    )
+                }
             },
             bottomBar = {
-                    BottomAppBar(backgroundColor = RecipeDetailsColor.footerSectionBackgroundColor) {
-                        if(Template.basketPreviewLineFooterTemplate != null){
-                            Template.basketPreviewLineFooterTemplate!!(
-                                {
-                                   removeRecipeAndClose()
-                                },
-                                { close() }
-                            )
-                        } else {
+                BottomAppBar(backgroundColor = RecipeDetailsColor.footerSectionBackgroundColor) {
+                    if(Template.basketPreviewLineFooterTemplate != null){
+                        Template.basketPreviewLineFooterTemplate!!(
+                            {
+                                removeRecipeAndClose()
+                            },
+                            { close() }
+                        )
+                    } else {
+                        Row(
+                            modifier = RecipeDetailsStyle.footerMainContainer,
+                            horizontalArrangement = Arrangement.End,
+                        ) {
                             Row(
-                                modifier = RecipeDetailsStyle.footerMainContainer,
-                                horizontalArrangement = Arrangement.End,
+                                footerRemoveButton
+                                    .weight(1F)
+                                    .clickable {
+                                        removeRecipeAndClose()
+                                    },
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment =  Alignment.CenterVertically
                             ) {
-                                Row(
-                                    footerRemoveButton
-                                        .weight(1F)
-                                        .clickable {
-                                            removeRecipeAndClose()
-                                        },
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment =  Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = removeRecipe,
-                                        style = Typography.button,
-                                        color = removeButtonTextColor
-                                    )
-                                }
-                                    Row(
-                                        modifier = footerContinueButton
-                                            .weight(1f)
-                                            .clickable { close() },
-                                        horizontalArrangement = Arrangement.SpaceEvenly,
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Text(
-                                            text = continueShopping,
-                                            style = Typography.button,
-                                            color = continueButtonTextColor
+                                Text(
+                                    text = removeRecipe,
+                                    style = Typography.button,
+                                    color = removeButtonTextColor
+                                )
+                            }
+                            Row(
+                                modifier = footerContinueButton
+                                    .weight(1f)
+                                    .clickable { close() },
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = continueShopping,
+                                    style = Typography.button,
+                                    color = continueButtonTextColor
 
-                                        )
-                                    }
+                                )
                             }
                         }
                     }
+                }
             }
         )
     }
@@ -181,7 +177,7 @@ class BasketPreview(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
- fun BasketPreviewSucessView(
+fun BasketPreviewSucessView(
     line : BasketPreviewLine,
     recipeVm: RecipeViewModel,
     goToDetail: () -> Unit,
@@ -193,16 +189,16 @@ class BasketPreview(
             line = line,
             { count ->
                 vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = recipeVm, )
-             )
+                    line.copy(count = count), recipeVm = recipeVm, )
+                )
             },
             goToDetail
         )
         BasketPreviewItems(
-                line = line,
-                vmBasketPreview= vmBasketPreview,
-                goToItemSelector = { goToItemSelector() }
-            )
+            line = line,
+            vmBasketPreview= vmBasketPreview,
+            goToItemSelector = { goToItemSelector() }
+        )
         Spacer(modifier = Modifier.padding(vertical = 32.dp))
     }
 }

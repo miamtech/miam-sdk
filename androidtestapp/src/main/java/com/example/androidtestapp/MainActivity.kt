@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-//        PointOfSaleHandler.updateStoreId("35291")
+        PointOfSaleHandler.updateStoreId("35291")
         PointOfSaleHandler.setSupplier(7)
         launch {
             delay(200)
@@ -152,7 +152,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 content(retailerBasketSubject)
                 recipes(this@MainActivity)
             }
-
         }
         initTemplate()
     }

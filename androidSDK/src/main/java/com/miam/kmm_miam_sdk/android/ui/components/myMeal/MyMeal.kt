@@ -60,7 +60,7 @@ class MyMeal @JvmOverloads constructor(
                 }
             },
             emptyView =  {
-                    Box{}
+                Box{}
             },
             onTryAgain = { },
             onCheckAgain = {  },
@@ -98,28 +98,27 @@ private fun CurrentRecipeInBasket(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-    previewLines.forEach {  previewLine ->
-             val recipeVM = RecipeViewModel()
-             val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
-             recipeVM.setEvent(
-                 RecipeContract.Event.OnGetRecipe( previewLine.id ?: "")
-             )
-
-
-        ExpendableBasketPreviewLine(
-            line = previewLine,
-            recipeVm = recipeVM,
-            vmBasketPreview = vmBasketPreview,
-            goToDetail = { goToDetail(recipeVM)  },
-            removeRecipe = {
-                myMealVm.setEvent(MyMealContract.Event.RemoveRecipe(previewLine.id.toString()))
-            },
-            goToReplaceItem = {
-                goToReplaceItem()
-             }
+        previewLines.forEach {  previewLine ->
+            val recipeVM = RecipeViewModel()
+            val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
+            recipeVM.setEvent(
+                RecipeContract.Event.OnGetRecipe( previewLine.id ?: "")
             )
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+
+            ExpendableBasketPreviewLine(
+                line = previewLine,
+                recipeVm = recipeVM,
+                vmBasketPreview = vmBasketPreview,
+                goToDetail = { goToDetail(recipeVM)  },
+                removeRecipe = {
+                    myMealVm.setEvent(MyMealContract.Event.RemoveRecipe(previewLine.id.toString()))
+                },
+                goToReplaceItem = {
+                    goToReplaceItem()
+                }
+            )
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
         }
     }
 }
-
