@@ -85,7 +85,7 @@ class FavoritePage @JvmOverloads constructor(
     private fun FavoriteList(vmFavoritePage: FavoritePageViewModel, favoritesRecipes : List<Recipe>, context: Context){
         LazyColumn(
             modifier = favoriteMainContainer,
-            contentPadding = spaceBetweenRecipe as PaddingValues
+//            contentPadding = spaceBetweenRecipe as PaddingValues
         ) {
             itemsIndexed(favoritesRecipes) { index, item ->
                 val recipe =  RecipeView(context = context)

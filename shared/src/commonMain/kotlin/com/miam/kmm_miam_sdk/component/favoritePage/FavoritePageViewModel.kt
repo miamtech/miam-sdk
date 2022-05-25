@@ -24,6 +24,10 @@ open class FavoritePageViewModel :
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
+    init {
+        loadPage()
+    }
+
     override fun createInitialState(): FavoritePageContract.State =
         FavoritePageContract.State(
             favoritesRecipes = BasicUiState.Loading,
