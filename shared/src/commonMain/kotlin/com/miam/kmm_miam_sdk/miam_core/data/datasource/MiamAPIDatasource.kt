@@ -140,7 +140,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     override suspend fun getRecipeById(id: String, included: List<String>): Recipe {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $id")
         val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + id + "?" + includedToString(included))!!.toRecord() as Recipe
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $id")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $id $returnValue")
         return returnValue
     }
 
@@ -148,7 +148,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeByIdsChunck $recipesIds")
         val idFilters = "page[size]=$pageSize&filter[id]=${recipesIds.joinToString(",")}"
         val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$idFilters&" + includedToString(included))!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeById $recipesIds $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -158,7 +158,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
             returnValue.addAll(getRecipeByIdsChunck(recipesIdsChunck, included, pageSize))
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $recipesIds $returnValue")
         return returnValue
     }
 
@@ -168,7 +168,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         val includedStr = if(included.isEmpty()) "" else "&${includedToString(included)}"
         val filtersStr = if(filters.isEmpty()) "" else "&${filtersToString(filters)}"
         val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$pageFilter$includedStr$filtersStr")!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $filters $included")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -180,7 +180,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
         val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&${includedToString(included)}"
         val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -269,7 +269,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.POINTOFSALE_ENDPOINT+"?filter[ext-id]=$extId&filter[supplier-id]=$supplierId")
         }
         if(posList.data.isEmpty()) throw Exception("Point of sale not found or incorrect")
-        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId $posList")
         return posList.data[0]
     }
 
@@ -282,7 +282,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.GROCERIESLIST_ENDPOINT+"$listId/baskets?filter[point_of_sale_id]=$posId&${includedToString(included)}")
         }.toRecords() as List<Basket>
         if(baskets.isEmpty()) throw Exception("basket not found or incorrect")
-        LogHandler.info("[Miam][MiamAPIDatasource] end getFromListAndPos $listId $posId")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getFromListAndPos $listId $posId $baskets")
         return baskets[0]
     }
 
@@ -294,7 +294,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.BASKET_ENDPOINT+"${basket.id}")
             body = RecordWrapper.fromRecord(basket)
         }.toRecord() as Basket
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasket $basket")
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasket $basket $returnValue")
         return returnValue
     }
 
@@ -305,7 +305,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         val returnValue = httpClient.get<Pricing> {
             url(HttpRoutes.RECIPE_ENDPOINT+"$idRecipe/pricing?point_of_sale_id=$idPos")
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipePrice $idRecipe $idPos")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipePrice $idRecipe $idPos $returnValue")
         return returnValue
     }
 
@@ -318,7 +318,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.BASKET_ENTRIES_ENDPOINT+"/${basketEntry.id}?${includedToString(included)}")
             body = RecordWrapper.fromRecord(basketEntry)
         }.toRecord() as BasketEntry
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasketEntry $basketEntry")
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateBasketEntry $basketEntry $returnValue")
         return returnValue
     }
 
@@ -331,7 +331,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT+"/${ge.id}")
             body =  RecordWrapper.fromRecord((ge))
         }.toRecord() as GroceriesEntry
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesEntry $ge")
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesEntry $ge $returnValue")
         return returnValue
     }
 
