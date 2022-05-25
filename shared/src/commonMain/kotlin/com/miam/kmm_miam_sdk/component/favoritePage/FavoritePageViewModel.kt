@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-
 open class FavoritePageViewModel :
     BaseViewModel<FavoritePageContract.Event, FavoritePageContract.State, FavoritePageContract.Effect>() {
 

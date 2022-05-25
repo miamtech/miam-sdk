@@ -340,7 +340,7 @@ class RecipeView @JvmOverloads constructor(
                                 )
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
                                 horizontalArrangement = Arrangement.End
                             ) {
                                 LikeButton(vmRecipe)
