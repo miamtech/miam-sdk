@@ -19,11 +19,13 @@ class RecipeRepositoryImp(
 
     override suspend fun getRecipeById(recipeId: String): Recipe {
         println("Miam getting recipe $recipeId")
-        return recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)
+        val recipe = recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)
+        return addRecipeLike(recipe)
     }
 
     suspend fun getRecipes(filters: Map<String, String>, included: List<String>, pageSize: Int, pageNumber: Int): List<Recipe> {
-        return recipeDataSource.getRecipes(filters, included, pageSize, pageNumber)
+        val recipes =  recipeDataSource.getRecipes(filters, included, pageSize, pageNumber)
+        return addRecipeLikes(recipes)
     }
 
     override suspend fun getRecipeSuggestions(
