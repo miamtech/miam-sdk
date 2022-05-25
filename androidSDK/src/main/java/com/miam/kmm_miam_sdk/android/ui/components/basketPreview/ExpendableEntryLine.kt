@@ -3,13 +3,9 @@ package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewColor.EEAddButtonTextColor
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.add
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.toggleCaret
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.EEAddButtonTextColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.add
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.toggleCaret
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 

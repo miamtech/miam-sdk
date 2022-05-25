@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.dialog
+package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -26,20 +26,20 @@ import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.component.router.RouterContent
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterOutletContract
+import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class Dialog : KoinComponent {
+class RouterOutlet : KoinComponent {
 
-    private var vmRouter: RouterViewModel = RouterViewModel()
+    private var vmRouter: RouterOutletViewModel = RouterOutletViewModel()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
 
     fun goToDetail(vmRecipe :RecipeViewModel, showDetailsFooter: Boolean = true){
         vmRouter.setEvent(
-            RouterContract.Event.GoToDetail(
+            RouterOutletContract.Event.GoToDetail(
                 vmRecipe, showDetailsFooter
             )
         )
@@ -47,13 +47,12 @@ class Dialog : KoinComponent {
 
     fun goToPreview(recipeId: String ,vmRecipe :RecipeViewModel) {
         vmRouter.setEvent(
-            RouterContract.Event.GoToPreview(
+            RouterOutletContract.Event.GoToPreview(
                 recipeId = recipeId,
                 vm = vmRecipe
             )
         )
     }
-
 
     fun goToReplaceItem() {
         itemSelectorViewModel.setEvent(
@@ -71,12 +70,12 @@ class Dialog : KoinComponent {
             )
         )
         vmRouter.setEvent(
-            RouterContract.Event.GoToItemSelector
+            RouterOutletContract.Event.GoToItemSelector
             )
     }
 
-    fun close(){
-        vmRouter.setEvent(RouterContract.Event.CloseDialogFromPreview)
+    private fun close(){
+        vmRouter.setEvent(RouterOutletContract.Event.CloseDialogFromPreview)
     }
 
     @Composable
@@ -87,13 +86,13 @@ class Dialog : KoinComponent {
         if (state.isOpen) {
             Box(){
                 BackHandler {
-                    vmRouter.setEvent(RouterContract.Event.CloseDialog)
+                    vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)
                 }
                 FullScreen {
                     Box(){
 
                         when(state.content){
-                            RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterContract.Event.CloseDialog)}) }
+                            RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)}) }
                             RouterContent.BASKET_PREVIEW -> state.rvm?.let { BasketPreview( recipeId = state.recipeId!! ,it, {goToDetail(it)} ,::close,::goToReplaceItem).content() }
                             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                         }

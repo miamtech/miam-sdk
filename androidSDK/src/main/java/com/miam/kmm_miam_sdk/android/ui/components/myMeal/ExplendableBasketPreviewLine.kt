@@ -6,20 +6,16 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewContent
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItems
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewRecipeLine
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
@@ -102,7 +98,7 @@ fun ExpendableBasketPreviewLine(
         )
 
         AnimatedVisibility(visible = expandedState ) {
-            BasketPreviewContent(
+            BasketPreviewItems(
                 line = line,
                 vmBasketPreview= vmBasketPreview,
                 goToItemSelector = { goToReplaceItem() }

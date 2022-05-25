@@ -84,15 +84,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsTe
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterOutletContract
+import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterViewModel,
+    vmRouter : RouterOutletViewModel,
     closeDialogue: () -> Unit
 ) {
 
@@ -102,7 +102,7 @@ fun recipdeDetails(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailContent(recipe, vmRecipeCard,vmRouter, closeDialogue, vmRouter.currentState.showDetailsFooter)
+            recipeDetailContent(recipe, vmRecipeCard,vmRouter, closeDialogue, vmRouter.currentState.showFooter)
         },
         onTryAgain = { },
         onCheckAgain = { },
@@ -115,7 +115,7 @@ fun recipdeDetails(
 private fun recipeDetailContent(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterViewModel,
+    vmRouter : RouterOutletViewModel,
     closeDialogue: () -> Unit,
     withBottomBar :Boolean = true
 ) {
@@ -129,7 +129,7 @@ private fun recipeDetailContent(
 
     fun seeProductMatching() {
         vmRouter.setEvent(
-            RouterContract.Event.GoToPreview(
+            RouterOutletContract.Event.GoToPreview(
                 recipeId = recipe.id,
                 vm = vmRecipeCard
             )
@@ -139,7 +139,7 @@ private fun recipeDetailContent(
     fun buy() {
         vmRecipeCard.setEvent(RecipeContract.Event.OnAddRecipe)
         vmRouter.setEvent(
-            RouterContract.Event.GoToPreview(
+            RouterOutletContract.Event.GoToPreview(
                 recipeId = recipe.id,
                 vm = vmRecipeCard
             )

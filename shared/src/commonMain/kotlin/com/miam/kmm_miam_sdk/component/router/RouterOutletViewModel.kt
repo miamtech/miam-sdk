@@ -4,26 +4,26 @@ import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
-open class RouterViewModel:
-    BaseViewModel<RouterContract.Event, RouterContract.State, RouterContract.Effect>() {
+open class RouterOutletViewModel:
+    BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
-    override fun createInitialState(): RouterContract.State =
-        RouterContract.State(
+    override fun createInitialState(): RouterOutletContract.State =
+        RouterOutletContract.State(
             content= RouterContent.BASKET_PREVIEW,
             rvm = null,
             bpvm = null,
             recipeId = null,
             isOpen = false,
-            showDetailsFooter = true
+            showFooter = true
         )
 
-    override fun handleEvent(event: RouterContract.Event) {
+    override fun handleEvent(event: RouterOutletContract.Event) {
         when (event) {
-            is RouterContract.Event.GoToDetail -> {
-                setState { copy(rvm = event.vm, showDetailsFooter = event.withFooter) }
+            is RouterOutletContract.Event.GoToDetail -> {
+                setState { copy(rvm = event.vm, showFooter = event.withFooter) }
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
-            is RouterContract.Event.GoToPreview -> {
+            is RouterOutletContract.Event.GoToPreview -> {
                 setState { copy(
                     recipeId =event.recipeId,
                     bpvm= BasketPreviewViewModel(event.recipeId),
@@ -31,21 +31,21 @@ open class RouterViewModel:
                 )}
                 navigateTo( RouterContent.BASKET_PREVIEW)
             }
-            is RouterContract.Event.GoToItemSelector -> {
+            is RouterOutletContract.Event.GoToItemSelector -> {
                 navigateTo(RouterContent.ITEMS_SELECTOR)
             }
-            is RouterContract.Event.CloseDialogFromPreview ->  {
+            is RouterOutletContract.Event.CloseDialogFromPreview ->  {
                 killBasketPreviewViewModel()
-                setEvent(RouterContract.Event.CloseDialog)
+                setEvent(RouterOutletContract.Event.CloseDialog)
             }
-            is RouterContract.Event.GoToDetailFromPreview -> {
+            is RouterOutletContract.Event.GoToDetailFromPreview -> {
                 killBasketPreviewViewModel()
-                setEvent(RouterContract.Event.GoToDetail(event.vm))
+                setEvent(RouterOutletContract.Event.GoToDetail(event.vm))
             }
-            RouterContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
-            RouterContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
-            RouterContract.Event.OpenDialog ->  setState { copy(isOpen = true) }
-            RouterContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
+            RouterOutletContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
+            RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
+            RouterOutletContract.Event.OpenDialog ->  setState { copy(isOpen = true) }
+            RouterOutletContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
         }
     }
 
@@ -57,7 +57,7 @@ open class RouterViewModel:
     private fun navigateTo( destination : RouterContent) {
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {
-            setEvent(RouterContract.Event.OpenDialog)
+            setEvent(RouterOutletContract.Event.OpenDialog)
         }
     }
 }

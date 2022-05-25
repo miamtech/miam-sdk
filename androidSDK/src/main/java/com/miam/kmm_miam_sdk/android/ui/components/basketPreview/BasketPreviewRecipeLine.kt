@@ -26,15 +26,10 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.link
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText.moreDetail
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText.moreDetail
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlin.math.round
 
@@ -166,6 +161,5 @@ fun BasketPreviewRecipeLine(
             }
             Divider(Modifier.fillMaxWidth())
         }
-        
     }
 }

@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Template
+import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 
-import com.miam.kmm_miam_sdk.android.ui.components.dialog.Dialog
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmm_miam_sdk.component.myMeal.MyMealContract
@@ -31,7 +31,7 @@ class MyMeal @JvmOverloads constructor(
 ) : AbstractComposeView(context, attrs, defStyleAttr)
 {
     private val myMealVm = MyMealViewModel()
-    private val modal = Dialog()
+    private val modal = RouterOutlet()
 
     @Composable
     override fun Content() {

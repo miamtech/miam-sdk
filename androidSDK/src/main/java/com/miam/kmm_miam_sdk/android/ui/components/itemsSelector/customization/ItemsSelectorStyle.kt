@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector
+package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,9 +21,9 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.mRoundedCorner
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.xlButtonHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.xlPadding
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.itemsBorderColor
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.selectedItemBorderColor
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.swapIconBackgroundColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.itemsBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.selectedItemBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.swapIconBackgroundColor
 
 object ItemsSelectorStyle {
 

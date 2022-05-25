@@ -23,10 +23,10 @@ import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewText
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewColor.BPPLDescriptionColor
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.delete
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewImage.swap
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.BPPLDescriptionColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.delete
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.swap
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
