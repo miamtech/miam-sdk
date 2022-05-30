@@ -12,6 +12,8 @@ object Image {
     var difficultyMid : Int = R.drawable.ic_mid
     var difficultyHard : Int = R.drawable.ic_hard
     var cart : Int = R.drawable.ic_cart
+    var favorite : Int = R.drawable.ic_favorite
+    var favoriteFilled : Int = R.drawable.ic_favorite_filled
     var close : Int = R.drawable.ic_close
     var knife :Int = R.drawable.ic_knife
     var oven : Int = R.drawable.ic_oven
