@@ -57,12 +57,5 @@ object Typography {
         fontSize = 14.sp
     )
 
-    var whiteRecipeTitle = TextStyle(
-        color = white,
-        fontSize = 32.sp,
-        fontFamily = FontFamily(
-            Font(R.font.satisfy_regular)
-    )
-    )
 
 }

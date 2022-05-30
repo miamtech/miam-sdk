@@ -22,12 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
+import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
@@ -57,7 +59,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 ) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in main activity $exception")
+            _, exception -> println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
@@ -116,6 +118,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         initKoin{
             androidContext(this@MainActivity)
             modules(
@@ -143,14 +147,25 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
         setContent {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                content(retailerBasketSubject)
-                recipes(this@MainActivity)
+            var isFavoritePage by remember { mutableStateOf(false) }
+            Column() {
+                Button(onClick = {isFavoritePage= !isFavoritePage}) {
+                    Text("Toggle favorite")
+                }
+
+                if(isFavoritePage){
+                    FavoritePage(this@MainActivity).Content()
+                } else {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        content(retailerBasketSubject)
+                        recipes(this@MainActivity)
+                    }
+                }
             }
         }
         initTemplate()

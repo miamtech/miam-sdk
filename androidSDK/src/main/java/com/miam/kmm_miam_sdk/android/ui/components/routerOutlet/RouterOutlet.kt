@@ -1,12 +1,12 @@
 package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.view.View
 import android.view.WindowManager
-
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
@@ -90,7 +90,6 @@ class RouterOutlet : KoinComponent {
                 }
                 FullScreen {
                     Box(){
-
                         when(state.content){
                             RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)}) }
                             RouterContent.BASKET_PREVIEW -> state.rvm?.let { BasketPreview( recipeId = state.recipeId!! ,it, {goToDetail(it)} ,::close,::goToReplaceItem).content() }
@@ -168,6 +167,7 @@ private class FullScreenLayout(
 
         setTag(R.id.compose_view_saveable_id_tag, "dialogLayout")
     }
+
 
 
     private var content: @Composable () -> Unit by mutableStateOf({})

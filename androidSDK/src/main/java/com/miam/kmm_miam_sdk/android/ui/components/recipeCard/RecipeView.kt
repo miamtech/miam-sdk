@@ -41,6 +41,8 @@ import com.miam.kmm_miam_sdk.android.theme.Typography
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
+import com.miam.kmm_miam_sdk.android.ui.components.dialog.Dialog
+import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
@@ -48,21 +50,21 @@ import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
-import org.koin.core.component.KoinComponent
-
 
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent  {
+) : AbstractComposeView(context, attrs, defStyleAttr)  {
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<String?> = mutableStateOf(null)
     private val modal = RouterOutlet()
 
     fun bind(recipeId: String = "",
-             criteria: SuggestionsCriteria? = null) {
+             criteria: SuggestionsCriteria? = null,
+            recipe: Recipe? = null)
+    {
         if (recipeId != "") {
             vmRecipe.setEvent(
                 RecipeContract.Event.OnGetRecipe(
@@ -75,7 +77,14 @@ class RecipeView @JvmOverloads constructor(
                     criteria
                 )
             )
+        } else if (recipe != null) {
+            vmRecipe.setEvent(
+                RecipeContract.Event.OnSetRecipe(
+                    recipe= recipe
+                )
+            )
         }
+
     }
 
     fun unbind() {
@@ -157,14 +166,14 @@ class RecipeView @JvmOverloads constructor(
                 y=translateAnimation.value
             )
         )
-       Card(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ){
-           shimmerRecipeCard(brush)
+            shimmerRecipeCard(brush)
         }
-     }
+    }
 
 
     @Composable
@@ -330,7 +339,12 @@ class RecipeView @JvmOverloads constructor(
                                     textAlign = TextAlign.Left,
                                     style = Typography.subtitleBold
                                 )
-
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                LikeButton(vmRecipe)
                             }
                             Box(modifier = recipeCardFlagPositionContainer) {
                                     Box(){
@@ -414,9 +428,5 @@ class RecipeView @JvmOverloads constructor(
                 }
             }
         }
-        }
+    }
 }
-
-
-
-

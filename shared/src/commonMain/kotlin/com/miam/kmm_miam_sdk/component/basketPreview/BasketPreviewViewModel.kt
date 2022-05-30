@@ -18,7 +18,7 @@ class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println(" [ERROR][Miam][Basket preview] $exception")
+            _, exception -> println(" [ERROR][Miam][Basket preview] $exception ${exception.stackTraceToString()}")
     }
 
     private val basketStore : BasketStore by inject()
