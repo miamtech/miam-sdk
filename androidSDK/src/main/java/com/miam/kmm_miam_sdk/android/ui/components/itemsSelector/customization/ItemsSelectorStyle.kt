@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector
+package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Dimension.borderWidth
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lIconHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
@@ -20,9 +21,9 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.mRoundedCorner
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.xlButtonHeight
 import com.miam.kmm_miam_sdk.android.theme.Dimension.xlPadding
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.itemsBorderColor
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.selectedItemBorderColor
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelectorColor.swapIconBackgroundColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.itemsBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.selectedItemBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.swapIconBackgroundColor
 
 object ItemsSelectorStyle {
 
@@ -30,7 +31,7 @@ object ItemsSelectorStyle {
      * mainContainer is a Column modifier
      * wrap all other element
      */
-    var mainContainer : Modifier = Modifier.fillMaxSize().padding(horizontal = lPadding, vertical = xlPadding)
+    var mainContainer : Modifier = Modifier.fillMaxSize().padding(horizontal = lPadding, vertical = xlPadding).background(Colors.white)
     // column vertical alignment
     var mainContainerArrangement : Arrangement.Vertical = Arrangement.Top
     // column horizontal alignment

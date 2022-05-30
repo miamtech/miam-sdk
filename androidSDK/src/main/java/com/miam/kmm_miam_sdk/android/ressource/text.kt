@@ -10,6 +10,7 @@ object Text {
     var currency = "€"
     var goToCatalog = "Je découvre les recettes"
     var ingredient = "Ingredients"
+    var moreDetail = "Voir le détail"
     var noFavoriteYet = "Vous n’avez pas encore de recettes favorites, on peut vous aider ?!"
     var moreInfo = "Plus d'informations"
     var preGuests = "par personne."
@@ -20,4 +21,5 @@ object Text {
     var restingTime = "Repos : "
     var steps = "Étapes"
     var totalTime = "Temps total"
+    var swap = "Remplacer"
 }

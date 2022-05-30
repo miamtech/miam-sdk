@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
+package com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization
 
 import com.miam.kmm_miam_sdk.android.theme.Colors
 

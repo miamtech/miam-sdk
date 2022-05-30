@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
@@ -110,6 +111,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
 
 
+
             }
         }
 
@@ -165,11 +167,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                     }
                 }
             }
-            
-
-
-
-
         }
         initTemplate()
     }
@@ -212,7 +209,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
             }
             Divider()
-
         }
     }
 
@@ -226,16 +222,13 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         recipe2.bind(criteria = RandomCriteria())
         recipe3.bind(recipeId = "1")
 
-        Column() {
-
+        Column {
+            MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
         }
-
-
     }
-
 
     private fun initTemplate(){
    /*     Template.recipeCardTemplate = recipeFunctionTemplateVariable
