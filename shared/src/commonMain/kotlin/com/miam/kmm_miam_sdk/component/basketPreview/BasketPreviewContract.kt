@@ -6,7 +6,6 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
-import com.miam.kmm_miam_sdk.miam_core.model.LineEntries
 import kotlinx.coroutines.Job
 
 
@@ -21,6 +20,7 @@ interface BasketPreviewContract {
         data class UpdateBasketEntry(val entry: BasketEntry,val finalQty: Int): Event()
         data class ReplaceItem(val entry: BasketEntry, val itemId: Int):Event()
         data class OpenItemSelector(val bpl: BasketPreviewLine): Event()
+        object RemoveRecipe: Event()
         object CloseItemSelector: Event()
         object KillJob: Event()
         object ToggleLine :Event()
@@ -33,8 +33,7 @@ interface BasketPreviewContract {
         val line: BasicUiState<BasketPreviewLine>, // ui state
         val bpl: BasketPreviewLine?, //service state
         val isReloading: Boolean,
-        val job: Job?,
-        val showItemSelector: Boolean
+        val job: Job?
     ) : UiState
 
     sealed class Effect : UiEffect {}

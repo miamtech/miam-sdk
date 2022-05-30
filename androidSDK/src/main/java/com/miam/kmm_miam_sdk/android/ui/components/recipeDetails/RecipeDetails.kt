@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -84,15 +85,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsTe
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
+import com.miam.kmm_miam_sdk.component.router.RouterOutletContract
+import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterViewModel,
+    vmRouter : RouterOutletViewModel,
     closeDialogue: () -> Unit
 ) {
 
@@ -102,7 +103,7 @@ fun recipdeDetails(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailCard(recipe, vmRecipeCard,vmRouter, closeDialogue)
+            recipeDetailContent(recipe, vmRecipeCard,vmRouter, closeDialogue, vmRouter.currentState.showFooter)
         },
         onTryAgain = { },
         onCheckAgain = { },
@@ -110,13 +111,15 @@ fun recipdeDetails(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun recipeDetailCard(
+private fun recipeDetailContent(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterViewModel,
-    closeDialogue: () -> Unit
+    vmRouter : RouterOutletViewModel,
+    closeDialogue: () -> Unit,
+    withBottomBar :Boolean = true
 ) {
 
     var expandedState by remember { mutableStateOf(false) }
@@ -128,7 +131,7 @@ private fun recipeDetailCard(
 
     fun seeProductMatching() {
         vmRouter.setEvent(
-            RouterContract.Event.GoToPreview(
+            RouterOutletContract.Event.GoToPreview(
                 recipeId = recipe.id,
                 vm = vmRecipeCard
             )
@@ -138,7 +141,7 @@ private fun recipeDetailCard(
     fun buy() {
         vmRecipeCard.setEvent(RecipeContract.Event.OnAddRecipe)
         vmRouter.setEvent(
-            RouterContract.Event.GoToPreview(
+            RouterOutletContract.Event.GoToPreview(
                 recipeId = recipe.id,
                 vm = vmRecipeCard
             )
@@ -221,7 +224,7 @@ private fun recipeDetailCard(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             when (recipe.attributes!!.difficulty) {
-                                0 -> {
+                                1 -> {
                                     Image(
                                         painter = painterResource(difficultyLow),
                                         contentDescription = null,
@@ -231,7 +234,7 @@ private fun recipeDetailCard(
                                         text = recipe.difficultyLabel
                                     )
                                 }
-                                1 -> {
+                                2 -> {
                                     Image(
                                         painter = painterResource(difficultyMid),
                                         contentDescription = null,
@@ -241,7 +244,7 @@ private fun recipeDetailCard(
                                         text = recipe.difficultyLabel
                                     )
                                 }
-                                2 -> {
+                                3 -> {
                                     Image(
                                         painter = painterResource(difficultyHard),
                                         contentDescription = null,
@@ -356,62 +359,69 @@ private fun recipeDetailCard(
             }
         },
         bottomBar = {
-            BottomAppBar(backgroundColor = footerSectionBackgroundColor) {
-                if(recipeDetailFooterTemplate != null){
-                    recipeDetailFooterTemplate!!(
-                        recipe,
-                        vmRecipeCard,
-                        { seeProductMatching() },
-                        { buy() }
-                    )
-                } else {
-                    Row(
-                        modifier = footerMainContainer,
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        Row(Modifier.weight(1F),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment =  Alignment.CenterVertically
+            if (withBottomBar) {
+                BottomAppBar(backgroundColor = footerSectionBackgroundColor) {
+                    if (recipeDetailFooterTemplate != null) {
+                        recipeDetailFooterTemplate!!(
+                            recipe,
+                            vmRecipeCard,
+                            { seeProductMatching() },
+                            { buy() }
+                        )
+                    } else {
+                        Row(
+                            modifier = footerMainContainer,
+                            horizontalArrangement = Arrangement.End,
                         ) {
-                            Price(recipeId = recipe.id, vmRecipeCard.currentState.guest).content()
-                        }
-                        if (vmRecipeCard.currentState.isInCart) {
-
                             Row(
-                                modifier = checkProductButton.weight(2f).clickable {seeProductMatching() },
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically,
+                                Modifier.weight(1F),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = checkBasketPreview,
-                                    style = button,
-                                    color = goToPreviewTextColor
-
-                                )
+                                Price(
+                                    recipeId = recipe.id,
+                                    vmRecipeCard.currentState.guest
+                                ).content()
                             }
+                            if (vmRecipeCard.currentState.isInCart) {
 
-                        } else {
-                            Row(
-                                modifier = buyRecipeButton.weight(2f).clickable { buy() },
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = addRecipe,
-                                    style = button,
-                                    color = buyButtonTextColor
-                                )
-                                Image(
-                                    painter = painterResource(cart),
-                                    contentDescription = null,
-                                    modifier = buyRecipeButtonIcon
-                                )
+                                Row(
+                                    modifier = checkProductButton.weight(2f)
+                                        .clickable { seeProductMatching() },
+                                    horizontalArrangement = Arrangement.SpaceEvenly,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = checkBasketPreview,
+                                        style = button,
+                                        color = goToPreviewTextColor
+
+                                    )
+                                }
+
+                            } else {
+                                Row(
+                                    modifier = buyRecipeButton.weight(2f).clickable { buy() },
+                                    horizontalArrangement = Arrangement.SpaceEvenly,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = addRecipe,
+                                        style = button,
+                                        color = buyButtonTextColor
+                                    )
+                                    Image(
+                                        painter = painterResource(cart),
+                                        contentDescription = null,
+                                        modifier = buyRecipeButtonIcon
+                                    )
+                                }
                             }
                         }
                     }
                 }
-
-
+            } else {
+                Surface{}
             }
         }
     )

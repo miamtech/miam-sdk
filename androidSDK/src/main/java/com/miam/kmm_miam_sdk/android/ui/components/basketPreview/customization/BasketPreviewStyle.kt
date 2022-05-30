@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
+package com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewColor.continueButtonColor
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewColor.removeButtonColor
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.continueButtonColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.removeButtonColor
 
 object BasketPreviewStyle{
 

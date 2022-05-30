@@ -18,10 +18,11 @@ class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println(" [ERROR][Miam][Basket preview] $exception")
+            _, exception -> println(" [ERROR][Miam][Basket preview] $exception ${exception.stackTraceToString()}")
     }
 
     private val basketStore : BasketStore by inject()
+    private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
     private val _guestChangeDebounceFlow = MutableSharedFlow<Pair<BasketPreviewLine,RecipeViewModel>>()
     private val lineEntriesSubject  = MutableSharedFlow<MutableList<BasketEntry>>()
@@ -34,7 +35,6 @@ class BasketPreviewViewModel(val recipeId: String?):
             line= BasicUiState.Loading,
             bpl= null,
             isReloading= false,
-            showItemSelector= false,
             job = null
         )
 
@@ -102,8 +102,8 @@ class BasketPreviewViewModel(val recipeId: String?):
             is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
             is BasketPreviewContract.Event.CountChange -> launch(coroutineHandler) { _guestChangeDebounceFlow.emit(Pair(event.bpl, event.recipeVm )) }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
-            is BasketPreviewContract.Event.CloseItemSelector ->  setState { copy(showItemSelector = false)}
             is BasketPreviewContract.Event.KillJob -> uiState.value.job?.cancel()
+            is BasketPreviewContract.Event.RemoveRecipe ->  groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = currentState.recipeId.toString() ))
         }
     }
 
@@ -202,8 +202,6 @@ class BasketPreviewViewModel(val recipeId: String?):
 
     private fun basketChange(){
         launch(coroutineHandler) {
-
-
             val bpl = basketStore.observeState().first {
                 it.basketPreview != null && it.basketPreview.isNotEmpty()
             }.basketPreview?.find {
@@ -220,8 +218,6 @@ class BasketPreviewViewModel(val recipeId: String?):
     private fun openItemSelector(bpl: BasketPreviewLine){
         itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetSelectedItem(bpl))
         itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetReplaceItemInPreview( replace= fun (be: BasketEntry) { this.replaceItem(be) }))
-        itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetReturnToBasketPreview( returnToPreview = {setState { copy(showItemSelector = false)}}))
-        setState { copy(showItemSelector = true)}
     }
 }
 

@@ -13,7 +13,7 @@ open class PricingViewModel :
     BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in Pricing view $exception")
+            _, exception -> println("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
     }
 
     private val basketStore : BasketStore by inject()

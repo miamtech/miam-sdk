@@ -11,7 +11,6 @@ class KoinInitializer {
             viewModelModule,
             repositoryModule,
             dispatcherModule,
-            useCasesModule,
             storeModule,
             platformModule()
         )

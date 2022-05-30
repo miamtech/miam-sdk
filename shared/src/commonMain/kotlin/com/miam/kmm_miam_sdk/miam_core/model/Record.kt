@@ -31,7 +31,6 @@ val jsonFormat = Json {
 data class RecordWrapper(var data: JsonElement? = null, var included: JsonElement? = null) {
 
     private fun includedRecords(): List<Record> {
-        // println("Miam RecordWrapper included $included")
         if (included == null) return listOf()
 
         return included!!.jsonArray.map { jsonElt ->
@@ -40,7 +39,6 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
     }
 
     fun toRecords(): List<Record> {
-        // println("Miam construct recordS whole object " + data + " " + included)
         val dataObject = data!!.jsonArray
         return dataObject.map { jsonElt ->
             createRecord(jsonElt, includedRecords())
@@ -48,7 +46,6 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
     }
 
     fun toRecord(): Record {
-        // println("Miam construct record whole object " + data + " " + included)
         return createRecord(data!!, includedRecords())
     }
 
@@ -77,6 +74,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
             Basket.serializer().descriptor.serialName -> Basket(id, attributes, relationships, includedRecords)
             BasketEntry.serializer().descriptor.serialName -> BasketEntry(id, attributes, relationships, includedRecords)
             Item.serializer().descriptor.serialName -> Item(id, attributes, relationships, includedRecords)
+            RecipeLike.serializer().descriptor.serialName -> RecipeLike(id, attributes, relationships, includedRecords)
             else -> throw Exception("Unsuported record type $type")
         }
     }
@@ -97,7 +95,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
  */
 @Serializable
 sealed class Record {
-    abstract val id: String
+    abstract val id: String?
     abstract val attributes: Attributes?
     abstract val relationships: Relationships?
 

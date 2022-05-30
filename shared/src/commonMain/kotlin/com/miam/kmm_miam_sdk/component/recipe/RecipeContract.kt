@@ -23,6 +23,7 @@ interface RecipeContract {
         data class UpdateGuest(val nbGuest: Int): Event()
         data class SetActiveStep(val stepIndex:Int): Event()
         object OnAddRecipe: Event()
+        object OnToggleLike :Event()
         object DecreaseGuest: Event()
         object IncreaseGuest: Event()
         object ShowIngredient: Event()
@@ -40,7 +41,8 @@ interface RecipeContract {
           val isInViewport : Boolean,
           val tabState : TabEnum,
           val activeStep: Int,
-          val recipeLoaded: Boolean
+          val recipeLoaded: Boolean,
+          val isLiked: Boolean
     ) : UiState
 
     sealed class Effect : UiEffect {
