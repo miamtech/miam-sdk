@@ -15,7 +15,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 
 @Composable
-fun BasketPreviewItems(
+fun BasketPreviewItem(
     line : BasketPreviewLine,
     vmBasketPreview: BasketPreviewViewModel,
     goToItemSelector : () -> Unit

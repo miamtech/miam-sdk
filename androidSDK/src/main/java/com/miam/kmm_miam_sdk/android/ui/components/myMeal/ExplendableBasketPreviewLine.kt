@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItems
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItem
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewRecipeLine
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -98,7 +98,7 @@ fun ExpendableBasketPreviewLine(
         )
 
         AnimatedVisibility(visible = expandedState ) {
-            BasketPreviewItems(
+            BasketPreviewItem(
                 line = line,
                 vmBasketPreview= vmBasketPreview,
                 goToItemSelector = { goToReplaceItem() }

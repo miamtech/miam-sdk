@@ -53,6 +53,7 @@ class MyMealViewModel :
             it.id.toString() != recipeId
         } ?: emptyList()
         setState { copy(lines = BasicUiState.Success(newBPL),bpls = newBPL) }
+        // TODO handle call back and error
         groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = recipeId))
     }
 }

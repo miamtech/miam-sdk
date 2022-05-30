@@ -41,7 +41,6 @@ import com.miam.kmm_miam_sdk.android.theme.Typography
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
-import com.miam.kmm_miam_sdk.android.ui.components.dialog.Dialog
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle

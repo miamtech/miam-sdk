@@ -68,7 +68,7 @@ class BasketPreview(
         fun removeRecipeAndClose(){
             vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveRecipe)
             close()
-        }
+        } 
         Scaffold(
             topBar = {
 
@@ -194,7 +194,7 @@ fun BasketPreviewSucessView(
             },
             goToDetail
         )
-        BasketPreviewItems(
+        BasketPreviewItem(
             line = line,
             vmBasketPreview= vmBasketPreview,
             goToItemSelector = { goToItemSelector() }
