@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "cross.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "knife (1).svg",
       "idiom" : "universal",
       "scale" : "2x"
     },

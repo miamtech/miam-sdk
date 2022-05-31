@@ -12,16 +12,17 @@ import SwiftUI
 public class Dimension {
     
     public static let sharedInstance = Dimension()
-
-    var sPadding : CGFloat = 4
-     var mPadding : CGFloat = 8
-     var lPadding : CGFloat = 16
-     var xlPadding : CGFloat = 32
     
-     var sButtonHeight : CGFloat = 8
-     var mButtonHeight : CGFloat = 16
-     var lButtonHeight : CGFloat = 32
-     var xlButtonHeight : CGFloat = 40
+    var borderWidth : CGFloat = 1
+    var sPadding : CGFloat = 4 
+    var mPadding : CGFloat = 8
+    var lPadding : CGFloat = 16
+    var xlPadding : CGFloat = 32
+    var mlPadding : CGFloat = 10
+    
+    var sButtonHeight : CGFloat = 8
+    var mButtonHeight : CGFloat = 16
+    var lButtonHeight : CGFloat = 32
+    var xlButtonHeight : CGFloat = 40
     
 }
-

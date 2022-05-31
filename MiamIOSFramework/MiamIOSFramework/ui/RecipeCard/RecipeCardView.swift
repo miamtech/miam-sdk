@@ -24,7 +24,7 @@ public struct RecipeCardView: View {
     }
     
     public var body: some View {
-        if(Template.sharedInstance.recipeCardTemplate != nil) {
+        if (Template.sharedInstance.recipeCardTemplate != nil) {
             Template.sharedInstance.recipeCardTemplate!(viewModel,{},{})
         } else {
             ZStack {
@@ -48,7 +48,8 @@ public struct RecipeCardView: View {
                                        ))
                                 Text(viewModel.recipe!.attributes?.title ?? "")
                                     .font(.title).bold()
-                                    .padding(.horizontal,20).multilineTextAlignment(.center)
+                                    .padding(.horizontal,20)
+                                    .multilineTextAlignment(.center)
                                     .foregroundColor(Color.white)
                                 if(viewModel.currentState.isInCart) {
                                     HStack{
@@ -59,7 +60,8 @@ public struct RecipeCardView: View {
                                                 .fill(MiamColor.sharedInstance.danger)
                                                 )
                                         Spacer()
-                                    }.padding([.leading],8).offset(x:0 , y: -100)
+                                    }.padding([.leading],8)
+                                        .offset(x:0 , y: -100)
                                         
                                 } else {
     //                                Button(action: {
@@ -80,12 +82,16 @@ public struct RecipeCardView: View {
                                 }
                                 HStack{
                                     HStack{
-                                        Image(uiImage: UIImage(named: "CookHat")!).resizable().scaledToFill().frame(width:16, height:16)
+                                        Image(uiImage: UIImage(named: "CookHat")!)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width:16, height:16)
                                         Text(MiamText.sharedInstance.recipeFlag)
                                             .foregroundColor(Color.white)
-                                    }.padding(8).background(RoundedRectangle(cornerRadius: 4)
-                                        .fill(MiamColor.sharedInstance.info)
-                                        )
+                                    }
+                                    .padding(8)
+                                    .background(RoundedRectangle(cornerRadius: 4)
+                                        .fill(MiamColor.sharedInstance.info))
                                     Spacer()
                                 }
                                .offset(x: 0 , y: 120)
@@ -98,12 +104,20 @@ public struct RecipeCardView: View {
                         HStack{
                             HStack{
                                 VStack{
-                                    Image(uiImage: UIImage(named: "Clock")!).resizable().scaledToFill().frame(width:16, height:16).padding(.bottom,2)
+                                    Image(uiImage: UIImage(named: "Clock")!)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:16, height:16)
+                                        .padding(.bottom,2)
                                     Text(viewModel.recipe!.totalTime).font(.system(size: 12.0))
                                 }
                                 Divider()
                                 VStack{
-                                    Image(uiImage: UIImage(named: "Difficulty")!).resizable().scaledToFill().frame(width:16, height:16).padding(.bottom,2)
+                                    Image(uiImage: UIImage(named: "Difficulty")!)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:16, height:16)
+                                        .padding(.bottom,2)
                                     Text(viewModel.recipe!.difficultyLabel).font(.system(size: 12.0))
                                 }
                                 
@@ -138,10 +152,7 @@ public struct RecipeCardView: View {
                             .background(MiamColor.sharedInstance.primary)
                             .cornerRadius(38.5)
                             .padding(.bottom,8)
-                            .shadow(color: Color.black.opacity(0.3),
-                                    radius: 3,
-                                    x: 3,
-                                    y: 3)
+                            .shadow(color: Color.black.opacity(0.3), radius: 3, x: 3, y: 3)
                         }.padding([.trailing,.leading],16)
                     }
                 }.cornerRadius(10)

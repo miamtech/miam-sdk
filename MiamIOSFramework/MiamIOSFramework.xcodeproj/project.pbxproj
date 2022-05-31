@@ -19,6 +19,17 @@
 		0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BF6281FCC6800BFC7F8 /* Template.swift */; };
 		0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA665282017C5007D6C8A /* PriceView.swift */; };
 		0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AA667282019D2007D6C8A /* PriceVM.swift */; };
+		521D644A282E30A00092AC52 /* IngredientRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D6449282E30A00092AC52 /* IngredientRow.swift */; };
+		521D644C282E30C00092AC52 /* StepRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D644B282E30C00092AC52 /* StepRow.swift */; };
+		521D645428322FFD0092AC52 /* MealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D645328322FFD0092AC52 /* MealView.swift */; };
+		521D64562832301B0092AC52 /* RecipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D64552832301B0092AC52 /* RecipeCard.swift */; };
+		521D6459283230BF0092AC52 /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D6458283230BF0092AC52 /* ProductView.swift */; };
+		521D645B283230DA0092AC52 /* ProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D645A283230DA0092AC52 /* ProductRow.swift */; };
+		521D645F283277B20092AC52 /* MyMealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D645E283277B20092AC52 /* MyMealsView.swift */; };
+		521D6461283277D00092AC52 /* MyMealRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D6460283277D00092AC52 /* MyMealRow.swift */; };
+		521D6463283277EA0092AC52 /* MyMealItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521D6462283277EA0092AC52 /* MyMealItemRow.swift */; };
+		52991E8C282CCE22001738EF /* RecpieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52991E8B282CCE22001738EF /* RecpieDetailsView.swift */; };
+		52C91E9828361EE3006DEAE0 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C91E9728361EE3006DEAE0 /* WebView.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -65,6 +76,17 @@
 		0B7C9BF6281FCC6800BFC7F8 /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
 		0B9AA665282017C5007D6C8A /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
 		0B9AA667282019D2007D6C8A /* PriceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceVM.swift; sourceTree = "<group>"; };
+		521D6449282E30A00092AC52 /* IngredientRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientRow.swift; sourceTree = "<group>"; };
+		521D644B282E30C00092AC52 /* StepRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepRow.swift; sourceTree = "<group>"; };
+		521D645328322FFD0092AC52 /* MealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealView.swift; sourceTree = "<group>"; };
+		521D64552832301B0092AC52 /* RecipeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCard.swift; sourceTree = "<group>"; };
+		521D6458283230BF0092AC52 /* ProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductView.swift; sourceTree = "<group>"; };
+		521D645A283230DA0092AC52 /* ProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRow.swift; sourceTree = "<group>"; };
+		521D645E283277B20092AC52 /* MyMealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealsView.swift; sourceTree = "<group>"; };
+		521D6460283277D00092AC52 /* MyMealRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealRow.swift; sourceTree = "<group>"; };
+		521D6462283277EA0092AC52 /* MyMealItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealItemRow.swift; sourceTree = "<group>"; };
+		52991E8B282CCE22001738EF /* RecpieDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecpieDetailsView.swift; sourceTree = "<group>"; };
+		52C91E9728361EE3006DEAE0 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -139,6 +161,52 @@
 			path = Price;
 			sourceTree = "<group>";
 		};
+		521D645028322FC50092AC52 /* MealView */ = {
+			isa = PBXGroup;
+			children = (
+				521D645328322FFD0092AC52 /* MealView.swift */,
+				521D64552832301B0092AC52 /* RecipeCard.swift */,
+			);
+			path = MealView;
+			sourceTree = "<group>";
+		};
+		521D6457283230B90092AC52 /* ProductView */ = {
+			isa = PBXGroup;
+			children = (
+				521D6458283230BF0092AC52 /* ProductView.swift */,
+				521D645A283230DA0092AC52 /* ProductRow.swift */,
+			);
+			path = ProductView;
+			sourceTree = "<group>";
+		};
+		521D645D283277A60092AC52 /* MyMealsView */ = {
+			isa = PBXGroup;
+			children = (
+				521D645E283277B20092AC52 /* MyMealsView.swift */,
+				521D6460283277D00092AC52 /* MyMealRow.swift */,
+				521D6462283277EA0092AC52 /* MyMealItemRow.swift */,
+			);
+			path = MyMealsView;
+			sourceTree = "<group>";
+		};
+		52991E8A282CCE22001738EF /* RecpieDetails */ = {
+			isa = PBXGroup;
+			children = (
+				52991E8B282CCE22001738EF /* RecpieDetailsView.swift */,
+				521D6449282E30A00092AC52 /* IngredientRow.swift */,
+				521D644B282E30C00092AC52 /* StepRow.swift */,
+			);
+			path = RecpieDetails;
+			sourceTree = "<group>";
+		};
+		52C91E9628361ED1006DEAE0 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				52C91E9728361EE3006DEAE0 /* WebView.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
 		DCD4E2F627BE914A000D3EA6 = {
 			isa = PBXGroup;
 			children = (
@@ -164,7 +232,7 @@
 			children = (
 				0B7C9BDD28196BED00BFC7F8 /* ressource */,
 				0B7C9BDA28196B9300BFC7F8 /* theme */,
-				DCD4E31E27BE92C8000D3EA6 /* mvvm */,
+				DCD4E31E27BE92C8000D3EA6 /* ViewModels */,
 				DCD4E31D27BE92B2000D3EA6 /* utils */,
 				DCD4E31C27BE92AC000D3EA6 /* ui */,
 				DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */,
@@ -184,6 +252,11 @@
 		DCD4E31C27BE92AC000D3EA6 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				52C91E9628361ED1006DEAE0 /* WebView */,
+				521D645D283277A60092AC52 /* MyMealsView */,
+				521D6457283230B90092AC52 /* ProductView */,
+				521D645028322FC50092AC52 /* MealView */,
+				52991E8A282CCE22001738EF /* RecpieDetails */,
 				0B7C9BF8282016BF00BFC7F8 /* Price */,
 				0B7C9BDE28197A1700BFC7F8 /* Counter */,
 				0B7C9BD728196A6300BFC7F8 /* RecipeCard */,
@@ -200,13 +273,13 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
-		DCD4E31E27BE92C8000D3EA6 /* mvvm */ = {
+		DCD4E31E27BE92C8000D3EA6 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				DCD4E31F27BE9339000D3EA6 /* RecipeCardVM.swift */,
 				0B9AA667282019D2007D6C8A /* PriceVM.swift */,
 			);
-			path = mvvm;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
@@ -347,21 +420,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColors.swift in Sources */,
 				0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */,
 				0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */,
+				521D64562832301B0092AC52 /* RecipeCard.swift in Sources */,
+				521D6459283230BF0092AC52 /* ProductView.swift in Sources */,
 				0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */,
+				521D6461283277D00092AC52 /* MyMealRow.swift in Sources */,
+				521D645428322FFD0092AC52 /* MealView.swift in Sources */,
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
 				0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
+				521D644C282E30C00092AC52 /* StepRow.swift in Sources */,
+				521D644A282E30A00092AC52 /* IngredientRow.swift in Sources */,
+				52C91E9828361EE3006DEAE0 /* WebView.swift in Sources */,
 				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
 				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
+				52991E8C282CCE22001738EF /* RecpieDetailsView.swift in Sources */,
 				0B7C9BF2281A7EF700BFC7F8 /* Dimension.swift in Sources */,
+				521D645B283230DA0092AC52 /* ProductRow.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
 				0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */,
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,
+				521D6463283277EA0092AC52 /* MyMealItemRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
