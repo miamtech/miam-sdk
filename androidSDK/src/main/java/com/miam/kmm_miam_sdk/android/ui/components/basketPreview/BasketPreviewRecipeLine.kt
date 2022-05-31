@@ -25,14 +25,11 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.black
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
+import com.miam.kmm_miam_sdk.android.theme.Typography.link
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText.moreDetail
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContract
-import com.miam.kmm_miam_sdk.component.router.RouterViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import kotlin.math.round
 
@@ -40,7 +37,11 @@ import kotlin.math.round
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBasketPreview: BasketPreviewViewModel, router:RouterViewModel)  {
+fun BasketPreviewRecipeLine(
+    line: BasketPreviewLine,
+    guestChange: (count:Int) -> Unit ,
+    goToDetail: () -> Unit
+)  {
 
     val price = Price(price = line.price.toDouble(), isTotalPrice = true)
     val recipeName = line.title
@@ -49,29 +50,26 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
     var count by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail(){
-        router.setEvent(RouterContract.Event.GoToDetailFromPreview(vmRecipe))
+        goToDetail()
     }
 
     fun increase() {
         if(line.count != 100) {
             count++
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = vmRecipe )
-            )
+            guestChange(count)
         }
     }
 
     fun decrease(){
         if(line.count != 0) {
             count--
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                line.copy(count = count), recipeVm = vmRecipe )
-            ) }
+            guestChange(count)
+        }
     }
 
 
-    if(Template.basketPreviewLineTemplate != null){
-        Template.basketPreviewLineTemplate?.let {
+    if(Template.basketPreviewRecipeLineTemplate != null){
+        Template.basketPreviewRecipeLineTemplate?.let {
             it(
                 recipeName,
                 recipeDescription,
@@ -84,8 +82,8 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
         }
     } else {
 
-        Column(Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
-            Divider(Modifier.fillMaxWidth())
+        Column(modifier = Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
+            Divider(Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier
@@ -132,10 +130,23 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                         color= Colors.grey,
                         style = body
                     )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    Clickable(
+                        onClick = { goToRecipeDetail() },
+                        children =  {
+                            Text(
+                                text = moreDetail,
+                                color= Colors.primary,
+                                style = link
+                            )
+                        }
+                    )
                 }
             }
             Row(
-                Modifier.fillMaxWidth().padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -145,7 +156,7 @@ fun basketPreviewLine(line: BasketPreviewLine, vmRecipe: RecipeViewModel, vmBask
                     increase = { increase() },
                     decrease = { decrease() },
                     lightMode = false,
-                    isDisable = vmBasketPreview.currentState.isReloading
+                    isDisable = false
                 )
             }
             Divider(Modifier.fillMaxWidth())

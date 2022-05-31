@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector
+package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization
 
 import androidx.compose.ui.graphics.Color
 import com.miam.kmm_miam_sdk.android.theme.Colors.lightgrey

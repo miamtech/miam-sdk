@@ -41,9 +41,6 @@ import com.miam.kmm_miam_sdk.component.pricing.PricingContract
 
 import com.miam.kmm_miam_sdk.component.pricing.PricingViewModel
 
-import com.miam.kmm_miam_sdk.miam_core.model.Pricing
-
-
 class Price(
     val recipeId :String? = "",
     private val guestNumber:Int? = -1,
@@ -54,7 +51,7 @@ class Price(
     private var vmPrice: PricingViewModel = PricingViewModel()
 
     init {
-        if (recipeId != "" && guestNumber != -1) {
+        if ((recipeId != "" || recipeId != null)  && guestNumber != -1) {
             vmPrice.setEvent(
                 PricingContract.Event.OnSetRecipe(recipeId!!, guestNumber!!)
             )

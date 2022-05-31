@@ -57,7 +57,7 @@ fun Step(stepNumber: Int, description: String, isActive: Boolean, onActivestep: 
                 .padding(vertical = 16.dp)
                 .clickable(onClick = { onActivestep(stepNumber) })
         ) {
-            CircleChips(stepNumber.toString())
+            CircleChips((stepNumber+1).toString())
 
             Text(
                 text = description,

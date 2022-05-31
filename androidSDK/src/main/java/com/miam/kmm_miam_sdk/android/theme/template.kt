@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.android.theme
 
 import androidx.compose.runtime.Composable
+import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.miam_core.model.Item
@@ -40,6 +41,16 @@ object Template {
     var recipeEmptyTemplate: (
       @Composable() () -> Unit
     ) ? = null
+
+/////////// Favorite Page //////////////////////////
+
+    var loadingFavoritePage : (@Composable() () -> Unit)? = null
+
+    var emptyFavoritePage : (
+    @Composable() (
+        visitCatalog : () -> Unit,
+    ) -> Unit
+    )? = null    
 
 ////////////////// Recipe details //////////////////
 
@@ -100,7 +111,7 @@ object Template {
 
 /////////////// Basket Preview //////////////////////
 
-    var basketPreviewLineTemplate  :  (@Composable() (
+    var basketPreviewRecipeLineTemplate  :  (@Composable() (
         recipeName: String,
         recipeDescription: String,
         pricePerGuest: String,
@@ -132,6 +143,9 @@ object Template {
         productName: String,
         add : () -> Unit,
     ) -> Unit)? = null
-                                                                       
+
+/////////////// My Meal Page  //////////////////////
+
+    var myMealLoaderTemplate :  (@Composable() () -> Unit)? = null
 
 }
