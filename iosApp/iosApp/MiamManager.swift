@@ -52,8 +52,8 @@ public class MiamManager {
   private init() {
       KoinKt.doInitKoin()
       basketHandler = BasketHandlerInstance.shared.instance
-      basketHandler.setListenToRetailerBasket(initBasketListener)
-      basketHandler.setPushProductsToRetailerBasket(pushProductToBasket)
+      basketHandler.setListenToRetailerBasket(func: initBasketListener)
+      basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
       basketHandler.pushProductsToMiamBasket(retailerBasket: [])
       PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
       PointOfSaleHandler.shared.setSupplierOrigin(origin:"www.coursesu.fr")
@@ -96,14 +96,12 @@ public class MiamManager {
     }
     
     private func initBasketListener(
-        callback: @escaping ([RetailerProduct]) -> KotlinUnit
+       
     ) {
         AppBasket.sharedInstance.basket.$items.sink {
          print($0)
-         // callback will be triggered on every basket change
-             callback(
-                self.yourProductsToRetailerProducts(products: AppBasket.sharedInstance.basket.items )
-             )
+        //TODO push product to basket basketHandler.pushProductsToMiamBasket(retailerBasket: [])
+             
        }
      }
     
