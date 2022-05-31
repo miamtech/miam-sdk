@@ -42,23 +42,24 @@ public class MiamManager {
     
   public static let sharedInstance = MiamManager()
   private let availableStoreIdLists = ["454", "652"]
-  private let basketHandler: BasketHandler = BasketHandler()
+  private let basketHandler: BasketHandler
   
-    func isActiveOnStore() -> KotlinBoolean {
-        return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
-    }
+  func isActiveOnStore() -> KotlinBoolean {
+    return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
+  }
     
   // need to be private
   private init() {
       KoinKt.doInitKoin()
+      basketHandler = BasketHandlerInstance.shared.instance
+      basketHandler.setListenToRetailerBasket(initBasketListener)
+      basketHandler.setPushProductsToRetailerBasket(pushProductToBasket)
+      basketHandler.pushProductsToMiamBasket(retailerBasket: [])
       PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
       PointOfSaleHandler.shared.setSupplierOrigin(origin:"www.coursesu.fr")
       PointOfSaleHandler.shared.setSupplier(supplierId: 7)
       PointOfSaleHandler.shared.isAvailable = isActiveOnStore
       UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
-      basketHandler.listenToRetailerBasket = initBasketListener
-      basketHandler.pushProductsToBasket = pushProductToBasket
-      basketHandler.paymentTotal = getTotalPayment
       //initCustomText()
   }
     
