@@ -20,21 +20,19 @@ data class BasketHandlerState(
     val comparator: BasketComparator? = null,
     val isProcessingRetailerEvent: Boolean = false,
     val firstMiamBasket: List<BasketEntry>? = null,
-    val firstRetailerBasket: List<RetailerProduct>? = null
+    val firstRetailerBasket: List<RetailerProduct>? = null,
+    val pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
+        throw Error("pushProductsToBasket not implemented")
+    },
+    val listenToRetailerBasket: () -> Unit = fun(){
+        throw Error("listenToRetailerBasket not implemented")
+    }
 ): State
 
 class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
     private val basketStore: BasketStore by inject()
 
     val state = MutableStateFlow(BasketHandlerState())
-
-    var paymentTotal: () -> Double = fun():Double{return 0.0}
-    var pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
-        throw Error("pushProductsToBasket not implemented")
-    }
-    var listenToRetailerBasket: () -> Unit = fun(){
-        throw Error("listenToRetailerBasket not implemented")
-    }
 
     fun isReady(): Boolean {
         return state.value.comparator != null
@@ -57,7 +55,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         val newComparator = BasketComparator(state.value.firstRetailerBasket!!, state.value.firstMiamBasket!!)
         state.value = state.value.copy(comparator = newComparator)
         processRetailerEvent(state.value.firstRetailerBasket!!)
-        listenToRetailerBasket()
+        this.state.value.listenToRetailerBasket()
         ContextHandlerInstance.instance.getReady()
     }
 
@@ -76,7 +74,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         if (itemsToAdd.isEmpty()) {
             return
         }
-        pushProductsToRetailerBasket(itemsToAdd)
+        this.state.value.pushProductsToRetailerBasket(itemsToAdd)
     }
 
     private fun processRetailerEvent(retailerBasket: List<RetailerProduct>) {
@@ -103,6 +101,14 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
      * called from app
      */
 
+    fun setPushProductsToRetailerBasket(func: (products: List<RetailerProduct>) -> Unit) {
+        state.value = state.value.copy(pushProductsToRetailerBasket = func)
+    }
+
+    fun setListenToRetailerBasket(func: () -> Unit) {
+        state.value = state.value.copy(listenToRetailerBasket = func)
+    }
+
     fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
         LogHandler.info("Retailer basket changed $retailerBasket")
         if(!isReady()) return initFirstRetailerBasket(retailerBasket)
@@ -114,10 +120,9 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         state.value = state.value.copy(comparator = null)
     }
 
-    fun handlePayment() {
+    fun handlePayment(totalAmount: Double) {
         //TODO handle analytic
-        val total = paymentTotal()
         if (basketStore.basketIsEmpty()) { return }
-        basketStore.dispatch(BasketAction.ConfirmBasket(price = total.toString()))
+        basketStore.dispatch(BasketAction.ConfirmBasket(price = totalAmount.toString()))
     }
 }
