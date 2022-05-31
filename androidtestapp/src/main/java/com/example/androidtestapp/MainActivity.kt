@@ -259,7 +259,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun setListenToRetailerBasket(basketHandler: BasketHandler) {
-        basketHandler.listenToRetailerBasket = ::initBasketListener
+        basketHandler.setListenToRetailerBasket(::initBasketListener)
         basketHandler.pushProductsToMiamBasket(retailerBasketSubject.value.items.map { product -> coursesUProductTORetailerProduct(product) })
     }
 
@@ -294,7 +294,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun setPushProductToBasket(basketHandler: BasketHandler) {
-        basketHandler.pushProductsToRetailerBasket = ::pushProductToRetailer
+        basketHandler.setPushProductsToRetailerBasket(::pushProductToRetailer)
     }
 
     private fun pushProductToRetailer(coursesUProducts: List<RetailerProduct>){
