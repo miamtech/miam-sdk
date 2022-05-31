@@ -40,6 +40,7 @@ import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.ui.components.tag.Tag
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
@@ -217,12 +218,15 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         val recipe1 =  RecipeView(context)
         val recipe2 =  RecipeView(context)
         val recipe3 =  RecipeView(context)
+        val tag = Tag(context)
 
         recipe1.bind(recipeId = "305")
         recipe2.bind(criteria = RandomCriteria())
         recipe3.bind(recipeId = "1")
+        tag.bind("970417")
 
         Column {
+            tag.Content()
             MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()
