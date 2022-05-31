@@ -29,7 +29,7 @@ open class TagViewModel(val vmRouter: RouterOutletViewModel) :
     }
 
     private  fun getRecipes(ingredientId:  String){
-        //TODO get recipes
+        //TODO ALEX get recipes
     }
 
 }

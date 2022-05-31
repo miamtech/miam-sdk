@@ -17,16 +17,21 @@ import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.link
 import com.miam.kmm_miam_sdk.android.theme.Typography.overLine
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagChipsBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagChipsTextColor
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagDialogRecipeLink
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagExtraCountBubbleBorder
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagExtraCountBubbleText
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagImage.close
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagText.tagPostRecipeCountText
+import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagText.tagPreRecipeCountText
 import com.miam.kmm_miam_sdk.component.tag.TagContract
 import com.miam.kmm_miam_sdk.component.tag.TagViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -56,39 +61,36 @@ class Tag @JvmOverloads constructor(
 
         val state by vmTag.uiState.collectAsState()
 
-            Column {
-                // Empty at init
-                fullscreen.Content()
-                ManagementResourceState(
-                    resourceState = state.recipeList,
-                    successView = { recipes ->
-                        requireNotNull(recipes)
-                        RecipesTag(
-                            recipes,
-                            ::goToDetail
-                        )
-                    },
-                    loadingView = {
-                        if(Template.recipeLoaderTemplate != null){
-                            Template.recipeLoaderTemplate?.let { it() }
-                        } else {
-                            RecipesTag(
-                                emptyList(),
-                                ::goToDetail
-                            )
-                        }
-                    },
-                    emptyView =  {
-                        if(Template.recipeEmptyTemplate !=  null){
-                            Template.recipeEmptyTemplate?.let {it()}
-                        } else {
-                            Box{}
-                        }
-                    },
-                    onTryAgain = { },
-                    onCheckAgain = {  },
-                )
-            }
+        Column {
+            // Empty at init
+            fullscreen.Content()
+            ManagementResourceState(
+                resourceState = state.recipeList,
+                successView = { recipes ->
+                    requireNotNull(recipes)
+                    RecipesTag(
+                        recipes,
+                        ::goToDetail
+                    )
+                },
+                loadingView = {
+                    if(Template.recipeLoaderTemplate != null){
+                        Template.recipeLoaderTemplate?.let { it() }
+                    } else {
+                        Box{}
+                    }
+                },
+                emptyView =  {
+                    if(Template.recipeEmptyTemplate !=  null){
+                        Template.recipeEmptyTemplate?.let {it()}
+                    } else {
+                        Box{}
+                    }
+                },
+                onTryAgain = { },
+                onCheckAgain = {  },
+            )
+        }
 
     }
 
@@ -97,49 +99,57 @@ class Tag @JvmOverloads constructor(
         recipes: List<Recipe>,
         goToDetails: (recipe: Recipe) -> Unit,
     ){
-
-        val openRecipeLinkDialog = remember { mutableStateOf(false) }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if(openRecipeLinkDialog.value){
-                AllRecipeLinkDialog(openRecipeLinkDialog, recipes, goToDetails)
+        if(Template.TagTemplate != null) {
+            Template.TagTemplate?.let {
+                it(recipes,goToDetails)
             }
-            Clickable(
-                onClick = {},
-                children = {
-                    Box() {
-                        Text(text= recipes[0].attributes!!.title, Modifier
-                            .border(
-                                width = 1.dp,
-                                color = Colors.grey,
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                            .padding(
-                                horizontal = 8.dp, vertical = 2.dp
-                            ), color = Colors.grey ) 
-                    }
+        } else {
+            val openRecipeLinkDialog = remember { mutableStateOf(false) }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if(openRecipeLinkDialog.value){
+                    AllRecipeLinkDialog(openRecipeLinkDialog, recipes, goToDetails)
                 }
-            )
-            Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-            if(recipes.size > 1) {
                 Clickable(
-                    onClick = { openRecipeLinkDialog.value = true},
+                    onClick = {},
                     children = {
-                        Box(
-                            Modifier
-                                .border(1.dp, Colors.primary, CircleShape)
-                                .padding(horizontal = 4.dp, vertical = 2.dp)
-                        ) {
+                        Box() {
                             Text(
-                                text = "+" + (recipes.size -1),
-                                color= Colors.primary,
-                                style= overLine,
-                                modifier = Modifier.align(Alignment.Center) )
+                                text= recipes[0].attributes!!.title,
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = tagChipsBorderColor,
+                                    shape = RoundedCornerShape(16.dp)
+                                ).padding(
+                                    horizontal = 8.dp, vertical = 2.dp
+                                ),
+                                color = tagChipsTextColor
+                            )
                         }
                     }
                 )
+                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                if(recipes.size > 1) {
+                    Clickable(
+                        onClick = { openRecipeLinkDialog.value = true},
+                        children = {
+                            Box(
+                                Modifier
+                                    .border(1.dp, tagExtraCountBubbleBorder, CircleShape)
+                                    .padding(horizontal = 4.dp, vertical = 2.dp)
+                            ) {
+                                Text(
+                                    text = "+" + (recipes.size -1),
+                                    color= tagExtraCountBubbleText,
+                                    style= overLine,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    )
+                }
             }
         }
     }
@@ -158,7 +168,7 @@ class Tag @JvmOverloads constructor(
             Card() {
                 Column (Modifier.padding(16.dp)) {
                     Text(
-                        text = "Ce produit est utilisé pour ${recipes.size} recettes",
+                        text = "$tagPreRecipeCountText ${recipes.size} $tagPostRecipeCountText",
                         style =  bodyBold,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
@@ -172,9 +182,9 @@ class Tag @JvmOverloads constructor(
                                 Text(
                                     text = it.attributes!!.title,
                                     style = link.copy(textDecoration =  TextDecoration.Underline),
-                                    color = Colors.primary,
+                                    color = tagDialogRecipeLink,
                                     modifier = Modifier.padding(bottom = 16.dp)
-                                    )
+                                )
                             }
                         )
                     }
@@ -185,9 +195,9 @@ class Tag @JvmOverloads constructor(
                             .clickable { openRecipeLinkDialog.value = false }
                     ) {
                         Image(
-                            painter = painterResource(RecipeDetailsImage.close),
+                            painter = painterResource(close),
                             contentDescription = null,
-                            modifier = RecipeDetailsStyle.headerCloseIconModifier.align(Alignment.Center)
+                            modifier = Modifier.align(Alignment.Center)
                         )
                     }
                 }
