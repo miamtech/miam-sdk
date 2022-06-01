@@ -12,7 +12,7 @@ public class MiamText {
     
     public static let sharedInstance = MiamText()
 
-    public var addRecipe = "Sélectionner ce repas"
+    public var addRecipe = "Découvrir la recette"
     public var alreadyInCart = "Déjà ajoutée"
     public var cookTime = "Temps de cuisson"
     public var checkBasketPreview = "Voir le détail"
@@ -20,7 +20,7 @@ public class MiamText {
     public var ingredient = "Ingredients"
     public var preGuests = "par pers."
     public var prepTime = "Temps de préparation"
-    public var recipeFlag = "Recette"
+    public var recipeFlag = "Idée repas"
     public var replaceBy = "Remplacer cet article par : "
     public var restingTime = "Temps de repos"
     public var steps = "Préparation"
