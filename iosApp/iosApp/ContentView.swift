@@ -49,18 +49,18 @@ struct ContentView: View {
     
     
     var body: some View {
-//        ScrollView {
-//            VStack {
-//                Button(action: addRandomProduct) {
-//                    Text("Add Random product")
-//                }
-//                Button(action: removeRandomProduct) {
-//                    Text("Remove random product")
-//                }
+        ScrollView {
+            VStack {
+                Button(action: addRandomProduct) {
+                    Text("Add Random product")
+                }
+                Button(action: removeRandomProduct) {
+                    Text("Remove random product")
+                }
                 RecipeCardView(recipeId: "1")
-//                RecipeCardView(criteria: criteria)
-//            }
-//        }
+                RecipeCardView(criteria: criteria)
+            }
+        }
     }
     private func addRandomProduct(){
         AppBasket.sharedInstance.basket.add(addedProduct: productSample.randomElement()!)
