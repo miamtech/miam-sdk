@@ -17,15 +17,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miam.kmm_miam_sdk.android.theme.Colors
 
 @Composable
 fun CustomActionButton(action: () -> Unit, icon: Int, text: String, isActive: Boolean) {
-    var colorFont = MiamMasterView.Primary
+    var colorFont = Colors.primary
     var backgroundColor = Color.White
 
     if (isActive) {
         colorFont = Color.White
-        backgroundColor = MiamMasterView.Primary
+        backgroundColor = Colors.primary
     }
     ExtendedFloatingActionButton(
         text = {

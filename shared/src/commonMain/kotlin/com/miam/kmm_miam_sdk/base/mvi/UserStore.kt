@@ -1,9 +1,11 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
 
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.GroceriesListRepositoryImp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,57 +16,61 @@ import org.koin.core.component.inject
 
 data class UserState(
     val userId: String?,
-    val sessionId: String?
+    val sessionId: String?,
+    val profilingAllowed: Boolean = true
 ) : State
 
 sealed class  UserAction : Action {
     data class RefreshUser(val idUser: String?) : UserAction()
-    data class SetSessionId(val idSession:String?): UserAction()
 }
-sealed class  UserEffect : Effect {
-    data class Error(val error: Exception) :  UserEffect()
-    data class UserChanged(val idUser: String) :  UserEffect()
-}
+sealed class UserEffect: Effect
 
 class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val state = MutableStateFlow(UserState( null, null))
+    override val state = MutableStateFlow(UserState( null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()
-    private val  groceriesListStore:  GroceriesListStore by inject()
+    private val groceriesListStore:  GroceriesListStore by inject()
 
 
     override fun observeState(): StateFlow<UserState> = state
 
     override fun observeSideEffect(): Flow<UserEffect> = sideEffect
 
-    override fun dispatch(action: UserAction) {
-        val oldState = state.value
-
-        val newState = when (action) {
+    override fun dispatch(action: UserAction): Job {
+        when (action) {
             is UserAction.RefreshUser -> {
-                //println("Miam --> basket RefreshUser")
-                if (oldState.userId == action.idUser) {
-                    // println("Miam --> same user")
-                    oldState
-                } else {
-                    groceriesListStore.dispatch(GroceriesListAction.RefreshGroceriesList)
-                    oldState.copy(userId = action.idUser)
-                }
-
-            }
-            is UserAction.SetSessionId -> {
-                if (oldState.sessionId == action.idSession) {
-                    // println("Miam --> same user")
-                    oldState
-                } else {
-                    oldState.copy(sessionId = action.idSession)
+                updateStateIfChanged(state.value.copy(userId = action.idUser))
+                return launch {
+                    if (state.value.userId != null) {
+                        groceriesListStore.dispatch(GroceriesListAction.RefreshGroceriesList)
+                    }
                 }
             }
+        }
+    }
 
-        }
-        if (newState != oldState) {
-            state.value = newState
-        }
+    fun getSessionId(): String? {
+        return state.value.sessionId
+    }
+
+    fun setSessionId(sessionId: String) {
+        updateStateIfChanged(state.value.copy(sessionId = sessionId))
+    }
+
+    fun sameSession(sessionId: String): Boolean {
+        return sessionId == state.value.sessionId;
+    }
+
+    fun sameUser(userId: String?): Boolean {
+        return userId == state.value.userId;
+    }
+
+    fun setProfilingAllowed(allowance: Boolean) {
+        updateStateIfChanged(state.value.copy(profilingAllowed = allowance))
+    }
+
+    fun ProfilingForbiden(): Boolean {
+        return !state.value.profilingAllowed
     }
 }

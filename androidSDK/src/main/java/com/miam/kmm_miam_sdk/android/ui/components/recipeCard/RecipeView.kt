@@ -6,6 +6,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -19,62 +20,50 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.addToCartFloatingButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.difficulty
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.recipeCardFlagIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.showRecipeFloatingButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.time
+
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.image
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.inCartTagBox
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.inCartTagPadding
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.metricsDivider
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.metricsIcon
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.moreInfoButton
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagImage
+
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeCardFlagPositionContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeMetricsRow
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.recipeTitle
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.alreadyInCart
-import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.recipeFlag
+
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.android.theme.Colors.grey
+
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
-import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
+
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 import com.miam.kmm_miam_sdk.android.theme.Template
-import com.miam.kmm_miam_sdk.android.theme.Typography.body
-import com.miam.kmm_miam_sdk.android.theme.Typography.whiteRecipeTitle
-import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import com.miam.kmm_miam_sdk.android.theme.Typography
+
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
-import com.miam.kmm_miam_sdk.android.ui.components.dialog.Dialog
+import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
+import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
-import org.koin.core.component.KoinComponent
-
 
 class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent  {
+) : AbstractComposeView(context, attrs, defStyleAttr)  {
 
     private var vmRecipe: RecipeViewModel = RecipeViewModel()
     private val idRecipeState: MutableState<String?> = mutableStateOf(null)
-    private val modal = Dialog()
+    private val modal = RouterOutlet()
 
     fun bind(recipeId: String = "",
-             criteria: SuggestionsCriteria? = null) {
+             criteria: SuggestionsCriteria? = null,
+            recipe: Recipe? = null)
+    {
         if (recipeId != "") {
             vmRecipe.setEvent(
                 RecipeContract.Event.OnGetRecipe(
@@ -87,7 +76,14 @@ class RecipeView @JvmOverloads constructor(
                     criteria
                 )
             )
+        } else if (recipe != null) {
+            vmRecipe.setEvent(
+                RecipeContract.Event.OnSetRecipe(
+                    recipe= recipe
+                )
+            )
         }
+
     }
 
     fun unbind() {
@@ -120,9 +116,22 @@ class RecipeView @JvmOverloads constructor(
                     requireNotNull(recipe)
                     RecipeCard(recipe, vmRecipe)
                 },
-                loadingView = { RecipeCardLoading() },
-                onTryAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
-                onCheckAgain = { vmRecipe.setEvent(RecipeContract.Event.Retry) },
+                loadingView = {
+                    if(Template.recipeLoaderTemplate != null){
+                        Template.recipeLoaderTemplate?.let { it() }
+                    } else {
+                        RecipeCardLoading()
+                    }
+                },
+                emptyView =  {
+                    if(Template.recipeEmptyTemplate !=  null){
+                        Template.recipeEmptyTemplate?.let {it()}
+                    } else {
+                        Box{}
+                    }
+                },
+                onTryAgain = { },
+                onCheckAgain = {  },
             )
         }
     }
@@ -156,14 +165,14 @@ class RecipeView @JvmOverloads constructor(
                 y=translateAnimation.value
             )
         )
-       Card(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ){
-           shimmerRecipeCard(brush)
+            shimmerRecipeCard(brush)
         }
-     }
+    }
 
 
     @Composable
@@ -292,9 +301,7 @@ class RecipeView @JvmOverloads constructor(
         recipe: Recipe,
         vmRecipe: RecipeViewModel
     )  {
-
         if(Template.recipeCardTemplate != null) {
-
             Template.recipeCardTemplate?.let {
                 it(
                     recipe, vmRecipe,
@@ -306,177 +313,119 @@ class RecipeView @JvmOverloads constructor(
                 )
             }
         } else {
-
-            val price = Price(recipeId = recipe.id, guestNumber = vmRecipe.uiState.value.guest)
             Column {
                 Card(modifier = cardLayout) {
-                    Box {
-                        Column {
-                            Box(modifier = imageContainer) {
-                                Clickable(
-                                    onClick = { modal.goToDetail(vmRecipe) },
-                                    children = {
-                                        Image(
-                                            painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = image
-                                        )
-                                    }
-                                )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box {
+                            Column {
+                                Box(modifier = imageContainer) {
+                                    Clickable(
+                                        onClick = { modal.goToDetail(vmRecipe) },
+                                        children = {
+                                            Image(
+                                                painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
+                                                contentDescription = null,
+                                                contentScale = ContentScale.Crop,
+                                                modifier = image
+                                            )
+                                        }
+                                    )
+
+                                }
                                 Text(
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center,
                                     text = recipe.attributes!!.title,
-                                    style = whiteRecipeTitle,
-                                    modifier = recipeTitle.align(Alignment.Center)
+                                    modifier = RecipeDetailsStyle.titleModifier,
+                                    textAlign = TextAlign.Left,
+                                    style = Typography.subtitleBold
                                 )
-                                if (vmRecipe.currentState.isInCart) {
-                                    Box(modifier = inCartTagBox) {
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                LikeButton(vmRecipe)
+                            }
+                            Box(modifier = recipeCardFlagPositionContainer) {
+                                    Box(){
+                                        Surface (
+
+                                            Modifier
+                                                .clip(
+                                                    RoundedCornerShape(
+                                                        topEnd = 70f,
+                                                        bottomEnd = 70f
+                                                    )
+                                                )
+                                                .height(40.dp)
+                                                .align(Alignment.Center),
+                                                elevation= 8.dp) 
+                                        {   
+                                            Row(
+                                                Modifier
+                                                    .background(white)
+                                                    .width(180.dp)) {
+                                                
+                                            }
+                                        }
                                         Row(
-                                            modifier = inCartTagPadding,
+                                            modifier = Modifier.padding(
+                                                horizontal = sPadding,
+                                                vertical = mPadding
+                                            ).align(Alignment.Center),
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.Center
                                         ) {
+                                            Surface(
+                                                modifier = Modifier.size(64.dp),
+                                                shape = CircleShape,
+                                                elevation = 8.dp
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(RecipeDetailsImage.recipeIcon),
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(62.dp)
+                                                )
+
+                                            }
+
                                             Text(
-                                                text = alreadyInCart,
-                                                style = body,
-                                                color = white,
+                                                text = "Idée repas",
+                                                style = Typography.subtitleBold,
                                                 modifier = Modifier.padding(horizontal = sPadding)
                                             )
                                         }
                                     }
-                                } else {
-                                    FloatingActionButton(
-                                        modifier = moreInfoButton,
-                                        backgroundColor = grey,
-                                        onClick = {
-                                        }
-                                    ) {
-                                        Text(text = "?", color = white)
-                                    }
-                                }
+
                             }
-                            Row(
-                                modifier = recipeMetricsRow,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Row() {
-                                    Column(
-                                        Modifier.padding(end = lPadding),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Image(
-                                            painter = painterResource(time),
-                                            contentDescription = "time metric",
-                                            modifier = metricsIcon
-                                        )
-                                        Text(
-                                            text = recipe.totalTime,
-                                            style = body,
-                                            modifier = Modifier.padding(top = sPadding)
-                                        )
-                                    }
-                                    Divider(
-                                        modifier = metricsDivider
-                                    )
-                                    Column(
-                                        Modifier.padding(start = lPadding),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Image(
-                                            painter = painterResource(difficulty),
-                                            contentDescription = "difficulty metric",
-                                            modifier = metricsIcon
-                                        )
-                                        Text(
-                                            text = recipe.difficultyLabel,
-                                            style = body,
-                                            modifier = Modifier.padding(top = sPadding)
-                                        )
-                                    }
-                                }
-                                price.content()
-                            }
-                            Counter(
-                                vmRecipe.currentState.guest,
-                                isDisable = false,
-                                { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
-                                { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
-                            )
+
+
                         }
-                        Box(modifier = recipeCardFlagPositionContainer) {
-                            Box(modifier = recipeCardFlagContainer) {
-                                Row(
-                                    modifier = Modifier.padding(
-                                        horizontal = sPadding,
-                                        vertical = mPadding
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center
+                            Clickable(
+                                onClick = { modal.goToDetail(vmRecipe) },
+                                children = {
+                                Surface(
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp, vertical = 10.dp)
+                                        .clip(RoundedCornerShape(80f)),
+                                    elevation = 8.dp
                                 ) {
-                                    Image(
-                                        painter = painterResource(recipeCardFlagIcon),
-                                        contentDescription = null,
-                                        modifier = recipeCardFlagImage
-                                    )
-                                    Text(
-                                        text = recipeFlag,
-                                        style = body,
-                                        color = white,
-                                        modifier = Modifier.padding(horizontal = sPadding)
-                                    )
+                                    Row(Modifier.background(
+                                        primary
+                                    ).padding(horizontal = 16.dp, vertical = 10.dp)) {
+                                        Text(
+                                            text = "Décourvir la recette",
+                                            color = white,
+                                            style = Typography.subtitleBold
+                                        )
+                                    }
+
                                 }
                             }
-                        }
-                        if (vmRecipe.currentState.isInCart) {
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(end = mPadding, bottom = mPadding)
-                            ) {
-                                FloatingActionButton(
-                                    modifier = Modifier.size(36.dp),
-                                    backgroundColor = primary,
-                                    onClick = {
-                                        modal.goToPreview(recipe.id, vmRecipe)
-                                    }) {
-                                    Image(
-                                        painter = painterResource(showRecipeFloatingButtonIcon),
-                                        contentDescription = "Show recipe action",
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
-                            }
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(end = mPadding, bottom = mPadding)
-                            ) {
-                                FloatingActionButton(modifier = Modifier.size(36.dp),
-                                    backgroundColor = primary,
-                                    onClick = {
-                                        vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
-                                        modal.goToPreview(recipe.id, vmRecipe)
-                                    }) {
-                                    Image(
-                                        painter = painterResource(addToCartFloatingButtonIcon),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
-                            }
-                        }
+                            )
+
                     }
                 }
             }
         }
-        }
+    }
 }
-
-
-
-

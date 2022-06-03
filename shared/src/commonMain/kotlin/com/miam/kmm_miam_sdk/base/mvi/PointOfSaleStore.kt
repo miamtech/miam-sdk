@@ -1,13 +1,11 @@
 package com.miam.kmm_miam_sdk.base.mvi
 
 
+import com.miam.kmm_miam_sdk.base.executor.ExecutorHelper
 import com.miam.kmm_miam_sdk.miam_core.data.repository.PointOfSaleRepositoryImp
-import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.*
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,29 +14,24 @@ data class PointOfSaleState(
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
     val origin: String?,
-) : State
+    val currentJob: Job? = null
+): State
 
 sealed class  PointOfSaleAction : Action {
-    data class RefreshPointOfSale(val idPointOfSale: Int) : PointOfSaleAction()
     data class SetExtId(val extId: String?) :PointOfSaleAction()
     data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
-    data class SetOrigin(val origin: String):PointOfSaleAction()
-    data class Error(val error: Exception) : PointOfSaleAction()
 }
 
-sealed class  PointOfSaleEffect : Effect {
-    data class Error(val error: Exception) :  PointOfSaleEffect()
-    data class PointOfSaleChanged(val idPointOfSale: Int) :  PointOfSaleEffect()
-}
+sealed class  PointOfSaleEffect : Effect
 
-class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>, KoinComponent,
+class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in BasketStore $exception")
+            _, exception -> println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
-    private val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
+    override val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
     private val basketStore:  BasketStore by inject()
@@ -48,67 +41,62 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
 
     override fun observeSideEffect(): Flow<PointOfSaleEffect> = sideEffect
 
-    override fun dispatch(action: PointOfSaleAction) {
-        val oldState = state.value
-
-        val newState = when (action) {
-            is PointOfSaleAction.RefreshPointOfSale -> {
-                // println("Miam refresh pos")
-                if (oldState.idPointOfSale == action.idPointOfSale) {
-                    // println("Miam refresh pos same pos")
-                    oldState
-                } else {
-                    basketStore.dispatch(BasketAction.SetIdPointOfSale(action.idPointOfSale))
-                    oldState.copy(idPointOfSale = action.idPointOfSale)
-                }
-            }
+    override fun dispatch(action: PointOfSaleAction): Job {
+        when (action) {
             is PointOfSaleAction.SetExtId -> {
-                // println("Miam refresh ext_id")
-                if (oldState.extIdPointOfSale == action.extId) {
-                    // println("Miam refresh ext_id same ext_id")
-                    oldState
-                } else {
-                    launch(coroutineHandler) {
-                        getPos(action.extId, oldState.idSupplier)
-                    }
-                    oldState.copy(extIdPointOfSale = action.extId)
-                }
+                updateStateIfChanged(state.value.copy(extIdPointOfSale = action.extId))
+                if (!canFetch()) return ExecutorHelper.emptyJob()
+
+                return launchNewPosRefresh()
             }
             is PointOfSaleAction.SetSupplierId -> {
-                // println("Miam refresh SetSupplierId")
-                if (oldState.idSupplier == action.supplierId) {
-                    // println("Miam refresh SetSupplierId same SetSupplierId")
-                    oldState
-                } else {
-                    launch(coroutineHandler) {
-                        getPos(oldState.extIdPointOfSale, action.supplierId)
-                    }
-                    oldState.copy(idSupplier = action.supplierId)
-                }
+                updateStateIfChanged(state.value.copy(idSupplier = action.supplierId))
+                if (!canFetch()) return ExecutorHelper.emptyJob()
+
+                return launchNewPosRefresh()
             }
-            is PointOfSaleAction.SetOrigin ->  oldState.copy(origin = action.origin)
-            is PointOfSaleAction.Error -> {
-                TODO("handle errors")
-                oldState
-            }
-        }
-        if (newState != oldState) {
-            state.value = newState
         }
     }
 
-    fun getProviderId() : Int{
+    fun samePos(extId: String?): Boolean {
+        return extId == state.value.extIdPointOfSale
+    }
+
+    fun sameSupplier(supplierId: Int): Boolean {
+        return supplierId == state.value.idSupplier
+    }
+
+    fun setOrigin(origin: String) {
+        updateStateIfChanged(state.value.copy(origin = origin))
+    }
+
+    fun getPosId(): Int? {
+        return state.value.idPointOfSale
+    }
+
+    fun getProviderId(): Int{
         return state.value.idSupplier ?: -1
     }
 
-    fun getProviderOrigin() : String{
+    fun getProviderOrigin(): String {
         return state.value.origin ?: ""
     }
 
-    private suspend fun getPos(extIdPointOfSale: String?, idSupplier: Int?) {
-        if(extIdPointOfSale == null || idSupplier == null ) return
+    private fun canFetch(): Boolean {
+        return state.value.extIdPointOfSale != null && state.value.idSupplier != null
+    }
 
-        val pos = pointOfSaleRepository.getPosFormExtId(extIdPointOfSale,idSupplier)
-        dispatch(PointOfSaleAction.RefreshPointOfSale(pos.id))
+    private fun launchNewPosRefresh(): Job {
+        ExecutorHelper.cancelRunningJob(state.value.currentJob)
+        val currentJob = launch(coroutineHandler) {
+            val pos = pointOfSaleRepository.getPosFormExtId(
+                state.value.extIdPointOfSale!!,
+                state.value.idSupplier!!
+            )
+            updateStateIfChanged(state.value.copy(idPointOfSale = pos.id))
+            basketStore.dispatch(BasketAction.RefreshBasket)
+        }
+        updateStateIfChanged(state.value.copy(currentJob = currentJob))
+        return currentJob
     }
 }

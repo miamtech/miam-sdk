@@ -53,25 +53,25 @@ Our components are using [Jetpack Compose](https://developer.android.com/jetpack
 
 ```kotlin
     implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.compose.compiler:compiler:1.0.5")
-    implementation("androidx.compose.ui:ui:1.0.5")
+    implementation("androidx.compose.compiler:compiler:1.1.1")
+    implementation("androidx.compose.ui:ui:1.1.1")
 
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.0.5")
+    implementation("androidx.compose.ui:ui-tooling:1.1.1")
 
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:1.0.5")
+    implementation("androidx.compose.foundation:foundation:1.1.1")
 
     // Material Design
-    implementation("androidx.compose.material:material:1.0.5")
+    implementation("androidx.compose.material:material:1.1.1")
 
     // Material design icons
-    implementation("androidx.compose.material:material-icons-core:1.0.5")
-    implementation("androidx.compose.material:material-icons-extended:1.0.5")
+    implementation("androidx.compose.material:material-icons-core:1.1.1")
+    implementation("androidx.compose.material:material-icons-extended:1.1.1")
 
     // Integration with observables
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.5")
-    implementation("androidx.compose.runtime:runtime-rxjava2:1.0.5")
+    implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
+    implementation("androidx.compose.runtime:runtime-rxjava2:1.1.1")
 
     // async image
     implementation("io.coil-kt:coil-compose:1.3.1")
@@ -260,20 +260,24 @@ import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 
 class Miam() {
 
-   private val basketHandler: BasketHandler = BasketHandler()
+  // to do after koin initialization, use lateinit var if necessary
+  private val basketHandler: BasketHandler = BasketHandlerInstance.instance
 
   init {
-    basketHandler.listenToRetailerBasket = ::initBasketListener
-
+    // give miam a function walled when everything is ready to listen to your basket
+    basketHandler.setListenToRetailerBasket(::initBasketListener) 
+    // push a first basket to Miam so we can sync your current basket we Miam ones
+    // then Miam will call initBasketListener function to listen to any change
+    val firstRetailerbasket = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
+    basketHandler.pushProductsToMiamBasket(firstRetailerbasket)
     // CODE
   }
 
-  private fun initBasketListener(
-    callback: (products: List<RetailerProduct>) -> Unit
-  ) {
+  private fun initBasketListener() {
     OBSERVABLE_ON_BASKET_OBJECT.collect { basket ->
-      // callback will be triggered on every basket change
-      callback(yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList))
+      // function will be triggered on every basket change
+      val yourBasketAsRetailerproducts = yourProductsToRetailerProducts(<List<YourProduct>>basket.productsList)
+      basketHandler.pushProductsToMiamBasket(yourBasketAsRetailerproducts)
     }
   }
 
@@ -288,10 +292,11 @@ import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
 
 class Miam() {
 
-  private val basketHandler: BasketHandler = BasketHandler()
+  // to do after koin initialization, use lateinit var if necessary
+  private val basketHandler: BasketHandler = BasketHandlerInstance.instance
 
   init {
-    basketHandler.pushProductsToBasket = ::pushProductsToYourBasket
+    basketHandler.setPushProductsToRetailerBasket(::pushProductsToYourBasket)
     // CODE
   }
 
@@ -337,6 +342,25 @@ class Miam() {
 
 // Confirm basket when payment confirmed in app:
 Miam.getInstance().basketHandler.handlePayment()
+```
+
+#### Miam readiness
+
+You have two ways to check Miam readiness : either call a direct function or listen to Miam event
+
+
+
+```kotlin
+  val miamContext = ContextHandlerInstance.instance
+  // miamContext.isReady() return a bool
+  prtinln("is Miam ready ? ${miamContext.isReady()}")
+
+  miamContext.observeReadyEvent().collect { event ->
+    val isReady = event == ReadyEvent.isReady
+    val isNotReady = event == ReadyEvent.isNotReady
+    // Do stuff
+  }
+
 ```
 
 ### Components injection
@@ -657,12 +681,12 @@ Component available for low level customization :
 | Name | Style | Color | Icon | Text | Preview | Template |
 |:-------------|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Recipe card |✅ | ❌ | ✅ |✅ | ❌ | ✅
-| Basket preview |❌ | ❌ |❌ | ❌ | ❌| ❌
+| Basket preview |✅ | ✅ |✅ | ✅ | ❌| ✅
 | Price |  ✅ |  ✅ |➖| ✅ | ✅| ❌
-| Item selector |✅ | ✅ |✅ |✅ | ❌| ❌
-| Recipe detail |❌ | ❌ |❌|❌ | ❌| ❌
-| Counter | ✅| ✅ |✅|➖ |❌| ❌
-| Dialog |✅ | ➖|➖|➖ | ❌| ❌
+| Item selector |✅ | ✅ |✅ |✅ | ❌| ✅
+| Recipe detail |✅| ✅ |✅|✅| ❌| ✅
+| Counter | ✅| ✅ |✅|➖ |✅| ❌
+| Dialog |✅ | ➖|➖|➖ | ➖| ➖
 
 - Add component preview for development
 
@@ -878,29 +902,33 @@ private func retailerProductsToYourProducts(products: Array<RetailerProduct>) ->
 }     
 ```
 
-Miam needs to listen to any change applied to the basket in the host app. To that end, you have to pass a function to `BasketHandler` with the flowing signature: 
-`(callback: @escaping ([RetailerProduct]) -> KotlinUnit) -> Void`
+Miam needs to listen to any change applied to the basket in the host app. To that end, you have to pass a function to `BasketHandler` 
 
 ```swift
 
 class Miam {
 
-   private let basketHandler: BasketHandler = BasketHandler()
+   private let basketHandler: BasketHandler 
 
   init {
-    basketHandler.listenToRetailerBasket = initBasketListener
+    KoinKt.doInitKoin() 
+    basketHandler = BasketHandlerInstance.shared.instance
+     // give miam a function walled when everything is ready to listen to your basket
+    basketHandler.listenToRetailerBasket(func: initBasketListener) 
+    // push a first basket to Miam so we can sync your current basket we Miam ones
+    // then Miam will call initBasketListener function to listen to any change
+    val firstRetailerbasket = yourProductsToRetailerProducts(basket.productsList)
+    basketHandler.pushProductsToMiamBasket(firstRetailerbasket)
 
     // CODE
   }
 
-  private func initBasketListener(
-    callback: @escaping ([RetailerProduct]) -> KotlinUnit
-  ) {
+  private func initBasketListener() {
     OBSERVABLE_ON_BASKET_OBJECT.sink  { receiveValue in
             // callback will be triggered on every basket change
-             callback(
-                self.yourProductsToRetailerProducts(products:  receiveValue)
-             )
+             basketHandler.pushProductsToMiamBasket(
+               yourProductsToRetailerProducts(receiveValue)
+               )
        }
   }
 
@@ -916,10 +944,12 @@ import shared
 
 class Miam {
    // CODE
-  private let basketHandler: BasketHandler = BasketHandler()
+  private let basketHandler: BasketHandler
 
   private init() {
-    basketHandler.pushProductsToBasket = pushProductsToYourBasket
+    KoinKt.doInitKoin() 
+    basketHandler = BasketHandlerInstance.shared.instance
+    basketHandler.pushProductsToRetailerBasket(func: pushProductsToYourBasket)
     // CODE
   }
 

@@ -8,6 +8,7 @@ object RecipeDetailsText {
     var cookTime: String = Text.cookTime
     var checkBasketPreview: String = Text.checkBasketPreview
     var ingredient: String= Text.ingredient
+    var moreInfo = Text.moreInfo
     var prepTime: String = Text.prepTime
     var restingTime: String= Text.restingTime
     var steps: String = Text.steps

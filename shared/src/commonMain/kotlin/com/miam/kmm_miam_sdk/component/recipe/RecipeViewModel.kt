@@ -2,8 +2,6 @@ package com.miam.kmm_miam_sdk.component.recipe
 
 import com.miam.kmm_miam_sdk.base.mvi.*
 
-import com.miam.kmm_miam_sdk.domain.interactors.AddRecipeUseCase
-import com.miam.kmm_miam_sdk.domain.interactors.GetRecipeUseCase
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 
@@ -22,11 +20,11 @@ open class RecipeViewModel :
     BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in Pricing view $exception")
+            _, exception ->
+                LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
+                //setEvent(RecipeContract.Event.Error)
     }
 
-    private val getRecipeUseCase: GetRecipeUseCase by inject()
-    private val addRecipeUseCase: AddRecipeUseCase by inject()
     private val groceriesListStore: GroceriesListStore by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
@@ -49,7 +47,8 @@ open class RecipeViewModel :
             isInViewport = false,
             tabState = TabEnum.INGREDIENT,
             activeStep = 0,
-            recipeLoaded = false
+            recipeLoaded = false,
+            isLiked = false
         )
     }
 
@@ -78,7 +77,8 @@ open class RecipeViewModel :
             RecipeContract.Event.IncreaseGuest -> addGuest()
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
-            RecipeContract.Event.Retry -> recipeId?.let { getRecipe(it) }
+            RecipeContract.Event.OnToggleLike -> toggleLike()
+            RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty)  }
         }
     }
 
@@ -139,12 +139,9 @@ open class RecipeViewModel :
 
     private fun addOrAlterRecipe() {
         launch(coroutineHandler) {
-            addRecipeUseCase.execute(
-                recipe.copy(
-                    attributes = recipe.attributes!!.copy(
-                        numberOfGuests = uiState.value.guest
-                    )
-                )
+            groceriesListStore.dispatch(
+                GroceriesListAction.AlterRecipeList(
+                    recipe.id , uiState.value.guest)
             )
             setState { copy(isInCart = true) }
         }
@@ -174,17 +171,18 @@ open class RecipeViewModel :
         this.recipeId = recipeId
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
-            val recipe = getRecipeUseCase.execute(recipeId)
+            val recipe = recipeRepositoryImp.getRecipeById(recipeId)
             setRecipe(recipe)
         }
-        // TODO manage errors
     }
 
     private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
         LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
+        setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler){
             pointOfSaleStore.observeState().value.idSupplier?.let {
-                val recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
+                var recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
+                recipe = recipeRepositoryImp.addRecipeLike(recipe)
                 setRecipe(recipe)
             }
         }
@@ -196,7 +194,8 @@ open class RecipeViewModel :
                 recipeState = BasicUiState.Success(recipe),
                 guest = getGuest(recipe),
                 isInCart = checkIsInCart(),
-                recipeLoaded = true
+                recipeLoaded = true,
+                isLiked = recipe.recipeLike?.attributes?.isPast == false
             )
         }
         this.recipe = recipe
@@ -214,10 +213,12 @@ open class RecipeViewModel :
         return recipe.attributes!!.numberOfGuests ?: 4
     }
 
-    private fun initIngredientsString() {
-        var ingredientsConcatName = ""
-        if (recipe != null) {
-
+    private fun toggleLike(){
+        // TODO : make it loading and manage it on success with invokeOnCompletion
+        setState { copy(isLiked =  !currentState.isLiked) }
+        val currentRecipe = this.recipe
+        launch(coroutineHandler){
+            setRecipe(recipeRepositoryImp.toggleLike(currentRecipe))
         }
     }
 

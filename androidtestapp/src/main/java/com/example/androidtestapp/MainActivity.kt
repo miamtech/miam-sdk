@@ -22,16 +22,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
-import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
+import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmm_miam_sdk.handler.Basket.BasketHandlerInstance
+import com.miam.kmm_miam_sdk.handler.ContextHandlerInstance
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
@@ -54,12 +59,16 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 ) {
 
     private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in main activity $exception")
+            _, exception -> println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
 
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
-    private val basketHandler = BasketHandler()
+    private lateinit var basketHandler: BasketHandler
 
+    private val recipeloader:  @Composable () -> Unit = { Box(
+        Modifier
+            .size(40.dp)
+            .background(Color.Blue)) }
 
     private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look : () -> Unit, buy: () -> Unit) -> Unit =
         { recipe: Recipe, vmRecipe: RecipeViewModel,look : () -> Unit, buy: () -> Unit ->
@@ -102,11 +111,14 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
 
 
+
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         initKoin{
             androidContext(this@MainActivity)
@@ -114,24 +126,47 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 KoinInitializer.miamModuleList
             )
         }
+
+        basketHandler = BasketHandlerInstance.instance
+        LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
+        launch {
+            ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
+                LogHandler.info("I know you are readdy !!! $it")
+            }
+        }
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
-        PointOfSaleHandler.updateStoreId("35290")
+        // this set on inexisting pos will be cancelled by second one
+        PointOfSaleHandler.updateStoreId("35291")
         PointOfSaleHandler.setSupplier(7)
+        launch {
+            delay(200)
+            PointOfSaleHandler.updateStoreId("35290")
+        }
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
         setContent {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                content(retailerBasketSubject)
-                recipes(this@MainActivity)
-            }
+            var isFavoritePage by remember { mutableStateOf(false) }
+            Column() {
+                Button(onClick = {isFavoritePage= !isFavoritePage}) {
+                    Text("Toggle favorite")
+                }
 
+                if(isFavoritePage){
+                    FavoritePage(this@MainActivity).Content()
+                } else {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        content(retailerBasketSubject)
+                        recipes(this@MainActivity)
+                    }
+                }
+            }
         }
         initTemplate()
     }
@@ -174,7 +209,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
             }
             Divider()
-
         }
     }
 
@@ -188,17 +222,17 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         recipe2.bind(criteria = RandomCriteria())
         recipe3.bind(recipeId = "1")
 
-        Column() {
+        Column {
+            MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
         }
-
-
     }
 
     private fun initTemplate(){
-        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+   /*     Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        Template.recipeLoaderTemplate = recipeloader*/
     }
 
     private fun RandomCriteria() :SuggestionsCriteria{
@@ -225,14 +259,15 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun setListenToRetailerBasket(basketHandler: BasketHandler) {
-        basketHandler.listenToRetailerBasket = ::initBasketListener
+        basketHandler.setListenToRetailerBasket(::initBasketListener)
+        basketHandler.pushProductsToMiamBasket(retailerBasketSubject.value.items.map { product -> coursesUProductTORetailerProduct(product) })
     }
 
-    private fun initBasketListener(callback: (products: List<RetailerProduct>) -> Unit) {
+    private fun initBasketListener() {
         launch(coroutineHandler) {
             retailerBasketSubject.collect {
-                print("DEMO basket EMT")
-                callback(it.items.map { product -> coursesUProductTORetailerProduct(product)  })
+                LogHandler.debug("Demo basket emit")
+                basketHandler.pushProductsToMiamBasket(it.items.map { product -> coursesUProductTORetailerProduct(product) })
             }
         }
     }
@@ -259,8 +294,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun setPushProductToBasket(basketHandler: BasketHandler) {
-        basketHandler.pushProductsToBasket = ::pushProductToRetailer
-
+        basketHandler.setPushProductsToRetailerBasket(::pushProductToRetailer)
     }
 
     private fun pushProductToRetailer(coursesUProducts: List<RetailerProduct>){
