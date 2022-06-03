@@ -28,15 +28,16 @@ struct Dialog: View {
     
     func goToDetail(vmRecipe :RecipeViewModel){
         viewModel.setEvent(event:
-               RouterContractEvent.GoToDetail(
-                vm: vmRecipe
+               RouterOutletContractEvent.GoToDetail(
+                vm: vmRecipe,
+                withFooter: false
                )
            )
        }
 
        func goToPreview(recipeId: String ,vmRecipe: RecipeViewModel) {
            viewModel.setEvent(event:
-               RouterContractEvent.GoToPreview(
+                                RouterOutletContractEvent.GoToPreview(
                 recipeId: recipeId,
                 vm: vmRecipe
                )
