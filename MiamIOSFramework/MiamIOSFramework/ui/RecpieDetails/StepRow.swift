@@ -2,40 +2,57 @@
 //  StepRow.swift
 //  MiamIOSFramework
 //
-//  Created by John on 12/05/2022.
+//  Created by miam on 12/05/2022.
 //
 
 import SwiftUI
+import shared
 
 struct StepRow: View {
+    
+    private var index : Int
+    private var step : RecipeStep
+    private var onToogleCheckbox : () -> ()
+    
+    @SwiftUI.State var checkState:Bool = false
+    
+    init(index : Int, step : RecipeStep, isCheck: Bool = false){
+        self.index = index
+        self.step = step
+        self.onToogleCheckbox = {}
+        checkState = isCheck
+    }
+    
     var body: some View {
         HStack(spacing: 10.0) {
             ZStack {
-                Text("1")
+                Circle()
+                    .fill(MiamColor.sharedInstance.primaryText)
+                    .frame(width: 35.0, height: 35.0)
+                Text(String(index))
                     .foregroundColor(MiamColor.sharedInstance.white)
+                    .frame( alignment: .center)
             }
-            .frame(width: 35.0, height: 35.0, alignment: .center)
-            .background(MiamColor.sharedInstance.primaryText).cornerRadius(17.5)
-            VStack {
-                Text("40 scLkj haskdkjahsdsdasasdd")
+            Text(step.attributes!.description.description)
                     .foregroundColor(MiamColor.sharedInstance.black20)
                     .font(.system(size: 16, weight: .regular, design: .default))
                     .multilineTextAlignment(.leading)
                     .padding(Dimension.sharedInstance.mPadding)
-                    .frame(maxWidth: .infinity)
-            }.frame(maxWidth: .infinity)
-            HStack {
-                
-            }
-            .frame(width: 30.0, height: 30.0, alignment: .leading)
-            .border(MiamColor.sharedInstance.black, width: 1.0)
+            
+            Button(action:
+                        {
+                            self.checkState = !self.checkState
+                    
+                        }) {
+                        ZStack(alignment: .center) {
+                               Rectangle()
+                                        .fill(self.checkState ? Color.green : Color.red)
+                                        .frame(width:20, height:20, alignment: .center)
+                                        .cornerRadius(5)
+                        }
+                    }
+                    .foregroundColor(Color.white)
         }
-        .frame(maxWidth: .infinity)
-    }
-}
-
-struct StepRow_Previews: PreviewProvider {
-    static var previews: some View {
-        StepRow()
+       
     }
 }
