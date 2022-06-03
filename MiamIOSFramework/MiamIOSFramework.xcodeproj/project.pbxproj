@@ -187,6 +187,8 @@
 				0B9AA67228216B31007D6C8A /* RecipeDetail.swift */,
 			);
 			path = RecipeDetail;
+			sourceTree = "<group>";
+		};
 		521D6457283230B90092AC52 /* ProductView */ = {
 			isa = PBXGroup;
 			children = (
