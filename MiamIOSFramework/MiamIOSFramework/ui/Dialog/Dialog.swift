@@ -57,7 +57,7 @@ struct Dialog: View {
             }
             switch viewModel.content {
             case RouterContent.recipeDetail : RecipeDetail()
-            case RouterContent.basketPreview : BasketPreview()
+            case RouterContent.basketPreview : BasketPreviewView()
             default: HStack{}
                 
             }
