@@ -29,17 +29,7 @@ public struct BasketPreviewView: View {
                 Spacer()
             }.frame(width: .infinity, height: 50, alignment: .leading)
             
-            //Divider
-            HStack {
-                HStack  {
-                    
-                }.frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading)
-            }.background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
+            Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
             
             //Product View
             VStack(alignment: .leading) {
@@ -94,19 +84,7 @@ public struct BasketPreviewView: View {
             }.padding().background(MiamColor.sharedInstance.lightPrimaryBg)
                 .padding(.top, -8)
             
-            //Divider
-            HStack {
-                HStack  {
-                    
-                }.frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading)
-            }.background(MiamColor.sharedInstance.borderBottom)
-                .frame(height: 1.0, alignment: .leading)
-                .padding(.top, -8)
+            Divider().background(MiamColor.sharedInstance.borderBottom).padding(.top, -8)
             
             //List
             ScrollView {
