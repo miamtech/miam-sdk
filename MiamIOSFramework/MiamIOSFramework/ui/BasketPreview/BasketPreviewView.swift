@@ -77,30 +77,12 @@ public struct BasketPreviewView: View {
                         Spacer()
                         
                         // Plus Minus View
-                        HStack {
-                            Button(action: {
-                                
-                            }) {
-                                Image("Minus")
-                                    .foregroundColor(MiamColor.sharedInstance.white)
-                            }.padding(.leading, Dimension.sharedInstance.lPadding)
-                                .frame(width: 20.0, height: 20.0, alignment: .leading)
-                            
-                            Text("4 pers.")
-                                .foregroundColor(MiamColor.sharedInstance.white)
-                                .font(.system(size: 13, weight: .bold, design: .default))
-                                .padding(Dimension.sharedInstance.lPadding)
-                            
-                            Button(action: {
-                                
-                            }) {
-                                Image("Plus")
-                                    .foregroundColor(MiamColor.sharedInstance.white)
-                            }.padding(.trailing, Dimension.sharedInstance.lPadding)
-                                .frame(width: 20.0, height: 20.0, alignment: .trailing)
-                        }.frame(width: 140.0, height: 50.0, alignment: .center)
-                            .background(MiamColor.sharedInstance.primaryText)
-                            .cornerRadius(25.0)
+                        CounterView(count: 4, isDisable: false) {
+                            // TODO: increase. Use CountChange event?
+                        } decrease: {
+                            // TODO: decrease
+                        }
+
                     }.frame(
                         minWidth: 0,
                         maxWidth: .infinity,
