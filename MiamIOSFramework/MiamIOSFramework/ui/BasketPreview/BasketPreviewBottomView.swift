@@ -9,19 +9,26 @@ import SwiftUI
 
 
 internal struct BasketPreviewBottomView: View {
+    let removeFromBasketAction: () -> Void
+    let continueShoppingAction: () -> Void
+
     var body: some View {
         HStack {
             ZStack(alignment: .center) {
-                Text("Retirer du panier")
-                    .foregroundColor(MiamColor.sharedInstance.bodyText)
-                    .font(.system(size: 16.0, weight: .regular, design: .default))
+                Button(action: {
+                    removeFromBasketAction()
+                }) {
+                    Text("Retirer du panier").font(.system(size: 16.0, weight: .regular, design: .default))
+                }.foregroundColor(MiamColor.sharedInstance.bodyText)
+
             }.padding(.horizontal, Dimension.sharedInstance.mPadding).frame(minWidth: 155.0)
 
             ZStack(alignment: .center) {
-                Text("Continuer mes courses")
-                    .foregroundColor(MiamColor.sharedInstance.white
-                    ).padding(.horizontal, Dimension.sharedInstance.sPadding)
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                Button(action: {
+                    continueShoppingAction()
+                }) {
+                    Text("Continuer mes achats").font(.system(size: 16.0, weight: .bold, design: .default))
+                }.foregroundColor(MiamColor.sharedInstance.white).padding(.horizontal, Dimension.sharedInstance.sPadding)
             }.frame(maxWidth: .infinity)
                 .frame(height: 64.0)
                 .background(MiamColor.sharedInstance.primaryText)
