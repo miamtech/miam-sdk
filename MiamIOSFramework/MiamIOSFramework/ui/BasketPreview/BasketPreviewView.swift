@@ -126,8 +126,12 @@ public struct BasketPreviewView: View {
                 }.padding(.horizontal, Dimension.sharedInstance.lPadding)
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
             }
-            
-            BasketPreviewBottomView()
+
+            BasketPreviewBottomView {
+
+            } continueShoppingAction: {
+                
+            }
         }
     }
 }
