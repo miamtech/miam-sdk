@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
-class BasketPreviewViewModel(val recipeId: String?):
+open class BasketPreviewViewModel(val recipeId: String?):
     BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
