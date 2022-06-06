@@ -7,8 +7,13 @@
 
 import SwiftUI
 
-struct ProductView: View {
-    var body: some View {
+public struct BasketPreviewView: View {
+
+    public init() {
+        
+    }
+
+    public var body: some View {
         VStack {
             // Top Bar
             HStack {
@@ -124,7 +129,7 @@ struct ProductView: View {
             //List
             ScrollView {
                 ForEach([""], id: \.self) { ingr in
-                    ProductRow()
+                    BasketPreviewRow()
                 }
                 HStack {
                     Text(MiamText.sharedInstance.mealRowAlready)
@@ -183,9 +188,9 @@ struct ProductView: View {
     }
 }
 
-struct ProductView_Previews: PreviewProvider {
+struct BasketPreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductView()
+        BasketPreviewView()
     }
 }
 
