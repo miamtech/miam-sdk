@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProductRow: View {
+struct BasketPreviewRow: View {
     @State var stepperValue: Float = 0.0
 
     var body: some View {
@@ -114,7 +114,7 @@ struct ProductRow: View {
 
 struct ProductRow_Previews: PreviewProvider {
     static var previews: some View {
-        ProductRow()
+        BasketPreviewRow()
     }
 }
 
