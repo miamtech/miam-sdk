@@ -10,11 +10,13 @@ import SwiftUI
 struct BasketPreviewRow: View {
     @State var stepperValue: Float = 0.0
 
+    private let productImageDimensions = CGSize(width: 90, height: 90)
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).aspectRatio( contentMode: .fit)
-                    .frame(width: 120, height: 120, alignment: .topLeading)
+                AsyncImage(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!,
+                           placeholder: { ProgressView() }).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                 
                 VStack (alignment: .leading){
                     
