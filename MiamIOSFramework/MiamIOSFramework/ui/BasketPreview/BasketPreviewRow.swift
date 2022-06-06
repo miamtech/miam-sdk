@@ -74,31 +74,11 @@ struct BasketPreviewRow: View {
                     Spacer()
                     
                     // Plus Minus View
-                    HStack {
-                        Button(action: {
-                            
-                        }) {
-                            Image("Minus")
-                                .foregroundColor(MiamColor.sharedInstance.white)
-                        }.padding(.leading, Dimension.sharedInstance.mPadding)
-                            .frame(width: 20.0, height: 20.0, alignment: .leading)
-                        
-                        Text("1")
-                            .foregroundColor(MiamColor.sharedInstance.white)
-                            .font(.system(size: 13, weight: .medium, design: .default))
-                            .padding(Dimension.sharedInstance.lPadding)
-                        
-                        Button(action: {
-                            
-                        }) {
-                            Image("Plus")
-                                .foregroundColor(MiamColor.sharedInstance.white)
-                        }
-                        .padding(.trailing, Dimension.sharedInstance.mPadding)
-                            .frame(width: 20.0, height: 20.0, alignment: .trailing)
+                    CounterView(count: 1, isDisable: false) {
+                        ()
+                    } decrease: {
+                        ()
                     }
-                    .frame(width: 120.0, height: 50.0, alignment:.center)
-                    .background(MiamColor.sharedInstance.primaryText).cornerRadius(25.0)
                 }
             }
             
