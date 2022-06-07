@@ -32,7 +32,7 @@ struct IngredientRow: View {
             Text(qty)
                 .foregroundColor(MiamColor.sharedInstance.black)
                 .font(.system(size: 16, weight: .bold, design: .default))
-                .cornerRadius(25.0).padding(Dimension.sharedInstance.mPadding)
+                .padding(Dimension.sharedInstance.mPadding)
         }
     }
 }

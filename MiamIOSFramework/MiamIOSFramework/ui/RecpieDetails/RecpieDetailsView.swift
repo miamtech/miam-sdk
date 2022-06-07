@@ -11,12 +11,19 @@ import shared
 public struct RecpieDetailsView: View {
     
     public var recipeId: String?
+    public var close: () -> ()
     
+    @ObservedObject var viewModel: RecipeCardVM
     
-    @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
-    
-    public init(recipeId: String) {
+    public init(recipeId: String, close: @escaping () -> ()) {
         self.recipeId = recipeId
+        self.close = close
+        viewModel = RecipeCardVM()
+    }
+    
+    public init(vmRecipe: RecipeCardVM, close: @escaping () -> ()) {
+        self.close = close
+        self.viewModel = vmRecipe
     }
     
     public var body: some View {
@@ -26,13 +33,12 @@ public struct RecpieDetailsView: View {
                     VStack{
                         if(viewModel.recipe != nil ){
                             VStack {
-                                Spacer(minLength: 50)
                                 AsyncImage(
                                     url: URL(
                                         string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                     )! ,
                                     placeholder: { Text("loading ...")}
-                                ).frame(height: 250)
+                                ).frame(height: 250).padding(.top,50)
                                 HStack {
                                     //TODO Put logic into like button component
                                     Button(action: {
@@ -52,8 +58,6 @@ public struct RecpieDetailsView: View {
                                     }
                                     .frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.greySurface).cornerRadius(25)
                                 }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
-                                Spacer(minLength: 16)
-                                
                                 Text(viewModel.recipe?.attributes?.title ?? "")
                                     .foregroundColor(MiamColor.sharedInstance.black)
                                     .font(.system(size: 20, weight: .heavy, design: .default))
@@ -139,7 +143,10 @@ public struct RecpieDetailsView: View {
                                         StepRow(
                                             index: i,
                                             step: viewModel.recipe!.relationships!.recipeSteps!.data[i],
-                                            isCheck: viewModel.currentState.activeStep >= i
+                                            isCheck: viewModel.currentState.activeStep <= i,
+                                            onToogleCheckbox:  {
+                                                viewModel.setEvent(event: RecipeContractEvent.SetActiveStep(stepIndex: Int32(i)))
+                                            }
                                         )
                                     }
                                 }.padding(.vertical, Dimension.sharedInstance.lPadding)
@@ -149,7 +156,7 @@ public struct RecpieDetailsView: View {
                     if(viewModel.recipe != nil ){
                         RecipeDetailsHeader(recipe: viewModel.recipe!, closeDetail: {})
                     }
-                }.edgesIgnoringSafeArea(.vertical).onAppear(perform: {
+                }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(
                             event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))

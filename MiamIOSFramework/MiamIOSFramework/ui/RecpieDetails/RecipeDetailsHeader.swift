@@ -66,7 +66,7 @@ struct RecipeDetailsHeader: View {
                     height: 50.0,
                     alignment: .topLeading
                 )
-                .padding(.top,30)
+                .padding(.top,50)
                 .padding(.horizontal,16)
                 .background(MiamColor.sharedInstance.white)
                 .offset(y: gr.frame(in: .global).origin.y < 0 // Is it going up?

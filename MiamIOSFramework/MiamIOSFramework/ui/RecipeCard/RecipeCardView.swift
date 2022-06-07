@@ -13,7 +13,10 @@ public struct RecipeCardView: View {
     public var recipeId: String?
     public var criteria: SuggestionsCriteria?
     
+    @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
+    @SwiftUI.State var showingPopup = false
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
+   
     
     public init(recipeId: String) {
         self.recipeId = recipeId
@@ -38,7 +41,9 @@ public struct RecipeCardView: View {
                                     string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                 )! ,
                                 placeholder: { Text("loading ...")}
-                            ).frame(height: 245)
+                            ).frame(height: 245).onTapGesture {
+                                showingPopup = true
+                            }
                             HStack(alignment: .center) {
                                 HStack(){
                                     Image("ideerepas")
@@ -68,7 +73,10 @@ public struct RecipeCardView: View {
                             .font(.system(size: 16.0, weight: .bold, design: .default))
                             .padding(Dimension.sharedInstance.lPadding)
                         Button(RecipeCardText.sharedInstance.addRecipe) {
-                            //TODO add on click action
+                        action: do {
+                            initialDialogScreen = RouterContent.recipeDetail
+                            showingPopup = true
+                        }
                         }.foregroundColor(MiamColor.sharedInstance.white)
                             .frame(minHeight: 50.0, maxHeight: 50.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
@@ -78,7 +86,13 @@ public struct RecipeCardView: View {
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
                         
                     }
+                   
                     
+                }.popover(isPresented: $showingPopup) {
+                    Dialog(
+                        close: { showingPopup = false },
+                        initialRoute : initialDialogScreen
+                    )
                 }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(
@@ -89,10 +103,13 @@ public struct RecipeCardView: View {
                     }
                     
                 }
+                           
+                                           
                 ).cornerRadius(15).clipped().overlay(
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
                 ).padding(16)
+               
             }
         }
     }

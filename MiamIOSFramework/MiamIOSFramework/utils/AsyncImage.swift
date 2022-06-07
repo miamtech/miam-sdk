@@ -50,7 +50,7 @@ struct AsyncImage<Placeholder:View> : View {
         Group {
             if loader.image != nil {
                 GeometryReader { geo in
-                    Image(uiImage: loader.image!).resizable().scaledToFill().frame(width: geo.size.width * 1, height: 245)
+                    Image(uiImage: loader.image!).resizable().scaledToFill().frame( height: 245)
                 }
             } else {
                 placeholder
