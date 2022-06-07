@@ -68,12 +68,12 @@ object Template {
     @Composable() (recipe : Recipe) -> Unit
     ) ? = null
 
-    var recipeDetailStepsTemplate : (@Composable() (
+    var recipeDetailIngredientTemplate : (@Composable() (
         recipe: Recipe,
         vmRecipe : RecipeViewModel
             ) -> Unit )? = null
 
-    var recipeDetailIngredientTemplate :  (@Composable() (
+    var recipeDetailStepsTemplate :  (@Composable() (
         steps : List<RecipeStep>,
         vmRecipe : RecipeViewModel
             ) -> Unit )? =  null
