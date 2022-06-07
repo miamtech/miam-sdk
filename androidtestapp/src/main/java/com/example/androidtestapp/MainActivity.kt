@@ -1,5 +1,6 @@
 package com.example.androidtestapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 
 import android.os.Bundle
@@ -116,6 +117,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
             }
         }
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -149,14 +151,42 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         initFakeBasket()
         setContent {
             var isFavoritePage by remember { mutableStateOf(false) }
+            var isTagPage by remember { mutableStateOf(false) }
             Column() {
-                Button(onClick = {isFavoritePage= !isFavoritePage}) {
-                    Text("Toggle favorite")
+                Row(){
+                    Button(onClick = {
+                        isFavoritePage= !isFavoritePage
+                        isTagPage = false
+                    }) {
+                        Text("Toggle favorite")
+                    }
+                    Button(onClick = {
+                        isTagPage= !isTagPage
+                        isFavoritePage= false}) {
+                        Text("Toggle tags")
+                    }
                 }
 
                 if(isFavoritePage){
                     FavoritePage(this@MainActivity).Content()
-                } else {
+                } else if(isTagPage) {
+
+                    var miamReadyState by remember { mutableStateOf(false) }
+
+//                    launch {
+//                        ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
+//                            miamReadyState = true
+//                        }
+//                    }
+                    val tag = Tag(this@MainActivity)
+//                    if(miamReadyState){
+                        println("coco ready")
+                        tag.bind("19790")
+                        tag.Content()
+//                    }
+
+                }
+                   else {
                     Column(
                         Modifier
                             .fillMaxWidth()
@@ -218,15 +248,12 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         val recipe1 =  RecipeView(context)
         val recipe2 =  RecipeView(context)
         val recipe3 =  RecipeView(context)
-        val tag = Tag(context)
 
         recipe1.bind(recipeId = "305")
         recipe2.bind(criteria = RandomCriteria())
         recipe3.bind(recipeId = "1")
-        tag.bind("970417")
 
         Column {
-            tag.Content()
             MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()

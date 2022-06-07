@@ -113,7 +113,7 @@ class Tag @JvmOverloads constructor(
                     AllRecipeLinkDialog(openRecipeLinkDialog, recipes, goToDetails)
                 }
                 Clickable(
-                    onClick = {},
+                    onClick = { goToDetails(recipes[0])},
                     children = {
                         Box() {
                             Text(

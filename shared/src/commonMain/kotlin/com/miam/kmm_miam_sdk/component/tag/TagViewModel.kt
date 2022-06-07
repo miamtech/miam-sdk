@@ -41,10 +41,14 @@ open class TagViewModel(private val vmRouter: RouterOutletViewModel) :
             setState { copy(recipeList = BasicUiState.Empty) }
             return
         }
-
+        LogHandler.info(" recipe count  ${gl.recipes.size}")
         val recipesWithIngredient = gl.recipes.filter { recipe ->
-            recipe.relationships!!.ingredients!!.data.any { ingredient -> ingredient.id == ingredientId }
+
+            recipe.relationships!!.ingredients!!.data.any { ingredient ->
+                LogHandler.info("getting belonging recipes for ${ingredient.attributes?.name}/${ingredient.id}")
+                ingredient.id == ingredientId }
         }
+        LogHandler.info(" belong to ${recipesWithIngredient.size}")
         val newState = if (recipesWithIngredient.isEmpty()) BasicUiState.Empty else BasicUiState.Success(recipesWithIngredient)
         setState { copy(recipeList = newState) }
     }
