@@ -58,7 +58,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             groceriesListStore.observeSideEffect().collect {
                 handleGLChange(it)
             }
-
         }
         launch(coroutineHandler) {
             listenguestSubjectChanges()
