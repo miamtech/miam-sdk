@@ -71,6 +71,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
     }
 
     private fun sendUpdateToRetailer(itemsToAdd: List<RetailerProduct>) {
+        LogHandler.info("Miam will sendUpdateToRetailer $itemsToAdd")
         if (itemsToAdd.isEmpty()) {
             return
         }
@@ -84,6 +85,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
     }
 
     private fun sendUpdateToMiam(entriesToRemove : List<AlterQuantityBasketEntry>) {
+        LogHandler.info("Miam will sendUpdateToMiam $entriesToRemove")
         if (entriesToRemove.isEmpty()){
             state.value = state.value.copy(isProcessingRetailerEvent = false)
             return
@@ -110,7 +112,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
     }
 
     fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
-        LogHandler.info("Retailer basket changed $retailerBasket")
+        LogHandler.info("Miam Retailer basket changed $retailerBasket")
         if(!isReady()) return initFirstRetailerBasket(retailerBasket)
 
         processRetailerEvent(retailerBasket)
