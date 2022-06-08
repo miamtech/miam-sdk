@@ -3,9 +3,18 @@ package com.miam.kmm_miam_sdk.component.router
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
 import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 
 open class RouterOutletViewModel:
     BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
+
+    fun goToDetail(vmRecipe : RecipeViewModel, showDetailsFooter: Boolean = true){
+        setEvent(
+            RouterOutletContract.Event.GoToDetail(
+                vmRecipe, showDetailsFooter
+            )
+        )
+    }
 
     override fun createInitialState(): RouterOutletContract.State =
         RouterOutletContract.State(

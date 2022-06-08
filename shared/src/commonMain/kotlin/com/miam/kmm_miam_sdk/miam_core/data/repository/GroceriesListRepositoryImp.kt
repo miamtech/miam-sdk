@@ -28,7 +28,8 @@ class GroceriesListRepositoryImp (
     }
 
     private suspend fun getMissingRecipes(gl: GroceriesList, existingRecipes: List<Recipe> = emptyList()): GroceriesList {
-        val missingRecipes = groceriesListDataSource.getRecipeByIds(gl.missingRecipesIds(existingRecipes))
+        // need ingredients for tags to know to which recipes it belongs
+        val missingRecipes = groceriesListDataSource.getRecipeByIds(gl.missingRecipesIds(existingRecipes), included = listOf("ingredients"))
         gl.rebuildRecipesRelationships(missingRecipes, existingRecipes)
         return gl
     }

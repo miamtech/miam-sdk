@@ -66,6 +66,10 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     override fun observeSideEffect(): Flow<BasketEffect> = sideEffect
 
+    fun getBasket(): Basket? {
+        return state.value.basket
+    }
+
     override fun dispatch(action: BasketAction): Job {
         when (action) {
             is BasketAction.RefreshBasket -> {
