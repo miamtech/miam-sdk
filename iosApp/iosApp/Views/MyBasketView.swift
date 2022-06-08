@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct MyBasketView: View {
-    @ObservedObject var basket: MyBasket
+    @ObservedObject var basket: MyBasket = MyBasket.shared
 
     var body: some View {
         List{

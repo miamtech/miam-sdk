@@ -3,7 +3,7 @@ import MiamIOSFramework
 import shared
 
 struct ContentView: View {
-    @ObservedObject var basket: MyBasket = MyBasket(items: [])
+    let applicationBasket: MyBasket = MyBasket.shared
 
     var criteria = SuggestionsCriteria(
         shelfIngredientsIds: ["5319173","970417"],
@@ -33,24 +33,21 @@ struct ContentView: View {
                         Text("Remove")
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-
-                }
             })
         }
     }
 
     private func addRandomProduct() {
         if let product = MyProductsRepository.sharedInstance.getRandomProduct() {
-            basket.add(addedProduct: product)
+            applicationBasket.add(addedProduct: product)
         }
     }
     
     private func removeRandomProduct(){
-        guard let product = basket.items.randomElement() else {
+        guard let product = applicationBasket.items.randomElement() else {
             return
         }
-        basket.remove(removedProduct: product)
+        applicationBasket.remove(removedProduct: product)
     }
     
     struct ContentView_Previews: PreviewProvider {

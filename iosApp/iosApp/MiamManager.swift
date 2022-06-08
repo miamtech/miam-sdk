@@ -54,9 +54,9 @@ public class MiamManager {
     private func pushProductToBasket(products: Array<RetailerProduct>){
         retailerProductsToYourProducts(products: products).forEach( {
             if($0.quantity == 0){
-                AppBasket.sharedInstance.basket.remove(removedProduct: $0)
+                MyBasket.shared.remove(removedProduct: $0)
             } else {
-                AppBasket.sharedInstance.basket.add(addedProduct: $0)
+                MyBasket.shared.add(addedProduct: $0)
             }
           }
         )
@@ -75,7 +75,7 @@ public class MiamManager {
     private func initBasketListener(
        
     ) {
-        AppBasket.sharedInstance.basket.$items.sink {
+        MyBasket.shared.$items.sink {
          print($0)
         //TODO push product to basket basketHandler.pushProductsToMiamBasket(retailerBasket: [])
              

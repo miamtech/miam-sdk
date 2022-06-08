@@ -9,9 +9,10 @@
 import Foundation
 
 class MyBasket: ObservableObject {
+    static let shared = MyBasket(items: [])
     @Published var items = [MyProduct]()
 
-    init(items: Array<MyProduct>) {
+    private init(items: Array<MyProduct>) {
         self.items = items
     }
 
