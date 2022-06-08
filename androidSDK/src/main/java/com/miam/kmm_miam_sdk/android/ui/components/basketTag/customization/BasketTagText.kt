@@ -1,8 +1,8 @@
-package com.miam.kmm_miam_sdk.android.ui.components.tag.customization
+package com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization
 
 import com.miam.kmm_miam_sdk.android.ressource.Text
 
-object TagText {
+object BasketTagText {
     var tagPreRecipeCountText =  Text.tagPreRecipeCountText
     var tagPostRecipeCountText = Text.tagPostRecipeCountText
 }

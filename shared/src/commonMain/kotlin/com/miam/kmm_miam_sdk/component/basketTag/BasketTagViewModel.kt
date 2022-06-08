@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.component.tag
+package com.miam.kmm_miam_sdk.component.basketTag
 
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
@@ -13,8 +13,8 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class TagViewModel(private val vmRouter: RouterOutletViewModel) :
-    BaseViewModel<TagContract.Event, TagContract.State, TagContract.Effect>() {
+open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
+    BaseViewModel<BasketTagContract.Event, BasketTagContract.State, BasketTagContract.Effect>() {
 
     private val basketStore: BasketStore by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
@@ -31,15 +31,15 @@ open class TagViewModel(private val vmRouter: RouterOutletViewModel) :
         vmRouter.goToDetail(vmRecipe,false)
     }
 
-    override fun createInitialState(): TagContract.State =
-        TagContract.State(
+    override fun createInitialState(): BasketTagContract.State =
+        BasketTagContract.State(
             recipeList = BasicUiState.Loading,
         )
 
 
-    override fun handleEvent(event: TagContract.Event) {
+    override fun handleEvent(event: BasketTagContract.Event) {
         when (event) {
-         is TagContract.Event.SetRetailerProductId -> setItemExtId(event.productId)
+         is BasketTagContract.Event.SetRetailerProductId -> setItemExtId(event.productId)
         }
     }
 
@@ -50,10 +50,8 @@ open class TagViewModel(private val vmRouter: RouterOutletViewModel) :
         }?.flatMap { be ->
           be.attributes?.recipeIds?.map { it.toString() }?: listOf()
         }?: listOf()
-        LogHandler.info("recipe count  ${recipeIds.size}")
 
         if (recipeIds.isEmpty()) {
-
             setState { copy(recipeList = BasicUiState.Empty) }
             return
         }

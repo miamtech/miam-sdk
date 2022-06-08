@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.tag
+package com.miam.kmm_miam_sdk.android.ui.components.basketTag
 
 import android.content.Context
 import android.util.AttributeSet
@@ -24,26 +24,26 @@ import com.miam.kmm_miam_sdk.android.theme.Typography.overLine
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagChipsBorderColor
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagChipsTextColor
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagDialogRecipeLink
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagExtraCountBubbleBorder
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagColor.tagExtraCountBubbleText
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagImage.close
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagText.tagPostRecipeCountText
-import com.miam.kmm_miam_sdk.android.ui.components.tag.customization.TagText.tagPreRecipeCountText
-import com.miam.kmm_miam_sdk.component.tag.TagContract
-import com.miam.kmm_miam_sdk.component.tag.TagViewModel
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagChipsBorderColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagChipsTextColor
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagDialogRecipeLink
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagExtraCountBubbleBorder
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagExtraCountBubbleText
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagImage.close
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPostRecipeCountText
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPreRecipeCountText
+import com.miam.kmm_miam_sdk.component.basketTag.BasketTagContract
+import com.miam.kmm_miam_sdk.component.basketTag.BasketTagViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
-class Tag @JvmOverloads constructor(
+class BasketTag @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val fullscreen = RouterOutlet()
-    private val vmTag = TagViewModel(fullscreen.getViewModel())
+    private val vmTag = BasketTagViewModel(fullscreen.getViewModel())
 
     private fun goToDetail(recipe: Recipe){
         vmTag.goToDetail(recipe)
@@ -53,7 +53,7 @@ class Tag @JvmOverloads constructor(
      * Don't delete use by client
      */
     fun bind (retailerProductId: String) {
-        vmTag.setEvent(TagContract.Event.SetRetailerProductId(retailerProductId))
+        vmTag.setEvent(BasketTagContract.Event.SetRetailerProductId(retailerProductId))
     }
 
     @Composable

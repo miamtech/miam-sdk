@@ -41,7 +41,7 @@ import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.ui.components.tag.Tag
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
@@ -165,7 +165,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                     FavoritePage(this@MainActivity).Content()
                 } else if(isTagPage) {
                     if (ContextHandlerInstance.instance.isReady()) {
-                        val tag = Tag(this@MainActivity)
+                        val tag = BasketTag(this@MainActivity)
                         val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
                         if (items.size > 0) {
                             tag.bind(items[items.size - 1].id)

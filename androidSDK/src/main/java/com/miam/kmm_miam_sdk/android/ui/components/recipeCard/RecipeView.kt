@@ -348,7 +348,6 @@ class RecipeView @JvmOverloads constructor(
                             Box(modifier = recipeCardFlagPositionContainer) {
                                     Box(){
                                         Surface (
-
                                             Modifier
                                                 .clip(
                                                     RoundedCornerShape(
@@ -397,8 +396,6 @@ class RecipeView @JvmOverloads constructor(
                                     }
 
                             }
-
-
                         }
                             Clickable(
                                 onClick = { modal.goToDetail(vmRecipe) },

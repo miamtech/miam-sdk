@@ -1,8 +1,8 @@
-package com.miam.kmm_miam_sdk.android.ui.components.tag.customization
+package com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization
 
 import com.miam.kmm_miam_sdk.android.theme.Colors
 
-object TagColor {
+object BasketTagColor {
     var tagChipsBorderColor = Colors.grey
     var tagChipsTextColor = Colors.grey
     var tagExtraCountBubbleBorder = Colors.primary
