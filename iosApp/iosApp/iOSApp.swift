@@ -22,13 +22,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 
 class Basket {
-    @Published var items = [TestProduct]()
+    @Published var items = [MyProduct]()
 
-    init(items: Array<TestProduct>) {
+    init(items: Array<MyProduct>) {
         self.items = items
     }
 
-    func add(addedProduct: TestProduct) -> Void {
+    func add(addedProduct: MyProduct) -> Void {
         
         let results = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }  )
         
@@ -40,7 +40,7 @@ class Basket {
         }
     }
     
-    func remove(removedProduct : TestProduct){
+    func remove(removedProduct : MyProduct){
         let results = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } )
         if(results == nil ){ return }
         items.remove(at: results!)
@@ -49,12 +49,10 @@ class Basket {
 
 
 public class AppBasket {
-    
     public static let sharedInstance = AppBasket()
     let basket = Basket(items:[])
     
     private init(){
         
     }
-    
 }
