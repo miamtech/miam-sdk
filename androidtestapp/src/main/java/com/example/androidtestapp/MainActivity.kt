@@ -67,6 +67,30 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private lateinit var basketHandler: BasketHandler
 
+    private fun initMiam() {
+        initKoin{
+            androidContext(this@MainActivity)
+            modules(
+                KoinInitializer.miamModuleList
+            )
+        }
+
+        basketHandler = BasketHandlerInstance.instance
+        LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
+        launch {
+            ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
+                LogHandler.info("I know you are readdy !!! $it")
+            }
+        }
+        setListenToRetailerBasket(basketHandler)
+        setPushProductToBasket(basketHandler)
+        // this set on inexisting pos will be cancelled by second one
+        PointOfSaleHandler.updateStoreId("35290")
+        PointOfSaleHandler.setSupplier(7)
+        PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
+        UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+    }
+
     private val recipeloader:  @Composable () -> Unit = { Box(
         Modifier
             .size(40.dp)
@@ -111,43 +135,13 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                     Text(text = recipe.attributes!!.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
-
-
-
             }
         }
 
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-        initKoin{
-            androidContext(this@MainActivity)
-            modules(
-                KoinInitializer.miamModuleList
-            )
-        }
-
-        basketHandler = BasketHandlerInstance.instance
-        LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
-        launch {
-            ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
-                LogHandler.info("I know you are readdy !!! $it")
-            }
-        }
-        setListenToRetailerBasket(basketHandler)
-        setPushProductToBasket(basketHandler)
-        // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.updateStoreId("35291")
-        PointOfSaleHandler.setSupplier(7)
-        launch {
-            delay(200)
-            PointOfSaleHandler.updateStoreId("35290")
-        }
-        PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
-        UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        initMiam()
         initFakeBasket()
         setContent {
             var isFavoritePage by remember { mutableStateOf(false) }
@@ -170,21 +164,15 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 if(isFavoritePage){
                     FavoritePage(this@MainActivity).Content()
                 } else if(isTagPage) {
+                    if (ContextHandlerInstance.instance.isReady()) {
+                        val tag = Tag(this@MainActivity)
+                        val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
+                        if (items.size > 0) {
+                            tag.bind(items[items.size - 1].id)
+                            tag.Content()
+                        }
 
-                    var miamReadyState by remember { mutableStateOf(false) }
-
-//                    launch {
-//                        ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
-//                            miamReadyState = true
-//                        }
-//                    }
-                    val tag = Tag(this@MainActivity)
-//                    if(miamReadyState){
-                        println("coco ready")
-                        tag.bind("19790")
-                        tag.Content()
-//                    }
-
+                    }
                 }
                    else {
                     Column(
@@ -203,7 +191,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     @Composable
-    fun content( retailerBasketSubject : MutableStateFlow<ExampleState>){
+    fun content(retailerBasketSubject : MutableStateFlow<ExampleState>){
 
         val state = retailerBasketSubject.asStateFlow().collectAsState()
         Column(

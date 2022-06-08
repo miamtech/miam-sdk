@@ -52,8 +52,8 @@ class Tag @JvmOverloads constructor(
     /**
      * Don't delete use by client
      */
-    fun bind (ingredientId:String) {
-        vmTag.setEvent(TagContract.Event.SetIngredientId(ingredientId))
+    fun bind (retailerProductId: String) {
+        vmTag.setEvent(TagContract.Event.SetRetailerProductId(retailerProductId))
     }
 
     @Composable

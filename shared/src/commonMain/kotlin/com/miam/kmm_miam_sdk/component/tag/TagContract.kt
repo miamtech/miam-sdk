@@ -7,7 +7,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 interface TagContract {
 
     sealed class Event : UiEvent {
-        data class SetIngredientId(val ingredientId: String) : TagContract.Event()
+        data class SetRetailerProductId(val productId: String) : TagContract.Event()
     }
 
     data class State(
