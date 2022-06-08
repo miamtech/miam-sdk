@@ -148,4 +148,11 @@ object Template {
 
     var myMealLoaderTemplate :  (@Composable() () -> Unit)? = null
 
+///////////////////  Tag  //////////////////////////
+
+    var TagTemplate: (@Composable() (
+        recipes: List<Recipe>,
+        showRecipe : (recipe: Recipe) -> Unit
+    ) -> Unit)? = null
+
 }

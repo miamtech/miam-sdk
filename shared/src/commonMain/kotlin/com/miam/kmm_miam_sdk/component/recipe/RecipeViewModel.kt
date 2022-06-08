@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.component.recipe
 
 import com.miam.kmm_miam_sdk.base.mvi.*
+import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
 
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 
 import org.koin.core.component.inject
 
-open class RecipeViewModel :
+open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
@@ -57,7 +58,6 @@ open class RecipeViewModel :
             groceriesListStore.observeSideEffect().collect {
                 handleGLChange(it)
             }
-
         }
         launch(coroutineHandler) {
             listenguestSubjectChanges()
@@ -80,6 +80,10 @@ open class RecipeViewModel :
             RecipeContract.Event.OnToggleLike -> toggleLike()
             RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty)  }
         }
+    }
+
+    fun goToDetail() {
+        routerVM.goToDetail(this)
     }
 
     private fun handleGLChange(gl: GroceriesListEffect) {

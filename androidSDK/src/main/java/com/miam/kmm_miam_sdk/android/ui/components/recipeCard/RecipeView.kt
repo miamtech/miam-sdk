@@ -56,9 +56,9 @@ class RecipeView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr)  {
 
-    private var vmRecipe: RecipeViewModel = RecipeViewModel()
-    private val idRecipeState: MutableState<String?> = mutableStateOf(null)
     private val modal = RouterOutlet()
+    private var vmRecipe: RecipeViewModel = RecipeViewModel(modal.getViewModel())
+    private val idRecipeState: MutableState<String?> = mutableStateOf(null)
 
     fun bind(recipeId: String = "",
              criteria: SuggestionsCriteria? = null,
@@ -320,7 +320,7 @@ class RecipeView @JvmOverloads constructor(
                             Column {
                                 Box(modifier = imageContainer) {
                                     Clickable(
-                                        onClick = { modal.goToDetail(vmRecipe) },
+                                        onClick = { vmRecipe.goToDetail() },
                                         children = {
                                             Image(
                                                 painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
@@ -348,7 +348,6 @@ class RecipeView @JvmOverloads constructor(
                             Box(modifier = recipeCardFlagPositionContainer) {
                                     Box(){
                                         Surface (
-
                                             Modifier
                                                 .clip(
                                                     RoundedCornerShape(
@@ -397,8 +396,6 @@ class RecipeView @JvmOverloads constructor(
                                     }
 
                             }
-
-
                         }
                             Clickable(
                                 onClick = { modal.goToDetail(vmRecipe) },
