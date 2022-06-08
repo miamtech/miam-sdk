@@ -16,20 +16,18 @@ class MyBasket {
     }
 
     func add(addedProduct: MyProduct) -> Void {
-
-        let results = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }  )
-
-        if(results != nil ){
-            // TODO update quantity
+        if let existingProductIndex = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }) {
+            let product = items[existingProductIndex]
+            product.quantity += 1
         } else {
             items.append(addedProduct)
-            self.items = items
         }
     }
 
     func remove(removedProduct : MyProduct){
-        let results = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } )
-        if(results == nil ){ return }
-        items.remove(at: results!)
+        guard let productIndex = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } ) else {
+            return
+        }
+        items.remove(at: productIndex)
     }
 }
