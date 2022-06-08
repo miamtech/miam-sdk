@@ -46,7 +46,7 @@ open class TagViewModel(private val vmRouter: RouterOutletViewModel) :
     private fun setItemExtId(itemExtId: String){
         LogHandler.info("getting belonging recipes for $itemExtId")
         val recipeIds = basketStore.getBasket()?.relationships?.basketEntries?.data?.filter { be ->
-            be.selectedItem?.attributes?.extId == itemExtId
+            be.selectedItem?.attributes?.extId == itemExtId && be.attributes?.groceriesEntryStatus == "active"
         }?.flatMap { be ->
           be.attributes?.recipeIds?.map { it.toString() }?: listOf()
         }?: listOf()
