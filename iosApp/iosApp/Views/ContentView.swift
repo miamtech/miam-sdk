@@ -2,16 +2,9 @@ import SwiftUI
 import MiamIOSFramework
 import shared
 
-
-class ViewModel : ObservableObject {
-    
-    init(){
-    }
-    
-}
-
 struct ContentView: View {
-    
+    @ObservedObject var basket: MyBasket = MyBasket(items: [])
+
     private  let productSample = [
         MyProduct(id:"12726",name: "Farine de blé T45 FRANCINE, 1k",quantity:  1 , price: 0.88, identifier: "id_12726"),
         MyProduct(id:"484202",name:"Lait UHT entier U, 6x1L",quantity:1, price:5.46, identifier: "id_484202"),
@@ -42,33 +35,45 @@ struct ContentView: View {
         basketIngredientsIds: nil,
         groupId: nil
     )
-    
-    @ObservedObject
-    var viewModel = ViewModel()
-    
-    
+
     var body: some View {
-        ScrollView {
+        NavigationView {
             VStack {
-                Button(action: addRandomProduct) {
-                    Text("Add Random product")
+                ScrollView {
+                    VStack {
+                        RecipeCardView(recipeId: "1")
+                        RecipeCardView(criteria: criteria)
+                    }
                 }
-                Button(action: removeRandomProduct) {
-                    Text("Remove random product")
-                }
-                RecipeCardView(recipeId: "1")
-                RecipeCardView(criteria: criteria)
             }
+            .navigationTitle("Miam demo app").navigationBarTitleDisplayMode(.inline)
+            .toolbar(content: {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Button(action: addRandomProduct) {
+                        Text("Add")
+                    }.buttonStyle(.automatic)
+                    Button(action: removeRandomProduct) {
+                        Text("Remove")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+
+                }
+            })
         }
     }
-    private func addRandomProduct(){
-        AppBasket.sharedInstance.basket.add(addedProduct: productSample.randomElement()!)
-        
+
+    private func addRandomProduct() {
+        if let product = productSample.randomElement() {
+            basket.add(addedProduct: product)
+        }
     }
     
     private func removeRandomProduct(){
-        AppBasket.sharedInstance.basket.remove(removedProduct: AppBasket.sharedInstance.basket.items.randomElement()!)
-        
+        guard let product = basket.items.randomElement() else {
+            return
+        }
+        basket.remove(removedProduct: product)
     }
     
     struct ContentView_Previews: PreviewProvider {
