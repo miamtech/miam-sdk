@@ -39,6 +39,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                MyBasketView(basket: basket)
                 ScrollView {
                     VStack {
                         RecipeCardView(recipeId: "1")
