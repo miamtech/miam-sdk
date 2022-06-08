@@ -21,36 +21,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 
-class Basket {
-    @Published var items = [MyProduct]()
 
-    init(items: Array<MyProduct>) {
-        self.items = items
-    }
-
-    func add(addedProduct: MyProduct) -> Void {
-        
-        let results = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }  )
-        
-        if(results != nil ){
-            // TODO update quantity
-        } else {
-            items.append(addedProduct)
-            self.items = items
-        }
-    }
-    
-    func remove(removedProduct : MyProduct){
-        let results = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } )
-        if(results == nil ){ return }
-        items.remove(at: results!)
-    }
-}
 
 
 public class AppBasket {
     public static let sharedInstance = AppBasket()
-    let basket = Basket(items:[])
+    let basket = MyBasket(items:[])
     
     private init(){
         

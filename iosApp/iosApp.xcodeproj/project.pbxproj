@@ -14,6 +14,7 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF8892850D63800E8B1F2 /* MyProduct.swift */; };
+		BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF3AF8892850D63800E8B1F2 /* MyProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProduct.swift; sourceTree = "<group>"; };
+		BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				BF3AF8892850D63800E8B1F2 /* MyProduct.swift */,
+				BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */,
 				0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */,
 				BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
