@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class MyProduct {
-var id :String;
-var name: String;
-var quantity :Int;
-var price: Double?;
-var identifier: String?;
+public class MyProduct: Identifiable {
+    public var id :String;
+    var name: String;
+    var quantity :Int;
+    var price: Double?;
+    var identifier: String?;
 
 
     init (id: String, name: String, quantity: Int, price: Double, identifier: String)  {

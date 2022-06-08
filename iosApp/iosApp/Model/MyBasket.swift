@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MyBasket {
+class MyBasket: ObservableObject {
     @Published var items = [MyProduct]()
 
     init(items: Array<MyProduct>) {
