@@ -19,16 +19,3 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 }
-
-
-
-
-
-public class AppBasket {
-    public static let sharedInstance = AppBasket()
-    let basket = MyBasket(items:[])
-    
-    private init(){
-        
-    }
-}
