@@ -13,7 +13,7 @@ public class MiamText {
     public static let sharedInstance = MiamText()
 
     public var addRecipe = "Découvrir la recette"
-    public var alreadyInCart = "Déjà ajoutée"
+    public var alreadyInCart = "Déjà au panier"
     public var cookTime = "Temps de cuisson"
     public var checkBasketPreview = "Voir le détail"
     public var currency = "€"
@@ -29,6 +29,9 @@ public class MiamText {
     public let recpeitDetailsSubtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum dictum turpis nec in viverra..."
     public let recpeitDetailsInfo = "Plus d'informatations"
     public let mealRowAlready = "Déjà dans vos placards"
+    public let select = "Choisir"
+    public let swapProduct = "Remplacer le produit"
+    
     private init(){}
 
 }

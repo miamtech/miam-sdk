@@ -40,7 +40,8 @@ public struct RecipeCardView: View {
                                 url: URL(
                                     string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                 )! ,
-                                placeholder: { Text("loading ...")}
+                                placeholder: { Text("loading ...")},
+                                height : 245
                             ).frame(height: 245).onTapGesture {
                                 initialDialogScreen = RouterContent.recipeDetail
                                 showingPopup = true
