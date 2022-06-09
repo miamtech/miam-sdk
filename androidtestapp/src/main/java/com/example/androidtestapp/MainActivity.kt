@@ -118,8 +118,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         initKoin{
             androidContext(this@MainActivity)
             modules(
@@ -137,12 +135,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.updateStoreId("35291")
+        PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
-        launch {
-            delay(200)
-            PointOfSaleHandler.updateStoreId("35290")
-        }
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         initFakeBasket()
@@ -273,7 +267,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun coursesUProductTORetailerProduct(product: CoursesUProduct): RetailerProduct {
-        return RetailerProduct(product.id, product.quantity, product.name)
+        return RetailerProduct(product.id, product.quantity, product.name, product.identifier)
     }
 
     private fun pushProduct(){
@@ -302,7 +296,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         coursesUProducts.forEach { rp ->
           val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.retailerId }
             if(productToUpdateIdx == -1){
-                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name?: "", rp.quantity, 0.0, "id_" + rp.retailerId))
+                retailerBasketSubject.value.items.add(CoursesUProduct(rp.retailerId, rp.name?: "item-${rp.retailerId}", rp.quantity, 0.0, "id_" + rp.retailerId))
             } else if( rp.quantity == 0) {
                 retailerBasketSubject.value.items.removeAt(productToUpdateIdx)
             } else {
