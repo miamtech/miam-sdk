@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                MyBasketView(basket: basket)
+                MyBasketView(basket: applicationBasket)
                 ScrollView {
                     VStack {
                         RecipeCardView(recipeId: "1")
