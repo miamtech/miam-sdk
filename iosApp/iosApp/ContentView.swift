@@ -60,7 +60,6 @@ struct ContentView: View {
                 
                 RecipeCardView(criteria: criteria)
             }
-             ItemSelector()
         }
     }
     private func addRandomProduct(){
