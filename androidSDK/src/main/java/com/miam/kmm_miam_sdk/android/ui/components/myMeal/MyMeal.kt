@@ -66,59 +66,61 @@ class MyMeal @JvmOverloads constructor(
             onCheckAgain = {  },
         )
     }
-}
 
-@Composable
-private fun MyMealLoading(){
-    if (Template.myMealLoaderTemplate != null){
-        Template.myMealLoaderTemplate?.let { it() }
-    } else {
+    @Composable
+    private fun MyMealLoading(){
+        if (Template.myMealLoaderTemplate != null){
+            Template.myMealLoaderTemplate?.let { it() }
+        } else {
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalAnimationApi::class)
+    @Composable
+    private fun CurrentRecipeInBasket(
+        previewLines: List<BasketPreviewLine>,
+        myMealVm: MyMealViewModel,
+        goToDetail: (vmRecipe: RecipeViewModel) -> Unit,
+        goToReplaceItem: () -> Unit
+    ){
+
         Column(
             Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator()
+
+            previewLines.forEach {  previewLine ->
+                val recipeVM = RecipeViewModel(modal.getViewModel())
+                val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
+                recipeVM.setEvent(
+                    RecipeContract.Event.OnGetRecipe( previewLine.id ?: "")
+                )
+
+
+                ExpendableBasketPreviewLine(
+                    line = previewLine,
+                    recipeVm = recipeVM,
+                    vmBasketPreview = vmBasketPreview,
+                    goToDetail = { goToDetail(recipeVM)  },
+                    removeRecipe = {
+                        myMealVm.setEvent(MyMealContract.Event.RemoveRecipe(previewLine.id.toString()))
+                    },
+                    goToReplaceItem = {
+                        goToReplaceItem()
+                    }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+            }
         }
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun CurrentRecipeInBasket(
-    previewLines: List<BasketPreviewLine>,
-    myMealVm: MyMealViewModel,
-    goToDetail: (vmRecipe: RecipeViewModel) -> Unit,
-    goToReplaceItem: () -> Unit
-){
 
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        previewLines.forEach {  previewLine ->
-            val recipeVM = RecipeViewModel()
-            val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
-            recipeVM.setEvent(
-                RecipeContract.Event.OnGetRecipe( previewLine.id ?: "")
-            )
-
-
-            ExpendableBasketPreviewLine(
-                line = previewLine,
-                recipeVm = recipeVM,
-                vmBasketPreview = vmBasketPreview,
-                goToDetail = { goToDetail(recipeVM)  },
-                removeRecipe = {
-                    myMealVm.setEvent(MyMealContract.Event.RemoveRecipe(previewLine.id.toString()))
-                },
-                goToReplaceItem = {
-                    goToReplaceItem()
-                }
-            )
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
-        }
-    }
-}

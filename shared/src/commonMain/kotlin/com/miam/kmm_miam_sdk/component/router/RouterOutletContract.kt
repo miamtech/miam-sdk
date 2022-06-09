@@ -21,6 +21,7 @@ interface RouterOutletContract {
             data class GoToPreview(val recipeId: String, val vm: RecipeViewModel): RouterOutletContract.Event()
             data class GoToDetail (val vm: RecipeViewModel, val withFooter: Boolean = true) :RouterOutletContract.Event()
             data class GoToDetailFromPreview (val vm: RecipeViewModel ) :RouterOutletContract.Event()
+            data class SetRouterContent(val routerContent: RouterContent) :RouterOutletContract.Event()
         }
 
         data class State(

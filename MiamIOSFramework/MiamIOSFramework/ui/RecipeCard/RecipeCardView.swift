@@ -15,7 +15,7 @@ public struct RecipeCardView: View {
     
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
-    @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM()
+    @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
    
     
     public init(recipeId: String) {
@@ -28,7 +28,31 @@ public struct RecipeCardView: View {
     
     public var body: some View {
         if (Template.sharedInstance.recipeCardTemplate != nil) {
-            Template.sharedInstance.recipeCardTemplate!(viewModel,{},{})
+            Template.sharedInstance.recipeCardTemplate!(
+                viewModel,
+                {
+                    viewModel.goToDetail()
+                    showingPopup = true
+                    
+                },
+                {}).popover(isPresented: $showingPopup) {
+                Dialog(
+                    close: { showingPopup = false },
+                    initialRoute : initialDialogScreen,
+                    routerVm: viewModel.routerVM
+                )
+            }.onAppear(perform: {
+                if(recipeId != nil){
+                    viewModel.setEvent(
+                        event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))
+                } else if (criteria != nil) {
+                    viewModel.setEvent(
+                        event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
+                }
+                }
+                )
+                
+            
         } else {
             
             VStack {
@@ -42,7 +66,6 @@ public struct RecipeCardView: View {
                                 )! ,
                                 placeholder: { Text("loading ...")}
                             ).frame(height: 245).onTapGesture {
-                                initialDialogScreen = RouterContent.recipeDetail
                                 showingPopup = true
                             }
                             HStack(alignment: .center) {
@@ -75,7 +98,7 @@ public struct RecipeCardView: View {
                             .padding(Dimension.sharedInstance.lPadding)
                         Button(RecipeCardText.sharedInstance.addRecipe) {
                         action: do {
-                            initialDialogScreen = RouterContent.recipeDetail
+                            viewModel.goToDetail()
                             showingPopup = true
                         }
                         }.foregroundColor(MiamColor.sharedInstance.white)
@@ -92,8 +115,8 @@ public struct RecipeCardView: View {
                 }.popover(isPresented: $showingPopup) {
                     Dialog(
                         close: { showingPopup = false },
-                        initialRoute : initialDialogScreen  ,
-                        recipeVm: viewModel
+                        initialRoute : initialDialogScreen,
+                        routerVm: viewModel.routerVM
                     )
                 }.onAppear(perform: {
                     if(recipeId != nil){

@@ -50,24 +50,29 @@ struct CounterView: View {
             )
         } else {
             HStack{
-                Image(uiImage: UIImage(named: "Peoples")!).resizable().scaledToFill().frame(width:16, height:16).padding(.bottom,2)
                 Button(action: {
                     decrease()
                 }) {
-                    Image(systemName: "minus")
-                        .foregroundColor(CounterColor.sharedInstance.lessIconColor)
-                }.foregroundColor(CounterColor.sharedInstance.lessButtonBackgroundColor)
-                Text(String(count)).font(.system(size: 16)).padding(4).overlay(
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(MiamColor.sharedInstance.lightgrey)
-                )
+                    Image("minus")
+                        .foregroundColor(MiamColor.sharedInstance.white)
+                }.padding(.leading, Dimension.sharedInstance.mPadding)
+                    .frame(width: 20.0, height: 20.0, alignment: .leading)
+                Spacer()
+                Text(String(count)+" pers.")
+                    .foregroundColor(MiamColor.sharedInstance.white)
+                    .font(.system(size: 13, weight: .bold, design: .default))
+                Spacer()
+                
                 Button(action: {
                     increase()
                 }) {
-                    Image(systemName: "plus")
-                        .foregroundColor(CounterColor.sharedInstance.plusIconColor)
-                }.foregroundColor(CounterColor.sharedInstance.plusButtonBackgroundColor)
-            }.mainRowContainer()
+                    Image("plus")
+                        .foregroundColor(MiamColor.sharedInstance.white)
+                }.padding(.trailing, Dimension.sharedInstance.lPadding)
+                    .frame(width: 20.0, height: 20.0, alignment: .trailing)
+            }.frame(width: 130.0, height: 40.0, alignment: .center)
+            .background(MiamColor.sharedInstance.primaryText)
+            .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
         }
     }
 }
