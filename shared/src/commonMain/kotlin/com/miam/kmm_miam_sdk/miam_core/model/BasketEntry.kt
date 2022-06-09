@@ -22,6 +22,11 @@ data class BasketEntry private constructor(
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
+
+    override fun toString(): String {
+        return "$id - ${relationships?.groceriesEntry?.data?.attributes?.name} - ${attributes?.quantity}"
+    }
+
     var needPatch: Boolean = false
 
     val selectedItem : Item?
