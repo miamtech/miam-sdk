@@ -2,40 +2,66 @@
 //  StepRow.swift
 //  MiamIOSFramework
 //
-//  Created by John on 12/05/2022.
+//  Created by miam on 12/05/2022.
 //
 
 import SwiftUI
+import shared
 
 struct StepRow: View {
+    
+    private var index : Int
+    private var step : RecipeStep
+    private var onToogleCheckbox : () -> ()
+    
+    @SwiftUI.State var checkState:Bool = false
+    
+    init(index : Int, step : RecipeStep, isCheck: Bool = false, onToogleCheckbox : @escaping() -> () ){
+        self.index = index
+        self.step = step
+        self.onToogleCheckbox = onToogleCheckbox
+        checkState = isCheck
+    }
+    
+    
     var body: some View {
-        HStack(spacing: 10.0) {
+        HStack() {
             ZStack {
-                Text("1")
+                Circle()
+                    .fill(MiamColor.sharedInstance.primaryText)
+                    .frame(width: 35.0, height: 35.0)
+                Text(String(index+1))
                     .foregroundColor(MiamColor.sharedInstance.white)
+                    .frame( alignment: .center)
             }
-            .frame(width: 35.0, height: 35.0, alignment: .center)
-            .background(MiamColor.sharedInstance.primaryText).cornerRadius(17.5)
-            VStack {
-                Text("40 scLkj haskdkjahsdsdasasdd")
+            
+            Text(step.attributes!.stepDescription ?? "")
                     .foregroundColor(MiamColor.sharedInstance.black20)
                     .font(.system(size: 16, weight: .regular, design: .default))
                     .multilineTextAlignment(.leading)
-                    .padding(Dimension.sharedInstance.mPadding)
-                    .frame(maxWidth: .infinity)
-            }.frame(maxWidth: .infinity)
-            HStack {
-                
-            }
-            .frame(width: 30.0, height: 30.0, alignment: .leading)
-            .border(MiamColor.sharedInstance.black, width: 1.0)
+                        .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
+            Spacer()
+            Button(action:
+                        {
+                            self.checkState = !self.checkState
+                            onToogleCheckbox()
+                        }) {
+                        ZStack(alignment: .center) {
+                               Rectangle()
+                                .fill(.white)
+                                .cornerRadius(5)
+                                .border(.black, width: 1)
+                                        .frame(width:20, height:20, alignment: .center)
+                                        
+                            if(self.checkState){
+                                Image("Check")
+                                    .renderingMode(.original).frame( alignment: .center)
+                            }
+                            
+                        }
+                    }
+                    .foregroundColor(Color.white)
         }
-        .frame(maxWidth: .infinity)
-    }
-}
-
-struct StepRow_Previews: PreviewProvider {
-    static var previews: some View {
-        StepRow()
+       
     }
 }

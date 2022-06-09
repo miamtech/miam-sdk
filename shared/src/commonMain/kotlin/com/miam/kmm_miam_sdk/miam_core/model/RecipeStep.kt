@@ -29,7 +29,8 @@ data class RecipeStepAttributes(
     @SerialName("step-number")
     val stepNumber: Int,
     val title : String?,
-    val description : String?,
+    @SerialName("description")
+    val stepDescription : String?,
     @SerialName("media-url")
     val mediaUrl: String?
 ): Attributes()

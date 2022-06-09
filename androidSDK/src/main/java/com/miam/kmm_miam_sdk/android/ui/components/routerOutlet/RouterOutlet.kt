@@ -37,6 +37,10 @@ class RouterOutlet : KoinComponent {
     private var vmRouter: RouterOutletViewModel = RouterOutletViewModel()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
 
+    fun getViewModel(): RouterOutletViewModel {
+        return vmRouter
+    }
+
     fun goToDetail(vmRecipe :RecipeViewModel, showDetailsFooter: Boolean = true){
         vmRouter.setEvent(
             RouterOutletContract.Event.GoToDetail(

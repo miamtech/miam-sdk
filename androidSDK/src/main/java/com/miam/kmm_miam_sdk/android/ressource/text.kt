@@ -21,5 +21,7 @@ object Text {
     var restingTime = "Repos : "
     var steps = "Étapes"
     var totalTime = "Temps total"
+    var tagPreRecipeCountText = "Ce produit est utilisé pour"
+    var tagPostRecipeCountText = "recettes"
     var swap = "Remplacer"
 }

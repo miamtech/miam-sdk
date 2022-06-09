@@ -47,7 +47,7 @@ fun EntryLine(entry: BasketPreviewLine,
     val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
     val productName = entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1)
         .lowercase(Locale.getDefault())
-    val description = entry.description[0]
+    val description = entry.bplDescription[0]
     val sharingCount = entry.inlineTag
     var count by remember { mutableStateOf(entry.count) }
 

@@ -338,13 +338,13 @@ private fun recipeDetailContent(
                         )
                     }
                 }
-                if(recipeDetailStepsTemplate != null) {
-                    recipeDetailStepsTemplate!!(recipe, vmRecipeCard)
+                if(recipeDetailIngredientTemplate != null) {
+                    recipeDetailIngredientTemplate!!(recipe, vmRecipeCard)
                 } else {
                     RecipeIngredients(recipe, vmRecipeCard)
                 }
-                if(recipeDetailIngredientTemplate != null ){
-                    recipeDetailIngredientTemplate!!(
+                if(recipeDetailStepsTemplate != null ){
+                    recipeDetailStepsTemplate!!(
                         recipe.relationships!!.recipeSteps!!.data,
                         vmRecipeCard
                     )
