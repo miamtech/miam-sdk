@@ -8,32 +8,25 @@
 import SwiftUI
 import shared
 
+
+
 struct Dialog: View {
     
     private var close: () -> Void
     
-    @ObservedObject var viewModel: DialogVM = DialogVM()
+    @ObservedObject var viewModel: DialogVM
     
-    public init(close: @escaping () -> Void, initialRoute: RouterContent) {
+    
+    public init(close: @escaping () -> Void, initialRoute: RouterContent, routerVm : RouterOutletViewModel ) {
         self.close = close
-        viewModel.content = initialRoute
+        self.viewModel = DialogVM(routerVm: routerVm)
     }
     
-    
     func goToDetail(vmRecipe :RecipeViewModel){
-        viewModel.setEvent(event:
+        viewModel.getKotlinVm().setEvent(event:
                             RouterOutletContractEvent.GoToDetail(
                                 vm: vmRecipe,
                                 withFooter: false
-                            )
-        )
-    }
-    
-    func goToPreview(recipeId: String ,vmRecipe: RecipeViewModel) {
-        viewModel.setEvent(event:
-                            RouterOutletContractEvent.GoToPreview(
-                                recipeId: recipeId,
-                                vm: vmRecipe
                             )
         )
     }
@@ -43,9 +36,10 @@ struct Dialog: View {
     var body: some View {
         VStack{
             HStack(alignment: .top){
-                switch viewModel.content {
-                case RouterContent.recipeDetail : RecpieDetailsView(recipeId: "1", close: close)
+                switch viewModel.state?.content {
+                case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
                 case RouterContent.basketPreview : BasketPreview()
+                case RouterContent.itemsSelector : HStack{}
                 default: HStack{}
                     
                 }

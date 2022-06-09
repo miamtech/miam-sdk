@@ -20,13 +20,14 @@ struct RecipeDetailsFooter: View {
     
     
     private func goToPreview(){
-        //   TODO Routing
-        //                vmRouter.setEvent(
-        //                    RouterOutletContract.Event.GoToPreview(
-        //                        recipeId = recipe.id,
-        //                        vm = vmRecipeCard
-        //                    )
-        //                )
+        if(recipeVM.recipe != nil ){
+            recipeVM.routerVM.setEvent( event: 
+                                RouterOutletContractEvent.GoToPreview(
+                                    recipeId : recipeVM.recipe!.id,
+                                    vm : recipeVM
+                                )
+                            )
+        }
     }
     
     init(recipeVM : RecipeCardVM){
@@ -45,7 +46,7 @@ struct RecipeDetailsFooter: View {
             
             HStack {
                 if(recipeVM.recipe != nil){
-                    PriceView(recipeId: recipeVM.recipe!.id, guestNumber: Int(recipeVM.currentState.guest))
+                    PriceView(recipeId: recipeVM.recipe!.id, guestNumber: Int(recipeVM.currentState.guest)).padding(.horizontal,16)
                 }
                 
                 if(recipeVM.currentState.isInCart){
@@ -63,7 +64,7 @@ struct RecipeDetailsFooter: View {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(MiamColor.sharedInstance.white)
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
-                            .font(.system(size: 12.0, weight: .bold, design: .default))
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
                         Image("cart")
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 24, height: 24, alignment: .center)
@@ -72,6 +73,7 @@ struct RecipeDetailsFooter: View {
                         .frame(height: 80.0)
                         .background(MiamColor.sharedInstance.primaryText).onTapGesture {
                             buy()
+                            goToPreview()
                         }
                 }
             }

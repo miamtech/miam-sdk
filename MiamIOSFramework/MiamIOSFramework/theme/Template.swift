@@ -16,7 +16,11 @@ public class Template {
     private init(){}
     
     
-    
+    /**
+        recipe view Model
+         look : ( ) -> Void
+         buy: () -> Void
+     */
     public var recipeCardTemplate : ((_: RecipeCardVM,
                                       _ : @escaping () -> Void,
                                       _ : @escaping () -> Void)  -> AnyView)? = nil

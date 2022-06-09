@@ -18,7 +18,7 @@ public struct RecpieDetailsView: View {
     public init(recipeId: String, close: @escaping () -> ()) {
         self.recipeId = recipeId
         self.close = close
-        viewModel = RecipeCardVM()
+        viewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
     }
     
     public init(vmRecipe: RecipeCardVM, close: @escaping () -> ()) {
@@ -180,7 +180,7 @@ public struct RecpieDetailsView: View {
                         }
                     }.padding(.bottom, 100.0)
                     if(viewModel.recipe != nil ){
-                        RecipeDetailsHeader(recipe: viewModel.recipe!, closeDetail: {})
+                        RecipeDetailsHeader(recipe: viewModel.recipe!, closeDetail: { close() })
                     }
                 }.onAppear(perform: {
                     if(recipeId != nil){

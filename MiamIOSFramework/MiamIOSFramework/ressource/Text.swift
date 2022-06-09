@@ -18,7 +18,7 @@ public class MiamText {
     public var checkBasketPreview = "Ajouter les ingrédients"
     public var currency = "€"
     public var ingredient = "Ingredients"
-    public var preGuests = "par pers."
+    public var preGuests = "par personne"
     public var recipeFlag = "Idée repas"
     public var replaceBy = "Remplacer cet article par : "
     public var steps = "Préparation"
