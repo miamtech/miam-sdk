@@ -41,6 +41,24 @@ data class Recipe private constructor(
             return duration.toString()
         }
 
+    val preparationTimeIos: String
+        get() {
+           var duration = this.attributes!!.preparationTime ?: 0.minutes
+            return duration.toString()
+        }
+
+    val cookingTimeIos: String
+        get() {
+            var duration = this.attributes!!.cookingTime ?: 0.minutes
+            return duration.toString()
+        }
+
+    val restingTimeIos: String
+        get() {
+            var duration = this.attributes!!.cookingTime ?: 0.minutes
+            return duration.toString()
+        }
+
     val difficultyLabel : String
         get () {
             return when(this.attributes!!.difficulty) {

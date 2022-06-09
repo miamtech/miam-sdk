@@ -6,19 +6,25 @@
 //
 
 import Foundation
-
-
 import shared
-
-public class DialogVM : RouterOutletViewModel, ObservableObject {
-    @Published var content: RouterContent?
+import Combine
 
 
-    override init() {
-        super.init()
-        collect(flow: uiState, collect: { data in
-            let _ = data as! RouterOutletContractState
+public class DialogVM : ObservableObject {
+    
+    @Published var state: RouterOutletContractState?
+    private let routerVm: RouterOutletViewModel
+
+     init(routerVm : RouterOutletViewModel) {
+         self.routerVm = routerVm
+         
+          routerVm.collect(flow: routerVm.uiState, collect: { data in
+             self.state = data as! RouterOutletContractState
         })
         
+    }
+    
+    public func getKotlinVm() -> RouterOutletViewModel{
+        return self.routerVm
     }
 }

@@ -57,7 +57,7 @@ struct ContentView: View {
                 Button(action: removeRandomProduct) {
                     Text("Remove random product")
                 }
-                RecipeCardView(recipeId: "1")
+                
                 RecipeCardView(criteria: criteria)
             }
         }
