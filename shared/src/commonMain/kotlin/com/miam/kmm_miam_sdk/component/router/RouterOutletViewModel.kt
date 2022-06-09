@@ -51,6 +51,13 @@ open class RouterOutletViewModel:
                 killBasketPreviewViewModel()
                 setEvent(RouterOutletContract.Event.GoToDetail(event.vm))
             }
+            is RouterOutletContract.Event.SetRouterContent -> {
+                setState{
+                    copy(
+                        content = event.routerContent
+                    )
+                }
+            }
             RouterOutletContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
             RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterOutletContract.Event.OpenDialog ->  setState { copy(isOpen = true) }

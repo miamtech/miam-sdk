@@ -41,8 +41,8 @@ struct PriceView: View {
         } else {
         VStack{
             HStack(alignment: .top, spacing: 2){
-                Text(viewModel.currentState.integerPart+"," ).foregroundColor(MiamColor.sharedInstance.primary)
-                Text(viewModel.currentState.decimalPart + "" + MiamText.sharedInstance.currency).foregroundColor(MiamColor.sharedInstance.primary).font(.system(size: 12))
+                Text(viewModel.currentState.integerPart+"," ).font(.system(size: 14,weight: .bold))
+                Text(viewModel.currentState.decimalPart + "" + MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
             }
             if(!isTotalPrice){
                 Text(MiamText.sharedInstance.preGuests).foregroundColor(MiamColor.sharedInstance.grey).font(.system(size: 12))

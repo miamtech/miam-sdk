@@ -65,8 +65,8 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 ingredients.forEach {
                     IngredientRow(
                         it.attributes!!.name!!.capitalize(),
-                        ReadableFloatNumber(
-                            realQuantities(
+                        vmRecipe.readableFloatNumber(
+                            vmRecipe.realQuantities(
                                 it.attributes!!.quantity!!,
                                 state.guest,
                                 recipe.attributes!!.numberOfGuests!!
@@ -99,7 +99,4 @@ fun IngredientRow(ingredient: String, quantity: String) {
     }
 }
 
-fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
-    return quantity.toFloat().toBigDecimal().multiply(currentGuest.toBigDecimal())
-        .divide(recipeGuest.toBigDecimal(), 2).toString()
-}
+
