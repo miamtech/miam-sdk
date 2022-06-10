@@ -29,8 +29,10 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
 
     public var pictureURL: URL? {
         guard let basket = basketPreviewLine else {
-            return URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")
+            return nil
         }
+
+        let picture = basket.picture
 
         return URL(string: basket.picture)
     }

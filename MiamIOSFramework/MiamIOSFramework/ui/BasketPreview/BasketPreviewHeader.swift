@@ -23,7 +23,11 @@ struct BasketPreviewHeader: View {
 
         return String(format: "%.2f€", priceDouble)
     }
-    let pictureURL: URL
+    let pictureURL: URL?
+    private var hasPicture: Bool {
+        return pictureURL != nil
+    }
+
 
     let descreaseGuestsCount: () -> Void
     let increaseGuestsCount: () -> Void
@@ -31,11 +35,11 @@ struct BasketPreviewHeader: View {
     var body: some View {
         VStack {
             HStack {
-                AsyncImage(url: pictureURL, placeholder: {
-                        ProgressView()
-                    }, height: 150.0).frame(width: 150, height: 150, alignment: .topLeading)
-                EmptyView().frame(width: 150, height: 150, alignment: .topLeading)
-
+                if hasPicture {
+                    AsyncImage(url: pictureURL!, placeholder: {
+                            ProgressView()
+                    }, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                }
 
                 VStack (alignment: .leading) {
                     Text(basketTitle)

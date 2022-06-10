@@ -51,7 +51,7 @@ public struct BasketPreviewView: View {
             }.frame(height: 50, alignment: .leading)
 
             ScrollView {
-                BasketPreviewHeader(basketTitle: viewModel.basketTitle, basketDescription: viewModel.basketDescription, pricePerGuest: viewModel.pricePerGuest, numberOfGuests: Int(viewModel.numberOfGuests), price: viewModel.price, pictureURL: viewModel.pictureURL!, descreaseGuestsCount: {}, increaseGuestsCount: {})
+                BasketPreviewHeader(basketTitle: viewModel.basketTitle, basketDescription: viewModel.basketDescription, pricePerGuest: viewModel.pricePerGuest, numberOfGuests: Int(viewModel.numberOfGuests), price: viewModel.price, pictureURL: viewModel.pictureURL, descreaseGuestsCount: {}, increaseGuestsCount: {})
 
                 //List
                 VStack {
