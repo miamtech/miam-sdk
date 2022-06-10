@@ -725,6 +725,16 @@ then click on **+** button and select your framwork
 
 ![alt text](pic/addFrameworkStep3.png "add framework step 3")
 
+#### Running the demo application on your device
+
+To run the demo application on a real device, you will need to update the signing certificates. 
+
+* for iOSApp certificates can be managed by Xcode (Automatically manage signing), just select your team name in the list.
+
+* for MiamIOSFramework and MiamIOSFrameworkTests signing has to be set to manual. Select your team and make sure to use the same team as for iOSApp. Then select your signing certificate.
+
+![alt text](pic/manualSigning.png "manual signing")
+
 #### Running the demo application in the simulator on Apple Silicon (M1, M2)
 
 To run miam iOS Framework on Apple Silicon, a few steps are required:
