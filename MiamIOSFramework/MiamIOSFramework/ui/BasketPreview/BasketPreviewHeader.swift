@@ -16,7 +16,13 @@ struct BasketPreviewHeader: View {
     let pricePerGuest: String
     let numberOfGuests: Int
     let price: String
+    private var formattedPrice: String {
+        guard let priceDouble = Double(price) else {
+            return ""
+        }
 
+        return String(format: "%.2f€", priceDouble)
+    }
     let pictureURL: URL
 
     let descreaseGuestsCount: () -> Void
@@ -59,6 +65,7 @@ struct BasketPreviewHeader: View {
             }
 
         }
+                Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
         Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
     }
 }
