@@ -771,11 +771,21 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 ```
+#### Miam readiness
+
+As soon as miam is available `isReady` will return `true`
+
+
+```swift
+   LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
+    // Do stuff
+  
+```
 
 
 #### Connection to Miam API
 
-**TODO**
+**Comming soon**
 
 #### User
 Miam initialization process will start only after the user is **logged**.
