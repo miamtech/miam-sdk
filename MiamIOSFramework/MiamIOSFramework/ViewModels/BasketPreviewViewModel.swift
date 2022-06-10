@@ -22,17 +22,29 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
             case let success as BasicUiStateSuccess<BasketPreviewLine>:
                 self.basketPreviewLine = success.data
             default:
+                print("Error while fetching basket preview: \(state.line)")
                 break
             }
         }
+    }
+
+    public var pictureURL: URL? {
+        guard let basket = basketPreviewLine else {
+            return URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")
+        }
+
+        return URL(string: basket.picture)
     }
 
     public var basketTitle: String {
         return basketPreviewLine?.title ?? ""
     }
 
+
+
     public var basketDescription: String {
-        return basketPreviewLine?.description_[0] ?? ""
+        //return basketPreviewLine?.description_[0] ?? ""
+        return ""
     }
 
     public var pricePerGuest: String {
@@ -45,7 +57,8 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         }
 
         let price = parsedPrice * 100 / Double(basket.count) / 100
-        return "\(price)€ /personne"
+        let formattedPrice = String(format: "%.2f", price)
+        return "\(formattedPrice)€ /personne"
     }
 
     public var numberOfGuests: Int {
