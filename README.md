@@ -773,9 +773,39 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 ```
 
 
+#### Miam readiness
+
+You have two ways to check Miam readiness : either call a direct function or listen to Miam event
+
+
+
+```kotlin
+  val miamContext = ContextHandlerInstance.instance
+  // miamContext.isReady() return a bool
+  prtinln("is Miam ready ? ${miamContext.isReady()}")
+
+  miamContext.observeReadyEvent().collect { event ->
+    val isReady = event == ReadyEvent.isReady
+    val isNotReady = event == ReadyEvent.isNotReady
+    // Do stuff
+  }
+
+
+#### Miam readiness
+
+As soon as miam is available `isReady` will return `true`
+
+
+```swift
+   LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
+    // Do stuff
+  
+```
+
+
 #### Connection to Miam API
 
-**TODO**
+**Comming soon**
 
 #### User
 Miam initialization process will start only after the user is **logged**.
