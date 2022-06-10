@@ -1,78 +1,70 @@
 package com.miam.kmm_miam_sdk.handler.Basket
 
+import com.miam.kmm_miam_sdk.base.mvi.AlterQuantityBasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
+import kotlin.math.min
 
-class BasketComparisonItem() {
-
-   var miamQuantity :Int = 0;
-   var miamTargetQuantity: Int = 0;
-   val miamBasketEntryIds : MutableMap<String, Int> = mutableMapOf()
-   val _retailerProducts : MutableList<RetailerProduct> = mutableListOf()
-
+data class BasketComparisonItem(
+    val retailerId: String,
+    val miamBasketEntryIds: Map<String, Int> = mapOf(), // need multiple if two different ingredients matched same item
+    val retailerProduct: RetailerProduct = RetailerProduct(retailerId, 0)
+) {
     override fun toString(): String {
-        return "" + miamQuantity + " " + miamTargetQuantity + " " + miamBasketEntryIds + " " + _retailerProducts
+        return "$miamBasketEntryIds $retailerProduct"
     }
 
     val retailerQuantity: Int
          get() {
-             val quantities = _retailerProducts.map { retailerProduct -> retailerProduct.quantity }
-             return quantities.sum()
+             return retailerProduct?.quantity?: 0
          }
 
-    val firstBasketEntryId : String
+    val miamQuantity: Int
+        get() {
+            return miamBasketEntryIds.values.sum()
+        }
+
+    val firstBasketEntryId: String
         get() {
             return  miamBasketEntryIds.keys.first()
         }
 
-   fun clearRetailerProduct() {
-       _retailerProducts.clear()
-   }
-
-    fun removeFirstMiamEntry(qtyToRemove :Int): Pair<String, Int> {
-        if(miamBasketEntryIds.entries.isEmpty()) {
-            return Pair("", 0)
-        }
-        val quantity = miamBasketEntryIds.values.first()
-        if(quantity > qtyToRemove){
-            miamBasketEntryIds[firstBasketEntryId] = quantity - qtyToRemove
-            return Pair(firstBasketEntryId, qtyToRemove)
-        }
-        val toReturn = Pair(firstBasketEntryId, quantity)
-        miamBasketEntryIds.remove(firstBasketEntryId)
-        return toReturn
+    fun addMiamEntry(basketEntry: BasketEntry): BasketComparisonItem {
+        val newMiamBasketEntryIds = miamBasketEntryIds.toMutableMap()
+        newMiamBasketEntryIds[basketEntry.id] = basketEntry.attributes!!.quantity ?: 0
+        return this.copy(miamBasketEntryIds = newMiamBasketEntryIds)
     }
 
-    /**
-     * Update comming from retailer
-     */
-
-    fun addOrUpdateRetailerProduct(retailerProduct: RetailerProduct) {
-        if(_retailerProducts.isEmpty() || retailerQuantity == 0){
-            _retailerProducts.add(retailerProduct)
-            return
+    fun retailerProductAddedOrUpdatedFromMiam(previousCompItem: BasketComparisonItem?): RetailerProduct? {
+        if (previousCompItem == null) {
+            return RetailerProduct(retailerId, miamQuantity)
         }
-        _retailerProducts[0] = _retailerProducts[0].copy(quantity = retailerProduct.quantity, productIdentifier = retailerProduct.productIdentifier)
-    }
-
-    /**
-     * Update comming from miam
-     */
-
-    fun createRetailerProducts(basketEntry: BasketEntry, targetQuantity : Int) : MutableList<RetailerProduct> {
-        if(basketEntry.selectedItem != null && basketEntry.selectedItem!!.attributes?.extId != null){
-            _retailerProducts.add(RetailerProduct(basketEntry.selectedItem!!.attributes!!.extId!!, targetQuantity, basketEntry.selectedItem!!.attributes!!.name))
+        val deltaQuantity = miamQuantity - previousCompItem.miamQuantity
+        if (deltaQuantity == 0) {
+            return null
         }
-        return _retailerProducts
+        return retailerProduct.copy(quantity = retailerProduct.quantity + deltaQuantity)
     }
 
-    fun updateRetailerProducts() : MutableList<RetailerProduct>{
-        val quantityDiff = miamTargetQuantity - miamQuantity
-        if(quantityDiff == 0 || _retailerProducts.isEmpty()) return mutableListOf()
-        var item = _retailerProducts[0]
-        item = item.copy(quantity= item.quantity + quantityDiff)
-        if(item.quantity <= 0) clearRetailerProduct()
-        return mutableListOf(item)
+    fun retailerProductsRemovedFromMiam(newCompItem: BasketComparisonItem?): RetailerProduct? {
+        if (newCompItem != null) {
+            return null
+        }
+        return retailerProduct.copy(quantity = 0)
     }
 
+    fun miamProductRemoved(): List<AlterQuantityBasketEntry> {
+        var quantityToRemove = miamQuantity - retailerQuantity
+        if (quantityToRemove < 0) return listOf()
+
+        return miamBasketEntryIds.mapNotNull { entry ->
+            if (quantityToRemove <= 0) {
+                null
+            } else {
+                val quantityRemoved = min(entry.value, quantityToRemove)
+                quantityToRemove -= quantityRemoved
+                AlterQuantityBasketEntry(entry.key, -quantityRemoved)
+            }
+        }
+    }
 }

@@ -49,7 +49,8 @@ data class BasketPreviewLine(
     val inlineTag : String? = null,
     val title: String,
     val picture: String,
-    val description: List<String> = emptyList(),
+    // description is a key work in swift
+    val bplDescription: List<String> = emptyList(),
     val price: String,
     val count: Int,
     val entries : LineEntries?,
@@ -91,14 +92,14 @@ data class BasketPreviewLine(
                 isRecipe= true,
                 title= recipe.attributes!!.title,
                 picture= recipe.attributes!!.mediaUrl ?: "",
-                description=  listOf("$itemsCount article${if (itemsCount > 1) 's' else ' '}"),
+                bplDescription=  listOf("$itemsCount article${if (itemsCount > 1) 's' else ' '}"),
                 count= guestNum ?: 4 ,
                 entries = entries,
                 price= recipePrice ?: "",
             )
 
             if(pricePerGuest != null) {
-                bpl.description?.plus("${truncate(pricePerGuest)} € / personne")
+                bpl.bplDescription?.plus("${truncate(pricePerGuest)} € / personne")
             }
 
             return bpl
@@ -117,7 +118,7 @@ data class BasketPreviewLine(
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
                 title= entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
                 picture = item?.attributes?.image ?: "",
-                description = listOf("${item?.attributes?.brand ?: ' '} ${item?.attributes?.name ?: ' '} | ${item?.attributes?.capacityUnit}"),
+                bplDescription = listOf("${item?.attributes?.name ?: ' '} \n ${item?.attributes?.capacityUnit}", "${item?.attributes?.brand ?: ' '}"),
                 price= "$price",
                 count= entry.attributes.quantity ?: 1,
                 entries = null,
@@ -136,7 +137,7 @@ data class BasketPreviewLine(
                 inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
                 title= entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
                 picture = item.attributes!!.image ?: "",
-                description = listOf("${item.attributes.brand ?: ' '} ${item.attributes.name ?: ' '} | ${item.attributes.capacityUnit}"),
+                bplDescription = listOf("${item.attributes.brand ?: ' '} ${item.attributes.name ?: ' '} | ${item.attributes.capacityUnit}"),
                 price= "$price",
                 count= entry.attributes.quantity ?: 1,
                 entries = null,

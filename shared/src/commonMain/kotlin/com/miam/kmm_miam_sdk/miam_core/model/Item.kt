@@ -30,7 +30,9 @@ data class ItemAttributes (
     val extId: String? = null,
     val name: String,
     val status: String? = null,
-    val description: String? = null,
+    // description is a key word in swift
+    @SerialName("description")
+    val itemDescription: String? = null,
     val brand: String? = null,
     @SerialName("product-page")
     val productPage: String? = null,
