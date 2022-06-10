@@ -13,6 +13,7 @@
 		0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEEA6B7280F138E00291155 /* MiamManager.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		BFF96312284A6ED7006FF4B7 /* MiamIOSFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF8892850D63800E8B1F2 /* MyProduct.swift */; };
 		BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */; };
 		BF3AF88F2850EF3800E8B1F2 /* MyBasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */; };
@@ -43,6 +44,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BFF96312284A6ED7006FF4B7 /* MiamIOSFramework.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
