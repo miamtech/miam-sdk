@@ -1066,7 +1066,18 @@ data class SuggestionsCriteria(
 
 #### With UIKit 
 
-> coming soon
+You can inject our compomemt in a Uikit App 
+
+```swift
+
+if #available(iOS 13.0, *) {
+  let swiftUIView = SomeSwiftUIView() // swiftUIView is View
+  let viewCtrl = UIHostingController(rootView: swiftUIView)
+}
+
+```
+
+you can find more info [here]("https://developer.apple.com/forums/thread/652405")
 
 ### Styling
 
