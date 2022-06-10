@@ -50,7 +50,7 @@ struct BasketPreviewRow: View {
                 
                 Spacer()
                 Button(action: {
-                    
+                    removeProductAction()
                 }) {
                     Image("Bin")
                 }.frame(width: 30, height: 30, alignment: .topTrailing)
