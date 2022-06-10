@@ -18,7 +18,7 @@ struct BasketPreviewRow: View {
                 AsyncImage(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!,
                            placeholder: { ProgressView() }).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                 
-                VStack (alignment: .leading){
+                VStack (alignment: .leading) {
                     
                     Text("Bière blonde (40 cl)")
                         .foregroundColor(MiamColor.sharedInstance.black)
@@ -47,8 +47,7 @@ struct BasketPreviewRow: View {
                 Button(action: {
                     
                 }) {
-                    Image("Bin").resizable()
-                        .renderingMode(.original)
+                    Image("Bin")
                 }.frame(width: 30, height: 30, alignment: .topTrailing)
             }
             
@@ -99,6 +98,3 @@ struct ProductRow_Previews: PreviewProvider {
         BasketPreviewRow()
     }
 }
-
-
-

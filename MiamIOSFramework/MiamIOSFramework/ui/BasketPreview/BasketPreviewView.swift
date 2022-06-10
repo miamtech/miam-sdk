@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import shared
 
 public struct BasketPreviewView: View {
+    @ObservedObject private var viewModel: BasketPreviewVM
 
-    public init() {
-        
+    public init(recipeId: String) {
+        viewModel = BasketPreviewVM(recipeId: recipeId)
     }
 
     public var body: some View {
@@ -23,122 +25,143 @@ public struct BasketPreviewView: View {
                     .frame(width: 30, height: 30, alignment: .center)
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 
-                Text("6 produits ajoutés à votre panier")
+                Text("XX produits ajoutés à votre panier")
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 Spacer()
             }.frame(width: .infinity, height: 50, alignment: .leading)
-            
-            Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
-            
-            //Product View
-            VStack(alignment: .leading) {
-                HStack {
-                    Image("recipe").resizable()
-                        .frame(width: 150, height: 150, alignment: .topLeading)
-                    
-                    VStack (alignment: .leading){
-                        
-                        Text("Welsh royal à la 3 Monts")
-                            .foregroundColor(MiamColor.sharedInstance.black)
-                            .font(.system(size: 16, weight: .heavy, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
-                        
-                        Text("6 articles")
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                            .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
-                            .padding(.top, Dimension.sharedInstance.borderWidth)
-                        
-                        Text("4,93 € par personne")
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                            .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
-                    }.frame(width: .infinity, height: 150, alignment: .topLeading)
-                }.frame(width: .infinity, height: 150, alignment: .topLeading)
-                
-                //Ingredeient View
-                HStack {
-                    HStack {
-                        Text("19,72 €")
-                            .foregroundColor(MiamColor.sharedInstance.primaryText)
-                            .font(.system(size: 20, weight: .heavy, design: .default))
-                        
-                        Spacer()
-                        
-                        // Plus Minus View
-                        CounterView(count: 4, isDisable: false) {
-                            // TODO: increase. Use CountChange event?
-                        } decrease: {
-                            // TODO: decrease
-                        }
 
-                    }.frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 0,
-                        maxHeight: .infinity,
-                        alignment: .topLeading
-                    )
-                }.frame(height: 50.0, alignment: .topLeading).padding(.top, Dimension.sharedInstance.mPadding)
-            }.padding().background(MiamColor.sharedInstance.lightPrimaryBg)
-                .padding(.top, -8)
-            
-            Divider().background(MiamColor.sharedInstance.borderBottom).padding(.top, -8)
-            
-            //List
             ScrollView {
-                ForEach([""], id: \.self) { ingr in
-                    BasketPreviewRow()
-                }
-                HStack {
-                    Text(MiamText.sharedInstance.mealRowAlready)
-                        .font(.system(size: 16.0, weight: .bold, design: .default))
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                    
-                    Spacer()
-                    
-                    Image("Caret")
-                        .resizable()
-                        .aspectRatio( contentMode: .fit)
-                        .frame(width: 30, height: 30, alignment: .center)
-                }
-                .padding(Dimension.sharedInstance.lPadding)
-                .background(MiamColor.sharedInstance.primaryLight)
-                .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
-                
-                HStack {
-                    Text("Oeufs")
-                        .font(.system(size: 16.0, weight: .bold, design: .default))
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                    
-                    Spacer()
-                    
-                    Image("PlusGreen")
-                        .resizable()
-                        .aspectRatio( contentMode: .fit)
-                        .frame(width: 30, height: 30, alignment: .center)
-                        .foregroundColor(MiamColor.sharedInstance.primary)
-                    
-                    Text("Ajouter")
-                        .font(.system(size: 16.0, weight: .bold, design: .default))
-                        .foregroundColor(MiamColor.sharedInstance.primary)
-                }.padding(.horizontal, Dimension.sharedInstance.lPadding)
-                    .padding(.bottom, Dimension.sharedInstance.lPadding)
+                HeaderView(model: viewModel).frame(width: .infinity, height: 160.0, alignment: .topLeading)
+
+                //Product View
+//                VStack(alignment: .leading) {
+//
+//
+//                    //Ingredeient View
+//
+//                }.padding().background(MiamColor.sharedInstance.lightPrimaryBg)
+//                    .padding(.top, -8)
+
+                Divider().background(MiamColor.sharedInstance.borderBottom)
+
+                //List
+//                if let found = viewModel.$basketPreviewLine?.entries?.found {
+//                    ForEach(found, id: \.self) { entry in
+//                            BasketPreviewRow()
+//                    }
+//                }
+
+                    HStack {
+                        Text(MiamText.sharedInstance.mealRowAlready)
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+
+                        Spacer()
+
+                        Image("Caret")
+                            .resizable()
+                            .aspectRatio( contentMode: .fit)
+                            .frame(width: 30, height: 30, alignment: .center)
+                    }
+                    .padding(Dimension.sharedInstance.lPadding)
+                    .background(MiamColor.sharedInstance.primaryLight)
+                    .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
+
+                    HStack {
+                        Text("Oeufs")
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+
+                        Spacer()
+
+                        Image("PlusGreen")
+                            .resizable()
+                            .aspectRatio( contentMode: .fit)
+                            .frame(width: 30, height: 30, alignment: .center)
+                            .foregroundColor(MiamColor.sharedInstance.primary)
+
+                        Text("Ajouter")
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .foregroundColor(MiamColor.sharedInstance.primary)
+                    }.padding(.horizontal, Dimension.sharedInstance.lPadding)
+                        .padding(.bottom, Dimension.sharedInstance.lPadding)
             }
 
             BasketPreviewBottomView {
 
             } continueShoppingAction: {
-                
+
             }
+        }
+    }
+}
+
+fileprivate struct HeaderView: View {
+    @ObservedObject var model: BasketPreviewVM
+
+    private let headerHeight = 150.0
+
+    var body: some View {
+        HStack {
+            AsyncImage(url: model.pictureURL!, placeholder: {
+                    ProgressView()
+                }, height: 150.0).frame(width: 150, height: 150, alignment: .topLeading)
+            EmptyView().frame(width: 150, height: 150, alignment: .topLeading)
+
+
+            VStack (alignment: .leading) {
+                Text(model.basketTitle)
+                    .foregroundColor(MiamColor.sharedInstance.black)
+                    .font(.system(size: 16, weight: .heavy, design: .default))
+                    .padding(.leading, Dimension.sharedInstance.sPadding)
+
+                Text(model.basketDescription)
+                    .foregroundColor(MiamColor.sharedInstance.bodyText)
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .padding(.leading, Dimension.sharedInstance.sPadding)
+                    .padding(.top, Dimension.sharedInstance.borderWidth)
+
+                Text(model.pricePerGuest)
+                    .foregroundColor(MiamColor.sharedInstance.bodyText)
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .padding(.leading, Dimension.sharedInstance.sPadding)
+            }.frame(width: .infinity, height: .infinity, alignment: .topLeading)
+        }.frame(width: .infinity, height: headerHeight, alignment: .topLeading)
+        HStack {
+            Text("\(model.price) €").foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
+            Spacer()
+            
+            CounterView(count: Int(model.numberOfGuests), isDisable: false) {
+
+            } decrease: {
+
+            }
+
+        }
+        Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
+    }
+}
+
+fileprivate struct ContentView: View {
+    //let basketPreviewLine = BasketPreviewLine(id: "1", record: Recipe(id: "1", attributes: nil, json_relationships: nil, includedRecords: []), isRecipe: true, inlineTag: "tag", title: "La soupe aux choux", picture: "", description: ["6 personnes"], price: "4.55", count: 4, entries: nil, _displayMode: true)
+    var body: some View {
+        VStack {
+//            ScrollView {
+//                HeaderView(line: basketPreviewLine)
+//            }.frame(width: .infinity, height: .infinity, alignment: .topLeading)
+//            BasketPreviewBottomView {
+//
+//            } continueShoppingAction: {
+//
+//            }
         }
     }
 }
 
 struct BasketPreviewView_Previews: PreviewProvider {
     static var previews: some View {
-        BasketPreviewView()
+        ContentView()
     }
 }
 

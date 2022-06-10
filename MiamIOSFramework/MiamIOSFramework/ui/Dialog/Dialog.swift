@@ -38,7 +38,7 @@ struct Dialog: View {
             HStack(alignment: .top){
                 switch viewModel.state?.content {
                 case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
-                case RouterContent.basketPreview : BasketPreview()
+                case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!)
                 case RouterContent.itemsSelector : HStack{}
                 default: HStack{}
                     
