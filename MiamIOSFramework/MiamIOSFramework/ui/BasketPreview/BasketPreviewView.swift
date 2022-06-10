@@ -15,6 +15,14 @@ public struct BasketPreviewView: View {
         viewModel = BasketPreviewVM(recipeId: recipeId)
     }
 
+    func increaseGuestsCount() {
+        
+    }
+
+    func decreaseGuestsCount() {
+
+    }
+
     public var body: some View {
         VStack {
             // Top Bar
@@ -32,7 +40,7 @@ public struct BasketPreviewView: View {
             }.frame(width: .infinity, height: 50, alignment: .leading)
 
             ScrollView {
-                HeaderView(model: viewModel).frame(width: .infinity, height: 160.0, alignment: .topLeading)
+                BasketPreviewHeader(basketTitle: viewModel.basketTitle, basketDescription: viewModel.basketDescription, pricePerGuest: viewModel.pricePerGuest, numberOfGuests: Int(viewModel.numberOfGuests), price: viewModel.price, pictureURL: viewModel.pictureURL!, descreaseGuestsCount: {}, increaseGuestsCount: {})
 
                 //Product View
 //                VStack(alignment: .leading) {
