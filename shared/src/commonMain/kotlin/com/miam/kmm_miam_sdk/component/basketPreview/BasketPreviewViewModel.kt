@@ -32,6 +32,7 @@ class BasketPreviewViewModel(val recipeId: String?):
             recipeId= null,
             showLines= false,
             line= BasicUiState.Loading,
+            lineUpdates = listOf(),
             bpl= null,
             isReloading= false,
             job = null
@@ -64,15 +65,16 @@ class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
        launch(coroutineHandler) {
            lineEntriesSubject.debounce(500).collect { entries ->
+               LogHandler.info("launching update $entries")
                val newBpl = updateBplEntries(entries)
-               setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
+               setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl, lineUpdates = listOf()) }
                // create a copy of the list so you can clear it here
                basketStore.dispatch(
                    BasketAction.UpdateBasketEntries(
                        mutableListOf(*entries.toTypedArray())
                    )
                )
-            }
+           }
         }
     }
 
@@ -155,10 +157,10 @@ class BasketPreviewViewModel(val recipeId: String?):
     private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
         LogHandler.debug("[Miam] update entry $entry to $finalQty")
         val newEntry = entry.updateQuantity(finalQty)
-        lineEntriesSubject.collect { entries ->
-            val newEntries = entries.filter { be -> be.id != entry.id }.plus(newEntry)
-            lineEntriesSubject.emit(newEntries)
-        }
+
+        val newLineUpdates = currentState.lineUpdates.filter { be -> be.id != entry.id }.plus(newEntry)
+        setState { copy(lineUpdates = newLineUpdates) }
+        lineEntriesSubject.emit(newLineUpdates)
     }
 
     private fun replaceItem(entry: BasketEntry){

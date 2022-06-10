@@ -24,7 +24,7 @@ data class BasketEntry private constructor(
     }
 
     override fun toString(): String {
-        return "$id - ${relationships?.groceriesEntry?.data?.attributes?.name} - ${attributes?.quantity}"
+        return "$id - ${relationships?.groceriesEntry?.data?.attributes?.name} - ${attributes?.quantity} - ${attributes?.groceriesEntryStatus}"
     }
 
     var needPatch: Boolean = false

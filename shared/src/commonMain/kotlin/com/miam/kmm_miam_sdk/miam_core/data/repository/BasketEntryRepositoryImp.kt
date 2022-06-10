@@ -8,10 +8,9 @@ import kotlinx.coroutines.flow.flow
 
 class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasource): BasketEntryRepository {
     override suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
-        // println("Miam will update be")
-        // println("Miam will update be rels ge" + basketEntry?._relationships?.groceriesEntry)
-        // println("Miam will update be rels items" + basketEntry?._relationships?.items)
-        basketEntry.needPatch = false
-        return basketEntryDataSource.updateBasketEntry(basketEntry, listOf("groceries-entry", "items"))
+        val newBasketEntry = basketEntry.copy()
+        // reset the value to default so this field will not be sent
+        newBasketEntry.needPatch = false
+        return basketEntryDataSource.updateBasketEntry(newBasketEntry, listOf("groceries-entry", "items"))
     }
 }

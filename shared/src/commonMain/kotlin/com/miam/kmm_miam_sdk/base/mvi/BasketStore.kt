@@ -165,7 +165,6 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
         return recipesInfos.map { ri ->
-
             val found = mutableListOf<BasketEntry>()
             val oftenDeleted = mutableListOf<BasketEntry>()
             val removed = mutableListOf<BasketEntry>()
@@ -225,8 +224,8 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String): BasketEntry {
-        basketEntry.updateStatus(status)
-        return updateBasketEntry(basketEntry)
+        val newEntry = basketEntry.updateStatus(status)
+        return updateBasketEntry(newEntry)
     }
 
     private suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {
