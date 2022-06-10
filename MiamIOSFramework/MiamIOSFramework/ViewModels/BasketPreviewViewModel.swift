@@ -22,7 +22,6 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
             case let success as BasicUiStateSuccess<BasketPreviewLine>:
                 self.basketPreviewLine = success.data
             default:
-                print("Error while fetching basket preview: \(state.line)")
                 break
             }
         }
@@ -40,11 +39,8 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         return basketPreviewLine?.title ?? ""
     }
 
-
-
     public var basketDescription: String {
-        //return basketPreviewLine?.description_[0] ?? ""
-        return ""
+        return basketPreviewLine?.bplDescription[0] ?? ""
     }
 
     public var pricePerGuest: String {
@@ -67,5 +63,41 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
 
     public var price: String {
         return basketPreviewLine?.price ?? ""
+    }
+
+    public var productsInBasket: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = basketPreviewLine?.entries?.found as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    public var productsNotFound: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = basketPreviewLine?.entries?.notFound as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    public var productsOftenDeleted: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = basketPreviewLine?.entries?.oftenDeleted as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    public var productsRemoved: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = basketPreviewLine?.entries?.removed as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
     }
 }
