@@ -26,7 +26,6 @@ data class GroceriesEntry private constructor(
     var needPatch: Boolean = false
 
     fun updateStatus(status: String): GroceriesEntry {
-        needPatch = true
         val copy = this.copy(
             attributes = this.attributes?.copy(status = status)
         )
