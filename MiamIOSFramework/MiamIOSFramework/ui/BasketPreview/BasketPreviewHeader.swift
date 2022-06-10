@@ -29,43 +29,46 @@ struct BasketPreviewHeader: View {
     let increaseGuestsCount: () -> Void
 
     var body: some View {
-        HStack {
-            AsyncImage(url: pictureURL, placeholder: {
-                    ProgressView()
-                }, height: 150.0).frame(width: 150, height: 150, alignment: .topLeading)
-            EmptyView().frame(width: 150, height: 150, alignment: .topLeading)
+        VStack {
+            HStack {
+                AsyncImage(url: pictureURL, placeholder: {
+                        ProgressView()
+                    }, height: 150.0).frame(width: 150, height: 150, alignment: .topLeading)
+                EmptyView().frame(width: 150, height: 150, alignment: .topLeading)
 
 
-            VStack (alignment: .leading) {
-                Text(basketTitle)
-                    .foregroundColor(MiamColor.sharedInstance.black)
-                    .font(.system(size: 16, weight: .heavy, design: .default))
-                    .padding(.leading, Dimension.sharedInstance.sPadding)
+                VStack (alignment: .leading) {
+                    Text(basketTitle)
+                        .foregroundColor(MiamColor.sharedInstance.black)
+                        .font(.system(size: 16, weight: .heavy, design: .default))
+                        .padding(.leading, Dimension.sharedInstance.sPadding)
 
-                Text(basketDescription)
-                    .foregroundColor(MiamColor.sharedInstance.bodyText)
-                    .font(.system(size: 16, weight: .light, design: .default))
-                    .padding(.leading, Dimension.sharedInstance.sPadding)
-                    .padding(.top, Dimension.sharedInstance.borderWidth)
+                    Text(basketDescription)
+                        .foregroundColor(MiamColor.sharedInstance.bodyText)
+                        .font(.system(size: 16, weight: .light, design: .default))
+                        .padding(.leading, Dimension.sharedInstance.sPadding)
+                        .padding(.top, Dimension.sharedInstance.borderWidth)
 
-                Text(pricePerGuest)
-                    .foregroundColor(MiamColor.sharedInstance.bodyText)
-                    .font(.system(size: 16, weight: .light, design: .default))
-                    .padding(.leading, Dimension.sharedInstance.sPadding)
-            }.frame(width: .infinity, height: .infinity, alignment: .topLeading)
-        }.frame(width: .infinity, height: headerHeight, alignment: .topLeading)
-        HStack {
-            Text("\(price) €").foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
-            Spacer()
+                    Text(pricePerGuest)
+                        .foregroundColor(MiamColor.sharedInstance.bodyText)
+                        .font(.system(size: 16, weight: .light, design: .default))
+                        .padding(.leading, Dimension.sharedInstance.sPadding)
+                }.frame(alignment: .topLeading)
+            }.frame(height: headerHeight, alignment: .topLeading)
+            HStack {
 
-            CounterView(count: numberOfGuests, isDisable: false) {
+                Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
+                Spacer()
 
-            } decrease: {
+                CounterView(count: numberOfGuests, isDisable: false) {
+
+                } decrease: {
+
+                }
 
             }
-
-        }
-                Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
+        }.padding([.leading, .trailing], 16.0)
         Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
+
     }
 }
