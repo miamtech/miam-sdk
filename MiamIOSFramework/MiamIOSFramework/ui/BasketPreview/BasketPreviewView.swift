@@ -132,7 +132,6 @@ public struct BasketPreviewView: View {
             BasketPreviewBottomView {
 
             } continueShoppingAction: {
-
             }
         }
     }

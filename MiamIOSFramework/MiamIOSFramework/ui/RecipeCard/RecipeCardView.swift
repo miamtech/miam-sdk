@@ -51,6 +51,8 @@ public struct RecipeCardView: View {
                     }
                 }
                 )
+            
+            
         } else {
             
             VStack {
