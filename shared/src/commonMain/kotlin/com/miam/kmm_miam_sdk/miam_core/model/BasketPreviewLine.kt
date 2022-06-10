@@ -4,40 +4,31 @@ import kotlin.math.truncate
 
 interface BasketPreviewEntry
 
-class LineEntries {
-    val found: MutableList<BasketEntry> = mutableListOf()
-    val notFound: MutableList<BasketEntry> = mutableListOf()
-    val oftenDeleted: MutableList<BasketEntry> = mutableListOf()
-    val removed: MutableList<BasketEntry> = mutableListOf()
-
-    fun copy() : LineEntries {
-        val newEntries = LineEntries()
-        found.let { newEntries.found.addAll(it) }
-        removed.let { newEntries.removed.addAll(it) }
-        oftenDeleted.let { newEntries.oftenDeleted.addAll(it) }
-        notFound.let { newEntries.notFound.addAll(it) }
-        return  newEntries
+data class LineEntries(
+    val found: List<BasketEntry> = listOf(),
+    val notFound: List<BasketEntry> = listOf(),
+    val oftenDeleted: List<BasketEntry> = listOf(),
+    val removed: List<BasketEntry> = listOf()
+) {
+    fun updateBasketEntries(basketEntries: List<BasketEntry>): LineEntries {
+        return this.copy(
+            found = updateBasketEntryInList(found, basketEntries),
+            notFound = updateBasketEntryInList(notFound, basketEntries),
+            oftenDeleted = updateBasketEntryInList(oftenDeleted, basketEntries),
+            removed = updateBasketEntryInList(removed, basketEntries),
+        )
     }
 
-    fun updateBasketEntries(basketEntries: List<BasketEntry>) {
-        basketEntries.forEach { updateBasketEntry(it) }
-    }
-
-    private fun updateBasketEntry(basketEntry: BasketEntry) {
-        updateBasketEntryInList(found, basketEntry)
-        updateBasketEntryInList(removed, basketEntry)
-        updateBasketEntryInList(oftenDeleted, basketEntry)
-        updateBasketEntryInList(notFound, basketEntry)
-    }
-
-    private fun updateBasketEntryInList(basketEntries: MutableList<BasketEntry>, basketEntry: BasketEntry) {
-        val existingEntryIdx = basketEntries.indexOfFirst{ be ->
-            be.id == basketEntry.id
+    private fun updateBasketEntryInList(existingBasketEntries: List<BasketEntry>, newBasketEntries: List<BasketEntry>): List<BasketEntry> {
+        return existingBasketEntries.map { be ->
+            newBasketEntries.find { newBe -> newBe.id == be.id }?: be
         }
-        if (existingEntryIdx >= 0) {
-            var existingEntry = basketEntries[existingEntryIdx]
-            existingEntry = existingEntry.updateQuantity(basketEntry.attributes!!.quantity ?: 0)
-            basketEntries[existingEntryIdx] = existingEntry
+    }
+
+    fun totalPrice(): Double {
+        return found.sumOf { be ->
+            val beItem = be.attributes!!.basketEntriesItems?.find { bei -> bei.itemId == be.attributes.selectedItemId }
+            if (beItem?.unitPrice != null && be.attributes.quantity != null) beItem.unitPrice * be.attributes.quantity else 0.0
         }
     }
 }
@@ -62,20 +53,6 @@ data class BasketPreviewLine(
                         this.entries.notFound.isNotEmpty()||
                         this.entries.oftenDeleted.isNotEmpty() ||
                         this.entries.removed.isNotEmpty())
-    }
-
-    fun updatePrice() :BasketPreviewLine {
-        var total = 0.0
-        this.entries!!.found.forEach { fe ->
-            val beItem = fe.attributes!!.basketEntriesItems?.find { bei ->bei.itemId ==  fe.attributes.selectedItemId }
-            val price = if(beItem?.unitPrice != null && fe.attributes.quantity != null ) beItem.unitPrice * fe.attributes.quantity else 0.0
-            total+= price
-        }
-        return  this.copy(price = total.toString())
-    }
-
-    fun updateEntries() : BasketPreviewLine {
-        return this.copy(entries = this.entries!!.copy()).updatePrice()
     }
 
     companion object {
