@@ -725,6 +725,20 @@ then click on **+** button and select your framwork
 
 ![alt text](pic/addFrameworkStep3.png "add framework step 3")
 
+#### Running the demo application in the simulator on Apple Silicon (M1, M2)
+
+To run miam iOS Framework on Apple Silicon, a few steps are required:
+
+1. Xcode need to be opened using Rosetta
+
+![alt text](pic/openWithRosetta.png "open with rosetta")
+
+2. arm64 architecture must be excluded the build when building for iOS Simulator.
+
+![alt text](pic/excludeArm64.png "exclude arm64")
+
+
+
 #### Main class
 
 We recommend that all the mapping functions that will define the interactions between the SDK and the host app be wrapped in a main "Miam" class.
