@@ -67,6 +67,7 @@ public struct RecipeCardView: View {
                                 placeholder: { Text("loading ...")},
                                 height : 245
                             ).frame(height: 245).onTapGesture {
+                                viewModel.goToDetail()
                                 showingPopup = true
                             }
                             HStack(alignment: .center) {
@@ -129,8 +130,6 @@ public struct RecipeCardView: View {
                     }
                     
                 }
-                           
-                           
                 ).cornerRadius(15).clipped().overlay(
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)

@@ -53,9 +53,9 @@ struct BasketPreviewHeader: View {
             Spacer()
 
             CounterView(count: numberOfGuests, isDisable: false) {
-
+                increaseGuestsCount()
             } decrease: {
-
+                descreaseGuestsCount()
             }
 
         }
