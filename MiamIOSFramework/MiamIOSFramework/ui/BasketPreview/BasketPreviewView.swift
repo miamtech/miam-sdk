@@ -33,11 +33,11 @@ public struct BasketPreviewView: View {
                     .frame(width: 30, height: 30, alignment: .center)
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 
-                Text("XX produits ajoutés à votre panier")
+                Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 Spacer()
-            }.frame(width: .infinity, height: 50, alignment: .leading)
+            }.frame(height: 50, alignment: .leading)
 
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle, basketDescription: viewModel.basketDescription, pricePerGuest: viewModel.pricePerGuest, numberOfGuests: Int(viewModel.numberOfGuests), price: viewModel.price, pictureURL: viewModel.pictureURL!, descreaseGuestsCount: {}, increaseGuestsCount: {})

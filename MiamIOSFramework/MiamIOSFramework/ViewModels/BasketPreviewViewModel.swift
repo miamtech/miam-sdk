@@ -65,6 +65,10 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         return basketPreviewLine?.price ?? ""
     }
 
+    public var  numberOfproductsInBasket: Int {
+        return basketPreviewLine?.entries?.found.count ?? 0
+    }
+
     public var productsInBasket: Array<BasketEntry> {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
         guard let entries = basketPreviewLine?.entries?.found as? Array<BasketEntry> else {
