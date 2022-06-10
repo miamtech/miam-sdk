@@ -24,14 +24,35 @@ struct Dialog: View {
     
     func goToDetail(vmRecipe :RecipeViewModel){
         viewModel.getKotlinVm().setEvent(event:
-                            RouterOutletContractEvent.GoToDetail(
-                                vm: vmRecipe,
-                                withFooter: false
-                            )
+                                            RouterOutletContractEvent.GoToDetail(
+                                                vm: vmRecipe,
+                                                withFooter: false
+                                            )
         )
     }
     
-
+    func goToReplaceItem() {
+        ItemSelectorVM.sharedInstance.setEvent(
+            event:
+                ItemSelectorContractEvent.SetReturnToBasketPreview(
+                    returnToPreview : {
+                        if(viewModel.state != nil && viewModel.state?.recipeId != nil && viewModel.state?.rvm != nil){
+                            viewModel.getKotlinVm().setEvent(event:
+                                    RouterOutletContractEvent.GoToPreview(
+                                        recipeId : viewModel.state!.recipeId!,
+                                        vm : viewModel.state!.rvm!
+                                    )
+                                )
+                        } else {
+                            close()
+                        }
+                    }
+                )
+        )
+        viewModel.getKotlinVm().setEvent(event:
+                                            RouterOutletContractEvent.GoToItemSelector()
+        )
+    }
     
     var body: some View {
         VStack{
@@ -39,9 +60,8 @@ struct Dialog: View {
                 switch viewModel.state?.content {
                 case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
                 case RouterContent.basketPreview : BasketPreview()
-                case RouterContent.itemsSelector : HStack{}
+                case RouterContent.itemsSelector : ItemSelector()
                 default: HStack{}
-                    
                 }
             }
         }

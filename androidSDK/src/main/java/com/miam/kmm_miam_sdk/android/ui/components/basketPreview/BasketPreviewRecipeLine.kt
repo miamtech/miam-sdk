@@ -45,7 +45,7 @@ fun BasketPreviewRecipeLine(
 
     val price = Price(price = line.price.toDouble(), isTotalPrice = true)
     val recipeName = line.title
-    val recipeDescription = line.description[0]
+    val recipeDescription = line.bplDescription[0]
     val pricePerGuest = "${ (round(((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()).toDouble()) / 100) }€ /personne"
     var count by remember { mutableStateOf(line.count) }
 

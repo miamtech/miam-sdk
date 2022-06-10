@@ -43,7 +43,8 @@ public struct RecpieDetailsView: View {
                                         url: URL(
                                             string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                         )! ,
-                                        placeholder: { Text("loading ...")}
+                                        placeholder: { Text("loading ...")},
+                                        height: 250
                                     ).frame(height: 250).padding(.top,50)
                                     HStack {
                                         //TODO Put logic into like button component
