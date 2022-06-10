@@ -112,7 +112,7 @@ class ItemsSelector () :KoinComponent {
                                     verticalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = state.value.selectedItem?.description?.get(0) ?: " ",
+                                        text = state.value.selectedItem?.bplDescription?.get(0) ?: " ",
                                         textAlign = TextAlign.Center,
                                         style = bodySmallBold
                                     )
@@ -194,7 +194,7 @@ class ItemsSelector () :KoinComponent {
                                                     )
                                                     Text(
                                                         text = "${
-                                                            itemsList[index].description?.get(
+                                                            itemsList[index].bplDescription?.get(
                                                                 0
                                                             ) ?: ' '
                                                         }",

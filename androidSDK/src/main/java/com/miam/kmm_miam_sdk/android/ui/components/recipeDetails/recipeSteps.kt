@@ -37,7 +37,7 @@ fun RecipeSteps(steps: List<RecipeStep>,vmRecipe: RecipeViewModel) {
             var stepNumber = it.attributes!!.stepNumber
             Step(
                 stepNumber,
-                it.attributes!!.description!!,
+                it.attributes!!.stepDescription!!,
                 state.activeStep >= it.attributes!!.stepNumber,
                 { onActivestep(stepNumber) }
             )

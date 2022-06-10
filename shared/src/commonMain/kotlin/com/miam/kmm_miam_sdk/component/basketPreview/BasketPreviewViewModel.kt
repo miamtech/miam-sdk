@@ -148,14 +148,15 @@ class BasketPreviewViewModel(val recipeId: String?):
         )
         val newBpl = currentState.bpl!!.copy(entries = newEntries, price = newEntries.totalPrice().toString())
         setState { copy(bpl = newBpl, line = BasicUiState.Success(newBpl)) }
-        basketStore.dispatch(BasketAction.AddBasketEntry(entry))
+        basketStore.dispatch(BasketAction.RemoveEntry(entry))
         updateBasketEntry(entry, 0)
     }
 
     private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
-        LogHandler.debug("[Miam] update entry $entry")
+        LogHandler.debug("[Miam] update entry $entry to $finalQty")
+        val newEntry = entry.updateQuantity(finalQty)
         lineEntriesSubject.collect { entries ->
-            val newEntries = entries.filter { be -> be.id != entry.id }.plus(entry)
+            val newEntries = entries.filter { be -> be.id != entry.id }.plus(newEntry)
             lineEntriesSubject.emit(newEntries)
         }
     }
