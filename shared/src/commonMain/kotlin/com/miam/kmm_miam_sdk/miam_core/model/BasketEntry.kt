@@ -33,33 +33,33 @@ data class BasketEntry private constructor(
         get() = relationships!!.items!!.data.find { item -> item.id == attributes!!.selectedItemId.toString() }
 
     fun updateQuantity(qty: Int): BasketEntry {
-        // println("Miam update quantity model $qty $this")
-        needPatch = true
-        return if (qty <= 0) {
-            // println("Miam update quantity model will delete")
-            updateStatus("deleted")
-        } else {
-            // println("Miam update quantity model will update qty")
-            var newRecord = this.copy(
-                attributes = this.attributes!!.copy(
-                    quantity = qty,
-                )
+        if (qty <= 0) return updateStatus("deleted")
+
+        var newRecord = this.copy(
+            attributes = this.attributes!!.copy(
+                quantity = qty,
             )
-            if (this.attributes.groceriesEntryStatus != "active") {
-                newRecord = newRecord.updateStatus("active")
-            }
-            newRecord
+        )
+        newRecord.needPatch = true
+        if (this.attributes.groceriesEntryStatus != "active") {
+            newRecord = newRecord.updateStatus("active")
         }
+        return newRecord
     }
 
     fun updateStatus(status: String): BasketEntry {
-        needPatch = true
-        if (this.relationships?.groceriesEntry?.data != null) this.relationships.groceriesEntry!!.data = this.relationships.groceriesEntry!!.data.updateStatus(status)
-        return this.copy(
+        var newRecord = this.copy(
             attributes = this.attributes!!.copy(
                 groceriesEntryStatus = status
             )
         )
+        newRecord.needPatch = true
+        if (this.relationships?.groceriesEntry?.data != null) {
+            newRecord = newRecord.copy(relationships = this.relationships.copy(
+                groceriesEntry = GroceriesEntryRelationship(this.relationships.groceriesEntry!!.data.updateStatus(status))
+            ))
+        }
+        return newRecord
     }
 
     fun updateSelectedItem(selectedItemId: Int): BasketEntry {

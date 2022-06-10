@@ -211,7 +211,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private fun alteredEntries(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{
-        var basketEntry =  basketEntries.find { it.id == aqbe.id.toString() }
+        var basketEntry =  basketEntries.find { it.id == aqbe.id }
 
         if (basketEntry != null) {
             val newQty = (basketEntry.attributes!!.quantity ?: 0) + aqbe.delatQty
