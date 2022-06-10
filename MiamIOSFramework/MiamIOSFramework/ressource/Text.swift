@@ -25,6 +25,8 @@ public class MiamText {
     public var totalTime = "Temps total"
     public let recpeitDetailsInfo = "Plus d'informatations"
     public let mealRowAlready = "Déjà dans vos placards"
+    public let mealRowNotFound = "Produits indisponibles"
+    public let mealRowRemoved = "Articles retirés du panier"
     public let select = "Choisir"
     public let swapProduct = "Remplacer le produit"
     public var difficultyEasy = "Chef débutant"
