@@ -165,21 +165,24 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
 
     private fun groupBasketEntries(recipesInfos : List<RecipeInfos>, entries : List<BasketEntry>) : List<LineEntries> {
         return recipesInfos.map { ri ->
-            val lineEntries = LineEntries()
+            val found = mutableListOf<BasketEntry>()
+            val oftenDeleted = mutableListOf<BasketEntry>()
+            val removed = mutableListOf<BasketEntry>()
+            val notFound = mutableListOf<BasketEntry>()
             entries.filter { entry -> entry.attributes!!.recipeIds?.contains(ri.id) ?: false }
                 .forEach { matchingEntry ->
                     val available  = matchingEntry.attributes!!.selectedItemId
                     if(available != null) {
                         when(matchingEntry.attributes.groceriesEntryStatus){
-                            "often_deleted" -> lineEntries.oftenDeleted.add(matchingEntry)
-                            "deleted" -> lineEntries.removed.add(matchingEntry)
-                            else -> lineEntries.found.add(matchingEntry)
+                            "often_deleted" -> oftenDeleted.add(matchingEntry)
+                            "deleted" -> removed.add(matchingEntry)
+                            else -> found.add(matchingEntry)
                         }
                     } else {
-                        lineEntries.notFound.add(matchingEntry)
+                        notFound.add(matchingEntry)
                     }
                 }
-            lineEntries
+            LineEntries(found = found, removed = removed, oftenDeleted = oftenDeleted, notFound = notFound)
         }
     }
 
@@ -221,8 +224,8 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     }
 
     private suspend fun updateBasketEntryStatus(basketEntry: BasketEntry, status: String): BasketEntry {
-        basketEntry.updateStatus(status)
-        return updateBasketEntry(basketEntry)
+        val newEntry = basketEntry.updateStatus(status)
+        return updateBasketEntry(newEntry)
     }
 
     private suspend fun updateBasketEntry(basketEntry: BasketEntry): BasketEntry {

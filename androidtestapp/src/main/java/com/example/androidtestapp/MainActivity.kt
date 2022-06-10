@@ -32,6 +32,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
@@ -41,7 +42,6 @@ import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
 import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
-        UserHandler.updateUserId("ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        UserHandler.updateUserId("alexis")
     }
 
     private val recipeloader:  @Composable () -> Unit = { Box(
