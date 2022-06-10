@@ -12,6 +12,7 @@ struct BasketPreviewRow: View {
 
     private let productImageDimensions = CGSize(width: 90, height: 90)
     let productName: String
+    let productPictureURL: URL?
     let productBrandName: String
     let productDescription: String
     let productPrice: String
@@ -19,15 +20,19 @@ struct BasketPreviewRow: View {
     let removeProductAction: () -> Void
     let replaceProductAction: () -> Void
 
+    private var hasPicture: Bool {
+        productPictureURL != nil
+    }
 
     private let moreInformationButtonTitle = "Plus d'infos"
     private let replaceIngredientButtonTitle = "Remplacer"
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                AsyncImage(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!,
-                           placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
-                
+                if hasPicture {
+                    AsyncImage(url: productPictureURL!,
+                               placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
+                }
                 VStack (alignment: .leading) {
                     
                     Text(productName)
@@ -99,6 +104,6 @@ struct BasketPreviewRow: View {
 
 struct ProductRow_Previews: PreviewProvider {
     static var previews: some View {
-        BasketPreviewRow(productName: "Bière blonde (40 cl)", productBrandName: "3 MONTS", productDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus. 0.15 kg", productPrice: "1.59", removeProductAction: {}, replaceProductAction: {})
+        BasketPreviewRow(productName: "Bière blonde (40 cl)", productPictureURL: nil, productBrandName: "3 MONTS", productDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus. 0.15 kg", productPrice: "1.59", removeProductAction: {}, replaceProductAction: {})
     }
 }

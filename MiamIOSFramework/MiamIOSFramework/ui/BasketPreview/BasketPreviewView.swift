@@ -58,7 +58,7 @@ public struct BasketPreviewView: View {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
 
-                        BasketPreviewRow(productName: previewLine.title, productBrandName: previewLine.productBrand,
+                        BasketPreviewRow(productName: previewLine.title, productPictureURL: URL(string: previewLine.picture), productBrandName: previewLine.productBrand,
                                          productDescription: previewLine.productDescription, productPrice: previewLine.price, removeProductAction: {
                             removeProduct(entry)
                         }, replaceProductAction: {
