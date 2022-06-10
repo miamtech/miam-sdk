@@ -32,7 +32,7 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
     }
 
     public var basketDescription: String {
-        return basketPreviewLine?.description_[0] ?? ""
+        return basketPreviewLine?.bplDescription[0] ?? ""
     }
 
     public var pricePerGuest: String {

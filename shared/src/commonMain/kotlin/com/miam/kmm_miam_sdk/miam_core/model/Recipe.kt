@@ -89,8 +89,10 @@ data class RecipeAttributes constructor(
 
     @SerialName("ext-link")
     val extLink: String? = null,
-
-    val description: String? = null,
+    
+    // description is a key word in swift
+    @SerialName("description")
+    val recipeDescription: String? = null,
 
     @SerialName("number-of-guests")
     val numberOfGuests: Int = 4,

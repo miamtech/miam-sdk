@@ -16,7 +16,7 @@ struct BasketPreviewRow: View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
                 AsyncImage(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!,
-                           placeholder: { ProgressView() }).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
+                           placeholder: { ProgressView() },height:90).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                 
                 VStack (alignment: .leading){
                     
