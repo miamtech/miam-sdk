@@ -68,12 +68,12 @@ object Template {
     @Composable() (recipe : Recipe) -> Unit
     ) ? = null
 
-    var recipeDetailStepsTemplate : (@Composable() (
+    var recipeDetailIngredientTemplate : (@Composable() (
         recipe: Recipe,
         vmRecipe : RecipeViewModel
             ) -> Unit )? = null
 
-    var recipeDetailIngredientTemplate :  (@Composable() (
+    var recipeDetailStepsTemplate :  (@Composable() (
         steps : List<RecipeStep>,
         vmRecipe : RecipeViewModel
             ) -> Unit )? =  null
@@ -147,5 +147,12 @@ object Template {
 /////////////// My Meal Page  //////////////////////
 
     var myMealLoaderTemplate :  (@Composable() () -> Unit)? = null
+
+///////////////////  Tag  //////////////////////////
+
+    var TagTemplate: (@Composable() (
+        recipes: List<Recipe>,
+        showRecipe : (recipe: Recipe) -> Unit
+    ) -> Unit)? = null
 
 }

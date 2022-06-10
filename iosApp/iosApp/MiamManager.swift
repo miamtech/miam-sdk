@@ -12,30 +12,7 @@ import MiamIOSFramework
 import SwiftUI
 
 
-public class TestProduct {
-var id :String;
-var name: String;
-var quantity :Int;
-var price: Double?;
-var identifier: String?;
 
-
-    init (id: String, name: String, quantity: Int, price: Double, identifier: String)  {
-      self.id = id
-      self.name = name
-      self.quantity = quantity
-      self.price = price
-      self.identifier = identifier
-  }
-    
-    init (id: String, name: String, quantity: Int)  {
-      self.id = id
-      self.name = name
-      self.quantity = quantity
-      self.price = nil
-      self.identifier = nil
-  }
-}
 
 
 public class MiamManager {
@@ -63,7 +40,7 @@ public class MiamManager {
       //initCustomText()
   }
     
-    private func yourProductsToRetailerProducts(products: Array<TestProduct>) -> Array<RetailerProduct> {
+    private func yourProductsToRetailerProducts(products: Array<MyProduct>) -> Array<RetailerProduct> {
       return products.map {
        return RetailerProduct(
             retailerId: $0.id,
@@ -77,17 +54,17 @@ public class MiamManager {
     private func pushProductToBasket(products: Array<RetailerProduct>){
         retailerProductsToYourProducts(products: products).forEach( {
             if($0.quantity == 0){
-                AppBasket.sharedInstance.basket.remove(removedProduct: $0)
+                MyBasket.shared.remove(removedProduct: $0)
             } else {
-                AppBasket.sharedInstance.basket.add(addedProduct: $0)
+                MyBasket.shared.add(addedProduct: $0)
             }
           }
         )
     }
     
-    private func retailerProductsToYourProducts(products: Array<RetailerProduct>) -> Array<TestProduct> {
+    private func retailerProductsToYourProducts(products: Array<RetailerProduct>) -> Array<MyProduct> {
       return products.map {
-        return   TestProduct(
+        return   MyProduct(
             id: $0.retailerId,
             name: "\($0.name)",
             quantity: Int($0.quantity)
@@ -98,7 +75,7 @@ public class MiamManager {
     private func initBasketListener(
        
     ) {
-        AppBasket.sharedInstance.basket.$items.sink {
+        MyBasket.shared.$items.sink {
          print($0)
         //TODO push product to basket basketHandler.pushProductsToMiamBasket(retailerBasket: [])
              

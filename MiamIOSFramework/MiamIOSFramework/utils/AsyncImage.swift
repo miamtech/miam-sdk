@@ -35,26 +35,27 @@ class ImageLoader : ObservableObject {
 struct AsyncImage<Placeholder:View> : View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
+    private let height: CGFloat
     
-    init(url:URL, @ViewBuilder placeholder: () -> Placeholder ){
+    init(url:URL, @ViewBuilder placeholder: () -> Placeholder, height: CGFloat ){
         self.placeholder = placeholder()
+        self.height = height
         _loader = StateObject(wrappedValue: ImageLoader(url: url))
         
     }
     
     var body: some View {
-        content.onAppear(perform: loader.load)
-    }
-    
-    private var content : some View {
-        Group {
-            if loader.image != nil {
+        HStack {
+            if (loader.image != nil) {
                 GeometryReader { geo in
-                    Image(uiImage: loader.image!).resizable().scaledToFill().frame(width: geo.size.width * 1, height: 245)
+                    Image(uiImage: loader.image!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geo.size.width * 1, height: height)
                 }
             } else {
                 placeholder
             }
-        }
+        }.onAppear(perform: loader.load)
     }
 }
