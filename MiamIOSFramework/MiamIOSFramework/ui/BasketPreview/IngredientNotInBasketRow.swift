@@ -14,26 +14,30 @@ struct IngredientNotInBasketRow: View {
     private let addIngredientText = "Ajouter"
     private let addIngredientIcon = "PlusGreen"
     var body: some View {
-        HStack {
-            Text(name)
-                .font(.system(size: 16.0, weight: .bold, design: .default))
-                .foregroundColor(MiamColor.sharedInstance.bodyText)
-
-            Spacer()
-
-            Button(action: addIngredientAction) {
-                Image(addIngredientIcon)
-                    .resizable()
-                    .aspectRatio( contentMode: .fit)
-                    .frame(width: 30, height: 30, alignment: .center)
-                    .foregroundColor(MiamColor.sharedInstance.primary)
-                Text(addIngredientText)
+        if (Template.sharedInstance.ingredientNotInBasketRowTemplate != nil) {
+            Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, addIngredientAction)
+        } else {
+            HStack {
+                Text(name)
                     .font(.system(size: 16.0, weight: .bold, design: .default))
-                    .foregroundColor(MiamColor.sharedInstance.primary)
-            }
+                    .foregroundColor(MiamColor.sharedInstance.bodyText)
 
-        }.padding(.horizontal, Dimension.sharedInstance.lPadding)
-            .padding(.bottom, Dimension.sharedInstance.lPadding)
+                Spacer()
+
+                Button(action: addIngredientAction) {
+                    Image(addIngredientIcon)
+                        .resizable()
+                        .aspectRatio( contentMode: .fit)
+                        .frame(width: 30, height: 30, alignment: .center)
+                        .foregroundColor(MiamColor.sharedInstance.primary)
+                    Text(addIngredientText)
+                        .font(.system(size: 16.0, weight: .bold, design: .default))
+                        .foregroundColor(MiamColor.sharedInstance.primary)
+                }
+
+            }.padding(.horizontal, Dimension.sharedInstance.lPadding)
+                .padding(.bottom, Dimension.sharedInstance.lPadding)
+        }
     }
 }
 

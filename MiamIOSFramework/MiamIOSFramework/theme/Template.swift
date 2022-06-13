@@ -156,4 +156,13 @@ public class Template {
         () -> Void,
         () -> Void
     ) -> AnyView)? = nil
+
+    /**
+     ingredientName: String
+     addToBasketAction: () -> Void
+     */
+    public var ingredientNotInBasketRowTemplate: ((
+        String,
+        () -> Void
+    )-> AnyView)? = nil
 }
