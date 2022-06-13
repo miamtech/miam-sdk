@@ -3,12 +3,20 @@ package com.miam.kmm_miam_sdk.component.itemSelector
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasketAction
 import com.miam.kmm_miam_sdk.base.mvi.BasketStore
+import com.miam.kmm_miam_sdk.handler.ContextHandler
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+
+object ItemSelectorInstance: KoinComponent {
+    val instance: ItemSelectorViewModel by inject()
+}
+
 open class ItemSelectorViewModel() :
-    BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>() {
+    BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>() ,KoinComponent {
 
     private val basketStore: BasketStore by inject()
 
@@ -35,6 +43,7 @@ open class ItemSelectorViewModel() :
     }
 
     private fun fillItem(basketEntry: BasketPreviewLine): MutableList<BasketPreviewLine> {
+        LogHandler.debug(""+(basketEntry.record as BasketEntry).relationships?.items?.data?.size)
         val itemList = mutableListOf<BasketPreviewLine>()
         (basketEntry.record as BasketEntry).relationships?.items?.data?.forEach {
             item ->

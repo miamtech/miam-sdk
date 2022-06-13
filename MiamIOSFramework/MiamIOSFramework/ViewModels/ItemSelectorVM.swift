@@ -9,24 +9,27 @@ import Foundation
 
 import shared
 
-public class ItemSelectorVM : ItemSelectorViewModel, ObservableObject {
+public class ItemSelectorVM : ObservableObject {
     
-    public static let sharedInstance = ItemSelectorVM()
+    @Published var state: ItemSelectorContractState?
     
-    private override init() {
-        super.init()
-        collect(flow: uiState, collect: { data in
-            let _ = data as! ItemSelectorContractState
+    public let sharedInstance = ItemSelectorInstance.shared.instance
+    
+    init() {
+        
+        sharedInstance.collect(flow: sharedInstance.uiState,
+                                                     collect: { data in
+            self.state = data as! ItemSelectorContractState
         })
         
     }
     
     public func returnToPreview(){
-        setEvent(event: ItemSelectorContractEvent.ReturnToBasketPreview())
+        sharedInstance.setEvent(event: ItemSelectorContractEvent.ReturnToBasketPreview())
     }
     
     public func chooseItem(index : Int) {
-        choose(index: Int32(index))
+        sharedInstance.choose(index: Int32(index))
         returnToPreview()
     }
 }
