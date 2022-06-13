@@ -61,7 +61,7 @@ struct Dialog: View {
                 case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
                 case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
                                                                      recipeVm:  (viewModel.state?.rvm!)!,
-                                                                     goToDetail: {},
+                                                                     goToDetail: {_ in },
                                                                      close: {},
                                                                      goToItemSelector: {}
                 )
