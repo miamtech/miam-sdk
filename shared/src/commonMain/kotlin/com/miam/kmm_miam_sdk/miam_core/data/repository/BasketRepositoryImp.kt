@@ -25,7 +25,6 @@ class BasketRepositoryImp ( private val basketDataSource: MiamAPIDatasource) : B
     }
 
     override suspend fun updateBasket(basket: Basket): Basket {
-        val origin  = pointOfSaleStore.getProviderOrigin()
-        return basketDataSource.updateBasket(basket,origin)
+        return basketDataSource.updateBasket(basket)
     }
 }

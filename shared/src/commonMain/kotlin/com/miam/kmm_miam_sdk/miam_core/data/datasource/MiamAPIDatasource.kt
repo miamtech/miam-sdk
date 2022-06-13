@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.data.datasource
 
+import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
 import com.miam.kmm_miam_sdk.base.mvi.UserStore
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.*
@@ -42,6 +43,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     SupplierDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
+    private val pointOfSaleStore: PointOfSaleStore by inject()
 
     private val httpClient = HttpClient{
         install(JsonFeature) {
@@ -76,6 +78,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
            userStore.observeState().value.userId.let {
                context.headers.append(HttpHeaders.Authorization, "user_id $it" )
            }
+           context.headers.append(HttpHeaders.Origin, pointOfSaleStore.getProviderOrigin())
            if (userStore.ProfilingForbiden()) {
                context.url.parameters["profiling"] = "off"
            }
@@ -286,12 +289,11 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return baskets[0]
     }
 
-    override suspend fun updateBasket(basket: Basket, origin:String): Basket {
+    override suspend fun updateBasket(basket: Basket): Basket {
         LogHandler.info("[Miam][MiamAPIDatasource] starting updateBasket $basket")
         val returnValue = httpClient.patch<RecordWrapper>{
-            headers.append(HttpHeaders.Origin, origin)
             headers.append( HttpHeaders.ContentType, "application/vnd.api+json" )
-            url(HttpRoutes.BASKET_ENDPOINT+"${basket.id}")
+            url(HttpRoutes.BASKET_ENDPOINT+ basket.id)
             body = RecordWrapper.fromRecord(basket)
         }.toRecord() as Basket
         LogHandler.info("[Miam][MiamAPIDatasource] end updateBasket $basket $returnValue")
