@@ -10,7 +10,7 @@ import shared
 
 public struct BasketPreviewView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
-    
+
     private var recipeVm : RecipeViewModel
     private var goToDetail : (_ : RecipeViewModel) -> Void
     private var close : ()-> Void
@@ -137,84 +137,81 @@ public struct BasketPreviewView: View {
                 }
 
                 if (viewModel.basketPreviewLine?.entries?.oftenDeleted ?? []).count > 0 {
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowAlready)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("Caret")
-                            .resizable()
-                            .aspectRatio( contentMode: .fit)
-                            .frame(width: 30, height: 30, alignment: .center)
-                    }
-                    .padding(Dimension.sharedInstance.lPadding)
-                    .background(MiamColor.sharedInstance.primaryLight)
-                    .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
-                    
-                    ForEach(viewModel.productsOftenDeleted, id: \.self) { entry in
-                        let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
-                        IngredientNotInBasketRow(name: productName, addIngredientAction: {
-                            addIngredient(entry)
-                        })
-                    }
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: viewModel.productsOftenDeleted, addIngredientAction: { entry in
+                        addIngredient(entry)
+                    })
+
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.notFound ?? []).count > 0 {
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowNotFound)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("Caret")
-                            .resizable()
-                            .aspectRatio( contentMode: .fit)
-                            .frame(width: 30, height: 30, alignment: .center)
-                    }
-                    .padding(Dimension.sharedInstance.lPadding)
-                    .background(MiamColor.sharedInstance.greySurface)
-                    .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
-                    ForEach(viewModel.productsNotFound, id: \.self) { entry in
-                        let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
-                        IngredientNotInBasketRow(name: productName, addIngredientAction: {
-                            addIngredient(entry)
-                        })
-                    }
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: viewModel.productsNotFound, addIngredientAction: { entry in
+                        addIngredient(entry)})
+
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.removed ?? []).count > 0 {
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowRemoved)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("Caret")
-                            .resizable()
-                            .aspectRatio( contentMode: .fit)
-                            .frame(width: 30, height: 30, alignment: .center)
-                    }
-                    .padding(Dimension.sharedInstance.lPadding)
-                    .background(MiamColor.sharedInstance.greySurface)
-                    .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
-                    
-                    
-                    ForEach(viewModel.productsRemoved, id: \.self) { entry in
-                        let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
-                        IngredientNotInBasketRow(name: productName, addIngredientAction: {
-                            addIngredient(entry)
-                        })
-                    }
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: viewModel.productsRemoved, addIngredientAction: { entry in
+                        addIngredient(entry)})
                 }
             }
             
             BasketPreviewBottomView {
                 
             } continueShoppingAction: {
+                
+            }
+        }
+    }
+}
+
+
+internal struct IngredientsHeader: View {
+    let title: String
+    @Binding var folded: Bool
+    private let foldedCarretImageName = "Caret"
+    @SwiftUI.State private var caretAngle = 0.0
+
+    init(title: String, folded: Binding<Bool> = .constant(true)) {
+        self.title = title
+        _folded = folded
+    }
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 16.0, weight: .bold, design: .default))
+                .foregroundColor(MiamColor.sharedInstance.bodyText)
+
+            Spacer()
+
+            Image(foldedCarretImageName)
+                .resizable()
+                .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
+                .frame(width: 30, height: 30, alignment: .center)
+        }
+        .padding(Dimension.sharedInstance.lPadding)
+        .background(MiamColor.sharedInstance.greySurface)
+        .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
+            folded.toggle()
+            caretAngle = folded ? 0.0 : 90.0
+        }
+    }
+}
+
+internal struct IngredientsFoldableView: View {
+    var title: String
+    var products: Array<BasketEntry>
+    @SwiftUI.State var folded: Bool = true
+    let addIngredientAction: (BasketEntry) -> Void
+    var body: some View {
+        IngredientsHeader(title: title, folded: $folded)
+
+        if (!folded) {
+            ForEach(products, id: \.self) { entry in
+                let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
+                IngredientNotInBasketRow(name: productName, addIngredientAction: {
+                    addIngredientAction(entry)
+                })
             }
         }
     }
