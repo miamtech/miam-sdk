@@ -120,7 +120,7 @@ public struct BasketPreviewView: View {
                                     numberOfGuests: count,
                                     price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
-                                    descreaseGuestsCount: decreaseGuestsCount,
+                                    decreaseGuestsCount: decreaseGuestsCount,
                                     increaseGuestsCount: increaseGuestsCount)
                 //List
                 VStack {

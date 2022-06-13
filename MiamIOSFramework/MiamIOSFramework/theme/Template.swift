@@ -118,21 +118,42 @@ public class Template {
 
 
     /**
-     productName: String
-     productPictureURL: URL?
-     productBrandName: String
-     productDescription: String
-     productPrice: String
-     remove: () -> Unit
-     replace: () -> Unit
+     basketTitle: String
+     basketPictureURL: URL?,
+     basketDescription: String,
+     pricePerGuest: String,
+     numberOfGuests: Int,
+     price: String,
+     decreaseGuestsCount: () -> Unit,
+     increaseGuestsCount: () -> Unit
+     */
+    public var basketPreviewHeaderTemplate: ((
+        String,
+        URL?,
+        String,
+        String,
+        Int,
+        String,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+    /**
+     productName: String,
+     productPictureURL: URL?,
+     productBrandName: String,
+     productDescription: String,
+     productPrice: String,
+     removeProduct: () -> Unit,
+     replaceProduct: () -> Unit
      */
     public var basketPreviewRowTemplate: ((
-        _: String,
-        _ : URL?,
-        _: String,
-        _: String,
-        _: String,
-        _: () -> Void,
-        _: () -> Void
+        String,
+        URL?,
+        String,
+        String,
+        String,
+        () -> Void,
+        () -> Void
     ) -> AnyView)? = nil
 }
