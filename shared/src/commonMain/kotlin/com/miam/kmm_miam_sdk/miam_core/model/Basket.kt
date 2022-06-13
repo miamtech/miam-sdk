@@ -24,14 +24,15 @@ data class Basket private constructor(
     }
 
     fun updateBasketEntry(newBe: BasketEntry): Basket {
-        val copy = this.copy()
-        val entryToUpdateIndex = copy.relationships?.basketEntries?.data?.indexOfFirst { be -> be.id == newBe.id }
+        var newBasket = this.copy()
+        val entryToUpdateIndex = newBasket.relationships?.basketEntries?.data?.indexOfFirst { be -> be.id == newBe.id }
         if (entryToUpdateIndex != null && entryToUpdateIndex >= 0) {
-            val newBasketEntries = copy.relationships.basketEntries!!.data.toMutableList()
+            val newBasketEntries = newBasket.relationships!!.basketEntries!!.data.toMutableList()
             newBasketEntries[entryToUpdateIndex] = newBe
-            copy.relationships.basketEntries!!.data = newBasketEntries
+            val newRelationships = newBasket.relationships!!.copy(basketEntries = BasketEntryRelationshipList(newBasketEntries))
+            newBasket = newBasket.copy(relationships = newRelationships)
         }
-        return copy
+        return newBasket
     }
 }
 
