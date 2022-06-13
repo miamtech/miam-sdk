@@ -31,6 +31,7 @@ interface BasketPreviewContract {
         val recipeId: Int?,
         val showLines: Boolean,
         val line: BasicUiState<BasketPreviewLine>, // ui state
+        val lineUpdates: List<BasketEntry>,
         val bpl: BasketPreviewLine?, //service state
         val isReloading: Boolean,
         val job: Job?

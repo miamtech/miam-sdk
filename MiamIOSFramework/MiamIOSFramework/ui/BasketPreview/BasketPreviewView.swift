@@ -77,6 +77,14 @@ public struct BasketPreviewView: View {
     func addIngredient(_ entry: BasketEntry) {
         viewModel.setEvent(event: BasketPreviewContractEvent.AddEntry(entry: entry))
     }
+
+     func removeProduct(_ entry: BasketEntry) {
+        viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
+    }
+
+    func replaceProduct(_ entry: BasketEntry) {
+
+    }
     
     public var body: some View {
         VStack {
@@ -93,17 +101,31 @@ public struct BasketPreviewView: View {
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 Spacer()
             }.frame(height: 50, alignment: .leading)
-            
+
             ScrollView {
-                BasketPreviewHeader(basketTitle: viewModel.basketTitle, basketDescription: viewModel.basketDescription, pricePerGuest: viewModel.pricePerGuest, numberOfGuests: count, price: viewModel.price, pictureURL: viewModel.pictureURL!, descreaseGuestsCount: {}, increaseGuestsCount: {})
-                
+                BasketPreviewHeader(basketTitle: viewModel.basketTitle,
+                 basketDescription: viewModel.basketDescription,
+                  pricePerGuest: viewModel.pricePerGuest,
+                   numberOfGuests: count,
+                    price: viewModel.price,
+                     pictureURL: viewModel.pictureURL!,
+                      descreaseGuestsCount: decreaseGuestsCount,
+                       increaseGuestsCount: increaseGuestsCount)
+
                 //List
                 VStack {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
-                        BasketPreviewRow()
+                        let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
+
+                        BasketPreviewRow(productName: previewLine.title, productPictureURL: URL(string: previewLine.picture), productBrandName: previewLine.productBrand,
+                                         productDescription: previewLine.productDescription, productPrice: previewLine.price, removeProductAction: {
+                            removeProduct(entry)
+                        }, replaceProductAction: {
+
+                        })
                     }
                 }
-                
+
                 if (viewModel.basketPreviewLine?.entries?.oftenDeleted ?? []).count > 0 {
                     HStack {
                         Text(MiamText.sharedInstance.mealRowAlready)
@@ -145,7 +167,6 @@ public struct BasketPreviewView: View {
                     .padding(Dimension.sharedInstance.lPadding)
                     .background(MiamColor.sharedInstance.greySurface)
                     .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding)
-                    
                     ForEach(viewModel.productsNotFound, id: \.self) { entry in
                         let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
                         IngredientNotInBasketRow(name: productName, addIngredientAction: {

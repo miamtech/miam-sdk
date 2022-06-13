@@ -25,14 +25,14 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
     private val _guestChangeDebounceFlow = MutableSharedFlow<Pair<BasketPreviewLine,RecipeViewModel>>()
-    private val lineEntriesSubject  = MutableSharedFlow<MutableList<BasketEntry>>()
-    var lastEntriesUpdate: MutableList<BasketEntry> = mutableListOf()
+    private val lineEntriesSubject  = MutableSharedFlow<List<BasketEntry>>()
 
     override fun createInitialState(): BasketPreviewContract.State =
         BasketPreviewContract.State(
             recipeId= null,
             showLines= false,
             line= BasicUiState.Loading,
+            lineUpdates = listOf(),
             bpl= null,
             isReloading= false,
             job = null
@@ -40,9 +40,8 @@ open class BasketPreviewViewModel(val recipeId: String?):
 
     init {
         if(recipeId != null){
-            // println("Miam --> basket RecipeId : $recipeId ")
-                basketChange()
-          val job = launch(coroutineHandler) {
+            basketChange()
+            val job = launch(coroutineHandler) {
                 basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
                     basketChange()
                 }
@@ -66,28 +65,17 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
        launch(coroutineHandler) {
            lineEntriesSubject.debounce(500).collect { entries ->
-            //    println("Miam listenEntriesChanges debounced with $entries")
-            //    println("Miam update ui $entries")
-               setState {
-                   copy(
-                       line = BasicUiState.Success(updateBplEntries(entries))
-                   )
-               }
-               // println("Miam listenEntriesChanges will dispatch with $entries")
+               LogHandler.info("launching update $entries")
+               val newBpl = updateBplEntries(entries)
+               setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl, lineUpdates = listOf()) }
                // create a copy of the list so you can clear it here
                basketStore.dispatch(
                    BasketAction.UpdateBasketEntries(
                        mutableListOf(*entries.toTypedArray())
                    )
                )
-               lastEntriesUpdate.clear()
-            }
+           }
         }
-    }
-
-    private fun updateBplEntries(basketEntries: MutableList<BasketEntry>): BasketPreviewLine {
-        currentState.bpl!!.entries!!.updateBasketEntries(basketEntries)
-        return  currentState.bpl!!.updateEntries()
     }
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
@@ -125,78 +113,59 @@ open class BasketPreviewViewModel(val recipeId: String?):
         setState { copy(showLines = !uiState.value.showLines)}
     }
 
+    private fun updateBplEntries(basketEntries: List<BasketEntry>): BasketPreviewLine {
+        val newBplEntries = currentState.bpl!!.entries!!.updateBasketEntries(basketEntries)
+        return currentState.bpl!!.copy(entries = newBplEntries, price = newBplEntries.totalPrice().toString())
+    }
+
     private fun addEntry(entry: BasketEntry){
         LogHandler.debug("[Miam] add entry $entry")
-        currentState.bpl?.entries?.found?.add(entry)
-        currentState.bpl?.entries?.found?.sortedBy { basketEntry -> basketEntry.id }
-        currentState.bpl?.entries?.oftenDeleted?.removeAll { be -> be.id == entry.id }
-        currentState.bpl?.entries?.removed?.removeAll { be -> be.id == entry.id }
-        LogHandler.debug("[Miam] add after entry $entry")
-
-        if(currentState.bpl != null ) {
-            setState {
-                copy(
-                    line = BasicUiState.Success(
-                        currentState.bpl!!.updateEntries()
-                    )
-                )
-            }
-            basketStore.dispatch(BasketAction.AddBasketEntry(entry))
+        if (currentState.bpl == null || currentState.bpl!!.entries == null) {
+            LogHandler.error("Trying to add entry with null bpl")
+            return
         }
 
+        val currentEntries = currentState.bpl!!.entries!!
+        val newEntries = currentEntries.copy(
+            found = currentEntries.found.toMutableList().plus(entry).sortedBy { basketEntry -> basketEntry.id },
+            oftenDeleted = currentEntries.oftenDeleted.toMutableList().filter { e -> e.id != entry.id },
+            removed = currentEntries.removed.toMutableList().filter { e -> e.id != entry.id }
+        )
+        val newBpl = currentState.bpl!!.copy(entries = newEntries, price = newEntries.totalPrice().toString())
+        setState { copy(bpl = newBpl, line = BasicUiState.Success(newBpl)) }
+        basketStore.dispatch(BasketAction.AddBasketEntry(entry))
     }
 
     private suspend fun removeBasketEntry(entry: BasketEntry){
         LogHandler.debug("[Miam] remove entry $entry")
-        currentState.bpl?.entries?.found?.removeAll { be -> be.id == entry.id }
-        currentState.bpl?.entries?.removed?.add(entry)
-        LogHandler.debug("[Miam] remove end entry $entry")
-        if(currentState.bpl != null ) {
-            setState {
-                copy(
-                    line = BasicUiState.Success(
-                        currentState.bpl!!.updateEntries()
-                    )
-                )
-            }
-            updateBasketEntry(entry, 0)
+        if (currentState.bpl == null || currentState.bpl!!.entries == null) {
+            LogHandler.error("Trying to add entry with null bpl")
+            return
         }
+
+        val currentEntries = currentState.bpl!!.entries!!
+        val newEntries = currentEntries.copy(
+            found = currentEntries.found.toMutableList().filter { e -> e.id != entry.id }.sortedBy { basketEntry -> basketEntry.id },
+            removed = currentEntries.removed.toMutableList().plus(entry)
+        )
+        val newBpl = currentState.bpl!!.copy(entries = newEntries, price = newEntries.totalPrice().toString())
+        setState { copy(bpl = newBpl, line = BasicUiState.Success(newBpl)) }
+        basketStore.dispatch(BasketAction.RemoveEntry(entry))
+        updateBasketEntry(entry, 0)
     }
 
     private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
-        // println("Miam updateBasketEntry $BasketEntry $finalQty")
-        // println("Miam updateBasketEntry already got $lastEntriesUpdate")
-        LogHandler.debug("[Miam] update entry $entry")
-        val existingEntryIdx = lastEntriesUpdate.indexOfFirst{ be ->
-            be.id == entry.id
-        }
-        if (existingEntryIdx >= 0) {
-            // println("Miam updateBasketEntry updating")
-            var existingEntry = lastEntriesUpdate[existingEntryIdx]
-            existingEntry = existingEntry.updateQuantity(finalQty)
-            lastEntriesUpdate[existingEntryIdx] = existingEntry
-        } else {
-            // println("Miam updateBasketEntry creating")
-            val newEntry = entry.updateQuantity(finalQty)
-            lastEntriesUpdate.add(newEntry)
-        }
-        // println("Miam updateBasketEntry will emit $lastEntriesUpdate")
-        LogHandler.debug("[Miam] update end entry $entry")
-        lineEntriesSubject.emit(lastEntriesUpdate)
+        LogHandler.debug("[Miam] update entry $entry to $finalQty")
+        val newEntry = entry.updateQuantity(finalQty)
+
+        val newLineUpdates = currentState.lineUpdates.filter { be -> be.id != entry.id }.plus(newEntry)
+        setState { copy(lineUpdates = newLineUpdates) }
+        lineEntriesSubject.emit(newLineUpdates)
     }
 
     private fun replaceItem(entry: BasketEntry){
-        val idx = currentState.bpl?.entries?.found?.indexOfFirst { be -> be.id == entry.id }
-        if(idx != -1 && idx!= null){
-            currentState.bpl!!.entries!!.found[idx] = entry
-            setState {
-                copy(
-                    line = BasicUiState.Success(
-                        currentState.bpl!!.updateEntries()
-                    )
-                )
-            }
-        }
+        val newBpl = updateBplEntries(listOf(entry))
+        setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
         setEvent(BasketPreviewContract.Event.CloseItemSelector)
     }
 

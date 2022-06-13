@@ -10,6 +10,7 @@ import Foundation
 import shared
 import MiamIOSFramework
 import SwiftUI
+import Combine
 
 
 
@@ -17,38 +18,40 @@ import SwiftUI
 
 public class MiamManager {
     
-  public static let sharedInstance = MiamManager()
-  private let availableStoreIdLists = ["454", "652"]
-  private let basketHandler: BasketHandler
-  
-  func isActiveOnStore() -> KotlinBoolean {
-    return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
-  }
+    public static let sharedInstance = MiamManager()
+    private let availableStoreIdLists = ["454", "652"]
+    private let basketHandler: BasketHandler
+    private var cancelable : AnyCancellable?
     
-  // need to be private
-  private init() {
-      KoinKt.doInitKoin()
-      basketHandler = BasketHandlerInstance.shared.instance
-      basketHandler.setListenToRetailerBasket(func: initBasketListener)
-      basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
-      basketHandler.pushProductsToMiamBasket(retailerBasket: [])
-      PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
-      PointOfSaleHandler.shared.setSupplierOrigin(origin:"www.coursesu.fr")
-      PointOfSaleHandler.shared.setSupplier(supplierId: 7)
-      PointOfSaleHandler.shared.isAvailable = isActiveOnStore
-      UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
-      //initCustomText()
-  }
+    func isActiveOnStore() -> KotlinBoolean {
+        return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
+    }
+    
+    // need to be private
+    private init() {
+        KoinKt.doInitKoin()
+        LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
+        basketHandler = BasketHandlerInstance.shared.instance
+        basketHandler.setListenToRetailerBasket(func: initBasketListener)
+        basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
+        basketHandler.pushProductsToMiamBasket(retailerBasket: [])
+        PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
+        PointOfSaleHandler.shared.setSupplierOrigin(origin:"www.coursesu.fr")
+        PointOfSaleHandler.shared.setSupplier(supplierId: 7)
+        PointOfSaleHandler.shared.isAvailable = isActiveOnStore
+        UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        //initCustomText()
+    }
     
     private func yourProductsToRetailerProducts(products: Array<MyProduct>) -> Array<RetailerProduct> {
-      return products.map {
-       return RetailerProduct(
-            retailerId: $0.id,
-            quantity: Int32($0.quantity),
-            name: $0.name,
-            productIdentifier: nil
-        )
-      }
+        return products.map {
+            return RetailerProduct(
+                retailerId: $0.id,
+                quantity: Int32($0.quantity),
+                name: $0.name,
+                productIdentifier: nil
+            )
+        }
     }
     
     private func pushProductToBasket(products: Array<RetailerProduct>){
@@ -58,33 +61,31 @@ public class MiamManager {
             } else {
                 MyBasket.shared.add(addedProduct: $0)
             }
-          }
+        }
         )
     }
     
     private func retailerProductsToYourProducts(products: Array<RetailerProduct>) -> Array<MyProduct> {
-      return products.map {
-        return   MyProduct(
-            id: $0.retailerId,
-            name: "\($0.name)",
-            quantity: Int($0.quantity)
-        )
-      }
+        return products.map {
+            return   MyProduct(
+                id: $0.retailerId,
+                name: "\($0.name)",
+                quantity: Int($0.quantity)
+            )
+        }
     }
     
-    private func initBasketListener(
-       
-    ) {
-        MyBasket.shared.$items.sink {
-         print($0)
-        //TODO push product to basket basketHandler.pushProductsToMiamBasket(retailerBasket: [])
-             
-       }
-     }
+    private func initBasketListener() {
+        cancelable = MyBasket.shared.$items.sink { receiveValue in
+            self.basketHandler.pushProductsToMiamBasket(
+                retailerBasket: self.yourProductsToRetailerProducts(products:receiveValue)
+            )
+        }
+    }
     
     private func getTotalPayment() -> KotlinDouble {
         return 2.0
-      }
+    }
     
     private func initCustomText() {
         MiamText.sharedInstance.alreadyInCart = "c'est dans la boite"
@@ -96,20 +97,20 @@ public class MiamManager {
           increase: @escaping () -> Void,
           decrease: @escaping () -> Void ) -> AnyView in
             AnyView(
-               HStack{
-                   Button(action: {
-                       decrease()
-                   }) {
-                       Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                   }
-                   Text(String(count))
-                   Button(action: {
-                       increase()
-                   }) {
-                       Image(systemName: "plus.circle").foregroundColor(.blue)
-                   }
+                HStack{
+                    Button(action: {
+                        decrease()
+                    }) {
+                        Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                    }
+                    Text(String(count))
+                    Button(action: {
+                        increase()
+                    }) {
+                        Image(systemName: "plus.circle").foregroundColor(.blue)
+                    }
                 }
-                )}
+            )}
     }
 }
 

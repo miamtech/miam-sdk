@@ -8,21 +8,13 @@
 import SwiftUI
 import shared
 
-public struct ItemSelector: View {
+public struct ItemSelector: View  {
     
-    @ObservedObject var viewModel: ItemSelectorVM = ItemSelectorVM()
+    @ObservedObject var viewModel = ItemSelectorVM.sharedInstance
     
     public init() {}
     
-    private func chooseItem(index : Int) {
-        viewModel.choose(index: Int32(index))
-        returnToPreview()
-    }
-    
-    private func returnToPreview(){
-        viewModel.setEvent(event: ItemSelectorContractEvent.ReturnToBasketPreview())
-    }
-    
+
     public var body: some View {
         ScrollView{
             ZStack{
@@ -37,7 +29,7 @@ public struct ItemSelector: View {
                     if(Template.sharedInstance.productOptionListTemplate != nil) {
                         Template.sharedInstance.productOptionListTemplate!(
                             viewModel.currentState.itemList ?? [],
-                            chooseItem
+                            viewModel.chooseItem
                         )
                     }
                     else {
@@ -46,7 +38,7 @@ public struct ItemSelector: View {
                             ItemSelectorProductRow(
                                 product: viewModel.currentState.itemList![i]
                             ).onTapGesture {
-                                chooseItem(index: i)
+                                viewModel.chooseItem(index: i)
                             }
                         }
                     }
@@ -55,7 +47,7 @@ public struct ItemSelector: View {
                 VStack(alignment: .leading){
                     HStack(spacing: 20){
                         Image("Arrow").onTapGesture {
-                            returnToPreview()
+                            viewModel.returnToPreview()
                         }
                         Text(ItemSelectorText.sharedInstance.swapProduct)
                             .foregroundColor(MiamColor.sharedInstance.black)
