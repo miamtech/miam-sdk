@@ -16,6 +16,7 @@ struct BasketPreviewHeader: View {
     let pricePerGuest: String
     let numberOfGuests: Int
     let price: String
+
     private var formattedPrice: String {
         guard let priceDouble = Double(price) else {
             return ""
@@ -23,6 +24,8 @@ struct BasketPreviewHeader: View {
 
         return String(format: "%.2f€", priceDouble)
     }
+    
+    
     let pictureURL: URL?
     private var hasPicture: Bool {
         return pictureURL != nil
@@ -65,10 +68,10 @@ struct BasketPreviewHeader: View {
                 Spacer()
 
                 CounterView(count: numberOfGuests, isDisable: false) {
-
-                } decrease: {
-
-                }
+                increaseGuestsCount()
+            } decrease: {
+                descreaseGuestsCount()
+            }
 
             }
         }.padding([.leading, .trailing], 16.0)

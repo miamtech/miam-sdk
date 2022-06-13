@@ -61,7 +61,7 @@ struct MyMealRow: View {
             //Product View
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(width: 120, height: 120, alignment: .topLeading)
+//                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(width: 120, height: 120, alignment: .topLeading)
                     
                     VStack (alignment: .leading){
                         

@@ -13,9 +13,6 @@ import SwiftUI
 import Combine
 
 
-
-
-
 public class MiamManager {
     
     public static let sharedInstance = MiamManager()
