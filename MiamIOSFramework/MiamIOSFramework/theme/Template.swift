@@ -139,6 +139,15 @@ public class Template {
     ) -> AnyView)? = nil
 
     /**
+     removeFromBasketAction: () -> Void
+     continueShoppingAction: () -> Void
+     */
+    public var basketPreviewFooterTemplate: ((
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+    /**
      productName: String,
      productPictureURL: URL?,
      productBrandName: String,
