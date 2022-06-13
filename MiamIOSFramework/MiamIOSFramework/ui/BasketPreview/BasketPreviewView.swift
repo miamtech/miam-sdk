@@ -160,7 +160,7 @@ public struct BasketPreviewView: View {
                 }
             }
             
-            BasketPreviewBottomView {
+            BasketPreviewFooter {
                 viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe())
                 close()
             } continueShoppingAction: {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-internal struct BasketPreviewBottomView: View {
+internal struct BasketPreviewFooter: View {
     let removeFromBasketAction: () -> Void
     let continueShoppingAction: () -> Void
 
