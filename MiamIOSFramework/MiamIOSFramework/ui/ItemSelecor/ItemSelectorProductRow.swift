@@ -30,17 +30,17 @@ struct ItemSelectorProductRow: View {
                     height: 90
                 ).frame(width: 90, height: 90)
                 VStack(alignment: .leading){
-                    Text(product.bplDescription[1] )
+                    Text(product.productBrand )
                         .font(.system(size: 13))
                         .padding(.bottom,8)
-                    Text(product.bplDescription[0] )
+                    Text(product.productDescription )
                         .font(.system(size: 13))
                         .padding(.bottom,32)
                         .foregroundColor(MiamColor.sharedInstance.grey)
                     HStack{
-                        Text(product.price)
+                        Text(product.price + "€")
                             .font(.system(size: 16, weight: .heavy))
-                        Text(isSelected ? ItemSelectorText.sharedInstance.alreadyInCart : ItemSelectorText.sharedInstance.select )
+                        Text(isSelected ? "Déjà au panier" : ItemSelectorText.sharedInstance.select )
                             .font(.system(size: 13, weight: .heavy))
                             .padding(.horizontal,16)
                             .padding(.vertical,4)

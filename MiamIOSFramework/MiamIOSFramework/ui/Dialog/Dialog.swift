@@ -13,6 +13,7 @@ import shared
 struct Dialog: View {
     
     private var close: () -> Void
+    private var itemSelectorVM = ItemSelectorVM()
     
     @ObservedObject var viewModel: DialogVM
     
@@ -32,7 +33,7 @@ struct Dialog: View {
     }
     
     func goToReplaceItem() {
-        ItemSelectorVM.sharedInstance.setEvent(
+        itemSelectorVM.sharedInstance.setEvent(
             event:
                 ItemSelectorContractEvent.SetReturnToBasketPreview(
                     returnToPreview : {
