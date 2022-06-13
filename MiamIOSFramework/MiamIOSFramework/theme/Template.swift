@@ -115,5 +115,72 @@ public class Template {
             _ : () -> Void,
             _ : () -> Void
                 ) -> AnyView )? =  nil
-        
+
+
+    /**
+     basketTitle: String
+     basketPictureURL: URL?,
+     basketDescription: String,
+     pricePerGuest: String,
+     numberOfGuests: Int,
+     price: String,
+     decreaseGuestsCount: () -> Unit,
+     increaseGuestsCount: () -> Unit
+     */
+    public var basketPreviewHeaderTemplate: ((
+        String,
+        URL?,
+        String,
+        String,
+        Int,
+        String,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+    /**
+     removeFromBasketAction: () -> Void
+     continueShoppingAction: () -> Void
+     */
+    public var basketPreviewFooterTemplate: ((
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+    /**
+     productName: String,
+     productPictureURL: URL?,
+     productBrandName: String,
+     productDescription: String,
+     productPrice: String,
+     removeProduct: () -> Unit,
+     replaceProduct: () -> Unit
+     */
+    public var basketPreviewRowTemplate: ((
+        String,
+        URL?,
+        String,
+        String,
+        String,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+    /**
+     foldableSectionTitle: String,
+     foldedState: Bool
+     */
+    public var ingredientFoldableHeaderTemplate: ((
+        String,
+        Binding<Bool>
+    ) -> AnyView)? = nil
+
+    /**
+     ingredientName: String
+     addToBasketAction: () -> Void
+     */
+    public var ingredientNotInBasketRowTemplate: ((
+        String,
+        () -> Void
+    )-> AnyView)? = nil
 }

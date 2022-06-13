@@ -13,6 +13,7 @@ import shared
 struct Dialog: View {
     
     private var close: () -> Void
+    private var itemSelectorVM = ItemSelectorVM()
     
     @ObservedObject var viewModel: DialogVM
     
@@ -32,7 +33,7 @@ struct Dialog: View {
     }
     
     func goToReplaceItem() {
-        ItemSelectorVM.sharedInstance.setEvent(
+        itemSelectorVM.sharedInstance.setEvent(
             event:
                 ItemSelectorContractEvent.SetReturnToBasketPreview(
                     returnToPreview : {
@@ -59,8 +60,13 @@ struct Dialog: View {
             HStack(alignment: .top){
                 switch viewModel.state?.content {
                 case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
-                case RouterContent.basketPreview : BasketPreview()
-                case RouterContent.itemsSelector : ItemSelector()
+                case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
+                                                                     recipeVm:  (viewModel.state?.rvm!)!,
+                                                                     goToDetail: goToDetail,
+                                                                     close: close,
+                                                                     goToItemSelector: goToReplaceItem
+                )
+               case RouterContent.itemsSelector : ItemSelector()
                 default: HStack{}
                 }
             }
