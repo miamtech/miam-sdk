@@ -24,6 +24,8 @@ struct BasketPreviewHeader: View {
 
         return String(format: "%.2f€", priceDouble)
     }
+    
+    
     let pictureURL: URL?
     private var hasPicture: Bool {
         return pictureURL != nil

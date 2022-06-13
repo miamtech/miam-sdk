@@ -12,7 +12,7 @@ public struct BasketPreviewView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
     private var recipeVm : RecipeViewModel
-    private var goToDetail : () -> Void
+    private var goToDetail : (_ : RecipeViewModel) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
@@ -21,7 +21,7 @@ public struct BasketPreviewView: View {
     
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
-                goToDetail: @escaping () -> Void,
+                goToDetail: @escaping (_ : RecipeViewModel) -> Void,
                 close: @escaping ()-> Void,
                 goToItemSelector: @escaping () -> Void
     )
@@ -59,7 +59,7 @@ public struct BasketPreviewView: View {
     }
     
     func increaseGuestsCount() {
-        if(viewModel.basketPreviewLine != nil && viewModel.basketPreviewLine?.count != 100){
+        if(viewModel.basketPreviewLine != nil && count != 100){
             count+=1
             updateGuest(count: count)
             
@@ -67,11 +67,10 @@ public struct BasketPreviewView: View {
     }
     
     func decreaseGuestsCount() {
-        if(viewModel.basketPreviewLine != nil && viewModel.basketPreviewLine?.count != 0){
+        if(viewModel.basketPreviewLine != nil && count != 1){
             count-=1
             updateGuest(count: count)
         }
-        
     }
     
     func addIngredient(_ entry: BasketEntry) {
@@ -82,19 +81,31 @@ public struct BasketPreviewView: View {
         viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
     }
 
-    func replaceProduct(_ entry: BasketEntry) {
-
+    func replaceProduct(_ previewLine: BasketPreviewLine) {
+        viewModel.setEvent(event: BasketPreviewContractEvent.OpenItemSelector(bpl: previewLine))
+        goToItemSelector()
     }
-    
+
     public var body: some View {
         VStack {
             // Top Bar
             HStack {
-                Image("Arrow")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 30, height: 30, alignment: .center)
-                    .padding(.leading, Dimension.sharedInstance.lPadding)
+                Button(
+                    action: {
+                        goToDetail(recipeVm)
+                    }
+                ) {
+                    Image("Caret")
+                        .renderingMode(.original)
+                        .frame(
+                            width: 24,
+                            height: 24,
+                            alignment: .center
+                        )
+                }
+                .frame( alignment: .center)
+                .rotationEffect(.degrees(180))
+                .padding(.horizontal , 8)
                 
                 Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
                     .font(.system(size: 16.0, weight: .bold, design: .default))
@@ -103,15 +114,14 @@ public struct BasketPreviewView: View {
             }.frame(height: 50, alignment: .leading)
 
             ScrollView {
-                BasketPreviewHeader(basketTitle: viewModel.basketTitle,
+                      BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                  basketDescription: viewModel.basketDescription,
                   pricePerGuest: viewModel.pricePerGuest,
                    numberOfGuests: count,
                     price: viewModel.price,
-                     pictureURL: viewModel.pictureURL!,
+                                    pictureURL: viewModel.pictureURL ??  URL(string:""),
                       descreaseGuestsCount: decreaseGuestsCount,
                        increaseGuestsCount: increaseGuestsCount)
-
                 //List
                 VStack {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
@@ -121,7 +131,7 @@ public struct BasketPreviewView: View {
                                          productDescription: previewLine.productDescription, productPrice: previewLine.price, removeProductAction: {
                             removeProduct(entry)
                         }, replaceProductAction: {
-
+                            replaceProduct(previewLine)
                         })
                     }
                 }
