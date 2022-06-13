@@ -183,23 +183,27 @@ internal struct IngredientsHeader: View {
     }
     
     var body: some View {
-        HStack {
-            Text(title)
-                .font(.system(size: 16.0, weight: .bold, design: .default))
-                .foregroundColor(MiamColor.sharedInstance.bodyText)
-            
-            Spacer()
-            
-            Image(foldedCarretImageName)
-                .resizable()
-                .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
-                .frame(width: 30, height: 30, alignment: .center)
-        }
-        .padding(Dimension.sharedInstance.lPadding)
-        .background(MiamColor.sharedInstance.greySurface)
-        .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
-            folded.toggle()
-            caretAngle = folded ? 0.0 : 90.0
+        if (Template.sharedInstance.ingredientFoldableHeaderTemplate != nil) {
+            Template.sharedInstance.ingredientFoldableHeaderTemplate!(title, $folded)
+        } else {
+            HStack {
+                Text(title)
+                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .foregroundColor(MiamColor.sharedInstance.bodyText)
+
+                Spacer()
+
+                Image(foldedCarretImageName)
+                    .resizable()
+                    .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
+                    .frame(width: 30, height: 30, alignment: .center)
+            }
+            .padding(Dimension.sharedInstance.lPadding)
+            .background(MiamColor.sharedInstance.greySurface)
+            .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
+                folded.toggle()
+                caretAngle = folded ? 0.0 : 90.0
+            }
         }
     }
 }

@@ -167,6 +167,15 @@ public class Template {
     ) -> AnyView)? = nil
 
     /**
+     foldableSectionTitle: String,
+     foldedState: Bool
+     */
+    public var ingredientFoldableHeaderTemplate: ((
+        String,
+        Binding<Bool>
+    ) -> AnyView)? = nil
+
+    /**
      ingredientName: String
      addToBasketAction: () -> Void
      */
