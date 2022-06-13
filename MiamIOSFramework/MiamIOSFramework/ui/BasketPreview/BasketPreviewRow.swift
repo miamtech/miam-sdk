@@ -73,7 +73,7 @@ struct BasketPreviewRow: View {
             HStack {
                 HStack {
                     Button(action: {
-                        
+                        replaceProductAction()
                     }) {
                         Image("sync").resizable()
                             .renderingMode(.original)

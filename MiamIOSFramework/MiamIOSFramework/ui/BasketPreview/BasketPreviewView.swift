@@ -10,7 +10,7 @@ import shared
 
 public struct BasketPreviewView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
-
+    
     private var recipeVm : RecipeViewModel
     private var goToDetail : (_ : RecipeViewModel) -> Void
     private var close : ()-> Void
@@ -76,16 +76,16 @@ public struct BasketPreviewView: View {
     func addIngredient(_ entry: BasketEntry) {
         viewModel.setEvent(event: BasketPreviewContractEvent.AddEntry(entry: entry))
     }
-
-     func removeProduct(_ entry: BasketEntry) {
+    
+    func removeProduct(_ entry: BasketEntry) {
         viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
     }
-
+    
     func replaceProduct(_ previewLine: BasketPreviewLine) {
         viewModel.setEvent(event: BasketPreviewContractEvent.OpenItemSelector(bpl: previewLine))
         goToItemSelector()
     }
-
+    
     public var body: some View {
         VStack {
             // Top Bar
@@ -112,41 +112,46 @@ public struct BasketPreviewView: View {
                     .padding(.leading, Dimension.sharedInstance.lPadding)
                 Spacer()
             }.frame(height: 50, alignment: .leading)
-
+            
             ScrollView {
-                      BasketPreviewHeader(basketTitle: viewModel.basketTitle,
-                 basketDescription: viewModel.basketDescription,
-                  pricePerGuest: viewModel.pricePerGuest,
-                   numberOfGuests: count,
-                    price: viewModel.price,
+                BasketPreviewHeader(basketTitle: viewModel.basketTitle,
+                                    basketDescription: viewModel.basketDescription,
+                                    pricePerGuest: viewModel.pricePerGuest,
+                                    numberOfGuests: count,
+                                    price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
-                      descreaseGuestsCount: decreaseGuestsCount,
-                       increaseGuestsCount: increaseGuestsCount)
+                                    descreaseGuestsCount: decreaseGuestsCount,
+                                    increaseGuestsCount: increaseGuestsCount)
                 //List
                 VStack {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
-
-                        BasketPreviewRow(productName: previewLine.title, productPictureURL: URL(string: previewLine.picture), productBrandName: previewLine.productBrand,
-                                         productDescription: previewLine.productDescription, productPrice: previewLine.price, removeProductAction: {
+                        
+                        BasketPreviewRow(
+                            productName: previewLine.title,
+                            productPictureURL: URL(string: previewLine.picture),
+                            productBrandName: previewLine.productBrand,
+                            productDescription: previewLine.productDescription,
+                            productPrice: previewLine.price,
+                            removeProductAction: {
                             removeProduct(entry)
                         }, replaceProductAction: {
                             replaceProduct(previewLine)
                         })
                     }
                 }
-
+                
                 if (viewModel.basketPreviewLine?.entries?.oftenDeleted ?? []).count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: viewModel.productsOftenDeleted, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
-
+                    
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.notFound ?? []).count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: viewModel.productsNotFound, addIngredientAction: { entry in
                         addIngredient(entry)})
-
+                    
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.removed ?? []).count > 0 {
@@ -156,9 +161,10 @@ public struct BasketPreviewView: View {
             }
             
             BasketPreviewBottomView {
-                
+                viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe())
+                close()
             } continueShoppingAction: {
-                
+                close()
             }
         }
     }
@@ -170,20 +176,20 @@ internal struct IngredientsHeader: View {
     @Binding var folded: Bool
     private let foldedCarretImageName = "Caret"
     @SwiftUI.State private var caretAngle = 0.0
-
+    
     init(title: String, folded: Binding<Bool> = .constant(true)) {
         self.title = title
         _folded = folded
     }
-
+    
     var body: some View {
         HStack {
             Text(title)
                 .font(.system(size: 16.0, weight: .bold, design: .default))
                 .foregroundColor(MiamColor.sharedInstance.bodyText)
-
+            
             Spacer()
-
+            
             Image(foldedCarretImageName)
                 .resizable()
                 .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
@@ -205,7 +211,7 @@ internal struct IngredientsFoldableView: View {
     let addIngredientAction: (BasketEntry) -> Void
     var body: some View {
         IngredientsHeader(title: title, folded: $folded)
-
+        
         if (!folded) {
             ForEach(products, id: \.self) { entry in
                 let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
