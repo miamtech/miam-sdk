@@ -63,12 +63,13 @@ data class BasketEntry private constructor(
     }
 
     fun updateSelectedItem(selectedItemId: Int): BasketEntry {
-        needPatch = true
-        return this.copy(
+        val newRecord = this.copy(
             attributes = this.attributes!!.copy(
                 selectedItemId = selectedItemId
             )
         )
+        newRecord.needPatch = true
+        return newRecord
     }
 }
 
