@@ -27,78 +27,82 @@ struct BasketPreviewRow: View {
     private let moreInformationButtonTitle = "Plus d'infos"
     private let replaceIngredientButtonTitle = "Remplacer"
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top) {
-                if hasPicture {
-                    AsyncImage(url: productPictureURL!,
-                               placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
-                }
-                VStack (alignment: .leading) {
-                    
-                    Text(productName)
-                        .foregroundColor(MiamColor.sharedInstance.black)
-                        .font(.system(size: 16, weight: .bold, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-                    
-                    Text(productBrandName)
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        .font(.system(size: 13, weight: .medium, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-                        .padding(.top, Dimension.sharedInstance.borderWidth)
-                    
-                    Text(productDescription)
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        .font(.system(size: 16, weight: .light, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-                        .padding(.top, Dimension.sharedInstance.borderWidth)
-                }
-                
-                Spacer()
-                Button(action: {
-                    removeProductAction()
-                }) {
-                    Image("Bin")
-                }.frame(width: 30, height: 30, alignment: .topTrailing)
-            }
-            
-            //Price
-            VStack {
-                Text("\(productPrice)€")
-                    .foregroundColor(MiamColor.sharedInstance.primaryText)
-                    .font(.system(size: 20, weight: .heavy, design: .default))
-            }.frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.top, Dimension.sharedInstance.borderWidth)
-            
-            //Ingredeient View
-            HStack {
-                HStack {
-                    Button(action: {
-                        replaceProductAction()
-                    }) {
-                        Image("sync").resizable()
-                            .renderingMode(.original)
-                            .frame(width: 30, height: 30, alignment: .topTrailing)
-                        Text(replaceIngredientButtonTitle)
-                            .foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .semibold, design: .default))
-                    }.frame(width: 145, height: 30, alignment: .topTrailing)
-                    
+        if (Template.sharedInstance.basketPreviewRowTemplate != nil) {
+            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, removeProductAction, replaceProductAction)
+        } else {
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    if hasPicture {
+                        AsyncImage(url: productPictureURL!,
+                                   placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
+                    }
+                    VStack (alignment: .leading) {
+
+                        Text(productName)
+                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .font(.system(size: 16, weight: .bold, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+
+                        Text(productBrandName)
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .font(.system(size: 13, weight: .medium, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                            .padding(.top, Dimension.sharedInstance.borderWidth)
+
+                        Text(productDescription)
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .font(.system(size: 16, weight: .light, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                            .padding(.top, Dimension.sharedInstance.borderWidth)
+                    }
+
                     Spacer()
-                    
-                    // Plus Minus View
-                    CounterView(count: 1, isDisable: false) {
-                        ()
-                    } decrease: {
-                        ()
+                    Button(action: {
+                        removeProductAction()
+                    }) {
+                        Image("Bin")
+                    }.frame(width: 30, height: 30, alignment: .topTrailing)
+                }
+
+                //Price
+                VStack {
+                    Text("\(productPrice)€")
+                        .foregroundColor(MiamColor.sharedInstance.primaryText)
+                        .font(.system(size: 20, weight: .heavy, design: .default))
+                }.frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.top, Dimension.sharedInstance.borderWidth)
+
+                //Ingredeient View
+                HStack {
+                    HStack {
+                        Button(action: {
+                            replaceProductAction()
+                        }) {
+                            Image("sync").resizable()
+                                .renderingMode(.original)
+                                .frame(width: 30, height: 30, alignment: .topTrailing)
+                            Text(replaceIngredientButtonTitle)
+                                .foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .semibold, design: .default))
+                        }.frame(width: 145, height: 30, alignment: .topTrailing)
+
+                        Spacer()
+
+                        // Plus Minus View
+                        CounterView(count: 1, isDisable: false) {
+                            ()
+                        } decrease: {
+                            ()
+                        }
                     }
                 }
+
+                Divider()
+                    .background(MiamColor.sharedInstance.borderBottom)
+                    .padding(.top, Dimension.sharedInstance.mPadding)
             }
-            
-            Divider()
-                .background(MiamColor.sharedInstance.borderBottom)
-                .padding(.top, Dimension.sharedInstance.mPadding)
+            .padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
+            .frame(alignment: .topLeading)
         }
-        .padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
-        .frame(alignment: .topLeading)
     }
 }
 

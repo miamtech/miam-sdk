@@ -32,50 +32,53 @@ struct BasketPreviewHeader: View {
     }
 
 
-    let descreaseGuestsCount: () -> Void
+    let decreaseGuestsCount: () -> Void
     let increaseGuestsCount: () -> Void
 
     var body: some View {
-        VStack {
-            HStack {
-                if hasPicture {
-                    AsyncImage(url: pictureURL!, placeholder: {
-                            ProgressView()
-                    }, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+        if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
+            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, price, numberOfGuests, price, decreaseGuestsCount, increaseGuestsCount)
+        } else {
+            VStack {
+                HStack {
+                    if hasPicture {
+                        AsyncImage(url: pictureURL!, placeholder: {
+                                ProgressView()
+                        }, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                    }
+
+                    VStack (alignment: .leading) {
+                        Text(basketTitle)
+                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .font(.system(size: 16, weight: .heavy, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+
+                        Text(basketDescription)
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .font(.system(size: 16, weight: .light, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                            .padding(.top, Dimension.sharedInstance.borderWidth)
+
+                        Text(pricePerGuest)
+                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .font(.system(size: 16, weight: .light, design: .default))
+                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                    }.frame(alignment: .topLeading)
+                }.frame(height: headerHeight, alignment: .topLeading)
+                HStack {
+
+                    Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
+                    Spacer()
+
+                    CounterView(count: numberOfGuests, isDisable: false) {
+                    increaseGuestsCount()
+                } decrease: {
+                    decreaseGuestsCount()
                 }
 
-                VStack (alignment: .leading) {
-                    Text(basketTitle)
-                        .foregroundColor(MiamColor.sharedInstance.black)
-                        .font(.system(size: 16, weight: .heavy, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-
-                    Text(basketDescription)
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        .font(.system(size: 16, weight: .light, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-                        .padding(.top, Dimension.sharedInstance.borderWidth)
-
-                    Text(pricePerGuest)
-                        .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        .font(.system(size: 16, weight: .light, design: .default))
-                        .padding(.leading, Dimension.sharedInstance.sPadding)
-                }.frame(alignment: .topLeading)
-            }.frame(height: headerHeight, alignment: .topLeading)
-            HStack {
-
-                Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
-                Spacer()
-
-                CounterView(count: numberOfGuests, isDisable: false) {
-                increaseGuestsCount()
-            } decrease: {
-                descreaseGuestsCount()
-            }
-
-            }
-        }.padding([.leading, .trailing], 16.0)
-        Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
-
+                }
+            }.padding([.leading, .trailing], 16.0)
+            Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
+        }
     }
 }
