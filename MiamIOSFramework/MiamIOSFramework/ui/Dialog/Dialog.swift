@@ -61,9 +61,9 @@ struct Dialog: View {
                 case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
                 case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
                                                                      recipeVm:  (viewModel.state?.rvm!)!,
-                                                                     goToDetail: {},
-                                                                     close: {},
-                                                                     goToItemSelector: {}
+                                                                     goToDetail: goToDetail,
+                                                                     close: close,
+                                                                     goToItemSelector: goToReplaceItem
                 )
                case RouterContent.itemsSelector : ItemSelector()
                 default: HStack{}
