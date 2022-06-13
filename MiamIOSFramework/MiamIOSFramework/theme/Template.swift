@@ -115,5 +115,24 @@ public class Template {
             _ : () -> Void,
             _ : () -> Void
                 ) -> AnyView )? =  nil
-        
+
+
+    /**
+     productName: String
+     productPictureURL: URL?
+     productBrandName: String
+     productDescription: String
+     productPrice: String
+     remove: () -> Unit
+     replace: () -> Unit
+     */
+    public var basketPreviewRowTemplate: ((
+        _: String,
+        _ : URL?,
+        _: String,
+        _: String,
+        _: String,
+        _: () -> Void,
+        _: () -> Void
+    ) -> AnyView)? = nil
 }
