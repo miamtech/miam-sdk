@@ -155,7 +155,6 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private suspend fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
-        LogHandler.debug("[Miam] update entry $entry to $finalQty")
         val newEntry = entry.updateQuantity(finalQty)
 
         val newLineUpdates = currentState.lineUpdates.filter { be -> be.id != entry.id }.plus(newEntry)

@@ -11,6 +11,7 @@ import SwiftUI
 struct IngredientNotInBasketRow: View {
     let name: String
     let addIngredientAction: () -> Void
+    let isAddable: Bool
     private let addIngredientText = "Ajouter"
     private let addIngredientIcon = "PlusGreen"
     var body: some View {
@@ -23,7 +24,7 @@ struct IngredientNotInBasketRow: View {
                     .foregroundColor(MiamColor.sharedInstance.bodyText)
 
                 Spacer()
-
+                if(isAddable){
                 Button(action: addIngredientAction) {
                     Image(addIngredientIcon)
                         .resizable()
@@ -34,6 +35,8 @@ struct IngredientNotInBasketRow: View {
                         .font(.system(size: 16.0, weight: .bold, design: .default))
                         .foregroundColor(MiamColor.sharedInstance.primary)
                 }
+                    
+                }
 
             }.padding(.horizontal, Dimension.sharedInstance.lPadding)
                 .padding(.bottom, Dimension.sharedInstance.lPadding)
@@ -43,6 +46,6 @@ struct IngredientNotInBasketRow: View {
 
 struct IngredientNotInBasketRow_Previews: PreviewProvider {
     static var previews: some View {
-        IngredientNotInBasketRow(name: "Oeufs", addIngredientAction: {})
+        IngredientNotInBasketRow(name: "Oeufs", addIngredientAction: {}, isAddable: true)
     }
 }

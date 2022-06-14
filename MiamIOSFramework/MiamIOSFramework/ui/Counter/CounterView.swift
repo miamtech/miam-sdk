@@ -30,15 +30,15 @@ struct CounterView: View {
     public init(
         count: Int,
         isDisable: Bool,
+        lightMode: Bool,
         increase: @escaping () -> Void,
-        decrease: @escaping () -> Void,
-        lightMode: Bool
+        decrease: @escaping () -> Void
     ) {
         self.count = count
         self.isDisable = isDisable
+        self.lightMode = lightMode
         self.increase = increase
         self.decrease = decrease
-        self.lightMode = lightMode
     }
     
     var body: some View {
@@ -58,11 +58,10 @@ struct CounterView: View {
                 }.padding(.leading, Dimension.sharedInstance.mPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
-                Text(String(count)+" pers.")
+                    Text(String(count) + " \( lightMode ? "" : "pers.")")
                     .foregroundColor(MiamColor.sharedInstance.white)
                     .font(.system(size: 13, weight: .bold, design: .default))
-                Spacer()
-                
+                    Spacer()
                 Button(action: {
                     increase()
                 }) {
@@ -70,7 +69,7 @@ struct CounterView: View {
                         .foregroundColor(MiamColor.sharedInstance.white)
                 }.padding(.trailing, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .trailing)
-            }.frame(width: 130.0, height: 40.0, alignment: .center)
+            }.frame(width: lightMode ? 80 : 130.0, height: 40.0, alignment: .center)
             .background(MiamColor.sharedInstance.primaryText)
             .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
         }

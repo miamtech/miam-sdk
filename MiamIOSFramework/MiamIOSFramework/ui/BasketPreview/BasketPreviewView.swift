@@ -17,7 +17,7 @@ public struct BasketPreviewView: View {
     private var goToItemSelector: () -> Void
     
     
-    @SwiftUI.State private var count: Int
+    @SwiftUI.State private var count: Int = 4
     
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
@@ -31,7 +31,7 @@ public struct BasketPreviewView: View {
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
-        self.count = Int(recipeVm.currentState.guest)
+       
     }
     
     
@@ -62,6 +62,7 @@ public struct BasketPreviewView: View {
         if(viewModel.basketPreviewLine != nil && count != 100){
             count+=1
             updateGuest(count: count)
+            recipeVm.setEvent(event: RecipeContractEvent.IncreaseGuest())
             
         }
     }
@@ -70,6 +71,7 @@ public struct BasketPreviewView: View {
         if(viewModel.basketPreviewLine != nil && count != 1){
             count-=1
             updateGuest(count: count)
+            recipeVm.setEvent(event: RecipeContractEvent.DecreaseGuest())
         }
     }
     
@@ -121,18 +123,18 @@ public struct BasketPreviewView: View {
                                     price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     decreaseGuestsCount: decreaseGuestsCount,
-                                    increaseGuestsCount: increaseGuestsCount)
+                                    increaseGuestsCount: increaseGuestsCount).onAppear(
+                                        perform: {
+                                            self.count = Int(recipeVm.currentState.guest)
+                                        })
                 //List
                 VStack {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
                         
                         BasketPreviewRow(
-                            productName: previewLine.title,
-                            productPictureURL: URL(string: previewLine.picture),
-                            productBrandName: previewLine.productBrand,
-                            productDescription: previewLine.productDescription,
-                            productPrice: previewLine.price,
+                            viewModel:viewModel,
+                            previewLine: previewLine,
                             removeProductAction: {
                             removeProduct(entry)
                         }, replaceProductAction: {
@@ -142,20 +144,20 @@ public struct BasketPreviewView: View {
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.oftenDeleted ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: viewModel.productsOftenDeleted, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: viewModel.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
                     
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.notFound ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: viewModel.productsNotFound, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: viewModel.productsNotFound, isAddable: false, addIngredientAction: { entry in
                         addIngredient(entry)})
                     
                 }
                 
                 if (viewModel.basketPreviewLine?.entries?.removed ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: viewModel.productsRemoved, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: viewModel.productsRemoved, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)})
                 }
             }
@@ -211,6 +213,7 @@ internal struct IngredientsHeader: View {
 internal struct IngredientsFoldableView: View {
     var title: String
     var products: Array<BasketEntry>
+    var isAddable : Bool
     @SwiftUI.State var folded: Bool = true
     let addIngredientAction: (BasketEntry) -> Void
     var body: some View {
@@ -221,7 +224,7 @@ internal struct IngredientsFoldableView: View {
                 let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
                 IngredientNotInBasketRow(name: productName, addIngredientAction: {
                     addIngredientAction(entry)
-                })
+                }, isAddable: isAddable)
             }
         }
     }
