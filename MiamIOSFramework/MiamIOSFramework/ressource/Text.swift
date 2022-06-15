@@ -23,7 +23,7 @@ public class MiamText {
     public var replaceBy = "Remplacer cet article par : "
     public var steps = "Préparation"
     public var totalTime = "Temps total"
-    public let recpeitDetailsInfo = "Plus d'informatations"
+    public let recpeitDetailsInfo = "Plus d'informations"
     public let mealRowAlready = "Déjà dans vos placards"
     public let mealRowNotFound = "Produits indisponibles"
     public let mealRowRemoved = "Articles retirés du panier"

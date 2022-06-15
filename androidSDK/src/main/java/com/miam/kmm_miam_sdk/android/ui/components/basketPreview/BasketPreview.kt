@@ -187,11 +187,8 @@ fun BasketPreviewSucessView(
     Column() {
         BasketPreviewRecipeLine(
             line = line,
-            { count ->
-                vmBasketPreview.setEvent(BasketPreviewContract.Event.CountChange(
-                    line.copy(count = count), recipeVm = recipeVm, )
-                )
-            },
+            { vmBasketPreview.setEvent(BasketPreviewContract.Event.AddGuest(recipeVm = recipeVm)) },
+            { vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveGuest(recipeVm = recipeVm)) },
             goToDetail
         )
         BasketPreviewItem(

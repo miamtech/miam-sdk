@@ -53,9 +53,9 @@ struct RecipeDetailsFooter: View {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(MiamColor.sharedInstance.white)
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
-                            .font(.system(size: 12.0, weight: .bold, design: .default))
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
                     }.frame(maxWidth: .infinity)
-                        .frame(height: 80.0)
+                        .frame(height: 64.0)
                         .background(MiamColor.sharedInstance.ternary).onTapGesture {
                             goToPreview()
                         }
@@ -70,7 +70,7 @@ struct RecipeDetailsFooter: View {
                             .frame(width: 24, height: 24, alignment: .center)
                             .foregroundColor(Color.white)
                     }.frame(maxWidth: .infinity)
-                        .frame(height: 80.0)
+                        .frame(height: 64.0)
                         .background(MiamColor.sharedInstance.primaryText).onTapGesture {
                             buy()
                             goToPreview()

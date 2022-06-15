@@ -16,7 +16,6 @@ public struct BasketPreviewView: View {
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
-    
     @SwiftUI.State private var count: Int = 4
     
     public init(recipeId: String,
@@ -34,34 +33,9 @@ public struct BasketPreviewView: View {
        
     }
     
-    
-    private func updateGuest(count: Int) {
-        if(viewModel.basketPreviewLine != nil){
-            
-            let currentBPL = viewModel.basketPreviewLine!
-            
-            let newBPL = BasketPreviewLine.init(
-                id: currentBPL.id,
-                record: currentBPL.record,
-                isRecipe: currentBPL.isRecipe,
-                inlineTag: currentBPL.inlineTag,
-                title: currentBPL.title,
-                picture: currentBPL.picture,
-                bplDescription: currentBPL.bplDescription,
-                price: currentBPL.price,
-                count: Int32(count),
-                entries: currentBPL.entries,
-                _displayMode: currentBPL._displayMode)
-            
-            viewModel.setEvent(event: BasketPreviewContractEvent.CountChange(
-                bpl: newBPL, recipeVm : recipeVm )
-            )}
-    }
-    
     func increaseGuestsCount() {
         if(viewModel.basketPreviewLine != nil && count != 100){
             count+=1
-            updateGuest(count: count)
             recipeVm.setEvent(event: RecipeContractEvent.IncreaseGuest())
             
         }
@@ -70,7 +44,6 @@ public struct BasketPreviewView: View {
     func decreaseGuestsCount() {
         if(viewModel.basketPreviewLine != nil && count != 1){
             count-=1
-            updateGuest(count: count)
             recipeVm.setEvent(event: RecipeContractEvent.DecreaseGuest())
         }
     }
@@ -162,12 +135,15 @@ public struct BasketPreviewView: View {
                 }
             }
             
-            BasketPreviewFooter {
-                viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe())
-                close()
-            } continueShoppingAction: {
-                close()
-            }
+            BasketPreviewFooter (
+                removeFromBasketAction: {
+                    viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe())
+                    close()
+                }
+                ,continueShoppingAction: {
+                    close()
+                }
+            )
         }
     }
 }

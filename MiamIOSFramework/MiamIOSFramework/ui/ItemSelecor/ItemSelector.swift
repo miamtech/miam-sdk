@@ -48,23 +48,31 @@ public struct ItemSelector: View  {
                                 
                             }
                         }
-                    }.padding(.top ,130)
+                    }.padding(.top , 80)
                     
                     VStack(alignment: .leading){
                         HStack(spacing: 20){
-                            Image("Arrow").onTapGesture {
-                                viewModel.returnToPreview()
+                            Button(
+                                action: {
+                                    viewModel.returnToPreview()
+                                }
+                            ) {
+                                Image("Caret")
+                                    .renderingMode(.original)
+                                    .frame(
+                                        width: 24,
+                                        height: 24,
+                                        alignment: .center
+                                    )
                             }
+                            .frame( alignment: .center)
+                            .rotationEffect(.degrees(180))
+                            .padding(.horizontal , 8)
                             Text(ItemSelectorText.sharedInstance.swapProduct)
                                 .foregroundColor(MiamColor.sharedInstance.black)
                                 .font(.system(size: 16, weight: .heavy, design: .default))
                         }.padding(16)
                         Divider()
-                        HStack{
-                            Text("Pour \(viewModel.state!.selectedItem!.count) \(viewModel.state!.selectedItem!.title)")
-                                .foregroundColor(MiamColor.sharedInstance.primary)
-                                .font(.system(size: 16, weight: .heavy, design: .default))
-                        }.padding(16)
                     }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
                 }
             }

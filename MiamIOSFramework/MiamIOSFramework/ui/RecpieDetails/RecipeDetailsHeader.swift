@@ -73,12 +73,12 @@ struct RecipeDetailsHeader: View {
                         alignment: .topLeading
                     )
                     .padding(.top,50)
-                    .padding(.horizontal,16)
+                    .padding(.horizontal,8)
                     .background(MiamColor.sharedInstance.white)
                     .offset(y: gr.frame(in: .global).origin.y < 0 // Is it going up?
                             ? abs(gr.frame(in: .global).origin.y) // Push it down!
                             : -gr.frame(in: .global).origin.y) // Push it up!
-                    Spacer() // Push header to top
+
                 }
             }
             

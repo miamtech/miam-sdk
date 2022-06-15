@@ -51,7 +51,7 @@ struct BasketPreviewRow: View {
     
     func increaseQty(){
        count+=1
-       viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: previewLine.count + 1))
+       viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count)))
    }
    
     func decreaseQty(){
@@ -59,7 +59,7 @@ struct BasketPreviewRow: View {
            viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: previewLine.record as! BasketEntry))
        }else{
            count-=1
-           viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: previewLine.count - 1))
+           viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count)))
        }
    }
     
