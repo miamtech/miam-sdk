@@ -6,27 +6,66 @@
 //
 
 import SwiftUI
+import shared
 
 struct BasketPreviewRow: View {
-    @State var stepperValue: Float = 0.0
-
+    
+    @SwiftUI.State var count: Int = 1
+   
     private let productImageDimensions = CGSize(width: 90, height: 90)
-    let productName: String
-    let productPictureURL: URL?
-    let productBrandName: String
-    let productDescription: String
-    let productPrice: String
-
-    let removeProductAction: () -> Void
-    let replaceProductAction: () -> Void
-
+    private let productName: String
+    private let productPictureURL: URL?
+    private let productBrandName: String
+    private let productDescription: String
+    private let productPrice: String
+    private var viewModel : BasketPreviewVM
+    private let previewLine: BasketPreviewLine
+    
+    private var removeProductAction: () -> Void = {}
+    private var replaceProductAction: () -> Void = {}
+    
     private var hasPicture: Bool {
         productPictureURL != nil
     }
-
+    
+    public init(viewModel : BasketPreviewVM,
+         previewLine: BasketPreviewLine,
+         removeProductAction: @escaping() -> Void,
+         replaceProductAction: @escaping() -> Void){
+        
+        self.viewModel = viewModel
+        self.previewLine = previewLine
+        self.productName = previewLine.title
+        self.productPictureURL = URL(string: previewLine.picture)
+        self.productBrandName =  previewLine.productBrand
+        self.productDescription = previewLine.productDescription
+        self.productPrice = previewLine.price
+        self.removeProductAction = removeProductAction
+        self.replaceProductAction = replaceProductAction
+    }
+    
+    
     private let moreInformationButtonTitle = "Plus d'infos"
     private let replaceIngredientButtonTitle = "Remplacer"
+    
+    
+    func increaseQty(){
+       count+=1
+       viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count)))
+   }
+   
+    func decreaseQty(){
+       if(previewLine.count  == 1 ){
+           viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: previewLine.record as! BasketEntry))
+       }else{
+           count-=1
+           viewModel.setEvent(event: BasketPreviewContractEvent.UpdateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count)))
+       }
+   }
+    
     var body: some View {
+        
+         
         if (Template.sharedInstance.basketPreviewRowTemplate != nil) {
             Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, removeProductAction, replaceProductAction)
         } else {
@@ -37,25 +76,25 @@ struct BasketPreviewRow: View {
                                    placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                     }
                     VStack (alignment: .leading) {
-
+                        
                         Text(productName)
                             .foregroundColor(MiamColor.sharedInstance.black)
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
-
+                        
                         Text(productBrandName)
                             .foregroundColor(MiamColor.sharedInstance.bodyText)
                             .font(.system(size: 13, weight: .medium, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
-
+                        
                         Text(productDescription)
                             .foregroundColor(MiamColor.sharedInstance.bodyText)
                             .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
                     }
-
+                    
                     Spacer()
                     Button(action: {
                         removeProductAction()
@@ -63,7 +102,7 @@ struct BasketPreviewRow: View {
                         Image("Bin")
                     }.frame(width: 30, height: 30, alignment: .topTrailing)
                 }
-
+                
                 //Price
                 VStack {
                     Text("\(productPrice)€")
@@ -71,31 +110,37 @@ struct BasketPreviewRow: View {
                         .font(.system(size: 20, weight: .heavy, design: .default))
                 }.frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.top, Dimension.sharedInstance.borderWidth)
-
+                
                 //Ingredeient View
                 HStack {
                     HStack {
-                        Button(action: {
-                            replaceProductAction()
-                        }) {
-                            Image("sync").resizable()
-                                .renderingMode(.original)
-                                .frame(width: 30, height: 30, alignment: .topTrailing)
-                            Text(replaceIngredientButtonTitle)
-                                .foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .semibold, design: .default))
-                        }.frame(width: 145, height: 30, alignment: .topTrailing)
-
-                        Spacer()
-
-                        // Plus Minus View
-                        CounterView(count: 1, isDisable: false) {
-                            ()
-                        } decrease: {
-                            ()
+                        if(!((previewLine.record as! BasketEntry).relationships?.items?.data.isEmpty ?? true ||
+                             (previewLine.record as! BasketEntry).relationships!.items!.data.count == 1 ) ){
+                            Button(action: {
+                                replaceProductAction()
+                            }) {
+                                Image("sync").resizable()
+                                    .renderingMode(.original)
+                                    .frame(width: 30, height: 30, alignment: .topTrailing)
+                                Text(replaceIngredientButtonTitle)
+                                    .foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .semibold, design: .default))
+                            }.frame(width: 145, height: 30, alignment: .topTrailing)
                         }
+                        Spacer().onAppear(perform: {
+                            print((previewLine.record as! BasketEntry).relationships!.items!.data.description )
+                        })
+                        
+                        // Plus Minus View
+                        CounterView(count: count, isDisable: false, lightMode: true) {
+                            increaseQty()
+                        } decrease: {
+                            decreaseQty()
+                        }.onAppear(perform: {
+                            count = Int(previewLine.count)
+                        })
                     }
                 }
-
+                
                 Divider()
                     .background(MiamColor.sharedInstance.borderBottom)
                     .padding(.top, Dimension.sharedInstance.mPadding)
@@ -106,8 +151,3 @@ struct BasketPreviewRow: View {
     }
 }
 
-struct ProductRow_Previews: PreviewProvider {
-    static var previews: some View {
-        BasketPreviewRow(productName: "Bière blonde (40 cl)", productPictureURL: nil, productBrandName: "3 MONTS", productDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus. 0.15 kg", productPrice: "1.59", removeProductAction: {}, replaceProductAction: {})
-    }
-}

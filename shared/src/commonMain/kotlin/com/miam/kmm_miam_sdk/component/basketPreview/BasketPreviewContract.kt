@@ -14,7 +14,8 @@ interface BasketPreviewContract {
     sealed class Event : UiEvent {
         data class SetRecipeId(val newRecipeId: Int):  Event()
         data class SetLines(val newlines: BasketPreviewLine):Event()
-        data class CountChange(val bpl: BasketPreviewLine, val recipeVm: RecipeViewModel): Event()
+        data class AddGuest(val recipeVm: RecipeViewModel): Event()
+        data class RemoveGuest(val recipeVm: RecipeViewModel): Event()
         data class AddEntry(val entry: BasketEntry):Event()
         data class RemoveEntry(val entry: BasketEntry):Event()
         data class UpdateBasketEntry(val entry: BasketEntry,val finalQty: Int): Event()

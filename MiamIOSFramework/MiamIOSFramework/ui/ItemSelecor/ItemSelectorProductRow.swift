@@ -40,6 +40,7 @@ struct ItemSelectorProductRow: View {
                     HStack{
                         Text(product.price + "€")
                             .font(.system(size: 16, weight: .heavy))
+                        Spacer()
                         Text(isSelected ? "Déjà au panier" : ItemSelectorText.sharedInstance.select )
                             .font(.system(size: 13, weight: .heavy))
                             .padding(.horizontal,16)
