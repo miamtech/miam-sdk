@@ -137,7 +137,7 @@ public struct BasketPreviewView: View {
             
             BasketPreviewFooter (
                 removeFromBasketAction: {
-                    viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: String(recipeVm.recipeId)))
+                    viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: viewModel.basketPreviewLine!.id! ))
                     close()
                 }
                 ,continueShoppingAction: {
