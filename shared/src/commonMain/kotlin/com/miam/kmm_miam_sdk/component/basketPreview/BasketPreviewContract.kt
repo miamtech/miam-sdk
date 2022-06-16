@@ -21,7 +21,7 @@ interface BasketPreviewContract {
         data class UpdateBasketEntry(val entry: BasketEntry,val finalQty: Int): Event()
         data class ReplaceItem(val entry: BasketEntry, val itemId: Int):Event()
         data class OpenItemSelector(val bpl: BasketPreviewLine): Event()
-        object RemoveRecipe: Event()
+        data class RemoveRecipe(val recipeId: String): Event()
         object CloseItemSelector: Event()
         object KillJob: Event()
         object ToggleLine :Event()

@@ -66,7 +66,7 @@ class BasketPreview(
 
 
         fun removeRecipeAndClose(){
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveRecipe)
+            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveRecipe(state.bpl?.id ?: ""))
             close()
         } 
         Scaffold(
