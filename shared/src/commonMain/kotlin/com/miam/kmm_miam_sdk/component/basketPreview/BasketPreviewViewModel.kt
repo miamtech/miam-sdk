@@ -85,7 +85,8 @@ open class BasketPreviewViewModel(val recipeId: String?):
             }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
             is BasketPreviewContract.Event.KillJob -> uiState.value.job?.cancel()
-            is BasketPreviewContract.Event.RemoveRecipe ->  groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = currentState.recipeId.toString() ))
+            is BasketPreviewContract.Event.RemoveRecipe -> {
+                groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = event.recipeId)) }
         }
     }
 
