@@ -14,7 +14,7 @@ public struct MyMealRow: View {
     private let basketPreviewViewModel: BasketPreviewVM
     private let recipeViewModel: RecipeViewModel
     private let meal: MyMeal
-    @SwiftUI.State private var count: Int
+    @SwiftUI.State private var count: Int = 4
 
     public init(myMealViewModel: MyMealVM, meal: MyMeal) {
         self.meal = meal
@@ -24,41 +24,17 @@ public struct MyMealRow: View {
         self.count = meal.basketPreviewLine.numberOfGuests
     }
 
-    private func updateGuest(count: Int) {
-        if(basketPreviewViewModel.basketPreviewLine != nil) {
-
-            let currentBPL = meal.basketPreviewLine
-
-            let newBPL = BasketPreviewLine.init(
-                id: currentBPL.id,
-                record: currentBPL.record,
-                isRecipe: currentBPL.isRecipe,
-                inlineTag: currentBPL.inlineTag,
-                title: currentBPL.title,
-                picture: currentBPL.picture,
-                bplDescription: currentBPL.bplDescription,
-                price: currentBPL.price,
-                count: Int32(count),
-                entries: currentBPL.entries,
-                _displayMode: currentBPL._displayMode)
-
-            basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.CountChange(
-                bpl: newBPL, recipeVm : recipeViewModel )
-            )
-        }
-    }
-
     func increaseGuestsCount() {
-        if(basketPreviewViewModel.basketPreviewLine != nil && count != 100){
+        if(basketPreviewViewModel.basketPreviewLine != nil && count != 100) {
             count += 1
-            updateGuest(count: count)
+            recipeViewModel.setEvent(event: RecipeContractEvent.IncreaseGuest())
         }
     }
 
     func decreaseGuestsCount() {
-        if(basketPreviewViewModel.basketPreviewLine != nil && count != 1){
-            count-=1
-            updateGuest(count: count)
+        if(basketPreviewViewModel.basketPreviewLine != nil && count != 1) {
+            count -= 1
+            recipeViewModel.setEvent(event: RecipeContractEvent.DecreaseGuest())
         }
     }
 
@@ -86,7 +62,7 @@ public struct MyMealRow: View {
                 BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
                                     basketDescription: meal.basketPreviewLine.basketDescription,
                                     pricePerGuest: meal.basketPreviewLine.pricePerGuest,
-                                    numberOfGuests: meal.basketPreviewLine.numberOfGuests,
+                                    numberOfGuests: count,
                                     price: meal.basketPreviewLine.price,
                                     pictureURL: meal.basketPreviewLine.pictureURL) {
                     decreaseGuestsCount()
@@ -112,35 +88,29 @@ public struct MyMealRow: View {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
 
-                        BasketPreviewRow(
-                            productName: previewLine.title,
-                            productPictureURL: URL(string: previewLine.picture),
-                            productBrandName: previewLine.productBrand,
-                            productDescription: previewLine.productDescription,
-                            productPrice: previewLine.price,
-                            removeProductAction: {
-                                removeProduct(entry)
-                            }, replaceProductAction: {
-                                replaceProduct(previewLine)
-                            })
+                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine) {
+                            removeProduct(entry)
+                        } replaceProductAction: {
+                            replaceProduct(previewLine)
+                        }
                     }
                 }
 
                 if meal.basketPreviewLine.productsOftenDeleted.count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: meal.basketPreviewLine.productsOftenDeleted, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: meal.basketPreviewLine.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
 
                 }
 
                 if meal.basketPreviewLine.productsNotFound.count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: meal.basketPreviewLine.productsNotFound, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: meal.basketPreviewLine.productsNotFound, isAddable: false, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
                 }
 
                 if meal.basketPreviewLine.productsRemoved.count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: meal.basketPreviewLine.productsRemoved, addIngredientAction: { entry in
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: meal.basketPreviewLine.productsRemoved, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
                 }
