@@ -25,7 +25,7 @@ public struct MyMealsView: View {
             ScrollView {
                 
                 ForEach(myMealsViewModel.meals) { meal in
-                    MyMealRow(meal: meal).animation(.default, value: 1).padding(.bottom, Dimension.sharedInstance.mPadding)
+                    MyMealRow(myMealViewModel: myMealsViewModel, meal: meal).animation(.default, value: 1).padding(.bottom, Dimension.sharedInstance.mPadding)
                 }
                 .navigationTitle("Mes repas (2)")
             }
