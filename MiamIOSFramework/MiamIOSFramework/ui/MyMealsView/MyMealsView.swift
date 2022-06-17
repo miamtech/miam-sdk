@@ -27,7 +27,7 @@ public struct MyMealsView: View {
                 ForEach(myMealsViewModel.meals) { meal in
                     MyMealRow(myMealViewModel: myMealsViewModel, meal: meal).animation(.default, value: 1).padding(.bottom, Dimension.sharedInstance.mPadding)
                 }
-                .navigationTitle("Mes repas (2)")
+                .navigationTitle("Mes repas (\(myMealsViewModel.meals.count))")
             }
         }.navigationBarBackButtonHidden(false)
     }
