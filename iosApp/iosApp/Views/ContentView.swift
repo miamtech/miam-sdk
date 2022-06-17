@@ -24,8 +24,7 @@ struct ContentView: View {
                             RecipeCardView(criteria: criteria)
                         }
                     }
-                }
-                .navigationTitle("Miam demo app").navigationBarTitleDisplayMode(.inline)
+                }.navigationTitle("Miam demo app").navigationBarTitleDisplayMode(.inline)
                 .toolbar(content: {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button(action: addRandomProduct) {
