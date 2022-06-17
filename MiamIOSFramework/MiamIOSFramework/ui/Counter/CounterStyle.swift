@@ -8,15 +8,6 @@
 import Foundation
 import SwiftUI
 
-public class CounterStyle {
-    
-    public static let sharedInstance = CounterStyle()
-    
-    public var mainModifier: some ViewModifier = MainRowContainer()
-    
-    private init(){}
-}
-
 public struct MainRowContainer : ViewModifier {
     public func body(content: Content) -> some View {
         content.padding(Dimension.sharedInstance.sPadding)
@@ -25,7 +16,7 @@ public struct MainRowContainer : ViewModifier {
 
 extension View {
     public func mainRowContainer () -> some View {
-       return modifier(CounterStyle.sharedInstance.mainModifier)
+       return modifier(MainRowContainer())
     }
 }
 
