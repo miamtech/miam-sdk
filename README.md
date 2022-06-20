@@ -802,6 +802,10 @@ As soon as miam is available `isReady` will return `true`
 
 ```swift
    LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
+     ContextHandlerInstance.shared.instance.getReadyIos(callback: {
+       // do your call back here
+     })
+    
     // Do stuff
   
 ```
@@ -1080,7 +1084,7 @@ You can inject our compomemt in a Uikit App
 
 ```swift
 
-if #available(iOS 13.0, *) {
+if #available(iOS 14.0, *) {
   let swiftUIView = SomeSwiftUIView() // swiftUIView is View
   let viewCtrl = UIHostingController(rootView: swiftUIView)
 }

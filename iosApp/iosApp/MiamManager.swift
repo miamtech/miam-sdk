@@ -28,7 +28,7 @@ public class MiamManager {
     private init() {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
-        
+        ContextHandlerInstance.shared.instance.getReadyIos(callback: {isReady in print("Miam event recived \(isReady)")})
         basketHandler = BasketHandlerInstance.shared.instance
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
@@ -40,21 +40,7 @@ public class MiamManager {
         UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         //initCustomText()
     }
-    
-    @MainActor public func listenMiam() {
-        print(Thread.current.name)
-        DispatchQueue.main.async {
-            print(Thread.current.name)
-            ContextHandlerInstance.shared.instance.observeReadyEvent().collect(
-                collector:
-                    Collector<Bool>{ v in
-                        print(v)
-                    }){ kotlinUnit, possibleError in
-                        print("finished with possible error")
-                    }
 
-        }
-    }
     
     private func yourProductsToRetailerProducts(products: Array<MyProduct>) -> Array<RetailerProduct> {
         return products.map {
@@ -127,36 +113,3 @@ public class MiamManager {
     }
 }
 
-
-
-//Task(priority: .low){
-//            ContextHandlerInstance.shared.instance.observeReadyEvent().collect(
-//                collector:
-//                    Collector<Bool>{ v in
-//                        print(v)
-//                        
-//                    }){ kotlinUnit, possibleError in
-//                        print("finished with possible error")
-//                    }
-//        }
-
-
-//        lulu()
-//        DispatchQueue.main.async {
-//            print(Thread.current.name)
-//           
-//        }
-
-// @MainActor private func lulu(){
-//     DispatchQueue.main.async {
-//         ContextHandlerInstance.shared.instance.observeReadyEvent().collect(
-//             collector:
-//                 Collector<Bool>{ v in
-//                     print(v)
-
-//                 }){ kotlinUnit, possibleError in
-//                     print("finished with possible error")
-//                 }
-//     }
-
-// }
