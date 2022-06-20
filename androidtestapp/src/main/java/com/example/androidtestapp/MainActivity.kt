@@ -88,6 +88,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.setSupplier(7)
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("alexis")
+        UserHandler.setProfilingAllowed(true)
     }
 
     private val recipeloader:  @Composable () -> Unit = { Box(
