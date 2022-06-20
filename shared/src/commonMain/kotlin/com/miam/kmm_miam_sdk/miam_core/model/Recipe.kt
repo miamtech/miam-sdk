@@ -78,6 +78,14 @@ data class Recipe private constructor(
                 else -> "moyen"
             }
         }
+
+    val sortedStep : List<RecipeStep>
+        get() {
+            val temp = mutableListOf<RecipeStep>()
+            temp.addAll(this.relationships?.recipeSteps?.data ?: emptyList())
+            temp.sortBy { it.attributes?.stepNumber }
+            return temp
+        }
 }
 
 @Serializable

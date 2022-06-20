@@ -345,16 +345,15 @@ private fun recipeDetailContent(
                 }
                 if(recipeDetailStepsTemplate != null ){
                     recipeDetailStepsTemplate!!(
-                        recipe.relationships!!.recipeSteps!!.data,
+                        recipe.sortedStep,
                         vmRecipeCard
                     )
                 } else {
                     RecipeSteps(
-                        recipe.relationships!!.recipeSteps!!.data,
+                        recipe.sortedStep,
                         vmRecipeCard
                     )
                 }
-
                 Spacer(modifier = Modifier.padding(vertical = 50.dp))
             }
         },
