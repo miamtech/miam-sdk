@@ -173,6 +173,28 @@ class Miam() {
 }
 ```
 
+##### Profiling
+
+You can block custom recipe suggestions if the user wishes.
+
+```kotlin 
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
+class Miam() {
+  init {
+    // CODE
+
+    OBSERVABLE_ON_USER_PREF.collect { user ->
+      UserHandler.setProfilingAllowed(<boolean>user.allowProfiling)
+    }
+  }
+
+  // CODE
+}
+
+```
+
+
 #### Store
 
 Miam initialization process will start only after the user has **selected a valid store**.
@@ -850,6 +872,30 @@ public class Miam {
 
   // CODE
 }
+```
+
+##### Profiling
+
+You can block custom recipe suggestions if the user wishes.
+
+```swift
+import shared
+
+public class Miam {
+  // CODE
+
+  private init() {
+    // CODE
+
+    OBSERVABLE_ON_USER_PREF.sink { _  in
+      // allowance is a boolean, true by default
+      UserHandler.shared.setProfilingAllowed(allowance: USER_PREF_IN_HOST_APP)
+    }
+  }
+
+  // CODE
+}
+
 ```
 
 #### Store

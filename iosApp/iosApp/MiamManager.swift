@@ -38,6 +38,7 @@ public class MiamManager {
         PointOfSaleHandler.shared.setSupplier(supplierId: 7)
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
         UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        UserHandler.shared.setProfilingAllowed(allowance: true)
         //initCustomText()
     }
 
