@@ -4,13 +4,8 @@ import com.miam.kmm_miam_sdk.base.mvi.BasketEffect
 import com.miam.kmm_miam_sdk.base.mvi.Effect
 import com.miam.kmm_miam_sdk.base.mvi.State
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -42,6 +37,13 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
         state.value = state.value.copy(isInError = true)
         launch(coroutineHandler) {
             readyEvent.emit(ReadyEvent.isNotReady)
+        }
+    }
+
+    @OptIn(InternalCoroutinesApi::class)
+    fun getReadyIos(callback: (it: ReadyEvent) -> Unit){
+        launch(coroutineHandler) {
+            readyEvent.asSharedFlow().collect { callback(it) }
         }
     }
 
