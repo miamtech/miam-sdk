@@ -125,7 +125,7 @@ public struct RecpieDetailsView: View {
                                     .background(MiamColor.sharedInstance.borderBottom)
                                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                                 
-                                //Ingredeients ListView
+                                //Ingredients ListView
                                 VStack {
                                     VStack {
                                         ForEach(viewModel.recipe!.relationships?.ingredients!.data ?? [], id: \.self) { ingr in
@@ -147,7 +147,7 @@ public struct RecpieDetailsView: View {
                             
                             if(Template.sharedInstance.recipeDetailStepsTemplate != nil){
                                 Template.sharedInstance.recipeDetailStepsTemplate!(
-                                    viewModel.recipe!.relationships?.recipeSteps!.data ?? [RecipeStep](),
+                                    viewModel.recipe?.sortedStep ?? [RecipeStep](),
                                     viewModel
                                 )
                             }
@@ -165,7 +165,7 @@ public struct RecpieDetailsView: View {
                                 //Steps ListView
                                 VStack {
                                     VStack {
-                                        ForEach(0..<(viewModel.recipe!.relationships?.recipeSteps!.data ?? []).count, id: \.self) { i in
+                                        ForEach(0..<(viewModel.recipe?.sortedStep ?? []).count, id: \.self) { i in
                                             StepRow(
                                                 index: i,
                                                 step: viewModel.recipe!.relationships!.recipeSteps!.data[i],

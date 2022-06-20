@@ -16,7 +16,6 @@ struct ios_miam_integrationApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let miamM = MiamManager.sharedInstance
-        miamM.listenMiam()
         return true
     }
 }
