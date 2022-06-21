@@ -12,7 +12,7 @@ public struct BasketPreviewView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
     private var recipeVm : RecipeViewModel
-    private var goToDetail : (_ : RecipeViewModel) -> Void
+    private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
@@ -20,7 +20,7 @@ public struct BasketPreviewView: View {
     
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
-                goToDetail: @escaping (_ : RecipeViewModel) -> Void,
+                goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
                 goToItemSelector: @escaping () -> Void
     )
@@ -67,7 +67,7 @@ public struct BasketPreviewView: View {
             HStack {
                 Button(
                     action: {
-                        goToDetail(recipeVm)
+                        goToDetail(recipeVm, true)
                     }
                 ) {
                     Image("Caret")

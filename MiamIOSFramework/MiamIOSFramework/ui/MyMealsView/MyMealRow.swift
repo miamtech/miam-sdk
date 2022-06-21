@@ -73,7 +73,7 @@ public struct MyMealRow: View {
                 } increaseGuestsCount: {
                     increaseGuestsCount()
                 } goToDetail: {
-                    recipeViewModel.goToDetail()
+                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
                 VStack {
