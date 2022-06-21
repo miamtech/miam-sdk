@@ -179,8 +179,10 @@ internal struct IngredientsHeader: View {
             .padding(Dimension.sharedInstance.lPadding)
             .background(MiamColor.sharedInstance.greySurface)
             .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
-                folded.toggle()
-                caretAngle = folded ? 0.0 : 90.0
+                withAnimation(.default) {
+                    folded.toggle()
+                    caretAngle = folded ? 0.0 : 90.0
+                }
             }
         }
     }
