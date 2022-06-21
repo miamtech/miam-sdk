@@ -44,11 +44,77 @@ internal extension BasketPreviewLine {
         )
     }
 
+    var pictureURL: URL? {
+        return URL(string: picture)
+    }
+
+    var basketTitle: String {
+        return title
+    }
+
+    var basketDescription: String {
+        return bplDescription[0]
+    }
+
+    var pricePerGuest: String {
+        guard let parsedPrice = Double(price) else {
+            return ""
+        }
+
+        let price = parsedPrice * 100 / Double(count) / 100
+        let formattedPrice = String(format: "%.2f", price)
+        return "\(formattedPrice)€ /personne"
+    }
+
+    var numberOfGuests: Int {
+        return Int(count)
+    }
+
     var productBrand: String {
         return bplDescription.count > 1 ? bplDescription[1] : ""
     }
 
     var productDescription: String {
         return bplDescription.count > 0 ? bplDescription[0] : ""
+    }
+
+    var  numberOfproductsInBasket: Int {
+        return entries?.found.count ?? 0
+    }
+
+    var productsInBasket: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = entries?.found as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    var productsNotFound: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = entries?.notFound as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    var productsOftenDeleted: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = entries?.oftenDeleted as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
+    }
+
+    var productsRemoved: Array<BasketEntry> {
+        // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
+        guard let entries = entries?.removed as? Array<BasketEntry> else {
+            return []
+        }
+
+        return entries
     }
 }

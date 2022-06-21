@@ -39,7 +39,11 @@ struct BasketPreviewRow: View {
         self.productPictureURL = URL(string: previewLine.picture)
         self.productBrandName =  previewLine.productBrand
         self.productDescription = previewLine.productDescription
-        self.productPrice = previewLine.price
+        if let price = Double(previewLine.price) {
+            productPrice = String(format: "%.2f", price)
+        } else {
+            productPrice = "N/A"
+        }
         self.removeProductAction = removeProductAction
         self.replaceProductAction = replaceProductAction
     }

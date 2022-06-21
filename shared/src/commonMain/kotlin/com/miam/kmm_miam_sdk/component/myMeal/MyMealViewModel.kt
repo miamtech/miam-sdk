@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
-class MyMealViewModel :
+open class MyMealViewModel :
     BaseViewModel<MyMealContract.Event, MyMealContract.State, MyMealContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler {
