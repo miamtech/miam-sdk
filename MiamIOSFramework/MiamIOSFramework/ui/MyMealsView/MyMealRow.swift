@@ -15,6 +15,7 @@ public struct MyMealRow: View {
     private let recipeViewModel: RecipeViewModel
     private let meal: MyMeal
     @SwiftUI.State private var count: Int = 4
+    @SwiftUI.State private var chevronAngle = -90.0
 
     public init(myMealViewModel: MyMealVM, meal: MyMeal) {
         self.meal = meal
@@ -77,9 +78,12 @@ public struct MyMealRow: View {
                     }
                     Spacer()
                     Button {
-                        isExpanded.toggle()
+                        withAnimation(.default) {
+                            isExpanded.toggle()
+                            chevronAngle = isExpanded ? 0.0 : -90.0
+                        }
                     } label: {
-                        Image("chevron-down")
+                        Image("chevron-down").rotationEffect(Angle.degrees(chevronAngle))
                     }.padding([.trailing], Dimension.sharedInstance.lPadding)
                 }.frame(width: 30.0, alignment: .trailing)
             }.padding(Dimension.sharedInstance.mlPadding)
