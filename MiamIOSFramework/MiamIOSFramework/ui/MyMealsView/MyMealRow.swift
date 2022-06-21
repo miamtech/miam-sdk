@@ -17,6 +17,9 @@ public struct MyMealRow: View {
     @SwiftUI.State private var count: Int = 4
     @SwiftUI.State private var chevronAngle = -90.0
 
+    @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
+    @SwiftUI.State private var showingPopup = false
+
     public init(myMealViewModel: MyMealVM, meal: MyMeal) {
         self.meal = meal
         self.myMealViewModel = myMealViewModel
@@ -69,6 +72,9 @@ public struct MyMealRow: View {
                     decreaseGuestsCount()
                 } increaseGuestsCount: {
                     increaseGuestsCount()
+                } goToDetail: {
+                    recipeViewModel.goToDetail()
+                    showingPopup = true
                 }
                 VStack {
                     Button {
@@ -119,6 +125,15 @@ public struct MyMealRow: View {
                     })
                 }
             }
-        }
+        }.popover(isPresented: $showingPopup) {
+            Dialog(
+                close: { showingPopup = false },
+                initialRoute : initialDialogScreen,
+                routerVm: recipeViewModel.routerVM
+            )
+        }.onAppear(perform: {
+            recipeViewModel.setEvent(
+                event: RecipeContractEvent.OnGetRecipe(idRecipe: meal.id))
+        })
     }
 }

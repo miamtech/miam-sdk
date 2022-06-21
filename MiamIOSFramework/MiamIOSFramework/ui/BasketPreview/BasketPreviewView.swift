@@ -96,7 +96,9 @@ public struct BasketPreviewView: View {
                                     price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     decreaseGuestsCount: decreaseGuestsCount,
-                                    increaseGuestsCount: increaseGuestsCount).onAppear(
+                                    increaseGuestsCount: increaseGuestsCount, goToDetail: {
+                    recipeVm.goToDetail()
+                }).onAppear(
                                         perform: {
                                             self.count = Int(recipeVm.currentState.guest)
                                         })
