@@ -20,7 +20,7 @@ struct ContentView: View {
                     MyBasketView(basket: applicationBasket)
                     ScrollView {
                         VStack {
-                            RecipeCardView(recipeId: "1")
+                            RecipeCardView(recipeId: "9422")
                             RecipeCardView(criteria: criteria)
                         }
                     }
