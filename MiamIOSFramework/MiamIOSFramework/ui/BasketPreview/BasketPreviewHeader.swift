@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import shared
 
 struct BasketPreviewHeader: View {
     private let headerHeight = 150.0
@@ -16,7 +17,7 @@ struct BasketPreviewHeader: View {
     let pricePerGuest: String
     let numberOfGuests: Int
     let price: String
-
+    let showDetailsButton = false
     private var formattedPrice: String {
         guard let priceDouble = Double(price) else {
             return ""
@@ -34,6 +35,7 @@ struct BasketPreviewHeader: View {
 
     let decreaseGuestsCount: () -> Void
     let increaseGuestsCount: () -> Void
+    let goToDetail: () -> Void
 
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
@@ -63,6 +65,12 @@ struct BasketPreviewHeader: View {
                             .foregroundColor(MiamColor.sharedInstance.bodyText)
                             .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
+
+                        Button {
+                            goToDetail()
+                        } label: {
+                            Text("Voir le détail").fontWeight(.heavy).foregroundColor(MiamColor.sharedInstance.primaryText)
+                        }.padding([.leading, .top], Dimension.sharedInstance.sPadding)
                     }.frame(alignment: .topLeading)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
@@ -71,11 +79,10 @@ struct BasketPreviewHeader: View {
                     Spacer()
 
                     CounterView(count: numberOfGuests, isDisable: false) {
-                    increaseGuestsCount()
-                } decrease: {
-                    decreaseGuestsCount()
-                }
-
+                        increaseGuestsCount()
+                    } decrease: {
+                        decreaseGuestsCount()
+                    }
                 }
             }.padding([.leading, .trailing], 16.0)
             Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)

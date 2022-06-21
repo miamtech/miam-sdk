@@ -12,18 +12,21 @@ public struct RecpieDetailsView: View {
     
     public var recipeId: String?
     public var close: () -> ()
-    
+    public var showFooter = true
+
     @ObservedObject var viewModel: RecipeCardVM
     
-    public init(recipeId: String, close: @escaping () -> ()) {
+    public init(recipeId: String, close: @escaping () -> (), showFooter: Bool = true) {
         self.recipeId = recipeId
         self.close = close
         viewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
+        self.showFooter = showFooter
     }
     
-    public init(vmRecipe: RecipeCardVM, close: @escaping () -> ()) {
+    public init(vmRecipe: RecipeCardVM, close: @escaping () -> (), showFooter: Bool = true) {
         self.close = close
         self.viewModel = vmRecipe
+        self.showFooter = showFooter
     }
     
     public var body: some View {
@@ -191,7 +194,10 @@ public struct RecpieDetailsView: View {
                 }
                 )
             }
-            RecipeDetailsFooter(recipeVM: viewModel)
+
+            if (showFooter) {
+                RecipeDetailsFooter(recipeVM: viewModel)
+            }
         }
     }
 }

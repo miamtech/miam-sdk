@@ -14,20 +14,20 @@ struct Dialog: View {
     
     private var close: () -> Void
     private var itemSelectorVM = ItemSelectorVM()
-    
+
     @ObservedObject var viewModel: DialogVM
     
     
-    public init(close: @escaping () -> Void, initialRoute: RouterContent, routerVm : RouterOutletViewModel ) {
+    public init(close: @escaping () -> Void, initialRoute: RouterContent, routerVm : RouterOutletViewModel) {
         self.close = close
         self.viewModel = DialogVM(routerVm: routerVm)
     }
     
-    func goToDetail(vmRecipe :RecipeViewModel){
+    func goToDetail(vmRecipe :RecipeViewModel, withFooter: Bool = true) {
         viewModel.getKotlinVm().setEvent(event:
                                             RouterOutletContractEvent.GoToDetail(
                                                 vm: vmRecipe,
-                                                withFooter: false
+                                                withFooter: withFooter
                                             )
         )
     }
@@ -59,7 +59,7 @@ struct Dialog: View {
         VStack{
             HStack(alignment: .top){
                 switch viewModel.state?.content {
-                case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close)
+                case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close, showFooter: viewModel.state!.showFooter)
                 case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
                                                                      recipeVm:  (viewModel.state?.rvm!)!,
                                                                      goToDetail: goToDetail,

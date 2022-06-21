@@ -12,7 +12,7 @@ public struct BasketPreviewView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
     private var recipeVm : RecipeViewModel
-    private var goToDetail : (_ : RecipeViewModel) -> Void
+    private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
@@ -20,7 +20,7 @@ public struct BasketPreviewView: View {
     
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
-                goToDetail: @escaping (_ : RecipeViewModel) -> Void,
+                goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
                 goToItemSelector: @escaping () -> Void
     )
@@ -67,7 +67,7 @@ public struct BasketPreviewView: View {
             HStack {
                 Button(
                     action: {
-                        goToDetail(recipeVm)
+                        goToDetail(recipeVm, true)
                     }
                 ) {
                     Image("Caret")
@@ -96,7 +96,9 @@ public struct BasketPreviewView: View {
                                     price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     decreaseGuestsCount: decreaseGuestsCount,
-                                    increaseGuestsCount: increaseGuestsCount).onAppear(
+                                    increaseGuestsCount: increaseGuestsCount, goToDetail: {
+                    recipeVm.goToDetail()
+                }).onAppear(
                                         perform: {
                                             self.count = Int(recipeVm.currentState.guest)
                                         })
@@ -179,8 +181,10 @@ internal struct IngredientsHeader: View {
             .padding(Dimension.sharedInstance.lPadding)
             .background(MiamColor.sharedInstance.greySurface)
             .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
-                folded.toggle()
-                caretAngle = folded ? 0.0 : 90.0
+                withAnimation(.default) {
+                    folded.toggle()
+                    caretAngle = folded ? 0.0 : 90.0
+                }
             }
         }
     }

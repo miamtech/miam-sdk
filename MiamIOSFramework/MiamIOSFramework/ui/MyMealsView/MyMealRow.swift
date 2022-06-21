@@ -6,159 +6,134 @@
 //
 
 import SwiftUI
+import shared
 
-struct MyMealRow: View {
-    @State private var isExpanded: Bool = false
-    
-    var body: some View {
+public struct MyMealRow: View {
+    @SwiftUI.State private var isExpanded: Bool = false
+    private let myMealViewModel: MyMealVM
+    private let basketPreviewViewModel: BasketPreviewVM
+    private let recipeViewModel: RecipeViewModel
+    private let meal: MyMeal
+    @SwiftUI.State private var count: Int = 4
+    @SwiftUI.State private var chevronAngle = -90.0
+
+    @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
+    @SwiftUI.State private var showingPopup = false
+
+    public init(myMealViewModel: MyMealVM, meal: MyMeal) {
+        self.meal = meal
+        self.myMealViewModel = myMealViewModel
+        self.basketPreviewViewModel = BasketPreviewVM(recipeId: meal.id)
+        self.recipeViewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
+        self.count = meal.basketPreviewLine.numberOfGuests
+    }
+
+    func increaseGuestsCount() {
+        if(basketPreviewViewModel.basketPreviewLine != nil && count != 100) {
+            count += 1
+            recipeViewModel.setEvent(event: RecipeContractEvent.IncreaseGuest())
+        }
+    }
+
+    func decreaseGuestsCount() {
+        if(basketPreviewViewModel.basketPreviewLine != nil && count != 1) {
+            count -= 1
+            recipeViewModel.setEvent(event: RecipeContractEvent.DecreaseGuest())
+        }
+    }
+
+    func addIngredient(_ entry: BasketEntry) {
+        basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.AddEntry(entry: entry))
+    }
+
+    func removeProduct(_ entry: BasketEntry) {
+        basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
+    }
+
+    func replaceProduct(_ previewLine: BasketPreviewLine) {
+        basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.OpenItemSelector(bpl: previewLine))
+        //goToItemSelector()
+    }
+
+    public var body: some View {
         content
             .frame(maxWidth: .infinity)
     }
     
     private var content: some View {
         VStack(alignment: .leading) {
-            header
-            if isExpanded {
-                Group {
-                    ForEach(0 ..< 5) { _ in
-                        MyMealItemRow()
-                    }
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowAlready)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("Caret")
-                            .resizable()
-                            .aspectRatio( contentMode: .fit)
-                            .frame(width: 20, height: 20, alignment: .center)
-                    }
-                    .padding(Dimension.sharedInstance.lPadding).background(MiamColor.sharedInstance.primaryLight).cornerRadius(10).padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
-                    
-                    HStack {
-                        Text(MiamText.sharedInstance.mealRowAlready)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                        
-                        Spacer()
-                        
-                        Image("CaretGrey").resizable()
-                            .aspectRatio( contentMode: .fit)
-                            .frame(width: 20, height: 20, alignment: .center)
-                    }.padding(Dimension.sharedInstance.lPadding)
-                        .background(MiamColor.sharedInstance.borderBottom)
-                        .cornerRadius(10)
-                        .padding( Dimension.sharedInstance.lPadding)
+            HStack {
+                BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
+                                    basketDescription: meal.basketPreviewLine.basketDescription,
+                                    pricePerGuest: meal.basketPreviewLine.pricePerGuest,
+                                    numberOfGuests: count,
+                                    price: meal.basketPreviewLine.price,
+                                    pictureURL: meal.basketPreviewLine.pictureURL) {
+                    decreaseGuestsCount()
+                } increaseGuestsCount: {
+                    increaseGuestsCount()
+                } goToDetail: {
+                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
+                    showingPopup = true
                 }
-            }
-        }
-    }
-    
-    private var header: some View {
-        VStack {
-            //Product View
-            VStack(alignment: .leading) {
-                HStack(alignment: .top) {
-//                    WebView(url: URL(string: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/410.svg")!).frame(width: 120, height: 120, alignment: .topLeading)
-                    
-                    VStack (alignment: .leading){
-                        
-                        Text("Welsh royal à la 3 Monts")
-                            .foregroundColor(MiamColor.sharedInstance.black)
-                            .font(.system(size: 16, weight: .heavy, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
-                        
-                        Text("6 articles")
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                            .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
-                            .padding(.top, Dimension.sharedInstance.borderWidth)
-                        
-                        Text("4,93 € par personne")
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
-                            .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
+                VStack {
+                    Button {
+                        myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))
+                    } label: {
+                        Image("Bin")
                     }
                     Spacer()
-                    Button(action: {
-                        
-                    }) {
-                        Image("Bin")
-                            .resizable()
-                            .renderingMode(.original)
-                    }.frame(width: 30, height: 30, alignment: .topTrailing)
-                }
-                
-                //Ingredeient View
-                HStack {
-                    HStack {
-                        Text("19,72 €").foregroundColor(MiamColor.sharedInstance.primaryText)
-                            .font(.system(size: 20, weight: .heavy, design: .default))
-                        
-                        Spacer()
-                        
-                        // Plus Minus View
-                        HStack {
-                            Button(action: {
-                                
-                            }) {
-                                Image("Minus")
-                                    .foregroundColor(MiamColor.sharedInstance.white)
-                            }
-                            .padding(.leading, Dimension.sharedInstance.lPadding)
-                            .frame(width: 20.0, height: 20.0, alignment: .leading)
-                            
-                            Text("4 pers.")
-                                .foregroundColor(MiamColor.sharedInstance.white)
-                                .font(.system(size: 13, weight: .bold, design: .default))
-                                .padding(Dimension.sharedInstance.lPadding)
-                            
-                            Button(action: {
-                                
-                            }) {
-                                Image("Plus")
-                                    .foregroundColor(MiamColor.sharedInstance.white)
-                            }.padding(.trailing, Dimension.sharedInstance.lPadding)
-                                .frame(width: 20.0, height: 20.0, alignment: .trailing)
-                        }.frame(width: 140.0, height: 50.0, alignment: .center)
-                            .background(MiamColor.sharedInstance.primaryText)
-                            .cornerRadius(25.0)
-                        
-                        if isExpanded {
-                            Image("chevron-down").resizable()
-                                .frame(width: 40.0, height: 40.0, alignment: .center)
-                                .background(MiamColor.sharedInstance.white)
-                                .padding(.vertical, Dimension.sharedInstance.lPadding+4)
-                                .rotationEffect(.degrees(180))
-                        } else {
-                            Image("chevron-down")
-                                .resizable()
-                                .frame(width: 40.0, height: 40.0, alignment: .center)
-                                .background(MiamColor.sharedInstance.white)
-                                .padding(.vertical, Dimension.sharedInstance.lPadding + 4)
-                                .rotationEffect(.degrees(0))
+                    Button {
+                        withAnimation(.default) {
+                            isExpanded.toggle()
+                            chevronAngle = isExpanded ? 0.0 : -90.0
+                        }
+                    } label: {
+                        Image("chevron-down").rotationEffect(Angle.degrees(chevronAngle))
+                    }.padding([.trailing], Dimension.sharedInstance.lPadding)
+                }.frame(width: 30.0, alignment: .trailing)
+            }.padding(Dimension.sharedInstance.mlPadding)
+            if isExpanded {
+                VStack {
+                    ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
+                        let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
+
+                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine) {
+                            removeProduct(entry)
+                        } replaceProductAction: {
+                            replaceProduct(previewLine)
                         }
                     }
-                }.padding(.top, Dimension.sharedInstance.mPadding)
-            }
-            .padding().background(MiamColor.sharedInstance.lightPrimaryBg)
-            .padding(.top, -8)
-            
-            //Divider
-            Divider()
-                .background(MiamColor.sharedInstance.borderBottom)
-                .padding(.top, -8)
-        }
-        .onTapGesture {
-            withAnimation { isExpanded.toggle() }
-        }
-    }
-}
+                }
 
-struct MyMealRow_Previews: PreviewProvider {
-    static var previews: some View {
-        MyMealRow()
+                if meal.basketPreviewLine.productsOftenDeleted.count > 0 {
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: meal.basketPreviewLine.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
+                        addIngredient(entry)
+                    })
+
+                }
+
+                if meal.basketPreviewLine.productsNotFound.count > 0 {
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: meal.basketPreviewLine.productsNotFound, isAddable: false, addIngredientAction: { entry in
+                        addIngredient(entry)
+                    })
+                }
+
+                if meal.basketPreviewLine.productsRemoved.count > 0 {
+                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: meal.basketPreviewLine.productsRemoved, isAddable: true, addIngredientAction: { entry in
+                        addIngredient(entry)
+                    })
+                }
+            }
+        }.popover(isPresented: $showingPopup) {
+            Dialog(
+                close: { showingPopup = false },
+                initialRoute : initialDialogScreen,
+                routerVm: recipeViewModel.routerVM
+            )
+        }.onAppear(perform: {
+            recipeViewModel.setEvent(
+                event: RecipeContractEvent.OnGetRecipe(idRecipe: meal.id))
+        })
     }
 }
