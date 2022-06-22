@@ -12,12 +12,15 @@ import shared
 
 
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
+    
     @Published var basketPreviewLine: BasketPreviewLine?
+    @Published var state : BasketPreviewContractState?
 
     override init(recipeId: String?) {
         super.init(recipeId: recipeId)
         collect(flow: uiState) { data in
             let state = data as! BasketPreviewContractState
+            self.state = state
             switch state.line {
             case let success as BasicUiStateSuccess<BasketPreviewLine>:
                 self.basketPreviewLine = success.data
