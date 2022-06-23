@@ -34,13 +34,14 @@ object HttpRoutes {
     const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
     const val RECIPE_SUGGESTIONS= "$BASE_URL/recipes/suggestions"
     const val SUPPLIER = "$BASE_URL/suppliers/"
+    const val PACKAGE_ENDPOINT = "$BASE_URL/packages/"
 }
 
 
 @OptIn(InternalAPI::class)
 class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
-    SupplierDataSource, KoinComponent {
+    SupplierDataSource,PackageDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
@@ -174,6 +175,18 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
+
+    override suspend fun getRecipesFromStringFilter(filters: String, included: List<String>, pageSize: Int, pageNumber: Int): List<Recipe> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters $included")
+        val pageFilter = "page[size]=$pageSize&page[number]=$pageNumber"
+        val includedStr = if(included.isEmpty()) "" else "&${includedToString(included)}"
+        val filtersStr = if(filters.isEmpty()) "" else "&${filters}"
+        val returnValue = this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$pageFilter$includedStr$filtersStr")!!.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $returnValue")
+        return returnValue.map { record -> record as Recipe }
+    }
+
+
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
@@ -356,5 +369,18 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     private fun filtersToString(filters: Map<String, String>): String {
         return filters.toList().fold(""){ res, filter -> res + "filter[${filter.first}]=${filter.second}" }
     }
+
+    ///////////////////////////////////// PACKAGE /////////////////////////////////////////////////
+
+    override suspend fun getActivePackagesFromSupplierID(supplierId: String): List<Package> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getActivePackagesFromSupplierID $supplierId")
+        // TODO Alex handle status and user pref
+        val returnValue = httpClient.get<List<Package>> {
+            url(HttpRoutes.PACKAGE_ENDPOINT+"filter[category_for]=$supplierId&filter[status]=4&filter[user_preferences]=true&sort=catalog_position")
+        }
+        LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
+        return returnValue
+    }
+
 
 }
