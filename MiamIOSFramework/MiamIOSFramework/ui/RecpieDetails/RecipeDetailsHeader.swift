@@ -35,7 +35,7 @@ struct RecipeDetailsHeader: View {
                                 closeDetail()
                             }
                         ) {
-                            Image("Caret")
+                            Image("Caret", bundle: Bundle(for: RecipeCardVM.self))
                                 .renderingMode(.original)
                                 .frame(
                                     width: 24,
@@ -59,7 +59,7 @@ struct RecipeDetailsHeader: View {
                                     width: 40,
                                     height: 40
                                 )
-                            Image( "bucket")
+                            Image( "bucket", bundle: Bundle(for: RecipeCardVM.self))
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(

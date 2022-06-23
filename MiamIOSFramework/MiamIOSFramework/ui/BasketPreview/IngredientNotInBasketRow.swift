@@ -26,7 +26,7 @@ struct IngredientNotInBasketRow: View {
                 Spacer()
                 if(isAddable){
                 Button(action: addIngredientAction) {
-                    Image(addIngredientIcon)
+                    Image(addIngredientIcon, bundle: Bundle(for: BasketPreviewVM.self))
                         .resizable()
                         .aspectRatio( contentMode: .fit)
                         .frame(width: 30, height: 30, alignment: .center)

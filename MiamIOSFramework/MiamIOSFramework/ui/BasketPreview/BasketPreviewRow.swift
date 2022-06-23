@@ -103,7 +103,7 @@ struct BasketPreviewRow: View {
                     Button(action: {
                         removeProductAction()
                     }) {
-                        Image("Bin")
+                        Image("Bin", bundle: Bundle(for: BasketPreviewVM.self))
                     }.frame(width: 30, height: 30, alignment: .topTrailing)
                 }
                 
@@ -123,7 +123,7 @@ struct BasketPreviewRow: View {
                             Button(action: {
                                 replaceProductAction()
                             }) {
-                                Image("sync").resizable()
+                                Image("sync", bundle: Bundle(for: BasketPreviewVM.self)).resizable()
                                     .renderingMode(.original)
                                     .frame(width: 30, height: 30, alignment: .topTrailing)
                                 Text(replaceIngredientButtonTitle)
