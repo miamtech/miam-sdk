@@ -75,6 +75,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
             BasketEntry.serializer().descriptor.serialName -> BasketEntry(id, attributes, relationships, includedRecords)
             Item.serializer().descriptor.serialName -> Item(id, attributes, relationships, includedRecords)
             RecipeLike.serializer().descriptor.serialName -> RecipeLike(id, attributes, relationships, includedRecords)
+            Package.serializer().descriptor.serialName -> Package(id, attributes, relationships, includedRecords)
             else -> throw Exception("Unsuported record type $type")
         }
     }

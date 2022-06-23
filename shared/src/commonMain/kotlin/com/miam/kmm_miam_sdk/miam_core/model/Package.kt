@@ -27,15 +27,14 @@ data class PackageAttributes(
     val title : String,
     @SerialName("author-id")
     val authorId: String,
-    val editable : Boolean = false,
-    val shared: Boolean = false,
+    val editable : Boolean? = false,
+    val shared: Boolean? = false,
     @SerialName("catalog-category")
-    val catalogCategory: Boolean = false,
+    val catalogCategory: Boolean? = false,
     @SerialName("catalog-position")
-    val catalogPosition: Int,
+    val catalogPosition: Int?,
     @SerialName("recipes-count")
     val recipesCount: Int,
-    val token :String? = null,
     // TODO ALEX il y a une propriété setting sans type en TS
 ): Attributes()
 
