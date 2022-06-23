@@ -54,7 +54,7 @@ struct RecipeDetailsMoreInfo: View {
                         .font(.system(size: 13, weight: .bold, design: .default))
                         .padding(Dimension.sharedInstance.mPadding)
                         .padding(.leading, Dimension.sharedInstance.lPadding)
-                Image("chevron-down-grey")
+                Image("chevron-down-grey", bundle: Bundle(for: RecipeCardVM.self))
                     .renderingMode(.original)
                     .rotationEffect(Angle.degrees(collapsed ? 0 : 180))
                     .padding(.trailing , 8)

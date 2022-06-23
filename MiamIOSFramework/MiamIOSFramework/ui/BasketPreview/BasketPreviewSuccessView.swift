@@ -70,7 +70,7 @@ public struct BasketPreviewSuccessView: View {
                         goToDetail(recipeVm, true)
                     }
                 ) {
-                    Image("Caret")
+                    Image("Caret", bundle: Bundle(for: BasketPreviewVM.self))
                         .renderingMode(.original)
                         .frame(
                             width: 24,
@@ -173,7 +173,7 @@ internal struct IngredientsHeader: View {
 
                 Spacer()
 
-                Image(foldedCarretImageName)
+                Image(foldedCarretImageName, bundle: Bundle(for: BasketPreviewVM.self))
                     .resizable()
                     .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
                     .frame(width: 30, height: 30, alignment: .center)

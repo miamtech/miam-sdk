@@ -57,7 +57,7 @@ public struct ItemSelector: View  {
                                     viewModel.returnToPreview()
                                 }
                             ) {
-                                Image("Caret")
+                                Image("Caret", bundle: Bundle(for: RecipeCardVM.self))
                                     .renderingMode(.original)
                                     .frame(
                                         width: 24,

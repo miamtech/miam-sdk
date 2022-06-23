@@ -54,7 +54,7 @@ public struct RecpieDetailsView: View {
                                         Button(action: {
                                             
                                         }) {
-                                            Image("Like")
+                                            Image("Like", bundle: Bundle(for: RecipeCardVM.self))
                                                 .renderingMode(.original)
                                         }
                                         .padding(.leading).frame(width: 40, height: 40, alignment: .leading)
@@ -63,7 +63,7 @@ public struct RecpieDetailsView: View {
                                         Button(action: {
                                             
                                         }) {
-                                            Image("Help")
+                                            Image("Help", bundle: Bundle(for: RecipeCardVM.self))
                                                 .renderingMode(.original)
                                         }
                                         .frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.greySurface).cornerRadius(25)
@@ -87,7 +87,7 @@ public struct RecpieDetailsView: View {
                                             HStack {
                                                 Spacer()
                                                 VStack(alignment: .center) {
-                                                    Image( "Clock").frame(width: 25, height:25, alignment: .center)
+                                                    Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
                                                     Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
                                                 }
                                                 Spacer()

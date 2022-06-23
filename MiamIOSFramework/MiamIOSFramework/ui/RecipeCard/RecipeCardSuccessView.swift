@@ -73,7 +73,7 @@ struct RecipeCardSuccessView: View {
                             }
                             HStack(alignment: .center) {
                                 HStack(){
-                                    Image("ideerepas")
+                                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width:24, height:24)
@@ -87,7 +87,7 @@ struct RecipeCardSuccessView: View {
                                 ZStack(){
                                     Circle().fill(MiamColor.sharedInstance.white)
                                         .frame(width: 32, height: 32)
-                                    Image("Like")
+                                    Image("Like", bundle: Bundle(for: RecipeCardVM.self))
                                         .frame(width: 24.0, height: 24.0, alignment: .center)
                                         .foregroundColor(MiamColor.sharedInstance.primaryText)
                                     
