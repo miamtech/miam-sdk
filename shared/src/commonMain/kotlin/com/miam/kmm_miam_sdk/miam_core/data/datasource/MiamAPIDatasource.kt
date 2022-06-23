@@ -34,7 +34,7 @@ object HttpRoutes {
     const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
     const val RECIPE_SUGGESTIONS= "$BASE_URL/recipes/suggestions"
     const val SUPPLIER = "$BASE_URL/suppliers/"
-    const val PACKAGE_ENDPOINT = "$BASE_URL/packages/"
+    const val PACKAGE_ENDPOINT = "$BASE_URL/packages"
 }
 
 
@@ -185,8 +185,6 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
-
-
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
@@ -375,11 +373,11 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     override suspend fun getActivePackagesFromSupplierID(supplierId: String): List<Package> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getActivePackagesFromSupplierID $supplierId")
         // TODO Alex handle status and user pref
-        val returnValue = httpClient.get<List<Package>> {
-            url(HttpRoutes.PACKAGE_ENDPOINT+"filter[category_for]=$supplierId&filter[status]=4&filter[user_preferences]=true&sort=catalog_position")
-        }
+        val returnValue = httpClient.get<RecordWrapper> {
+            url(HttpRoutes.PACKAGE_ENDPOINT+"?filter[category_for]=$supplierId&[status]=4&[user_preferences]=true&sort=catalog_position")
+        }.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
-        return returnValue
+        return returnValue.map { record -> record as Package  }
     }
 
 
