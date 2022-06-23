@@ -34,6 +34,11 @@ class RecipeRepositoryImp(
         return addRecipeLikes(recipes)
     }
 
+    suspend fun getRecipesFromStringFilter(filters: String, included: List<String>, pageSize: Int, pageNumber: Int): List<Recipe> {
+        val recipes =  recipeDataSource.getRecipesFromStringFilter(filters, included, pageSize, pageNumber)
+        return addRecipeLikes(recipes)
+    }
+
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
         criteria: SuggestionsCriteria
