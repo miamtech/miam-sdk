@@ -374,7 +374,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] starting getActivePackagesFromSupplierID $supplierId")
         // TODO Alex handle status and user pref
         val returnValue = httpClient.get<RecordWrapper> {
-            url(HttpRoutes.PACKAGE_ENDPOINT+"?filter[category_for]=$supplierId&[status]=4&[user_preferences]=true&sort=catalog_position")
+            url(HttpRoutes.PACKAGE_ENDPOINT+"?filter[category_for]=$supplierId&[status]=4&[user_preferences]=true&sort=catalog_position&include=recipes")
         }.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
         return returnValue.map { record -> record as Package  }
