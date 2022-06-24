@@ -11,7 +11,7 @@ import SwiftUI
 
 
 public struct CatalogView: View {
-    @ObservedObject var catalog = CatalogVM()
+    @ObservedObject var catalog: CatalogVM = CatalogVM()
     @SwiftUI.State private var showingFilters = false
 
     public init() {
@@ -24,8 +24,10 @@ public struct CatalogView: View {
             CatalogViewToolbar {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
             }
-            ForEach(catalog.packages) { package in
-                CatalogPackageRow(package: package)
+            ScrollView {
+                ForEach(catalog.packages) { package in
+                    CatalogPackageRow(package: package)
+                }
             }
             Spacer()
         }.popover(isPresented: $showingFilters) {
@@ -40,9 +42,11 @@ internal struct CatalogPackageRow: View {
     var body: some View {
         VStack {
             Text(package.title)
-            HStack {
-                ForEach(package.recipes, id: \.self) { recipe in
-                    RecipeCardView(recipeId: recipe.id)
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(package.recipes, id: \.self) { recipe in
+                        RecipeCardView(recipeId: recipe.id)
+                    }
                 }
             }
         }
