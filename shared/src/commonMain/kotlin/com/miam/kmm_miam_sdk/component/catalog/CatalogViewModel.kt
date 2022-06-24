@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-
 open class CatalogViewModel:
     BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
@@ -40,6 +39,8 @@ open class CatalogViewModel:
                 setState {copy(content = CatalogContent.DEFAULT, searchString = "", searchOpen = false )}}
             is CatalogContract.Event.GoToFavorite -> {
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
+
+                // TODO reset RecipeListPageViewModel
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         "Mes Favorits",
@@ -51,7 +52,7 @@ open class CatalogViewModel:
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
-                        "Votre recherche : \"${currentState.searchString}\"",
+                        if(currentState.searchString.isEmpty()) "Votre sélection" else "Votre recherche : \"${currentState.searchString}\"",
                         createFilter("")
                     )
                 )
@@ -72,7 +73,7 @@ open class CatalogViewModel:
                 setState {copy(searchOpen = !currentState.searchOpen )}
             }
             is CatalogContract.Event.OnFilterValidation -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filter = event.filter )}
+                setState {copy(content = CatalogContent.RECIPE_LIST, filterOpen = false, filter = event.filter )}
             }
             is CatalogContract.Event.OnSearchLaunch -> {
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, searchString = event.searchString)}
@@ -96,6 +97,8 @@ open class CatalogViewModel:
         if(providerId != -1) {
             launch(coroutineHandler) {
                 val fetchedPackage = packageRepositoryImp.getActivePackageForRetailer(providerId.toString())
+                // TODO on ne filtre pas sur les category == true ?
+                // TODO le multi page n'est pas encore supporté
                 setState {copy(categories = BasicUiState.Success(fetchedPackage))}
             }
         }
