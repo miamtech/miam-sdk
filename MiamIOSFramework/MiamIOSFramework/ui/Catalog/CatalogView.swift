@@ -13,6 +13,8 @@ import SwiftUI
 public struct CatalogView: View {
     @ObservedObject var catalog: CatalogVM = CatalogVM()
     @SwiftUI.State private var showingFilters = false
+    @SwiftUI.State private var showingSearch = false
+    @SwiftUI.State private var showingPackageRecipes = false
 
     public init() {
 
@@ -23,25 +25,45 @@ public struct CatalogView: View {
             CatalogViewHeader()
             CatalogViewToolbar {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+                showingFilters = true
+            } searchTapped: {
+                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+                showingSearch = true
             }
-            ScrollView {
-                ForEach(catalog.packages) { package in
-                    CatalogPackageRow(package: package)
+            if case .categories = catalog.content {
+                ScrollView {
+                    ForEach(catalog.packages) { package in
+                        CatalogPackageRow(package: package) { package in
+                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
+                            showingPackageRecipes = true
+                        }
+                    }
                 }
+                Spacer()
+            } else {
+                CatalogRecipesPageSuccessView(recipesListPageModel: RecipeListPageVM(model: catalog.recipePageViewModel!))
             }
-            Spacer()
-        }.popover(isPresented: $showingFilters) {
+        }.popover(isPresented: $catalog.filterOpen) {
             CatalogFiltersView()
+        }.popover(isPresented: $catalog.searchOpen) {
         }
     }
 }
 
 internal struct CatalogPackageRow: View {
     let package: CatalogPackage
-
+    let showRecipes: (CatalogPackage) -> Void
     var body: some View {
-        VStack {
-            Text(package.title)
+        VStack(alignment: .leading) {
+            Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding([.leading], 16.0)
+            HStack {
+                Spacer()
+                Button {
+                    showRecipes(package)
+                } label: {
+                    Text("Tout voir").foregroundColor(MiamColor.sharedInstance.primaryText).underline().padding([.trailing], 16.0).padding([.top], 8)
+                }
+            }
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(package.recipes, id: \.self) { recipe in
