@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import shared
 import SwiftUI
 
 
 public struct CatalogView: View {
-
-    @State private var showingFilters = false
+    @ObservedObject var catalog = CatalogVM()
+    @SwiftUI.State private var showingFilters = false
 
     public init() {
 
@@ -21,11 +22,29 @@ public struct CatalogView: View {
         VStack {
             CatalogViewHeader()
             CatalogViewToolbar {
-                showingFilters = true
+                catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            }
+            ForEach(catalog.packages) { package in
+                CatalogPackageRow(package: package)
             }
             Spacer()
         }.popover(isPresented: $showingFilters) {
             CatalogFiltersView()
+        }
+    }
+}
+
+internal struct CatalogPackageRow: View {
+    let package: CatalogPackage
+
+    var body: some View {
+        VStack {
+            Text(package.title)
+            HStack {
+                ForEach(package.recipes, id: \.self) { recipe in
+                    RecipeCardView(recipeId: recipe.id)
+                }
+            }
         }
     }
 }
