@@ -28,13 +28,30 @@ struct CatalogPackage: Identifiable {
     }
 }
 
+enum CatalogModelContent {
+    case recipeList
+    case categories
+}
+
 class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
+    @Published var recipePageViewModel: RecipeListPageViewModel?
+    @Published var content: CatalogModelContent = .categories
+    @Published var filterOpen = false
+    @Published var searchOpen = false
+    @Published var searchString = ""
+    @Published var state: CatalogContractState?
 
     override public init() {
         super.init()
         collect(flow: uiState) { data in
             let state = data as! CatalogContractState
+            self.content = state.content == CatalogContent.recipeList ? .recipeList : .categories
+            self.state = state
+            self.filterOpen = state.filterOpen
+            self.searchOpen = state.searchOpen
+            self.searchString = state.searchString
+            self.recipePageViewModel = state.recipePageVM
             switch state.categories {
             case let success as BasicUiStateSuccess<NSArray>: // Must use an object, thus NSArray
                 if let packages = success.data as? [Package] {
