@@ -59,7 +59,7 @@ public struct RecipeCardLoadingView: View {
                         .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
                 ).padding(16)
             
-        }
+        }.frame(width: 300, height: 400)
     }
     
 }
