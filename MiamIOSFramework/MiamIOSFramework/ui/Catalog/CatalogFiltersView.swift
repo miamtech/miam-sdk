@@ -37,7 +37,9 @@ struct CatalogFiltersView: View {
                 catalogFilters.clearFilter()
             } label: {
                 Text("Retirer les filtres").foregroundColor(MiamColor.sharedInstance.primaryText)
-            }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20)).border(MiamColor.sharedInstance.primary, width: 1.0)
+            }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
+
 
             Divider().padding([.bottom, .top], 10)
             Button {

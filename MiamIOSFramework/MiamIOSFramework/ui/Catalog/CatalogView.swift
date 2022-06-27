@@ -125,7 +125,7 @@ internal struct CatalogViewToolbar: View {
                 Text(myIdeas).foregroundColor(MiamColor.sharedInstance.primary)
             }
             .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-            .border(MiamColor.sharedInstance.primary, width: 1.0)
+            .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
             Spacer()
         }.padding(10)
     }
