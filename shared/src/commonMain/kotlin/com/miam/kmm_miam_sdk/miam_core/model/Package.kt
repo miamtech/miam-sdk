@@ -35,7 +35,7 @@ data class PackageAttributes(
     val catalogPosition: Int?,
     @SerialName("recipes-count")
     val recipesCount: Int,
-    // TODO ALEX il y a une propriété setting sans type en TS
+    val settings: PackageSettings
 ): Attributes()
 
 @Serializable
@@ -47,3 +47,8 @@ data class PackageRelationships constructor(
         recipes?.buildFromIncluded(includedRecords)
     }
 }
+
+@Serializable
+data class PackageSettings(
+    var subtitle: String? = null,
+)

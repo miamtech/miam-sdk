@@ -32,6 +32,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
@@ -146,18 +147,27 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         setContent {
             var isFavoritePage by remember { mutableStateOf(false) }
             var isTagPage by remember { mutableStateOf(false) }
+            var isCatalogPage by remember { mutableStateOf(false) }
             Column() {
                 Row(){
                     Button(onClick = {
                         isFavoritePage= !isFavoritePage
                         isTagPage = false
+                        isCatalogPage = false
                     }) {
-                        Text("Toggle favorite")
+                        Text("favorite")
                     }
                     Button(onClick = {
                         isTagPage= !isTagPage
+                        isCatalogPage = false
                         isFavoritePage= false}) {
-                        Text("Toggle tags")
+                        Text("tags")
+                    }
+                    Button(onClick = {
+                        isCatalogPage= !isCatalogPage
+                        isTagPage = false
+                        isFavoritePage= false}) {
+                        Text("Catalog tags")
                     }
                 }
 
@@ -173,6 +183,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                         }
 
                     }
+                }  else if(isCatalogPage) {
+                     Catalog(this@MainActivity).Content()
                 }
                    else {
                     Column(
