@@ -102,6 +102,7 @@ internal struct CatalogViewHeader: View {
 internal struct CatalogViewToolbar: View {
     let myIdeas = "Mes idées repas"
     let filtersTapped: () -> Void
+    let searchTapped: () -> Void
 
     var body: some View {
         HStack {
