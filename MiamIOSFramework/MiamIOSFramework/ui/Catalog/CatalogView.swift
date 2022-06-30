@@ -38,21 +38,28 @@ public struct CatalogView: View {
             }
             if case .categories = catalog.content {
                 ScrollView {
-                    ForEach(catalog.packages) { package in
-                        CatalogPackageRow(package: package) { package in
-                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
-                            showingPackageRecipes = true
+                    VStack {
+                        ForEach(catalog.packages) { package in
+                            CatalogPackageRow(package: package) { package in
+                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
+                                showingPackageRecipes = true
                                 headerHeight = 0.0
+                            }
                         }
                     }
                 }
                 Spacer()
             } else {
-                CatalogRecipesPageSuccessView(recipesListPageModel: RecipeListPageVM(model: catalog.recipePageViewModel!))
+                let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
+                CatalogRecipesPageSuccessView(viewModel: model)
+                Spacer()
             }
         }.popover(isPresented: $catalog.filterOpen) {
-            CatalogFiltersView()
+            CatalogFiltersView {
+                self.catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            }
         }.popover(isPresented: $catalog.searchOpen) {
+            CatalogSearchView(catalog: catalog)
         }
     }
 }
@@ -62,7 +69,7 @@ internal struct CatalogPackageRow: View {
     let showRecipes: (CatalogPackage) -> Void
     var body: some View {
         VStack(alignment: .leading) {
-            Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding([.leading], 16.0)
+            Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mlPadding)
             HStack {
                 Spacer()
                 Button {
@@ -74,7 +81,7 @@ internal struct CatalogPackageRow: View {
             ScrollView(.horizontal) {
                 LazyHStack {
                     ForEach(package.recipes, id: \.self) { recipe in
-                        RecipeCardView(recipeId: recipe.id)
+                        RecipeCardView(recipeId: recipe.id).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
                     }
                 }
             }
@@ -101,7 +108,7 @@ internal struct CatalogViewHeader: View {
             Spacer()
         }
         .padding(EdgeInsets(top: 17, leading: 11, bottom: 17, trailing: 11))
-        .frame(maxWidth: .infinity, maxHeight: 80.0)
+        .frame(maxWidth: .infinity, minHeight: 0.0, maxHeight: 80.0)
         .background(MiamColor.sharedInstance.backgroundDark)
     }
 }
@@ -119,24 +126,30 @@ internal struct CatalogViewToolbar: View {
                 searchTapped()
             } label: {
                 Image("search", bundle: Bundle(for: RecipeCardVM.self))
-            }.frame(width: 40, height: 40).background(MiamColor.sharedInstance.primary).clipShape(Circle())
+                    .renderingMode(.template)
+                    .foregroundColor(MiamColor.sharedInstance.primary)
+            }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
             Spacer()
             Button {
                 filtersTapped()
             } label: {
                 Image("filters", bundle: Bundle(for: RecipeCardVM.self))
-            }.frame(width: 40, height: 40).background(MiamColor.sharedInstance.primary).clipShape(Circle())
+                    .renderingMode(.template)
+                    .foregroundColor(MiamColor.sharedInstance.primary)
+            }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
             Spacer()
             Button {
                 favoritesTapped()
             } label: {
                 Image("Like", bundle: Bundle(for: RecipeCardVM.self))
-                Text(myIdeas).foregroundColor(MiamColor.sharedInstance.primary)
+                    .renderingMode(.template)
+                    .foregroundColor(.white)
+                Text(myIdeas).foregroundColor(.white)
             }
             .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-            .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
+            .overlay(Capsule().stroke(.white, lineWidth: 1.0))
             Spacer()
-        }.padding(10)
+        }.padding(Dimension.sharedInstance.mlPadding).background(MiamColor.sharedInstance.backgroundDark)
     }
 }
 
