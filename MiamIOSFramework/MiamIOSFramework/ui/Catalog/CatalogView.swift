@@ -108,7 +108,7 @@ internal struct CatalogViewToolbar: View {
         HStack {
             Spacer()
             Button {
-                // TODO: open search
+                searchTapped()
             } label: {
                 Image("search", bundle: Bundle(for: RecipeCardVM.self))
             }.frame(width: 40, height: 40).background(MiamColor.sharedInstance.primary).clipShape(Circle())
