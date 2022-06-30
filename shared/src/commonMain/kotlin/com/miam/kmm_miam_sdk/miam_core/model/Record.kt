@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.miam_core.model
 
+import io.ktor.http.*
 import io.ktor.util.reflect.*
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Encoder
@@ -21,6 +22,21 @@ fun JsonObject.getIntValueOrThrow(attribute: String): Int {
 val jsonFormat = Json {
     ignoreUnknownKeys = true
 }
+
+@Serializable
+data class RecordCounterWrapper(var links: RecordLink) {
+
+    /**only work if page size is 1*/
+    fun getCount(): Int {
+        val lastPageParams =  Url(this.links.last).parameters;
+        val size = lastPageParams["page[size]"]?.toInt()
+        return  (size ?: 0) * (lastPageParams["page[number]"]?.toInt() ?: 0)
+    }
+}
+
+@Serializable
+data class RecordLink(val first:String, val last:String)
+
 
 /**
  * Wrapper to collect or send you records

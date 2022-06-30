@@ -23,6 +23,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val coroutineHandler = CoroutineExceptionHandler {
             _, exception ->
                 LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
+                // TODO alex break in ios mutability
                 //setEvent(RecipeContract.Event.Error)
     }
 

@@ -27,4 +27,8 @@ object Image {
     var resttime : Int = R.drawable.ic_resttime
     var swap :Int = R.drawable.ic_switch
     var toggleCaret: Int = R.drawable.ic_caret
+    var recipeId : Int = R.drawable.ic_idee_repas
+    var trait: Int = R.drawable.ic_trait
+    var filter : Int = R.drawable.ic_filtres
+    var search : Int = R.drawable.ic_search
 }

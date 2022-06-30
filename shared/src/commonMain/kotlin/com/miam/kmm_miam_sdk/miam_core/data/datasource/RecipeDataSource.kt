@@ -12,4 +12,5 @@ interface RecipeDataSource {
     suspend fun getRecipeLikes(recipesIds: List<String>, pageSize: Int = 20): List<RecipeLike>
     suspend fun createRecipeLike(recipeLike: RecipeLike): RecipeLike
     suspend fun updateRecipeLike(recipeLike: RecipeLike): RecipeLike
+    suspend fun getRecipeNumberOfResult(filter: String): Int
 }
