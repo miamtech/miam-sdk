@@ -41,6 +41,7 @@ open class CatalogViewModel:
                     content = CatalogContent.DEFAULT,
                     searchString = "",
                     searchOpen = false,
+                    filterOpen= false,
                     catalogFilterVM = CatalogFilterViewModel()
                 )}}
             is CatalogContract.Event.GoToFavorite -> {
@@ -64,7 +65,7 @@ open class CatalogViewModel:
                         CatalogFilterContract.Event.SetSearchString(currentState.searchString)
                     )
                 }
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
+                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filterOpen= false,)}
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         if(currentState.searchString.isEmpty()) "Votre sélection" else "Votre recherche : \"${currentState.searchString}\"",
@@ -97,7 +98,7 @@ open class CatalogViewModel:
                 setState {copy(content = CatalogContent.RECIPE_LIST, filterOpen = false)}
             }
             is CatalogContract.Event.OnSearchLaunch -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, searchString = event.searchString)}
+                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, searchString = currentState.catalogFilterVM.currentState.searchString ?: "")}
             }
         }
     }

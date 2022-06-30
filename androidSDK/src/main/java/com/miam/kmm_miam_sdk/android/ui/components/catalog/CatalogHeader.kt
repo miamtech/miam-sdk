@@ -9,10 +9,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogColor.headerTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.favorite
@@ -33,7 +36,12 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
     fun openFilter(){
         catalogVm.setEvent(CatalogContract.Event.ToggleFilter)
     }
-    
+
+    fun openSearch(){
+        catalogVm.setEvent(CatalogContract.Event.ToggleSearch)
+    }
+
+
     Column() {
         if(showFullHeader){
             Box(
@@ -60,7 +68,9 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                         Image(
                             painter = painterResource(trait),
                             contentDescription = null,
-                            Modifier.align(Alignment.BottomEnd).offset(y= 4.dp)
+                            Modifier
+                                .align(Alignment.BottomEnd)
+                                .offset(y = 4.dp)
                         )
 
                     }
@@ -74,7 +84,7 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Clickable(onClick = {}, children = {
+            Clickable(onClick = { openSearch() }, children = {
                 Surface(
                     shape = CircleShape,
                     elevation = 8.dp,
@@ -95,20 +105,41 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
             )
 
             Clickable(onClick = {openFilter()}, children = {
-                Surface(
-                    shape = CircleShape,
-                    elevation = 8.dp,
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                ) {
-                    Box(
-                        Modifier
-                            .background(primary)
-                            .padding(8.dp))
-                    {
-                        Image(
-                            painter = painterResource(filter),
-                            contentDescription = null,
+
+                Box() {
+                    Surface(
+                        shape = CircleShape,
+                        elevation = 8.dp,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
+                        Row(
+                            Modifier
+                                .background(primary)
+                                .padding(8.dp)
                         )
+                        {
+                            Image(
+                                painter = painterResource(filter),
+                                contentDescription = null,
+                            )
+
+                        }
+                    }
+                    if (catalogVm.currentState.catalogFilterVM.getActiveFilterCount() != 0) {
+                        Box(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .background(Color.Red).align(Alignment.TopEnd)
+                        ) {
+                            Text(
+                                text = catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
+                                    .toString(),
+                                color = white,
+                                modifier = Modifier.align(Alignment.Center)
+
+                            )
+                        }
                     }
                 }
             })

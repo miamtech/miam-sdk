@@ -10,4 +10,5 @@ object CatalogImage {
     var filter = Image.filter
     var search = Image.search
     var close = Image.close
+    var back = Image.toggleCaret
 }

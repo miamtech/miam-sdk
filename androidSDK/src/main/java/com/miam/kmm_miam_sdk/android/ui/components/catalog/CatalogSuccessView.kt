@@ -14,24 +14,46 @@ import com.miam.kmm_miam_sdk.miam_core.model.Package
 @Composable
 fun CatalogSuccessView(categories: List<Package>, state:  CatalogContract.State, context: Context,vmCatalog: CatalogViewModel ) {
 
-    val filter = CatalogFilter(state.filter)
+    val filter = CatalogFilter(vmCatalog.currentState.catalogFilterVM,
+        { vmCatalog.setEvent(CatalogContract.Event.ToggleFilter) },
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList)}
+    )
+    val search = CatalogSearch(
+        vmCatalog.currentState.catalogFilterVM,
+        { vmCatalog.setEvent(CatalogContract.Event.ToggleSearch) },
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList)}
+    )
 
-    Column(Modifier.verticalScroll(rememberScrollState())) {
+
+    Column() {
         if(state.filterOpen){
             filter.Content()
+        }
+        if(state.searchOpen){
+            search.Content()
         }
 
         CatalogHeader(state,vmCatalog)
         when(state.content) {
             CatalogContent.DEFAULT -> {
-                Column() {
-                    categories.forEach {
-                        CatalogCategory(it, context)
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    categories.forEach { cat ->
+                        CatalogCategory(cat, context) {
+                            vmCatalog.setEvent(
+                                CatalogContract.Event.GoToRecipeListFromCategory(
+                                    it
+                                )
+                            )
+                        }
                     }
                 }
             }
             CatalogContent.RECIPE_LIST -> {
-
+                CatalogPage(vmCatalog.currentState.recipePageVM,context) {
+                    vmCatalog.setEvent(
+                        CatalogContract.Event.GoToDefault
+                    )
+                }
             }
         }
     }
