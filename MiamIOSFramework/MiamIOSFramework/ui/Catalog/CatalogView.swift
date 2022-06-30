@@ -16,6 +16,7 @@ public struct CatalogView: View {
     @SwiftUI.State private var showingSearch = false
     @SwiftUI.State private var showingPackageRecipes = false
 
+    @SwiftUI.State private var headerHeight = 80.0
     public init() {
 
     }
@@ -23,6 +24,9 @@ public struct CatalogView: View {
     public var body: some View {
         VStack {
             CatalogViewHeader()
+                .frame(height: headerHeight)
+                .animation(.default, value: headerHeight)
+
             CatalogViewToolbar {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
                 showingFilters = true
@@ -38,6 +42,7 @@ public struct CatalogView: View {
                         CatalogPackageRow(package: package) { package in
                             catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
                             showingPackageRecipes = true
+                                headerHeight = 0.0
                         }
                     }
                 }
