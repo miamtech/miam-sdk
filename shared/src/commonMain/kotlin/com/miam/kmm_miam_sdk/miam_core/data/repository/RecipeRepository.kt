@@ -8,4 +8,5 @@ interface RecipeRepository {
     suspend fun getRecipeById(recipeId: String): Recipe
     suspend fun getRecipesByIds(recipeIds: List<String>): List<Recipe>
     suspend fun getRecipeSuggestions(supplierId: Int, criteria: SuggestionsCriteria): Recipe
+    suspend fun getRecipeNumberOfResult(filter : String) : Int
 }
