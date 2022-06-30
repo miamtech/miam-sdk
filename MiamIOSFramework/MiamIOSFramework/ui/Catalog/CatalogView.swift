@@ -29,6 +29,8 @@ public struct CatalogView: View {
             } searchTapped: {
                 catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                 showingSearch = true
+            } favoritesTapped: {
+                catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
             }
             if case .categories = catalog.content {
                 ScrollView {
@@ -120,7 +122,7 @@ internal struct CatalogViewToolbar: View {
             }.frame(width: 40, height: 40).background(MiamColor.sharedInstance.primary).clipShape(Circle())
             Spacer()
             Button {
-                // TODO: open favorites
+                favoritesTapped()
             } label: {
                 Image("Like", bundle: Bundle(for: RecipeCardVM.self))
                 Text(myIdeas).foregroundColor(MiamColor.sharedInstance.primary)
