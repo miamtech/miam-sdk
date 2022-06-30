@@ -51,6 +51,7 @@
 		BF25E15B286495A100328B4B /* CatalogFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E15A286495A100328B4B /* CatalogFiltersView.swift */; };
 		BF25E15F2864B56200328B4B /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E15E2864B56200328B4B /* CatalogView.swift */; };
 		BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1602865B01B00328B4B /* CatalogVM.swift */; };
+		BF25E1632865CA7A00328B4B /* CatalogSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1622865CA7A00328B4B /* CatalogSearchView.swift */; };
 		BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E168286611B200328B4B /* RecipePageListVM.swift */; };
 		BF25E16B28661D7100328B4B /* CatalogRecipePageSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E16A28661D7100328B4B /* CatalogRecipePageSuccessView.swift */; };
 		BFD55AA2285B6E16009CBC1E /* MyMealVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD55AA1285B6E16009CBC1E /* MyMealVM.swift */; };
@@ -135,6 +136,7 @@
 		BF25E15A286495A100328B4B /* CatalogFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFiltersView.swift; sourceTree = "<group>"; };
 		BF25E15E2864B56200328B4B /* CatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogView.swift; sourceTree = "<group>"; };
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
+		BF25E1622865CA7A00328B4B /* CatalogSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogSearchView.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
 		BF25E16A28661D7100328B4B /* CatalogRecipePageSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogRecipePageSuccessView.swift; sourceTree = "<group>"; };
 		BFD55AA1285B6E16009CBC1E /* MyMealVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealVM.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 			children = (
 				BF25E15A286495A100328B4B /* CatalogFiltersView.swift */,
 				BF25E15E2864B56200328B4B /* CatalogView.swift */,
+				BF25E1622865CA7A00328B4B /* CatalogSearchView.swift */,
 				BF25E16A28661D7100328B4B /* CatalogRecipePageSuccessView.swift */,
 			);
 			path = Catalog;
@@ -584,6 +587,7 @@
 				521D645B283230DA0092AC52 /* BasketPreviewRow.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
 				0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */,
+				BF25E1632865CA7A00328B4B /* CatalogSearchView.swift in Sources */,
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,
 				521D6463283277EA0092AC52 /* MyMealItemRow.swift in Sources */,
 				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
