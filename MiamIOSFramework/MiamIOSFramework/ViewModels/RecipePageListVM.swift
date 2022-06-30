@@ -10,15 +10,27 @@ import shared
 
 class RecipeListPageVM: ObservableObject {
     @Published var recipes: [Recipe] = []
+    @Published var title: String = ""
+
+    let model: RecipeListPageViewModel
 
     init(model: RecipeListPageViewModel) {
-        model.collect(flow: model.uiState) { data in
-            switch(data) {
+        self.model = model
+        self.model.collect(flow: model.uiState) { data in
+            let state = data as! RecipeListPageContractState
+            self.title = state.title
+            switch(state.recipes) {
             case let success as BasicUiStateSuccess<NSArray>:
-                self.recipes = success.data as? [Recipe] ?? []
+                if let recipes = success.data as? [Recipe] {
+                    self.recipes = recipes
+                }
             default:
-                break
+                ()
             }
         }
+    }
+
+    func loadPage() {
+        self.model.setEvent(event: RecipeListPageContractEvent.LoadPage())
     }
 }
