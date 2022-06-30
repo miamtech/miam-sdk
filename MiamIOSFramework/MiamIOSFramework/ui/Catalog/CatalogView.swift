@@ -65,7 +65,7 @@ internal struct CatalogPackageRow: View {
                 }
             }
             ScrollView(.horizontal) {
-                HStack {
+                LazyHStack {
                     ForEach(package.recipes, id: \.self) { recipe in
                         RecipeCardView(recipeId: recipe.id)
                     }
