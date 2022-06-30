@@ -3,10 +3,11 @@ package com.miam.kmm_miam_sdk.component.catalog
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
+import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterContract
+import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageContract
 import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmm_miam_sdk.miam_core.data.repository.PackageRepositoryImp
-import com.miam.kmm_miam_sdk.miam_core.model.CatalogFilter
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -26,7 +27,7 @@ open class CatalogViewModel:
         CatalogContract.State(
             categories= BasicUiState.Loading,
             content= CatalogContent.DEFAULT,
-            filter= CatalogFilter(),
+            catalogFilterVM = CatalogFilterViewModel(),
             recipePageVM = RecipeListPageViewModel(),
             searchString="",
             filterOpen= false,
@@ -36,33 +37,53 @@ open class CatalogViewModel:
     override fun handleEvent(event: CatalogContract.Event) {
         when (event) {
             is CatalogContract.Event.GoToDefault -> {
-                setState {copy(content = CatalogContent.DEFAULT, searchString = "", searchOpen = false )}}
+                setState {copy(
+                    content = CatalogContent.DEFAULT,
+                    searchString = "",
+                    searchOpen = false,
+                    catalogFilterVM = CatalogFilterViewModel()
+                )}}
             is CatalogContract.Event.GoToFavorite -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
-
-                // TODO reset RecipeListPageViewModel
+                setState { copy(
+                    content = CatalogContent.RECIPE_LIST,
+                    searchOpen = false,
+                ) }
+                currentState.catalogFilterVM.setEvent(
+                    CatalogFilterContract.Event.SetFavorite
+                )
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         "Mes Favorits",
-                        createFilter("filter[liked]=true&")
+                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
             }
             is CatalogContract.Event.GoToRecipeList -> {
+                if(currentState.searchString.isNotEmpty()){
+                    currentState.catalogFilterVM.setEvent(
+                        CatalogFilterContract.Event.SetSearchString(currentState.searchString)
+                    )
+                }
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         if(currentState.searchString.isEmpty()) "Votre sélection" else "Votre recherche : \"${currentState.searchString}\"",
-                        createFilter("")
+                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false)}
+                currentState.catalogFilterVM.setEvent(
+                    CatalogFilterContract.Event.SetCategoryTitle(event.category.attributes?.title ?: "")
+                )
+                setState { copy(
+                    content = CatalogContent.RECIPE_LIST,
+                    searchOpen = false,
+                ) }
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         "${event.category.attributes?.title}",
-                        createFilter("[packages]=${event.category}")
+                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
             }
@@ -73,7 +94,7 @@ open class CatalogViewModel:
                 setState {copy(searchOpen = !currentState.searchOpen )}
             }
             is CatalogContract.Event.OnFilterValidation -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, filterOpen = false, filter = event.filter )}
+                setState {copy(content = CatalogContent.RECIPE_LIST, filterOpen = false)}
             }
             is CatalogContract.Event.OnSearchLaunch -> {
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, searchString = event.searchString)}
@@ -104,11 +125,5 @@ open class CatalogViewModel:
         }
     }
 
-    private fun createFilter(initialFilter: String) : String {
-        return "$initialFilter${
-            if (currentState.searchString.isEmpty()) "" 
-            else "[search]=$currentState&" 
-        }${currentState.filter.getSelectedFilterAsQueryString()}"
-    }
 
 }

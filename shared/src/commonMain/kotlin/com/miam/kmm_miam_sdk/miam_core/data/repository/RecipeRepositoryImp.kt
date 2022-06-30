@@ -17,6 +17,10 @@ class RecipeRepositoryImp(
         val DEFAULT_PAGESIZE = 20
     }
 
+    override suspend fun getRecipeNumberOfResult(filter : String): Int {
+       return recipeDataSource.getRecipeNumberOfResult(filter)
+    }
+
     override suspend fun getRecipeById(recipeId: String): Recipe {
         println("Miam getting recipe $recipeId")
         val recipe = recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)

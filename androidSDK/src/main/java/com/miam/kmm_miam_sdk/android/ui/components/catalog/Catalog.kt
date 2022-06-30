@@ -1,0 +1,52 @@
+package com.miam.kmm_miam_sdk.android.ui.components.catalog
+
+import android.content.Context
+import android.util.AttributeSet
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.AbstractComposeView
+
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+
+import com.miam.kmm_miam_sdk.component.catalog.CatalogViewModel
+
+
+class Catalog @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AbstractComposeView(context, attrs, defStyleAttr)  {
+
+    private val vmCatalog: CatalogViewModel = CatalogViewModel()
+
+
+    @Composable
+    override fun Content() {
+
+        val state by vmCatalog.uiState.collectAsState()
+
+
+        Box(){
+                    Column {
+                        ManagementResourceState(
+                            resourceState = state.categories,
+                            successView = { categories ->
+                                requireNotNull(categories)
+                                CatalogSuccessView(categories,state, context,vmCatalog )
+                            },
+                            loadingView = {
+                                CatalogLoadingView()
+                            },
+                            emptyView =  {
+                               //TODO
+                            },
+                            onTryAgain = {},
+                            onCheckAgain = {},
+                        )
+                    }
+            }
+        }
+    }

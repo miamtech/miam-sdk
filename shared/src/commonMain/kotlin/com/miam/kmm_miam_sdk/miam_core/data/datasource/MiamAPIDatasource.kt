@@ -198,6 +198,13 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return returnValue.map { record -> record as Recipe }
     }
 
+    override suspend fun getRecipeNumberOfResult(filter: String): Int {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeNumberOfResult $filter")
+        val returnValue = this.get<RecordCounterWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$filter")!!
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateRecipeLike ${returnValue.getCount()}")
+        return returnValue.getCount()
+    }
+
     ///////// RecipeLike ///////////////
 
     private suspend fun getRecipeLikesByRecipeIds(recipesIds: List<String>, pageSize: Int): List<RecipeLike> {
