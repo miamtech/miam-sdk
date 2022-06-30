@@ -66,8 +66,8 @@ struct RecipeCardSuccessView: View {
                                     string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                 )! ,
                                 placeholder: { Text("loading ...")},
-                                height : 245
-                            ).frame(height: 245).onTapGesture {
+                                height : 240
+                            ).frame(height: 240).onTapGesture {
                                 viewModel.goToDetail()
                                 showingPopup = true
                             }
@@ -93,7 +93,7 @@ struct RecipeCardSuccessView: View {
                                     
                                 }
                             }.padding([.leading,.trailing],8).padding(.top,16)
-                        }.frame(height: 245)
+                        }.frame(height: 240)
                         Text(viewModel.recipe!.attributes?.title ?? "")
                             .lineLimit(2)
                             .foregroundColor(MiamColor.sharedInstance.black)
@@ -105,7 +105,7 @@ struct RecipeCardSuccessView: View {
                             showingPopup = true
                         }
                         }.foregroundColor(MiamColor.sharedInstance.white)
-                            .frame(minHeight: 50.0, maxHeight: 50.0)
+                            .frame(height: 40.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                             .background(MiamColor.sharedInstance.primaryText)
                             .cornerRadius(25)
@@ -124,9 +124,8 @@ struct RecipeCardSuccessView: View {
                 }.cornerRadius(15).clipped().overlay(
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
-                ).padding(16)
-                
-            }.frame(width: 300, height: 400)
+                )
+            }.frame(height: 400)
         }
     }
 }

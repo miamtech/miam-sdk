@@ -27,7 +27,7 @@ public struct RecipeCardLoadingView: View {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
                         .fill(MiamColor.sharedInstance.borderColor)
-                        .frame(width: .infinity,height: 245 )
+                        .frame(height: 245)
                     
                 }.frame(height: 245)
                 Text( "")
@@ -57,9 +57,9 @@ public struct RecipeCardLoadingView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
-                ).padding(16)
+                )
             
-        }.frame(width: 300, height: 400)
+        }.frame(height: 400)
     }
     
 }
