@@ -9,43 +9,62 @@ import SwiftUI
 import shared
 
 struct CatalogFiltersView: View {
-
     @SwiftUI.State var resultCount: Int = 0
-    let catalogFilters: CatalogFilter = CatalogFilter()
+    @ObservedObject var catalogFilters: CatalogFilterVM
+
+    let mainTitle = "Affiner ma sélection"
+    let difficultySectionTitle = "Difficulté"
+    let costSectionTitle = "Coût par personne"
+    let preparationTimeSectionTitle = "Temps de préparation"
+    let removeFiltersButtonTitle = "Retirer les filtres"
+
+    let closeFilters: () -> Void
+    let applyFilters: () -> Void
+
+    init(catalogFiltersModel: CatalogFilterVM, apply: @escaping () -> Void, close: @escaping () -> Void) {
+        catalogFilters = catalogFiltersModel
+        applyFilters = apply
+        closeFilters = close
+    }
 
     var body: some View {
         VStack() {
+            // Title and close button
             HStack {
-                Text("Affiner ma sélection").fontWeight(.bold)
+                Text(mainTitle).fontWeight(.bold)
                 Spacer()
                 Button {
-                    // TODO: Close filters window
+                    closeFilters()
                 } label: {
                     Image("cross", bundle: Bundle(for: RecipeCardVM.self))
                 }
             }.padding([.top], 20)
-            // TODO: Should be a loop on filters object
-            CatalogSection(title: "Difficulté", filters: catalogFilters.difficulty)
+
+            // Filters
+            CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
+                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
+            }
             Divider()
-            CatalogSection(title: "Coût par personne", filters: catalogFilters.cost)
+            CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
+                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
+            }
             Divider()
-            CatalogSection(title: "Temps de préparation", filters: catalogFilters.time)
+            CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
+                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
+            }
 
             Spacer()
 
             Button {
-                catalogFilters.clearFilter()
+                catalogFilters.model.clearFilter()
             } label: {
-                Text("Retirer les filtres").foregroundColor(MiamColor.sharedInstance.primaryText)
+                Text(removeFiltersButtonTitle).foregroundColor(MiamColor.sharedInstance.primaryText)
             }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-                .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
-
-
             Divider().padding([.bottom, .top], 10)
             Button {
-                // TODO: display results
+                applyFilters()
             } label: {
-                Text("Voir les \(resultCount) idées repas")
+                Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
                     .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
                     .foregroundColor(.white)
                     .background(MiamColor.sharedInstance.primary)
@@ -55,37 +74,44 @@ struct CatalogFiltersView: View {
     }
 }
 
-internal struct CatalogSection: View {
+internal struct CatalogFilterSection: View {
     let title: String
     let filters: Array<CatalogFilterOptions>
+    let filterSelected: (CatalogFilterOptions) -> Void
     var body: some View {
         VStack(alignment: .leading) {
             Text(title).bold().fontWeight(.bold)
             ForEach(filters, id: \.self) { filter in
-                CatalogFilterRow(filterName: filter.uiLabel)
+                CatalogFilterRow(filter: filter) { option in
+                    filterSelected(option)
+                }
             }
         }.padding([.top, .bottom], 25.0)
     }
 }
 
 internal struct CatalogFilterRow: View {
-    let filterName: String
+    let filter: CatalogFilterOptions
+    let filterSelected: (CatalogFilterOptions) -> Void
+    var imageName: String {
+        filter.isSelected ? "Check" : "cross"
+    }
     var body: some View {
         HStack {
             Button {
-
+                filter.isSelected = true
+                filterSelected(filter)
             } label: {
-                RoundedRectangle(cornerRadius: 4.0).frame(width: 22, height: 22).border(MiamColor.sharedInstance.primary).foregroundColor(.clear)
-            }
-            Text(filterName).fontWeight(Font.Weight.regular)
+                if (filter.isSelected) {
+                    Image(imageName, bundle: Bundle(for: CatalogVM.self))
+                } else {
+                    Rectangle().foregroundColor(.clear)
+                }
+            }.frame(width: 22, height: 22)
+                .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
+            Text(filter.uiLabel).fontWeight(Font.Weight.regular)
             Spacer()
 
         }
-    }
-}
-
-struct CatalogFiltersView_Previews: PreviewProvider {
-    static var previews: some View {
-        CatalogFiltersView()
     }
 }

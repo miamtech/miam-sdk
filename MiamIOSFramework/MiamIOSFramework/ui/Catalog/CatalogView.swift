@@ -61,7 +61,9 @@ public struct CatalogView: View {
                 Spacer()
             }
         }.popover(isPresented: $catalog.filterOpen) {
-            CatalogFiltersView {
+            CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
+                self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
+            } close: {
                 self.catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
             }
         }.popover(isPresented: $catalog.searchOpen) {
