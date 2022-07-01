@@ -30,7 +30,6 @@ interface CatalogContract {
         val content: CatalogContent,
         val catalogFilterVM: CatalogFilterViewModel,
         val recipePageVM : RecipeListPageViewModel,
-        val searchString: String,
         val filterOpen: Boolean,
         val searchOpen:Boolean
     ) : UiState

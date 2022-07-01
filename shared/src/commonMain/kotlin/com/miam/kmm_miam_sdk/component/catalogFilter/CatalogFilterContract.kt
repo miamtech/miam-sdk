@@ -11,10 +11,7 @@ interface CatalogFilterContract {
         data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions ) : CatalogFilterContract.Event()
         data class OnCostFilterChanged(val costFilter: CatalogFilterOptions ) : CatalogFilterContract.Event()
         data class OnDifficultyChanged(val difficulty: CatalogFilterOptions ) : CatalogFilterContract.Event()
-        data class SetCategoryTitle(val catTitle:String): CatalogFilterContract.Event()
         data class SetSearchString(val searchString: String): CatalogFilterContract.Event()
-        object SetFavorite: CatalogFilterContract.Event()
-
     }
 
     data class State(

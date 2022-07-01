@@ -29,7 +29,6 @@ open class CatalogViewModel:
             content= CatalogContent.DEFAULT,
             catalogFilterVM = CatalogFilterViewModel(),
             recipePageVM = RecipeListPageViewModel(),
-            searchString="",
             filterOpen= false,
             searchOpen= false
         )
@@ -39,54 +38,45 @@ open class CatalogViewModel:
             is CatalogContract.Event.GoToDefault -> {
                 setState {copy(
                     content = CatalogContent.DEFAULT,
-                    searchString = "",
                     searchOpen = false,
                     filterOpen= false,
                     catalogFilterVM = CatalogFilterViewModel()
                 )}}
             is CatalogContract.Event.GoToFavorite -> {
+
+                currentState.catalogFilterVM.setFavorite()
+                currentState.recipePageVM.setEvent(
+                    RecipeListPageContract.Event.InitPage(
+                        "Mes idées repas",
+                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
+                    )
+                )
                 setState { copy(
                     content = CatalogContent.RECIPE_LIST,
                     searchOpen = false,
                 ) }
-                currentState.catalogFilterVM.setEvent(
-                    CatalogFilterContract.Event.SetFavorite
-                )
-                currentState.recipePageVM.setEvent(
-                    RecipeListPageContract.Event.InitPage(
-                        "Mes Favorits",
-                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
-                    )
-                )
             }
             is CatalogContract.Event.GoToRecipeList -> {
-                if(currentState.searchString.isNotEmpty()){
-                    currentState.catalogFilterVM.setEvent(
-                        CatalogFilterContract.Event.SetSearchString(currentState.searchString)
-                    )
-                }
                 setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filterOpen= false,)}
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
-                        if(currentState.searchString.isEmpty()) "Votre sélection" else "Votre recherche : \"${currentState.searchString}\"",
+                        if((currentState.catalogFilterVM.currentState.searchString ?: "").isEmpty()) "Votre sélection" else "Votre recherche : \"${currentState.catalogFilterVM.currentState.searchString}\"",
                         currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
-                currentState.catalogFilterVM.setEvent(
-                    CatalogFilterContract.Event.SetCategoryTitle(event.category.attributes?.title ?: "")
-                )
-                setState { copy(
-                    content = CatalogContent.RECIPE_LIST,
-                    searchOpen = false,
-                ) }
+                currentState.catalogFilterVM.setCat(event.category.id)
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
                         "${event.category.attributes?.title}",
                         currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
+                setState { copy(
+                    content = CatalogContent.RECIPE_LIST,
+                    searchOpen = false,
+                ) }
             }
             is CatalogContract.Event.ToggleFilter -> {
                 setState {copy(filterOpen = !currentState.filterOpen )}
@@ -98,7 +88,7 @@ open class CatalogViewModel:
                 setState {copy(content = CatalogContent.RECIPE_LIST, filterOpen = false)}
             }
             is CatalogContract.Event.OnSearchLaunch -> {
-                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, searchString = currentState.catalogFilterVM.currentState.searchString ?: "")}
+                setState {copy(content = CatalogContent.RECIPE_LIST, searchOpen = false,)}
             }
         }
     }

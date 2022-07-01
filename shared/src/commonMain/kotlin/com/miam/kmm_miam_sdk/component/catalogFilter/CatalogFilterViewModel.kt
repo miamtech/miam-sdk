@@ -48,20 +48,6 @@ open class CatalogFilterViewModel:
     override fun handleEvent(event: CatalogFilterContract.Event) {
         when (event) {
 
-            is CatalogFilterContract.Event.SetFavorite -> {
-                setState {
-                    copy(
-                        isFavorite = true
-                    )
-                }
-            }
-            is CatalogFilterContract.Event.SetCategoryTitle -> {
-                setState {
-                    copy(
-                        category = event.catTitle
-                    )
-                }
-            }
             is CatalogFilterContract.Event.SetSearchString -> {
                 setState {
                     copy(
@@ -102,6 +88,23 @@ open class CatalogFilterViewModel:
         launch(coroutineHandler) {
             val count = recipeRepositoryImp.getRecipeNumberOfResult( getSelectedFilterAsQueryString())
             setState { copy(numberOfResult= count) }
+        }
+    }
+
+    fun setCat(catId: String){
+        setState {
+            copy(
+                category =catId
+            )
+        }
+    }
+
+
+    fun setFavorite(){
+        setState {
+            copy(
+                isFavorite = true
+            )
         }
     }
 
@@ -147,10 +150,10 @@ open class CatalogFilterViewModel:
             filter+= (timeOption.name +"&")
         }
         if(currentState.searchString != null){
-            filter+= "[search]=${currentState.searchString}&"
+            filter+= "filter[search]=${currentState.searchString}&"
         }
         if(currentState.category != null){
-            filter+= "[packages]=${currentState.category}&"
+            filter+= "filter[packages]=${currentState.category}&"
         }
         if(currentState.isFavorite){
             filter+= "filter[liked]=true&"
