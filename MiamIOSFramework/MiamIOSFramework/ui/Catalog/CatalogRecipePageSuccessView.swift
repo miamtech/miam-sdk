@@ -23,7 +23,7 @@ internal struct CatalogRecipesPageSuccessView: View {
                 ForEach(recipesListPageModel.recipes, id: \.self) { recipe in
                     RecipeCardView(recipeId: recipe.id)
                 }
-            }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
+            }.padding([.leading, .trailing, .top], Dimension.sharedInstance.mlPadding)
         }
     }
 }
