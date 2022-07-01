@@ -46,19 +46,18 @@ class RecipeListPageViewModel : BaseViewModel<RecipeListPageContract.Event, Reci
             setState { copy(isFetchingNewPage = true) }
             val fetchedRecipes = recipeRepositoryImp.getRecipesFromStringFilter(currentState.filter, RecipeRepositoryImp.DEFAULT_INCLUDED, RecipeRepositoryImp.DEFAULT_PAGESIZE, currentPage)
             newRecipes.addAll(fetchedRecipes)
+            val uiState = if(newRecipes.isEmpty() && fetchedRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
+            setState {
+                copy(
+                    recipes = uiState,
+                    noMoreData = noMoreData,
+                    currentPage = currentPage + 1,
+                    isFetchingNewPage = false
+                )
+            }
             noMoreData = fetchedRecipes.size < RecipeRepositoryImp.DEFAULT_PAGESIZE
         }.invokeOnCompletion { error ->
-            if (error == null) {
-                val uiState = if(newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
-                setState {
-                    copy(
-                        recipes = uiState,
-                        noMoreData = noMoreData,
-                        currentPage = currentPage + 1,
-                        isFetchingNewPage = false
-                    )
-                }
-            } else {
+            if (error != null) {
                 LogHandler.error("category loadPage is in error")
                 setState {copy(recipes = BasicUiState.Error("Error while getting recipe list pages"), isFetchingNewPage = false)}
             }
@@ -66,7 +65,15 @@ class RecipeListPageViewModel : BaseViewModel<RecipeListPageContract.Event, Reci
     }
 
     private fun initPage(title: String,filter: String){
-        setState {copy(title = title, filter = filter)}
+        setState {
+            copy(
+            title = title,
+            filter = filter,
+            recipes  = BasicUiState.Loading,
+            noMoreData = false,
+            currentPage = 1
+         )
+        }
         loadPage()
     }
 

@@ -21,7 +21,7 @@ interface CatalogContract {
         object ToggleFilter : CatalogContract.Event()
         object ToggleSearch : CatalogContract.Event()
         object OnFilterValidation  : CatalogContract.Event()
-        data class OnSearchLaunch( val searchString: String): CatalogContract.Event()
+        object OnSearchLaunch: CatalogContract.Event()
         data class GoToRecipeListFromCategory(val category: Package): CatalogContract.Event()
     }
 
@@ -30,7 +30,6 @@ interface CatalogContract {
         val content: CatalogContent,
         val catalogFilterVM: CatalogFilterViewModel,
         val recipePageVM : RecipeListPageViewModel,
-        val searchString: String,
         val filterOpen: Boolean,
         val searchOpen:Boolean
     ) : UiState
