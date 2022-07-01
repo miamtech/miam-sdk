@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 14, *)
 struct BasketPreviewLoadingView: View {
     var body: some View {
         VStack(){

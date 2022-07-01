@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 public struct RecpieDetailsView: View {
     
     public var recipeId: String?

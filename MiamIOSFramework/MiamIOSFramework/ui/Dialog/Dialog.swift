@@ -9,7 +9,7 @@ import SwiftUI
 import shared
 
 
-
+@available(iOS 14, *)
 struct Dialog: View {
     
     private var close: () -> Void

@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 public struct BasketPreviewSuccessView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
@@ -150,7 +151,7 @@ public struct BasketPreviewSuccessView: View {
     }
 }
 
-
+@available(iOS 14, *)
 internal struct IngredientsHeader: View {
     let title: String
     @Binding var folded: Bool
@@ -190,6 +191,7 @@ internal struct IngredientsHeader: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct IngredientsFoldableView: View {
     var title: String
     var products: Array<BasketEntry>

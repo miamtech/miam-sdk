@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 14, *)
 struct CounterView: View {
     
     public var count: Int
@@ -76,6 +77,7 @@ struct CounterView: View {
     }
 }
 
+@available(iOS 14, *)
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         CounterView(count: 12 ,

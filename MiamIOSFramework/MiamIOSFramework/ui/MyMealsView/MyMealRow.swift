@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 public struct MyMealRow: View {
     @SwiftUI.State private var isExpanded: Bool = false
     private let myMealViewModel: MyMealVM

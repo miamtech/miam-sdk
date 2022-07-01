@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct StepRow: View {
     
     private var index : Int

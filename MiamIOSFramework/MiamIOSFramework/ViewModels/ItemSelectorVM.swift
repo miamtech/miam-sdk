@@ -9,6 +9,7 @@ import Foundation
 
 import shared
 
+@available(iOS 14, *)
 public class ItemSelectorVM : ObservableObject {
     
     @Published var state: ItemSelectorContractState?

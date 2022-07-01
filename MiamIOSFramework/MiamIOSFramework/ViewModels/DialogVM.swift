@@ -9,7 +9,7 @@ import Foundation
 import shared
 import Combine
 
-
+@available(iOS 14, *)
 public class DialogVM : ObservableObject {
     
     @Published var state: RouterOutletContractState?

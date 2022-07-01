@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 public struct RecipeCardView: View {
     
     public var criteria: SuggestionsCriteria?

@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct BasketPreviewHeader: View {
     private let headerHeight = 150.0
 

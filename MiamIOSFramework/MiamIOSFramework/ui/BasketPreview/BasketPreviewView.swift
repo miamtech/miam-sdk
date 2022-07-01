@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 struct BasketPreviewView: View {
     
     @ObservedObject private var viewModel: BasketPreviewVM

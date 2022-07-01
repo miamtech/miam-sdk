@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View>: View {
     
     private let resourceState: BasicUiState<T>

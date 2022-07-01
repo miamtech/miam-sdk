@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 
+@available(iOS 14, *)
 class ImageLoader : ObservableObject {
     @Published var image: UIImage?
     private let url: URL
@@ -32,6 +33,7 @@ class ImageLoader : ObservableObject {
     }
 }
 
+@available(iOS 14, *)
 struct AsyncImage<Placeholder:View> : View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
