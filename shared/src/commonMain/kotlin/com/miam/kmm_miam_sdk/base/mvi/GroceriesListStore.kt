@@ -6,9 +6,19 @@ import com.miam.kmm_miam_sdk.miam_core.model.RecipeInfos
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import com.miam.kmm_miam_sdk.handler.LogHandler
 import kotlinx.coroutines.*
 
+
+/**
+ * Proprerties shared with final user
+ */
+object MiamGroceriesList : KoinComponent {
+   private val instance: GroceriesListStore by inject()
+
+     fun getRecipeCount(updateRecipeCount : (Int) -> Unit){
+        instance.getRecipeCount(updateRecipeCount)
+    }
+}
 
 data class GroceriesListState(
     val groceriesList : GroceriesList?
@@ -122,5 +132,13 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             )
         )
         return groceriesListRepo.updateGroceriesList(gl)
+    }
+
+   fun getRecipeCount(updateRecipeCount : (Int) -> Unit){
+        launch {
+            state.collect {
+                updateRecipeCount(it.groceriesList?.attributes?.recipesInfos?.size ?: 0)
+            }
+        }
     }
 }

@@ -370,8 +370,6 @@ Miam.getInstance().basketHandler.handlePayment()
 
 You have two ways to check Miam readiness : either call a direct function or listen to Miam event
 
-
-
 ```kotlin
   val miamContext = ContextHandlerInstance.instance
   // miamContext.isReady() return a bool
@@ -384,6 +382,24 @@ You have two ways to check Miam readiness : either call a direct function or lis
   }
 
 ```
+#### Miam basket state
+
+Some Miam internal informations are available for reading only
+they can be accesed with `MiamGroceriesList`
+
+```kotlin
+    import com.miam.kmm_miam_sdk.base.mvi.MiamGroceriesList
+
+    private var recipeCount = 0
+    
+    // Each time groceriesList'll change it'll be triggered
+    MiamGroceriesList.getRecipeCount {
+        recipeCount = it
+        println("recipes count : $recipeCount " )
+    }
+
+```
+
 
 ### Components injection
 
