@@ -14,20 +14,25 @@ public struct CatalogView: View {
     @ObservedObject var catalog: CatalogVM = CatalogVM()
     @SwiftUI.State private var showingFilters = false
     @SwiftUI.State private var showingSearch = false
+    @SwiftUI.State private var showingFavorites = false
     @SwiftUI.State private var showingPackageRecipes = false
 
-    @SwiftUI.State private var headerHeight = 80.0
+    @SwiftUI.State private var headerHeight = 50.0
     public init() {
 
     }
 
     public var body: some View {
-        VStack {
+        VStack(spacing: 0.0) {
             CatalogViewHeader()
-                .frame(height: headerHeight)
-                .animation(.default, value: headerHeight)
+                .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
-            CatalogViewToolbar {
+            CatalogViewToolbar(showBackButton: (catalog.content != .categories),
+                               favoritesFilterActive: showingFavorites) {
+                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                showingFavorites = false
+                headerHeight = 50.0
+            } filtersTapped: {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
                 showingFilters = true
             } searchTapped: {
@@ -35,6 +40,7 @@ public struct CatalogView: View {
                 showingSearch = true
             } favoritesTapped: {
                 catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
+                showingFavorites = true
             }
             if case .categories = catalog.content {
                 ScrollView {
@@ -107,21 +113,32 @@ internal struct CatalogViewHeader: View {
             }
             Spacer()
         }
-        .padding(EdgeInsets(top: 17, leading: 11, bottom: 17, trailing: 11))
-        .frame(maxWidth: .infinity, minHeight: 0.0, maxHeight: 80.0)
+        .padding(EdgeInsets(top: 16, leading: 11, bottom: 0, trailing: 11))
+        .frame(maxWidth: .infinity, minHeight: 0.0)
         .background(MiamColor.sharedInstance.backgroundDark)
     }
 }
 
 internal struct CatalogViewToolbar: View {
     let myIdeas = "Mes idées repas"
+
+    let showBackButton: Bool
+    let favoritesFilterActive: Bool
+    let backTapped: () -> Void
     let filtersTapped: () -> Void
     let searchTapped: () -> Void
     let favoritesTapped: () -> Void
 
     var body: some View {
-        HStack {
-            Spacer()
+        HStack(spacing: 16.0) {
+            if (showBackButton) {
+                Button {
+                    backTapped()
+                } label: {
+                    Image("back", bundle: Bundle(for: RecipeCardVM.self))
+                }.frame(width: 40, height: 40)
+                Spacer()
+            }
             Button {
                 searchTapped()
             } label: {
@@ -129,7 +146,10 @@ internal struct CatalogViewToolbar: View {
                     .renderingMode(.template)
                     .foregroundColor(MiamColor.sharedInstance.primary)
             }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
-            Spacer()
+            if (!showBackButton) {
+                Spacer()
+            }
+
             Button {
                 filtersTapped()
             } label: {
@@ -137,19 +157,36 @@ internal struct CatalogViewToolbar: View {
                     .renderingMode(.template)
                     .foregroundColor(MiamColor.sharedInstance.primary)
             }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
-            Spacer()
-            Button {
-                favoritesTapped()
-            } label: {
-                Image("Like", bundle: Bundle(for: RecipeCardVM.self))
-                    .renderingMode(.template)
-                    .foregroundColor(.white)
-                Text(myIdeas).foregroundColor(.white)
+
+            if (!favoritesFilterActive) {
+                if (showBackButton) {
+                    Button {
+                        favoritesTapped()
+                    } label: {
+                        Image("heart", bundle: Bundle(for: RecipeCardVM.self))
+                            .renderingMode(.template)
+                            .foregroundColor(MiamColor.sharedInstance.primary)
+                    }
+                    .frame(width: 40, height: 40)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                } else {
+                    Button {
+                        favoritesTapped()
+                    } label: {
+                        Image("heart", bundle: Bundle(for: RecipeCardVM.self))
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                        Text(myIdeas).foregroundColor(.white)
+                    }
+                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                    .overlay(Capsule().stroke(.white, lineWidth: 1.0))
+                }
             }
-            .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-            .overlay(Capsule().stroke(.white, lineWidth: 1.0))
-            Spacer()
-        }.padding(Dimension.sharedInstance.mlPadding).background(MiamColor.sharedInstance.backgroundDark)
+        }.padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
+                             leading: Dimension.sharedInstance.mlPadding, bottom: 16,
+                             trailing: Dimension.sharedInstance.mlPadding))
+        .background(MiamColor.sharedInstance.backgroundDark)
     }
 }
 
