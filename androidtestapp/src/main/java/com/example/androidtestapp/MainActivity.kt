@@ -33,6 +33,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
+import com.miam.kmm_miam_sdk.base.mvi.MiamGroceriesList
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
@@ -67,6 +68,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private lateinit var basketHandler: BasketHandler
 
+    private var recipeCount = 0
+
     private fun initMiam() {
         initKoin{
             androidContext(this@MainActivity)
@@ -90,6 +93,10 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("alexis")
         UserHandler.setProfilingAllowed(true)
+        MiamGroceriesList.getRecipeCount {
+            recipeCount = it
+            println("recipes count : $recipeCount " )
+        }
     }
 
     private val recipeloader:  @Composable () -> Unit = { Box(

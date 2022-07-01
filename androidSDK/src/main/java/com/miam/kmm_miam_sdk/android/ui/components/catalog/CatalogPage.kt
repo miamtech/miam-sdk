@@ -34,7 +34,7 @@ import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 @Composable
 fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnToCategoriesPage: () -> Unit) {
 
-        val state = recipePageVM.uiState.collectAsState()
+    val state = recipePageVM.uiState.collectAsState()
 
     ManagementResourceState(
         resourceState = state.value.recipes,
@@ -55,7 +55,7 @@ fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnT
         onTryAgain = { /**TODO*/ },
         onCheckAgain = { /**TODO*/ },
     )
-    }
+}
 
 
 @Composable
@@ -124,6 +124,11 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
             )
             if(isFavorit){
                 Clickable(onClick = { returnToCategoriesPage() }) {
+                    Text(text ="Oups, vous n’avez pas encore d’idée repas",
+                        color= white,
+                        style = Typography.subtitleBold,
+                        textAlign = TextAlign.Center
+                    )
                     Box(
                         Modifier
                             .clip(RoundedCornerShape(50))
@@ -156,9 +161,6 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                     color= white
                 )
             }
-
         }
-
     }
-
 }
