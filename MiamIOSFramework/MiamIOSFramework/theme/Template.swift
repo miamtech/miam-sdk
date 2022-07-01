@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 public class Template {
     
     public static let sharedInstance = Template()

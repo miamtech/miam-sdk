@@ -7,6 +7,7 @@
 
 import shared
 
+@available(iOS 14, *)
 public class RecipeCardVM : RecipeViewModel, ObservableObject {
    
     @Published var recipe: Recipe?

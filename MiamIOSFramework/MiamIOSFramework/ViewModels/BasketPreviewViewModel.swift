@@ -10,7 +10,7 @@ import Combine
 import shared
 
 
-
+@available(iOS 14, *)
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
     
     @Published var basketPreviewLine: BasketPreviewLine?

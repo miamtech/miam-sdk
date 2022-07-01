@@ -8,6 +8,7 @@
 import Foundation
 import shared
 
+@available(iOS 14, *)
 public class MyMeal: Identifiable {
     init(basketPreviewLine: BasketPreviewLine) {
         self.basketPreviewLine = basketPreviewLine
@@ -23,6 +24,7 @@ public class MyMeal: Identifiable {
     }
 }
 
+@available(iOS 14, *)
 public class MyMealVM : MyMealViewModel, ObservableObject {
     @Published public var meals: [MyMeal] = []
     override public init() {

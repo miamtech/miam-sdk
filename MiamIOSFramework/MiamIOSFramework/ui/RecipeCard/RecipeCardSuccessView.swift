@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 struct RecipeCardSuccessView: View {
     
     @ObservedObject var viewModel: RecipeCardVM

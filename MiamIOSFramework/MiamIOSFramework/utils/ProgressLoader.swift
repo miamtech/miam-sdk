@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 14, *)
 struct ProgressLoader: View {
     
     @State private var isAnimating = false

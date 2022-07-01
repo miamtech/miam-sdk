@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 14, *)
 public struct MyMealsView: View {
     @ObservedObject var myMealsViewModel: MyMealVM = MyMealVM()
 
@@ -33,6 +34,7 @@ public struct MyMealsView: View {
     }
 }
 
+@available(iOS 14, *)
 struct MyMealsView_Previews: PreviewProvider {
     static var previews: some View {
         MyMealsView()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 public class RecipeCardText {
     
     public static let sharedInstance = RecipeCardText()

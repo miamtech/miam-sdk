@@ -7,6 +7,7 @@
 
 import shared
 
+@available(iOS 14, *)
 public class PriceVM : PricingViewModel, ObservableObject {
     @Published var price: Pricing?
 

@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 struct RecipeDetailsFooter: View {
     
     private var recipeVM : RecipeCardVM
