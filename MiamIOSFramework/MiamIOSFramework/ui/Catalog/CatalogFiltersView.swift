@@ -28,49 +28,53 @@ struct CatalogFiltersView: View {
     }
 
     var body: some View {
-        VStack() {
-            // Title and close button
-            HStack {
-                Text(mainTitle).fontWeight(.bold)
-                Spacer()
-                Button {
-                    closeFilters()
-                } label: {
-                    Image("cross", bundle: Bundle(for: RecipeCardVM.self))
+        if (Template.sharedInstance.catalogFiltersViewTemplate != nil) {
+            Template.sharedInstance.catalogFiltersViewTemplate!
+        } else {
+            VStack() {
+                // Title and close button
+                HStack {
+                    Text(mainTitle).fontWeight(.bold)
+                    Spacer()
+                    Button {
+                        closeFilters()
+                    } label: {
+                        Image("cross", bundle: Bundle(for: RecipeCardVM.self))
+                    }
+                }.padding([.top], 20)
+
+                // Filters
+                CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
+                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
                 }
-            }.padding([.top], 20)
+                Divider()
+                CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
+                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
+                }
+                Divider()
+                CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
+                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
+                }
 
-            // Filters
-            CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
-                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
-            }
-            Divider()
-            CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
-                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
-            }
-            Divider()
-            CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
-                catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
-            }
+                Spacer()
 
-            Spacer()
-
-            Button {
-                catalogFilters.model.clearFilter()
-            } label: {
-                Text(removeFiltersButtonTitle).foregroundColor(MiamColor.sharedInstance.primaryText)
-            }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-            Divider().padding([.bottom, .top], 10)
-            Button {
-                applyFilters()
-            } label: {
-                Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
-                    .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-                    .foregroundColor(.white)
-                    .background(MiamColor.sharedInstance.primary)
-                    .clipShape(Capsule())
-            }
-        }.padding(Dimension.sharedInstance.lPadding)
+                Button {
+                    catalogFilters.model.clearFilter()
+                } label: {
+                    Text(removeFiltersButtonTitle).foregroundColor(MiamColor.sharedInstance.primaryText)
+                }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                Divider().padding([.bottom, .top], 10)
+                Button {
+                    applyFilters()
+                } label: {
+                    Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
+                        .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                        .foregroundColor(.white)
+                        .background(MiamColor.sharedInstance.primary)
+                        .clipShape(Capsule())
+                }
+            }.padding(Dimension.sharedInstance.lPadding)
+        }
     }
 }
 
@@ -79,14 +83,18 @@ internal struct CatalogFilterSection: View {
     let filters: Array<CatalogFilterOptions>
     let filterSelected: (CatalogFilterOptions) -> Void
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(title).bold().fontWeight(.bold)
-            ForEach(filters, id: \.self) { filter in
-                CatalogFilterRow(filter: filter) { option in
-                    filterSelected(option)
+        if (Template.sharedInstance.catalogFiltersSectionTemplate != nil) {
+            Template.sharedInstance.catalogFiltersSectionTemplate!(title, filters, filterSelected)
+        } else {
+            VStack(alignment: .leading) {
+                Text(title).bold().fontWeight(.bold)
+                ForEach(filters, id: \.self) { filter in
+                    CatalogFilterRow(filter: filter) { option in
+                        filterSelected(option)
+                    }
                 }
-            }
-        }.padding([.top, .bottom], 25.0)
+            }.padding([.top, .bottom], 25.0)
+        }
     }
 }
 
@@ -97,21 +105,24 @@ internal struct CatalogFilterRow: View {
         filter.isSelected ? "Check" : "cross"
     }
     var body: some View {
-        HStack {
-            Button {
-                filter.isSelected = true
-                filterSelected(filter)
-            } label: {
-                if (filter.isSelected) {
-                    Image(imageName, bundle: Bundle(for: CatalogVM.self))
-                } else {
-                    Rectangle().foregroundColor(.clear)
-                }
-            }.frame(width: 22, height: 22)
-                .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
-            Text(filter.uiLabel).fontWeight(Font.Weight.regular)
-            Spacer()
-
+        if Template.sharedInstance.catalogFilterRowTemplate != nil {
+            Template.sharedInstance.catalogFilterRowTemplate!(filter, filterSelected)
+        } else {
+            HStack {
+                Button {
+                    filter.isSelected = true
+                    filterSelected(filter)
+                } label: {
+                    if (filter.isSelected) {
+                        Image(imageName, bundle: Bundle(for: CatalogVM.self))
+                    } else {
+                        Rectangle().foregroundColor(.clear)
+                    }
+                }.frame(width: 22, height: 22)
+                    .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
+                Text(filter.uiLabel).fontWeight(Font.Weight.regular)
+                Spacer()
+            }
         }
     }
 }

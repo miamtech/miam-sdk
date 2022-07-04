@@ -183,4 +183,27 @@ public class Template {
         String,
         () -> Void
     )-> AnyView)? = nil
+
+    public var catalogFiltersViewTemplate: AnyView? = nil
+
+
+    /**
+     title: String
+     filters: Array<CatalogFilterOptions>
+     filterSelected: (CatalogFilterOptions) -> Void
+     */
+    public var catalogFiltersSectionTemplate: ((
+        String,
+        Array<CatalogFilterOptions>,
+        (CatalogFilterOptions) -> Void
+    ) -> AnyView)? = nil
+
+    /**
+     filter: CatalogFilterOptions
+     filterSelected: (CatalogFilterOptions) -> Void
+     */
+    public var catalogFilterRowTemplate: ((
+        CatalogFilterOptions,
+        (CatalogFilterOptions) -> Void
+    ) -> AnyView)? = nil
 }
