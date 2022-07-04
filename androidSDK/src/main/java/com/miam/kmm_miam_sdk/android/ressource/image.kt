@@ -15,8 +15,6 @@ object Image {
     var close : Int = R.drawable.ic_close
     var knife :Int = R.drawable.ic_knife
     var oven : Int = R.drawable.ic_oven
-    var showRecipe : Int = R.drawable.ic_details
-    var recipeCardFlagIcon: Int  = R.drawable.ic_cookhat
     var guests : Int = R.drawable.ic_peoples
     var less : Int = R.drawable.ic_less
     var plus : Int = R.drawable.ic_plus
@@ -30,4 +28,5 @@ object Image {
     var filter : Int = R.drawable.ic_filtres
     var search : Int = R.drawable.ic_search
     var empty : Int = R.drawable.ic_empty_search
+    var check : Int = R.drawable.ic_check
 }
