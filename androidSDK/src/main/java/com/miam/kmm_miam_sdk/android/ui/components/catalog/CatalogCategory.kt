@@ -65,10 +65,11 @@ fun CatalogCategory(
                 ) {
                         items(items = (category.relationships?.recipes?.data ?: emptyList())) { item ->
                                 Box(modifier = Modifier
-                                        .width(310.dp)
-                                        .height(400.dp)){
+                                        .width(350.dp)
+                                        .height(600.dp)){
                                         val recipe = RecipeView(context)
                                         recipe.bind(recipeId = item.id)
+                                        recipe.isNotInShelf()
                                         recipe.Content()
                                 }
                         }

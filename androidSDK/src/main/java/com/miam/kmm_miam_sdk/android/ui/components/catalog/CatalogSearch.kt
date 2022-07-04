@@ -99,7 +99,6 @@ class CatalogSearch(
                                         painter = painterResource(search),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(white),
-
                                         )
                                 }
                             }

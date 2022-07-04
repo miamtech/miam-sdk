@@ -57,7 +57,6 @@ fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnT
     )
 }
 
-
 @Composable
 private fun CatalogSuccessPage (recipePageVM :RecipeListPageViewModel, recipes: List<Recipe>, context: Context){
     LazyColumn(
@@ -71,6 +70,7 @@ private fun CatalogSuccessPage (recipePageVM :RecipeListPageViewModel, recipes: 
         itemsIndexed(recipes) { index, item ->
             val recipe =  RecipeView(context = context)
             recipe.bind(recipe = item)
+            recipe.isNotInShelf()
             recipe.Content()
             if(index == recipes.lastIndex){
                 recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
@@ -124,30 +124,33 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
             )
             if(isFavorit){
                 Clickable(onClick = { returnToCategoriesPage() }) {
-                    Text(text ="Oups, vous n’avez pas encore d’idée repas",
-                        color= white,
-                        style = Typography.subtitleBold,
-                        textAlign = TextAlign.Center
-                    )
-                    Box(
-                        Modifier
-                            .clip(RoundedCornerShape(50))
-                            .background(white)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "Parcourir les idées repas",
-                                color = primary,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            )
-                            Image(
-                                painter = painterResource(CatalogImage.back),
-                                contentDescription = null,
-                                Modifier.padding(start = 8.dp)
-                            )
-                        }
+                    Column() {
+                        Text(text ="Oups, vous n’avez pas encore d’idée repas",
+                            color= white,
+                            style = Typography.subtitleBold,
+                            textAlign = TextAlign.Center
+                        )
+                        Box(
+                            Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(white)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "Parcourir les idées repas",
+                                    color = primary,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                )
+                                Image(
+                                    painter = painterResource(CatalogImage.back),
+                                    contentDescription = null,
+                                    Modifier.padding(start = 8.dp)
+                                )
+                            }
 
+                        }
                     }
+
 
                 }
             }

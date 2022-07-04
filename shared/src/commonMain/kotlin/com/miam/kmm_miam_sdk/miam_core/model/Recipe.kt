@@ -62,10 +62,10 @@ data class Recipe private constructor(
     val difficultyLabel : String
         get () {
             return when(this.attributes!!.difficulty) {
-                1 -> "facile"
-                2 -> "moyen"
-                3-> "difficile"
-                else -> "facile"
+                1 -> "Chef débutant"
+                2 -> "Chef intermédiaire"
+                3-> "Top chef"
+                else -> "Chef débutant"
             }
         }
 
