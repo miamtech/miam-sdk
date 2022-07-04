@@ -184,6 +184,45 @@ public class Template {
         () -> Void
     )-> AnyView)? = nil
 
+
+    /**
+     catalogViewModel: CatalogVM
+     */
+    public var catalogViewTemplate: ((
+        CatalogVM
+    ) -> AnyView)? = nil
+
+    /**
+     package: CatalogPackage
+     showRecipes: (CatalogPackage) -> Void
+     */
+    public var catalogPackageRowTemplate: ((
+        CatalogPackage,
+        (CatalogPackage) -> Void
+    ) -> AnyView)? = nil
+
+
+    public var catalogViewHeaderTemplate: AnyView? = nil
+
+    /**
+     showBackButton: Bool
+     favoritesFilterActive: Bool
+     backTapped: () -> Void
+     filtersTapped: () -> Void
+     searchTapped: () -> Void
+     favoritesTapped: () -> Void
+     */
+    public var catalogViewToolbarTemplate: ((
+        Bool,
+        Bool,
+        () -> Void,
+        () -> Void,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+
+
+
     public var catalogFiltersViewTemplate: AnyView? = nil
 
 

@@ -8,7 +8,7 @@
 import Foundation
 import shared
 
-struct CatalogPackage: Identifiable {
+public struct CatalogPackage: Identifiable {
     let package: Package
 
     public var id: String {
@@ -28,12 +28,12 @@ struct CatalogPackage: Identifiable {
     }
 }
 
-enum CatalogModelContent {
+public enum CatalogModelContent {
     case recipeList
     case categories
 }
 
-class CatalogVM: CatalogViewModel, ObservableObject {
+public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
     @Published var recipePageViewModel: RecipeListPageViewModel?
     @Published var filtersViewModel: CatalogFilterViewModel?
