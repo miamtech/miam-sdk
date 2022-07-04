@@ -3,7 +3,6 @@ package com.miam.kmm_miam_sdk.component.catalog
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.base.mvi.PointOfSaleStore
-import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterContract
 import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageContract
 import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageViewModel
@@ -109,7 +108,6 @@ open class CatalogViewModel:
         if(providerId != -1) {
             launch(coroutineHandler) {
                 val fetchedPackage = packageRepositoryImp.getActivePackageForRetailer(providerId.toString())
-                // TODO on ne filtre pas sur les category == true ?
                 // TODO le multi page n'est pas encore supporté
                 setState {copy(categories = BasicUiState.Success(fetchedPackage))}
             }

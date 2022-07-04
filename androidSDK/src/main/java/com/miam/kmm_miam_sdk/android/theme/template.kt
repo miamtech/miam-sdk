@@ -1,10 +1,12 @@
 package com.miam.kmm_miam_sdk.android.theme
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.miam_core.model.Item
+import com.miam.kmm_miam_sdk.miam_core.model.Package
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
 
@@ -153,6 +155,24 @@ object Template {
     var TagTemplate: (@Composable() (
         recipes: List<Recipe>,
         showRecipe : (recipe: Recipe) -> Unit
+    ) -> Unit)? = null
+
+//////////////// Catalog /////////////////////////
+
+
+    var CatalogHeader: (@Composable() (
+        openFilter: () -> Unit,
+        openSearch: () -> Unit,
+        goToFavorite: () -> Unit,
+        goBackTOCatalog: () -> Unit,
+        getActiveFilterCount: () -> Int
+            ) -> Unit)? = null
+
+    var CatalogCategoryTemplate: (@Composable() (
+        context: Context,
+        category : Package,
+        recipesID: List<String>,
+        goToCategoryPage : (category : Package) -> Unit
     ) -> Unit)? = null
 
 }
