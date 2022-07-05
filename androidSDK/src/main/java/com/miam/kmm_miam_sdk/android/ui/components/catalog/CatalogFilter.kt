@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.close
 
@@ -33,11 +34,18 @@ class CatalogFilter(
     private fun onCostFilterChanged(catOption:CatalogFilterOptions){
         catalogFilterVM.setEvent(CatalogFilterContract.Event.OnCostFilterChanged(catOption))
     }
+
     private fun onTimeFilterChanged(catOption:CatalogFilterOptions){
         catalogFilterVM.setEvent(CatalogFilterContract.Event.OnTimeFilterChanged(catOption))
     }
+
     private fun onDifficultyChanged(catOption:CatalogFilterOptions){
         catalogFilterVM.setEvent(CatalogFilterContract.Event.OnDifficultyChanged(catOption))
+    }
+
+    private fun clearFilter(){
+        catalogFilterVM.clearFilter()
+        catalogFilterVM.getRecipeCount()
     }
 
     @Composable
@@ -46,98 +54,113 @@ class CatalogFilter(
         val state = catalogFilterVM.uiState.collectAsState()
 
         FullScreen{
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(white)) {
-                Column(
-                    Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+            if(Template.CatalogFilterTemplate != null ){
+                Template.CatalogFilterTemplate?.let {
+                    it(
+                        state.value.difficulty ,
+                        state.value.cost,
+                        state.value.time,
+                        ::onCostFilterChanged,
+                        ::onTimeFilterChanged,
+                        ::onDifficultyChanged,
+                        ::clearFilter,
+                        { goToFilterResult()},
+                        { closeDialog() }
+                    )
+                }
+            } else {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(white)) {
+                    Column(
+                        Modifier
+                            .padding(vertical = 8.dp, horizontal = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            "Affiner ma sélection",
-                            color = Colors.black,
-                            style = Typography.subtitleBold
-                        )
-                        Clickable(
-                            onClick = { closeDialog() },
-                            children = {
-                                Image(
-                                    painter = painterResource(close),
-                                    contentDescription = null,
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Affiner ma sélection",
+                                color = Colors.black,
+                                style = Typography.subtitleBold
+                            )
+                            Clickable(
+                                onClick = { closeDialog() },
+                                children = {
+                                    Image(
+                                        painter = painterResource(close),
+                                        contentDescription = null,
+                                    )
+                                }
+                            )
+                        }
+                        Column(Modifier.weight(weight =1f, fill = false).verticalScroll(rememberScrollState()) ) {
+                            Text(text = "Difficulté", style = Typography.bodyBold)
+                            state.value.difficulty.forEach { catOption ->
+                                CheckboxRow(
+                                    catOption,
+                                    mutableStateOf(catOption.isSelected),
+                                    ::onDifficultyChanged
                                 )
                             }
-                        )
-                    }
-                    Column(Modifier.weight(weight =1f, fill = false).verticalScroll(rememberScrollState()) ) {
-                        Text(text = "Difficulté", style = Typography.bodyBold)
-                        state.value.difficulty.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onDifficultyChanged
-                            )
-                        }
-                        Divider(Modifier.padding(vertical = 16.dp))
-                        Text(text = "Coût par personne", style = Typography.bodyBold)
-                        state.value.cost.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onCostFilterChanged
-                            )
-                        }
-                        Divider(Modifier.padding(vertical = 16.dp))
-                        Text(text = "Temps de préparation", style = Typography.bodyBold)
-                        state.value.time.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onTimeFilterChanged
-                            )
-                        }
-                    }
-                    Clickable(onClick = {
-                        catalogFilterVM.clearFilter()
-                        catalogFilterVM.getRecipeCount()
-                    }) {
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    border = BorderStroke(1.dp, Colors.primary),
-                                    shape = RoundedCornerShape(50)
+                            Divider(Modifier.padding(vertical = 16.dp))
+                            Text(text = "Coût par personne", style = Typography.bodyBold)
+                            state.value.cost.forEach { catOption ->
+                                CheckboxRow(
+                                    catOption,
+                                    mutableStateOf(catOption.isSelected),
+                                    ::onCostFilterChanged
                                 )
-                        ) {
-                            Text(
-                                text = "Retirer les filtres",
-                                color = primary,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            )
+                            }
+                            Divider(Modifier.padding(vertical = 16.dp))
+                            Text(text = "Temps de préparation", style = Typography.bodyBold)
+                            state.value.time.forEach { catOption ->
+                                CheckboxRow(
+                                    catOption,
+                                    mutableStateOf(catOption.isSelected),
+                                    ::onTimeFilterChanged
+                                )
+                            }
                         }
-                    }
-
-                    Divider(Modifier.padding(vertical = 8.dp))
-                    Clickable(onClick = { goToFilterResult() }) {
-                        Box(
-                            Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(primary)
-                        ) {
-                            Text(
-                                text = "Voir les ${state.value.numberOfResult} idées repas",
-                                color = white,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            )
+                        Clickable(onClick = {
+                            clearFilter()
+                        }) {
+                            Box(
+                                modifier = Modifier
+                                    .border(
+                                        border = BorderStroke(1.dp, Colors.primary),
+                                        shape = RoundedCornerShape(50)
+                                    )
+                            ) {
+                                Text(
+                                    text = "Retirer les filtres",
+                                    color = primary,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                )
+                            }
                         }
 
+                        Divider(Modifier.padding(vertical = 8.dp))
+                        Clickable(onClick = { goToFilterResult() }) {
+                            Box(
+                                Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(primary)
+                            ) {
+                                Text(
+                                    text = "Voir les ${state.value.numberOfResult} idées repas",
+                                    color = white,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                )
+                            }
+
+                        }
                     }
                 }
             }
-        }
+            }
     }
 }
 
