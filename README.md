@@ -404,7 +404,11 @@ they can be accesed with `GroceriesListHandler`
     }
 
 ```
+You can reset Miam recipe list :
 
+```kotlin
+  GroceriesListHandler.resetGroceriesList()
+```
 
 ### Components injection
 
@@ -853,6 +857,38 @@ As soon as miam is available `isReady` will return `true`
   
 ```
 
+#### Miam groceries list state
+
+Some Miam internal informations are available for reading only
+they can be accesed with `GroceriesListHandler`
+
+You can get or subscribe to our recipe count :
+
+```swift
+struct ContentView: View {
+    
+    @State private var recipeCount: Int = 0
+
+    var body: some View {
+      VStack {
+        Text("Recette dans le panier : \(recipeCount)")
+      }.onAppear(
+            perform: {  
+              GroceriesListHandler.shared.onRecipeCountChange(
+                  updateRecipeCount: {count in recipeCount = Int(count) }
+              )
+            }
+          )
+    }
+
+}
+```
+
+You can reset Miam recipe list :
+
+```swift
+ Button("reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
+```
 
 #### Connection to Miam API
 
