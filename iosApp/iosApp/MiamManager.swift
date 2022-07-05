@@ -28,7 +28,7 @@ public class MiamManager {
     private init() {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
-        ContextHandlerInstance.shared.instance.getReadyIos(callback: {isReady in print("Miam event recived \(isReady)")})
+        ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
         basketHandler = BasketHandlerInstance.shared.instance
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
