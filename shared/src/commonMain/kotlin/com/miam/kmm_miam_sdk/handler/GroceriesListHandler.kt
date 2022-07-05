@@ -28,7 +28,7 @@ object GroceriesListHandler: KoinComponent, CoroutineScope by CoroutineScope(Dis
             .map { it as GroceriesListEffect.RecipeCountChanged }
     }
 
-    fun onRecipeCountChange(updateRecipeCount : (Int) -> Unit) {
+    fun onRecipeCountChange(updateRecipeCount : (count: Int) -> Unit) {
         launch(coroutineHandler) {
             groceriesListStore.observeSideEffect()
                 .filter { it is GroceriesListEffect.RecipeCountChanged }
