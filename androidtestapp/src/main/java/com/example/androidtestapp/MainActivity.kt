@@ -95,13 +95,11 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         UserHandler.setProfilingAllowed(true)
         launch {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
-                retailerBasketSubject.value.recipeCount = it.newRecipeCount
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} " )
                 retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it.newRecipeCount))
             }
         }
         GroceriesListHandler.onRecipeCountChange {
-            retailerBasketSubject.value.recipeCount = it
             println("recipes count by callback : ${retailerBasketSubject.value.recipeCount} " )
             launch(coroutineHandler) {
                 retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it))
