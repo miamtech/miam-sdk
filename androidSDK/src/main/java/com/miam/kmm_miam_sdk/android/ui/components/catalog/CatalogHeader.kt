@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogColor.headerTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.back
@@ -25,6 +26,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.recipeId
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.trait
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.component.catalog.CatalogContent
 import com.miam.kmm_miam_sdk.component.catalog.CatalogContract
@@ -52,175 +55,184 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
         catalogVm.setEvent(CatalogContract.Event.GoToDefault)
     }
 
-    Column(Modifier.background(color = primary)) {
-        if(showFullHeader){
-            Box(
-                Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(
-                    Modifier.padding(16.dp)
-                ) {
-                    Image(
-                        painter = painterResource(recipeId),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(headerTextColor),
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Box() {
-                        Text(
-                            text = "Idées repas en 1 clic",
-                            color = headerTextColor,
-                            style = subtitleBold,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                        Image(
-                            painter = painterResource(trait),
-                            contentDescription = null,
-                            Modifier
-                                .align(Alignment.BottomEnd)
-                                .offset(y = 4.dp)
-                        )
+    fun getActiveFilterCount():Int{
+       return catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
+    }
 
-                    }
-                }
-            }
+    if(Template.CatalogHeader != null){
+        Template.CatalogHeader?.let {
+            it(::openFilter,::openSearch,::goToFavorite,::goToBack, ::getActiveFilterCount)
         }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = if(showFullHeader) Arrangement.Start else  Arrangement.SpaceBetween
-        ) {
-            if(!showFullHeader){
-                Clickable(onClick = { goToBack() }, children = {
-                    Image(
-                        painter = painterResource(back),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(white),
-                        modifier= Modifier
-                            .rotate(180f)
-                            .padding(vertical = 8.dp)
-                    )
-                }
-                )
-            }
-            Row() {
-
-                Clickable(onClick = { openSearch() }, children = {
-                    Surface(
-                        shape = CircleShape,
-                        elevation = 8.dp,
-                        modifier = Modifier.padding(horizontal = 10.dp)
+    } else {
+        Column(Modifier.background(color = primary)) {
+            if(showFullHeader){
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        Modifier.padding(16.dp)
                     ) {
-                        Box(
-                            Modifier
-                                .background(white)
-                                .padding(8.dp))
-                        {
-                            Image(
-                                painter = painterResource(search),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(primary),
+                        Image(
+                            painter = painterResource(recipeId),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(headerTextColor),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Box() {
+                            Text(
+                                text = headerTitle,
+                                color = headerTextColor,
+                                style = subtitleBold,
+                                modifier = Modifier.align(Alignment.Center)
                             )
+                            Image(
+                                painter = painterResource(trait),
+                                contentDescription = null,
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .offset(y = 4.dp)
+                            )
+
                         }
                     }
                 }
-                )
+            }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = if(showFullHeader) Arrangement.Start else  Arrangement.SpaceBetween
+            ) {
+                if(!showFullHeader){
+                    Clickable(onClick = { goToBack() }, children = {
+                        Image(
+                            painter = painterResource(back),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(white),
+                            modifier= Modifier
+                                .rotate(180f)
+                                .padding(vertical = 8.dp)
+                        )
+                    }
+                    )
+                }
+                Row() {
 
-                Clickable(onClick = {openFilter()}, children = {
-                    Box() {
+                    Clickable(onClick = { openSearch() }, children = {
                         Surface(
                             shape = CircleShape,
                             elevation = 8.dp,
                             modifier = Modifier.padding(horizontal = 10.dp)
                         ) {
-                            Row(
+                            Box(
                                 Modifier
                                     .background(white)
-                                    .padding(8.dp)
-                            )
+                                    .padding(8.dp))
                             {
                                 Image(
-                                    painter = painterResource(filter),
+                                    painter = painterResource(search),
                                     contentDescription = null,
                                     colorFilter = ColorFilter.tint(primary),
-                                )
-
-                            }
-                        }
-                        if (catalogVm.currentState.catalogFilterVM.getActiveFilterCount() != 0) {
-                            Box(
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Red)
-                                    .align(Alignment.TopEnd)
-                            ) {
-                                Text(
-                                    text = catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
-                                        .toString(),
-                                    color = white,
-                                    modifier = Modifier.align(Alignment.Center)
-
                                 )
                             }
                         }
                     }
-                })
+                    )
 
-                if(!isFavorit){
-                    if(showFullHeader){
-                        Box(modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                            .border(
-                                border = BorderStroke(1.dp, white),
-                                shape = RoundedCornerShape(50)
-                            )
-                            .clickable { goToFavorite() }
-                        ) {
-                            Row(
-                                Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .background(primary),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(favorite),
-                                    contentDescription = null,
-                                    colorFilter = ColorFilter.tint(white),
-                                    modifier = Modifier.padding(end = 8.dp)
-                                )
-                                Text(
-                                    text = "Mes idées repas",
-                                    color = white
-                                )
-                            }
-                        }
-                    } else {
-                        Clickable(onClick = { goToFavorite() }, children = {
+                    Clickable(onClick = {openFilter()}, children = {
+                        Box() {
                             Surface(
                                 shape = CircleShape,
                                 elevation = 8.dp,
                                 modifier = Modifier.padding(horizontal = 10.dp)
                             ) {
-                                Box(
+                                Row(
                                     Modifier
                                         .background(white)
-                                        .padding(8.dp))
+                                        .padding(8.dp)
+                                )
                                 {
                                     Image(
-                                        painter = painterResource(favorite),
+                                        painter = painterResource(filter),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(primary),
+                                    )
+
+                                }
+                            }
+                            if (getActiveFilterCount() != 0) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.Red)
+                                        .align(Alignment.TopEnd)
+                                ) {
+                                    Text(
+                                        text = getActiveFilterCount().toString(),
+                                        color = white,
+                                        modifier = Modifier.align(Alignment.Center)
+
                                     )
                                 }
                             }
                         }
-                        )
-                    }
+                    })
 
+                    if(!isFavorit){
+                        if(showFullHeader){
+                            Box(modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .border(
+                                    border = BorderStroke(1.dp, white),
+                                    shape = RoundedCornerShape(50)
+                                )
+                                .clickable { goToFavorite() }
+                            ) {
+                                Row(
+                                    Modifier
+                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                        .background(primary),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(favorite),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(white),
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
+                                    Text(
+                                        text = favoriteButtonText,
+                                        color = white
+                                    )
+                                }
+                            }
+                        } else {
+                            Clickable(onClick = { goToFavorite() }, children = {
+                                Surface(
+                                    shape = CircleShape,
+                                    elevation = 8.dp,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                ) {
+                                    Box(
+                                        Modifier
+                                            .background(white)
+                                            .padding(8.dp))
+                                    {
+                                        Image(
+                                            painter = painterResource(favorite),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(primary),
+                                        )
+                                    }
+                                }
+                            }
+                            )
+                        }
+
+                    }
                 }
             }
         }

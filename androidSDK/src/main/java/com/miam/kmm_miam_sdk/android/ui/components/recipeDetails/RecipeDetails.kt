@@ -196,7 +196,7 @@ private fun recipeDetailContent(
                 modifier = mainColumnsContainer.verticalScroll(scrollState)
             ) {
                 if(Template.recipeDetailInfosTemplate !=  null){
-                    Template.recipeDetailInfosTemplate!!(recipe)
+                    Template.recipeDetailInfosTemplate!!( { closeDialogue() },recipe)
                 } else {
                     Image(
                         painter = rememberImagePainter(recipe.attributes!!.mediaUrl),

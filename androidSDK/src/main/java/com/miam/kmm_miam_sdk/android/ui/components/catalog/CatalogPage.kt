@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -50,7 +51,13 @@ fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnT
             CatalogEmptyPage(recipePageVM,returnToCategoriesPage)
         },
         loadingView = {
-            CatalogLoadingPage()
+            if(Template.CatalogResultPageLoadingTemplate != null){
+                Template.CatalogResultPageLoadingTemplate?.let {
+                    it()
+                }
+            } else {
+                CatalogLoadingPage()
+            }
         },
         onTryAgain = { /**TODO*/ },
         onCheckAgain = { /**TODO*/ },
@@ -75,14 +82,20 @@ private fun CatalogSuccessPage (recipePageVM :RecipeListPageViewModel, recipes: 
             if(index == recipes.lastIndex){
                 recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
                 if(recipePageVM.currentState.isFetchingNewPage){
-                    Row(
-                        modifier = FavoritePageStyle.loadMoreContainer,
-                        Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = FavoritePageColor.loaderColor,
-                            modifier = FavoritePageStyle.loadMoreModifier
-                        )
+                    if(Template.CatalogResultPageLazyLoaderTemplate != null ) {
+                        Template.CatalogResultPageLazyLoaderTemplate?.let {
+                            it()
+                        }
+                    } else {
+                        Row(
+                            modifier = FavoritePageStyle.loadMoreContainer,
+                            Arrangement.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = FavoritePageColor.loaderColor,
+                                modifier = FavoritePageStyle.loadMoreModifier
+                            )
+                        }
                     }
                 }
             }
@@ -116,53 +129,71 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                 .align(Alignment.Center)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                painter = painterResource(CatalogImage.empty),
-                contentDescription = null,
-                Modifier
-                    .padding(vertical = 16.dp)
-            )
-            if(isFavorit){
-                Clickable(onClick = { returnToCategoriesPage() }) {
-                    Column() {
-                        Text(text ="Oups, vous n’avez pas encore d’idée repas",
-                            color= white,
-                            style = Typography.subtitleBold,
-                            textAlign = TextAlign.Center
-                        )
-                        Box(
-                            Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(white)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = "Parcourir les idées repas",
-                                    color = primary,
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                )
-                                Image(
-                                    painter = painterResource(CatalogImage.back),
-                                    contentDescription = null,
-                                    Modifier.padding(start = 8.dp)
-                                )
-                            }
 
+            if(isFavorit){
+                if(Template.CatalogFavoritEmptyTemplate !=  null){
+                    Template.CatalogFavoritEmptyTemplate?.let {
+                        it { returnToCategoriesPage() }
+                    }
+                } else {
+                    Image(
+                        painter = painterResource(CatalogImage.empty),
+                        contentDescription = null,
+                        Modifier
+                            .padding(vertical = 16.dp)
+                    )
+                    Clickable(onClick = { returnToCategoriesPage() }) {
+                        Column() {
+                            Text(text ="Oups, vous n’avez pas encore d’idée repas",
+                                color= white,
+                                style = Typography.subtitleBold,
+                                textAlign = TextAlign.Center
+                            )
+                            Box(
+                                Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(white)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "Parcourir les idées repas",
+                                        color = primary,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                    )
+                                    Image(
+                                        painter = painterResource(CatalogImage.back),
+                                        contentDescription = null,
+                                        Modifier.padding(start = 8.dp)
+                                    )
+                                }
+                            }
                         }
                     }
-
-
                 }
             }
             else {
-                Text(text ="Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                    color= white,
-                    style = Typography.subtitleBold,
-                    textAlign = TextAlign.Center
-                )
-                Text(text =  "Essayez une nouvelle recherche.",
-                    color= white
-                )
+                if(Template.CatalogSearchResultEmptyTemplate != null){
+                    Template.CatalogSearchResultEmptyTemplate?.let {
+                        it { returnToCategoriesPage() }
+                    }
+                } else {
+                    Image(
+                        painter = painterResource(CatalogImage.empty),
+                        contentDescription = null,
+                        Modifier
+                            .padding(vertical = 16.dp)
+                    )
+                    Text(text ="Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
+                        color= white,
+                        style = Typography.subtitleBold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(text =  "Essayez une nouvelle recherche.",
+                        color= white
+                    )
+                }
+
+
             }
         }
     }

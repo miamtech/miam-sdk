@@ -34,9 +34,9 @@ open class MyMealViewModel :
         val job = launch(coroutineHandler) {
             basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
                 val bpls = basketStore.observeState().first {
-                    it.basketPreview != null && it.basketPreview.isNotEmpty()
+                    it.basketPreview != null
                 }.basketPreview!!
-                setState { copy(lines = BasicUiState.Success(bpls),bpls = bpls) }
+                setState { copy(lines = BasicUiState.Success(bpls), bpls = bpls) }
             }
         }
         setState { copy(job = job) }

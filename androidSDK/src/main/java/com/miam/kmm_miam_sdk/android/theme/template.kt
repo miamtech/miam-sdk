@@ -1,12 +1,11 @@
 package com.miam.kmm_miam_sdk.android.theme
 
+import android.content.Context
 import androidx.compose.runtime.Composable
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
-import com.miam.kmm_miam_sdk.miam_core.model.Item
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
+import com.miam.kmm_miam_sdk.miam_core.model.*
 
 object Template {
 
@@ -19,140 +18,201 @@ object Template {
      * call look function 'll open recipe detail without adding recipe to basket
      * call buy function 'll open basket preview and add recipe to basket if it not already in
      */
-    var recipeCardTemplate : (
+    var recipeCardTemplate: (
     @Composable() (
         recipe: Recipe,
         vmRecipe: RecipeViewModel,
-        look : () -> Unit,
-        buy : () -> Unit
-        ) -> Unit
+        look: () -> Unit,
+        buy: () -> Unit
+    ) -> Unit
     )? = null
 
     /**
      * view when recipe is fetching
      */
-    var recipeLoaderTemplate : (
+    var recipeLoaderTemplate: (
     @Composable() () -> Unit
-    ) ? = null
+    )? = null
 
     /**
      * view when miam fail to fetch
      */
     var recipeEmptyTemplate: (
-      @Composable() () -> Unit
-    ) ? = null
+    @Composable() () -> Unit
+    )? = null
 
 /////////// Favorite Page //////////////////////////
 
-    var loadingFavoritePage : (@Composable() () -> Unit)? = null
+    var loadingFavoritePage: (@Composable() () -> Unit)? = null
 
-    var emptyFavoritePage : (
+    var emptyFavoritePage: (
     @Composable() (
-        visitCatalog : () -> Unit,
+        visitCatalog: () -> Unit,
     ) -> Unit
-    )? = null    
+    )? = null
 
 ////////////////// Recipe details //////////////////
 
     /**
      * sticky header
      */
-    var recipeDetailHeaderTemplate : (
+    var recipeDetailHeaderTemplate: (
     @Composable() (
-        closeDetail : () -> Unit,
+        closeDetail: () -> Unit,
         recipe: Recipe
-            ) -> Unit
-    ) ? = null
+    ) -> Unit
+    )? = null
 
-    var recipeDetailInfosTemplate : (
-    @Composable() (recipe : Recipe) -> Unit
-    ) ? = null
-
-    var recipeDetailIngredientTemplate : (@Composable() (
+    var recipeDetailInfosTemplate: (
+    @Composable() (
+        closeDetail: () -> Unit,
         recipe: Recipe,
-        vmRecipe : RecipeViewModel
-            ) -> Unit )? = null
+    ) -> Unit)? = null
 
-    var recipeDetailStepsTemplate :  (@Composable() (
-        steps : List<RecipeStep>,
-        vmRecipe : RecipeViewModel
-            ) -> Unit )? =  null
-
-    var recipeDetailFooterTemplate : (@Composable() (
+    var recipeDetailIngredientTemplate: (@Composable() (
         recipe: Recipe,
-        vmRecipe : RecipeViewModel,
-        look : () -> Unit,
-        buy : () -> Unit
-            ) -> Unit )? =  null
+        vmRecipe: RecipeViewModel
+    ) -> Unit)? = null
+
+    var recipeDetailStepsTemplate: (@Composable() (
+        steps: List<RecipeStep>,
+        vmRecipe: RecipeViewModel
+    ) -> Unit)? = null
+
+    var recipeDetailFooterTemplate: (@Composable() (
+        recipe: Recipe,
+        vmRecipe: RecipeViewModel,
+        look: () -> Unit,
+        buy: () -> Unit
+    ) -> Unit)? = null
 
 ////////////////// Product Selector //////////////////
 
-    var  currentProductTemplate :  (@Composable() (
-            selectedItem: BasketPreviewLine
-            ) -> Unit )? =  null
+    var currentProductTemplate: (@Composable() (
+        selectedItem: BasketPreviewLine
+    ) -> Unit)? = null
 
-    var  productOptionListTemplate :  (@Composable() (
-             options: List<BasketPreviewLine>,
-             choose:(index :Int) -> Unit
-            ) -> Unit )? =  null
+    var productOptionListTemplate: (@Composable() (
+        options: List<BasketPreviewLine>,
+        choose: (index: Int) -> Unit
+    ) -> Unit)? = null
 
 ////////////////// Product Selector //////////////////
 
-    var basketPreviewHeaderTemplate  : (@Composable() (
-        recipeVm : RecipeViewModel,
-        goBackToRecipeDetails: ()-> Unit
-            ) -> Unit)? = null
+    var basketPreviewHeaderTemplate: (@Composable() (
+        recipeVm: RecipeViewModel,
+        goBackToRecipeDetails: () -> Unit
+    ) -> Unit)? = null
 
 
-    var basketPreviewLineFooterTemplate :  (@Composable() (
-        removeAddClose :  ()-> Unit,
-        close : ()-> Unit
+    var basketPreviewLineFooterTemplate: (@Composable() (
+        removeAddClose: () -> Unit,
+        close: () -> Unit
     ) -> Unit)? = null
 
 /////////////// Basket Preview //////////////////////
 
-    var basketPreviewRecipeLineTemplate  :  (@Composable() (
+    var basketPreviewRecipeLineTemplate: (@Composable() (
         recipeName: String,
         recipeDescription: String,
         pricePerGuest: String,
-        guestCount:  Int,
-        goToRecipeDetail : () -> Unit,
+        guestCount: Int,
+        goToRecipeDetail: () -> Unit,
         increaseGuest: () -> Unit,
-        decreaseGuest: () ->  Unit
+        decreaseGuest: () -> Unit
     ) -> Unit)? = null
 
-    var basketPreviewLoadingTemplate :  (@Composable() () -> Unit)? = null
+    var basketPreviewLoadingTemplate: (@Composable() () -> Unit)? = null
 
-    var basketPreviewProductLine : (@Composable() (
+    var basketPreviewProductLine: (@Composable() (
         productName: String,
         description: String,
         quantity: Int,
         sharingCount: String, // ex : partager avec x recette
-        delete : () -> Unit,
+        delete: () -> Unit,
         replace: () -> Unit,
         increaseQty: () -> Unit,
-        decreaseQty: () ->  Unit
-            ) -> Unit)? = null
-
-    var basketPreviewExpendHeaderTemplate :  (@Composable() (
-        isOpen: Boolean,
-        toggle : () -> Unit,
+        decreaseQty: () -> Unit
     ) -> Unit)? = null
 
-    var basketPreviewExpendRowTemplate :  (@Composable() (
+    var basketPreviewExpendHeaderTemplate: (@Composable() (
+        isOpen: Boolean,
+        toggle: () -> Unit,
+    ) -> Unit)? = null
+
+    var basketPreviewExpendRowTemplate: (@Composable() (
         productName: String,
-        add : () -> Unit,
+        add: () -> Unit,
     ) -> Unit)? = null
 
 /////////////// My Meal Page  //////////////////////
 
-    var myMealLoaderTemplate :  (@Composable() () -> Unit)? = null
+    var myMealLoaderTemplate: (@Composable() () -> Unit)? = null
 
 ///////////////////  Tag  //////////////////////////
 
     var TagTemplate: (@Composable() (
         recipes: List<Recipe>,
-        showRecipe : (recipe: Recipe) -> Unit
+        showRecipe: (recipe: Recipe) -> Unit
     ) -> Unit)? = null
+
+//////////////// Catalog /////////////////////////
+
+
+    var CatalogHeader: (@Composable() (
+        openFilter: () -> Unit,
+        openSearch: () -> Unit,
+        goToFavorite: () -> Unit,
+        goBackTOCatalog: () -> Unit,
+        getActiveFilterCount: () -> Int
+    ) -> Unit)? = null
+
+    var CatalogCategoryTemplate: (@Composable() (
+        context: Context,
+        category: Package,
+        recipesID: List<String>,
+        goToCategoryPage: (category: Package) -> Unit
+    ) -> Unit)? = null
+
+    var CatalogFilterTemplate: (@Composable() (
+        difficulties: List<CatalogFilterOptions>,
+        costs: List<CatalogFilterOptions>,
+        times: List<CatalogFilterOptions>,
+        onCostFilterChanged: (option: CatalogFilterOptions) -> Unit,
+        onTimeFilterChanged: (option: CatalogFilterOptions) -> Unit,
+        onDifficultyChanged: (option: CatalogFilterOptions) -> Unit,
+        clearFilter: () -> Unit,
+        goToFilterResult: () -> Unit,
+        closeDialog: () -> Unit,
+    ) -> Unit)? = null
+
+    var CatalogLoaderTemplate: (@Composable() () -> Unit)? = null
+
+    var CatalogSearchTemplate: (@Composable() (
+        currentSearchValue :String,
+        updateResearch: (newSearchValue : String) -> Unit,
+        closeDialog : () -> Unit,
+        goToResultPage: () -> Unit
+    ) -> Unit)? = null
+
+    /**
+     * full loading state
+     */
+    var CatalogResultPageLoadingTemplate: (@Composable() () -> Unit)? = null
+
+    /**
+     * lazy loading loader
+     */
+    var CatalogResultPageLazyLoaderTemplate: (@Composable() () -> Unit)? = null
+
+
+    var CatalogFavoritEmptyTemplate: (@Composable() (
+             returnToCatalog : () -> Unit
+            ) -> Unit)? = null
+
+    var CatalogSearchResultEmptyTemplate: (@Composable() (
+        returnToCatalog : () -> Unit
+            ) -> Unit)? = null
+
 
 }

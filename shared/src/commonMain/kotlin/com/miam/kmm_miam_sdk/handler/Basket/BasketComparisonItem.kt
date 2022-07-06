@@ -36,9 +36,23 @@ data class BasketComparisonItem(
     }
 
     fun retailerProductAddedOrUpdatedFromMiam(previousCompItem: BasketComparisonItem?): RetailerProduct? {
+        // product wasn't in miam basket nor retailer basket, just add it
         if (previousCompItem == null) {
             return RetailerProduct(retailerId, miamQuantity)
         }
+        // then we would like to know the final retailer quantity
+        // it can only be greater or equals than new miam quantity, never lower
+        if (retailerQuantity == miamQuantity) {
+            // update comes from miam we can either use retailerQuantity or previousCompItem.retailerQuantity
+            // retailer quantity is already the target. Miam update probably comes after a retailer update
+            return null
+        }
+        if (retailerQuantity < miamQuantity) {
+            // don't even compute the diff, retailer quantity should adjust anyway
+            return retailerProduct.copy(quantity = miamQuantity)
+        }
+        // here we have few possibilities, retailer quantity could have been greater than miam one
+        // and still have both case of an increase or a decrease, check what change and adjuste retailer quantity
         val deltaQuantity = miamQuantity - previousCompItem.miamQuantity
         if (deltaQuantity == 0) {
             return null

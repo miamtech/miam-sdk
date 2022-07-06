@@ -8,21 +8,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlinx.coroutines.*
 
-
-/**
- * Proprerties shared with final user
- */
-object MiamGroceriesList : KoinComponent {
-   private val instance: GroceriesListStore by inject()
-
-     fun getRecipeCount(updateRecipeCount : (Int) -> Unit){
-        instance.getRecipeCount(updateRecipeCount)
-    }
+data class GroceriesListState(val groceriesList: GroceriesList?): State {
+    val recipeCount: Int
+        get() = groceriesList?.attributes?.recipesInfos?.size?: 0
 }
-
-data class GroceriesListState(
-    val groceriesList : GroceriesList?
-) : State
 
 sealed class  GroceriesListAction : Action {
     object RefreshGroceriesList : GroceriesListAction()
@@ -31,7 +20,8 @@ sealed class  GroceriesListAction : Action {
     data class RemoveRecipe(val recipeId: String): GroceriesListAction()
 }
 sealed class  GroceriesListEffect : Effect {
-    object GroceriesListLoaded :  GroceriesListEffect()
+    object GroceriesListLoaded: GroceriesListEffect()
+    data class RecipeCountChanged(val newRecipeCount: Int): GroceriesListEffect()
     data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
     data class RecipeRemoved(val recipeId: String) :GroceriesListEffect()
 }
@@ -134,11 +124,10 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         return groceriesListRepo.updateGroceriesList(gl)
     }
 
-   fun getRecipeCount(updateRecipeCount : (Int) -> Unit){
-        launch {
-            state.collect {
-                updateRecipeCount(it.groceriesList?.attributes?.recipesInfos?.size ?: 0)
-            }
+    override fun updateStateIfChanged(newState: GroceriesListState) {
+        if (newState.recipeCount != state.value.recipeCount) {
+            launch(coroutineHandler) { sideEffect.emit(GroceriesListEffect.RecipeCountChanged(newState.recipeCount)) }
         }
+        super.updateStateIfChanged(newState)
     }
 }

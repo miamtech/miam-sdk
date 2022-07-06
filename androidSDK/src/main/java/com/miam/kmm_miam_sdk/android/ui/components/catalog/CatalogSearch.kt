@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.back
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -38,6 +39,12 @@ class CatalogSearch(
 ) {
 
 
+    private fun updateResearch(searchString : String){
+        catalogFilterVM.setEvent(
+            CatalogFilterContract.Event.SetSearchString(searchString)
+        )
+    }
+
     @Composable
     fun Content() {
 
@@ -46,60 +53,69 @@ class CatalogSearch(
 
 
         FullScreen{
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(white)) {
-                Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                    Row(Modifier.fillMaxWidth()) {
-                        Clickable(onClick = {closeDialog()}) {
-                            Image(
-                                painter = painterResource(back),
-                                contentDescription = null,
-                                Modifier.rotate(180f).padding(vertical = 8.dp)
-                            )
-                        }
-                    }
-                    Row(Modifier.fillMaxWidth().border(
-                        border = BorderStroke(1.dp, Colors.primary),
-                        shape = RoundedCornerShape(50)
-                    ), verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween){
-                        TextField(
-                            modifier=Modifier.weight(1f,false).
-                            focusRequester(focusRequester),
-                            value = state.value.searchString ?: "",
-                            onValueChange = {
-                                catalogFilterVM.setEvent(
-                                    CatalogFilterContract.Event.SetSearchString(it)
+            if(Template.CatalogSearchTemplate != null){
+                Template.CatalogSearchTemplate?.let {
+                    it(
+                        state.value.searchString ?: "",
+                        ::updateResearch,
+                        {closeDialog()},
+                        {goToSearchResult()},
+                    )
+                }
+            } else {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(white)) {
+                    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                        Row(Modifier.fillMaxWidth()) {
+                            Clickable(onClick = {closeDialog()}) {
+                                Image(
+                                    painter = painterResource(back),
+                                    contentDescription = null,
+                                    Modifier.rotate(180f).padding(vertical = 8.dp)
                                 )
-                            },
-                            colors = TextFieldDefaults.textFieldColors(
-                                disabledTextColor = Color.Transparent,
-                                backgroundColor = Color.White,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            placeholder = { Text( "Chercher un ingrédient ou une recette")}
+                            }
+                        }
+                        Row(Modifier.fillMaxWidth().border(
+                            border = BorderStroke(1.dp, Colors.primary),
+                            shape = RoundedCornerShape(50)
+                        ), verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween){
+                            TextField(
+                                modifier=Modifier.weight(1f,false).
+                                focusRequester(focusRequester),
+                                value = state.value.searchString ?: "",
+                                onValueChange = {
+                                    updateResearch(it)
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    disabledTextColor = Color.Transparent,
+                                    backgroundColor = Color.White,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent
+                                ),
+                                placeholder = { Text( "Chercher un ingrédient ou une recette")}
 
-                        )
-                        Clickable(onClick = { goToSearchResult() }) {
-                            Surface(
-                                shape = CircleShape,
-                                elevation = 8.dp,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            ) {
-                                Box(
-                                    Modifier
-                                        .background(Colors.primary)
-                                        .padding(8.dp))
-                                {
-                                    Image(
-                                        painter = painterResource(search),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(white),
+                            )
+                            Clickable(onClick = { goToSearchResult() }) {
+                                Surface(
+                                    shape = CircleShape,
+                                    elevation = 8.dp,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                ) {
+                                    Box(
+                                        Modifier
+                                            .background(Colors.primary)
+                                            .padding(8.dp))
+                                    {
+                                        Image(
+                                            painter = painterResource(search),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(white),
                                         )
+                                    }
                                 }
                             }
                         }

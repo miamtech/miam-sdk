@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.handler
 
-import com.miam.kmm_miam_sdk.base.mvi.BasketEffect
 import com.miam.kmm_miam_sdk.base.mvi.Effect
 import com.miam.kmm_miam_sdk.base.mvi.State
 import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
@@ -31,7 +30,6 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
 
     val state = MutableStateFlow(ContextHandlerState())
     private val readyEvent = MutableSharedFlow<ReadyEvent>()
-    fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
 
     fun gotAnError() {
         state.value = state.value.copy(isInError = true)
@@ -40,18 +38,10 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
         }
     }
 
-    @OptIn(InternalCoroutinesApi::class)
-    fun getReadyIos(callback: (it: ReadyEvent) -> Unit){
+    fun emitReadiness() {
         launch(coroutineHandler) {
-            readyEvent.asSharedFlow().collect { callback(it) }
-        }
-    }
+            readyEvent.emit(if (isReady()) ReadyEvent.isReady else ReadyEvent.isNotReady)
 
-    fun getReady() {
-        if (isReady()) {
-            launch(coroutineHandler) {
-                readyEvent.emit(ReadyEvent.isReady)
-            }
         }
     }
 
@@ -61,5 +51,14 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
 
     fun isReady(): Boolean {
         return basketHandler.isReady() && !state.value.isInError
+    }
+
+    fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
+
+    @OptIn(InternalCoroutinesApi::class)
+    fun onReadyEvent(callback: (it: ReadyEvent) -> Unit){
+        launch(coroutineHandler) {
+            readyEvent.asSharedFlow().collect { callback(it) }
+        }
     }
 }
