@@ -19,7 +19,7 @@ object UserHandler: KoinComponent {
         store.setProfilingAllowed(allowance)
     }
 
-    fun disableLike(){
-        store.disableLike()
+    fun setEnableLike(isEnable: Boolean){
+        store.setEnableLike(isEnable)
     }
 }

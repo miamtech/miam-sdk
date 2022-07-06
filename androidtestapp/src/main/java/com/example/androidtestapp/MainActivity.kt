@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
         UserHandler.updateUserId("alexis")
         UserHandler.setProfilingAllowed(true)
-        UserHandler.disableLike()
+        UserHandler.setEnableLike(false)
         launch {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} " )

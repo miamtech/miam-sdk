@@ -181,7 +181,8 @@ import com.miam.kmm_miam_sdk.handler.UserHandler
 class Miam() {
   init {
     // CODE
-      UserHandler.disableLike()
+    // false if you don't want like on recipe card
+      UserHandler.setEnableLike(false)
   }
 
   // CODE
@@ -957,7 +958,7 @@ public class Miam {
 
   private init() {
     // CODE
-      UserHandler.shared.disableLike()
+      UserHandler.shared.setEnableLike(isEnable: false)
   }
 
   // CODE

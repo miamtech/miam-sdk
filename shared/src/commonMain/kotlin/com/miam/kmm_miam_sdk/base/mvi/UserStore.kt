@@ -75,7 +75,7 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
         return !state.value.profilingAllowed
     }
 
-    fun disableLike(){
-        updateStateIfChanged(state.value.copy(likeIsEnable= false))
+    fun setEnableLike(isEnable: Boolean){
+        updateStateIfChanged(state.value.copy(likeIsEnable= isEnable))
     }
 }
