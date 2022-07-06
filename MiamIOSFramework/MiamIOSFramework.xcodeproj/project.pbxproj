@@ -11,6 +11,7 @@
 		0B4B3E80284FA99D00F25E7B /* ItemSelectorText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E7F284FA99D00F25E7B /* ItemSelectorText.swift */; };
 		0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */; };
 		0B4B3E84285099EA00F25E7B /* ItemSelectorVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E83285099EA00F25E7B /* ItemSelectorVM.swift */; };
+		0B5325212874899E001906CD /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325202874899E001906CD /* LikeButton.swift */; };
 		0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */; };
 		0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* Text.swift */; };
 		0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */; };
@@ -90,6 +91,7 @@
 		0B4B3E7F284FA99D00F25E7B /* ItemSelectorText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorText.swift; sourceTree = "<group>"; };
 		0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorProductRow.swift; sourceTree = "<group>"; };
 		0B4B3E83285099EA00F25E7B /* ItemSelectorVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorVM.swift; sourceTree = "<group>"; };
+		0B5325202874899E001906CD /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 		0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardText.swift; sourceTree = "<group>"; };
 		0B7C9BDB28196BAB00BFC7F8 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
@@ -176,6 +178,14 @@
 				0B4B3E7F284FA99D00F25E7B /* ItemSelectorText.swift */,
 			);
 			path = customization;
+			sourceTree = "<group>";
+		};
+		0B53251F2874897A001906CD /* likeButton */ = {
+			isa = PBXGroup;
+			children = (
+				0B5325202874899E001906CD /* LikeButton.swift */,
+			);
+			path = likeButton;
 			sourceTree = "<group>";
 		};
 		0B7C9BD728196A6300BFC7F8 /* RecipeCard */ = {
@@ -334,6 +344,7 @@
 		DCD4E31C27BE92AC000D3EA6 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				0B53251F2874897A001906CD /* likeButton */,
 				0BFD391B2860C12700A7FCED /* state */,
 				0B4B3E7B284FA6E000F25E7B /* ItemSelecor */,
 				0B9AA66B28215A69007D6C8A /* Dialog */,
@@ -511,6 +522,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B5325212874899E001906CD /* LikeButton.swift in Sources */,
 				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
 				0BB5CA602847B3A2007AC86D /* RecipeDetailsFooter.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColors.swift in Sources */,

@@ -173,6 +173,22 @@ class Miam() {
 }
 ```
 
+You can disable Like feature with UserHandler
+
+```kotlin 
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
+class Miam() {
+  init {
+    // CODE
+    // false if you don't want like on recipe card
+      UserHandler.setEnableLike(false)
+  }
+
+  // CODE
+}
+```
+
 ##### Profiling
 
 You can block custom recipe suggestions if the user wishes.
@@ -925,6 +941,24 @@ public class Miam {
       // USER_ID_IN_HOST_APP is your user id type String is expected
       UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
     }
+  }
+
+  // CODE
+}
+```
+
+You can disable like feature on recipe using UserHandler
+
+```swift
+// file Miam.swift
+import shared
+
+public class Miam {
+  // CODE
+
+  private init() {
+    // CODE
+      UserHandler.shared.setEnableLike(isEnable: false)
   }
 
   // CODE

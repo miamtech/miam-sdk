@@ -391,13 +391,15 @@ class RecipeView @JvmOverloads constructor(
                                     }
                                 }
                             }
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                LikeButton(vmRecipe)
+                            if(vmRecipe.currentState.likeIsEnable){
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    LikeButton(vmRecipe)
+                                }
                             }
                             if(isInshelve){
                                 Box(modifier = recipeCardFlagPositionContainer) {

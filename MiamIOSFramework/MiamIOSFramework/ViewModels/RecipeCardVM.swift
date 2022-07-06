@@ -27,4 +27,13 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
             }
         )
     }
+    
+    
+    func toggleLike(){
+        setEvent(event: RecipeContractEvent.OnToggleLike())
+    }
+    
+    func likeIsEnable() -> Bool {
+        return state?.likeIsEnable ?? false
+    }
 }

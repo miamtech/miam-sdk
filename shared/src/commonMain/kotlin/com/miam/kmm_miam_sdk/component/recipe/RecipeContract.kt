@@ -42,7 +42,8 @@ interface RecipeContract {
           val tabState : TabEnum,
           val activeStep: Int,
           val recipeLoaded: Boolean,
-          val isLiked: Boolean
+          val isLiked: Boolean,
+          val likeIsEnable: Boolean
     ) : UiState
 
     sealed class Effect : UiEffect {
