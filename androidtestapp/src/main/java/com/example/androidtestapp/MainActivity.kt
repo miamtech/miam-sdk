@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
         UserHandler.updateUserId("alexis")
         UserHandler.setProfilingAllowed(true)
+        UserHandler.disableLike()
         MiamGroceriesList.getRecipeCount {
             recipeCount = it
             println("recipes count : $recipeCount " )

@@ -39,12 +39,9 @@ public struct RecipeCardView: View {
                     viewModel.setEvent(
                         event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
                 }
-                
             }
             )
-            
         }
-       
     }
 }
  

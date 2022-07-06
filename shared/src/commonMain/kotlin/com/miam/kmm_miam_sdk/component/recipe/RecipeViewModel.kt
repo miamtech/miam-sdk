@@ -30,6 +30,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val groceriesListStore: GroceriesListStore by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val userStore: UserStore by inject()
 
     private var recipeId: String? = null
     private var isInit: Boolean = false
@@ -50,7 +51,8 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             tabState = TabEnum.INGREDIENT,
             activeStep = 0,
             recipeLoaded = false,
-            isLiked = false
+            isLiked = false,
+            likeIsEnable = true
         )
     }
 
@@ -63,6 +65,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         launch(coroutineHandler) {
             listenguestSubjectChanges()
         }
+        setState { copy(likeIsEnable = userStore.state.value.likeIsEnable) }
     }
 
     override fun handleEvent(event: RecipeContract.Event) {

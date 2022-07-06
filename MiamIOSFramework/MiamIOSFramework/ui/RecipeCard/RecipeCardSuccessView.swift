@@ -86,13 +86,8 @@ struct RecipeCardSuccessView: View {
                                     .background(MiamColor.sharedInstance.musterd)
                                     .cornerRadius(8)
                                 Spacer()
-                                ZStack(){
-                                    Circle().fill(MiamColor.sharedInstance.white)
-                                        .frame(width: 32, height: 32)
-                                    Image("Like", bundle: Bundle(for: RecipeCardVM.self))
-                                        .frame(width: 24.0, height: 24.0, alignment: .center)
-                                        .foregroundColor(MiamColor.sharedInstance.primaryText)
-                                    
+                                if(viewModel.likeIsEnable()){
+                                    LikeButton(recipeVm: viewModel)
                                 }
                             }.padding([.leading,.trailing],8).padding(.top,16)
                         }.frame(height: 245)
