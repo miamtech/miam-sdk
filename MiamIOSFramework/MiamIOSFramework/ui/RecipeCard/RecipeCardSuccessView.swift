@@ -54,8 +54,6 @@ struct RecipeCardSuccessView: View {
                     }
                 }
                 )
-            
-            
         } else {
             
             VStack {
@@ -94,8 +92,18 @@ struct RecipeCardSuccessView: View {
                         Text(viewModel.recipe!.attributes?.title ?? "")
                             .lineLimit(2)
                             .foregroundColor(MiamColor.sharedInstance.black)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .padding(Dimension.sharedInstance.lPadding)
+                            .font(.system(size: 13.0, weight: .bold, design: .default))
+                            .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
+                                                leading: Dimension.sharedInstance.lPadding,
+                                                bottom: Dimension.sharedInstance.mlPadding,
+                                                trailing: Dimension.sharedInstance.lPadding))
+
+                        HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
+                            IconWithText(imageName: "clock", text: viewModel.recipe?.totalTime ?? "")
+                            Divider()
+                            IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
+                        }
+
                         Button(RecipeCardText.sharedInstance.addRecipe) {
                         action: do {
                             viewModel.goToDetail()
@@ -106,7 +114,7 @@ struct RecipeCardSuccessView: View {
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                             .background(MiamColor.sharedInstance.primaryText)
                             .cornerRadius(25)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .font(.system(size: 14.0, weight: .bold, design: .default))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
                         
                     }
