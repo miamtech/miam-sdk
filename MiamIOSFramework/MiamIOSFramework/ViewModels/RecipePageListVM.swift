@@ -30,7 +30,22 @@ class RecipeListPageVM: ObservableObject {
         }
     }
 
-    func loadPage() {
+    var hasNoResults: Bool {
+        return self.model.currentState.noMoreData && recipes.isEmpty
+    }
+
+    func loadMoreContent(currentRecipe: Recipe) {
+        guard !self.model.currentState.isFetchingNewPage, !self.model.currentState.noMoreData else {
+            return
+        }
+
+        let thresholdIndex = recipes.index(recipes.endIndex, offsetBy: -3)
+        if recipes.firstIndex(where: {$0.id == currentRecipe.id}) == thresholdIndex {
+            loadPage()
+        }
+    }
+
+    private func loadPage() {
         self.model.setEvent(event: RecipeListPageContractEvent.LoadPage())
     }
 }

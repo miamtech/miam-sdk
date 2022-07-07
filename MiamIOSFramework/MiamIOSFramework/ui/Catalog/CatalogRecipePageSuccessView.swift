@@ -17,13 +17,13 @@ internal struct CatalogRecipesPageSuccessView: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading) {
-                Text(recipesListPageModel.title).font(Font.system(size: 20.0)).fontWeight(.heavy)
-                ForEach(recipesListPageModel.recipes, id: \.self) { recipe in
-                    RecipeCardView(recipeId: recipe.id)
+            Text(recipesListPageModel.title).font(Font.system(size: 20.0)).fontWeight(.heavy)
+            List(recipesListPageModel.recipes, id: \.self) { recipe in
+                RecipeCardView(recipeId: recipe.id).onAppear {
+                    recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                 }
-            }.padding([.leading, .trailing, .top], Dimension.sharedInstance.mlPadding)
+            }
+            .background(Color.white)//.padding([.leading, .trailing, .top], Dimension.sharedInstance.mlPadding)
         }
     }
 }
