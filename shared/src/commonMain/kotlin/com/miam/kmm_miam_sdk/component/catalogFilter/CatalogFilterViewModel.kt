@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.component.catalogFilter
 
 import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
+import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmm_miam_sdk.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -23,18 +24,18 @@ open class CatalogFilterViewModel:
 
     override fun createInitialState(): CatalogFilterContract.State  =
         CatalogFilterContract.State(
-            numberOfResult=  0,
-            difficulty =   listOf(
+            numberOfResult = 0,
+            difficulty = listOf(
                 CatalogFilterOptions("1","Chef débutant"),
                 CatalogFilterOptions("2","Chef intermédiaire"),
                 CatalogFilterOptions("3","Top chef"),
             ),
-            cost  =listOf(
+            cost = listOf(
                 CatalogFilterOptions("0-5","Moins de 5€"),
                 CatalogFilterOptions("5-10","Entre 5€ et 10€"),
                 CatalogFilterOptions("10-1000","Plus de 10€"),
             ),
-            time =  listOf(
+            time = listOf(
                 CatalogFilterOptions("15","Moins de 15 min"),
                 CatalogFilterOptions("30","Moins de 30 min"),
                 CatalogFilterOptions("60","Moins de 1 h"),
@@ -47,7 +48,6 @@ open class CatalogFilterViewModel:
 
     override fun handleEvent(event: CatalogFilterContract.Event) {
         when (event) {
-
             is CatalogFilterContract.Event.SetFavorite -> {
                 setState {
                     copy(
@@ -80,7 +80,7 @@ open class CatalogFilterViewModel:
             is CatalogFilterContract.Event.OnCostFilterChanged -> {
                 setState {
                     copy(
-                        cost = singleChoiceGroupUpdate( currentState.cost, event.costFilter)
+                        cost = singleChoiceGroupUpdate(currentState.cost, event.costFilter)
                     )
                 }
                 getRecipeCount()
@@ -88,9 +88,7 @@ open class CatalogFilterViewModel:
             is CatalogFilterContract.Event.OnDifficultyChanged -> {
                 setState {
                     copy(
-
-                            difficulty  = multipleChoiceGroupUpdate( currentState.difficulty, event.difficulty)
-
+                        difficulty  = multipleChoiceGroupUpdate( currentState.difficulty, event.difficulty)
                     )
                 }
                 getRecipeCount()
@@ -100,30 +98,21 @@ open class CatalogFilterViewModel:
 
     fun getRecipeCount(){
         launch(coroutineHandler) {
-            val count = recipeRepositoryImp.getRecipeNumberOfResult( getSelectedFilterAsQueryString())
-            setState { copy(numberOfResult= count) }
+            val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
+            setState { copy(numberOfResult = count) }
         }
     }
 
-    private fun singleChoiceGroupUpdate(group : List<CatalogFilterOptions> , option: CatalogFilterOptions): List<CatalogFilterOptions> {
-        val groupCopy = mutableListOf(*group.map { it.copy() }.toTypedArray())
-        val optionIndex = group.indexOfFirst { it.name == option.name }
-        if(option.isSelected){
-            groupCopy.forEach{  it.isSelected = false }
+    private fun singleChoiceGroupUpdate(group: List<CatalogFilterOptions>, option: CatalogFilterOptions): List<CatalogFilterOptions> {
+        return group.map { currentOption ->
+            if (currentOption.name == option.name) currentOption.on() else currentOption.off()
         }
-        if(optionIndex != -1){
-            groupCopy[optionIndex] = option.copy()
-        }
-        return groupCopy.toList()
     }
 
     private fun multipleChoiceGroupUpdate(group : List<CatalogFilterOptions> , option: CatalogFilterOptions): List<CatalogFilterOptions> {
-        val groupCopy =  mutableListOf(group).flatten().toMutableList()
-        val optionIndex = group.indexOf(option)
-        if(optionIndex != -1){
-            groupCopy[optionIndex] = option
+        return group.map { currentOption ->
+            if (currentOption.name == option.name) currentOption.toogle() else currentOption
         }
-        return groupCopy.toList()
     }
 
     fun getSelectedFilterAsQueryString() : String {

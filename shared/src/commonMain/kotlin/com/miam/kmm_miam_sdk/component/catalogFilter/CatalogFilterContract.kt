@@ -8,9 +8,9 @@ import com.miam.kmm_miam_sdk.miam_core.model.CatalogFilterOptions
 interface CatalogFilterContract {
 
     sealed class Event : UiEvent {
-        data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions ) : CatalogFilterContract.Event()
-        data class OnCostFilterChanged(val costFilter: CatalogFilterOptions ) : CatalogFilterContract.Event()
-        data class OnDifficultyChanged(val difficulty: CatalogFilterOptions ) : CatalogFilterContract.Event()
+        data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions): CatalogFilterContract.Event()
+        data class OnCostFilterChanged(val costFilter: CatalogFilterOptions): CatalogFilterContract.Event()
+        data class OnDifficultyChanged(val difficulty: CatalogFilterOptions): CatalogFilterContract.Event()
         data class SetCategoryTitle(val catTitle:String): CatalogFilterContract.Event()
         data class SetSearchString(val searchString: String): CatalogFilterContract.Event()
         object SetFavorite: CatalogFilterContract.Event()

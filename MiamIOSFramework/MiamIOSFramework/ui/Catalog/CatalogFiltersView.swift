@@ -110,7 +110,6 @@ internal struct CatalogFilterRow: View {
         } else {
             HStack {
                 Button {
-                    filter.isSelected = true
                     filterSelected(filter)
                 } label: {
                     if (filter.isSelected) {
