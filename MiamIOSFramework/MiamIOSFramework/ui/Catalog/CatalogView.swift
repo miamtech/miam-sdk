@@ -81,7 +81,7 @@ internal struct CatalogPackageRow: View {
     let showRecipes: (CatalogPackage) -> Void
     var body: some View {
         if (Template.sharedInstance.catalogPackageRowTemplate != nil) {
-            Template.sharedInstance.catalogFilterRowTemplate!(package, showRecipes)
+            Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
         } else {
             VStack(alignment: .leading) {
                 Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mlPadding)
