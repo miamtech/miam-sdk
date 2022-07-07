@@ -24,8 +24,9 @@ struct ContentView: View {
                         Button("Reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
                         Text("Recette dans le panier : \(recipeCount)")
                         VStack {
-                            RecipeCardView(recipeId: "9422")
-                            RecipeCardView(criteria: criteria)
+                              BasketTag()
+//                            RecipeCardView(recipeId: "9422")
+//                            RecipeCardView(criteria: criteria)
                         }
                     }
                 }.navigationTitle("Miam demo app").navigationBarTitleDisplayMode(.inline)
