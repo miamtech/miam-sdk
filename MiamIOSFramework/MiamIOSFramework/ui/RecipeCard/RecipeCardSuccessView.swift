@@ -59,7 +59,6 @@ struct RecipeCardSuccessView: View {
             VStack {
                 VStack() {
                     if(viewModel.recipe ?? nil != nil) {
-                        
                         ZStack(alignment: .topLeading) {
                             AsyncImage(
                                 url: URL(
@@ -82,7 +81,7 @@ struct RecipeCardSuccessView: View {
                                 }.padding(.horizontal,16)
                                     .padding(.vertical,4)
                                     .background(MiamColor.sharedInstance.musterd)
-                                    .cornerRadius(8)
+                                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
                                 Spacer()
                                 if(viewModel.likeIsEnable()){
                                     LikeButton(recipeVm: viewModel)
@@ -104,19 +103,33 @@ struct RecipeCardSuccessView: View {
                             IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
                         }
 
-                        Button(RecipeCardText.sharedInstance.addRecipe) {
-                        action: do {
-                            viewModel.goToDetail()
+                        Button {
+                            if !viewModel.isInCart {
+                                viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
+                            } else {
+                                viewModel.goToDetail()
+                            }
                             showingPopup = true
-                        }
-                        }.foregroundColor(MiamColor.sharedInstance.white)
+                        } label: {
+                            if !viewModel.isInCart {
+                                HStack {
+                                    Text(MiamText.sharedInstance.checkBasketPreview)
+                                    Image("cart", bundle: Bundle(for: RecipeCardVM.self))
+                                }
+                            } else {
+                                HStack {
+                                    Text(MiamText.sharedInstance.viewRecipeDetail)
+                                    Image("Check", bundle: Bundle(for: RecipeCardVM.self))
+                                }
+                            }
+                        }.foregroundColor(!viewModel.isInCart ? MiamColor.sharedInstance.white : MiamColor.sharedInstance.primaryText)
                             .frame(minHeight: 50.0, maxHeight: 50.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                            .background(MiamColor.sharedInstance.primaryText)
+                            .background(!viewModel.isInCart ? MiamColor.sharedInstance.primaryText : Color.white)
                             .cornerRadius(25)
                             .font(.system(size: 14.0, weight: .bold, design: .default))
+                            .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
-                        
                     }
                     
                     
