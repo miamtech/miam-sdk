@@ -12,6 +12,7 @@ import shared
 class RecipeListPageVM: ObservableObject {
     @Published var recipes: [Recipe] = []
     @Published var title: String = ""
+    @Published var state: RecipeListPageContractState?
 
     let model: RecipeListPageViewModel
 
@@ -19,6 +20,7 @@ class RecipeListPageVM: ObservableObject {
         self.model = model
         self.model.collect(flow: model.uiState) { data in
             let state = data as! RecipeListPageContractState
+            self.state = state
             self.title = state.title
             switch(state.recipes) {
             case let success as BasicUiStateSuccess<NSArray>:

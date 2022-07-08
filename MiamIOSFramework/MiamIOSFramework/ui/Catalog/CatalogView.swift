@@ -45,7 +45,13 @@ public struct CatalogView: View {
                     catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
                     showingFavorites = true
                 }
-                CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight)
+                if let catalogState = catalog.state {
+                    ManagementResourceState<NSArray, CatalogSuccessView, ProgressLoader>(resourceState: catalogState.categories,
+                                                                                         successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight),
+                                                                                         loadingView: ProgressLoader(color: MiamColor.sharedInstance.primary)).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                Spacer()
             }.popover(isPresented: $catalog.filterOpen) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
@@ -77,11 +83,13 @@ internal struct CatalogSuccessView: View {
                     }
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
-            Spacer()
         } else {
             let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
-            CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog).padding([.top], Dimension.sharedInstance.lPadding)
-            Spacer()
+            if let modelState = model.state {
+                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, ProgressLoader>(resourceState: modelState.recipes,
+                                                                                                successView: CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog),
+                                                                                                loadingView: ProgressLoader(color: MiamColor.sharedInstance.primary)).padding([.top], Dimension.sharedInstance.lPadding)
+            }
         }
     }
 }
