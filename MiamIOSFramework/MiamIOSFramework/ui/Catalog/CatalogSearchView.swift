@@ -26,6 +26,12 @@ struct CatalogSearchView: View {
             HStack(spacing: 10.0) {
                 HStack(spacing: 10.0) {
                     TextField("Rechercher", text: $searchString).frame(height: 45.0)
+                        .disableAutocorrection(true)
+                        .onChange(of: searchString) { value in
+                        if let filtersViewModel = catalog.filtersViewModel {
+                            filtersViewModel.setEvent(event: CatalogFilterContractEvent.SetSearchString(searchString: value))
+                        }
+                    }
                     Button {
                         catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
                     } label: {
