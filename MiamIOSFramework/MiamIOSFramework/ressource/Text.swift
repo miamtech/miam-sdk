@@ -35,6 +35,7 @@ public class MiamText {
     public var preparationTime = "Préparation"
     public var cookingTime = "Cuisson"
     public var restingTime = "Repos"
+    public var simmering = "Ça mijote"
     
     private init(){}
 

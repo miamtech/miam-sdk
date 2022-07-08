@@ -46,12 +46,11 @@ public struct CatalogView: View {
                     showingFavorites = true
                 }
                 if let catalogState = catalog.state {
-                    ManagementResourceState<NSArray, CatalogSuccessView, ProgressLoader>(resourceState: catalogState.categories,
+                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView>(resourceState: catalogState.categories,
                                                                                          successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight),
-                                                                                         loadingView: ProgressLoader(color: MiamColor.sharedInstance.primary)).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering)).padding([.top], Dimension.sharedInstance.lPadding)
                                                                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                Spacer()
             }.popover(isPresented: $catalog.filterOpen) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
@@ -68,6 +67,15 @@ public struct CatalogView: View {
 @available(iOS 14, *)
 internal struct CatalogSuccessView: View {
     @ObservedObject var catalog: CatalogVM
+    @ObservedObject var recipeListPageModel: RecipeListPageVM
+
+    init(catalog: CatalogVM, showingPackageRecipes: Binding<Bool>, headerHeight: Binding<Double>) {
+        self.catalog = catalog
+        self.recipeListPageModel = RecipeListPageVM(model: catalog.recipePageViewModel!)
+        _showingPackageRecipes = showingPackageRecipes
+        _headerHeight = headerHeight
+    }
+
     @Binding var showingPackageRecipes: Bool
     @Binding var headerHeight: Double
     var body: some View {
@@ -84,11 +92,10 @@ internal struct CatalogSuccessView: View {
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
-            let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
-            if let modelState = model.state {
-                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, ProgressLoader>(resourceState: modelState.recipes,
-                                                                                                successView: CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog),
-                                                                                                loadingView: ProgressLoader(color: MiamColor.sharedInstance.primary)).padding([.top], Dimension.sharedInstance.lPadding)
+            if let modelState = recipeListPageModel.state {
+                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView>(resourceState: modelState.recipes,
+                                                                                                successView: CatalogRecipesPageSuccessView(viewModel: recipeListPageModel, catalogViewModel: catalog),
+                                                                                                loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering)).padding([.top], Dimension.sharedInstance.lPadding)
             }
         }
     }

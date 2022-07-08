@@ -19,13 +19,17 @@ internal struct CatalogRecipesPageSuccessView: View {
 
     var body: some View {
         if !recipesListPageModel.hasNoResults {
-            Text(recipesListPageModel.title).font(Font.system(size: 20.0)).fontWeight(.heavy)
-            List(recipesListPageModel.recipes, id: \.self) { recipe in
-                RecipeCardView(recipeId: recipe.id).onAppear {
-                    recipesListPageModel.loadMoreContent(currentRecipe: recipe)
+            VStack {
+                Text(recipesListPageModel.title).font(Font.system(size: 20.0))
+                    .fontWeight(.heavy).frame(height: 40.0)
+                List(recipesListPageModel.recipes, id: \.self) { recipe in
+                    RecipeCardView(recipeId: recipe.id).onAppear {
+                        recipesListPageModel.loadMoreContent(currentRecipe: recipe)
+                    }
                 }
+                .padding(0)
+                .background(Color.white)
             }
-            .background(Color.white)//.padding([.leading, .trailing, .top], Dimension.sharedInstance.mlPadding)
         } else {
             CatalogRecipePageNoResultsView(catalogViewModel: catalogViewModel, showingFavorites: false)
         }
