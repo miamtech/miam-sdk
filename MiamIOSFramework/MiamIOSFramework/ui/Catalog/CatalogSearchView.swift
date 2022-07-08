@@ -14,7 +14,7 @@ struct CatalogSearchView: View {
     var catalog: CatalogVM
     
     var body: some View {
-        VStack {
+        VStack(spacing: 10.0) {
             HStack {
                 Button {
                     catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
@@ -23,11 +23,11 @@ struct CatalogSearchView: View {
                 }
                 Spacer()
             }.frame(height: 44).padding(Dimension.sharedInstance.mlPadding)
-            HStack {
-                HStack {
+            HStack(spacing: 10.0) {
+                HStack(spacing: 10.0) {
                     TextField("Rechercher", text: $searchString).frame(height: 45.0)
                     Button {
-                        catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch(searchString: searchString))
+                        catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
                     } label: {
                         Image("search", bundle: Bundle(for: CatalogVM.self))
                             .padding(10)

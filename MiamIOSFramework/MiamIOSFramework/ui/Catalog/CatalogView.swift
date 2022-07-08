@@ -60,7 +60,7 @@ public struct CatalogView: View {
                     Spacer()
                 } else {
                     let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
-                    CatalogRecipesPageSuccessView(viewModel: model).padding([.top], Dimension.sharedInstance.lPadding)
+                    CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog).padding([.top], Dimension.sharedInstance.lPadding)
                     Spacer()
                 }
             }.popover(isPresented: $catalog.filterOpen) {
