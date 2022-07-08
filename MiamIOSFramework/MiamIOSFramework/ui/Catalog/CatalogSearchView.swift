@@ -33,7 +33,7 @@ struct CatalogSearchView: View {
                         }
                     }
                     Button {
-                        catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
+                        catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
                     } label: {
                         Image("search", bundle: Bundle(for: CatalogVM.self))
                             .padding(10)
