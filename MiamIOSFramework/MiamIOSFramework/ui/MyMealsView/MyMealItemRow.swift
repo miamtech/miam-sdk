@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 14, *)
 struct MyMealItemRow: View {
     var body: some View {
         VStack {
@@ -15,6 +16,7 @@ struct MyMealItemRow: View {
     }
 }
 
+@available(iOS 14, *)
 struct MyMealItemRow_Previews: PreviewProvider {
     static var previews: some View {
         MyMealItemRow()

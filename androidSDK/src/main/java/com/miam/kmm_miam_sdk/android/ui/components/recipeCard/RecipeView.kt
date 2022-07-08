@@ -3,19 +3,24 @@ package com.miam.kmm_miam_sdk.android.ui.components.recipeCard
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
@@ -23,6 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.miam.kmm_miam_sdk.android.theme.Colors.grey
+import com.miam.kmm_miam_sdk.android.theme.Colors.lightgrey
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.image
@@ -34,15 +41,23 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 
+
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
+
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.cardLayout
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.imageContainer
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.cart
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.difficulty
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.time
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.check
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.ideeRepas
+
+
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
@@ -59,6 +74,7 @@ class RecipeView @JvmOverloads constructor(
     private val modal = RouterOutlet()
     private var vmRecipe: RecipeViewModel = RecipeViewModel(modal.getViewModel())
     private val idRecipeState: MutableState<String?> = mutableStateOf(null)
+    private var isInshelve = true
 
     fun bind(recipeId: String = "",
              criteria: SuggestionsCriteria? = null,
@@ -88,6 +104,10 @@ class RecipeView @JvmOverloads constructor(
 
     fun unbind() {
         vmRecipe.setEvent(RecipeContract.Event.OnUnbind)
+    }
+
+    fun isNotInShelf(){
+        isInshelve = false
     }
 
     var idRecipe: String
@@ -180,7 +200,7 @@ class RecipeView @JvmOverloads constructor(
 
         Column() {
             Spacer(modifier = Modifier
-                .height(245.dp)
+                .height(280.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
                 .background(brush = brush))
@@ -291,7 +311,6 @@ class RecipeView @JvmOverloads constructor(
                     .width(36.dp)
                     .clip(RoundedCornerShape(100))
                     .background(brush = brush))
-
             }
         }
     }
@@ -315,9 +334,9 @@ class RecipeView @JvmOverloads constructor(
         } else {
             Column {
                 Card(modifier = cardLayout) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally , modifier = Modifier.height(500.dp)) {
                         Box {
-                            Column {
+                            Column (verticalArrangement = Arrangement.SpaceBetween ){
                                 Box(modifier = imageContainer) {
                                     Clickable(
                                         onClick = { vmRecipe.goToDetail() },
@@ -335,91 +354,126 @@ class RecipeView @JvmOverloads constructor(
                                 Text(
                                     text = recipe.attributes!!.title,
                                     modifier = RecipeDetailsStyle.titleModifier,
-                                    textAlign = TextAlign.Left,
+                                    textAlign = TextAlign.Center,
                                     style = Typography.subtitleBold
                                 )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                LikeButton(vmRecipe)
-                            }
-                            Box(modifier = recipeCardFlagPositionContainer) {
-                                    Box(){
-                                        Surface (
-                                            Modifier
-                                                .clip(
-                                                    RoundedCornerShape(
-                                                        topEnd = 70f,
-                                                        bottomEnd = 70f
-                                                    )
-                                                )
-                                                .height(40.dp)
-                                                .align(Alignment.Center),
-                                                elevation= 8.dp) 
-                                        {   
-                                            Row(
-                                                Modifier
-                                                    .background(white)
-                                                    .width(180.dp)) {
-                                                
-                                            }
-                                        }
-                                        Row(
-                                            modifier = Modifier.padding(
-                                                horizontal = sPadding,
-                                                vertical = mPadding
-                                            ).align(Alignment.Center),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.Center
-                                        ) {
-                                            Surface(
-                                                modifier = Modifier.size(64.dp),
-                                                shape = CircleShape,
-                                                elevation = 8.dp
-                                            ) {
-                                                Image(
-                                                    painter = painterResource(RecipeDetailsImage.recipeIcon),
-                                                    contentDescription = null,
-                                                    modifier = Modifier.size(62.dp)
-                                                )
-
-                                            }
-
-                                            Text(
-                                                text = "Idée repas",
-                                                style = Typography.subtitleBold,
-                                                modifier = Modifier.padding(horizontal = sPadding)
-                                            )
-                                        }
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ){
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(time),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(grey),
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                        Text(text = recipe.totalTime, color = grey,
+                                            modifier = Modifier.padding(top= 8.dp))
                                     }
+                                    Divider(Modifier.background(grey).height(40.dp).width(1.dp))
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.padding(horizontal = 16.dp)) {
+                                        Image(
+                                            painter = painterResource(difficulty),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(grey),
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                        Text(
+                                            text = recipe.difficultyLabel,
+                                            color = grey,
+                                            modifier = Modifier.padding(top= 8.dp)
+                                        )
+                                    }
+                                }
+                            }
+                            if(vmRecipe.currentState.likeIsEnable){
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    LikeButton(vmRecipe)
+                                }
+                            }
+                            if(isInshelve){
+                                Box(modifier = recipeCardFlagPositionContainer) {
 
+                                    Row(
+                                        modifier = Modifier
+                                            .background(Color(0xFFFBC702))
+                                            .padding(
+                                                horizontal = mPadding,
+                                                vertical = sPadding
+                                            ),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(ideeRepas),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(Color.Black)
+                                        )
+                                        Text(
+                                            text = "Idée repas",
+                                            style = Typography.subtitleBold,
+                                            modifier = Modifier.padding(horizontal = sPadding)
+                                        )
+                                    }
+                                }
                             }
                         }
                             Clickable(
-                                onClick = { modal.goToDetail(vmRecipe) },
+                                onClick = {  if (vmRecipe.currentState.isInCart)  modal.goToDetail(vmRecipe) else {
+                                    vmRecipe.setEvent(RecipeContract.Event.OnAddRecipe)
+                                    modal.goToPreview(recipe.id,vmRecipe)
+                                }},
                                 children = {
                                 Surface(
                                     modifier = Modifier
                                         .padding(horizontal = 16.dp, vertical = 10.dp)
-                                        .clip(RoundedCornerShape(80f)),
+                                        .clip(RoundedCornerShape(80f))
+                                        .border(
+                                            border = BorderStroke(
+                                                1.dp,
+                                                if (vmRecipe.currentState.isInCart) primary else Color.Transparent
+                                            ),
+                                            shape = RoundedCornerShape(50)
+                                        ),
                                     elevation = 8.dp
                                 ) {
-                                    Row(Modifier.background(
-                                        primary
-                                    ).padding(horizontal = 16.dp, vertical = 10.dp)) {
+                                    Row(
+                                        Modifier
+                                            .background(
+                                                if (vmRecipe.currentState.isInCart) white else primary
+                                            )
+                                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
                                         Text(
-                                            text = "Décourvir la recette",
-                                            color = white,
-                                            style = Typography.subtitleBold
+                                            text =  if (vmRecipe.currentState.isInCart) "Voir le détail" else "Ajouter les ingrédients",
+                                            color = if (vmRecipe.currentState.isInCart) primary  else white,
+                                            style = Typography.subtitle
                                         )
+                                        Image(
+                                            painter = painterResource(  if (vmRecipe.currentState.isInCart) check  else cart),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint( if (vmRecipe.currentState.isInCart) primary  else white),
+                                            modifier= Modifier
+                                                .padding(start = 8.dp)
+                                                .size(20.dp)
+                                        )
+
                                     }
 
                                 }
                             }
                             )
-
                     }
                 }
             }

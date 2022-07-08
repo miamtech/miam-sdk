@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+@available(iOS 14, *)
 public class ItemSelectorText {
     
     public static let sharedInstance = ItemSelectorText()

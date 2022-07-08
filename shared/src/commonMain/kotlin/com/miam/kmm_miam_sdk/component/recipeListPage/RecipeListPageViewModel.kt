@@ -45,7 +45,8 @@ class RecipeListPageViewModel : BaseViewModel<RecipeListPageContract.Event, Reci
         launch(coroutineHandler) {
             setState { copy(isFetchingNewPage = true) }
             val fetchedRecipes = recipeRepositoryImp.getRecipesFromStringFilter(currentState.filter, RecipeRepositoryImp.DEFAULT_INCLUDED, RecipeRepositoryImp.DEFAULT_PAGESIZE, currentPage)
-            val uiState = if(newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(listOf(newRecipes,fetchedRecipes).flatten())
+            newRecipes.addAll(fetchedRecipes)
+            val uiState = if(newRecipes.isEmpty() && fetchedRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
             setState {
                 copy(
                     recipes = uiState,
@@ -64,7 +65,15 @@ class RecipeListPageViewModel : BaseViewModel<RecipeListPageContract.Event, Reci
     }
 
     private fun initPage(title: String,filter: String){
-        setState {copy(title = title, filter = filter)}
+        setState {
+            copy(
+            title = title,
+            filter = filter,
+            recipes  = BasicUiState.Loading,
+            noMoreData = false,
+            currentPage = 1
+         )
+        }
         loadPage()
     }
 

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+@available(iOS 14, *)
 struct RecipeDetailsDifficulty: View {
     
     private var difficulty : Int

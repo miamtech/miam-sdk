@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+@available(iOS 14, *)
 internal struct BasketPreviewFooter: View {
     let removeFromBasketAction: () -> Void
     let continueShoppingAction: () -> Void

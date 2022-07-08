@@ -41,6 +41,7 @@ import com.miam.kmm_miam_sdk.handler.ContextHandlerInstance
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
 import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmm_miam_sdk.handler.GroceriesListHandler
 import com.miam.kmm_miam_sdk.miam_core.model.Recipe
 
 import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
@@ -67,6 +68,8 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private lateinit var basketHandler: BasketHandler
 
+    private var recipeCount = 0
+
     private fun initMiam() {
         initKoin{
             androidContext(this@MainActivity)
@@ -87,9 +90,22 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
-        PointOfSaleHandler.setSupplierOrigin("www.coursesu.com")
+        PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
         UserHandler.updateUserId("alexis")
         UserHandler.setProfilingAllowed(true)
+        UserHandler.setEnableLike(false)
+        launch {
+            GroceriesListHandler.getRecipeCountChangeFlow().collect {
+                println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} " )
+                retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it.newRecipeCount))
+            }
+        }
+        GroceriesListHandler.onRecipeCountChange {
+            println("recipes count by callback : ${retailerBasketSubject.value.recipeCount} " )
+            launch(coroutineHandler) {
+                retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it))
+            }
+        }
     }
 
     private val recipeloader:  @Composable () -> Unit = { Box(
@@ -211,6 +227,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         ) {
             Text(text = "Panier du client", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Text(text = "Total Panier -> ${state.value.items.sumOf { it.price }} €")
+            Text(text = "Nombre de recette -> ${state.value.recipeCount}")
             Divider()
             Row(Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -219,6 +236,9 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                 }
                 Button(onClick = { removeProduct() }) {
                     Text(text = "Retirer")
+                }
+                Button(onClick = { flushRecipes() }) {
+                    Text(text = "flush recipes")
                 }
             }
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -311,7 +331,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         launch(coroutineHandler) {
             val randomElement = productSampleCoursesU.random()
             retailerBasketSubject.value.items.add(randomElement.copy(quantity = Random.nextInt(1,4)))
-            retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
+            retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, retailerBasketSubject.value.recipeCount))
         }
     }
 
@@ -319,9 +339,13 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         launch(coroutineHandler) {
             if(retailerBasketSubject.value.items.isNotEmpty()) {
                 retailerBasketSubject.value.items.removeAt(Random.nextInt(retailerBasketSubject.value.items.size))
-                retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
+                retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, retailerBasketSubject.value.recipeCount))
             }
         }
+    }
+
+    private fun flushRecipes(){
+        GroceriesListHandler.resetGroceriesList()
     }
 
     private fun setPushProductToBasket(basketHandler: BasketHandler) {
@@ -329,7 +353,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     }
 
     private fun pushProductToRetailer(coursesUProducts: List<RetailerProduct>){
-
         coursesUProducts.forEach { rp ->
           val productToUpdateIdx =  retailerBasketSubject.value.items.indexOfFirst { it.id == rp.retailerId }
             if(productToUpdateIdx == -1){
@@ -342,7 +365,7 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
 
         }
         launch(coroutineHandler) {
-            retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items))
+            retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, retailerBasketSubject.value.recipeCount))
         }
     }
 
@@ -390,6 +413,7 @@ data class CoursesUPointOfSale(
 )
 
 class ExampleState(
-     val items: MutableList<CoursesUProduct> = mutableListOf()
+    val items: MutableList<CoursesUProduct> = mutableListOf(),
+    var recipeCount: Int = 0
 )
 

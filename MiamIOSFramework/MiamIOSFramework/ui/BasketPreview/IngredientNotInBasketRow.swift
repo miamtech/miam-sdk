@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+
+@available(iOS 14, *)
 struct IngredientNotInBasketRow: View {
     let name: String
     let addIngredientAction: () -> Void
@@ -44,6 +46,7 @@ struct IngredientNotInBasketRow: View {
     }
 }
 
+@available(iOS 14, *)
 struct IngredientNotInBasketRow_Previews: PreviewProvider {
     static var previews: some View {
         IngredientNotInBasketRow(name: "Oeufs", addIngredientAction: {}, isAddable: true)

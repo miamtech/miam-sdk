@@ -22,7 +22,7 @@ object RecipeDetailsStyle {
     // recipe Infos
     var mainColumnsContainer = Modifier.fillMaxWidth()
     var recipeImageModifier = Modifier.height(280.dp).fillMaxWidth()
-    var recipeDetailsActionsContainer = Modifier
+    var recipeDetailsActionsContainer = Modifier.padding(8.dp)
     var titleModifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 16.dp, vertical = 24.dp)

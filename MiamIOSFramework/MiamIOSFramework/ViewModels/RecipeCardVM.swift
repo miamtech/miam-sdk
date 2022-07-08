@@ -7,6 +7,7 @@
 
 import shared
 
+@available(iOS 14, *)
 public class RecipeCardVM : RecipeViewModel, ObservableObject {
    
     @Published var recipe: Recipe?
@@ -25,5 +26,14 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
                 }
             }
         )
+    }
+    
+    
+    func toggleLike(){
+        setEvent(event: RecipeContractEvent.OnToggleLike())
+    }
+    
+    func likeIsEnable() -> Bool {
+        return state?.likeIsEnable ?? false
     }
 }

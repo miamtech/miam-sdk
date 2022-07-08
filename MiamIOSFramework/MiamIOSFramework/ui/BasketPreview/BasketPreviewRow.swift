@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct BasketPreviewRow: View {
     
     @SwiftUI.State var count: Int = 1

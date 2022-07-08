@@ -4,7 +4,6 @@ import com.miam.kmm_miam_sdk.base.mvi.*
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
 import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.handler.LogHandler
 import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine

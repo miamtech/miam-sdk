@@ -8,6 +8,8 @@
 import SwiftUI
 import shared
 
+
+@available(iOS 14, *)
 public struct RecpieDetailsView: View {
     
     public var recipeId: String?
@@ -49,15 +51,13 @@ public struct RecpieDetailsView: View {
                                         placeholder: { Text("loading ...")},
                                         height: 250
                                     ).frame(height: 250).padding(.top,50)
+                                    if(viewModel.likeIsEnable()){
                                     HStack {
                                         //TODO Put logic into like button component
-                                        Button(action: {
+                                       
+                                           
+                                                LikeButton(recipeVm: viewModel)
                                             
-                                        }) {
-                                            Image("Like", bundle: Bundle(for: RecipeCardVM.self))
-                                                .renderingMode(.original)
-                                        }
-                                        .padding(.leading).frame(width: 40, height: 40, alignment: .leading)
                                         Spacer()
                                         
                                         Button(action: {
@@ -68,6 +68,7 @@ public struct RecpieDetailsView: View {
                                         }
                                         .frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.greySurface).cornerRadius(25)
                                     }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                    }
                                     Text(viewModel.recipe?.attributes?.title ?? "")
                                         .foregroundColor(MiamColor.sharedInstance.black)
                                         .font(.system(size: 20, weight: .heavy, design: .default))

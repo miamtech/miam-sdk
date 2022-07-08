@@ -173,6 +173,22 @@ class Miam() {
 }
 ```
 
+You can disable Like feature with UserHandler
+
+```kotlin 
+import com.miam.kmm_miam_sdk.handler.UserHandler
+
+class Miam() {
+  init {
+    // CODE
+    // false if you don't want like on recipe card
+      UserHandler.setEnableLike(false)
+  }
+
+  // CODE
+}
+```
+
 ##### Profiling
 
 You can block custom recipe suggestions if the user wishes.
@@ -370,8 +386,6 @@ Miam.getInstance().basketHandler.handlePayment()
 
 You have two ways to check Miam readiness : either call a direct function or listen to Miam event
 
-
-
 ```kotlin
   val miamContext = ContextHandlerInstance.instance
   // miamContext.isReady() return a bool
@@ -383,6 +397,33 @@ You have two ways to check Miam readiness : either call a direct function or lis
     // Do stuff
   }
 
+```
+#### Miam groceries list state
+
+Some Miam internal informations are available for reading only
+they can be accesed with `GroceriesListHandler`
+
+```kotlin
+    import com.miam.kmm_miam_sdk.handler.GroceriesListHandler
+
+    private var recipeCount = 0
+
+    launch {
+        GroceriesListHandler.getRecipeCountChangeFlow().collect {
+            recipeCount = it.newRecipeCount
+            println("recipes count by flow : $recipeCount " )
+        }
+    }
+    GroceriesListHandler.onRecipeCountChange {
+        recipeCount = it
+        println("recipes count by callback : $recipeCount " )
+    }
+
+```
+You can reset Miam recipe list :
+
+```kotlin
+  GroceriesListHandler.resetGroceriesList()
 ```
 
 ### Components injection
@@ -824,7 +865,7 @@ As soon as miam is available `isReady` will return `true`
 
 ```swift
    LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
-     ContextHandlerInstance.shared.instance.getReadyIos(callback: {
+     ContextHandlerInstance.shared.instance.onReadyEvent(callback: {
        // do your call back here
      })
     
@@ -832,6 +873,38 @@ As soon as miam is available `isReady` will return `true`
   
 ```
 
+#### Miam groceries list state
+
+Some Miam internal informations are available for reading only
+they can be accesed with `GroceriesListHandler`
+
+You can get or subscribe to our recipe count :
+
+```swift
+struct ContentView: View {
+    
+    @State private var recipeCount: Int = 0
+
+    var body: some View {
+      VStack {
+        Text("Recette dans le panier : \(recipeCount)")
+      }.onAppear(
+            perform: {  
+              GroceriesListHandler.shared.onRecipeCountChange(
+                  updateRecipeCount: {count in recipeCount = Int(count) }
+              )
+            }
+          )
+    }
+
+}
+```
+
+You can reset Miam recipe list :
+
+```swift
+ Button("reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
+```
 
 #### Connection to Miam API
 
@@ -868,6 +941,24 @@ public class Miam {
       // USER_ID_IN_HOST_APP is your user id type String is expected
       UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
     }
+  }
+
+  // CODE
+}
+```
+
+You can disable like feature on recipe using UserHandler
+
+```swift
+// file Miam.swift
+import shared
+
+public class Miam {
+  // CODE
+
+  private init() {
+    // CODE
+      UserHandler.shared.setEnableLike(isEnable: false)
   }
 
   // CODE

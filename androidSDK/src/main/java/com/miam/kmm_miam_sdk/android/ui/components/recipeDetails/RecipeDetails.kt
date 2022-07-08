@@ -39,6 +39,7 @@ import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 
 import com.miam.kmm_miam_sdk.android.ui.components.*
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
 
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 
@@ -195,7 +196,7 @@ private fun recipeDetailContent(
                 modifier = mainColumnsContainer.verticalScroll(scrollState)
             ) {
                 if(Template.recipeDetailInfosTemplate !=  null){
-                    Template.recipeDetailInfosTemplate!!(recipe)
+                    Template.recipeDetailInfosTemplate!!( { closeDialogue() },recipe)
                 } else {
                     Image(
                         painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
@@ -203,13 +204,14 @@ private fun recipeDetailContent(
                         contentScale = ContentScale.Crop,
                         modifier = recipeImageModifier
                     )
-
+                    if(vmRecipeCard.currentState.likeIsEnable){
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = recipeDetailsActionsContainer
                     ) {
-                        /** TODO ADD LIKE BUTTON + INFO BUTTON */
+                        LikeButton(vmRecipeCard)
+                    }
                     }
                     Text(
                         text = recipe.attributes!!.title,

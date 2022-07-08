@@ -17,7 +17,8 @@ import org.koin.core.component.inject
 data class UserState(
     val userId: String?,
     val sessionId: String?,
-    val profilingAllowed: Boolean = true
+    val profilingAllowed: Boolean = true,
+    val likeIsEnable: Boolean = true
 ) : State
 
 sealed class  UserAction : Action {
@@ -72,5 +73,9 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
 
     fun ProfilingForbiden(): Boolean {
         return !state.value.profilingAllowed
+    }
+
+    fun setEnableLike(isEnable: Boolean){
+        updateStateIfChanged(state.value.copy(likeIsEnable= isEnable))
     }
 }

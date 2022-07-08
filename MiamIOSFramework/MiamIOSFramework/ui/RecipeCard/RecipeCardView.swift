@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 public struct RecipeCardView: View {
     
     public var criteria: SuggestionsCriteria?
@@ -38,12 +39,9 @@ public struct RecipeCardView: View {
                     viewModel.setEvent(
                         event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
                 }
-                
             }
             )
-            
         }
-       
     }
 }
  

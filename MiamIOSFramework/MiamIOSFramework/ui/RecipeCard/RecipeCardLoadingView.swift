@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@available(iOS 14, *)
 public struct RecipeCardLoadingView: View {
     
     private struct Constants {

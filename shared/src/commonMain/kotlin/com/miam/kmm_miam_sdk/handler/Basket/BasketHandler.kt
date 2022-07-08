@@ -55,7 +55,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         state.value = state.value.copy(comparator = newComparator)
         processRetailerEvent(state.value.firstRetailerBasket!!)
         this.state.value.listenToRetailerBasket()
-        ContextHandlerInstance.instance.getReady()
+        ContextHandlerInstance.instance.emitReadiness()
     }
 
     fun basketChange(miamActiveBasket: List<BasketEntry>) {
@@ -124,10 +124,12 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
 
     fun dispose() {
         state.value = state.value.copy(comparator = null)
+        ContextHandlerInstance.instance.emitReadiness()
     }
 
     fun handlePayment(totalAmount: Double) {
         //TODO handle analytic
+        LogHandler.info("Miam will handle payment for ${basketStore.getBasket()}")
         if (basketStore.basketIsEmpty()) { return }
         basketStore.dispatch(BasketAction.ConfirmBasket(price = totalAmount.toString()))
     }

@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.unit.dp
 
@@ -42,7 +44,7 @@ object RecipeCardStyle {
      * use for position
      * recipeFlag is mainly use for retailer branding
      */
-    var recipeCardFlagPositionContainer = Modifier.absoluteOffset(x = 0.dp, y = 4.dp)
+    var recipeCardFlagPositionContainer = Modifier.absoluteOffset(x = 4.dp, y = 8.dp).rotate(-3f)
 
 
 

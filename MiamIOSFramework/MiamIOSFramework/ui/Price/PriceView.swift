@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct PriceView: View {
     
     public var recipeId: String?
@@ -53,6 +54,7 @@ struct PriceView: View {
     }
 }
 
+@available(iOS 14, *)
 struct PriceView_Previews: PreviewProvider {
     static var previews: some View {
         PriceView(recipeId:String(1),guestNumber: 4)
