@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
     @ObservedObject var catalogFilters: CatalogFilterVM
@@ -78,6 +79,7 @@ struct CatalogFiltersView: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct CatalogFilterSection: View {
     let title: String
     let filters: Array<CatalogFilterOptions>
@@ -98,6 +100,7 @@ internal struct CatalogFilterSection: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct CatalogFilterRow: View {
     let filter: CatalogFilterOptions
     let filterSelected: (CatalogFilterOptions) -> Void

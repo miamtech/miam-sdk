@@ -8,6 +8,7 @@
 import SwiftUI
 import shared
 
+@available(iOS 14, *)
 public struct CatalogRecipePageNoResultsView: View {
     let catalogViewModel: CatalogVM
     private var showingFavorites = false
@@ -66,9 +67,8 @@ public struct CatalogRecipePageNoResultsView: View {
     }
 }
 
+@available(iOS 14, *)
 public struct CatalogRecipePageNoFavoritesView: View {
-
-
     public var body: some View {
         VStack {
             Image("no-results", bundle: Bundle(for: CatalogVM.self))

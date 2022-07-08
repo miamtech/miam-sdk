@@ -7,6 +7,8 @@
 
 import SwiftUI
 import shared
+
+@available(iOS 14, *)
 struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
     var catalog: CatalogVM
@@ -39,6 +41,7 @@ struct CatalogSearchView: View {
     }
 }
 
+@available(iOS 14, *)
 struct CatalogSearchView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {

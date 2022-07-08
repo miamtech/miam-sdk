@@ -8,6 +8,7 @@
 import Foundation
 import shared
 
+@available(iOS 14, *)
 class RecipeListPageVM: ObservableObject {
     @Published var recipes: [Recipe] = []
     @Published var title: String = ""

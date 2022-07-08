@@ -9,7 +9,7 @@ import Foundation
 import shared
 import SwiftUI
 
-
+@available(iOS 14, *)
 public struct CatalogView: View {
     @ObservedObject var catalog: CatalogVM = CatalogVM()
     @SwiftUI.State private var showingFilters = false
@@ -76,6 +76,7 @@ public struct CatalogView: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct CatalogPackageRow: View {
     let package: CatalogPackage
     let showRecipes: (CatalogPackage) -> Void
@@ -105,6 +106,7 @@ internal struct CatalogPackageRow: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct CatalogViewHeader: View {
     var body: some View {
         if (Template.sharedInstance.catalogViewHeaderTemplate != nil) {
@@ -133,6 +135,7 @@ internal struct CatalogViewHeader: View {
     }
 }
 
+@available(iOS 14, *)
 internal struct CatalogViewToolbar: View {
     let myIdeas = "Mes idées repas"
 
@@ -208,6 +211,7 @@ internal struct CatalogViewToolbar: View {
     }
 }
 
+@available(iOS 14, *)
 struct CatalogView_Preview: PreviewProvider {
     static var previews: some View {
         CatalogView()

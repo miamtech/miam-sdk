@@ -8,6 +8,7 @@
 import Foundation
 import shared
 
+@available(iOS 14, *)
 class CatalogFilterVM: ObservableObject {
     let model: CatalogFilterViewModel
 

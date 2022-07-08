@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@available(iOS 14, *)
 internal struct CatalogRecipesPageSuccessView: View {
     @ObservedObject var recipesListPageModel: RecipeListPageVM
     let catalogViewModel: CatalogVM

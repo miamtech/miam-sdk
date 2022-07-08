@@ -33,6 +33,7 @@ public enum CatalogModelContent {
     case categories
 }
 
+@available(iOS 14, *)
 public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
     @Published var recipePageViewModel: RecipeListPageViewModel?
@@ -52,9 +53,9 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
             self.state = state
             self.filterOpen = state.filterOpen
             self.searchOpen = state.searchOpen
-            self.searchString = state.searchString
             self.recipePageViewModel = state.recipePageVM
             self.filtersViewModel = state.catalogFilterVM
+            self.searchString = state.catalogFilterVM.currentState.searchString ?? ""
             switch state.categories {
             case let success as BasicUiStateSuccess<NSArray>: // Must use an object, thus NSArray
                 if let packages = success.data as? [Package] {
