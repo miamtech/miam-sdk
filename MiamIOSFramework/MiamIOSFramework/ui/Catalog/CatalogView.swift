@@ -26,7 +26,7 @@ public struct CatalogView: View {
         if (Template.sharedInstance.catalogViewTemplate != nil) {
             Template.sharedInstance.catalogViewTemplate!(catalog)
         } else {
-            VStack(spacing: 0.0) {
+            VStack(alignment: .center, spacing: 0.0) {
                 CatalogViewHeader()
                     .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
@@ -45,24 +45,7 @@ public struct CatalogView: View {
                     catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
                     showingFavorites = true
                 }
-                if case .categories = catalog.content {
-                    ScrollView {
-                        VStack {
-                            ForEach(catalog.packages) { package in
-                                CatalogPackageRow(package: package) { package in
-                                    catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
-                                    showingPackageRecipes = true
-                                    headerHeight = 0.0
-                                }
-                            }
-                        }
-                    }.padding([.top], Dimension.sharedInstance.lPadding)
-                    Spacer()
-                } else {
-                    let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
-                    CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog).padding([.top], Dimension.sharedInstance.lPadding)
-                    Spacer()
-                }
+                CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight)
             }.popover(isPresented: $catalog.filterOpen) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
@@ -72,6 +55,33 @@ public struct CatalogView: View {
             }.popover(isPresented: $catalog.searchOpen) {
                 CatalogSearchView(catalog: catalog)
             }
+        }
+    }
+}
+
+@available(iOS 14, *)
+internal struct CatalogSuccessView: View {
+    @ObservedObject var catalog: CatalogVM
+    @Binding var showingPackageRecipes: Bool
+    @Binding var headerHeight: Double
+    var body: some View {
+        if case .categories = catalog.content {
+            ScrollView {
+                VStack {
+                    ForEach(catalog.packages) { package in
+                        CatalogPackageRow(package: package) { package in
+                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
+                            showingPackageRecipes = true
+                            headerHeight = 0.0
+                        }
+                    }
+                }
+            }.padding([.top], Dimension.sharedInstance.lPadding)
+            Spacer()
+        } else {
+            let model = RecipeListPageVM(model: catalog.recipePageViewModel!)
+            CatalogRecipesPageSuccessView(viewModel: model, catalogViewModel: catalog).padding([.top], Dimension.sharedInstance.lPadding)
+            Spacer()
         }
     }
 }
