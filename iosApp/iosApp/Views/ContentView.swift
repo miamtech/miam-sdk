@@ -6,6 +6,7 @@ struct ContentView: View {
     let applicationBasket: MyBasket = MyBasket.shared
     
     @SwiftUI.State private var recipeCount: Int = 0
+    @SwiftUI.State private var showTag: Bool = false
     
     var criteria = SuggestionsCriteria(
         shelfIngredientsIds: ["5319173","970417"],
@@ -22,10 +23,14 @@ struct ContentView: View {
                     MyBasketView(basket: applicationBasket)
                     ScrollView {
                         Button("Reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
+                        Button("Reset recipe list", action: { showTag = !showTag})
                         Text("Recette dans le panier : \(recipeCount)")
                         VStack {
-                              BasketTag()
-//                            RecipeCardView(recipeId: "9422")
+                            if(showTag){
+                                BasketTag(itemId: "42851844")
+                            }
+                             
+                              RecipeCardView(recipeId: "9422")
 //                            RecipeCardView(criteria: criteria)
                         }
                     }

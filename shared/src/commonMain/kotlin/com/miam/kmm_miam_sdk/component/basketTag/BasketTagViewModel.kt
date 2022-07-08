@@ -21,8 +21,7 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
 
     private val coroutineHandler = CoroutineExceptionHandler {
             _, exception ->
-        LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
-        //setEvent(RecipeContract.Event.Error)
+        LogHandler.error("Miam error in Tag view $exception ${exception.stackTraceToString()}")
     }
 
      fun goToDetail(recipe : Recipe){
@@ -59,9 +58,11 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
         var recipes = listOf<Recipe>()
         launch(coroutineHandler) {
             recipes = recipeRepositoryImp.getRecipesByIds(recipeIds)
+            LogHandler.info("getting belonging recipes : $recipes")
         }.invokeOnCompletion { error ->
             if (error == null) {
                 setState { copy(recipeList = BasicUiState.Success(recipes)) }
+                LogHandler.info("getting belonging recipes : Success ")
             } else {
                 setState { copy(recipeList = BasicUiState.Error("Could not fetch recipes $recipeIds")) }
             }

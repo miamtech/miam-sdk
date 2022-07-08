@@ -12,9 +12,11 @@ import  shared
 public class BasketTagVM : BasketTagViewModel, ObservableObject {
     
     @Published var recipeList: NSArray?
+    var vMRouter : RouterOutletViewModel
     
     init(productExtId: String) {
-         super.init(vmRouter: RouterOutletViewModel())
+        self.vMRouter = RouterOutletViewModel()
+         super.init(vmRouter:self.vMRouter)
         // TODO handle other states
         collect(flow: uiState, collect: { data in
             let state = data as! BasketTagContractState
