@@ -12,12 +12,14 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
    
     @Published var recipe: Recipe?
     @Published var state: RecipeContractState?
+    @Published var isInCart: Bool = false
 
     override init(routerVM: RouterOutletViewModel) {
         super.init(routerVM:routerVM)
         collect(flow: uiState, collect: { data in
             let state = data as! RecipeContractState
             self.state = state
+            self.isInCart = state.isInCart
             switch state.recipeState {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
