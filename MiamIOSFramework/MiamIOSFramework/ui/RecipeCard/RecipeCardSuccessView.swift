@@ -54,14 +54,11 @@ struct RecipeCardSuccessView: View {
                     }
                 }
                 )
-            
-            
         } else {
             
             VStack {
                 VStack() {
                     if(viewModel.recipe ?? nil != nil) {
-                        
                         ZStack(alignment: .topLeading) {
                             AsyncImage(
                                 url: URL(
@@ -84,7 +81,7 @@ struct RecipeCardSuccessView: View {
                                 }.padding(.horizontal,16)
                                     .padding(.vertical,4)
                                     .background(MiamColor.sharedInstance.musterd)
-                                    .cornerRadius(8)
+                                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
                                 Spacer()
                                 if(viewModel.likeIsEnable()){
                                     LikeButton(recipeVm: viewModel)
@@ -94,21 +91,45 @@ struct RecipeCardSuccessView: View {
                         Text(viewModel.recipe!.attributes?.title ?? "")
                             .lineLimit(2)
                             .foregroundColor(MiamColor.sharedInstance.black)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
-                            .padding(Dimension.sharedInstance.lPadding)
-                        Button(RecipeCardText.sharedInstance.addRecipe) {
-                        action: do {
-                            viewModel.goToDetail()
-                            showingPopup = true
+                            .font(.system(size: 13.0, weight: .bold, design: .default))
+                            .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
+                                                leading: Dimension.sharedInstance.lPadding,
+                                                bottom: Dimension.sharedInstance.mlPadding,
+                                                trailing: Dimension.sharedInstance.lPadding))
+
+                        HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
+                            IconWithText(imageName: "clock", text: viewModel.recipe?.totalTime ?? "")
+                            Divider()
+                            IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
                         }
-                        }.foregroundColor(MiamColor.sharedInstance.white)
-                            .frame(height: 40.0)
+
+                        Button {
+                            if !viewModel.isInCart {
+                                viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
+                            } else {
+                                viewModel.goToDetail()
+                            }
+                            showingPopup = true
+                        } label: {
+                            if !viewModel.isInCart {
+                                HStack {
+                                    Text(MiamText.sharedInstance.checkBasketPreview)
+                                    Image("cart", bundle: Bundle(for: RecipeCardVM.self))
+                                }
+                            } else {
+                                HStack {
+                                    Text(MiamText.sharedInstance.viewRecipeDetail)
+                                    Image("Check", bundle: Bundle(for: RecipeCardVM.self))
+                                }
+                            }
+                        }.foregroundColor(!viewModel.isInCart ? MiamColor.sharedInstance.white : MiamColor.sharedInstance.primaryText)
+                            .frame(minHeight: 50.0, maxHeight: 50.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                            .background(MiamColor.sharedInstance.primaryText)
+                            .background(!viewModel.isInCart ? MiamColor.sharedInstance.primaryText : Color.white)
                             .cornerRadius(25)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .font(.system(size: 14.0, weight: .bold, design: .default))
+                            .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
-                        
                     }
                     
                     
