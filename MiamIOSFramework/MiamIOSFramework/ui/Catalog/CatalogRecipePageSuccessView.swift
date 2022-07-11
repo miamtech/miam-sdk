@@ -23,7 +23,7 @@ internal struct CatalogRecipesPageSuccessView: View {
                 Text(recipesListPageModel.title).font(Font.system(size: 20.0))
                     .fontWeight(.heavy).frame(height: 40.0)
                 List(recipesListPageModel.recipes, id: \.self) { recipe in
-                    RecipeCardView(recipeId: recipe.id).onAppear {
+                    RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     }
                 }

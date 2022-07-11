@@ -122,7 +122,7 @@ internal struct CatalogPackageRow: View {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(package.recipes, id: \.self) { recipe in
-                            RecipeCardView(recipeId: recipe.id).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
+                            RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
                         }
                     }
                 }

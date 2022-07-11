@@ -16,18 +16,22 @@ struct RecipeCardSuccessView: View {
     
     public var recipeId: String?
     public var criteria: SuggestionsCriteria?
-    
+
+    private let showMealIdeaTag: Bool
+
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
     
-    public init(viewModel: RecipeCardVM, recipeId: String) {
+    public init(viewModel: RecipeCardVM, recipeId: String, showMealIdeaTag: Bool = true) {
         self.recipeId = recipeId
         self.viewModel = viewModel
+        self.showMealIdeaTag = showMealIdeaTag
     }
     
-    public init(viewModel: RecipeCardVM, criteria: SuggestionsCriteria) {
+    public init(viewModel: RecipeCardVM, criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true) {
         self.criteria = criteria
         self.viewModel = viewModel
+        self.showMealIdeaTag = showMealIdeaTag
     }
     
     var body: some View {
@@ -71,17 +75,19 @@ struct RecipeCardSuccessView: View {
                                 showingPopup = true
                             }
                             HStack(alignment: .center) {
-                                HStack(){
-                                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width:24, height:24)
-                                    Text(RecipeCardText.sharedInstance.recipeFlag)
-                                        .font(.system(size: 14.0, design: .default))
-                                }.padding(.horizontal,16)
-                                    .padding(.vertical,4)
-                                    .background(MiamColor.sharedInstance.musterd)
-                                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                                if (showMealIdeaTag) {
+                                    HStack(){
+                                        Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width:24, height:24)
+                                        Text(RecipeCardText.sharedInstance.recipeFlag)
+                                            .font(.system(size: 14.0, design: .default))
+                                    }.padding(.horizontal,16)
+                                        .padding(.vertical,4)
+                                        .background(MiamColor.sharedInstance.musterd)
+                                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                                }
                                 Spacer()
                                 if(viewModel.likeIsEnable()){
                                     LikeButton(recipeVm: viewModel)
