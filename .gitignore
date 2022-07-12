@@ -15,3 +15,8 @@ iosApp/iosApp.xcodeproj/xcuserdata/noe.xcuserdatad/xcschemes/xcschememanagement.
 MiamIOSFramework/MiamIOSFramework.xcodeproj/xcuserdata/noe.xcuserdatad/xcschemes/xcschememanagement.plist
 androidtestapp/libs/androidSDK-debug.aar
 after_build.sh
+.bundle
+vendor/
+xcuserdata/
+fastlane/report.xml
+fastlane/README.md
