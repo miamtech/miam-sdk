@@ -17,3 +17,6 @@ androidtestapp/libs/androidSDK-debug.aar
 after_build.sh
 .bundle
 vendor/
+xcuserdata/
+fastlane/report.xml
+fastlane/README.md
