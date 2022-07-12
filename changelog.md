@@ -1,3 +1,6 @@
+## 2.0.0
+- [BRK][FEA] shared module is now called miamCore module impact ios and android
+
 ## 1.2.0
 - [FEA] Like recipe on ios
 - [FEA] you can disable like feature on android and ios
