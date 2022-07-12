@@ -13,11 +13,11 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:android)
+default_platform(:ios)
 
 platform :android do
 	desc "Assemble shared XCFrameork"
-	lane :releasexcframework do
+	lane :miamcore do
  		gradle(
 			task: "clean assembleReleaseXCFramework"
 		)
@@ -29,6 +29,14 @@ platform :android do
 end
 
 platform :ios do
-	lane :miamiosframework do
+	lane :miamios do
+		xcclean(scheme: 'Release')
+		create_xcframework(
+    		workspace: 'MiamIOSFramework.xcworkspace',
+    		scheme: 'Release',
+			product_name: "MiamIOSFramework",
+    		destinations: ['iOS'],
+    		xcframework_output_directory: 'frameworks/'
+		)
 	end
 end	
