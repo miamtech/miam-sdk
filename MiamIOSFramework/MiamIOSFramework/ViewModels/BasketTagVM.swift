@@ -30,4 +30,12 @@ public class BasketTagVM : BasketTagViewModel, ObservableObject {
         )
         setEvent(event: BasketTagContractEvent.SetRetailerProductId(productId: productExtId))
     }
+    
+    
+    public override  func goToDetail(recipe: Recipe) {
+        let vmRecipe = RecipeCardVM(routerVM: vMRouter)
+        vmRecipe.setEvent(event: RecipeContractEvent.OnSetRecipe(recipe: recipe ))
+        vMRouter.goToDetail(vmRecipe: vmRecipe,showDetailsFooter: false)
+    }
+   
 }

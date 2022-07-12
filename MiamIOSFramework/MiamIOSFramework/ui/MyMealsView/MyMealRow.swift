@@ -135,7 +135,7 @@ public struct MyMealRow: View {
             )
         }.onAppear(perform: {
             recipeViewModel.setEvent(
-                event: RecipeContractEvent.OnGetRecipe(idRecipe: meal.id))
+                event: RecipeContractEvent.OnFetchRecipe(idRecipe: meal.id))
         })
     }
 }

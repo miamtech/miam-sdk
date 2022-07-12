@@ -190,7 +190,7 @@ public struct RecpieDetailsView: View {
                 }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(
-                            event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))
+                            event: RecipeContractEvent.OnFetchRecipe(idRecipe: self.recipeId!))
                     }
                 }
                 )

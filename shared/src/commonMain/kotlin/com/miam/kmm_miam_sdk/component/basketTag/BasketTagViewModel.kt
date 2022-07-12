@@ -24,10 +24,12 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
         LogHandler.error("Miam error in Tag view $exception ${exception.stackTraceToString()}")
     }
 
-     fun goToDetail(recipe : Recipe){
-        val vmRecipe = RecipeViewModel(vmRouter)
-        vmRecipe.setEvent(RecipeContract.Event.OnSetRecipe(recipe))
-        vmRouter.goToDetail(vmRecipe,false)
+     open fun goToDetail(recipe : Recipe){
+         val vmRecipe = RecipeViewModel(vmRouter)
+         LogHandler.info("goToDetail vmRecipe : $vmRecipe")
+         vmRecipe.setEvent(RecipeContract.Event.OnSetRecipe(recipe))
+         LogHandler.info("goToDetail setEvent :")
+         vmRouter.goToDetail(vmRecipe,false)
     }
 
     override fun createInitialState(): BasketTagContract.State =
@@ -44,6 +46,7 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
 
     private fun setItemExtId(itemExtId: String){
         LogHandler.info("getting belonging recipes for $itemExtId")
+        LogHandler.info("getting belonging recipes : ${basketStore.getBasket()?.relationships?.basketEntries?.data} ")
         val recipeIds = basketStore.getBasket()?.relationships?.basketEntries?.data?.filter { be ->
             be.selectedItem?.attributes?.extId == itemExtId && be.attributes?.groceriesEntryStatus == "active"
         }?.flatMap { be ->
@@ -55,15 +58,12 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
             return
         }
 
-        var recipes = listOf<Recipe>()
         launch(coroutineHandler) {
-            recipes = recipeRepositoryImp.getRecipesByIds(recipeIds)
-            LogHandler.info("getting belonging recipes : $recipes")
+            val recipes = recipeRepositoryImp.getRecipesByIds(recipeIds)
+            setState { copy(recipeList = BasicUiState.Success(recipes)) }
+            LogHandler.info("getting belonging recipes : Success ")
         }.invokeOnCompletion { error ->
-            if (error == null) {
-                setState { copy(recipeList = BasicUiState.Success(recipes)) }
-                LogHandler.info("getting belonging recipes : Success ")
-            } else {
+            if (error != null) {
                 setState { copy(recipeList = BasicUiState.Error("Could not fetch recipes $recipeIds")) }
             }
         }

@@ -23,11 +23,11 @@ struct ContentView: View {
                     MyBasketView(basket: applicationBasket)
                     ScrollView {
                         Button("Reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
-                        Button("Reset recipe list", action: { showTag = !showTag})
+                        Button("toggle tag", action: { showTag = !showTag})
                         Text("Recette dans le panier : \(recipeCount)")
                         VStack {
                             if(showTag){
-                                BasketTag(itemId: "42851844")
+                                BasketTag(itemId: "1088020")
                             }
                              
                               RecipeCardView(recipeId: "9422")

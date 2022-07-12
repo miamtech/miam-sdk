@@ -47,7 +47,7 @@ struct RecipeCardSuccessView: View {
                 }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(
-                            event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))
+                            event: RecipeContractEvent.OnFetchRecipe(idRecipe: self.recipeId!))
                     } else if (criteria != nil) {
                         viewModel.setEvent(
                             event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))

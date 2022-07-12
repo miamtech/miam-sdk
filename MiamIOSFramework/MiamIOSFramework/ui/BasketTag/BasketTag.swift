@@ -34,6 +34,7 @@ public struct BasketTag: View {
                     ).onTapGesture {
                         showingListModal = true
                     }
+                if(basketTagVm.recipeList != nil && basketTagVm.recipeList!.count > 1){
                 ZStack(){
                     Circle()
                         .strokeBorder(MiamColor.sharedInstance.primary,lineWidth: 1)
@@ -41,16 +42,19 @@ public struct BasketTag: View {
                     Text("+" + String(basketTagVm.recipeList!.count - 1))
                         .foregroundColor(MiamColor.sharedInstance.primary)
                 }
-            }.popover(isPresented: $showingPopup) {
+                    
+                }
+            }.sheet(isPresented: $showingListModal)
+            { ListModal(showingListModal: $showingListModal,
+                        showingPopup: $showingPopup,
+                        recipeList: basketTagVm.recipeList ??  NSArray(),
+                        basketTagVm: basketTagVm) }.popover(isPresented: $showingPopup) {
                 Dialog(
                     close: { showingPopup = false },
                     initialRoute : initialDialogScreen,
                     routerVm: basketTagVm.vMRouter
                 )
-            }.sheet(isPresented: $showingListModal)
-            { ListModal(showingListModal: $showingListModal,
-                        recipeList: basketTagVm.recipeList ??  NSArray(),
-                        basketTagVm: basketTagVm) }
+            }
         }
     }
 }
@@ -59,9 +63,9 @@ public struct BasketTag: View {
 internal struct ListModal: View {
     
     @Binding var showingListModal:Bool
+    @Binding var showingPopup:Bool
     var recipeList : NSArray
     var basketTagVm : BasketTagVM
-    
     
     var body: some View {
         
@@ -81,7 +85,8 @@ internal struct ListModal: View {
                                 .padding(.horizontal,8)
                                 .padding(.vertical,4).onTapGesture {
                                     basketTagVm.goToDetail(recipe: recipeList[i] as! Recipe)
-                                    showingListModal = false
+                                    showingPopup = true
+                                    showingListModal = false                              
                                 }
                         }
                     }
