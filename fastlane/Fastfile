@@ -21,6 +21,10 @@ platform :android do
  		gradle(
 			task: "clean assembleReleaseXCFramework"
 		)
+		copy_artifacts(
+ 			target_path: "frameworks",
+  			artifacts: ["shared/build/XCFrameworks/release/*.xcframework"]
+		)
 	end
 end
 
