@@ -23,7 +23,7 @@ platform :android do
 		)
 		copy_artifacts(
  			target_path: "frameworks",
-  			artifacts: ["shared/build/XCFrameworks/release/*.xcframework"]
+  			artifacts: ["miamCore/build/XCFrameworks/release/*.xcframework"]
 		)
 	end
 end
