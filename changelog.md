@@ -4,6 +4,7 @@
 - [FEA][IOS][Android] Recipe card v2.
 - [FEA][IOS][Android] Catalog.
 - [FIX][IOS] Removed navigation view from my meals view.
+- [FIX][IOS][Android] Provide a first value when using onRecipeCountChange
 
 ## 1.1.0
 - [BRK] getReadyIos is now called onReadyEvent

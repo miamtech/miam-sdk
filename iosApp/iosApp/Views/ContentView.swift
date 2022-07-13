@@ -6,6 +6,7 @@ struct ContentView: View {
     let applicationBasket: MyBasket = MyBasket.shared
     
     @SwiftUI.State private var recipeCount: Int = 0
+    @SwiftUI.State private var showRecipeCount: Bool = false
     
     var criteria = SuggestionsCriteria(
         shelfIngredientsIds: ["5319173","970417"],
@@ -22,7 +23,15 @@ struct ContentView: View {
                     MyBasketView(basket: applicationBasket)
                     ScrollView {
                         Button("Reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
-                        Text("Recette dans le panier : \(recipeCount)")
+                        Button("toggle recipe count", action: { showRecipeCount = !showRecipeCount })
+                        
+                        if(showRecipeCount){Text("Recette dans le panier : \(recipeCount)").onAppear(
+                            perform: {  GroceriesListHandler.shared.onRecipeCountChange(
+                                updateRecipeCount: {count in recipeCount = Int(count) }
+                            )
+                            }
+                        )}
+                        
                         VStack {
                             RecipeCardView(recipeId: "9422")
                             RecipeCardView(criteria: criteria)
@@ -40,12 +49,7 @@ struct ContentView: View {
                     }
                 })
             }
-        }.onAppear(
-            perform: {  GroceriesListHandler.shared.onRecipeCountChange(
-                updateRecipeCount: {count in recipeCount = Int(count) }
-            )
-            }
-        )    }
+        }   }
     
     private func addRandomProduct() {
         if let product = MyProductsRepository.sharedInstance.getRandomProduct() {
