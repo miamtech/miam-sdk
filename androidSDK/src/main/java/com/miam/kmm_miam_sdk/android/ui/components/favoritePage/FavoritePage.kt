@@ -27,12 +27,11 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyl
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle.loadingStateLoaderModifier
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle.loadingStateMainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle.noFavoriteText
-import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle.spaceBetweenRecipe
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.favoritePage.FavoritePageContract
-import com.miam.kmm_miam_sdk.component.favoritePage.FavoritePageViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.component.favoritePage.FavoritePageContract
+import com.miam.kmmMiamCore.component.favoritePage.FavoritePageViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 class FavoritePage @JvmOverloads constructor(
     context: Context,

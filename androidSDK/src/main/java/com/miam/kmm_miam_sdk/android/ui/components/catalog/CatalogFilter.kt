@@ -19,12 +19,12 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.close
-
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
-import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterContract
-import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.CatalogFilterOptions
+
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 
 class CatalogFilter(
     private val catalogFilterVM: CatalogFilterViewModel,

@@ -28,9 +28,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColo
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageContract
-import com.miam.kmm_miam_sdk.component.recipeListPage.RecipeListPageViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
+import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 @Composable
 fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnToCategoriesPage: () -> Unit) {

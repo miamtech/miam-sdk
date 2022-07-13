@@ -10,18 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-
-import androidx.compose.ui.unit.sp
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
-import com.miam.kmm_miam_sdk.android.theme.Typography.subtitle
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.mainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceContainer
@@ -32,14 +25,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimal
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerTotalPriceColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.subtitleColor
-import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderDecimal
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.loaderInteger
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.currency
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.preGuests
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.pricing.PricingContract
+import com.miam.kmmMiamCore.component.pricing.PricingContract
 
-import com.miam.kmm_miam_sdk.component.pricing.PricingViewModel
+import com.miam.kmmMiamCore.component.pricing.PricingViewModel
 
 class Price(
     val recipeId :String? = "",

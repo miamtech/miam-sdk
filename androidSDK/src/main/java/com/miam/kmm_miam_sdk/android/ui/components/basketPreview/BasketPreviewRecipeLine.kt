@@ -30,7 +30,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import kotlin.math.round
 
 

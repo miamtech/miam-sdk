@@ -21,22 +21,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.guests
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.less
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterImage.plus
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countBorder
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countBorderLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countText
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.countTextLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.guestIcon
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.guestIconLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButton
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonIconLight
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.lessButtonLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.mainRowContainer
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.mainRowContainerLight
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButton
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIcon
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonIconLight
-import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButtonLight
-import com.miam.kmm_miam_sdk.android.ui.components.price.PriceShimmer
+
 
 @Composable
 fun Counter(

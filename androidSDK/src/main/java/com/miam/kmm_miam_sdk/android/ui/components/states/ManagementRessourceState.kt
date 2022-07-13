@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
 
 @Composable
 fun <T> ManagementResourceState(

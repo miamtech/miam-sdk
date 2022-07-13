@@ -29,9 +29,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.component.catalog.CatalogContent
-import com.miam.kmm_miam_sdk.component.catalog.CatalogContract
-import com.miam.kmm_miam_sdk.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.catalog.CatalogContent
+import com.miam.kmmMiamCore.component.catalog.CatalogContract
+import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 
 @Composable
 fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) {

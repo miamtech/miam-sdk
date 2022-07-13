@@ -10,14 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.stepsMainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.RecipeStep
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.RecipeStep
 
 @Composable
 fun RecipeSteps(steps: List<RecipeStep>,vmRecipe: RecipeViewModel) {
