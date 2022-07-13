@@ -15,7 +15,7 @@ enum class TabEnum {
 interface RecipeContract {
 
     sealed class Event : UiEvent {
-        data class OnGetRecipe(val idRecipe: String) : Event()
+        data class OnFetchRecipe(val idRecipe: String) : Event()
         data class OnSetRecipe(val recipe: Recipe) : Event()
         data class SetHeader(val header: String) : Event()
         data class OnSetCriteria(val crieria: SuggestionsCriteria): Event()
@@ -33,6 +33,7 @@ interface RecipeContract {
 
       data class State(
           val recipeState: BasicUiState<Recipe>,
+          val recipe: Recipe?,
           val headerText: String,
           val guest: Int,
           val isInCart : Boolean,

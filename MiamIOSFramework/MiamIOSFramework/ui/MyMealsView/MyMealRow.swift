@@ -127,7 +127,7 @@ public struct MyMealRow: View {
                     })
                 }
             }
-        }.popover(isPresented: $showingPopup) {
+        }.sheet(isPresented: $showingPopup) {
             Dialog(
                 close: { showingPopup = false },
                 initialRoute : initialDialogScreen,
@@ -135,7 +135,7 @@ public struct MyMealRow: View {
             )
         }.onAppear(perform: {
             recipeViewModel.setEvent(
-                event: RecipeContractEvent.OnGetRecipe(idRecipe: meal.id))
+                event: RecipeContractEvent.OnFetchRecipe(idRecipe: meal.id))
         })
     }
 }

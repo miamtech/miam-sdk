@@ -82,9 +82,7 @@ class RecipeView @JvmOverloads constructor(
     {
         if (recipeId != "") {
             vmRecipe.setEvent(
-                RecipeContract.Event.OnGetRecipe(
-                    recipeId
-                )
+                RecipeContract.Event.OnFetchRecipe(recipeId)
             )
         } else if (criteria != null) {
             vmRecipe.setEvent(
@@ -116,9 +114,7 @@ class RecipeView @JvmOverloads constructor(
             idRecipeState.value = value
             if (value != null) {
                 vmRecipe.setEvent(
-                    RecipeContract.Event.OnGetRecipe(
-                        value
-                    )
+                    RecipeContract.Event.OnFetchRecipe(idRecipe)
                 )
             }
         }

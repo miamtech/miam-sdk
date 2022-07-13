@@ -6,6 +6,7 @@ struct ContentView: View {
     let applicationBasket: MyBasket = MyBasket.shared
     
     @SwiftUI.State private var recipeCount: Int = 0
+    @SwiftUI.State private var showTag: Bool = false
     @SwiftUI.State private var showRecipeCount: Bool = false
     
     var criteria = SuggestionsCriteria(
@@ -23,6 +24,8 @@ struct ContentView: View {
                     MyBasketView(basket: applicationBasket)
                     ScrollView {
                         Button("Reset recipe list", action: { GroceriesListHandler.shared.resetGroceriesList()})
+                        Button("toggle tag", action: { showTag = !showTag})
+                        Text("Recette dans le panier : \(recipeCount)")
                         Button("toggle recipe count", action: { showRecipeCount = !showRecipeCount })
                         
                         if(showRecipeCount){Text("Recette dans le panier : \(recipeCount)").onAppear(
@@ -33,8 +36,12 @@ struct ContentView: View {
                         )}
                         
                         VStack {
-                            RecipeCardView(recipeId: "9422")
-                            RecipeCardView(criteria: criteria)
+                            if(showTag){
+                                BasketTag(itemId: "1088020")
+                            }
+                             
+                              RecipeCardView(recipeId: "9422")
+//                            RecipeCardView(criteria: criteria)
                         }
                     }
                 }.navigationTitle("Miam demo app").navigationBarTitleDisplayMode(.inline)
