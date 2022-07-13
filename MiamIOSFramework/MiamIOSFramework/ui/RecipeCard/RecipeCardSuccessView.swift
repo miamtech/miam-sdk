@@ -42,7 +42,7 @@ struct RecipeCardSuccessView: View {
                     viewModel.goToDetail()
                     showingPopup = true
                 },
-                {}).popover(isPresented: $showingPopup) {
+                {}).sheet(isPresented: $showingPopup) {
                     Dialog(
                         close: { showingPopup = false },
                         initialRoute : initialDialogScreen,
@@ -140,7 +140,7 @@ struct RecipeCardSuccessView: View {
                     }
                     
                     
-                }.popover(isPresented: $showingPopup) {
+                }.sheet(isPresented: $showingPopup) {
                     Dialog(
                         close: { showingPopup = false },
                         initialRoute : initialDialogScreen,
