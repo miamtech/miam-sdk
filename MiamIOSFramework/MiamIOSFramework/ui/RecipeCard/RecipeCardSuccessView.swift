@@ -111,6 +111,7 @@ struct RecipeCardSuccessView: View {
 
                         Button {
                             if !viewModel.isInCart {
+                                viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                                 viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
                             } else {
                                 viewModel.goToDetail()
