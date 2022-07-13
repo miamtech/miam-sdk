@@ -14,5 +14,5 @@ Pod::Spec.new do |spec|
   spec.author             = { "Vincent Kergonna" => "kergonna@k-interactive.fr" }
   spec.platform     = :ios, "14.0"
   spec.source       = { :git => "https://gitlab.com/miam/kmm-miam-sdk", :tag => "#{spec.version}" }
-  spec.vendored_frameworks = "frameworks/shared.xcframework"
+  spec.vendored_frameworks = "frameworks/miamCore.xcframework"
 end
