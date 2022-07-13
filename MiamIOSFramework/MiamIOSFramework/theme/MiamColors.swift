@@ -23,6 +23,7 @@ public class MiamColor {
     var warning = Color(hex:"#FFDAA3")
     var danger = Color(hex:"#F47F7A")
     var grey = Color(hex:"#676767")
+    var neutralGrey = Color(hex: "#575756")
     var lightgrey = Color(hex: "#9F9F9F")
     var white = Color(hex:"#FAFCFE")
     var unpureWhite = Color(hex:"#fefefe")
@@ -36,4 +37,5 @@ public class MiamColor {
     let lightPrimaryBg = Color(hex:"#F3F9FA")
     let black20 = Color(hex:"#202020")
     let primaryLight = Color(hex: "#BED5DC")
+    let backgroundDark = Color(hex: "#005562")
 }

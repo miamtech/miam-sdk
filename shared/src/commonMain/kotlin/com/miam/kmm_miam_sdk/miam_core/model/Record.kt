@@ -29,8 +29,9 @@ data class RecordCounterWrapper(var links: RecordLink) {
     /**only work if page size is 1*/
     fun getCount(): Int {
         val lastPageParams =  Url(this.links.last).parameters;
-        val size = lastPageParams["page[size]"]?.toInt()
-        return  (size ?: 0) * (lastPageParams["page[number]"]?.toInt() ?: 0)
+        val pagesize = lastPageParams["page[size]"]?.toInt()?: 0
+        val pagenumber = lastPageParams["page[number]"]?.toInt()?: 0
+        return pagesize * pagenumber
     }
 }
 
