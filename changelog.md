@@ -1,10 +1,11 @@
 ## 1.2.0
-- [FEA] Like recipe on ios
-- [FEA] you can disable like feature on android and ios
-- [FEA] Recipe card v2
-- [FEA] Catalog
+- [FEA][IOS] Like recipe.
+- [FEA][IOS][Android] You can disable like feature.
+- [FEA][IOS][Android] Recipe card v2.
+- [FEA][IOS][Android] Catalog.
+- [FIX][IOS] Removed navigation view from my meals view.
 
 ## 1.1.0
 - [BRK] getReadyIos is now called onReadyEvent
 - [BRK][FEA] MiamGroceriesList is replaced by GroceriesListHandler with two functions onRecipeCountChange and getRecipeCountChangeFlow
-- [FEA] expose resetGroceriesList on GroceriesListHandler
+- [FEA] Expose resetGroceriesList on GroceriesListHandler
