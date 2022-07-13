@@ -199,9 +199,9 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     }
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeNumberOfResult $filter")
-        val returnValue = this.get<RecordCounterWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$filter")!!
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateRecipeLike ${returnValue.getCount()}")
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeNumberOfResult $filter&page[size]=1")
+        val returnValue = this.get<RecordCounterWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$filter&page[size]=1")!!
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeNumberOfResult ${returnValue.getCount()}")
         return returnValue.getCount()
     }
 
