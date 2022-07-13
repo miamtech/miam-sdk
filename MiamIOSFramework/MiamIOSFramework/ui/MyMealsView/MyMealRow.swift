@@ -127,7 +127,7 @@ public struct MyMealRow: View {
                     })
                 }
             }
-        }.popover(isPresented: $showingPopup) {
+        }.sheet(isPresented: $showingPopup) {
             Dialog(
                 close: { showingPopup = false },
                 initialRoute : initialDialogScreen,

@@ -12,7 +12,7 @@ import shared
 public struct BasketTag: View {
     
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
-    @SwiftUI.State var showingPopup = false
+    @SwiftUI.State var showingRecipeDetails = false
     @SwiftUI.State var showingListModal = false
     
     @ObservedObject var basketTagVm : BasketTagVM
@@ -44,13 +44,17 @@ public struct BasketTag: View {
                 }
                     
                 }
-            }.sheet(isPresented: $showingListModal)
-            { ListModal(showingListModal: $showingListModal,
-                        showingPopup: $showingPopup,
+            }
+            .sheet(isPresented: $showingListModal)
+            {
+                ListModal(showingListModal: $showingListModal,
+                        showingPopup: $showingRecipeDetails,
                         recipeList: basketTagVm.recipeList ??  NSArray(),
-                        basketTagVm: basketTagVm) }.popover(isPresented: $showingPopup) {
+                        basketTagVm: basketTagVm)
+            }
+            .sheet(isPresented: $showingRecipeDetails) {
                 Dialog(
-                    close: { showingPopup = false },
+                    close: { showingRecipeDetails = false },
                     initialRoute : initialDialogScreen,
                     routerVm: basketTagVm.vMRouter
                 )
