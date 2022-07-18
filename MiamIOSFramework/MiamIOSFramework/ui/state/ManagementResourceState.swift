@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import shared
+import miamCore
 
 @available(iOS 14, *)
 struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View>: View {

@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import shared
+import miamCore
 
 
 @available(iOS 14, *)

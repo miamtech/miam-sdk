@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import shared
+import miamCore
 import SwiftUI
 
 @available(iOS 14, *)

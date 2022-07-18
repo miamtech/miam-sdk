@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import shared
+import miamCore
 
 public struct CatalogPackage: Identifiable {
     let package: Package

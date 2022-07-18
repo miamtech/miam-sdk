@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import shared
+import miamCore
 
 @available(iOS 14, *)
 class RecipeListPageVM: ObservableObject {

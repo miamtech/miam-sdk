@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import shared
+import miamCore
 
 @available(iOS 14, *)
 public struct RecipeCardView: View {
