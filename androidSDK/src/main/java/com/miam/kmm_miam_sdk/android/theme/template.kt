@@ -3,9 +3,9 @@ package com.miam.kmm_miam_sdk.android.theme
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
-import com.miam.kmm_miam_sdk.base.mvi.BasicUiState
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.*
 
 object Template {
 

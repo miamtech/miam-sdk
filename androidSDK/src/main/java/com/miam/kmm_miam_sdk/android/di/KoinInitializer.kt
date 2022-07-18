@@ -1,7 +1,8 @@
 package com.miam.kmm_miam_sdk.android.di
 
 import android.content.Context
-import com.miam.kmm_miam_sdk.di.*
+import com.miam.kmmMiamCore.di.platformModule
+import com.miam.kmmMiamCore.di.*
 import org.koin.android.ext.koin.androidContext
 
 class KoinInitializer {
@@ -18,7 +19,7 @@ class KoinInitializer {
             initKoin {
                 androidContext(context)
                 modules(
-                    viewModelModule
+                    miamModuleList
                 )
             }
      }

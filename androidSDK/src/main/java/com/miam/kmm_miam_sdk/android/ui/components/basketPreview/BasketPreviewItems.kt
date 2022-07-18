@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 
 @Composable
 fun BasketPreviewItem(

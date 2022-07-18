@@ -16,12 +16,12 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.myMeal.MyMealContract
-import com.miam.kmm_miam_sdk.component.myMeal.MyMealViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.component.myMeal.MyMealContract
+import com.miam.kmmMiamCore.component.myMeal.MyMealViewModel
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 
 
 class MyMeal @JvmOverloads constructor(

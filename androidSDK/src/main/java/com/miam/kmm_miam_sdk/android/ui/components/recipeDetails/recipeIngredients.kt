@@ -13,16 +13,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Colors.info
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
-import com.miam.kmm_miam_sdk.android.theme.Colors.secondary
 import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Ingredient
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.Ingredient
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 @Composable
 fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {

@@ -6,10 +6,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.miam.kmm_miam_sdk.component.catalog.CatalogContent
-import com.miam.kmm_miam_sdk.component.catalog.CatalogContract
-import com.miam.kmm_miam_sdk.component.catalog.CatalogViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Package
+import com.miam.kmmMiamCore.component.catalog.CatalogContent
+import com.miam.kmmMiamCore.component.catalog.CatalogContract
+import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.miam_core.model.Package
 
 @Composable
 fun CatalogSuccessView(categories: List<Package>, state:  CatalogContract.State, context: Context,vmCatalog: CatalogViewModel ) {

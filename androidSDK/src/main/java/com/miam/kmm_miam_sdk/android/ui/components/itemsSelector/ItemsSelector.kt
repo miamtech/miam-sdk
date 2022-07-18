@@ -51,8 +51,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIcon
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorText.replaceBy
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
-import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

@@ -84,11 +84,11 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsTe
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.restingTime
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterOutletContract
-import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.component.router.RouterOutletContract
+import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
 @Composable

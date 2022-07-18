@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmm_miam_sdk.android.theme.Colors.grey
-import com.miam.kmm_miam_sdk.android.theme.Colors.lightgrey
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardStyle.image
@@ -60,10 +59,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardImage.id
 
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 class RecipeView @JvmOverloads constructor(
     context: Context,

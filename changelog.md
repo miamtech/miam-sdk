@@ -1,3 +1,7 @@
+## 2.0.0
+- [BRK] shared module is now called miamCore module impact Ios and android
+- [BRK] kmm-miam-sdk in core module now call kmmMiamCore fix bundleId issue on Ios impact on android
+
 ## 1.2.0
 - [FEA][IOS] Like recipe.
 - [FEA][IOS][Android] You can disable like feature.

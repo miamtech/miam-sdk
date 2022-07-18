@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "kmm-miam-sdk"
+rootProject.name = "kmmMiamSdk"
 include(":androidSDK")
-include(":shared")
+include(":miamCore")
 include(":androidtestapp")

@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.AbstractComposeView
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
-import com.miam.kmm_miam_sdk.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 
 
 class Catalog @JvmOverloads constructor(

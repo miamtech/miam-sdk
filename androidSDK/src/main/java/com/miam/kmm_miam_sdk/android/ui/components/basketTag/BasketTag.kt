@@ -32,9 +32,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.Baske
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagImage.close
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPostRecipeCountText
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPreRecipeCountText
-import com.miam.kmm_miam_sdk.component.basketTag.BasketTagContract
-import com.miam.kmm_miam_sdk.component.basketTag.BasketTagViewModel
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.component.basketTag.BasketTagContract
+import com.miam.kmmMiamCore.component.basketTag.BasketTagViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 class BasketTag @JvmOverloads constructor(
     context: Context,

@@ -12,7 +12,6 @@ import androidx.compose.material.Surface
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -24,8 +23,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonColor.ic
 
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonStyle.iconModifier
 
-import com.miam.kmm_miam_sdk.component.recipe.RecipeContract
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 
 
 

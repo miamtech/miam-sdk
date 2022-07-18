@@ -38,13 +38,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsCo
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 
 
 

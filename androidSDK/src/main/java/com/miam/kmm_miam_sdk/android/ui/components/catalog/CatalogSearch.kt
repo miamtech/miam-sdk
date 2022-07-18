@@ -29,8 +29,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
-import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterContract
-import com.miam.kmm_miam_sdk.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 
 class CatalogSearch(
     private val catalogFilterVM: CatalogFilterViewModel,

@@ -18,7 +18,7 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogColor.moreInfoTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
-import com.miam.kmm_miam_sdk.miam_core.model.Package
+import com.miam.kmmMiamCore.miam_core.model.Package
 
 @Composable
 fun CatalogCategory(

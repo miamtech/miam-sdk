@@ -35,17 +35,17 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.di.initKoin
-import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
-import com.miam.kmm_miam_sdk.handler.Basket.BasketHandlerInstance
-import com.miam.kmm_miam_sdk.handler.ContextHandlerInstance
-import com.miam.kmm_miam_sdk.handler.LogHandler
-import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
-import com.miam.kmm_miam_sdk.handler.UserHandler
-import com.miam.kmm_miam_sdk.handler.GroceriesListHandler
-import com.miam.kmm_miam_sdk.miam_core.model.Recipe
+import com.miam.kmmMiamCore.handler.Basket.BasketHandler
+import com.miam.kmmMiamCore.handler.Basket.BasketHandlerInstance
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
+import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.UserHandler
+import com.miam.kmmMiamCore.handler.GroceriesListHandler
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 
-import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
-import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
+import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.android.ext.koin.androidContext
@@ -56,7 +56,6 @@ import kotlin.random.Random
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
-@OptIn(InternalCoroutinesApi::class)
 class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by CoroutineScope(
     Dispatchers.Main
 ) {

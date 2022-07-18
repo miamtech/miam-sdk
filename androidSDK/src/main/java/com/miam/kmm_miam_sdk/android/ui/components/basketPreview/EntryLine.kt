@@ -30,12 +30,12 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.common.*
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
 
-import com.miam.kmm_miam_sdk.miam_core.model.BasketEntry
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 
-import com.miam.kmm_miam_sdk.miam_core.model.BasketPreviewLine
 import java.util.*
 
 @ExperimentalCoilApi

@@ -22,12 +22,12 @@ import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
-import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorContract
-import com.miam.kmm_miam_sdk.component.itemSelector.ItemSelectorViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.component.router.RouterContent
-import com.miam.kmm_miam_sdk.component.router.RouterOutletContract
-import com.miam.kmm_miam_sdk.component.router.RouterOutletViewModel
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.component.router.RouterContent
+import com.miam.kmmMiamCore.component.router.RouterOutletContract
+import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
