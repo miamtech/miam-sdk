@@ -1,10 +1,10 @@
 package com.miam.kmmMiamCore.component.router
 
-import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
-import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.handler.LogHandler
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
+import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 
 open class RouterOutletViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {

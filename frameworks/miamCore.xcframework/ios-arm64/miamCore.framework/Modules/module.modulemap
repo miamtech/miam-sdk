@@ -1,0 +1,6 @@
+framework module miamCore {
+    umbrella header "miamCore.h"
+
+    export *
+    module * { export * }
+}
