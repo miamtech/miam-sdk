@@ -1,6 +1,6 @@
 import SwiftUI
 import MiamIOSFramework
-import shared
+import miamCore
 
 struct ContentView: View {
     let applicationBasket: MyBasket = MyBasket.shared
