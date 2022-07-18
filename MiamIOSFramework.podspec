@@ -16,6 +16,6 @@ Pod::Spec.new do |spec|
   spec.source_files  = "MiamIOSFramework/MiamIOSFramework/**/*.{h,c,cpp,swift}",
   spec.exclude_files = "Classes/Exclude"
   spec.resource  = "MiamIOSFramework/miam.xcassets"
-  spec.dependency "miamCore", "~> 2.0"
+  spec.vendored_frameworks = "frameworks/miamCore.xcframework"
 
 end
