@@ -5,7 +5,7 @@
 //  Created by Miam on 02/05/2022.
 //
 
-import shared
+import miamCore
 
 @available(iOS 14, *)
 public class PriceVM : PricingViewModel, ObservableObject {

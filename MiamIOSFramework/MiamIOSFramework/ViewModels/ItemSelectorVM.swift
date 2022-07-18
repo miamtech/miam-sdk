@@ -7,7 +7,7 @@
 
 import Foundation
 
-import shared
+import miamCore
 
 @available(iOS 14, *)
 public class ItemSelectorVM : ObservableObject {

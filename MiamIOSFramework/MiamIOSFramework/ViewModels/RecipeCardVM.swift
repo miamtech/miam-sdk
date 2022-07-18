@@ -5,7 +5,7 @@
 //  Created by miam on 17/02/2022.
 //
 
-import shared
+import miamCore
 
 @available(iOS 14, *)
 public class RecipeCardVM : RecipeViewModel, ObservableObject {

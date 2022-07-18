@@ -1,5 +1,5 @@
 import SwiftUI
-import shared
+import miamCore
 
 @main
 struct ios_miam_integrationApp: App {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import shared
+import miamCore
 
 internal extension BasketPreviewLine {
     static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine   {

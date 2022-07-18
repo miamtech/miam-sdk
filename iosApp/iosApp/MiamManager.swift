@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import shared
+import miamCore
 import MiamIOSFramework
 import SwiftUI
 import Combine
