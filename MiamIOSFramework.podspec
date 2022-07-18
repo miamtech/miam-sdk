@@ -16,6 +16,8 @@ Pod::Spec.new do |spec|
   spec.source_files  = "MiamIOSFramework/MiamIOSFramework/**/*.{h,c,cpp,swift}",
   spec.exclude_files = "Classes/Exclude"
   spec.resource  = "MiamIOSFramework/miam.xcassets"
+  spec.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  spec.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   spec.vendored_frameworks = "frameworks/miamCore.xcframework"
 
 end
