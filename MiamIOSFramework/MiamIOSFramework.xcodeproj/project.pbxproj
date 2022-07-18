@@ -12,6 +12,8 @@
 		0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */; };
 		0B4B3E84285099EA00F25E7B /* ItemSelectorVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E83285099EA00F25E7B /* ItemSelectorVM.swift */; };
 		0B5325212874899E001906CD /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325202874899E001906CD /* LikeButton.swift */; };
+		0B5325242876B9ED001906CD /* BasketTagVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325232876B9ED001906CD /* BasketTagVM.swift */; };
+		0B5325272876C70C001906CD /* BasketTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325262876C70C001906CD /* BasketTag.swift */; };
 		0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */; };
 		0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* Text.swift */; };
 		0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */; };
@@ -87,6 +89,8 @@
 		0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorProductRow.swift; sourceTree = "<group>"; };
 		0B4B3E83285099EA00F25E7B /* ItemSelectorVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorVM.swift; sourceTree = "<group>"; };
 		0B5325202874899E001906CD /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
+		0B5325232876B9ED001906CD /* BasketTagVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketTagVM.swift; sourceTree = "<group>"; };
+		0B5325262876C70C001906CD /* BasketTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketTag.swift; sourceTree = "<group>"; };
 		0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardText.swift; sourceTree = "<group>"; };
 		0B7C9BDB28196BAB00BFC7F8 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
@@ -190,6 +194,14 @@
 				0B5325202874899E001906CD /* LikeButton.swift */,
 			);
 			path = likeButton;
+			sourceTree = "<group>";
+		};
+		0B5325252876C6F3001906CD /* BasketTag */ = {
+			isa = PBXGroup;
+			children = (
+				0B5325262876C70C001906CD /* BasketTag.swift */,
+			);
+			path = BasketTag;
 			sourceTree = "<group>";
 		};
 		0B7C9BD728196A6300BFC7F8 /* RecipeCard */ = {
@@ -368,6 +380,7 @@
 		DCD4E31C27BE92AC000D3EA6 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				0B5325252876C6F3001906CD /* BasketTag */,
 				BF25E1592864950700328B4B /* Catalog */,
 				BF7B82CD2876DCFC00DAC4F3 /* iconWithText */,
 				0B53251F2874897A001906CD /* likeButton */,
@@ -405,6 +418,7 @@
 				0B4B3E83285099EA00F25E7B /* ItemSelectorVM.swift */,
 				BF1429B5284E11D600395C4B /* BasketPreviewViewModel.swift */,
 				BFD55AA1285B6E16009CBC1E /* MyMealVM.swift */,
+				0B5325232876B9ED001906CD /* BasketTagVM.swift */,
 				BF25E1602865B01B00328B4B /* CatalogVM.swift */,
 				BF25E168286611B200328B4B /* RecipePageListVM.swift */,
 				BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */,
@@ -575,6 +589,7 @@
 				0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */,
+				0B5325242876B9ED001906CD /* BasketTagVM.swift in Sources */,
 				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
 				521D644C282E30C00092AC52 /* StepRow.swift in Sources */,
 				BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */,
@@ -593,6 +608,7 @@
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
 				BFA507EA287C126B00F274CA /* CatalogFiltersView.swift in Sources */,
 				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
+				0B5325272876C70C001906CD /* BasketTag.swift in Sources */,
 				0BFD39212860C70600A7FCED /* RecipeCardSuccessView.swift in Sources */,
 				BFF5B65728534F5800CEC7C5 /* IngredientNotInBasketRow.swift in Sources */,
 				0B9AA66F28215B4D007D6C8A /* DialogVM.swift in Sources */,

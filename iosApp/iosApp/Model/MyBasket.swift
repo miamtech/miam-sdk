@@ -9,7 +9,8 @@
 import Foundation
 
 class MyBasket: ObservableObject {
-    static let shared = MyBasket(items: [])
+    static let shared = MyBasket(items: [ MyProduct(id:"970417",name:"Beurre doux U, 125",quantity:1, price:2.12, identifier: "id_970417"),
+                                          MyProduct(id:"42851844",name:"Curry tradition en poudre DUCROS, 53g",quantity:1, price:3.40, identifier: "id_6511680")])
     @Published var items = [MyProduct]()
 
     private init(items: Array<MyProduct>) {

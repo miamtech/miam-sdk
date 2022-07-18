@@ -42,7 +42,7 @@ struct RecipeCardSuccessView: View {
                     viewModel.goToDetail()
                     showingPopup = true
                 },
-                {}).popover(isPresented: $showingPopup) {
+                {}).sheet(isPresented: $showingPopup) {
                     Dialog(
                         close: { showingPopup = false },
                         initialRoute : initialDialogScreen,
@@ -51,7 +51,7 @@ struct RecipeCardSuccessView: View {
                 }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(
-                            event: RecipeContractEvent.OnGetRecipe(idRecipe: self.recipeId!))
+                            event: RecipeContractEvent.OnFetchRecipe(idRecipe: self.recipeId!))
                     } else if (criteria != nil) {
                         viewModel.setEvent(
                             event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
@@ -111,6 +111,7 @@ struct RecipeCardSuccessView: View {
 
                         Button {
                             if !viewModel.isInCart {
+                                viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                                 viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
                             } else {
                                 viewModel.goToDetail()
@@ -139,7 +140,7 @@ struct RecipeCardSuccessView: View {
                     }
                     
                     
-                }.popover(isPresented: $showingPopup) {
+                }.sheet(isPresented: $showingPopup) {
                     Dialog(
                         close: { showingPopup = false },
                         initialRoute : initialDialogScreen,

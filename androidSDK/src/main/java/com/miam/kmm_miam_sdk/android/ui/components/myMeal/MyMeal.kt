@@ -101,7 +101,7 @@ class MyMeal @JvmOverloads constructor(
                 val recipeVM = RecipeViewModel(modal.getViewModel())
                 val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
                 recipeVM.setEvent(
-                    RecipeContract.Event.OnGetRecipe( previewLine.id ?: "")
+                    RecipeContract.Event.OnFetchRecipe(previewLine.id ?: "")
                 )
 
 

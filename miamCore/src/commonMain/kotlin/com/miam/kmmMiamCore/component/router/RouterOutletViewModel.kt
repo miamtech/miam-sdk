@@ -1,14 +1,16 @@
 package com.miam.kmmMiamCore.component.router
 
-import com.miam.kmmMiamCore.base.mvi.BaseViewModel
-import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
-import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.base.mvi.BaseViewModel
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewContract
+import com.miam.kmm_miam_sdk.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
+import com.miam.kmm_miam_sdk.handler.LogHandler
 
 open class RouterOutletViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     fun goToDetail(vmRecipe : RecipeViewModel, showDetailsFooter: Boolean = true){
+        LogHandler.info("RouterOutletViewModel goToDetail $vmRecipe")
         setEvent(
             RouterOutletContract.Event.GoToDetail(
                 vmRecipe, showDetailsFooter
@@ -29,7 +31,9 @@ open class RouterOutletViewModel:
     override fun handleEvent(event: RouterOutletContract.Event) {
         when (event) {
             is RouterOutletContract.Event.GoToDetail -> {
+                LogHandler.info("RouterOutletViewModel goToDetail event $event")
                 setState { copy(rvm = event.vm, showFooter = event.withFooter) }
+                LogHandler.info("RouterOutletViewModel will navigate")
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterOutletContract.Event.GoToPreview -> {
@@ -60,7 +64,11 @@ open class RouterOutletViewModel:
             }
             RouterOutletContract.Event.GoToHelper -> navigateTo (RouterContent.RECIPE_HELPER)
             RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
-            RouterOutletContract.Event.OpenDialog ->  setState { copy(isOpen = true) }
+            RouterOutletContract.Event.OpenDialog -> {
+                LogHandler.info("RouterOutletViewModel will OpenDialog ${this.currentState}")
+                setState { copy(isOpen = true) }
+                LogHandler.info("RouterOutletViewModel will OpenDialog ${this.currentState}")
+            }
             RouterOutletContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
         }
     }
@@ -74,6 +82,7 @@ open class RouterOutletViewModel:
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {
             setEvent(RouterOutletContract.Event.OpenDialog)
+            LogHandler.info("RouterOutletViewModel dialog should be open ${this.currentState}")
         }
     }
 }
