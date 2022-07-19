@@ -64,30 +64,15 @@ public struct BasketPreviewSuccessView: View {
     
     public var body: some View {
         VStack {
-            // Top Bar
-            HStack {
-                Button(
-                    action: {
-                        goToDetail(recipeVm, true)
-                    }
-                ) {
-                    Image("Caret", bundle: Bundle(for: BasketPreviewVM.self))
-                        .renderingMode(.original)
-                        .frame(
-                            width: 24,
-                            height: 24,
-                            alignment: .center
-                        )
-                }
-                .frame( alignment: .center)
-                .rotationEffect(.degrees(180))
-                .padding(.horizontal , 8)
-                
+            TitleBarView(showBackButton: true, backAction: {
+                goToDetail(recipeVm, true)
+            },
+             titleView: AnyView(
                 Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
                     .font(.system(size: 16.0, weight: .bold, design: .default))
-                    .padding(.leading, Dimension.sharedInstance.lPadding)
-                Spacer()
-            }.frame(height: 50, alignment: .leading)
+                    .padding(.leading, Dimension.sharedInstance.lPadding)))
+
+            
             
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,

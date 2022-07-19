@@ -33,9 +33,25 @@ public struct RecpieDetailsView: View {
     
     public var body: some View {
         VStack {
+            TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
+                HStack(){
+                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:24, height:24)
+                    Text(RecipeCardText.sharedInstance.recipeFlag)
+                        .font(.system(size: 14.0, design: .default))
+                }.padding(.horizontal,16)
+                    .padding(.vertical,4)
+                    .background(MiamColor.sharedInstance.musterd)
+                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+
+            ))
+
             ScrollView {
                 ZStack {
                     VStack{
+
                         if(viewModel.recipe != nil ){
                             if(Template.sharedInstance.recipeDetailInfosTemplate != nil){
                                 Template.sharedInstance.recipeDetailInfosTemplate!(
@@ -50,13 +66,11 @@ public struct RecpieDetailsView: View {
                                         )! ,
                                         placeholder: { Text("loading ...")},
                                         height: 250
-                                    ).frame(height: 250).padding(.top,50)
+                                    ).frame(height: 250)
                                     if(viewModel.likeIsEnable()){
                                     HStack {
                                         //TODO Put logic into like button component
-                                       
-                                           
-                                                LikeButton(recipeVm: viewModel)
+                                        LikeButton(recipeVm: viewModel)
                                             
                                         Spacer()
                                         
@@ -88,7 +102,7 @@ public struct RecpieDetailsView: View {
                                             HStack {
                                                 Spacer()
                                                 VStack(alignment: .center) {
-                                                    Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
+                                                    Image( "clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
                                                     Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
                                                 }
                                                 Spacer()
@@ -184,9 +198,6 @@ public struct RecpieDetailsView: View {
                             }
                         }
                     }.padding(.bottom, 100.0)
-                    if(viewModel.recipe != nil ){
-                        RecipeDetailsHeader(recipe: viewModel.recipe!, closeDetail: { close() })
-                    }
                 }.onAppear(perform: {
                     if(recipeId != nil){
                         viewModel.setEvent(

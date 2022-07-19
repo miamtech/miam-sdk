@@ -1,3 +1,9 @@
+## 2.0.1
+- [FIX] Missing clock icon in recipe card and recipe details
+- [FIX] Clip images that were bigger than their frame
+- [FIX] Right/left padding in item selector
+- [FIX] Truncated icon in title bar
+
 ## 2.0.0
 - [BRK] shared module is now called miamCore module impact Ios and android
 - [BRK] kmm-miam-sdk in core module now call kmmMiamCore fix bundleId issue on Ios impact on android
