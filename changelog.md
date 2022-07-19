@@ -3,6 +3,7 @@
 - [FIX] Clip images that were bigger than their frame
 - [FIX] Right/left padding in item selector
 - [FIX] Truncated icon in title bar
+- [FIX][CORE] Remove miam core pods spec file
 
 ## 2.0.0
 - [BRK] shared module is now called miamCore module impact Ios and android
