@@ -42,7 +42,7 @@ struct BasketPreviewHeader: View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
             Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, price, numberOfGuests, price, decreaseGuestsCount, increaseGuestsCount)
         } else {
-            VStack {
+            VStack(alignment: .leading) {
                 HStack {
                     if hasPicture {
                         AsyncImage(url: pictureURL!, placeholder: {
@@ -54,29 +54,25 @@ struct BasketPreviewHeader: View {
                         Text(basketTitle)
                             .foregroundColor(MiamColor.sharedInstance.black)
                             .font(.system(size: 16, weight: .heavy, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
 
                         Text(basketDescription)
                             .foregroundColor(MiamColor.sharedInstance.bodyText)
                             .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
 
                         Text(pricePerGuest)
                             .foregroundColor(MiamColor.sharedInstance.bodyText)
                             .font(.system(size: 16, weight: .light, design: .default))
-                            .padding(.leading, Dimension.sharedInstance.sPadding)
 
                         Button {
                             goToDetail()
                         } label: {
                             Text("Voir le détail").fontWeight(.heavy).foregroundColor(MiamColor.sharedInstance.primaryText)
-                        }.padding([.leading, .top], Dimension.sharedInstance.sPadding)
-                    }.frame(alignment: .topLeading)
+                        }.padding([.top], Dimension.sharedInstance.sPadding)
+                    }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
-
-                    Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold).padding([.leading], Dimension.sharedInstance.lPadding)
+                    Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold)
                     Spacer()
 
                     CounterView(count: numberOfGuests, isDisable: false) {
