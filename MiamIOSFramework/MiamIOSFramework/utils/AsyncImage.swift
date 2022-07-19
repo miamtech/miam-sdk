@@ -54,6 +54,7 @@ struct AsyncImage<Placeholder:View> : View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: geo.size.width * 1, height: height)
+                        .clipped()
                 }
             } else {
                 placeholder
