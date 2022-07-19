@@ -33,23 +33,24 @@ public struct RecpieDetailsView: View {
     
     public var body: some View {
         VStack {
+            TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
+                HStack(){
+                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:24, height:24)
+                    Text(RecipeCardText.sharedInstance.recipeFlag)
+                        .font(.system(size: 14.0, design: .default))
+                }.padding(.horizontal,16)
+                    .padding(.vertical,4)
+                    .background(MiamColor.sharedInstance.musterd)
+                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+
+            ))
+
             ScrollView {
                 ZStack {
                     VStack{
-                        TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
-                            HStack(){
-                                Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width:24, height:24)
-                                Text(RecipeCardText.sharedInstance.recipeFlag)
-                                    .font(.system(size: 14.0, design: .default))
-                            }.padding(.horizontal,16)
-                                .padding(.vertical,4)
-                                .background(MiamColor.sharedInstance.musterd)
-                                .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
-
-                        ))
 
                         if(viewModel.recipe != nil ){
                             if(Template.sharedInstance.recipeDetailInfosTemplate != nil){
