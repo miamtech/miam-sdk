@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   spec.author             = { "Vincent Kergonna" => "it@miam.tech" }
   spec.platform     = :ios, "11.0"
   spec.source       = { :git => "https://gitlab.com/miam/kmm-miam-sdk", :tag => "#{spec.version}" }
-  spec.source_files  = "MiamIOSFramework/MiamIOSFramework/**/*.{h,c,cpp,swift}",
+  spec.source_files  = "MiamIOSFramework/MiamIOSFramework/**/*.{h,c,cpp,swift}", "changelog.md"
   spec.exclude_files = "Classes/Exclude"
   spec.resource  = "MiamIOSFramework/miam.xcassets"
   spec.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
