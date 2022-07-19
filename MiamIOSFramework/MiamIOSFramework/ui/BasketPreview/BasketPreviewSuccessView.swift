@@ -64,11 +64,13 @@ public struct BasketPreviewSuccessView: View {
     
     public var body: some View {
         VStack {
-            TitleBarView(showBackButton: true, backAction: close,
-                         titleView: AnyView(
-                            Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
-                                .font(.system(size: 16.0, weight: .bold, design: .default))
-                                .padding(.leading, Dimension.sharedInstance.lPadding)))
+            TitleBarView(showBackButton: true, backAction: {
+                goToDetail(recipeVm, true)
+            },
+             titleView: AnyView(
+                Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
+                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .padding(.leading, Dimension.sharedInstance.lPadding)))
 
             
             
