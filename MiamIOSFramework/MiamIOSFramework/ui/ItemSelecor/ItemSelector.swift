@@ -20,8 +20,16 @@ public struct ItemSelector: View  {
     
     public var body: some View {
         if(viewModel.state != nil ) {
-            ScrollView{
-                ZStack{
+            VStack {
+                TitleBarView(showBackButton: true, backAction: {
+                    viewModel.returnToPreview()
+                }, titleView: AnyView(
+                    Text(ItemSelectorText.sharedInstance.swapProduct)
+                        .foregroundColor(MiamColor.sharedInstance.black)
+                        .font(.system(size: 16, weight: .heavy, design: .default)))
+                )
+
+                ScrollView{
                     VStack(alignment: .leading){
                         if (Template.sharedInstance.currentProductTemplate != nil) {
                             Template.sharedInstance.currentProductTemplate!(
@@ -46,35 +54,10 @@ public struct ItemSelector: View  {
                                 }.onTapGesture {
                                     viewModel.chooseItem(index: i)
                                 }
-                                
+
                             }
                         }
-                    }.padding(.top , 80)
-                    
-                    VStack(alignment: .leading){
-                        HStack(spacing: 20){
-                            Button(
-                                action: {
-                                    viewModel.returnToPreview()
-                                }
-                            ) {
-                                Image("Caret", bundle: Bundle(for: RecipeCardVM.self))
-                                    .renderingMode(.original)
-                                    .frame(
-                                        width: 24,
-                                        height: 24,
-                                        alignment: .center
-                                    )
-                            }
-                            .frame( alignment: .center)
-                            .rotationEffect(.degrees(180))
-                            .padding(.horizontal , 8)
-                            Text(ItemSelectorText.sharedInstance.swapProduct)
-                                .foregroundColor(MiamColor.sharedInstance.black)
-                                .font(.system(size: 16, weight: .heavy, design: .default))
-                        }.padding(16)
-                        Divider()
-                    }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                    }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
                 }
             }
         }
