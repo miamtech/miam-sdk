@@ -1,3 +1,6 @@
+## 2.0.2
+- [FIX] Recipe 'is in cart' not well refreshed
+
 ## 2.0.1
 - [FIX] Missing clock icon in recipe card and recipe details
 - [FIX] Clip images that were bigger than their frame
