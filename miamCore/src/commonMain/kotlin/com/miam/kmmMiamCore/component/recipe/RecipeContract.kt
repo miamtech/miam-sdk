@@ -1,9 +1,6 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import com.miam.kmmMiamCore.base.mvi.BasicUiState
-import com.miam.kmmMiamCore.base.mvi.UiEffect
-import com.miam.kmmMiamCore.base.mvi.UiEvent
-import com.miam.kmmMiamCore.base.mvi.UiState
+import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
@@ -31,21 +28,39 @@ interface RecipeContract {
         object Error : Event()
     }
 
-      data class State(
-          val recipeState: BasicUiState<Recipe>,
-          val recipe: Recipe?,
-          val headerText: String,
-          val guest: Int,
-          val isInCart : Boolean,
-          val analyticsEventSent: Boolean,
-          val isPriceDisplayed: Boolean,
-          val isInViewport : Boolean,
-          val tabState : TabEnum,
-          val activeStep: Int,
-          val recipeLoaded: Boolean,
-          val isLiked: Boolean,
-          val likeIsEnable: Boolean
-    ) : UiState
+    data class State(
+        val recipeState: BasicUiState<Recipe>,
+        val recipe: Recipe?,
+        val headerText: String,
+        val guest: Int,
+        val isInCart : Boolean,
+        val analyticsEventSent: Boolean,
+        val isPriceDisplayed: Boolean,
+        val isInViewport : Boolean,
+        val tabState : TabEnum,
+        val activeStep: Int,
+        val recipeLoaded: Boolean,
+        val isLiked: Boolean,
+        val likeIsEnable: Boolean
+    ): UiState {
+        fun refreshFromGl(groceriesListStore: GroceriesListStore): State {
+            val isInCart = retrieveIsInCart(groceriesListStore)
+            return this.copy(isInCart = isInCart, guest = retrieveGuest(isInCart, groceriesListStore))
+        }
+
+        private fun retrieveIsInCart(groceriesListStore: GroceriesListStore): Boolean {
+            if (recipe?.id == null) return false
+            return groceriesListStore.observeState().value.groceriesList?.hasRecipe(recipe.id)?: false
+        }
+
+        private fun retrieveGuest(isInCart: Boolean, groceriesListStore: GroceriesListStore): Int {
+            if (isInCart) {
+                val currentGl = groceriesListStore.observeState().value.groceriesList
+                return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id.toString() == recipe?.id })?.guests?: 4
+            }
+            return recipe?.attributes?.numberOfGuests?: 4
+        }
+    }
 
     sealed class Effect : UiEffect {
         object HideCard : Effect()
