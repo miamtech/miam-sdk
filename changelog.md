@@ -1,4 +1,4 @@
-## 2.0.1
+## 2.0.2
 - [FIX] Recipe 'is in cart' not well refreshed
 
 ## 2.0.1
