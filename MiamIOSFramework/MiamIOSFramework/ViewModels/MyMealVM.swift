@@ -27,10 +27,13 @@ public class MyMeal: Identifiable {
 @available(iOS 14, *)
 public class MyMealVM : MyMealViewModel, ObservableObject {
     @Published public var meals: [MyMeal] = []
+    @Published var state: MyMealContractState?
+
     override public init() {
         super.init()
         collect(flow: uiState) { data in
             let state = data as! MyMealContractState
+            self.state = state
             switch state.lines {
             case let success as BasicUiStateSuccess<NSArray>: // Must use an object, thus NSArray
                 if let basketPreviewLines = success.data as? [BasketPreviewLine] {

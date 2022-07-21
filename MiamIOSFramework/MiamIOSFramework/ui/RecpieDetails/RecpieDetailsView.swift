@@ -69,7 +69,6 @@ public struct RecpieDetailsView: View {
                                     ).frame(height: 250)
                                     if(viewModel.likeIsEnable()){
                                     HStack {
-                                        //TODO Put logic into like button component
                                         LikeButton(recipeVm: viewModel)
                                             
                                         Spacer()
@@ -102,7 +101,7 @@ public struct RecpieDetailsView: View {
                                             HStack {
                                                 Spacer()
                                                 VStack(alignment: .center) {
-                                                    Image( "clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
+                                                    Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
                                                     Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
                                                 }
                                                 Spacer()

@@ -14,6 +14,9 @@
 		0B5325212874899E001906CD /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325202874899E001906CD /* LikeButton.swift */; };
 		0B5325242876B9ED001906CD /* BasketTagVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325232876B9ED001906CD /* BasketTagVM.swift */; };
 		0B5325272876C70C001906CD /* BasketTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5325262876C70C001906CD /* BasketTag.swift */; };
+		0B61EB4B288992AB002E44FB /* MyMealSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61EB4A288992AB002E44FB /* MyMealSuccessView.swift */; };
+		0B61EB4D2889943C002E44FB /* MyMealLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61EB4C2889943C002E44FB /* MyMealLoadingView.swift */; };
+		0B61EB4F28899488002E44FB /* MyMealEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61EB4E28899488002E44FB /* MyMealEmptyView.swift */; };
 		0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */; };
 		0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* Text.swift */; };
 		0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */; };
@@ -91,6 +94,9 @@
 		0B5325202874899E001906CD /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 		0B5325232876B9ED001906CD /* BasketTagVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketTagVM.swift; sourceTree = "<group>"; };
 		0B5325262876C70C001906CD /* BasketTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketTag.swift; sourceTree = "<group>"; };
+		0B61EB4A288992AB002E44FB /* MyMealSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealSuccessView.swift; sourceTree = "<group>"; };
+		0B61EB4C2889943C002E44FB /* MyMealLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealLoadingView.swift; sourceTree = "<group>"; };
+		0B61EB4E28899488002E44FB /* MyMealEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealEmptyView.swift; sourceTree = "<group>"; };
 		0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardText.swift; sourceTree = "<group>"; };
 		0B7C9BDB28196BAB00BFC7F8 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
@@ -295,6 +301,9 @@
 				521D645E283277B20092AC52 /* MyMealsView.swift */,
 				521D6460283277D00092AC52 /* MyMealRow.swift */,
 				521D6462283277EA0092AC52 /* MyMealItemRow.swift */,
+				0B61EB4A288992AB002E44FB /* MyMealSuccessView.swift */,
+				0B61EB4C2889943C002E44FB /* MyMealLoadingView.swift */,
+				0B61EB4E28899488002E44FB /* MyMealEmptyView.swift */,
 			);
 			path = MyMealsView;
 			sourceTree = "<group>";
@@ -581,6 +590,7 @@
 				0BE594142849050C00D146F8 /* FirstLetterCapitalizer.swift in Sources */,
 				BFA507EB287C126B00F274CA /* CatalogLoadingView.swift in Sources */,
 				0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */,
+				0B61EB4F28899488002E44FB /* MyMealEmptyView.swift in Sources */,
 				0BB5CA682848AF63007AC86D /* RecipeDetailsMoreInfo.swift in Sources */,
 				0B9AA668282019D2007D6C8A /* PriceVM.swift in Sources */,
 				BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */,
@@ -598,6 +608,7 @@
 				0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */,
+				0B61EB4D2889943C002E44FB /* MyMealLoadingView.swift in Sources */,
 				0B5325242876B9ED001906CD /* BasketTagVM.swift in Sources */,
 				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
 				521D644C282E30C00092AC52 /* StepRow.swift in Sources */,
@@ -615,6 +626,7 @@
 				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
 				BFA507EA287C126B00F274CA /* CatalogFiltersView.swift in Sources */,
+				0B61EB4B288992AB002E44FB /* MyMealSuccessView.swift in Sources */,
 				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
 				0B5325272876C70C001906CD /* BasketTag.swift in Sources */,
 				0BFD39212860C70600A7FCED /* RecipeCardSuccessView.swift in Sources */,

@@ -10,26 +10,29 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View>: View {
+struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View, EmptyView : View>: View {
     
     private let resourceState: BasicUiState<T>
     private let successView:  SuccessView
     private let loadingView: LoadingView
+    private let emptyView: EmptyView
     
     init(
         resourceState: BasicUiState<T>,
         successView:  SuccessView,
-        loadingView:  LoadingView
+        loadingView:  LoadingView,
+        emptyView: EmptyView
     ) {
         self.resourceState = resourceState
         self.successView = successView
         self.loadingView = loadingView
+        self.emptyView = emptyView
     }
     
     var body: some View {
         switch self.resourceState {
         case is BasicUiStateEmpty:
-            HStack{} // TODO handle empty state
+            emptyView
         case is BasicUiStateError:
             HStack{} // TODO handle error state
         case is BasicUiStateSuccess<T> :

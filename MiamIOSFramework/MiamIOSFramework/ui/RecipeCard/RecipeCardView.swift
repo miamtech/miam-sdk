@@ -28,11 +28,12 @@ public struct RecipeCardView: View {
     
     public var body: some View {
         if(viewModel.state != nil ){
-            ManagementResourceState<Recipe,RecipeCardSuccessView,RecipeCardLoadingView> (
+            ManagementResourceState<Recipe,RecipeCardSuccessView,RecipeCardLoadingView,RecipeCardEmptyView> (
                 resourceState: viewModel.state!.recipeState,
                 successView:  criteria != nil ? RecipeCardSuccessView(viewModel: viewModel, criteria: criteria!, showMealIdeaTag: showMealIdeaTag) :
                     RecipeCardSuccessView(viewModel: viewModel, recipeId: recipeId!, showMealIdeaTag: showMealIdeaTag) ,
-                loadingView: RecipeCardLoadingView()
+                loadingView: RecipeCardLoadingView(),
+                emptyView: RecipeCardEmptyView()
             ).onAppear(perform: {
                 if(recipeId != nil){
                     viewModel.setEvent(
@@ -44,6 +45,13 @@ public struct RecipeCardView: View {
             }
             )
         }
+    }
+}
+
+@available(iOS 14, *)
+public struct RecipeCardEmptyView: View {
+    public var body: some View {
+        HStack{}
     }
 }
  

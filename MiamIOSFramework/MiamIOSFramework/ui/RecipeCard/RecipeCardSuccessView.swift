@@ -104,7 +104,7 @@ struct RecipeCardSuccessView: View {
                                                 trailing: Dimension.sharedInstance.lPadding))
 
                         HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
-                            IconWithText(imageName: "clock", text: viewModel.recipe?.totalTime ?? "")
+                            IconWithText(imageName: "Clock", text: viewModel.recipe?.totalTime ?? "")
                             Divider()
                             IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
                         }

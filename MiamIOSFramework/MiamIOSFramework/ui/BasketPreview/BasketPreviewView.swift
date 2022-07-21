@@ -10,6 +10,14 @@ import miamCore
 
 
 @available(iOS 14, *)
+struct BasketPreviewEmptyView: View {
+    var body: some View {
+        HStack{}
+    }
+}
+
+
+@available(iOS 14, *)
 struct BasketPreviewView: View {
     
     @ObservedObject private var viewModel: BasketPreviewVM
@@ -35,7 +43,7 @@ struct BasketPreviewView: View {
     
     var body: some View {
         if(viewModel.state != nil) {
-            ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView,BasketPreviewLoadingView> (
+            ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView,BasketPreviewLoadingView,BasketPreviewEmptyView> (
                 resourceState: viewModel.state!.line,
                 successView:  BasketPreviewSuccessView(
                     viewModel: viewModel,
@@ -44,7 +52,8 @@ struct BasketPreviewView: View {
                     close: close,
                     goToItemSelector: goToItemSelector
                 ) ,
-                loadingView: BasketPreviewLoadingView()
+                loadingView: BasketPreviewLoadingView(),
+                emptyView: BasketPreviewEmptyView()
             )
         }
     }
