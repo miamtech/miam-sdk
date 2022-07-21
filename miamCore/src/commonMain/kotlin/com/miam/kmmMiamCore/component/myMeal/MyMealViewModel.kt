@@ -29,14 +29,15 @@ open class MyMealViewModel :
     init {
         val bp = basketStore.observeState().value.basketPreview
         if(bp != null ){
-            setState { copy(lines = BasicUiState.Success(bp),bpls = bp) }
+            setState { copy(lines = if(bp.isEmpty())  BasicUiState.Empty else  BasicUiState.Success(bp),bpls = bp) }
         }
+        setState { copy(lines = BasicUiState.Loading) }
         val job = launch(coroutineHandler) {
             basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
                 val bpls = basketStore.observeState().first {
                     it.basketPreview != null
                 }.basketPreview!!
-                setState { copy(lines = BasicUiState.Success(bpls), bpls = bpls) }
+                setState { copy(lines = if(bpls.isEmpty())  BasicUiState.Empty else BasicUiState.Success(bpls), bpls = bpls) }
             }
         }
         setState { copy(job = job) }

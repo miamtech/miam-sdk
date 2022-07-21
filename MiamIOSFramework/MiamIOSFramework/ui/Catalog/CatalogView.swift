@@ -10,6 +10,13 @@ import miamCore
 import SwiftUI
 
 @available(iOS 14, *)
+public struct CatalogEmptyView: View {
+    public var body: some View {
+        HStack{}
+    }
+}
+
+@available(iOS 14, *)
 public struct CatalogView: View {
     @ObservedObject var catalog: CatalogVM = CatalogVM()
     @SwiftUI.State private var showingFilters = false
@@ -46,9 +53,10 @@ public struct CatalogView: View {
                     showingFavorites = true
                 }
                 if let catalogState = catalog.state {
-                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView>(resourceState: catalogState.categories,
+                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(resourceState: catalogState.categories,
                                                                                          successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight),
-                                                                                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering)).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                                               loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
+                                                                                                               emptyView: CatalogEmptyView()).padding([.top], Dimension.sharedInstance.lPadding)
                                                                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }.popover(isPresented: $catalog.filterOpen) {
@@ -93,9 +101,10 @@ internal struct CatalogSuccessView: View {
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
             if let modelState = recipeListPageModel.state {
-                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView>(resourceState: modelState.recipes,
+                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogEmptyView>(resourceState: modelState.recipes,
                                                                                                 successView: CatalogRecipesPageSuccessView(viewModel: recipeListPageModel, catalogViewModel: catalog),
-                                                                                                loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering)).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                                loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
+                                                                                                emptyView: CatalogEmptyView()).padding([.top], Dimension.sharedInstance.lPadding)
             }
         }
     }

@@ -1,5 +1,9 @@
 ## 2.0.2
-- [FIX] Recipe 'is in cart' not well refreshed
+- [FIX][CORE] Recipe 'is in cart' not well refreshed
+- [FIX][CORE] Handle loading and Empty state in MyMealViewModel
+- [FIX][IOS] Add my meal EmptyStateView
+- [FIX][IOS] Add my meal LoadingStateView
+- [FIX][IOS] Missing clock icon in recipe card and recipe details
 
 ## 2.0.1
 - [FIX] Missing clock icon in recipe card and recipe details
