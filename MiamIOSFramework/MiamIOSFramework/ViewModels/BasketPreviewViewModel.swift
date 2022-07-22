@@ -35,8 +35,6 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
             return nil
         }
 
-        let picture = basket.picture
-
         return URL(string: basket.picture)
     }
 
