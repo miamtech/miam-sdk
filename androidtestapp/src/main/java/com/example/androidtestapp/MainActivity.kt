@@ -33,8 +33,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
-import com.miam.kmm_miam_sdk.component.recipe.RecipeViewModel
-import com.miam.kmm_miam_sdk.di.initKoin
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.di.initKoin
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.Basket.BasketHandlerInstance
 import com.miam.kmmMiamCore.handler.ContextHandlerInstance
@@ -67,8 +67,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
     private val retailerBasketSubject : MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
     private lateinit var basketHandler: BasketHandler
 
-    private var recipeCount = 0
-
     private fun initMiam() {
         initKoin{
             androidContext(this@MainActivity)
@@ -90,9 +88,9 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
         PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
-        UserHandler.updateUserId("alexis")
+        UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
-        UserHandler.setEnableLike(false)
+        UserHandler.setEnableLike(true)
         launch {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} " )
