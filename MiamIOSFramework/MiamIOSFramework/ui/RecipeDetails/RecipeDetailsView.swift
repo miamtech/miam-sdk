@@ -10,7 +10,7 @@ import miamCore
 
 
 @available(iOS 14, *)
-public struct RecpieDetailsView: View {
+public struct RecipeDetailsView: View {
     
     public var recipeId: String?
     public var close: () -> ()

@@ -59,7 +59,7 @@ struct Dialog: View {
         VStack{
             HStack(alignment: .top){
                 switch viewModel.state?.content {
-                case RouterContent.recipeDetail : RecpieDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close, showFooter: viewModel.state!.showFooter)
+                case RouterContent.recipeDetail : RecipeDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close, showFooter: viewModel.state!.showFooter)
                 case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
                                                                      recipeVm:  (viewModel.state?.rvm!)!,
                                                                      goToDetail: goToDetail,
