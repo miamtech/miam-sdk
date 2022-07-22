@@ -16,7 +16,7 @@ struct IconWithText: View {
             Image(imageName, bundle: Bundle(for: RecipeCardVM.self))
             Text(text)
                 .font(.system(size: 11.0))
-                .foregroundColor(MiamColor.sharedInstance.neutralGrey)
+                .foregroundColor(Color.miamColor(.neutralGrey))
         }
     }
 }

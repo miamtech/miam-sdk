@@ -43,7 +43,7 @@ public struct RecipeDetailsView: View {
                         .font(.system(size: 14.0, design: .default))
                 }.padding(.horizontal,16)
                     .padding(.vertical,4)
-                    .background(MiamColor.sharedInstance.musterd)
+                    .background(Color.miamColor(.musterd))
                     .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
 
             ))
@@ -79,11 +79,11 @@ public struct RecipeDetailsView: View {
                                             Image("Help", bundle: Bundle(for: RecipeCardVM.self))
                                                 .renderingMode(.original)
                                         }
-                                        .frame(width: 40.0, height: 40.0, alignment: .center).background(MiamColor.sharedInstance.greySurface).cornerRadius(25)
+                                        .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
                                     }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
                                     }
                                     Text(viewModel.recipe?.attributes?.title ?? "")
-                                        .foregroundColor(MiamColor.sharedInstance.black)
+                                        .foregroundColor(Color.miamColor(.black))
                                         .font(.system(size: 20, weight: .heavy, design: .default))
                                         .padding(.horizontal, Dimension.sharedInstance.lPadding)
                                         .frame( alignment: .topLeading)
@@ -102,7 +102,7 @@ public struct RecipeDetailsView: View {
                                                 Spacer()
                                                 VStack(alignment: .center) {
                                                     Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
-                                                    Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
+                                                    Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
                                                 }
                                                 Spacer()
                                             }
@@ -126,7 +126,7 @@ public struct RecipeDetailsView: View {
                                 HStack {
                                     HStack {
                                         Text(String((viewModel.recipe!.relationships?.ingredients!.data.count)!) + " ingrédients")
-                                            .foregroundColor(MiamColor.sharedInstance.primaryText)
+                                            .foregroundColor(Color.miamColor(.primaryText))
                                             .font(.system(size: 20, weight: .heavy, design: .default))
                                             .padding(Dimension.sharedInstance.lPadding)
                                         Spacer()
@@ -139,7 +139,7 @@ public struct RecipeDetailsView: View {
                                     }
                                 }.frame(height: 60.0, alignment: .topLeading)
                                 Divider()
-                                    .background(MiamColor.sharedInstance.borderBottom)
+                                    .background(Color.miamColor(.borderLight))
                                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                                 
                                 //Ingredients ListView
@@ -157,7 +157,7 @@ public struct RecipeDetailsView: View {
                                                                                    unit: ingr.attributes!.unit))
                                         }
                                     }.padding(.vertical, Dimension.sharedInstance.lPadding)
-                                }.background(MiamColor.sharedInstance.lightPrimaryBg).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
+                                }.background(Color.miamColor(.primaryLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
                             }
                             
                             //Étapes Heading
@@ -170,13 +170,13 @@ public struct RecipeDetailsView: View {
                             }
                             else{
                                 HStack {
-                                    Text("Étapes").foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                                    Text("Étapes").foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
                                     Spacer()
                                 }.frame(height: 60.0, alignment: .topLeading)
                                     .padding(.top, Dimension.sharedInstance.lPadding)
                                 
                                 //Steps
-                                Divider().background(MiamColor.sharedInstance.borderBottom)
+                                Divider().background(Color.miamColor(.borderLight))
                                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                                 
                                 //Steps ListView

@@ -19,18 +19,18 @@ struct LikeButton: View {
     
     var body: some View {
         ZStack(){
-            Circle().fill(MiamColor.sharedInstance.white)
+            Circle().fill(Color.miamColor(.white))
                 .frame(width: 34, height: 34)
             if(recipeVm.currentState.isLiked){
                 Image("LikeFilled", bundle: Bundle(for: RecipeCardVM.self))
                     .renderingMode(.template)
                     .frame(width: 14.0, height: 14.0, alignment: .center)
-                    .foregroundColor(MiamColor.sharedInstance.primaryText)
+                    .foregroundColor(Color.miamColor(.primaryText))
             } else {
                 Image("Like", bundle: Bundle(for: RecipeCardVM.self))
                     .renderingMode(.template)
                     .frame(width: 14.0, height: 14.0, alignment: .center)
-                    .foregroundColor(MiamColor.sharedInstance.primaryText)
+                    .foregroundColor(Color.miamColor(.primaryText))
             }
         }.onTapGesture {
             recipeVm.toggleLike()

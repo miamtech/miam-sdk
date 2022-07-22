@@ -37,7 +37,7 @@ struct ItemSelectorProductRow: View {
                     Text(product.productDescription )
                         .font(.system(size: 13))
                         .padding(.bottom,32)
-                        .foregroundColor(MiamColor.sharedInstance.grey)
+                        .foregroundColor(Color.miamColor(.grey))
                     HStack{
                         Text(product.price + "€")
                             .font(.system(size: 16, weight: .heavy))
@@ -46,8 +46,8 @@ struct ItemSelectorProductRow: View {
                             .font(.system(size: 13, weight: .heavy))
                             .padding(.horizontal,16)
                             .padding(.vertical,4)
-                            .foregroundColor(MiamColor.sharedInstance.white)
-                            .background( isSelected ? MiamColor.sharedInstance.grey : MiamColor.sharedInstance.primary )
+                            .foregroundColor(Color.miamColor(.white))
+                            .background( isSelected ? Color.miamColor(.grey) : Color.miamColor(.primary))
                             .cornerRadius(1000)
                     }
                 }.padding(16)

@@ -55,23 +55,23 @@ struct CounterView: View {
                     decrease()
                 }) {
                     Image("minus", bundle: Bundle(for: RecipeCardVM.self))
-                        .foregroundColor(MiamColor.sharedInstance.white)
+                        .foregroundColor(Color.miamColor(.white))
                 }.padding(.leading, Dimension.sharedInstance.mPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
                     Text(String(count) + " \( lightMode ? "" : "pers.")")
-                    .foregroundColor(MiamColor.sharedInstance.white)
+                    .foregroundColor(Color.miamColor(.white))
                     .font(.system(size: 13, weight: .bold, design: .default))
                     Spacer()
                 Button(action: {
                     increase()
                 }) {
                     Image("plus", bundle: Bundle(for: RecipeCardVM.self))
-                        .foregroundColor(MiamColor.sharedInstance.white)
+                        .foregroundColor(Color.miamColor(.white))
                 }.padding(.trailing, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .trailing)
             }.frame(width: lightMode ? 80 : 130.0, height: 40.0, alignment: .center)
-            .background(MiamColor.sharedInstance.primaryText)
+                .background(Color.miamColor(.primaryText))
             .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
         }
     }

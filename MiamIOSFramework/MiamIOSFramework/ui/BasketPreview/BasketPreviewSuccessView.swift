@@ -155,7 +155,7 @@ internal struct IngredientsHeader: View {
             HStack {
                 Text(title)
                     .font(.system(size: 16.0, weight: .bold, design: .default))
-                    .foregroundColor(MiamColor.sharedInstance.bodyText)
+                    .foregroundColor(Color.miamColor(.secondaryText))
 
                 Spacer()
 
@@ -165,7 +165,7 @@ internal struct IngredientsHeader: View {
                     .frame(width: 30, height: 30, alignment: .center)
             }
             .padding(Dimension.sharedInstance.lPadding)
-            .background(MiamColor.sharedInstance.greySurface)
+            .background(Color.miamColor(.greySurface))
             .cornerRadius(10).padding(.all, Dimension.sharedInstance.lPadding).onTapGesture {
                 withAnimation(.default) {
                     folded.toggle()

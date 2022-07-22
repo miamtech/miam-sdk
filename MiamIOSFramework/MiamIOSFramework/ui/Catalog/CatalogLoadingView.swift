@@ -12,7 +12,7 @@ struct CatalogLoadingView: View {
     let loadingText: String
     var body: some View {
         VStack {
-            ProgressLoader(color: MiamColor.sharedInstance.primary)
+            ProgressLoader(color: Color.miamColor(.primary))
             Text(loadingText)
         }
     }

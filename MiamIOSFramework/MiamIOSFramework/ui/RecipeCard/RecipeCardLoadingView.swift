@@ -27,21 +27,21 @@ public struct RecipeCardLoadingView: View {
             VStack() {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
-                        .fill(MiamColor.sharedInstance.borderColor)
+                        .fill(Color.miamColor(.border))
                         .frame(height: 245)
                     
                 }.frame(height: 245)
                 Text( "")
                     .lineLimit(2)
-                    .foregroundColor(MiamColor.sharedInstance.black)
+                    .foregroundColor(Color.miamColor(.black))
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(Dimension.sharedInstance.lPadding)
                 Rectangle()
-                    .fill(MiamColor.sharedInstance.borderColor).opacity(0.1)
+                    .fill(Color.miamColor(.border)).opacity(0.1)
                     .frame(minHeight: 50.0, maxHeight: 50.0)
                     .frame(width: 180)
                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                    .background(MiamColor.sharedInstance.borderColor)
+                    .background(Color.miamColor(.border))
                     .cornerRadius(25)
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
@@ -57,7 +57,7 @@ public struct RecipeCardLoadingView: View {
                 .clipped()
                 .overlay(
                     RoundedRectangle(cornerRadius: 15)
-                        .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
+                        .stroke(Color.miamColor(.border), lineWidth: 1)
                 )
             
         }.frame(height: 400)

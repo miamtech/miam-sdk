@@ -37,7 +37,7 @@ struct CatalogSearchView: View {
                     } label: {
                         Image("search", bundle: Bundle(for: CatalogVM.self))
                             .padding(10)
-                            .background(MiamColor.sharedInstance.primary).clipShape(Circle())
+                            .background(Color.miamColor(.primary)).clipShape(Circle())
                     }
                 }.padding([.leading], 15).frame(height: 45.0)
                     .overlay(Capsule().stroke(Color.gray, lineWidth: 1.0))

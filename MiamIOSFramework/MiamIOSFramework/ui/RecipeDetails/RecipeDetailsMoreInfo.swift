@@ -24,20 +24,20 @@ struct RecipeDetailsMoreInfo: View {
         HStack {
             if(recipe.preparationTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.preparationTimeIos).foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                    Text(recipe.preparationTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
                 }
             }
             if(recipe.cookingTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.cookingTimeIos).foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                    Text(recipe.cookingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
                 }
             }
             if(recipe.restingTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.restingTime + " :").foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.restingTimeIos).foregroundColor(MiamColor.sharedInstance.bodyText).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.restingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                    Text(recipe.restingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
                 }
             }
                     }
@@ -52,7 +52,7 @@ struct RecipeDetailsMoreInfo: View {
             }) {
                 HStack {
                     Text(MiamText.sharedInstance.recpeitDetailsInfo)
-                        .foregroundColor(MiamColor.sharedInstance.grey)
+                        .foregroundColor(Color.miamColor(.grey))
                         .font(.system(size: 13, weight: .bold, design: .default))
                         .padding(Dimension.sharedInstance.mPadding)
                         .padding(.leading, Dimension.sharedInstance.lPadding)
@@ -61,7 +61,7 @@ struct RecipeDetailsMoreInfo: View {
                     .rotationEffect(Angle.degrees(collapsed ? 0 : 180))
                     .padding(.trailing , 8)
                 }
-                .background(MiamColor.sharedInstance.greySurface)
+                .background(Color.miamColor(.greySurface))
                 .cornerRadius(15.0)
                 .padding()
             }.padding(.trailing, Dimension.sharedInstance.lPadding)

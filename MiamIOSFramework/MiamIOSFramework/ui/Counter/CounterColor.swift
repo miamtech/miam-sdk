@@ -15,13 +15,13 @@ public class CounterColor {
     
     private init(){}
     
-      public   var lessButtonBackgroundDisableColor : Color = MiamColor.sharedInstance.lightgrey
-      public   var lessButtonBackgroundColor : Color = MiamColor.sharedInstance.white
-      public   var lessIconColor : Color =  MiamColor.sharedInstance.black
+    public   var lessButtonBackgroundDisableColor : Color = Color.miamColor(.lightGrey)
+    public   var lessButtonBackgroundColor : Color = Color.miamColor(.white)
+    public   var lessIconColor : Color = Color.miamColor(.black)
 
-      public   var plusButtonBackgroundDisableColor : Color = MiamColor.sharedInstance.lightgrey
-      public   var plusButtonBackgroundColor : Color = MiamColor.sharedInstance.white
-      public   var plusIconColor  : Color =  MiamColor.sharedInstance.black
+    public   var plusButtonBackgroundDisableColor : Color = Color.miamColor(.lightGrey)
+    public   var plusButtonBackgroundColor : Color = Color.miamColor(.white)
+    public   var plusIconColor : Color = Color.miamColor(.black)
 }
 
 

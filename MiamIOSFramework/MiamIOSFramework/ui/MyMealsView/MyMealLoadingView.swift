@@ -17,7 +17,7 @@ struct MyMealLoadingView: View {
             HStack{
                 Spacer()
                 VStack{
-                    ProgressLoader(color: MiamColor.sharedInstance.primary)
+                    ProgressLoader(color: Color.miamColor(.primary))
                     Text(MiamText.sharedInstance.simmering)
                 }
                 Spacer()

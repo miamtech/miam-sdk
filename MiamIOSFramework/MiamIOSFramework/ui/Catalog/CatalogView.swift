@@ -125,7 +125,7 @@ internal struct CatalogPackageRow: View {
                     Button {
                         showRecipes(package)
                     } label: {
-                        Text("Tout voir").foregroundColor(MiamColor.sharedInstance.primaryText).underline().padding([.trailing], 16.0).padding([.top], 8)
+                        Text("Tout voir").foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
                     }
                 }
                 ScrollView(.horizontal) {
@@ -164,7 +164,7 @@ internal struct CatalogViewHeader: View {
             }
             .padding(EdgeInsets(top: 16, leading: 11, bottom: 0, trailing: 11))
             .frame(maxWidth: .infinity, minHeight: 0.0)
-            .background(MiamColor.sharedInstance.backgroundDark)
+            .background(Color.miamColor(.primaryDark))
         }
     }
 }
@@ -198,7 +198,7 @@ internal struct CatalogViewToolbar: View {
                 } label: {
                     Image("search", bundle: Bundle(for: RecipeCardVM.self))
                         .renderingMode(.template)
-                        .foregroundColor(MiamColor.sharedInstance.primary)
+                        .foregroundColor(Color.miamColor(.primary))
                 }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
                 if (!showBackButton) {
                     Spacer()
@@ -209,7 +209,7 @@ internal struct CatalogViewToolbar: View {
                 } label: {
                     Image("filters", bundle: Bundle(for: RecipeCardVM.self))
                         .renderingMode(.template)
-                        .foregroundColor(MiamColor.sharedInstance.primary)
+                        .foregroundColor(Color.miamColor(.primary))
                 }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
 
                 if (!favoritesFilterActive) {
@@ -219,7 +219,7 @@ internal struct CatalogViewToolbar: View {
                         } label: {
                             Image("heart", bundle: Bundle(for: RecipeCardVM.self))
                                 .renderingMode(.template)
-                                .foregroundColor(MiamColor.sharedInstance.primary)
+                                .foregroundColor(Color.miamColor(.primary))
                         }
                         .frame(width: 40, height: 40)
                         .background(Color.white)
@@ -240,7 +240,7 @@ internal struct CatalogViewToolbar: View {
             }.padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                  leading: Dimension.sharedInstance.mlPadding, bottom: 16,
                                  trailing: Dimension.sharedInstance.mlPadding))
-            .background(MiamColor.sharedInstance.backgroundDark)
+            .background(Color.miamColor(.primaryDark))
         }
     }
 }
