@@ -7,7 +7,7 @@ struct ios_miam_integrationApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabbedView()
         }
     }
     
