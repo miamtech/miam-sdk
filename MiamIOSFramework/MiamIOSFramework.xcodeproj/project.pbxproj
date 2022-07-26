@@ -68,6 +68,8 @@
 		BFF5B65528534BA500CEC7C5 /* BasketPreviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65428534BA500CEC7C5 /* BasketPreviewHeader.swift */; };
 		BFF5B65728534F5800CEC7C5 /* IngredientNotInBasketRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65628534F5800CEC7C5 /* IngredientNotInBasketRow.swift */; };
 		BFF5B65B2853932C00CEC7C5 /* BasketPreviewLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65A2853932C00CEC7C5 /* BasketPreviewLine.swift */; };
+		BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF70573289016C200CB4EC6 /* MiamIcons.swift */; };
+		BFF70576289018BB00CB4EC6 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF70575289018BB00CB4EC6 /* Image.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -149,6 +151,8 @@
 		BFF5B65428534BA500CEC7C5 /* BasketPreviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreviewHeader.swift; sourceTree = "<group>"; };
 		BFF5B65628534F5800CEC7C5 /* IngredientNotInBasketRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientNotInBasketRow.swift; sourceTree = "<group>"; };
 		BFF5B65A2853932C00CEC7C5 /* BasketPreviewLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreviewLine.swift; sourceTree = "<group>"; };
+		BFF70573289016C200CB4EC6 /* MiamIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamIcons.swift; sourceTree = "<group>"; };
+		BFF70575289018BB00CB4EC6 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 				0B7C9BE32819933D00BFC7F8 /* MiamColor.swift */,
 				0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */,
 				0B7C9BF6281FCC6800BFC7F8 /* Template.swift */,
+				BFF70573289016C200CB4EC6 /* MiamIcons.swift */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 			children = (
 				0B7C9BED2819A11E00BFC7F8 /* Color.swift */,
 				BFB3957A288ACE1E00D696D0 /* Bundle.swift */,
+				BFF70575289018BB00CB4EC6 /* Image.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -594,6 +600,7 @@
 			files = (
 				0B5325212874899E001906CD /* LikeButton.swift in Sources */,
 				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
+				BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */,
 				0BB5CA602847B3A2007AC86D /* RecipeDetailsFooter.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColor.swift in Sources */,
 				0B4B3E84285099EA00F25E7B /* ItemSelectorVM.swift in Sources */,
@@ -616,6 +623,7 @@
 				521D6461283277D00092AC52 /* MyMealRow.swift in Sources */,
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
 				0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */,
+				BFF70576289018BB00CB4EC6 /* Image.swift in Sources */,
 				0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */,
