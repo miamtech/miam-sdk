@@ -1,6 +1,7 @@
 ## 2.0.3
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
 - [FIX][IOS] Recipe steps are now correctly marked as checked
+- [FEA][IOS] Customizable colors
 
 ## 2.0.2
 - [FIX][CORE] Recipe 'is in cart' not well refreshed
