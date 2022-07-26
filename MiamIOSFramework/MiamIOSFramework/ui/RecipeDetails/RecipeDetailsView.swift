@@ -10,7 +10,7 @@ import miamCore
 
 
 @available(iOS 14, *)
-public struct RecpieDetailsView: View {
+public struct RecipeDetailsView: View {
     
     public var recipeId: String?
     public var close: () -> ()
@@ -182,13 +182,15 @@ public struct RecpieDetailsView: View {
                                 //Steps ListView
                                 VStack {
                                     VStack {
-                                        ForEach(0..<(viewModel.recipe?.sortedStep ?? []).count, id: \.self) { i in
+                                        ForEach(viewModel.sortedSteps, id: \.self) { step in
+                                            let index = Int(step.attributes!.stepNumber)
+                                            let isChecked = viewModel.currentState.activeStep > index
                                             StepRow(
-                                                index: i,
-                                                step: viewModel.recipe!.relationships!.recipeSteps!.data[i],
-                                                isCheck: viewModel.currentState.activeStep <= i,
+                                                index: index,
+                                                step: step,
+                                                isCheck: isChecked,
                                                 onToogleCheckbox:  {
-                                                    viewModel.setEvent(event: RecipeContractEvent.SetActiveStep(stepIndex: Int32(i)))
+                                                    viewModel.setEvent(event: RecipeContractEvent.SetActiveStep(stepIndex: Int32(index + 1)))
                                                 }
                                             )
                                         }

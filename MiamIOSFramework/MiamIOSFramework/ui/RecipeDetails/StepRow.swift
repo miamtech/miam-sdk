@@ -15,9 +15,9 @@ struct StepRow: View {
     private var step : RecipeStep
     private var onToogleCheckbox : () -> ()
     
-    @SwiftUI.State var checkState:Bool = false
+    private var checkState: Bool
     
-    init(index : Int, step : RecipeStep, isCheck: Bool = false, onToogleCheckbox : @escaping() -> () ){
+    init(index : Int, step : RecipeStep, isCheck: Bool, onToogleCheckbox : @escaping() -> () ){
         self.index = index
         self.step = step
         self.onToogleCheckbox = onToogleCheckbox
@@ -44,7 +44,6 @@ struct StepRow: View {
             Spacer()
             Button(action:
                         {
-                            self.checkState = !self.checkState
                             onToogleCheckbox()
                         }) {
                         ZStack(alignment: .center) {
