@@ -104,8 +104,8 @@ internal struct CatalogFilterSection: View {
 internal struct CatalogFilterRow: View {
     let filter: CatalogFilterOptions
     let filterSelected: (CatalogFilterOptions) -> Void
-    var imageName: String {
-        filter.isSelected ? "mimaCheck" : "miamCross"
+    var icon: MiamIcon {
+        filter.isSelected ? .check : .cross
     }
     var body: some View {
         if Template.sharedInstance.catalogFilterRowTemplate != nil {
@@ -116,7 +116,7 @@ internal struct CatalogFilterRow: View {
                     filterSelected(filter)
                 } label: {
                     if (filter.isSelected) {
-                        Image(imageName, bundle: Bundle(for: CatalogVM.self))
+                        Image.miamImage(icon: icon)
                     } else {
                         Rectangle().foregroundColor(.clear)
                     }
