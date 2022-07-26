@@ -46,7 +46,7 @@ struct PriceView: View {
                 Text(viewModel.currentState.decimalPart + "" + MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
             }
             if(!isTotalPrice){
-                Text(MiamText.sharedInstance.preGuests).foregroundColor(MiamColor.sharedInstance.grey).font(.system(size: 12))
+                Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
             }
         }
         }

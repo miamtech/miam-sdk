@@ -24,23 +24,22 @@ struct StepRow: View {
         checkState = isCheck
     }
     
-    
     var body: some View {
         HStack() {
             ZStack {
                 Circle()
-                    .fill(MiamColor.sharedInstance.primaryText)
+                    .fill(Color.miamColor(.primaryText))
                     .frame(width: 35.0, height: 35.0)
                 Text(String(index+1))
-                    .foregroundColor(MiamColor.sharedInstance.white)
+                    .foregroundColor(Color.miamColor(.white))
                     .frame( alignment: .center)
             }
             
             Text(step.attributes!.stepDescription ?? "")
-                    .foregroundColor(MiamColor.sharedInstance.black20)
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .multilineTextAlignment(.leading)
-                        .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(Color.miamColor(.black20))
+                .font(.system(size: 16, weight: .regular, design: .default))
+                .multilineTextAlignment(.leading)
+                .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
             Spacer()
             Button(action:
                         {

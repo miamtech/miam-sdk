@@ -22,7 +22,7 @@ internal struct BasketPreviewFooter: View {
                         removeFromBasketAction()
                     }) {
                         Text("Retirer du panier").font(.system(size: 16.0, weight: .regular, design: .default))
-                    }.foregroundColor(MiamColor.sharedInstance.bodyText)
+                    }.foregroundColor(Color.miamColor(.secondaryText))
 
                 }.padding(.horizontal, Dimension.sharedInstance.mPadding).frame(minWidth: 155.0)
 
@@ -31,11 +31,11 @@ internal struct BasketPreviewFooter: View {
                         continueShoppingAction()
                     }) {
                         Text("Continuer mes achats").font(.system(size: 16.0, weight: .bold, design: .default))
-                    }.foregroundColor(MiamColor.sharedInstance.white).padding(.horizontal, Dimension.sharedInstance.sPadding)
+                    }.foregroundColor(Color.miamColor(.white)).padding(.horizontal, Dimension.sharedInstance.sPadding)
                 }.frame(maxWidth: .infinity)
                     .frame(height: 64.0)
-                    .background(MiamColor.sharedInstance.primaryText)
-            }.frame(maxWidth: .infinity, alignment: .bottom).background(MiamColor.sharedInstance.white)
+                    .background(Color.miamColor(.primaryText))
+            }.frame(maxWidth: .infinity, alignment: .bottom).background(Color.miamColor(.white))
         }
     }
 }

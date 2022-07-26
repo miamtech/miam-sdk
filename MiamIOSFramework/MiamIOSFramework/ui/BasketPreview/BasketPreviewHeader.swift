@@ -52,27 +52,27 @@ struct BasketPreviewHeader: View {
 
                     VStack (alignment: .leading) {
                         Text(basketTitle)
-                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .foregroundColor(Color.miamColor(.black))
                             .font(.system(size: 16, weight: .heavy, design: .default))
 
                         Text(basketDescription)
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .foregroundColor(Color.miamColor(.secondaryText))
                             .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.top, Dimension.sharedInstance.borderWidth)
 
                         Text(pricePerGuest)
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .foregroundColor(Color.miamColor(.secondaryText))
                             .font(.system(size: 16, weight: .light, design: .default))
 
                         Button {
                             goToDetail()
                         } label: {
-                            Text("Voir le détail").fontWeight(.heavy).foregroundColor(MiamColor.sharedInstance.primaryText)
+                            Text("Voir le détail").fontWeight(.heavy).foregroundColor(Color.miamColor(.primaryText))
                         }.padding([.top], Dimension.sharedInstance.sPadding)
                     }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
-                    Text(formattedPrice).foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.bold)
+                    Text(formattedPrice).foregroundColor(Color.miamColor(.primary)).fontWeight(.bold)
                     Spacer()
 
                     CounterView(count: numberOfGuests, isDisable: false) {
@@ -82,7 +82,7 @@ struct BasketPreviewHeader: View {
                     }
                 }
             }.padding([.leading, .trailing], 16.0)
-            Divider().background(MiamColor.sharedInstance.borderBottom).frame(height: 1.0, alignment: .leading)
+            Divider().background(Color.miamColor(.borderLight)).frame(height: 1.0, alignment: .leading)
         }
     }
 }

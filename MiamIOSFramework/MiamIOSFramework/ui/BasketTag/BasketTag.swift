@@ -37,10 +37,10 @@ public struct BasketTag: View {
                 if(basketTagVm.recipeList != nil && basketTagVm.recipeList!.count > 1){
                 ZStack(){
                     Circle()
-                        .strokeBorder(MiamColor.sharedInstance.primary,lineWidth: 1)
+                        .strokeBorder(Color.miamColor(.primary), lineWidth: 1)
                         .frame(width: 30, height: 30)
                     Text("+" + String(basketTagVm.recipeList!.count - 1))
-                        .foregroundColor(MiamColor.sharedInstance.primary)
+                        .foregroundColor(Color.miamColor(.primary))
                 }
                     
                 }
@@ -84,10 +84,10 @@ internal struct ListModal: View {
                         ForEach(0..<recipeList.count) { i in
                             Text((recipeList[i] as! Recipe).attributes?.title ?? "")
                                 .underline()
-                                .foregroundColor(MiamColor.sharedInstance.ternary)
+                                .foregroundColor(Color.miamColor(.ternary))
                                 .bold()
                                 .padding(.horizontal,8)
-                                .padding(.vertical,4).onTapGesture {
+                                .padding(.vertical, 4).onTapGesture {
                                     basketTagVm.goToDetail(recipe: recipeList[i] as! Recipe)
                                     showingPopup = true
                                     showingListModal = false                              

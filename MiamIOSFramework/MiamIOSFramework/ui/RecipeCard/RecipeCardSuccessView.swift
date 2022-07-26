@@ -18,7 +18,6 @@ struct RecipeCardSuccessView: View {
     public var criteria: SuggestionsCriteria?
 
     private let showMealIdeaTag: Bool
-
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
     
@@ -85,7 +84,7 @@ struct RecipeCardSuccessView: View {
                                             .font(.system(size: 14.0, design: .default))
                                     }.padding(.horizontal,16)
                                         .padding(.vertical,4)
-                                        .background(MiamColor.sharedInstance.musterd)
+                                        .background(Color.miamColor(.musterd))
                                         .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
                                 }
                                 Spacer()
@@ -96,7 +95,7 @@ struct RecipeCardSuccessView: View {
                         }.frame(height: 240)
                         Text(viewModel.recipe!.attributes?.title ?? "")
                             .lineLimit(2)
-                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .foregroundColor(Color.miamColor(.black))
                             .font(.system(size: 13.0, weight: .bold, design: .default))
                             .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                                 leading: Dimension.sharedInstance.lPadding,
@@ -129,13 +128,13 @@ struct RecipeCardSuccessView: View {
                                     Image("Check", bundle: Bundle(for: RecipeCardVM.self))
                                 }
                             }
-                        }.foregroundColor(!viewModel.isInCart ? MiamColor.sharedInstance.white : MiamColor.sharedInstance.primaryText)
+                        }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))
                             .frame(minHeight: 50.0, maxHeight: 50.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                            .background(!viewModel.isInCart ? MiamColor.sharedInstance.primaryText : Color.white)
+                            .background(!viewModel.isInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
                             .cornerRadius(25)
                             .font(.system(size: 14.0, weight: .bold, design: .default))
-                            .overlay(Capsule().stroke(MiamColor.sharedInstance.primary, lineWidth: 1.0))
+                            .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
                     }
                     
@@ -148,7 +147,7 @@ struct RecipeCardSuccessView: View {
                     )
                 }.cornerRadius(15).clipped().overlay(
                     RoundedRectangle(cornerRadius: 15)
-                        .stroke(MiamColor.sharedInstance.borderColor, lineWidth: 1)
+                        .stroke(Color.miamColor(.border), lineWidth: 1)
                 )
             }.frame(height: 400)
         }

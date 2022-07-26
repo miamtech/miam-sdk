@@ -34,4 +34,13 @@ extension Color {
             opacity: Double(a) / 255
         )
     }
+
+    static func miamColor(_ from: MiamColor) -> Color {
+        var color = Color(from.rawValue)
+        if color.cgColor == nil {
+            color = Color(from.rawValue, bundle: Bundle.miamBundle)
+        }
+
+        return color
+    }
 }

@@ -25,7 +25,7 @@ public struct ItemSelector: View  {
                     viewModel.returnToPreview()
                 }, titleView: AnyView(
                     Text(ItemSelectorText.sharedInstance.swapProduct)
-                        .foregroundColor(MiamColor.sharedInstance.black)
+                        .foregroundColor(Color.miamColor(.black))
                         .font(.system(size: 16, weight: .heavy, design: .default)))
                 )
 

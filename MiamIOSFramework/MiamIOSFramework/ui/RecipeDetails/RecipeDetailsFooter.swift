@@ -53,18 +53,17 @@ struct RecipeDetailsFooter: View {
                 
                 if(recipeVM.currentState.isInCart){
                     HStack {
-                        Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(MiamColor.sharedInstance.white)
+                        Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(Color.miamColor(.white))
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
                             .font(.system(size: 16.0, weight: .bold, design: .default))
                     }.frame(maxWidth: .infinity)
                         .frame(height: 64.0)
-                        .background(MiamColor.sharedInstance.ternary).onTapGesture {
+                        .background(Color.miamColor(.ternary)).onTapGesture {
                             goToPreview()
                         }
-                    
                 } else {
                     HStack {
-                        Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(MiamColor.sharedInstance.white)
+                        Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(Color.miamColor(.white))
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
                             .font(.system(size: 16.0, weight: .bold, design: .default))
                         Image("cart", bundle: Bundle(for: RecipeCardVM.self))
@@ -73,7 +72,7 @@ struct RecipeDetailsFooter: View {
                             .foregroundColor(Color.white)
                     }.frame(maxWidth: .infinity)
                         .frame(height: 64.0)
-                        .background(MiamColor.sharedInstance.primaryText).onTapGesture {
+                        .background(Color.miamColor(.primaryText)).onTapGesture {
                             buy()
                             goToPreview()
                         }

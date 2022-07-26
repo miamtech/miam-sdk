@@ -12,7 +12,7 @@ struct BasketPreviewLoadingView: View {
     var body: some View {
         VStack(){
             Text("Préparation du repas ...")
-            ProgressLoader(color: MiamColor.sharedInstance.primaryText)
+            ProgressLoader(color: Color.miamColor(.primaryText))
         }
     }
 }

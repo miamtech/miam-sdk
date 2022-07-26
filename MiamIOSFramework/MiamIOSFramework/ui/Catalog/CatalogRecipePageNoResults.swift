@@ -30,19 +30,19 @@ public struct CatalogRecipePageNoResultsView: View {
                 .fontWeight(.bold)
                 .font(.system(size: 24.0))
                 .multilineTextAlignment(.center)
-                .foregroundColor(MiamColor.sharedInstance.white)
+                .foregroundColor(Color.miamColor(.white))
 
             if !showingFavorites {
                 Text("\(tryAnotherSearchText)")
                     .font(.system(size: 16.0))
-                    .foregroundColor(MiamColor.sharedInstance.white)
+                    .foregroundColor(Color.miamColor(.white))
             }
 
             if showingFavorites {
                 Button {
                     catalogViewModel.setEvent(event: CatalogContractEvent.GoToDefault())
                 } label: {
-                    Text("\(browseRecipesText)").foregroundColor(MiamColor.sharedInstance.primary).fontWeight(.semibold)
+                    Text("\(browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
                     Image("right_arrow", bundle: Bundle(for: CatalogVM.self))
                 }
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
@@ -63,7 +63,7 @@ public struct CatalogRecipePageNoResultsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(10)
-        .background(MiamColor.sharedInstance.backgroundDark)
+        .background(Color.miamColor(.primaryDark))
     }
 }
 

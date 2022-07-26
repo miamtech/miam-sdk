@@ -83,18 +83,18 @@ struct BasketPreviewRow: View {
                     VStack (alignment: .leading) {
                         
                         Text(productName)
-                            .foregroundColor(MiamColor.sharedInstance.black)
+                            .foregroundColor(Color.miamColor(.black))
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                         
                         Text(productBrandName)
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .foregroundColor(Color.miamColor(.secondaryText))
                             .font(.system(size: 13, weight: .medium, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
                         
                         Text(productDescription)
-                            .foregroundColor(MiamColor.sharedInstance.bodyText)
+                            .foregroundColor(Color.miamColor(.secondaryText))
                             .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
@@ -111,7 +111,7 @@ struct BasketPreviewRow: View {
                 //Price
                 VStack {
                     Text("\(productPrice)€")
-                        .foregroundColor(MiamColor.sharedInstance.primaryText)
+                        .foregroundColor(Color.miamColor(.primaryText))
                         .font(.system(size: 20, weight: .heavy, design: .default))
                 }.frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.top, Dimension.sharedInstance.borderWidth)
@@ -128,7 +128,7 @@ struct BasketPreviewRow: View {
                                     .renderingMode(.original)
                                     .frame(width: 30, height: 30, alignment: .topTrailing)
                                 Text(replaceIngredientButtonTitle)
-                                    .foregroundColor(MiamColor.sharedInstance.primaryText).font(.system(size: 20, weight: .semibold, design: .default))
+                                    .foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 20, weight: .semibold, design: .default))
                             }.frame(width: 145, height: 30, alignment: .topTrailing)
                         }
                         Spacer().onAppear(perform: {
@@ -147,7 +147,7 @@ struct BasketPreviewRow: View {
                 }
                 
                 Divider()
-                    .background(MiamColor.sharedInstance.borderBottom)
+                    .background(Color.miamColor(.borderLight))
                     .padding(.top, Dimension.sharedInstance.mPadding)
             }
             .padding([.horizontal, .top], Dimension.sharedInstance.lPadding)
