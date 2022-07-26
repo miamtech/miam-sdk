@@ -39,4 +39,16 @@ platform :ios do
     		xcframework_output_directory: 'frameworks/'
 		)
 	end
+	lane :beta do
+        ensure_git_status_clean
+        increment_build_number(xcodeproj: "iosApp/iosApp.xcodeproj")
+        commit_version_bump(
+                xcodeproj: "iosApp/iosApp.xcodeproj",
+                message: "Increment build number [ci skip]",
+                force: true
+        )
+        match(type: "appstore", readonly: true)
+    	build_app(workspace: "showRoom.xcworkspace", scheme: "iosApp")
+    	upload_to_testflight
+  	end
 end	
