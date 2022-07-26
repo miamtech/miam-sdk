@@ -369,7 +369,6 @@
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
-				DCD4E32527BE9657000D3EA6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -452,13 +451,6 @@
 				BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
