@@ -1,3 +1,7 @@
+## 2.0.3
+- [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
+- [FIX][IOS] Recipe steps are now correctly marked as checked
+
 ## 2.0.2
 - [FIX][CORE] Recipe 'is in cart' not well refreshed
 - [FIX][CORE] Handle loading and Empty state in MyMealViewModel
