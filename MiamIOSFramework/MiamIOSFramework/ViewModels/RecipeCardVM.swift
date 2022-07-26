@@ -14,6 +14,13 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
     @Published var state: RecipeContractState?
     @Published var isInCart: Bool = false
 
+    var sortedSteps: [RecipeStep] {
+        guard let recipe = recipe else {
+            return []
+        }
+        return recipe.sortedStep
+    }
+
     override init(routerVM: RouterOutletViewModel) {
         super.init(routerVM:routerVM)
         collect(flow: uiState, collect: { data in
@@ -23,6 +30,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
             switch state.recipeState {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
+                    self.objectWillChange.send()
                 default:
                     break
                 }
