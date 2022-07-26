@@ -40,7 +40,7 @@ struct CatalogFiltersView: View {
                     Button {
                         closeFilters()
                     } label: {
-                        Image("cross", bundle: Bundle(for: RecipeCardVM.self))
+                        Image.miamImage(icon: .cross)
                     }
                 }.padding([.top], 20)
 
@@ -105,7 +105,7 @@ internal struct CatalogFilterRow: View {
     let filter: CatalogFilterOptions
     let filterSelected: (CatalogFilterOptions) -> Void
     var imageName: String {
-        filter.isSelected ? "Check" : "cross"
+        filter.isSelected ? "mimaCheck" : "miamCross"
     }
     var body: some View {
         if Template.sharedInstance.catalogFilterRowTemplate != nil {

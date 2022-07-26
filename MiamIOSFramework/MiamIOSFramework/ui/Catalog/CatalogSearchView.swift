@@ -19,7 +19,7 @@ struct CatalogSearchView: View {
                 Button {
                     catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                 } label: {
-                    Image("Arrow", bundle: Bundle(for: RecipeListPageVM.self))
+                    Image.miamImage(icon: .arrow)
                 }
                 Spacer()
             }.frame(height: 44).padding(Dimension.sharedInstance.mlPadding)
@@ -35,7 +35,7 @@ struct CatalogSearchView: View {
                     Button {
                         catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
                     } label: {
-                        Image("search", bundle: Bundle(for: CatalogVM.self))
+                        Image.miamImage(icon: .search)
                             .padding(10)
                             .background(Color.miamColor(.primary)).clipShape(Circle())
                     }

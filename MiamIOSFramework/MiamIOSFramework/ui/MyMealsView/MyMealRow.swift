@@ -82,7 +82,7 @@ public struct MyMealRow: View {
                     Button {
                         myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))
                     } label: {
-                        Image("Bin", bundle: Bundle(for: MyMealVM.self))
+                        Image.miamImage(icon: .bin)
                     }
                     Spacer()
                     Button {
@@ -91,7 +91,7 @@ public struct MyMealRow: View {
                             chevronAngle = isExpanded ? 0.0 : -90.0
                         }
                     } label: {
-                        Image("chevron-down", bundle: Bundle(for: MyMealVM.self)).rotationEffect(Angle.degrees(chevronAngle))
+                        Image.miamImage(icon: .chevronDown).rotationEffect(Angle.degrees(chevronAngle))
                     }.padding([.trailing], Dimension.sharedInstance.lPadding)
                 }.frame(width: 30.0, alignment: .trailing)
             }.padding(Dimension.sharedInstance.mlPadding)

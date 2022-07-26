@@ -54,7 +54,7 @@ struct CounterView: View {
                 Button(action: {
                     decrease()
                 }) {
-                    Image("minus", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .minus)
                         .foregroundColor(Color.miamColor(.white))
                 }.padding(.leading, Dimension.sharedInstance.mPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
@@ -66,7 +66,7 @@ struct CounterView: View {
                 Button(action: {
                     increase()
                 }) {
-                    Image("plus", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .plus)
                         .foregroundColor(Color.miamColor(.white))
                 }.padding(.trailing, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .trailing)
