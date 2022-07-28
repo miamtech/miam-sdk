@@ -109,9 +109,9 @@ open class CatalogViewModel:
             launch(coroutineHandler) {
                 setState {copy(categories = BasicUiState.Loading)}
                 val fetchedPackage = packageRepositoryImp.getActivePackageForRetailer(providerId.toString())
-                val newState = if (fetchedPackage.isEmpty()) BasicUiState.Empty else BasicUiState.Success(fetchedPackage)
+                //val newState = if (fetchedPackage.isEmpty()) BasicUiState.Empty else BasicUiState.Success(fetchedPackage)
                 // TODO le multi page n'est pas encore supporté
-                setState {copy(categories = newState)}
+                //setState {copy(categories = newState)}
             }.invokeOnCompletion { error ->
                 if (error != null) {
                     setState { copy(categories = BasicUiState.Error("Could not fetch packages")) }
