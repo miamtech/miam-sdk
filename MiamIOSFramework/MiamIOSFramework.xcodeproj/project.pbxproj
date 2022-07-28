@@ -54,7 +54,6 @@
 		BF25E1582864740900328B4B /* miam.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF25E1572864740900328B4B /* miam.xcassets */; };
 		BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1602865B01B00328B4B /* CatalogVM.swift */; };
 		BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E168286611B200328B4B /* RecipePageListVM.swift */; };
-		BF269199289293F300BF9D5A /* miamCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF269198289293E200BF9D5A /* miamCore.xcframework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */; };
 		BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF882083287F0B8600D7353B /* TitleBarView.swift */; };
 		BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */; };
@@ -136,7 +135,6 @@
 		BF25E1572864740900328B4B /* miam.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = miam.xcassets; sourceTree = "<group>"; };
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
-		BF269198289293E200BF9D5A /* miamCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = miamCore.xcframework; path = ../miamCore/build/XCFrameworks/Debug/miamCore.xcframework; sourceTree = "<group>"; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF269199289293F300BF9D5A /* miamCore.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +366,6 @@
 			isa = PBXGroup;
 			children = (
 				BF25E1572864740900328B4B /* miam.xcassets */,
-				BF269198289293E200BF9D5A /* miamCore.xcframework */,
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
@@ -476,7 +472,6 @@
 			buildConfigurationList = DCD4E31427BE914A000D3EA6 /* Build configuration list for PBXNativeTarget "MiamIOSFramework" */;
 			buildPhases = (
 				DCD4E2FB27BE914A000D3EA6 /* Headers */,
-				BF26919728928E8000BF9D5A /* ShellScript */,
 				DCD4E2FC27BE914A000D3EA6 /* Sources */,
 				DCD4E2FD27BE914A000D3EA6 /* Frameworks */,
 				DCD4E2FE27BE914A000D3EA6 /* Resources */,
@@ -562,26 +557,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BF26919728928E8000BF9D5A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:assembleXCFramework\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DCD4E2FC27BE914A000D3EA6 /* Sources */ = {
@@ -811,6 +786,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/XCFrameworks/$(CONFIGURATION)";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -850,6 +826,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/XCFrameworks/$(CONFIGURATION)";
 				GENERATE_INFOPLIST_FILE = YES;
