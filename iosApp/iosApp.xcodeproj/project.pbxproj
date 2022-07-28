@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,7 +13,6 @@
 		0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEEA6B7280F138E00291155 /* MiamManager.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* MealIdeas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* MealIdeas.swift */; };
-		BF2691AC2892C67D00BF9D5A /* miamCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2691AB2892C67D00BF9D5A /* miamCore.xcframework */; };
 		BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF8892850D63800E8B1F2 /* MyProduct.swift */; };
 		BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */; };
 		BF3AF88F2850EF3800E8B1F2 /* MyBasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */; };
@@ -64,7 +63,6 @@
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* MealIdeas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealIdeas.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BF2691AB2892C67D00BF9D5A /* miamCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = miamCore.xcframework; path = ../../miamCore/build/XCFrameworks/release/miamCore.xcframework; sourceTree = "<group>"; };
 		BF3AF8892850D63800E8B1F2 /* MyProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProduct.swift; sourceTree = "<group>"; };
 		BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasket.swift; sourceTree = "<group>"; };
 		BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasketView.swift; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF2691AC2892C67D00BF9D5A /* miamCore.xcframework in Frameworks */,
 				0B7C9BD62812E98500BFC7F8 /* MiamIOSFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,7 +120,6 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				BF2691AB2892C67D00BF9D5A /* miamCore.xcframework */,
 				BF3AF88D2850D8D300E8B1F2 /* Views */,
 				BF3AF8862850D62200E8B1F2 /* Model */,
 				0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */,
@@ -165,6 +161,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
+				BF2691B42892E1FA00BF9D5A /* Run Script */,
 				7555FF77242A565900829871 /* Sources */,
 				7555FF78242A565900829871 /* Frameworks */,
 				7555FF79242A565900829871 /* Resources */,
@@ -246,6 +243,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BF2691B42892E1FA00BF9D5A /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7555FF77242A565900829871 /* Sources */ = {
@@ -388,11 +407,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = VLHN7Y8965;
+				DEVELOPMENT_TEAM = 38CGT7EPPY;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -402,13 +421,12 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = (
-					"$(inherited)",
 					"-framework",
 					miamCore,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tech.miam.showRoom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development tech.miam.showRoom";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -422,7 +440,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = VLHN7Y8965;
 				ENABLE_BITCODE = YES;
@@ -435,7 +453,6 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = (
-					"$(inherited)",
 					"-framework",
 					miamCore,
 				);
