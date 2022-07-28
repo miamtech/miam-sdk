@@ -471,7 +471,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DCD4E31427BE914A000D3EA6 /* Build configuration list for PBXNativeTarget "MiamIOSFramework" */;
 			buildPhases = (
-				0BFD23B727FDDA9D00A50FE7 /* ShellScript */,
 				DCD4E2FB27BE914A000D3EA6 /* Headers */,
 				DCD4E2FC27BE914A000D3EA6 /* Sources */,
 				DCD4E2FD27BE914A000D3EA6 /* Frameworks */,
@@ -558,26 +557,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0BFD23B727FDDA9D00A50FE7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DCD4E2FC27BE914A000D3EA6 /* Sources */ = {
