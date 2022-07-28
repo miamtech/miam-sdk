@@ -158,12 +158,22 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         initMiam()
         initFakeBasket()
         setContent {
+            var isMyMealPage by remember { mutableStateOf(false) }
             var isFavoritePage by remember { mutableStateOf(false) }
             var isTagPage by remember { mutableStateOf(false) }
             var isCatalogPage by remember { mutableStateOf(false) }
             Column() {
                 Row(){
                     Button(onClick = {
+                        isMyMealPage = !isMyMealPage
+                        isFavoritePage = false
+                        isTagPage = false
+                        isCatalogPage = false
+                    }) {
+                        Text("my meal")
+                    }
+                    Button(onClick = {
+                        isMyMealPage = false
                         isFavoritePage= !isFavoritePage
                         isTagPage = false
                         isCatalogPage = false
@@ -171,20 +181,24 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                         Text("favorite")
                     }
                     Button(onClick = {
+                        isMyMealPage = false
                         isTagPage= !isTagPage
                         isCatalogPage = false
                         isFavoritePage= false}) {
                         Text("tags")
                     }
                     Button(onClick = {
+                        isMyMealPage = false
                         isCatalogPage= !isCatalogPage
                         isTagPage = false
                         isFavoritePage= false}) {
-                        Text("Catalog tags")
+                        Text("Catalog")
                     }
                 }
 
-                if(isFavoritePage){
+                if (isMyMealPage) {
+                    MyMeal(this@MainActivity).Content()
+                } else if(isFavoritePage){
                     FavoritePage(this@MainActivity).Content()
                 } else if(isTagPage) {
                     if (ContextHandlerInstance.instance.isReady()) {
@@ -196,10 +210,9 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
                         }
 
                     }
-                }  else if(isCatalogPage) {
+                } else if(isCatalogPage) {
                      Catalog(this@MainActivity).Content()
-                }
-                   else {
+                } else {
                     Column(
                         Modifier
                             .fillMaxWidth()
@@ -271,7 +284,6 @@ class MainActivity : ComponentActivity(), KoinComponent,  CoroutineScope by Coro
         recipe3.bind(recipeId = "1")
 
         Column {
-            MyMeal(context).Content()
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
