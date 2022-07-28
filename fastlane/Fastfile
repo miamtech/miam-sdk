@@ -48,7 +48,7 @@ platform :ios do
                 force: true
         )
         match(type: "appstore", readonly: true)
-    	build_app(workspace: "showRoom.xcworkspace", scheme: "Release")
+    	build_app(workspace: "showRoom.xcworkspace", scheme: "iosApp")
     	upload_to_testflight
   	end
 end	
