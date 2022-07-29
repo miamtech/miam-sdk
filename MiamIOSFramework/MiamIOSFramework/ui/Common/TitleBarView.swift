@@ -22,7 +22,7 @@ struct TitleBarView: View {
                         backAction()
                     }
                 } label: {
-                    Image("back", bundle: Bundle.miamBundle)
+                    Image.miamImage(icon: .back)
                         .renderingMode(.template)
                         .foregroundColor(Color.miamColor(.primary))
                         .padding([.leading, .trailing], Dimension.sharedInstance.lPadding)

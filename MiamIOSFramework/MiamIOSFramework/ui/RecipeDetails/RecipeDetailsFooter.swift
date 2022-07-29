@@ -66,7 +66,7 @@ struct RecipeDetailsFooter: View {
                         Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(Color.miamColor(.white))
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
                             .font(.system(size: 16.0, weight: .bold, design: .default))
-                        Image("cart", bundle: Bundle(for: RecipeCardVM.self))
+                        Image.miamImage(icon: .cart)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 24, height: 24, alignment: .center)
                             .foregroundColor(Color.white)

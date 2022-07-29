@@ -104,7 +104,7 @@ struct BasketPreviewRow: View {
                     Button(action: {
                         removeProductAction()
                     }) {
-                        Image("Bin", bundle: Bundle(for: BasketPreviewVM.self))
+                        Image.miamImage(icon: .bin)
                     }.frame(width: 30, height: 30, alignment: .topTrailing)
                 }
                 
@@ -124,7 +124,7 @@ struct BasketPreviewRow: View {
                             Button(action: {
                                 replaceProductAction()
                             }) {
-                                Image("sync", bundle: Bundle(for: BasketPreviewVM.self)).resizable()
+                                Image.miamImage(icon: .sync).resizable()
                                     .renderingMode(.original)
                                     .frame(width: 30, height: 30, alignment: .topTrailing)
                                 Text(replaceIngredientButtonTitle)
