@@ -768,7 +768,21 @@ Component available for low level customization :
 
 ## iOS integration (Swift)
 
-### Initialization
+### Cocoapods installation
+
+To integrate MiamIOSFramework into your Xcode project using CocoaPods, specify it in your Podfile:
+
+pod 'MiamIOSFramework'
+
+### Swift package manager installation
+
+To add MiamIOSFramework as a dependency directly from Xcode.
+
+![alt text](pic/addSwiftPackage.png "add swift package step 1")
+
+![alt text](pic/addMiamSwiftPackage.png "add swift package step 2")
+
+### Manual Installation
 
 #### Build and import
 
