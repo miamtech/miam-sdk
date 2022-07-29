@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 14, *)
 struct BasketPreviewLoadingView: View {
     var body: some View {
-        VStack(){
+        VStack {
             Text("Préparation du repas ...")
             ProgressLoader(color: Color.miamColor(.primaryText))
         }
