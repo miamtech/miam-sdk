@@ -1246,6 +1246,7 @@ you can find more info [here]("https://developer.apple.com/forums/thread/652405"
 
 ### Styling
 
+<<<<<<< HEAD
 ### Colors
 
 Colors can be globally overriden by redefining them in your main assets file. 
@@ -1281,7 +1282,50 @@ Below is a table of color names and default values.
 |miamWarning|#FFDAA3|
 |miamWhite|#FAFCFE|
 
-#### 
+### Icons
+
+Icons can be globally overriden by redefining them in your main assets file. 
+
+![alt text](pic/iconOverrideSample.png "add framework step 1")
+
+Below is a table of icons names with default icons. 
+
+| Name |  Default icon |
+|:-------------|:-------------:|
+|miamArrow|![alt text](MiamIOSFramework/miam.xcassets/miamArrow.imageset/Arrow.svg)|
+|miamBack|![](MiamIOSFramework/miam.xcassets/miamBack.imageset/back.svg)|
+|miamBin|![](MiamIOSFramework/miam.xcassets/miamBin.imageset/Bin.svg)|
+|miamBucket|![](MiamIOSFramework/miam.xcassets/miamBucket.imageset/bucket.svg)|
+|miamCaret|![](MiamIOSFramework/miam.xcassets/miamCaret.imageset/Caret.svg)|
+|miamGreyCaret|![](MiamIOSFramework/miam.xcassets/miamGreyCaret.imageset/CaretGrey.svg)|
+|miamCart|![](MiamIOSFramework/miam.xcassets/miamCart.imageset/Cart.svg)|
+|miamCheck|![](MiamIOSFramework/miam.xcassets/miamCheck.imageset/Check.svg)|
+|miamGreyChevronDown|![](MiamIOSFramework/miam.xcassets/miamGreyChevronDown.imageset/chevron-down-grey.svg)|
+|miamChevronDown|![](MiamIOSFramework/miam.xcassets/miamChevronDown.imageset/chevron-down.svg)|
+|miamClock|![](MiamIOSFramework/miam.xcassets/miamClock.imageset/Clock.svg)|
+|miamCookHat|![](MiamIOSFramework/miam.xcassets/miamCookHat.imageset/CookHat.svg)|
+|miamCross|![](MiamIOSFramework/miam.xcassets/miamCross.imageset/cross.svg)|
+|miamEasy|![](MiamIOSFramework/miam.xcassets/miamEasy.imageset/Easy.svg)|
+|miamFilters|![](MiamIOSFramework/miam.xcassets/miamFilters.imageset/filters.svg)|
+|miamHard|![](MiamIOSFramework/miam.xcassets/miamHard.imageset/Hard.svg)
+|miamHeart|![](MiamIOSFramework/miam.xcassets/miamHeart.imageset/heart.svg)
+|miamHelp|![](MiamIOSFramework/miam.xcassets/miamHelp.imageset/Help.svg)|
+|miamIdeeRepas|![](MiamIOSFramework/miam.xcassets/miamIdeeRepas.imageset/ideerepas.svg)
+|miamLike|![](MiamIOSFramework/miam.xcassets/miamLike.imageset/Like.svg)
+|miamLikeFilled|![](MiamIOSFramework/miam.xcassets/miamLikeFilled.imageset/Liked%3DTrue.png)|
+|miamMid|![](MiamIOSFramework/miam.xcassets/miamMid.imageset/Mid.svg)|
+|miamMinus|![](MiamIOSFramework/miam.xcassets/miamMinus.imageset/Minus.svg)
+|miamNoResults|![](MiamIOSFramework/miam.xcassets/miamNoResults.imageset/no-results.svg)|
+|miamPeople|![](MiamIOSFramework/miam.xcassets/miamPeoples.imageset/Peoples.svg)|
+|miamPlus|![](MiamIOSFramework/miam.xcassets/miamPlus.imageset/Plus.svg)|
+|miamPlusGreen|![](MiamIOSFramework/miam.xcassets/miamPlusGreen.imageset/PlusGreen.svg)|
+|miamPrint|![](MiamIOSFramework/miam.xcassets/miamPrint.imageset/Print.svg)|
+|miamRightArrow|![](MiamIOSFramework/miam.xcassets/miamRightArrow.imageset/right_arrow.svg)|
+|miamSearch|![](MiamIOSFramework/miam.xcassets/miamSearch.imageset/search.svg)|
+|miamSync|![](MiamIOSFramework/miam.xcassets/miamSync.imageset/sync.svg)|
+|miamWhisk|![](MiamIOSFramework/miam.xcassets/miamWhisk.imageset/whisk.svg)|
+|miamYellowUnderline|![](MiamIOSFramework/miam.xcassets/miamYellowUnderline.imageset/yellow_underline.svg)|
+
 
 ### Template injection
 
