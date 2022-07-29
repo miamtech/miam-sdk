@@ -20,7 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "MiamIOSFramework",
-            path: "MiamIOSFramework",
+            path: "MiamIOSFramework/MiamIOSFramework",
             resources: [
                 .process("miam.xcassets"),
             ]
@@ -31,7 +31,7 @@ let package = Package(
         )
         .testTarget(
             name: "MiamIOSFrameworkTests",
-            path: "MiamIOSFrameworkTests",
+            path: "MiamIOSFramework/MiamIOSFrameworkTests",
             dependencies: ["MiamIOSFramework"]),
     ]
 )
