@@ -2,7 +2,9 @@
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
 - [FIX][IOS] Recipe steps are now correctly marked as checked
 - [FEA][IOS] Customizable colors
+- [FIX][COR] Infinit loading of myMeal page
 - [FEA][IOS] Customizable icons
+- [FIX][IOS] Loader display
 
 ## 2.0.2
 - [FIX][CORE] Recipe 'is in cart' not well refreshed
