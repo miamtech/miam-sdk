@@ -377,7 +377,6 @@
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
-				DCD4E32527BE9657000D3EA6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -462,13 +461,6 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -487,11 +479,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DCD4E31427BE914A000D3EA6 /* Build configuration list for PBXNativeTarget "MiamIOSFramework" */;
 			buildPhases = (
-				0BFD23B727FDDA9D00A50FE7 /* ShellScript */,
+				BF2691B52892E5F600BF9D5A /* ShellScript */,
 				DCD4E2FB27BE914A000D3EA6 /* Headers */,
 				DCD4E2FC27BE914A000D3EA6 /* Sources */,
 				DCD4E2FD27BE914A000D3EA6 /* Frameworks */,
 				DCD4E2FE27BE914A000D3EA6 /* Resources */,
+				BF2691B62892ECC700BF9D5A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -576,7 +569,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0BFD23B727FDDA9D00A50FE7 /* ShellScript */ = {
+		BF2691B52892E5F600BF9D5A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -591,7 +584,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n\n";
+			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n#./gradlew :miamCore:embedAndSign\n#./gradlew :miamCore:linkDebugFrameworkIOSFat\n";
+		};
+		BF2691B62892ECC700BF9D5A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -825,6 +835,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -864,6 +875,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				GENERATE_INFOPLIST_FILE = YES;
