@@ -1,7 +1,8 @@
-## 2.0.3
+## 2.1.0
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
-- [FIX][IOS] Recipe steps are now correctly marked as checked
 - [FEA][IOS] Customizable colors
+- [FEA][IOS] Available on swift package manager
+- [FIX][IOS] Recipe steps are now correctly marked as checked
 - [FIX][COR] Infinit loading of myMeal page
 - [FEA][IOS] Customizable icons
 - [FIX][IOS] Loader display
