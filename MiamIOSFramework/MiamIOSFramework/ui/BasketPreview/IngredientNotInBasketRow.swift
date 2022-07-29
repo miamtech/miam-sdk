@@ -15,7 +15,6 @@ struct IngredientNotInBasketRow: View {
     let addIngredientAction: () -> Void
     let isAddable: Bool
     private let addIngredientText = "Ajouter"
-    private let addIngredientIcon = "PlusGreen"
     var body: some View {
         if (Template.sharedInstance.ingredientNotInBasketRowTemplate != nil) {
             Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, addIngredientAction)
@@ -28,7 +27,7 @@ struct IngredientNotInBasketRow: View {
                 Spacer()
                 if(isAddable){
                 Button(action: addIngredientAction) {
-                    Image(addIngredientIcon, bundle: Bundle(for: BasketPreviewVM.self))
+                    Image.miamImage(icon: .plusGreen)
                         .resizable()
                         .aspectRatio( contentMode: .fit)
                         .frame(width: 30, height: 30, alignment: .center)

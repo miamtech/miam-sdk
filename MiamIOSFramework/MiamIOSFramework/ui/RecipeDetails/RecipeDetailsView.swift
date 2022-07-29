@@ -35,7 +35,7 @@ public struct RecipeDetailsView: View {
         VStack {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
                 HStack(){
-                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .ideeRepas)
                         .resizable()
                         .scaledToFill()
                         .frame(width:24, height:24)
@@ -76,7 +76,7 @@ public struct RecipeDetailsView: View {
                                         Button(action: {
                                             
                                         }) {
-                                            Image("Help", bundle: Bundle(for: RecipeCardVM.self))
+                                            Image.miamImage(icon: .help)
                                                 .renderingMode(.original)
                                         }
                                         .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
@@ -92,7 +92,7 @@ public struct RecipeDetailsView: View {
                                         HStack(alignment: .center) {
                                             HStack {
                                                 Spacer()
-                                                RecipeDetailsDifficulty(difficulty: Int(viewModel.recipe?.attributes?.difficulty ?? 1))
+                                                RecipeDetailsDifficulty(difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1))
                                                 Spacer()
                                             }
                                             Spacer()
@@ -101,7 +101,7 @@ public struct RecipeDetailsView: View {
                                             HStack {
                                                 Spacer()
                                                 VStack(alignment: .center) {
-                                                    Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
+                                                    Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
                                                     Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
                                                 }
                                                 Spacer()

@@ -25,7 +25,7 @@ public struct CatalogRecipePageNoResultsView: View {
 
     public var body: some View {
         VStack(spacing: 32.0) {
-            Image("no-results", bundle: Bundle(for: CatalogVM.self))
+            Image.miamImage(icon: .noResults)
             Text("\(noRecipeFoundText) \"\(catalogViewModel.searchString)\"")
                 .fontWeight(.bold)
                 .font(.system(size: 24.0))
@@ -43,7 +43,7 @@ public struct CatalogRecipePageNoResultsView: View {
                     catalogViewModel.setEvent(event: CatalogContractEvent.GoToDefault())
                 } label: {
                     Text("\(browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
-                    Image("right_arrow", bundle: Bundle(for: CatalogVM.self))
+                    Image.miamImage(icon: .rightArrow)
                 }
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .background(Capsule().foregroundColor(.white))
@@ -53,7 +53,7 @@ public struct CatalogRecipePageNoResultsView: View {
                     // TODO: Create recipe
                 } label: {
                     HStack {
-                        Image("plus", bundle: Bundle(for: CatalogVM.self))
+                        Image.miamImage(icon: .plus)
                         Text("\(addRecipeText)").foregroundColor(.white).fontWeight(.semibold)
                     }
                     .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
@@ -71,8 +71,7 @@ public struct CatalogRecipePageNoResultsView: View {
 public struct CatalogRecipePageNoFavoritesView: View {
     public var body: some View {
         VStack {
-            Image("no-results", bundle: Bundle(for: CatalogVM.self))
-
+            Image.miamImage(icon: .noResults)
         }
     }
 }

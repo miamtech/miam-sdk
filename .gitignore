@@ -20,3 +20,6 @@ vendor/
 xcuserdata/
 fastlane/report.xml
 fastlane/README.md
+*.ipa 
+*.dSYM*
+

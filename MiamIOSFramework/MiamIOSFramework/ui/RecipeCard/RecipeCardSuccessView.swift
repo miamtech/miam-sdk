@@ -76,7 +76,7 @@ struct RecipeCardSuccessView: View {
                             HStack(alignment: .center) {
                                 if (showMealIdeaTag) {
                                     HStack(){
-                                        Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                                        Image.miamImage(icon: .ideeRepas)
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width:24, height:24)
@@ -103,9 +103,9 @@ struct RecipeCardSuccessView: View {
                                                 trailing: Dimension.sharedInstance.lPadding))
 
                         HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
-                            IconWithText(imageName: "Clock", text: viewModel.recipe?.totalTime ?? "")
+                            IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
                             Divider()
-                            IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
+                            IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
                         }
 
                         Button {
@@ -120,12 +120,12 @@ struct RecipeCardSuccessView: View {
                             if !viewModel.isInCart {
                                 HStack {
                                     Text(MiamText.sharedInstance.checkBasketPreview)
-                                    Image("cart", bundle: Bundle(for: RecipeCardVM.self))
+                                    Image.miamImage(icon: .cart)
                                 }
                             } else {
                                 HStack {
                                     Text(MiamText.sharedInstance.viewRecipeDetail)
-                                    Image("Check", bundle: Bundle(for: RecipeCardVM.self))
+                                    Image.miamImage(icon: .check)
                                 }
                             }
                         }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))

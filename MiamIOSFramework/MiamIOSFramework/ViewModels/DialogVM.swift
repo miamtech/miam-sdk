@@ -19,7 +19,7 @@ public class DialogVM : ObservableObject {
          self.routerVm = routerVm
          
           routerVm.collect(flow: routerVm.uiState, collect: { data in
-             self.state = data as! RouterOutletContractState
+             self.state = data as? RouterOutletContractState
         })
         
     }
