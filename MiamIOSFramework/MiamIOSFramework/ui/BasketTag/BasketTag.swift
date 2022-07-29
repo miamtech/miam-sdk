@@ -100,7 +100,7 @@ internal struct ListModal: View {
                 Divider()
                 HStack{
                     Spacer()
-                    Image("cross", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .cross)
                         .renderingMode(.original)
                         .frame(
                             width: 24,

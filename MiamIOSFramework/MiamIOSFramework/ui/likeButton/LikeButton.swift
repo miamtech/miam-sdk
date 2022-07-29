@@ -22,12 +22,12 @@ struct LikeButton: View {
             Circle().fill(Color.miamColor(.white))
                 .frame(width: 34, height: 34)
             if(recipeVm.currentState.isLiked){
-                Image("LikeFilled", bundle: Bundle(for: RecipeCardVM.self))
+                Image.miamImage(icon: .likeFilled)
                     .renderingMode(.template)
                     .frame(width: 14.0, height: 14.0, alignment: .center)
                     .foregroundColor(Color.miamColor(.primaryText))
             } else {
-                Image("Like", bundle: Bundle(for: RecipeCardVM.self))
+                Image.miamImage(icon: .like)
                     .renderingMode(.template)
                     .frame(width: 14.0, height: 14.0, alignment: .center)
                     .foregroundColor(Color.miamColor(.primaryText))
