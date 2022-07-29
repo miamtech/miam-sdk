@@ -20,11 +20,11 @@ The integration of the SDK into your app will take three steps:
 This SDK is leveraging Kotlin Multiplatform Mobile so most of the Models, Controllers, and Services (interactions with Miam API) can be implemented only once and reused both in iOS and Android apps. Only the Views have to be implemented separately for each platform.
 
 Consequently, this SDK is organized in three main modules (TODO: naming to be reviewed):
-- /shared : contains the core logic shared between the two platforms
+- /miamCore : contains the core logic shared between the two platforms
 - /androidSDK : the SDK to be built and imported in an Android app, containing the core logic + Android-related Views
 - /MiamIOSFramework : same thing, but for iOS apps
 
-For instance, in the case of an Android application, you shouldn't have to import the built archive of /shared and /androidSDK : building /androidSDK to an APK and importing it will be enough, as this APK will contain the whole logic (/shared + Android views).
+For instance, in the case of an Android application, you shouldn't have to import the built archive of /miamCore and /androidSDK : building /androidSDK to an APK and importing it will be enough, as this APK will contain the whole logic (/miamCore + Android views).
 
 ## Android integration (Kotlin)
 
@@ -150,7 +150,7 @@ Miam initialization process will start only after the user is **logged**.
 Here is how to pass the user ID to the SDK, directly within the host app:
 
 ```kotlin
-import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 
 // Reference to your main "Miam" class
 Miam.getInstance().UserHandler.updateUserId(USER_ID_IN_HOST_APP (string))
@@ -158,7 +158,7 @@ Miam.getInstance().UserHandler.updateUserId(USER_ID_IN_HOST_APP (string))
 Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end. For instance : [MutableSharedFlow]("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/").
 
 ```kotlin 
-import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 
 class Miam() {
   init {
@@ -176,7 +176,7 @@ class Miam() {
 You can disable Like feature with UserHandler
 
 ```kotlin 
-import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 
 class Miam() {
   init {
@@ -194,7 +194,7 @@ class Miam() {
 You can block custom recipe suggestions if the user wishes.
 
 ```kotlin 
-import com.miam.kmm_miam_sdk.handler.UserHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 
 class Miam() {
   init {
@@ -220,7 +220,7 @@ Firstly, ask Miam team for your "supplier id" (unique for all your apps and webs
 Then, initialize the PointOfSaleHandler with this information:
 
 ```kotlin 
-import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.PointOfSaleHandler
 
 class Miam() {
   init {
@@ -243,7 +243,7 @@ Miam.getInstance().PointOfSaleHandler.updateStoreId(<string>STORE_ID_IN_HOST_APP
 It is possible to define a store as "active" or "inactive". When a store is inactive, Miam initialization process won't start even if the store is selected by the user. 
 
 ```kotlin
-import com.miam.kmm_miam_sdk.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.PointOfSaleHandler
 
 // List of store ids in the host app referential
 private const val availableStoreIdLists = listof("454", "652")
@@ -264,7 +264,7 @@ Last but not least, the SDK embeds a complex synchronization system that will en
 By convenience, we recommend to define a mapping function that transforms the host app YourProduct objects to "Miam products" objects (named `RetailerProduct` in the SDK). The opposite function can also be defined:
 
 ```kotlin
-import com.miam.kmm_miam_sdk.miam_core.model.RetailerProduct
+import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 
 // Defined in the SDK
 data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
@@ -294,7 +294,7 @@ Miam needs to listen to any change applied to the basket in the host app. To tha
 `(callback : (products: List<RetailerProduct>) -> Unit) -> Unit`
 
 ```kotlin
-import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 
 class Miam() {
 
@@ -326,7 +326,7 @@ class Miam() {
 Now, the other way around : everytime Miam's basket changes (every time a recipe is added or removed for example), the added or removed subsequent products have to be pushed to the in-app basket. Another function has to be defined on BasketHandler, with the signature: `(products: List<RetailerProduct>) -> Unit`.
 
 ```kotlin
-import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 
 class Miam() {
 
@@ -361,7 +361,7 @@ class Miam() {
 Finally, Miam basket will be confirmed and cleared once the payment has been validated by the user. We have to trigger this event on the BasketHandler as well:
 
 ```kotlin
-import com.miam.kmm_miam_sdk.handler.Basket.BasketHandler
+import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 
 class Miam() {
 
@@ -404,7 +404,7 @@ Some Miam internal informations are available for reading only
 they can be accesed with `GroceriesListHandler`
 
 ```kotlin
-    import com.miam.kmm_miam_sdk.handler.GroceriesListHandler
+    import com.miam.kmmMiamCore.handler.GroceriesListHandler
 
     private var recipeCount = 0
 
@@ -445,7 +445,7 @@ val recipe = RecipeView(this@MainActivity)
 In Miam, recipe cards can either be "fixed" (= fetched by on a predefined ID) or "suggested" (= fetched based on the user navigation context)
 
 ```kotlin
-import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 // Implemented in Miam SDK
 data class SuggestionsCriteria(
@@ -502,7 +502,7 @@ If you are not using Jetpack Compose, you can inject Miam recipe cards directly 
 And then bind the properties like this: 
 
 ```kotlin
-import com.miam.kmm_miam_sdk.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 // Implemented in Miam SDK
 data class SuggestionsCriteria(
@@ -760,11 +760,8 @@ Component available for low level customization :
 
 #### SDK: new components
 
-- Recipes catalog
 - Selected recipes history page
-- Favorites recipes
 - Personal recipes creation
-- Recipe tags
 
 ## iOS integration (Swift)
 
@@ -837,7 +834,7 @@ Make sure this main "Miam" class is a singleton and instantiated only once in yo
 ```swift
 // file Miam.swift
 import Foundation
-import shared
+import miamCore
 
 public class Miam {
   public static let sharedInstance = Miam()
@@ -931,7 +928,7 @@ Here is how to pass the user ID to the SDK, directly within the host app:
 
 ```swift
 // From anywhere
-import shared
+import miamCore
 
 // USER_ID_IN_HOST_APP is your user id type String is expected
 UserHandler.shared.updateUserId(userId: USER_ID_IN_HOST_APP)
@@ -943,7 +940,7 @@ Here is how to inform the SDK whenever the user login state changes. We recommen
 
 ```swift
 // file Miam.swift
-import shared
+import miamCore
 
 public class Miam {
   // CODE
@@ -965,7 +962,7 @@ You can disable like feature on recipe using UserHandler
 
 ```swift
 // file Miam.swift
-import shared
+import miamCore
 
 public class Miam {
   // CODE
@@ -984,7 +981,7 @@ public class Miam {
 You can block custom recipe suggestions if the user wishes.
 
 ```swift
-import shared
+import miamCore
 
 public class Miam {
   // CODE
@@ -1013,7 +1010,7 @@ Then, initialize the PointOfSaleHandler with this information:
 
 ```swift
 // file Miam.swift
-import shared
+import miamCore
 
 class Miam {
   
@@ -1032,7 +1029,7 @@ Finally, send the store ID to the SDK (in the example, from the host app):
 
 ```swift
 // From anywhere
-import shared
+import miamCore
 
 // STORE_ID_IN_HOST_APP is your user id type String is expected
 PointOfSaleHandler.updateStoreId(storeId: <string>STORE_ID_IN_HOST_APP)
@@ -1064,7 +1061,7 @@ Last but not least, the SDK embeds a complex synchronization system that will en
 By convenience, we recommend to define a mapping function that transforms the host app YourProduct objects to "Miam products" objects (named `RetailerProduct` in the SDK). The opposite function can also be defined:
 
 ```swift
-import shared
+import miamCore
 
 // Defined in the kotlin SDK, but can be used in swift
 // data class RetailerProduct(val retailerId :String, val quantity: Int, val name: String?)
@@ -1129,7 +1126,7 @@ Now, the other way around : everytime Miam's basket changes (every time a recipe
 
 ```swift
 // file Miam.swift
-import shared
+import miamCore
 
 class Miam {
    // CODE
@@ -1200,7 +1197,7 @@ In Miam, recipe cards can either be "fixed" (= fetched by on a predefined ID) or
 ```swift
 // ContentView.swift
 
-// Implemented in Shared can be use directly
+// Implemented in miamCore can be use directly
 data class SuggestionsCriteria(
   // Ids of products displayed in the search results, right before and after the recipe card
   val shelfIngredientsIds: List<String>? = null,
