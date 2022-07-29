@@ -92,7 +92,7 @@ public struct RecipeDetailsView: View {
                                         HStack(alignment: .center) {
                                             HStack {
                                                 Spacer()
-                                                RecipeDetailsDifficulty(difficulty: Int(viewModel.recipe?.attributes?.difficulty ?? 1))
+                                                RecipeDetailsDifficulty(difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1))
                                                 Spacer()
                                             }
                                             Spacer()
