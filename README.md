@@ -1246,6 +1246,43 @@ you can find more info [here]("https://developer.apple.com/forums/thread/652405"
 
 ### Styling
 
+### Colors
+
+Colors can be globally overriden by redefining them in your main assets file. 
+
+![alt text](pic/colorOverrideSample.png "add framework step 1")
+
+Below is a table of color names and default values. 
+
+
+| Name |  Default value |
+|:-------------|:-------------:|
+|miamBlack|#252525|
+|miamBlack20|#202020|
+|miamBorder|#DDDDDD|
+|miamBorderLight|#E9E9E9|
+|miamDanger|#F47F7A|
+|miamGrey|#676767|
+|miamGreySurface|#EDEDED|
+|miamInfo|#44D6B3|
+|miamLightGrey|#9F9F9F|
+|miamMusterd|#FFC700|
+|miamNeutralGrey|#575756|
+|miamPrimary|#037E92|
+|miamPrimaryDark|#005562|
+|miamPrimaryLight|#BED5DC|
+|miamPrimaryLighter|#F3F9FA|
+|miamPrimaryText|#007E92|
+|miamSecondary|#E61845|
+|miamSecondaryText|#4B555D|
+|miamSuccess|#44D6B3|
+|miamTernary|#209B8F|
+|miamUnpureWhite|#FEFEFE|
+|miamWarning|#FFDAA3|
+|miamWhite|#FAFCFE|
+
+#### 
+
 ### Template injection
 
 You can provide your own swiftUi template and map it with our controller 

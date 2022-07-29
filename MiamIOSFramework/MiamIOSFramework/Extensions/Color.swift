@@ -36,11 +36,14 @@ extension Color {
     }
 
     static func miamColor(_ from: MiamColor) -> Color {
-        var color = Color(from.rawValue)
-        if color.cgColor == nil {
-            color = Color(from.rawValue, bundle: Bundle.miamBundle)
+        guard let color = UIColor(named: from.rawValue) else {
+            return Color(from.rawValue, bundle: Bundle.miamBundle)
         }
 
-        return color
+        if #available(iOS 15, *) {
+            return Color(uiColor: color)
+        } else {
+            return Color(from.rawValue)
+        }
     }
 }
