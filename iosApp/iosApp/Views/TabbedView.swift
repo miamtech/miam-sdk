@@ -32,7 +32,7 @@ struct TabbedView: View {
                     Label("Mon panier", systemImage: "cart.fill")
             }
             CatalogTabView().tabItem {
-                Label("Catalog", systemImage: "cart.fill")
+                Label("Catalog", systemImage: "book.fill")
             }
         }
     }

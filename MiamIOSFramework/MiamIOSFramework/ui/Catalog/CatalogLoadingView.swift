@@ -12,15 +12,9 @@ struct CatalogLoadingView: View {
     let loadingText: String
     var body: some View {
         VStack {
-            ProgressLoader(color: Color.miamColor(.primary))
             Text(loadingText)
+            ProgressLoader(color: Color.miamColor(.primary))
         }
     }
 }
 
-@available(iOS 14, *)
-struct CatalogLoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering)
-    }
-}
