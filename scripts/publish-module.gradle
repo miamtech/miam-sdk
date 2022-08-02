@@ -19,13 +19,11 @@ artifacts {
 }
 
 group = PUBLISH_GROUP_ID
-version = PUBLISH_VERSION
 
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                //TODO SET VARIABLE
                 groupId PUBLISH_GROUP_ID
                         artifactId PUBLISH_ARTIFACT_ID
                         version System.getenv('$CI_COMMIT_REF_NAME')
@@ -38,7 +36,6 @@ afterEvaluate {
                         }
 
                 artifact androidSourcesJar
-                        // Mostly self-explanatory metadata
                         pom {
                             name = PUBLISH_ARTIFACT_ID
                             description = 'Miam SDK is a component libray that is directly wired with miam API.  It allow you to inject recipe into your mobile App'
@@ -57,8 +54,6 @@ afterEvaluate {
                                 }
                                 // Add other devs here...
                             }
-
-                            // TODO
                             scm {
                                 connection = 'https://gitlab.com/miam/kmm-miam-sdk.git'
                                 developerConnection = 'git@gitlab.com:miam/kmm-miam-sdk.git'

@@ -25,15 +25,6 @@ allprojects {
     }
 }
 
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
-
-extra.apply{
-    set("PUBLISH_GROUP_ID" , "tech.miam.sdk")
-    set("PUBLISH_VERSION" ,"2.1.0")
-    set("PUBLISH_ARTIFACT_ID", "miam-android-sdk")
-}
 
 /**
  * Maven central deploy script
