@@ -13,6 +13,7 @@ before_script:
   - export GRADLE_USER_HOME
 
 build-sdk:
+  stage: build
   script:
     - ./gradlew :androidSDK:assembleRelease
 only:
@@ -22,6 +23,5 @@ publish-sdk-maven:
   stage: deploy
   script:
     - ./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
- only:
+only:
   - tags
-
