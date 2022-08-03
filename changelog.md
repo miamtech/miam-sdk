@@ -1,5 +1,6 @@
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
+- [FIX][CI] target only android SDK task
 
 ## 2.2.0
 - [FEA][AND] AAR available on maven central
