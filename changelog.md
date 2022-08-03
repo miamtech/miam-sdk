@@ -1,3 +1,7 @@
+## 2.2.0
+- [FEA][AND] AAR available on maven central
+- [FEA][AND] CI:CD deploy and build
+
 ## 2.1.0
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
 - [FEA][IOS] Customizable colors
