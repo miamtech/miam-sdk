@@ -26,7 +26,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId PUBLISH_GROUP_ID
                         artifactId PUBLISH_ARTIFACT_ID
-                        version System.getenv('$CI_COMMIT_REF_NAME')
+                        version System.getenv('CI_COMMIT_REF_NAME')
 
                         // Two artifacts, the `aar` (or `jar`) and the sources
                         if (project.plugins.findPlugin("com.android.library")) {

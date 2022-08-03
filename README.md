@@ -39,7 +39,7 @@ Import with Apache Maven
 ```
 <dependency>
   <groupId>tech.miam.sdk</groupId>
-  <artifactId>androidSDK</artifactId>
+  <artifactId>kmm-miam-sdk</artifactId>
   <version>X.X.X</version>
   <type>aar</type>
 </dependency>
@@ -48,16 +48,16 @@ Import with Apache Maven
 Import with Gradle Groovy DSL
 
 ```
-implementation 'tech.miam.sdk:androidSDK:X.X.X'
+implementation 'tech.miam.sdk:kmm-miam-sdk:X.X.X'
 ```
 
 With Gradle Kotlin DSL
 
 ```
-implementation("tech.miam.sdk:androidSDK:X.X.X")
+implementation("tech.miam.sdk:kmm-miam-sdk:X.X.X")
 ```
 
-All information and version available [here]('https://search.maven.org/artifact/tech.miam.sdk/androidSDK')
+All information and version available [here]('https://search.maven.org/artifact/tech.miam.sdk/kmm-miam-sdk')
 
 #### Build and import AAR
 
