@@ -45,6 +45,6 @@ build-sdk:
 publish-sdk-maven:
   stage: deploy
   script:
-    - ./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
+    - ./gradlew androidSDK:publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
   only:
     - tags
