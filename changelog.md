@@ -1,3 +1,7 @@
+## 2.2.0
+- [FEA][AND] AAR available on maven central
+- [FEA][AND] CI:CD deploy and build
+
 ## 2.1.0
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
 - [FEA][IOS] Customizable colors
@@ -6,9 +10,6 @@
 - [FIX][COR] Infinit loading of myMeal page
 - [FEA][IOS] Customizable icons
 - [FIX][IOS] Loader display
-- [FEA][AND] AAR available on maven central
-- [FEA][ANS] CI:CD deploy and build
-
 
 ## 2.0.2
 - [FIX][CORE] Recipe 'is in cart' not well refreshed
