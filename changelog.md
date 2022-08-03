@@ -1,3 +1,6 @@
+## 2.2.1
+- [FIX][CI] fix commit variable name CI
+
 ## 2.2.0
 - [FEA][AND] AAR available on maven central
 - [FEA][AND] CI:CD deploy and build
