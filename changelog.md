@@ -8,6 +8,7 @@
 - [FIX][IOS] Reverse add button in recipe details
 - [FIX][IOS] Fix recipe image size in recipe details
 - [FEA][IOS] Shelf recipes has no longer border radius
+- [FIX][IOS] Fix replace product button size
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

@@ -126,10 +126,10 @@ struct BasketPreviewRow: View {
                             }) {
                                 Image.miamImage(icon: .sync).resizable()
                                     .renderingMode(.original)
-                                    .frame(width: 30, height: 30, alignment: .topTrailing)
+                                    .frame(width: 18, height: 18, alignment: .topTrailing)
                                 Text(replaceIngredientButtonTitle)
-                                    .foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 20, weight: .semibold, design: .default))
-                            }.frame(width: 145, height: 30, alignment: .topTrailing)
+                                    .foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 14, weight: .semibold, design: .default))
+                            }.frame(width: 100, height: 18, alignment: .topTrailing)
                         }
                         Spacer().onAppear(perform: {
                             print((previewLine.record as! BasketEntry).relationships!.items!.data.description )
