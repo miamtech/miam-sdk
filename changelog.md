@@ -12,6 +12,8 @@
 - [FIX][IOS] Fix itemSelector CTA button size and text
 - [FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
 - [FIX][IOS] Fix bigger product quantity button
+- [FIX][IOS] Recipes details has no longer more infos button
+- [FIX][IOS] Recipes details infos are now align left
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

@@ -15,7 +15,7 @@ public struct RecipeDetailsView: View {
     public var recipeId: String?
     public var close: () -> ()
     public var showFooter = true
-
+    @SwiftUI.State var lulu = false
     @ObservedObject var viewModel: RecipeCardVM
     
     public init(recipeId: String, close: @escaping () -> (), showFooter: Bool = true) {
@@ -45,10 +45,10 @@ public struct RecipeDetailsView: View {
                     .padding(.vertical,4)
                     .background(Color.miamColor(.musterd))
                     .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
-
+                
             ))
-
-            ScrollView {
+            
+            ScrollView {            
                 ZStack {
                     VStack{
                         if(viewModel.recipe != nil ){
@@ -67,48 +67,66 @@ public struct RecipeDetailsView: View {
                                         height: 280
                                     ).frame(height: 280)
                                     if(viewModel.likeIsEnable()){
-                                    HStack {
-                                        LikeButton(recipeVm: viewModel)
+                                        HStack {
+                                            LikeButton(recipeVm: viewModel)
                                             
+                                            Spacer()
+                                            
+                                            Button(action: {
+                                                
+                                            }) {
+                                                Image.miamImage(icon: .help)
+                                                    .renderingMode(.original)
+                                            }
+                                            .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
+                                        }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                    }
+                                    HStack() {
+                                        Text(viewModel.recipe?.attributes?.title ?? "")
+                                            .foregroundColor(Color.miamColor(.black))
+                                            .font(.system(size: 20, weight: .heavy, design: .default))
+                                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                            .frame( alignment: .topLeading)
                                         Spacer()
-                                        
-                                        Button(action: {
-                                            
-                                        }) {
-                                            Image.miamImage(icon: .help)
-                                                .renderingMode(.original)
-                                        }
-                                        .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
-                                    }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
                                     }
-                                    Text(viewModel.recipe?.attributes?.title ?? "")
-                                        .foregroundColor(Color.miamColor(.black))
-                                        .font(.system(size: 20, weight: .heavy, design: .default))
-                                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                                        .frame( alignment: .topLeading)
                                     
-                                    ZStack {
-                                        HStack(alignment: .center) {
-                                            HStack {
-                                                Spacer()
-                                                RecipeDetailsDifficulty(difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1))
-                                                Spacer()
+                                    HStack(alignment: .center) {
+                                        HStack {
+                                            RecipeDetailsDifficulty(difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1))
+                                        }
+                                        Divider().frame(height: 20).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                        HStack {
+                                            VStack(alignment: .center) {
+                                                Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
+                                                Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
                                             }
-                                            Spacer()
-                                            Divider().frame(height: 20)
-                                            Spacer()
-                                            HStack {
-                                                Spacer()
-                                                VStack(alignment: .center) {
-                                                    Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
-                                                    Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
-                                                }
-                                                Spacer()
-                                            }
-                                        }.padding(.top, Dimension.sharedInstance.lPadding)
-                                    }
+                                        }
+                                        Spacer()
+                                    }.padding(.vertical, Dimension.sharedInstance.lPadding)
+                                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                    
                                 }
-                                RecipeDetailsMoreInfo(recipe: viewModel.recipe!)
+                                HStack {
+                                    if(viewModel.recipe!.preparationTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.preparationTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.preparationTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    if(viewModel.recipe!.cookingTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.cookingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.cookingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    if(viewModel.recipe!.restingTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.restingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.restingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    Spacer()
+                                }.padding(.horizontal, Dimension.sharedInstance.lPadding)
                             }
                             
                             if(Template.sharedInstance.recipeDetailIngredientsTemplate != nil){
@@ -206,7 +224,7 @@ public struct RecipeDetailsView: View {
                 }
                 )
             }
-
+            
             if (showFooter) {
                 RecipeDetailsFooter(recipeVM: viewModel)
             }
