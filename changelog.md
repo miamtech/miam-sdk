@@ -1,11 +1,13 @@
 ## 2.2.2
 - [FIX][IOS] Fix checkbox in recipe detail
 - [FIX][IOS] Fix like icon oppening next recipe card on catalog 
+- [FIX][IOS] Fix recipe image size in recipe details
 - [FIX][IOS] Fix catalog recipe loader size
 - [FIX][IOS] Reduce meal tag border radius on recipe card
 - [FIX][IOS] Fix like button style
 - [FIX][IOS] Reverse add button in recipe details
 - [FIX][IOS] Fix recipe image size in recipe details
+- [FEA][IOS] Shelf recipes has no longer border radius
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

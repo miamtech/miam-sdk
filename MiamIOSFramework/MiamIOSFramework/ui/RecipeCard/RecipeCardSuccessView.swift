@@ -16,7 +16,7 @@ struct RecipeCardSuccessView: View {
     
     public var recipeId: String?
     public var criteria: SuggestionsCriteria?
-
+    
     private let showMealIdeaTag: Bool
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
@@ -72,9 +72,9 @@ struct RecipeCardSuccessView: View {
                             ).frame(height: 240)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                viewModel.goToDetail()
-                                showingPopup = true
-                            }
+                                    viewModel.goToDetail()
+                                    showingPopup = true
+                                }
                             HStack(alignment: .center) {
                                 if (showMealIdeaTag) {
                                     HStack(){
@@ -103,13 +103,13 @@ struct RecipeCardSuccessView: View {
                                                 leading: Dimension.sharedInstance.lPadding,
                                                 bottom: Dimension.sharedInstance.mlPadding,
                                                 trailing: Dimension.sharedInstance.lPadding))
-
+                        
                         HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
                             IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
                             Divider()
                             IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
                         }
-
+                        
                         Button {
                             if !viewModel.isInCart {
                                 viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
@@ -147,10 +147,11 @@ struct RecipeCardSuccessView: View {
                         initialRoute : initialDialogScreen,
                         routerVm: viewModel.routerVM
                     )
-                }.cornerRadius(15).clipped().overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color.miamColor(.border), lineWidth: 1)
-                )
+                }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()
+                    .overlay(!showMealIdeaTag ?   RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
+                    .overlay(showMealIdeaTag ?  Rectangle()
+                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
             }.frame(height: 400)
         }
     }
