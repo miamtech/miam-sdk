@@ -15,6 +15,8 @@
 - [FIX][IOS] Recipes details has no longer more infos button
 - [FIX][IOS] Recipes details infos are now align left
 - [FIX][IOS] Recipes card infos are now align center vertically
+- [FIX][IOS] Margin between recipe in catalog result page
+- [FIX][IOS] Title position in catalog result page
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
