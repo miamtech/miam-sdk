@@ -69,7 +69,9 @@ struct RecipeCardSuccessView: View {
                                 )! ,
                                 placeholder: { Text("loading ...")},
                                 height : 240
-                            ).frame(height: 240).onTapGesture {
+                            ).frame(height: 240)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
                                 viewModel.goToDetail()
                                 showingPopup = true
                             }

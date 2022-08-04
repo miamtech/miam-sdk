@@ -1,5 +1,6 @@
 ## 2.2.2
-- [FIX][IOS] fix checkbox in recipe detail
+- [FIX][IOS] Fix checkbox in recipe detail
+- [FIX][IOS] Fix like icon oppening next recipe card on catalog 
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
