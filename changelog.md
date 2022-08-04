@@ -5,6 +5,7 @@
 - [FIX][IOS] Reduce meal tag border radius on recipe card
 - [FIX][IOS] Fix like button style
 - [FIX][IOS] Reverse add button in recipe details
+- [FIX][IOS] Fix recipe image size in recipe details
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

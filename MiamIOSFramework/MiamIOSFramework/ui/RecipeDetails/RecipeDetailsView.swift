@@ -51,7 +51,6 @@ public struct RecipeDetailsView: View {
             ScrollView {
                 ZStack {
                     VStack{
-
                         if(viewModel.recipe != nil ){
                             if(Template.sharedInstance.recipeDetailInfosTemplate != nil){
                                 Template.sharedInstance.recipeDetailInfosTemplate!(
@@ -65,8 +64,8 @@ public struct RecipeDetailsView: View {
                                             string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                         )! ,
                                         placeholder: { Text("loading ...")},
-                                        height: 250
-                                    ).frame(height: 250)
+                                        height: 280
+                                    ).frame(height: 280)
                                     if(viewModel.likeIsEnable()){
                                     HStack {
                                         LikeButton(recipeVm: viewModel)
