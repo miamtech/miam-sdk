@@ -2,7 +2,8 @@
 - [FIX][IOS] Fix checkbox in recipe detail
 - [FIX][IOS] Fix like icon oppening next recipe card on catalog 
 - [FIX][IOS] Fix catalog recipe loader size
-- [FIX][IOS] Reduce meal tqg border radius on recipe card
+- [FIX][IOS] Reduce meal tag border radius on recipe card
+- [FIX][IOS] Fix like button style
 
 
 ## 2.2.1
