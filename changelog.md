@@ -9,6 +9,7 @@
 - [FIX][IOS] Fix recipe image size in recipe details
 - [FEA][IOS] Shelf recipes has no longer border radius
 - [FIX][IOS] Fix replace product button size
+- [FIX][IOS] Fix itemSelector CTA button size and text
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
