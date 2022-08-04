@@ -1,3 +1,6 @@
+## 2.2.2
+- [FIX][IOS] fix checkbox in recipe detail
+
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
 - [FIX][CI] target only android SDK task
