@@ -10,6 +10,7 @@
 - [FEA][IOS] Shelf recipes has no longer border radius
 - [FIX][IOS] Fix replace product button size
 - [FIX][IOS] Fix itemSelector CTA button size and text
+- [FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

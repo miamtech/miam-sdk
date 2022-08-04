@@ -82,7 +82,7 @@ struct BasketPreviewRow: View {
                     }
                     VStack (alignment: .leading) {
                         
-                        Text(productName)
+                        Text(productName.capitalizingFirstLetter())
                             .foregroundColor(Color.miamColor(.black))
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
