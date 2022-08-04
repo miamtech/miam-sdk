@@ -108,7 +108,7 @@ struct RecipeCardSuccessView: View {
                             IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
                             Divider()
                             IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
-                        }
+                        }.padding(.bottom, Dimension.sharedInstance.mlPadding)
                         
                         Button {
                             if !viewModel.isInCart {

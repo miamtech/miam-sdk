@@ -14,6 +14,7 @@
 - [FIX][IOS] Fix bigger product quantity button
 - [FIX][IOS] Recipes details has no longer more infos button
 - [FIX][IOS] Recipes details infos are now align left
+- [FIX][IOS] Recipes card infos are now align center vertically
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
