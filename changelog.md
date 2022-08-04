@@ -1,6 +1,9 @@
 ## 2.2.2
 - [FIX][IOS] Fix checkbox in recipe detail
 - [FIX][IOS] Fix like icon oppening next recipe card on catalog 
+- [FIX][IOS] Fix catalog recipe loader size
+- [FIX][IOS] Reduce meal tqg border radius on recipe card
+
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

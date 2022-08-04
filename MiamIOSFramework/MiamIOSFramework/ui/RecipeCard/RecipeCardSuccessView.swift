@@ -87,7 +87,7 @@ struct RecipeCardSuccessView: View {
                                     }.padding(.horizontal,16)
                                         .padding(.vertical,4)
                                         .background(Color.miamColor(.musterd))
-                                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                                        .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
                                 }
                                 Spacer()
                                 if(viewModel.likeIsEnable()){
