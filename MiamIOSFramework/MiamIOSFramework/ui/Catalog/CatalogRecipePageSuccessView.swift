@@ -27,7 +27,7 @@ internal struct CatalogRecipesPageSuccessView: View {
                         Spacer()
                     }
                     
-                    VStack {
+                    LazyVStack {
                         ForEach(recipesListPageModel.recipes, id: \.self) { recipe in
                             RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
                                 recipesListPageModel.loadMoreContent(currentRecipe: recipe)

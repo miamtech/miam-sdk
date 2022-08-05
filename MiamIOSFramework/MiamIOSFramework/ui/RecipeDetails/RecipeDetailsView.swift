@@ -174,7 +174,7 @@ public struct RecipeDetailsView: View {
                                                                                    unit: ingr.attributes!.unit))
                                         }
                                     }.padding(.vertical, Dimension.sharedInstance.lPadding)
-                                }.background(Color.miamColor(.primaryLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
+                                }.background(Color.miamColor(.greyLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
                             }
                             
                             //Étapes Heading

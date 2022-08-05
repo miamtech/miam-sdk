@@ -17,6 +17,7 @@
 - [FIX][IOS] Recipes card infos are now align center vertically
 - [FIX][IOS] Margin between recipe in catalog result page
 - [FIX][IOS] Title position in catalog result page
+- [FIX][IOS] Change ingredients background color in recipe details
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
