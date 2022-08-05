@@ -13,7 +13,7 @@ public class ItemSelectorText {
     public static let sharedInstance = ItemSelectorText()
     
     public var swapProduct = MiamText.sharedInstance.swapProduct
-    public var alreadyInCart = MiamText.sharedInstance.alreadyInCart
+    public var selectedProduct = MiamText.sharedInstance.selectedProduct
     public var select = MiamText.sharedInstance.select
 
     private init() {}
