@@ -18,6 +18,8 @@
 - [FIX][IOS] Margin between recipe in catalog result page
 - [FIX][IOS] Title position in catalog result page
 - [FIX][IOS] Change ingredients background color in recipe details
+- [FIX][IOS] Item selector feet figma style
+- [FIX][IOS] Recipe title goes in header after scrolling down a break point
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

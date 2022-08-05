@@ -120,22 +120,22 @@ struct RecipeCardSuccessView: View {
                             showingPopup = true
                         } label: {
                             if !viewModel.isInCart {
-                                HStack {
+                                HStack(alignment: .center) {
                                     Text(MiamText.sharedInstance.checkBasketPreview)
                                     Image.miamImage(icon: .cart)
                                 }
                             } else {
-                                HStack {
+                                HStack(alignment: .center) {
                                     Text(MiamText.sharedInstance.viewRecipeDetail)
                                     Image.miamImage(icon: .check)
                                 }
                             }
                         }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))
-                            .frame(minHeight: 50.0, maxHeight: 50.0)
+                            .frame(minHeight: 40.0, maxHeight: 40.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                             .background(!viewModel.isInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
                             .cornerRadius(25)
-                            .font(.system(size: 14.0, weight: .bold, design: .default))
+                            .font(.system(size: 15.0, weight: .bold, design: .default))
                             .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
                     }

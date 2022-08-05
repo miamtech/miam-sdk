@@ -15,7 +15,7 @@ public struct RecipeDetailsView: View {
     public var recipeId: String?
     public var close: () -> ()
     public var showFooter = true
-    @SwiftUI.State var lulu = false
+    @SwiftUI.State var showTitleInHeader = false
     @ObservedObject var viewModel: RecipeCardVM
     
     public init(recipeId: String, close: @escaping () -> (), showFooter: Bool = true) {
@@ -34,21 +34,29 @@ public struct RecipeDetailsView: View {
     public var body: some View {
         VStack {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
-                HStack(){
-                    Image.miamImage(icon: .ideeRepas)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:24, height:24)
-                    Text(RecipeCardText.sharedInstance.recipeFlag)
-                        .font(.system(size: 14.0, design: .default))
-                }.padding(.horizontal,16)
-                    .padding(.vertical,4)
-                    .background(Color.miamColor(.musterd))
-                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
-                
+                HStack {
+                    HStack(){
+                        Image.miamImage(icon: .ideeRepas)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:24, height:24)
+                        Text(RecipeCardText.sharedInstance.recipeFlag)
+                            .font(.system(size: 14.0, design: .default))
+                    }.padding(.horizontal,16)
+                        .padding(.vertical,4)
+                        .background(Color.miamColor(.musterd))
+                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                    if(showTitleInHeader){
+                        Text(viewModel.recipe?.attributes?.title ?? "").foregroundColor(Color.miamColor(.black))
+                            .font(.system(size: 16, weight: .heavy, design: .default))
+                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                            .frame( alignment: .topLeading)
+                            .lineLimit(1)
+                    }
+                }
             ))
             
-            ScrollView {            
+            ScrollView {
                 ZStack {
                     VStack{
                         if(viewModel.recipe != nil ){
@@ -87,6 +95,17 @@ public struct RecipeDetailsView: View {
                                             .font(.system(size: 20, weight: .heavy, design: .default))
                                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                                             .frame( alignment: .topLeading)
+                                            .background(GeometryReader {
+                                                Color.clear.preference(key: ViewOffsetKey.self,
+                                                                       value: -$0.frame(in: .named("scroll")).origin.y)
+                                            })
+                                            .onPreferenceChange(ViewOffsetKey.self) {
+                                                if($0 > 24){
+                                                    showTitleInHeader = true
+                                                }else {
+                                                    showTitleInHeader = false
+                                                }
+                                            }
                                         Spacer()
                                     }
                                     
@@ -223,7 +242,7 @@ public struct RecipeDetailsView: View {
                     }
                 }
                 )
-            }
+            }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
                 RecipeDetailsFooter(recipeVM: viewModel)
@@ -232,3 +251,10 @@ public struct RecipeDetailsView: View {
     }
 }
 
+struct ViewOffsetKey: PreferenceKey {
+    typealias Value = CGFloat
+    static var defaultValue = CGFloat.zero
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value += nextValue()
+    }
+}
