@@ -26,6 +26,7 @@
 - [FIX][AND] Title on recipe card is now clicable and redirect to detail
 - [FIX][AND] New design on recipe detail header
 - [FIX][AND] Remove "more infos" section
+- [FIX][AND] Change recipe icon size on recipe card
 - [FIX][COR] Tag on ingredient wording changed
 
 ## 2.2.1
