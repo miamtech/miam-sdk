@@ -25,6 +25,8 @@
 - [FIX][AND] Button delete on ingredient row is no longer hide if description is too long
 - [FIX][AND] Title on recipe card is now clicable and redirect to detail
 - [FIX][AND] New design on recipe detail header
+- [FIX][AND] Remove "more infos" section
+- [FIX][COR] Tag on ingredient wording changed
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
