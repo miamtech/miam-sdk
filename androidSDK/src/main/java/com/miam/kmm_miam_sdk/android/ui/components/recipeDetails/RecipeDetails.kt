@@ -89,6 +89,7 @@ import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.ressource.Image.toggleCaret
 
 
 @Composable
@@ -160,6 +161,16 @@ private fun recipeDetailContent(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = headerMainContainer,
                 ) {
+                    Clickable(
+                        onClick = { closeDialogue() },
+                        children = {
+                            Image(
+                                painter = painterResource(toggleCaret),
+                                contentDescription = null,
+                                modifier = headerCloseIconModifier.rotate(180f)
+                            )
+                        }
+                    )
                     Image(
                         painter = painterResource(recipeIcon),
                         contentDescription = null,
@@ -177,16 +188,7 @@ private fun recipeDetailContent(
                     }else {
                         Spacer(modifier = Modifier.weight(1.0F) )
                     }
-                    Clickable(
-                        onClick = { closeDialogue() },
-                        children = {
-                            Image(
-                                painter = painterResource(close),
-                                contentDescription = null,
-                                modifier = headerCloseIconModifier
-                            )
-                        }
-                    )
+
                 }
             }
         },
@@ -277,7 +279,6 @@ private fun recipeDetailContent(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = moreInfoSection
                     ) {
-                        AnimatedVisibility(visible = expandedState) {
                             Column(Modifier.padding(bottom = 16.dp)) {
                                 Row(modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceEvenly
@@ -312,32 +313,6 @@ private fun recipeDetailContent(
                                     }
                                 }
                             }
-                        }
-                        Clickable(
-                            onClick = { expandedState = !expandedState },
-                            children = {
-                                Surface(moreInfoButtonShapeContainer) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = moreInfoButton
-                                    ) {
-                                        Text(
-                                            text = moreInfo,
-                                            style = button,
-                                            color = moreInfosButtonTextColor
-                                        )
-                                        Icon(
-                                            tint = moreInfosButtonTextColor,
-                                            imageVector = Icons.Default.ArrowDropDown,
-                                            contentDescription = "Drop-Down Arrow",
-                                            modifier = Modifier.rotate(rotationState),
-                                        )
-                                    }
-                                }
-
-                            }
-                        )
                     }
                 }
                 if(recipeDetailIngredientTemplate != null) {
