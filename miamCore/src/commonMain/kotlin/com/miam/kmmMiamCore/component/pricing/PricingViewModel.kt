@@ -23,7 +23,7 @@ open class PricingViewModel :
 
     override fun createInitialState(): PricingContract.State =
         PricingContract.State(
-            price = BasicUiState.Empty,
+            price = BasicUiState.Loading,
             directPrice = null,
             recipeId = "",
             guestNumber = -1,
@@ -38,7 +38,7 @@ open class PricingViewModel :
             is PricingContract.Event.SetPrice -> setState { copy(price = BasicUiState.Success(event.pricing))}
             is PricingContract.Event.SetDirectPrice -> {
                 setState { copy(
-                    price = BasicUiState.Success(Pricing(directPrice ?: 0.0,1)),
+                    price = BasicUiState.Success(Pricing(directPrice ?: 0.00,1)),
                     directPrice = event.price) }
                 getPrice()
             }

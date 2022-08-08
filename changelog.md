@@ -28,6 +28,7 @@
 - [FIX][AND] Remove "more infos" section
 - [FIX][AND] Change recipe icon size on recipe card
 - [FIX][COR] Tag on ingredient wording changed
+- [FIX][COR] Price initial state is now Loading avoid showing 0 when repainting view
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
