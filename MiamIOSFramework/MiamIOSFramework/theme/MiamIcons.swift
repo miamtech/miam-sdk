@@ -41,4 +41,5 @@ public enum MiamIcon: String {
     case sync = "miamSync"
     case whisk = "miamWhisk"
     case yellowUnderline = "miamYellowUnderline"
+    case look = "miamLook"
 }

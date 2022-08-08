@@ -12,6 +12,9 @@ import miamCore
 struct BasketPreviewRow: View {
     
     @SwiftUI.State var count: Int = 1
+    
+    private let moreInformationButtonTitle = "Plus d'infos"
+    private let replaceIngredientButtonTitle = "Remplacer"
    
     private let productImageDimensions = CGSize(width: 90, height: 90)
     private let productName: String
@@ -50,8 +53,6 @@ struct BasketPreviewRow: View {
     }
     
     
-    private let moreInformationButtonTitle = "Plus d'infos"
-    private let replaceIngredientButtonTitle = "Remplacer"
     
     
     func increaseQty(){
@@ -98,6 +99,24 @@ struct BasketPreviewRow: View {
                             .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
+                        HStack {
+                            Spacer()
+                            HStack {
+                                if(previewLine.inlineTag != nil ){
+                                    HStack(){
+                                        Text(previewLine.inlineTag!)
+                                            .font(.system(size: 14.0, design: .default))
+                                        Image.miamImage(icon: .look)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width:24, height:24)
+                                    }.padding(.horizontal,16)
+                                        .padding(.vertical,4)
+                                        .background(Color.miamColor(.greyLighter))
+                                        .cornerRadius(8)
+                                }
+                            }
+                        }
                     }
                     
                     Spacer()

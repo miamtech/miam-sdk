@@ -7,7 +7,7 @@
 - [FIX][IOS] Fix like button style
 - [FIX][IOS] Reverse add button in recipe details
 - [FIX][IOS] Fix recipe image size in recipe details
-- [FEA][IOS] Shelf recipes has no longer border radius
+- [FIX][IOS] Shelf recipes has no longer border radius
 - [FIX][IOS] Fix replace product button size
 - [FIX][IOS] Fix itemSelector CTA button size and text
 - [FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
@@ -20,6 +20,8 @@
 - [FIX][IOS] Change ingredients background color in recipe details
 - [FIX][IOS] Item selector feet figma style
 - [FIX][IOS] Recipe title goes in header after scrolling down a break point
+- [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
+
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
