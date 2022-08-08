@@ -23,7 +23,8 @@
 - [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
 - [FIX][IOS] Ingredients and step tilte is black in recipe detail
 - [FIX][AND] Button delete on ingredient row is no longer hide if description is too long
-
+- [FIX][AND] Title on recipe card is now clicable and redirect to detail
+- [FIX][AND] New design on recipe detail header
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

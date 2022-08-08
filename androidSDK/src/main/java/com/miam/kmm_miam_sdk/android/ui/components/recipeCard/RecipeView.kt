@@ -346,12 +346,15 @@ class RecipeView @JvmOverloads constructor(
                                     )
 
                                 }
-                                Text(
-                                    text = recipe.attributes!!.title,
-                                    modifier = RecipeDetailsStyle.titleModifier,
-                                    textAlign = TextAlign.Center,
-                                    style = Typography.subtitleBold
-                                )
+                                Clickable(
+                                    onClick = { vmRecipe.goToDetail() }){
+                                    Text(
+                                        text = recipe.attributes!!.title,
+                                        modifier = RecipeDetailsStyle.titleModifier,
+                                        textAlign = TextAlign.Center,
+                                        style = Typography.subtitleBold
+                                    )
+                                }
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,
