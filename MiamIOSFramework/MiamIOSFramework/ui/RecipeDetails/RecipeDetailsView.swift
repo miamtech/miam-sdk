@@ -162,7 +162,7 @@ public struct RecipeDetailsView: View {
                                 HStack {
                                     HStack {
                                         Text(String((viewModel.recipe!.relationships?.ingredients!.data.count)!) + " ingrédients")
-                                            .foregroundColor(Color.miamColor(.primaryText))
+                                            .foregroundColor(Color.miamColor(.black))
                                             .font(.system(size: 20, weight: .heavy, design: .default))
                                             .padding(Dimension.sharedInstance.lPadding)
                                         Spacer()
@@ -206,7 +206,7 @@ public struct RecipeDetailsView: View {
                             }
                             else{
                                 HStack {
-                                    Text("Étapes").foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                                    Text("Étapes").foregroundColor(Color.miamColor(.black)).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
                                     Spacer()
                                 }.frame(height: 60.0, alignment: .topLeading)
                                     .padding(.top, Dimension.sharedInstance.lPadding)

@@ -21,6 +21,8 @@
 - [FIX][IOS] Item selector feet figma style
 - [FIX][IOS] Recipe title goes in header after scrolling down a break point
 - [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
+- [FIX][IOS] Ingredients and step tilte is black in recipe detail
+- [FIX][AND] Button delete on ingredient row is no longer hide if description is too long
 
 
 ## 2.2.1
