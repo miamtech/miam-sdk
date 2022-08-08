@@ -63,13 +63,13 @@ struct RecipeDetailsFooter: View {
                         }
                 } else {
                     HStack {
-                        Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(Color.miamColor(.white))
-                            .padding(.horizontal, Dimension.sharedInstance.sPadding)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
                         Image.miamImage(icon: .cart)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 24, height: 24, alignment: .center)
                             .foregroundColor(Color.white)
+                        Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(Color.miamColor(.white))
+                            .padding(.horizontal, Dimension.sharedInstance.sPadding)
+                            .font(.system(size: 16.0, weight: .bold, design: .default))
                     }.frame(maxWidth: .infinity)
                         .frame(height: 64.0)
                         .background(Color.miamColor(.primaryText)).onTapGesture {

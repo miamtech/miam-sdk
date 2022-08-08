@@ -33,4 +33,5 @@ public enum MiamColor: String {
     case unpureWhite = "miamUnpureWhite"
     case warning = "miamWarning"
     case white = "miamWhite"
+    case greyLighter = "miamGreyLighter"
 }

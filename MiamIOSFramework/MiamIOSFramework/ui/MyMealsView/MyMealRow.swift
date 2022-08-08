@@ -93,7 +93,7 @@ public struct MyMealRow: View {
                     } label: {
                         Image.miamImage(icon: .chevronDown).rotationEffect(Angle.degrees(chevronAngle))
                     }.padding([.trailing], Dimension.sharedInstance.lPadding)
-                }.frame(width: 30.0, alignment: .trailing)
+                }.frame(width: 30.0, height: 30, alignment: .trailing)
             }.padding(Dimension.sharedInstance.mlPadding)
             if isExpanded {
                 VStack {

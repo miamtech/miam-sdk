@@ -20,7 +20,7 @@ struct IngredientNotInBasketRow: View {
             Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, addIngredientAction)
         } else {
             HStack {
-                Text(name)
+                Text(name.capitalizingFirstLetter())
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .foregroundColor(Color.miamColor(.secondaryText))
 

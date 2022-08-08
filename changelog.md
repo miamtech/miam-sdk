@@ -1,3 +1,28 @@
+## 2.2.2
+- [FIX][IOS] Fix checkbox in recipe detail
+- [FIX][IOS] Fix like icon oppening next recipe card on catalog 
+- [FIX][IOS] Fix recipe image size in recipe details
+- [FIX][IOS] Fix catalog recipe loader size
+- [FIX][IOS] Reduce meal tag border radius on recipe card
+- [FIX][IOS] Fix like button style
+- [FIX][IOS] Reverse add button in recipe details
+- [FIX][IOS] Fix recipe image size in recipe details
+- [FIX][IOS] Shelf recipes has no longer border radius
+- [FIX][IOS] Fix replace product button size
+- [FIX][IOS] Fix itemSelector CTA button size and text
+- [FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
+- [FIX][IOS] Fix bigger product quantity button
+- [FIX][IOS] Recipes details has no longer more infos button
+- [FIX][IOS] Recipes details infos are now align left
+- [FIX][IOS] Recipes card infos are now align center vertically
+- [FIX][IOS] Margin between recipe in catalog result page
+- [FIX][IOS] Title position in catalog result page
+- [FIX][IOS] Change ingredients background color in recipe details
+- [FIX][IOS] Item selector feet figma style
+- [FIX][IOS] Recipe title goes in header after scrolling down a break point
+- [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
+
+
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI
 - [FIX][CI] target only android SDK task

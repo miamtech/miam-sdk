@@ -55,8 +55,11 @@ struct CounterView: View {
                     decrease()
                 }) {
                     Image.miamImage(icon: .minus)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:18, height:18)
                         .foregroundColor(Color.miamColor(.white))
-                }.padding(.leading, Dimension.sharedInstance.mPadding)
+                }.padding(.leading, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
                     Text(String(count) + " \( lightMode ? "" : "pers.")")
@@ -67,12 +70,15 @@ struct CounterView: View {
                     increase()
                 }) {
                     Image.miamImage(icon: .plus)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 18, height:18)
                         .foregroundColor(Color.miamColor(.white))
                 }.padding(.trailing, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .trailing)
-            }.frame(width: lightMode ? 80 : 130.0, height: 40.0, alignment: .center)
+            }.frame(width: lightMode ? 90 : 130.0, height: 40.0, alignment: .center)
                 .background(Color.miamColor(.primaryText))
-            .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
+                .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
         }
     }
 }
