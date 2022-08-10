@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 
 
 import androidx.compose.ui.res.painterResource
@@ -45,7 +46,8 @@ import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
-
+import com.miam.kmm_miam_sdk.android.theme.Dimension
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.toggleCaret
 
 
 class BasketPreview(
@@ -87,8 +89,9 @@ class BasketPreview(
                             onClick = { goToDetail() }
                         ) {
                             Image(
-                                painter = painterResource(previous),
-                                contentDescription = "Previous"
+                                painter = painterResource(toggleCaret),
+                                contentDescription = "Previous",
+                                modifier= Modifier.size(40.dp).padding(end = Dimension.mPadding).rotate(180f)
                             )
                         }
                         Text(

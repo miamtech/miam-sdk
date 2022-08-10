@@ -16,7 +16,7 @@ object RecipeDetailsStyle {
     // header
     var headerMainContainer = Modifier.padding(horizontal = lPadding)
     var headerRecipeIconModifier = Modifier.width(120.dp).padding(vertical = mPadding).padding(end = mPadding)
-    var headerCloseIconModifier = Modifier.size(24.dp).padding(end = mPadding)
+    var headerCloseIconModifier = Modifier.size(40.dp).padding(end = mPadding)
 
 
     // recipe Infos

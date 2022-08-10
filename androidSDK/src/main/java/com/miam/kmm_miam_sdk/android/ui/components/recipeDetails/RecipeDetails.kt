@@ -1,16 +1,14 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.activity.compose.BackHandler
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 
 
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -113,8 +111,6 @@ fun recipdeDetails(
     )
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun recipeDetailContent(
     recipe: Recipe,
@@ -123,13 +119,7 @@ private fun recipeDetailContent(
     closeDialogue: () -> Unit,
     withBottomBar :Boolean = true
 ) {
-
-    var expandedState by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f
-    )
     val scrollState = rememberScrollState()
-
 
     fun seeProductMatching() {
         vmRouter.setEvent(
@@ -149,7 +139,6 @@ private fun recipeDetailContent(
             )
         )
     }
-
 
     Scaffold(
         topBar = {
@@ -401,4 +390,8 @@ private fun recipeDetailContent(
             }
         }
     )
+
+    BackHandler( true) {
+        closeDialogue()
+    }
 }
