@@ -94,7 +94,6 @@ data class BasketEntryRelationships constructor(
     @SerialName("groceries-entry") var groceriesEntry: GroceriesEntryRelationship? = null,
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
-        // println("Miam will build BE relationships $items $groceriesEntry")
         items?.buildFromIncluded(includedRecords)
         groceriesEntry?.buildFromIncluded(includedRecords)
     }

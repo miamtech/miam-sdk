@@ -106,7 +106,8 @@ fun EntryLine(entry: BasketPreviewLine,
                     Text(
                         text = description,
                         color= BPPLDescriptionColor,
-                        style = bodySmall
+                        style = bodySmall,
+                        modifier = Modifier.widthIn(200.dp, 200.dp)
                     )
                     if(sharingCount != null ){
                         Spacer(modifier = Modifier.padding(vertical = 8.dp))

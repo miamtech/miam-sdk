@@ -17,6 +17,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsTe
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
+import com.miam.kmm_miam_sdk.android.theme.Colors.black
 
 @Composable
 fun RecipeSteps(steps: List<RecipeStep>,vmRecipe: RecipeViewModel) {
@@ -29,7 +30,7 @@ fun RecipeSteps(steps: List<RecipeStep>,vmRecipe: RecipeViewModel) {
         Text(
             text = RecipeDetailsText.steps ,
             style = Typography.subtitleBold,
-            color = primary
+            color = black
         )
         Divider(Modifier.padding(8.dp))
         steps.forEach {

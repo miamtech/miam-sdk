@@ -21,7 +21,14 @@
 - [FIX][IOS] Item selector feet figma style
 - [FIX][IOS] Recipe title goes in header after scrolling down a break point
 - [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
-
+- [FIX][IOS] Ingredients and step tilte is black in recipe detail
+- [FIX][AND] Button delete on ingredient row is no longer hide if description is too long
+- [FIX][AND] Title on recipe card is now clicable and redirect to detail
+- [FIX][AND] New design on recipe detail header
+- [FIX][AND] Remove "more infos" section
+- [FIX][AND] Change recipe icon size on recipe card
+- [FIX][COR] Tag on ingredient wording changed
+- [FIX][COR] Price initial state is now Loading avoid showing 0 when repainting view
 
 ## 2.2.1
 - [FIX][CI] fix commit variable name CI

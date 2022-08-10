@@ -91,7 +91,7 @@ data class BasketPreviewLine(
                 id = entry.id,
                 record = entry,
                 isRecipe = false,
-                inlineTag =  if (recipesCount > 1) "Pour $recipesCount recettes" else null,
+                inlineTag =  if (recipesCount > 1) "Pour $recipesCount repas" else null,
                 title= entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
                 picture = item?.attributes?.image ?: "",
                 bplDescription = listOf("${item?.attributes?.name ?: ' '} \n ${item?.attributes?.capacityUnit}", "${item?.attributes?.brand ?: ' '}"),
