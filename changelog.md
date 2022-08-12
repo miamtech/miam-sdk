@@ -1,3 +1,6 @@
+## 2.2.3
+- [FIX][IOS] Fix crash IOS older than 13
+
 ## 2.2.2
 - [FIX][IOS] Fix checkbox in recipe detail
 - [FIX][IOS] Fix like icon oppening next recipe card on catalog 
