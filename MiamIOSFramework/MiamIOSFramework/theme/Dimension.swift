@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-
+@available(iOS 14, *)
 public class Dimension {
     
     public static let sharedInstance = Dimension()
