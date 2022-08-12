@@ -1,3 +1,7 @@
+
+## 2.2.4
+- [FIX][IOS] Fix SwiftUI imports
+
 ## 2.2.3
 - [FIX][IOS] Fix crash IOS older than 13
 

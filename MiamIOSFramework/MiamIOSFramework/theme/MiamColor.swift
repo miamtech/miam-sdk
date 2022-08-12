@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 11, *)
+@available(iOS 14, *)
 public enum MiamColor: String {
     case black = "miamBlack"
     case black20 = "miamBlack20"

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@available (iOS 13, *)
+@available(iOS 14, *)
 extension Image {
     static func miamImage(icon: MiamIcon) -> Image {
         guard let image = UIImage(named: icon.rawValue) else {
