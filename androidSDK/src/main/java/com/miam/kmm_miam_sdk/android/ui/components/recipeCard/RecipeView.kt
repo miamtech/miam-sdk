@@ -80,27 +80,17 @@ class RecipeView @JvmOverloads constructor(
             recipe: Recipe? = null)
     {
         if (recipeId != "") {
-            vmRecipe.setEvent(
-                RecipeContract.Event.OnFetchRecipe(recipeId)
-            )
+            vmRecipe.fetchRecipe(recipeId)
         } else if (criteria != null) {
-            vmRecipe.setEvent(
-                RecipeContract.Event.OnSetCriteria(
-                    criteria
-                )
-            )
+            vmRecipe.setRecipeFromSuggestion(criteria)
         } else if (recipe != null) {
-            vmRecipe.setEvent(
-                RecipeContract.Event.OnSetRecipe(
-                    recipe= recipe
-                )
-            )
+            vmRecipe.setRecipe(recipe)
         }
 
     }
 
     fun unbind() {
-        vmRecipe.setEvent(RecipeContract.Event.OnUnbind)
+        vmRecipe.unsetRecipe()
     }
 
     fun isNotInShelf(){
@@ -112,43 +102,45 @@ class RecipeView @JvmOverloads constructor(
         set(value) {
             idRecipeState.value = value
             if (value != null) {
-                vmRecipe.setEvent(
-                    RecipeContract.Event.OnFetchRecipe(idRecipe)
-                )
+                vmRecipe.fetchRecipe(idRecipe)
             }
         }
 
     @Composable
     override fun Content() {
-
-        val state by vmRecipe.uiState.collectAsState()
-
         Column {
             modal.Content()
-            ManagementResourceState(
-                resourceState = state.recipeState,
-                successView = { recipe ->
-                    requireNotNull(recipe)
-                    RecipeCard(recipe, vmRecipe)
-                },
-                loadingView = {
-                    if(Template.recipeLoaderTemplate != null){
-                        Template.recipeLoaderTemplate?.let { it() }
-                    } else {
-                        RecipeCardLoading()
-                    }
-                },
-                emptyView =  {
-                    if(Template.recipeEmptyTemplate !=  null){
-                        Template.recipeEmptyTemplate?.let {it()}
-                    } else {
-                        Box{}
-                    }
-                },
-                onTryAgain = { },
-                onCheckAgain = {  },
-            )
+            UpdatableContent()
         }
+    }
+
+    @Composable
+    private fun UpdatableContent() {
+        val state by vmRecipe.uiState.collectAsState()
+
+        ManagementResourceState(
+            resourceState = state.recipeState,
+            successView = { recipe ->
+                requireNotNull(recipe)
+                RecipeCard(recipe, vmRecipe)
+            },
+            loadingView = {
+                if(Template.recipeLoaderTemplate != null){
+                    Template.recipeLoaderTemplate?.let { it() }
+                } else {
+                    RecipeCardLoading()
+                }
+            },
+            emptyView =  {
+                if(Template.recipeEmptyTemplate !=  null){
+                    Template.recipeEmptyTemplate?.let {it()}
+                } else {
+                    Box{}
+                }
+            },
+            onTryAgain = { },
+            onCheckAgain = {  },
+        )
     }
 
     @Composable
@@ -370,7 +362,11 @@ class RecipeView @JvmOverloads constructor(
                                         Text(text = recipe.totalTime, color = grey,
                                             modifier = Modifier.padding(top= 8.dp))
                                     }
-                                    Divider(Modifier.background(grey).height(40.dp).width(1.dp))
+                                    Divider(
+                                        Modifier
+                                            .background(grey)
+                                            .height(40.dp)
+                                            .width(1.dp))
                                     Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.padding(horizontal = 16.dp)) {
                                         Image(
                                             painter = painterResource(difficulty),

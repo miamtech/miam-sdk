@@ -27,7 +27,7 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
      open fun goToDetail(recipe : Recipe){
          val vmRecipe = RecipeViewModel(vmRouter)
          LogHandler.info("goToDetail vmRecipe : $vmRecipe")
-         vmRecipe.setEvent(RecipeContract.Event.OnSetRecipe(recipe))
+         vmRecipe.setRecipe(recipe)
          LogHandler.info("goToDetail setEvent :")
          vmRouter.goToDetail(vmRecipe,false)
     }

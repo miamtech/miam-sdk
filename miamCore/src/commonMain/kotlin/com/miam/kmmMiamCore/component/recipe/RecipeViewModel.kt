@@ -74,15 +74,8 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     override fun handleEvent(event: RecipeContract.Event) {
         when (event) {
-            is RecipeContract.Event.OnFetchRecipe -> fetchRecipe(event.idRecipe)
-            is RecipeContract.Event.OnSetRecipe -> setRecipe(event.recipe)
-            is RecipeContract.Event.UpdateGuest -> updateGuest(event.nbGuest)
             is RecipeContract.Event.SetActiveStep -> setActiveSteps(event.stepIndex)
-            is RecipeContract.Event.OnSetCriteria -> setRecipeFromSuggestion(event.crieria)
-            RecipeContract.Event.OnUnbind -> unBindRecipe()
             RecipeContract.Event.OnAddRecipe -> addOrAlterRecipe()
-            RecipeContract.Event.DecreaseGuest -> removeGuest()
-            RecipeContract.Event.IncreaseGuest -> addGuest()
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.OnToggleLike -> toggleLike()
@@ -112,31 +105,23 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     private suspend fun listenguestSubjectChanges() {
         guestSubject.debounce(500).collect{
-                addOrAlterRecipe()
-            }
-        }
-
-    private fun removeGuest() {
-        if (uiState.value.guest == 1) return
-        setState { copy(guest = uiState.value.guest - 1) }
-        if (currentState.isInCart) launch(coroutineHandler) {
-            guestSubject.emit(uiState.value.guest)
-        }
-    }
-
-    private fun addGuest() {
-        if (uiState.value.guest == 100) return
-        setState { copy(guest = uiState.value.guest + 1) }
-        if (currentState.isInCart) launch(coroutineHandler) {
-            guestSubject.emit(uiState.value.guest)
-        }
-    }
-
-    private fun updateGuest(nbGuest: Int) {
-        if (uiState.value.guest <= 1 || uiState.value.guest >= 100) return
-        setState { copy(guest = nbGuest) }
-        if (currentState.isInCart) {
             addOrAlterRecipe()
+        }
+    }
+
+    fun increaseGuest() {
+        updateGuest(currentState.guest + 1)
+    }
+
+    fun decreaseGuest() {
+        updateGuest(currentState.guest - 1)
+    }
+
+    fun updateGuest(nbGuest: Int) {
+        if (currentState.guest <= 1 || currentState.guest >= 100) return
+        setState { copy(guest = nbGuest) }
+        if (currentState.isInCart) launch(coroutineHandler) {
+            guestSubject.emit(currentState.guest)
         }
     }
 
@@ -170,7 +155,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    private fun fetchRecipe(recipeId: String) {
+    fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
             val recipe = recipeRepositoryImp.getRecipeById(recipeId)
@@ -178,7 +163,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    private fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
+    fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
         LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler){
@@ -190,7 +175,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    private fun setRecipe(recipe: Recipe) {
+    fun setRecipe(recipe: Recipe) {
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
@@ -200,6 +185,20 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             ).refreshFromGl(groceriesListStore)
         }
         displayPrice()
+    }
+
+    fun unsetRecipe() {
+        val defaultState = defaultState()
+        setState {
+            copy(
+                recipeState = defaultState.recipeState,
+                recipe = defaultState.recipe,
+                recipeLoaded = defaultState.recipeLoaded,
+                isLiked = defaultState.isLiked,
+                isInCart = defaultState.isInCart,
+                guest = defaultState.guest
+            )
+        }
     }
 
     private fun toggleLike(){
@@ -214,10 +213,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private fun displayPrice() {
         if (currentState.isPriceDisplayed || !currentState.isInViewport) return
         setState { copy(isPriceDisplayed = true) }
-    }
-
-    private fun unBindRecipe() {
-        setState { defaultState() }
     }
 
     fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {

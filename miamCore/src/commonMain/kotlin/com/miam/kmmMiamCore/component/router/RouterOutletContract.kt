@@ -27,7 +27,6 @@ interface RouterOutletContract {
         data class State(
             val content: RouterContent,
             val rvm: RecipeViewModel?,
-            val bpvm :BasketPreviewViewModel?,
             val recipeId: String?,
             val isOpen: Boolean,
             val showFooter:Boolean

@@ -50,8 +50,7 @@ fun ExpendableBasketPreviewLine(
                     Column( Modifier.weight(1f)) {
                         BasketPreviewRecipeLine(
                             line = line,
-                            { vmBasketPreview.setEvent(BasketPreviewContract.Event.AddGuest(recipeVm = recipeVm)) },
-                            { vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveGuest(recipeVm = recipeVm)) },
+                            { guestCount -> vmBasketPreview.updateGuest(recipeVm, guestCount) },
                             goToDetail
                         )
                     }
