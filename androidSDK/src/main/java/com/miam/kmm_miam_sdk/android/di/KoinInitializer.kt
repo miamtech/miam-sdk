@@ -13,6 +13,7 @@ class KoinInitializer {
             repositoryModule,
             dispatcherModule,
             storeModule,
+            servicesModule,
             platformModule()
         )
         fun init(context: Context){

@@ -9,6 +9,7 @@ import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.data.repository.*
+import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -21,6 +22,7 @@ startKoin {
         repositoryModule,
         dispatcherModule,
         storeModule,
+        servicesModule,
         platformModule()
     )
 }
@@ -53,4 +55,8 @@ val storeModule = module {
     single { BasketHandler() }
     single { ContextHandler() }
     single { ItemSelectorViewModel() }
+}
+
+val servicesModule = module {
+    single { Analytics() }
 }

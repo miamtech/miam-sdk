@@ -73,12 +73,12 @@ fun CatalogCategory(
                         LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                                items(items = (category.relationships?.recipes?.data ?: emptyList())) { item ->
+                                items(items = (category.relationships?.recipes?.data ?: emptyList())) { recipeModel ->
                                         Box(modifier = Modifier
                                                 .width(350.dp)
                                                 .height(600.dp)){
                                                 val recipe = RecipeView(context)
-                                                recipe.bind(recipeId = item.id)
+                                                recipe.bind(recipeId = recipeModel.id)
                                                 recipe.isNotInShelf()
                                                 recipe.Content()
                                         }
