@@ -49,14 +49,11 @@ struct RecipeCardSuccessView: View {
                     )
                 }.onAppear(perform: {
                     if(recipeId != nil){
-                        viewModel.setEvent(
-                            event: RecipeContractEvent.OnFetchRecipe(idRecipe: self.recipeId!))
+                        viewModel.fetchRecipe(recipeId: self.recipeId!)
                     } else if (criteria != nil) {
-                        viewModel.setEvent(
-                            event: RecipeContractEvent.OnSetCriteria(crieria: self.criteria!))
+                        viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
                     }
-                }
-                )
+                })
         } else {
             
             VStack {

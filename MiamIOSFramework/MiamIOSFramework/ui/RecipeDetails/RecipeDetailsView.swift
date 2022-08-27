@@ -117,8 +117,8 @@ public struct RecipeDetailsView: View {
                                     viewModel.recipe!.relationships?.ingredients!.data ?? [],
                                     viewModel,
                                     Int(viewModel.currentState.guest),
-                                    { viewModel.setEvent(event: RecipeContractEvent.IncreaseGuest()) },
-                                    { viewModel.setEvent(event: RecipeContractEvent.DecreaseGuest()) }
+                                    { viewModel.increaseGuest() },
+                                    { viewModel.decreaseGuest() }
                                 )
                             }
                             else{
@@ -133,8 +133,8 @@ public struct RecipeDetailsView: View {
                                         CounterView(
                                             count: Int(viewModel.currentState.guest),
                                             isDisable: false,
-                                            increase: { viewModel.setEvent(event: RecipeContractEvent.IncreaseGuest()) },
-                                            decrease: { viewModel.setEvent(event: RecipeContractEvent.DecreaseGuest()) }
+                                            increase: { viewModel.increaseGuest() },
+                                            decrease: { viewModel.decreaseGuest() }
                                         )
                                     }
                                 }.frame(height: 60.0, alignment: .topLeading)
@@ -201,11 +201,9 @@ public struct RecipeDetailsView: View {
                     }.padding(.bottom, 100.0)
                 }.onAppear(perform: {
                     if(recipeId != nil){
-                        viewModel.setEvent(
-                            event: RecipeContractEvent.OnFetchRecipe(idRecipe: self.recipeId!))
+                        viewModel.fetchRecipe(recipeId: self.recipeId!)
                     }
-                }
-                )
+                })
             }
 
             if (showFooter) {
