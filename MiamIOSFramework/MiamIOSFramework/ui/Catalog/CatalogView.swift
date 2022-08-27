@@ -147,7 +147,7 @@ internal struct CatalogViewHeader: View {
             Template.sharedInstance.catalogViewHeaderTemplate!
         } else {
             HStack {
-                Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                Image.miamImage(icon: .ideeRepas)
                     .renderingMode(.template)
                     .foregroundColor(.white)
                     .frame(width: 30, height: 30)
@@ -157,7 +157,7 @@ internal struct CatalogViewHeader: View {
                     Text("Idées repas en 1 clic")
                         .foregroundColor(.white)
                         .font(.system(size: 20)).bold()
-                    Image("yellow_underline", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .yellowUnderline)
                         .position(x: 145.0, y: -12.0)
                 }
                 Spacer()
@@ -189,14 +189,14 @@ internal struct CatalogViewToolbar: View {
                     Button {
                         backTapped()
                     } label: {
-                        Image("back", bundle: Bundle(for: RecipeCardVM.self))
+                        Image.miamImage(icon: .back)
                     }.frame(width: 40, height: 40)
                     Spacer()
                 }
                 Button {
                     searchTapped()
                 } label: {
-                    Image("search", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .search)
                         .renderingMode(.template)
                         .foregroundColor(Color.miamColor(.primary))
                 }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
@@ -207,7 +207,7 @@ internal struct CatalogViewToolbar: View {
                 Button {
                     filtersTapped()
                 } label: {
-                    Image("filters", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .filters)
                         .renderingMode(.template)
                         .foregroundColor(Color.miamColor(.primary))
                 }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
@@ -217,7 +217,7 @@ internal struct CatalogViewToolbar: View {
                         Button {
                             favoritesTapped()
                         } label: {
-                            Image("heart", bundle: Bundle(for: RecipeCardVM.self))
+                            Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(Color.miamColor(.primary))
                         }
@@ -228,7 +228,7 @@ internal struct CatalogViewToolbar: View {
                         Button {
                             favoritesTapped()
                         } label: {
-                            Image("heart", bundle: Bundle(for: RecipeCardVM.self))
+                            Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
                             Text(myIdeas).foregroundColor(.white)

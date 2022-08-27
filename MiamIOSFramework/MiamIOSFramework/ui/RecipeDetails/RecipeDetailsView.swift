@@ -15,7 +15,7 @@ public struct RecipeDetailsView: View {
     public var recipeId: String?
     public var close: () -> ()
     public var showFooter = true
-
+    @SwiftUI.State var showTitleInHeader = false
     @ObservedObject var viewModel: RecipeCardVM
     
     public init(recipeId: String, close: @escaping () -> (), showFooter: Bool = true) {
@@ -34,24 +34,31 @@ public struct RecipeDetailsView: View {
     public var body: some View {
         VStack {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
-                HStack(){
-                    Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:24, height:24)
-                    Text(RecipeCardText.sharedInstance.recipeFlag)
-                        .font(.system(size: 14.0, design: .default))
-                }.padding(.horizontal,16)
-                    .padding(.vertical,4)
-                    .background(Color.miamColor(.musterd))
-                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
-
+                HStack {
+                    HStack(){
+                        Image.miamImage(icon: .ideeRepas)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:24, height:24)
+                        Text(RecipeCardText.sharedInstance.recipeFlag)
+                            .font(.system(size: 14.0, design: .default))
+                    }.padding(.horizontal,16)
+                        .padding(.vertical,4)
+                        .background(Color.miamColor(.musterd))
+                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                    if(showTitleInHeader){
+                        Text(viewModel.recipe?.attributes?.title ?? "").foregroundColor(Color.miamColor(.black))
+                            .font(.system(size: 16, weight: .heavy, design: .default))
+                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                            .frame( alignment: .topLeading)
+                            .lineLimit(1)
+                    }
+                }
             ))
-
+            
             ScrollView {
                 ZStack {
                     VStack{
-
                         if(viewModel.recipe != nil ){
                             if(Template.sharedInstance.recipeDetailInfosTemplate != nil){
                                 Template.sharedInstance.recipeDetailInfosTemplate!(
@@ -65,51 +72,80 @@ public struct RecipeDetailsView: View {
                                             string: viewModel.recipe!.attributes?.mediaUrl ?? ""
                                         )! ,
                                         placeholder: { Text("loading ...")},
-                                        height: 250
-                                    ).frame(height: 250)
+                                        height: 280
+                                    ).frame(height: 280)
                                     if(viewModel.likeIsEnable()){
-                                    HStack {
-                                        LikeButton(recipeVm: viewModel)
+                                        HStack {
+                                            LikeButton(recipeVm: viewModel)
                                             
-                                        Spacer()
-                                        
-                                        Button(action: {
+                                            Spacer()
                                             
-                                        }) {
-                                            Image("Help", bundle: Bundle(for: RecipeCardVM.self))
-                                                .renderingMode(.original)
-                                        }
-                                        .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
-                                    }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
-                                    }
-                                    Text(viewModel.recipe?.attributes?.title ?? "")
-                                        .foregroundColor(Color.miamColor(.black))
-                                        .font(.system(size: 20, weight: .heavy, design: .default))
-                                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                                        .frame( alignment: .topLeading)
-                                    
-                                    ZStack {
-                                        HStack(alignment: .center) {
-                                            HStack {
-                                                Spacer()
-                                                RecipeDetailsDifficulty(difficulty: Int(viewModel.recipe?.attributes?.difficulty ?? 1))
-                                                Spacer()
+                                            Button(action: {
+                                                
+                                            }) {
+                                                Image.miamImage(icon: .help)
+                                                    .renderingMode(.original)
                                             }
-                                            Spacer()
-                                            Divider().frame(height: 20)
-                                            Spacer()
-                                            HStack {
-                                                Spacer()
-                                                VStack(alignment: .center) {
-                                                    Image( "Clock", bundle: Bundle(for: RecipeCardVM.self)).frame(width: 25, height:25, alignment: .center)
-                                                    Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
+                                        }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                    }
+                                    HStack() {
+                                        Text(viewModel.recipe?.attributes?.title ?? "")
+                                            .foregroundColor(Color.miamColor(.black))
+                                            .font(.system(size: 20, weight: .heavy, design: .default))
+                                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                            .frame( alignment: .topLeading)
+                                            .background(GeometryReader {
+                                                Color.clear.preference(key: ViewOffsetKey.self,
+                                                                       value: -$0.frame(in: .named("scroll")).origin.y)
+                                            })
+                                            .onPreferenceChange(ViewOffsetKey.self) {
+                                                if($0 > 24){
+                                                    showTitleInHeader = true
+                                                }else {
+                                                    showTitleInHeader = false
                                                 }
-                                                Spacer()
                                             }
-                                        }.padding(.top, Dimension.sharedInstance.lPadding)
+                                        Spacer()
                                     }
+                                    
+                                    HStack(alignment: .center) {
+                                        HStack {
+                                            RecipeDetailsDifficulty(difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1))
+                                        }
+                                        Divider().frame(height: 20).padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                        HStack {
+                                            VStack(alignment: .center) {
+                                                Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
+                                                Text(viewModel.recipe?.totalTime ?? "10 min").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            }
+                                        }
+                                        Spacer()
+                                    }.padding(.vertical, Dimension.sharedInstance.lPadding)
+                                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                                    
                                 }
-                                RecipeDetailsMoreInfo(recipe: viewModel.recipe!)
+                                HStack {
+                                    if(viewModel.recipe!.preparationTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.preparationTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.preparationTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    if(viewModel.recipe!.cookingTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.cookingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.cookingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    if(viewModel.recipe!.restingTimeIos != "0") {
+                                        HStack{
+                                            Text(RecipeDetailsText.sharedInstance.restingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
+                                            Text(viewModel.recipe!.restingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                                        }
+                                    }
+                                    Spacer()
+                                }.padding(.horizontal, Dimension.sharedInstance.lPadding)
                             }
                             
                             if(Template.sharedInstance.recipeDetailIngredientsTemplate != nil){
@@ -126,7 +162,7 @@ public struct RecipeDetailsView: View {
                                 HStack {
                                     HStack {
                                         Text(String((viewModel.recipe!.relationships?.ingredients!.data.count)!) + " ingrédients")
-                                            .foregroundColor(Color.miamColor(.primaryText))
+                                            .foregroundColor(Color.miamColor(.black))
                                             .font(.system(size: 20, weight: .heavy, design: .default))
                                             .padding(Dimension.sharedInstance.lPadding)
                                         Spacer()
@@ -157,7 +193,7 @@ public struct RecipeDetailsView: View {
                                                                                    unit: ingr.attributes!.unit))
                                         }
                                     }.padding(.vertical, Dimension.sharedInstance.lPadding)
-                                }.background(Color.miamColor(.primaryLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
+                                }.background(Color.miamColor(.greyLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
                             }
                             
                             //Étapes Heading
@@ -170,7 +206,7 @@ public struct RecipeDetailsView: View {
                             }
                             else{
                                 HStack {
-                                    Text("Étapes").foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
+                                    Text("Étapes").foregroundColor(Color.miamColor(.black)).font(.system(size: 20, weight: .heavy, design: .default)).padding(Dimension.sharedInstance.lPadding)
                                     Spacer()
                                 }.frame(height: 60.0, alignment: .topLeading)
                                     .padding(.top, Dimension.sharedInstance.lPadding)
@@ -203,9 +239,10 @@ public struct RecipeDetailsView: View {
                     if(recipeId != nil){
                         viewModel.fetchRecipe(recipeId: self.recipeId!)
                     }
-                })
-            }
-
+                }
+                )
+            }.coordinateSpace(name: "scroll")
+            
             if (showFooter) {
                 RecipeDetailsFooter(recipeVM: viewModel)
             }
@@ -213,3 +250,10 @@ public struct RecipeDetailsView: View {
     }
 }
 
+struct ViewOffsetKey: PreferenceKey {
+    typealias Value = CGFloat
+    static var defaultValue = CGFloat.zero
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value += nextValue()
+    }
+}

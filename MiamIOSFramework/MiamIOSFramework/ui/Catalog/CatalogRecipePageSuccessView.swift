@@ -16,20 +16,26 @@ internal struct CatalogRecipesPageSuccessView: View {
         recipesListPageModel = viewModel
         self.catalogViewModel = catalogViewModel
     }
-
+    
     var body: some View {
         if !recipesListPageModel.hasNoResults {
-            VStack {
-                Text(recipesListPageModel.title).font(Font.system(size: 20.0))
-                    .fontWeight(.heavy).frame(height: 40.0)
-                List(recipesListPageModel.recipes, id: \.self) { recipe in
-                    RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
-                        recipesListPageModel.loadMoreContent(currentRecipe: recipe)
+            ScrollView {
+                VStack {
+                    HStack{
+                        Text(recipesListPageModel.title).font(Font.system(size: 20.0))
+                            .fontWeight(.heavy).frame(height: 40.0)
+                        Spacer()
+                    }
+                    
+                    LazyVStack {
+                        ForEach(recipesListPageModel.recipes, id: \.self) { recipe in
+                            RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
+                                recipesListPageModel.loadMoreContent(currentRecipe: recipe)
+                            }.padding(.top,Dimension.sharedInstance.lPadding)
+                        }
                     }
                 }
-                .padding(0)
-                .background(Color.white)
-            }
+            }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
         } else {
             CatalogRecipePageNoResultsView(catalogViewModel: catalogViewModel, showingFavorites: false)
         }

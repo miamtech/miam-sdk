@@ -1,16 +1,14 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.activity.compose.BackHandler
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 
 
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -89,6 +87,7 @@ import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.ressource.Image.toggleCaret
 
 
 @Composable
@@ -112,8 +111,6 @@ fun recipdeDetails(
     )
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun recipeDetailContent(
     recipe: Recipe,
@@ -122,13 +119,7 @@ private fun recipeDetailContent(
     closeDialogue: () -> Unit,
     withBottomBar :Boolean = true
 ) {
-
-    var expandedState by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f
-    )
     val scrollState = rememberScrollState()
-
 
     fun seeProductMatching() {
         vmRouter.setEvent(
@@ -149,7 +140,6 @@ private fun recipeDetailContent(
         )
     }
 
-
     Scaffold(
         topBar = {
             if (Template.recipeDetailHeaderTemplate != null) {
@@ -160,6 +150,16 @@ private fun recipeDetailContent(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = headerMainContainer,
                 ) {
+                    Clickable(
+                        onClick = { closeDialogue() },
+                        children = {
+                            Image(
+                                painter = painterResource(toggleCaret),
+                                contentDescription = null,
+                                modifier = headerCloseIconModifier.rotate(180f)
+                            )
+                        }
+                    )
                     Image(
                         painter = painterResource(recipeIcon),
                         contentDescription = null,
@@ -177,16 +177,7 @@ private fun recipeDetailContent(
                     }else {
                         Spacer(modifier = Modifier.weight(1.0F) )
                     }
-                    Clickable(
-                        onClick = { closeDialogue() },
-                        children = {
-                            Image(
-                                painter = painterResource(close),
-                                contentDescription = null,
-                                modifier = headerCloseIconModifier
-                            )
-                        }
-                    )
+
                 }
             }
         },
@@ -277,7 +268,6 @@ private fun recipeDetailContent(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = moreInfoSection
                     ) {
-                        AnimatedVisibility(visible = expandedState) {
                             Column(Modifier.padding(bottom = 16.dp)) {
                                 Row(modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceEvenly
@@ -312,32 +302,6 @@ private fun recipeDetailContent(
                                     }
                                 }
                             }
-                        }
-                        Clickable(
-                            onClick = { expandedState = !expandedState },
-                            children = {
-                                Surface(moreInfoButtonShapeContainer) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = moreInfoButton
-                                    ) {
-                                        Text(
-                                            text = moreInfo,
-                                            style = button,
-                                            color = moreInfosButtonTextColor
-                                        )
-                                        Icon(
-                                            tint = moreInfosButtonTextColor,
-                                            imageVector = Icons.Default.ArrowDropDown,
-                                            contentDescription = "Drop-Down Arrow",
-                                            modifier = Modifier.rotate(rotationState),
-                                        )
-                                    }
-                                }
-
-                            }
-                        )
                     }
                 }
                 if(recipeDetailIngredientTemplate != null) {
@@ -426,4 +390,8 @@ private fun recipeDetailContent(
             }
         }
     )
+
+    BackHandler( true) {
+        closeDialogue()
+    }
 }

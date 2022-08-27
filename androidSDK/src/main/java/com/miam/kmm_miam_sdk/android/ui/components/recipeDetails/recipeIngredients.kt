@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Colors.info
-import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
@@ -22,6 +20,7 @@ import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Ingredient
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.theme.Colors.black
 
 @Composable
 fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
@@ -43,7 +42,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
             Text(
                 text =  "${recipe.relationships?.ingredients?.data?.size} ingrédients",
                 style = Typography.subtitleBold,
-                color = primary
+                color = black
             )
             Counter(
                 vmRecipe.currentState.guest,

@@ -140,7 +140,6 @@ public struct BasketPreviewSuccessView: View {
 internal struct IngredientsHeader: View {
     let title: String
     @Binding var folded: Bool
-    private let foldedCarretImageName = "Caret"
     @SwiftUI.State private var caretAngle = 0.0
     
     init(title: String, folded: Binding<Bool> = .constant(true)) {
@@ -159,7 +158,7 @@ internal struct IngredientsHeader: View {
 
                 Spacer()
 
-                Image(foldedCarretImageName, bundle: Bundle(for: BasketPreviewVM.self))
+                Image.miamImage(icon: .caret)
                     .resizable()
                     .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
                     .frame(width: 30, height: 30, alignment: .center)

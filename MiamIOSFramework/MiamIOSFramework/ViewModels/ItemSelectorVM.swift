@@ -20,7 +20,7 @@ public class ItemSelectorVM : ObservableObject {
         
         sharedInstance.collect(flow: sharedInstance.uiState,
                                                      collect: { data in
-            self.state = data as! ItemSelectorContractState
+            self.state = data as? ItemSelectorContractState
         })
         
     }

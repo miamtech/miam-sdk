@@ -15,20 +15,19 @@ struct IngredientNotInBasketRow: View {
     let addIngredientAction: () -> Void
     let isAddable: Bool
     private let addIngredientText = "Ajouter"
-    private let addIngredientIcon = "PlusGreen"
     var body: some View {
         if (Template.sharedInstance.ingredientNotInBasketRowTemplate != nil) {
             Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, addIngredientAction)
         } else {
             HStack {
-                Text(name)
+                Text(name.capitalizingFirstLetter())
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .foregroundColor(Color.miamColor(.secondaryText))
 
                 Spacer()
                 if(isAddable){
                 Button(action: addIngredientAction) {
-                    Image(addIngredientIcon, bundle: Bundle(for: BasketPreviewVM.self))
+                    Image.miamImage(icon: .plusGreen)
                         .resizable()
                         .aspectRatio( contentMode: .fit)
                         .frame(width: 30, height: 30, alignment: .center)

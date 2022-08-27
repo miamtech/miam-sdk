@@ -4,42 +4,46 @@
 [FIX][COR] basket preview when deleting a product its quantity artificialy stay on next one
 
 ## 2.2.4
-[FIX][IOS] Fix SwiftUI imports
+- [FIX][IOS] Fix SwiftUI imports
 
 ## 2.2.3
-[FIX][IOS] Fix crash IOS older than 13
+- [FIX][IOS] Fix crash IOS older than 13
 
 ## 2.2.2
-[FIX][IOS] Fix checkbox in recipe detail
-[FIX][IOS] Fix like icon oppening next recipe card on catalog
-[FIX][IOS] Fix recipe image size in recipe details
-[FIX][IOS] Fix catalog recipe loader size
-[FIX][IOS] Reduce meal tag border radius on recipe card
-[FIX][IOS] Fix like button style
-[FIX][IOS] Reverse add button in recipe details
-[FIX][IOS] Fix recipe image size in recipe details
-[FIX][IOS] Shelf recipes has no longer border radius
-[FIX][IOS] Fix replace product button size
-[FIX][IOS] Fix itemSelector CTA button size and text
-[FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
-[FIX][IOS] Fix bigger product quantity button
-[FIX][IOS] Recipes details has no longer more infos button
-[FIX][IOS] Recipes details infos are now align left
-[FIX][IOS] Recipes card infos are now align center vertically
-[FIX][IOS] Margin between recipe in catalog result page
-[FIX][IOS] Title position in catalog result page
-[FIX][IOS] Change ingredients background color in recipe details
-[FIX][IOS] Item selector feet figma style
-[FIX][IOS] Recipe title goes in header after scrolling down a break point
-[FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
-[FIX][IOS] Ingredients and step tilte is black in recipe detail
-[FIX][AND] Button delete on ingredient row is no longer hide if description is too long
-[FIX][AND] Title on recipe card is now clicable and redirect to detail
-[FIX][AND] New design on recipe detail header
-[FIX][AND] Remove "more infos" section
-[FIX][AND] Change recipe icon size on recipe card
-[FIX][COR] Tag on ingredient wording changed
-[FIX][COR] Price initial state is now Loading avoid showing 0 when repainting view
+- [FIX][IOS] Fix checkbox in recipe detail
+- [FIX][IOS] Fix like icon oppening next recipe card on catalog 
+- [FIX][IOS] Fix recipe image size in recipe details
+- [FIX][IOS] Fix catalog recipe loader size
+- [FIX][IOS] Reduce meal tag border radius on recipe card
+- [FIX][IOS] Fix like button style
+- [FIX][IOS] Reverse add button in recipe details
+- [FIX][IOS] Fix recipe image size in recipe details
+- [FIX][IOS] Shelf recipes has no longer border radius
+- [FIX][IOS] Fix replace product button size
+- [FIX][IOS] Fix itemSelector CTA button size and text
+- [FIX][IOS] Fix ingredients name first lettre to uppercase in basket preview
+- [FIX][IOS] Fix bigger product quantity button
+- [FIX][IOS] Recipes details has no longer more infos button
+- [FIX][IOS] Recipes details infos are now align left
+- [FIX][IOS] Recipes card infos are now align center vertically
+- [FIX][IOS] Margin between recipe in catalog result page
+- [FIX][IOS] Title position in catalog result page
+- [FIX][IOS] Change ingredients background color in recipe details
+- [FIX][IOS] Item selector feet figma style
+- [FIX][IOS] Recipe title goes in header after scrolling down a break point
+- [FIX][IOS] Ingredients now have a tag if they are used in more than one recipe
+- [FIX][IOS] Ingredients and step tilte is black in recipe detail
+- [FIX][AND] Button delete on ingredient row is no longer hide if description is too long
+- [FIX][AND] Title on recipe card is now clicable and redirect to detail
+- [FIX][AND] New design on recipe detail header
+- [FIX][AND] Remove "more infos" section
+- [FIX][AND] Change recipe icon size on recipe card
+- [FIX][COR] Tag on ingredient wording changed
+- [FIX][COR] Price initial state is now Loading avoid showing 0 when repainting view
+
+## 2.2.1
+- [FIX][CI] fix commit variable name CI
+- [FIX][CI] target only android SDK task
 
 ## 2.2.0
 - [FEA][AND] AAR available on maven central
