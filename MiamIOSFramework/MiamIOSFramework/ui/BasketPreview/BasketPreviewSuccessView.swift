@@ -37,7 +37,7 @@ public struct BasketPreviewSuccessView: View {
     func increaseGuestsCount() {
         if(viewModel.basketPreviewLine != nil && count != 100){
             count+=1
-            recipeVm.setEvent(event: RecipeContractEvent.IncreaseGuest())
+            recipeVm.increaseGuest()
             
         }
     }
@@ -45,7 +45,7 @@ public struct BasketPreviewSuccessView: View {
     func decreaseGuestsCount() {
         if(viewModel.basketPreviewLine != nil && count != 1){
             count-=1
-            recipeVm.setEvent(event: RecipeContractEvent.DecreaseGuest())
+            recipeVm.decreaseGuest()
         }
     }
     
@@ -54,7 +54,7 @@ public struct BasketPreviewSuccessView: View {
     }
     
     func removeProduct(_ entry: BasketEntry) {
-        viewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
+        viewModel.removeBasketEntry(entry: entry)
     }
     
     func replaceProduct(_ previewLine: BasketPreviewLine) {

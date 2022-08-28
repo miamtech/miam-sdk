@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 14, *)
 struct MyMealSuccessView: View {
     
-    let myMealsViewModel: MyMealVM
+    @ObservedObject var myMealsViewModel: MyMealVM
     
     var body: some View {
         ScrollView {
@@ -20,5 +20,3 @@ struct MyMealSuccessView: View {
         }
     }
 }
-
-
