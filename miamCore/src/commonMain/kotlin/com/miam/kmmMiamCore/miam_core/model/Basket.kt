@@ -42,7 +42,7 @@ data class BasketAttributes(
     val confirmed: Boolean? = false,
     val completion : BasketCompletion? = null,
     @SerialName("total-price")
-    val totalPrice: Float? = null,
+    val totalPrice: Float,
     @SerialName("capacity-factor")
     val capacityFactor: Int? =null,
     val token :String? = null,

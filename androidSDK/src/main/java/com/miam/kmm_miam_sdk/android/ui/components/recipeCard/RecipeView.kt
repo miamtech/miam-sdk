@@ -69,7 +69,7 @@ class RecipeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr)  {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val modal = RouterOutlet()
     private var vmRecipe: RecipeViewModel = RecipeViewModel(modal.getViewModel())

@@ -8,7 +8,9 @@ import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 import kotlinx.coroutines.flow.collect
@@ -31,13 +33,14 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
+    private val analyticsService: Analytics by inject()
 
     private val guestSubject : MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val recipe: Recipe?
     get() = this.currentState.recipe
 
-    private val recipeId: String?
+    val recipeId: String?
     get() = recipe?.id
 
     override fun createInitialState(): RecipeContract.State = defaultState()
@@ -125,14 +128,11 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    private fun addOrAlterRecipe() {
-        launch(coroutineHandler) {
-            groceriesListStore.dispatch(
-                GroceriesListAction.AlterRecipeList(
-                    recipe!!.id , uiState.value.guest)
-            )
-            setState { copy(isInCart = true) }
-        }
+    private fun addOrAlterRecipe(): Job {
+        val action = GroceriesListAction.AlterRecipeList(recipe!!.id, uiState.value.guest)
+        val job = groceriesListStore.dispatch(action)
+        setState { copy(isInCart = true) }
+        return job
     }
 
     private fun setTab(newTab: TabEnum) {
@@ -145,21 +145,10 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         setState { copy(activeStep = newActiveStep) }
     }
 
-    fun sendShowEvent(eventType: String = "show-recipe-card") {
-        if (this.recipe == null) {
-            return
-        }
-        if (!currentState.analyticsEventSent && currentState.isInViewport) {
-            // TODO send event with event service
-            setState { copy(analyticsEventSent = true) }
-        }
-    }
-
     fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
-            val recipe = recipeRepositoryImp.getRecipeById(recipeId)
-            setRecipe(recipe)
+            setRecipe(recipeRepositoryImp.getRecipeById(recipeId))
         }
     }
 
@@ -167,15 +156,15 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler){
-            pointOfSaleStore.observeState().value.idSupplier?.let {
-                var recipe = recipeRepositoryImp.getRecipeSuggestions(it, criteria)
-                recipe = recipeRepositoryImp.addRecipeLike(recipe)
-                setRecipe(recipe)
+            pointOfSaleStore.observeState().value.idSupplier?.let { supplierId ->
+                setRecipe(recipeRepositoryImp.getRecipeSuggestions(supplierId, criteria))
             }
         }
     }
 
     fun setRecipe(recipe: Recipe) {
+        // TODO : path + multiple sent ?
+        analyticsService.sendEvent(Analytics.EVENT_RECIPE_SHOW, "", Analytics.PlausibleProps(recipe_id = recipe.id))
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
@@ -221,97 +210,96 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
 
     fun readableFloatNumber(value: String, unit: String?): String {
-    if (isUnitCountless(unit)) {
-        return unit.toString()
+        if (isUnitCountless(unit)) {
+            return unit.toString()
+        }
+
+        val valueToNumber = value.toFloat()
+        var unitToDisplay = if (unit != null && unit.isNotEmpty()) unit else ""
+        if (valueToNumber < 1) {
+            unitToDisplay = singularize(unit.toString())
+            return frac(valueToNumber).plus(" ").plus(unitToDisplay)
+        } else if (valueToNumber.equals(1)) {
+            unitToDisplay = singularize(unitToDisplay)
+        } else if (valueToNumber > 1) {
+            unitToDisplay = pluralize(unitToDisplay)
+        }
+
+        if (isInteger(valueToNumber)) {
+            return valueToNumber.toInt().toString().plus(" ").plus(unitToDisplay)
+        }
+
+        return valueToNumber.toString().plus(" ").plus(unitToDisplay)
     }
 
-    val valueToNumber = value.toFloat()
-    var unitToDisplay = if (unit != null && unit.isNotEmpty()) unit else ""
-    if (valueToNumber < 1) {
-        unitToDisplay = singularize(unit.toString())
-        return frac(valueToNumber).plus(" ").plus(unitToDisplay)
-    } else if (valueToNumber.equals(1)) {
-        unitToDisplay = singularize(unitToDisplay)
-    } else if (valueToNumber > 1) {
-        unitToDisplay = pluralize(unitToDisplay)
-    }
-
-    if (isInteger(valueToNumber)) {
-        return valueToNumber.toInt().toString().plus(" ").plus(unitToDisplay)
-    }
-
-    return valueToNumber.toString().plus(" ").plus(unitToDisplay)
-}
-
-fun frac(value: Float, maxdenominator: Int = 10): String {
-    var num1 = 0f
-    var den1 = 1f
-    var num2 = 1f
-    var den2 = 1f
-    while (den1 <= maxdenominator && den2 <= maxdenominator) {
-        val mediant = (num1 + num2) / (den1 + den2)
-        if (value == mediant) {
-            if (den1 + den2 <= maxdenominator) {
-                return render_frac(value, num1 + num2, den1 + den2)
-            } else if (den2 > den1) {
-                return render_frac(value, num2, den2)
+    fun frac(value: Float, maxdenominator: Int = 10): String {
+        var num1 = 0f
+        var den1 = 1f
+        var num2 = 1f
+        var den2 = 1f
+        while (den1 <= maxdenominator && den2 <= maxdenominator) {
+            val mediant = (num1 + num2) / (den1 + den2)
+            if (value == mediant) {
+                if (den1 + den2 <= maxdenominator) {
+                    return render_frac(value, num1 + num2, den1 + den2)
+                } else if (den2 > den1) {
+                    return render_frac(value, num2, den2)
+                } else {
+                    return render_frac(value, num1, den1)
+                }
+            } else if (value > mediant) {
+                num1 = num1 + num2
+                den1 = den1 + den2
             } else {
-                return render_frac(value, num1, den1)
+                num2 = num1 + num2
+                den2 = den1 + den2
             }
-        } else if (value > mediant) {
-            num1 = num1 + num2
-            den1 = den1 + den2
+        }
+        if (den1 > maxdenominator) {
+            return render_frac(value, num2, den2)
         } else {
-            num2 = num1 + num2
-            den2 = den1 + den2
+            return render_frac(value, num1, den1)
         }
     }
-    if (den1 > maxdenominator) {
-        return render_frac(value, num2, den2)
-    } else {
-        return render_frac(value, num1, den1)
-    }
-}
 
-fun render_frac(original_value: Float, num: Float, denom: Float): String {
-    if (num == 0f) {
-        return original_value.toString()
+    fun render_frac(original_value: Float, num: Float, denom: Float): String {
+        if (num == 0f) {
+            return original_value.toString()
 
-    }
-    return num.toInt().toString().plus('/').plus(denom.toInt())
-}
-
-fun pluralize(unit: String): String {
-    if (unit.isEmpty() || unit.length <= 3) {
-        return unit;
+        }
+        return num.toInt().toString().plus('/').plus(denom.toInt())
     }
 
-    val unitArray = unit.split(' ').toMutableList()
-    unitArray[0] = unitArray[0].replace("/(. * [^s])s*$/", "$1s")
-    return unitArray.joinToString(" ")
-}
+    fun pluralize(unit: String): String {
+        if (unit.isEmpty() || unit.length <= 3) {
+            return unit;
+        }
 
-fun singularize(unit: String): String {
-    if (unit.isEmpty() || unit.length <= 3) {
-        return unit
+        val unitArray = unit.split(' ').toMutableList()
+        unitArray[0] = unitArray[0].replace("/(. * [^s])s*$/", "$1s")
+        return unitArray.joinToString(" ")
     }
-    val unitArray = unit.split(' ').toMutableList()
 
-    unitArray[0] = unitArray[0].replace("/(. * [^s])s*$/", "$1")
-    return unitArray.joinToString(" ")
-}
+    fun singularize(unit: String): String {
+        if (unit.isEmpty() || unit.length <= 3) {
+            return unit
+        }
+        val unitArray = unit.split(' ').toMutableList()
 
-fun isUnitCountless(unit: String?): Boolean {
-    val arr = arrayOf("un peu", "un petit peu")
-    return arr.contains(unit)
-}
+        unitArray[0] = unitArray[0].replace("/(. * [^s])s*$/", "$1")
+        return unitArray.joinToString(" ")
+    }
 
-fun isInteger(N: Float): Boolean {
-    val X = N.toInt()
-    val reste = N - X
+    private fun isUnitCountless(unit: String?): Boolean {
+        val arr = arrayOf("un peu", "un petit peu")
+        return arr.contains(unit)
+    }
 
-    return if (reste > 0) {
-        false
-    } else true
-}
+    private fun isInteger(N: Float): Boolean {
+        // TODO : check return N.toInt().toFloat() == N
+        val intPart = N.toInt()
+        val decimalPart = N - intPart
+
+        return decimalPart <= 0
+    }
 }

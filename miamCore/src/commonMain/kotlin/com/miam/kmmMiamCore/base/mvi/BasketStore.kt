@@ -8,6 +8,7 @@ import com.miam.kmmMiamCore.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesEntryRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.SupplierRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.*
+import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
@@ -61,6 +62,7 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private val basketHandler: BasketHandler by inject()
     private val groceriesListStore: GroceriesListStore by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val analyticsService: Analytics by inject()
 
     override fun observeState(): StateFlow<BasketState> = state
 
@@ -205,12 +207,16 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
         return Pair(entriesFound.size, totalPrice)
     }
 
-    private suspend fun confirmBasket(basket: Basket, price: String){
-       val newBasket = basketRepo.updateBasket(basket.copy(attributes = basket.attributes!!.copy(confirmed = true)))
-       if(newBasket.attributes!!.token != null) {
-           supplierRepositoryImp.notifyConfirmBasket(newBasket.attributes!!.token!!)
-           supplierRepositoryImp.notifyPaidBasket(newBasket.attributes!!.token!!, price)
-       }
+    private suspend fun confirmBasket(basket: Basket, price: String) {
+        val eventProps = Analytics.PlausibleProps(total_amount = price, miam_amount = basket.attributes!!.totalPrice)
+        analyticsService.sendEvent(Analytics.EVENT_PAYMENT_CONFIRMED, "", eventProps)
+        val newBasket = basketRepo.updateBasket(basket.copy(attributes = basket.attributes!!.copy(confirmed = true)))
+        if(newBasket.attributes!!.token != null) {
+            analyticsService.sendEvent(Analytics.EVENT_BASKET_CONFIRMED, "", eventProps)
+            // TODO : DEPRACATED
+            supplierRepositoryImp.notifyConfirmBasket(newBasket.attributes!!.token!!)
+            supplierRepositoryImp.notifyPaidBasket(newBasket.attributes!!.token!!, price)
+        }
     }
 
     private fun alteredEntries(aqbe: AlterQuantityBasketEntry, basketEntries: List<BasketEntry> ): BasketEntry ?{

@@ -3,6 +3,7 @@ package com.miam.kmmMiamCore.base.mvi
 import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
+import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -37,6 +38,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     private val sideEffect = MutableSharedFlow<GroceriesListEffect>()
     private val groceriesListRepo: GroceriesListRepositoryImp by inject()
     private val basketStore: BasketStore by inject()
+    private val analyticsService: Analytics by inject()
 
     override fun observeState(): StateFlow<GroceriesListState> = state
 
@@ -59,6 +61,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             }
             is GroceriesListAction.ResetGroceriesList -> {
                 return launch(coroutineHandler) {
+                    // TODO : path
+                    analyticsService.sendEvent(Analytics.EVENT_RECIPE_RESET, "", Analytics.PlausibleProps())
                     setGroceriesListAndRefreshBasket(groceriesListRepo.reset())
                 }
             }
@@ -98,8 +102,12 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
         if(groceriesList.hasRecipe(recipeId)) {
             if(groceriesList.guestsForRecipe(recipeId) == guest) return null
 
+            // TODO : path
+            analyticsService.sendEvent(Analytics.EVENT_RECIPE_CHANGEGUESTS, "", Analytics.PlausibleProps(recipe_id = recipeId))
             newRecipesInfos.find { it.id.toString() == recipeId }?.guests = guest
         } else {
+            // TODO : path
+            analyticsService.sendEvent(Analytics.EVENT_RECIPE_ADD, "", Analytics.PlausibleProps(recipe_id = recipeId))
             newRecipesInfos.add(RecipeInfos(recipeId.toInt(), guest))
         }
         return alterRecipeInfo(groceriesList, newRecipesInfos)
@@ -108,6 +116,8 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     private suspend fun removeRecipe(groceriesList: GroceriesList?, recipeId: String): GroceriesList? {
         if (groceriesList == null || !groceriesList.hasRecipe(recipeId)) return null
 
+        // TODO : path
+        analyticsService.sendEvent(Analytics.EVENT_RECIPE_REMOVE, "", Analytics.PlausibleProps(recipe_id = recipeId))
         val recipesInfo = groceriesList.attributes!!.recipesInfos
         val newRecipeInfo = recipesInfo.filter { el -> el.id.toString() != recipeId }.toMutableList()
 
