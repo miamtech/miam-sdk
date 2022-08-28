@@ -1,3 +1,7 @@
+## 2.2.5
+[FIX][COR] recipe like heart not well recycled makes unwanted apparition
+[FIX][COR] basket preview guest change was broken
+[FIX][COR] basket preview when deleting a product its quantity artificialy stay on next one
 
 ## 2.2.4
 - [FIX][IOS] Fix SwiftUI imports

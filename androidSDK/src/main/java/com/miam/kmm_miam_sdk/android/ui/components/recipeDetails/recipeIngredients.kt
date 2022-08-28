@@ -47,8 +47,8 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
             Counter(
                 vmRecipe.currentState.guest,
                 isDisable = false,
-                { vmRecipe.setEvent(RecipeContract.Event.IncreaseGuest) },
-                { vmRecipe.setEvent(RecipeContract.Event.DecreaseGuest) },
+                { vmRecipe.increaseGuest() },
+                { vmRecipe.decreaseGuest() },
                 )
         }
         Divider(Modifier.padding(8.dp))

@@ -39,8 +39,7 @@ import kotlin.math.round
 @Composable
 fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,
-    guestIncrease: () -> Unit ,
-    guestDecrease: () -> Unit ,
+    guestUpdate: (guestCount: Int) -> Unit,
     goToDetail: () -> Unit
 )  {
 
@@ -55,16 +54,16 @@ fun BasketPreviewRecipeLine(
     }
 
     fun increase() {
-        if(line.count != 100) {
+        if(count != 100) {
             count++
-            guestIncrease()
+            guestUpdate(count)
         }
     }
 
     fun decrease(){
-        if(line.count != 0) {
+        if(count != 0) {
             count--
-            guestDecrease()
+            guestUpdate(count)
         }
     }
 

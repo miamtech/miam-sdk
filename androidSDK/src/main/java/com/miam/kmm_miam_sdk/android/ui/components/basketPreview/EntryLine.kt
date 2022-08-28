@@ -50,9 +50,16 @@ fun EntryLine(entry: BasketPreviewLine,
     val description = entry.bplDescription[0]
     val sharingCount = entry.inlineTag
     var count by remember { mutableStateOf(entry.count) }
+    val rememberedEntry by remember { mutableStateOf(entry) }
 
-     fun delete(){
-        vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveEntry(entry.record as BasketEntry))
+    if (rememberedEntry.id != entry.id) {
+        // object is reused reset remembered count
+        count = entry.count
+    }
+
+
+    fun delete(){
+        vmBasketPreview.removeBasketEntry(entry.record as BasketEntry)
     }
 
     fun replace(){
@@ -62,20 +69,19 @@ fun EntryLine(entry: BasketPreviewLine,
 
     fun increaseQty(){
         count++
-        vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, count))
+        vmBasketPreview.updateBasketEntry(entry.record as BasketEntry, count)
     }
 
     fun decreaseQty(){
         if(count == 1 ){
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveEntry(entry.record as BasketEntry))
+            vmBasketPreview.removeBasketEntry(entry.record as BasketEntry)
         }else{
             count --
-            vmBasketPreview.setEvent(BasketPreviewContract.Event.UpdateBasketEntry(entry.record as BasketEntry, count))
+            vmBasketPreview.updateBasketEntry(entry.record as BasketEntry, count)
         }
     }
 
     if(Template.basketPreviewProductLine != null){
-
         Template.basketPreviewProductLine?.let{
             it(productName, description, count, sharingCount.toString() , { delete() }, { replace() } , { increaseQty() },  { decreaseQty()})
         }

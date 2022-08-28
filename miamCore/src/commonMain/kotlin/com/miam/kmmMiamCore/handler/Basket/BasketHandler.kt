@@ -66,9 +66,10 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
 
         // When comparison is already initialized, we just update it
         val newComparator = state.value.comparator!!.updateReceivedFromMiam(miamActiveBasket)
-        sendUpdateToRetailer(state.value.comparator!!.resolveFromMiam(newComparator))
+        val updateToSend = state.value.comparator!!.resolveFromMiam(newComparator)
         state.value = state.value.copy(comparator = newComparator)
         LogHandler.info("Miam basket changed finished ${state.value.comparator} $miamActiveBasket")
+        sendUpdateToRetailer(updateToSend)
     }
 
     private fun sendUpdateToRetailer(itemsToAdd: List<RetailerProduct>) {

@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
@@ -24,12 +25,14 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private val itemSelectorViewModel : ItemSelectorViewModel by inject()
     private val lineEntriesSubject  = MutableSharedFlow<List<BasketEntry>>()
 
+    data class LineUpdateState(val lineUpdates: List<BasketEntry>): State
+    private val lineUpdateState: MutableStateFlow<LineUpdateState> = MutableStateFlow(LineUpdateState(listOf()))
+
     override fun createInitialState(): BasketPreviewContract.State =
         BasketPreviewContract.State(
             recipeId= null,
             showLines= false,
             line= BasicUiState.Loading,
-            lineUpdates = listOf(),
             bpl= null,
             isReloading= false,
             job = null
@@ -48,12 +51,17 @@ open class BasketPreviewViewModel(val recipeId: String?):
         }
     }
 
+    fun dispose() {
+        currentState.job?.cancel()
+    }
+
     private fun listenEntriesChanges() {
        launch(Dispatchers.Default) {
            lineEntriesSubject.debounce(500).collect { entries ->
                LogHandler.info("launching update $entries")
                val newBpl = updateBplEntries(entries)
-               setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl, lineUpdates = listOf()) }
+               lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
+               setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
                // create a copy of the list so you can clear it here
                basketStore.dispatch(
                    BasketAction.UpdateBasketEntries(
@@ -69,21 +77,10 @@ open class BasketPreviewViewModel(val recipeId: String?):
             is BasketPreviewContract.Event.SetRecipeId -> setRecipeId(event.newRecipeId)
             is BasketPreviewContract.Event.SetLines -> setLines(event.newlines)
             is BasketPreviewContract.Event.AddEntry -> addEntry(event.entry)
-            is BasketPreviewContract.Event.UpdateBasketEntry -> updateBasketEntry(event.entry, event.finalQty)
-            is BasketPreviewContract.Event.RemoveEntry -> removeBasketEntry(event.entry)
             is BasketPreviewContract.Event.ReplaceItem -> replaceItem(event.entry)
             is BasketPreviewContract.Event.ToggleLine -> toggleLine()
-            is BasketPreviewContract.Event.Reload -> setState { copy(isReloading = !uiState.value.isReloading)}
-            is BasketPreviewContract.Event.AddGuest -> {
-                    setEvent(BasketPreviewContract.Event.Reload)
-                    event.recipeVm.setEvent(RecipeContract.Event.IncreaseGuest)
-            }
-             is BasketPreviewContract.Event.RemoveGuest -> {
-                    setEvent(BasketPreviewContract.Event.Reload)
-                    event.recipeVm.setEvent(RecipeContract.Event.DecreaseGuest)
-            }
             is BasketPreviewContract.Event.OpenItemSelector -> openItemSelector(event.bpl)
-            is BasketPreviewContract.Event.KillJob -> uiState.value.job?.cancel()
+            is BasketPreviewContract.Event.KillJob -> dispose()
             is BasketPreviewContract.Event.RemoveRecipe -> {
                 groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = event.recipeId)) }
         }
@@ -91,6 +88,10 @@ open class BasketPreviewViewModel(val recipeId: String?):
 
     private fun setRecipeId(newRecipeId :Int) {
         setState { copy(recipeId = newRecipeId)}
+    }
+
+    private fun reloadState() {
+        setState { copy(isReloading = true)}
     }
 
     /**
@@ -105,6 +106,11 @@ open class BasketPreviewViewModel(val recipeId: String?):
 
     private fun toggleLine() {
         setState { copy(showLines = !uiState.value.showLines)}
+    }
+
+    fun updateGuest(recipeVm: RecipeViewModel, guestCount: Int) {
+        reloadState()
+        recipeVm.updateGuest(guestCount)
     }
 
     private fun updateBplEntries(basketEntries: List<BasketEntry>): BasketPreviewLine {
@@ -130,7 +136,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
         basketStore.dispatch(BasketAction.AddBasketEntry(entry))
     }
 
-    private fun removeBasketEntry(entry: BasketEntry){
+    fun removeBasketEntry(entry: BasketEntry){
         LogHandler.debug("[Miam] remove entry $entry")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
@@ -143,16 +149,18 @@ open class BasketPreviewViewModel(val recipeId: String?):
             removed = currentEntries.removed.toMutableList().plus(entry)
         )
         val newBpl = currentState.bpl!!.copy(entries = newEntries, price = newEntries.totalPrice().toString())
-        val newLineUpdates = currentState.lineUpdates.filter { be -> be.id != entry.id }
-        setState { copy(bpl = newBpl, line = BasicUiState.Success(newBpl), lineUpdates = newLineUpdates) }
+        val newLineUpdates = lineUpdateState.value.lineUpdates.filter { be -> be.id != entry.id }
+        lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = newLineUpdates)
+        setState { copy(bpl = newBpl, line = BasicUiState.Success(newBpl)) }
         basketStore.dispatch(BasketAction.RemoveEntry(entry))
     }
 
-    private fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
+    fun updateBasketEntry(entry: BasketEntry, finalQty:Int){
         val newEntry = entry.updateQuantity(finalQty)
 
-        val newLineUpdates = currentState.lineUpdates.filter { be -> be.id != entry.id }.plus(newEntry)
-        setState { copy(lineUpdates = newLineUpdates) }
+        val newLineUpdates = lineUpdateState.value.lineUpdates.filter { be -> be.id != entry.id }.plus(newEntry)
+        lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = newLineUpdates)
+        //setState { copy(lineUpdates = newLineUpdates) }
         launch(Dispatchers.Default) {
             lineEntriesSubject.emit(newLineUpdates)
         }
@@ -165,16 +173,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun basketChange(){
-        launch(coroutineHandler) {
-            val bpl = basketStore.observeState().first {
-                it.basketPreview != null && it.basketPreview.isNotEmpty()
-            }.basketPreview?.find {
-                basketPreviewLine -> basketPreviewLine.id == recipeId.toString()
-            }
-            LogHandler.debug("[Miam] bpl $bpl")
-            if(bpl != null) {
-                setEvent(BasketPreviewContract.Event.SetLines(bpl))
-            }
+        val bpl = basketStore.state.value.basketPreview?.find { basketPreviewLine -> basketPreviewLine.id == recipeId.toString() }
+        if(bpl != null) {
+            setEvent(BasketPreviewContract.Event.SetLines(bpl))
         }
     }
 

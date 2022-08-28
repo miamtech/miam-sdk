@@ -33,14 +33,14 @@ public struct MyMealRow: View {
     func increaseGuestsCount() {
         if(basketPreviewViewModel.basketPreviewLine != nil && count != 100) {
             count += 1
-            recipeViewModel.setEvent(event: RecipeContractEvent.IncreaseGuest())
+            recipeViewModel.increaseGuest()
         }
     }
 
     func decreaseGuestsCount() {
         if(basketPreviewViewModel.basketPreviewLine != nil && count != 1) {
             count -= 1
-            recipeViewModel.setEvent(event: RecipeContractEvent.DecreaseGuest())
+            recipeViewModel.decreaseGuest()
         }
     }
 
@@ -49,7 +49,7 @@ public struct MyMealRow: View {
     }
 
     func removeProduct(_ entry: BasketEntry) {
-        basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.RemoveEntry(entry: entry))
+        basketPreviewViewModel.removeBasketEntry(entry: entry)
     }
 
     func replaceProduct(_ previewLine: BasketPreviewLine) {
@@ -134,8 +134,7 @@ public struct MyMealRow: View {
                 routerVm: recipeViewModel.routerVM
             )
         }.onAppear(perform: {
-            recipeViewModel.setEvent(
-                event: RecipeContractEvent.OnFetchRecipe(idRecipe: meal.id))
+            recipeViewModel.fetchRecipe(recipeId: meal.id)
         })
     }
 }
