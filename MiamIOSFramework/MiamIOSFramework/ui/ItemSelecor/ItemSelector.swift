@@ -17,18 +17,22 @@ public struct ItemSelector: View  {
         viewModel = ItemSelectorVM()
     }
     
-    
     public var body: some View {
         if(viewModel.state != nil ) {
             VStack {
-                TitleBarView(showBackButton: true, backAction: {
-                    viewModel.returnToPreview()
-                }, titleView: AnyView(
-                    Text(ItemSelectorText.sharedInstance.swapProduct)
-                        .foregroundColor(Color.miamColor(.black))
-                        .font(.system(size: 16, weight: .heavy, design: .default)))
+                TitleBarView(
+                    showBackButton: true, backAction: {
+                        viewModel.returnToPreview()
+                    }, titleView: AnyView(
+                        HStack{
+                            Spacer()
+                            Text(ItemSelectorText.sharedInstance.swapProduct)
+                                .foregroundColor(Color.miamColor(.black))
+                                .font(.system(size: 16, weight: .heavy, design: .default))
+                            Spacer()
+                        }
+                    )
                 )
-
                 ScrollView{
                     VStack(alignment: .leading){
                         if (Template.sharedInstance.currentProductTemplate != nil) {
@@ -54,7 +58,7 @@ public struct ItemSelector: View  {
                                 }.onTapGesture {
                                     viewModel.chooseItem(index: i)
                                 }
-
+                                
                             }
                         }
                     }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)

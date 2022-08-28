@@ -1,16 +1,16 @@
 
 plugins {
-    id("com.android.library")
     kotlin("android")
+    id("com.android.library")
     id("kotlin-android")
     id("com.kezong.fat-aar")
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     defaultConfig {
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 31
     }
 
     buildTypes {
@@ -73,7 +73,12 @@ dependencies {
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
-    implementation("androidx.core:core-ktx:+")
+    implementation("androidx.core:core-ktx:1.8.0")
 
 
 }
+
+val PUBLISH_GROUP_ID by extra("tech.miam.sdk")
+val PUBLISH_ARTIFACT_ID by extra { "kmm-miam-sdk" }
+
+apply("${rootDir}/scripts/publish-module.gradle")

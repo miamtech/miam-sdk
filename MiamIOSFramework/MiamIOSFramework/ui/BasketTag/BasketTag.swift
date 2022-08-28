@@ -81,14 +81,16 @@ internal struct ListModal: View {
                 }
                 HStack {
                     VStack{
-                        ForEach(0..<recipeList.count) { i in
-                            Text((recipeList[i] as! Recipe).attributes?.title ?? "")
+                        let recipes: [Recipe] = recipeList.compactMap({$0 as? Recipe})
+                        ForEach(recipes, id: \.self) { recipe in
+                            Text(recipe.attributes?.title ?? "")
                                 .underline()
                                 .foregroundColor(Color.miamColor(.ternary))
                                 .bold()
                                 .padding(.horizontal,8)
-                                .padding(.vertical, 4).onTapGesture {
-                                    basketTagVm.goToDetail(recipe: recipeList[i] as! Recipe)
+                                .padding(.vertical,4)
+                                .onTapGesture {
+                                    basketTagVm.goToDetail(recipe: recipe)
                                     showingPopup = true
                                     showingListModal = false                              
                                 }
@@ -100,7 +102,7 @@ internal struct ListModal: View {
                 Divider()
                 HStack{
                     Spacer()
-                    Image("cross", bundle: Bundle(for: RecipeCardVM.self))
+                    Image.miamImage(icon: .cross)
                         .renderingMode(.original)
                         .frame(
                             width: 24,

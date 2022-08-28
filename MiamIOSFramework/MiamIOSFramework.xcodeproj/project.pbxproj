@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B10699728A131A40095580C /* BasketPreviewText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10699628A131A40095580C /* BasketPreviewText.swift */; };
 		0B4B3E7D284FA6FF00F25E7B /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E7C284FA6FF00F25E7B /* ItemSelector.swift */; };
 		0B4B3E80284FA99D00F25E7B /* ItemSelectorText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E7F284FA99D00F25E7B /* ItemSelectorText.swift */; };
 		0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */; };
@@ -68,6 +69,8 @@
 		BFF5B65528534BA500CEC7C5 /* BasketPreviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65428534BA500CEC7C5 /* BasketPreviewHeader.swift */; };
 		BFF5B65728534F5800CEC7C5 /* IngredientNotInBasketRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65628534F5800CEC7C5 /* IngredientNotInBasketRow.swift */; };
 		BFF5B65B2853932C00CEC7C5 /* BasketPreviewLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5B65A2853932C00CEC7C5 /* BasketPreviewLine.swift */; };
+		BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF70573289016C200CB4EC6 /* MiamIcons.swift */; };
+		BFF70576289018BB00CB4EC6 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF70575289018BB00CB4EC6 /* Image.swift */; };
 		DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */; };
 		DCD4E30B27BE914A000D3EA6 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */; };
 		DCD4E31027BE914A000D3EA6 /* MiamIOSFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD4E30F27BE914A000D3EA6 /* MiamIOSFrameworkTests.swift */; };
@@ -88,6 +91,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B10699628A131A40095580C /* BasketPreviewText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreviewText.swift; sourceTree = "<group>"; };
 		0B4B3E7C284FA6FF00F25E7B /* ItemSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelector.swift; sourceTree = "<group>"; };
 		0B4B3E7F284FA99D00F25E7B /* ItemSelectorText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorText.swift; sourceTree = "<group>"; };
 		0B4B3E812850918A00F25E7B /* ItemSelectorProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelectorProductRow.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 		BF25E1572864740900328B4B /* miam.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = miam.xcassets; sourceTree = "<group>"; };
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
+		BF2691BE2893CF7A00BF9D5A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
@@ -149,6 +154,8 @@
 		BFF5B65428534BA500CEC7C5 /* BasketPreviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreviewHeader.swift; sourceTree = "<group>"; };
 		BFF5B65628534F5800CEC7C5 /* IngredientNotInBasketRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientNotInBasketRow.swift; sourceTree = "<group>"; };
 		BFF5B65A2853932C00CEC7C5 /* BasketPreviewLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketPreviewLine.swift; sourceTree = "<group>"; };
+		BFF70573289016C200CB4EC6 /* MiamIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamIcons.swift; sourceTree = "<group>"; };
+		BFF70575289018BB00CB4EC6 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		DCD4E30027BE914A000D3EA6 /* MiamIOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiamIOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD4E30327BE914A000D3EA6 /* MiamIOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiamIOSFramework.h; sourceTree = "<group>"; };
 		DCD4E30427BE914A000D3EA6 /* MiamIOSFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MiamIOSFramework.docc; sourceTree = "<group>"; };
@@ -229,6 +236,7 @@
 				0B7C9BE32819933D00BFC7F8 /* MiamColor.swift */,
 				0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */,
 				0B7C9BF6281FCC6800BFC7F8 /* Template.swift */,
+				BFF70573289016C200CB4EC6 /* MiamIcons.swift */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -293,6 +301,7 @@
 				BFF5B65628534F5800CEC7C5 /* IngredientNotInBasketRow.swift */,
 				0BF5C6F72862163800C29CB6 /* BasketPreviewView.swift */,
 				0BF5C6FB28621AB200C29CB6 /* BasketPreviewLoadingView.swift */,
+				0B10699628A131A40095580C /* BasketPreviewText.swift */,
 			);
 			path = BasketPreview;
 			sourceTree = "<group>";
@@ -358,6 +367,7 @@
 			children = (
 				0B7C9BED2819A11E00BFC7F8 /* Color.swift */,
 				BFB3957A288ACE1E00D696D0 /* Bundle.swift */,
+				BFF70575289018BB00CB4EC6 /* Image.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -365,11 +375,11 @@
 		DCD4E2F627BE914A000D3EA6 = {
 			isa = PBXGroup;
 			children = (
+				BF2691BE2893CF7A00BF9D5A /* Package.swift */,
 				BF25E1572864740900328B4B /* miam.xcassets */,
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
-				DCD4E32527BE9657000D3EA6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -454,13 +464,6 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		DCD4E32527BE9657000D3EA6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -479,11 +482,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DCD4E31427BE914A000D3EA6 /* Build configuration list for PBXNativeTarget "MiamIOSFramework" */;
 			buildPhases = (
-				0BFD23B727FDDA9D00A50FE7 /* ShellScript */,
+				BF2691B52892E5F600BF9D5A /* ShellScript */,
 				DCD4E2FB27BE914A000D3EA6 /* Headers */,
 				DCD4E2FC27BE914A000D3EA6 /* Sources */,
 				DCD4E2FD27BE914A000D3EA6 /* Frameworks */,
 				DCD4E2FE27BE914A000D3EA6 /* Resources */,
+				BF2691B62892ECC700BF9D5A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -568,7 +572,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0BFD23B727FDDA9D00A50FE7 /* ShellScript */ = {
+		BF2691B52892E5F600BF9D5A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -583,7 +587,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n\n";
+			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :miamCore:embedAndSignAppleFrameworkForXcode\n#./gradlew :miamCore:embedAndSign\n#./gradlew :miamCore:linkDebugFrameworkIOSFat\n";
+		};
+		BF2691B62892ECC700BF9D5A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -594,6 +615,7 @@
 			files = (
 				0B5325212874899E001906CD /* LikeButton.swift in Sources */,
 				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
+				BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */,
 				0BB5CA602847B3A2007AC86D /* RecipeDetailsFooter.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColor.swift in Sources */,
 				0B4B3E84285099EA00F25E7B /* ItemSelectorVM.swift in Sources */,
@@ -616,6 +638,7 @@
 				521D6461283277D00092AC52 /* MyMealRow.swift in Sources */,
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
 				0B7C9BEE2819A11E00BFC7F8 /* Color.swift in Sources */,
+				BFF70576289018BB00CB4EC6 /* Image.swift in Sources */,
 				0B4B3E822850918A00F25E7B /* ItemSelectorProductRow.swift in Sources */,
 				DCD4E32427BE937F000D3EA6 /* RecipeCardView.swift in Sources */,
 				0B9AA66D28215A83007D6C8A /* Dialog.swift in Sources */,
@@ -657,6 +680,7 @@
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,
 				521D6463283277EA0092AC52 /* MyMealItemRow.swift in Sources */,
 				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
+				0B10699728A131A40095580C /* BasketPreviewText.swift in Sources */,
 				0BB5CA6628489B60007AC86D /* RecipeDetailsDifficulty.swift in Sources */,
 				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
 			);
@@ -733,7 +757,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -791,7 +815,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -815,6 +839,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -854,6 +879,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				GENERATE_INFOPLIST_FILE = YES;

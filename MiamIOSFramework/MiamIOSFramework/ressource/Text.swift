@@ -27,7 +27,7 @@ public class MiamText {
     public let mealRowAlready = "Déjà dans vos placards"
     public let mealRowNotFound = "Produits indisponibles"
     public let mealRowRemoved = "Articles retirés du panier"
-    public let select = "Choisir"
+    public let select = "Sélectionner"
     public let swapProduct = "Remplacer le produit"
     public var difficultyEasy = "Chef débutant"
     public var difficultyMid = "Chef aguerrie"
@@ -37,6 +37,7 @@ public class MiamText {
     public var restingTime = "Repos"
     public var simmering = "Ça mijote"
     public var viewRecipeDetail = "Voir le détail"
+    public var selectedProduct = "Dans le panier"
     
     private init(){}
 

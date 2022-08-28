@@ -16,7 +16,7 @@ struct RecipeCardSuccessView: View {
     
     public var recipeId: String?
     public var criteria: SuggestionsCriteria?
-
+    
     private let showMealIdeaTag: Bool
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
@@ -69,14 +69,16 @@ struct RecipeCardSuccessView: View {
                                 )! ,
                                 placeholder: { Text("loading ...")},
                                 height : 240
-                            ).frame(height: 240).onTapGesture {
-                                viewModel.goToDetail()
-                                showingPopup = true
-                            }
+                            ).frame(height: 240)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    viewModel.goToDetail()
+                                    showingPopup = true
+                                }
                             HStack(alignment: .center) {
                                 if (showMealIdeaTag) {
                                     HStack(){
-                                        Image("ideerepas", bundle: Bundle(for: RecipeCardVM.self))
+                                        Image.miamImage(icon: .ideeRepas)
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width:24, height:24)
@@ -85,7 +87,7 @@ struct RecipeCardSuccessView: View {
                                     }.padding(.horizontal,16)
                                         .padding(.vertical,4)
                                         .background(Color.miamColor(.musterd))
-                                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                                        .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
                                 }
                                 Spacer()
                                 if(viewModel.likeIsEnable()){
@@ -101,13 +103,13 @@ struct RecipeCardSuccessView: View {
                                                 leading: Dimension.sharedInstance.lPadding,
                                                 bottom: Dimension.sharedInstance.mlPadding,
                                                 trailing: Dimension.sharedInstance.lPadding))
-
+                        
                         HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
-                            IconWithText(imageName: "Clock", text: viewModel.recipe?.totalTime ?? "")
+                            IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
                             Divider()
-                            IconWithText(imageName: "whisk", text: viewModel.recipe?.difficultyLabel ?? "")
-                        }
-
+                            IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
+                        }.padding(.bottom, Dimension.sharedInstance.mlPadding)
+                        
                         Button {
                             if !viewModel.isInCart {
                                 viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
@@ -118,22 +120,22 @@ struct RecipeCardSuccessView: View {
                             showingPopup = true
                         } label: {
                             if !viewModel.isInCart {
-                                HStack {
+                                HStack(alignment: .center) {
                                     Text(MiamText.sharedInstance.checkBasketPreview)
-                                    Image("cart", bundle: Bundle(for: RecipeCardVM.self))
+                                    Image.miamImage(icon: .cart)
                                 }
                             } else {
-                                HStack {
+                                HStack(alignment: .center) {
                                     Text(MiamText.sharedInstance.viewRecipeDetail)
-                                    Image("Check", bundle: Bundle(for: RecipeCardVM.self))
+                                    Image.miamImage(icon: .check)
                                 }
                             }
                         }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))
-                            .frame(minHeight: 50.0, maxHeight: 50.0)
+                            .frame(minHeight: 40.0, maxHeight: 40.0)
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                             .background(!viewModel.isInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
                             .cornerRadius(25)
-                            .font(.system(size: 14.0, weight: .bold, design: .default))
+                            .font(.system(size: 15.0, weight: .bold, design: .default))
                             .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                             .padding(.bottom, Dimension.sharedInstance.lPadding)
                     }
@@ -145,10 +147,11 @@ struct RecipeCardSuccessView: View {
                         initialRoute : initialDialogScreen,
                         routerVm: viewModel.routerVM
                     )
-                }.cornerRadius(15).clipped().overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color.miamColor(.border), lineWidth: 1)
-                )
+                }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()
+                    .overlay(!showMealIdeaTag ?   RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
+                    .overlay(showMealIdeaTag ?  Rectangle()
+                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
             }.frame(height: 400)
         }
     }

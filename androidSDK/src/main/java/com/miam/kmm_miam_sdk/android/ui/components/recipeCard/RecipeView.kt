@@ -63,6 +63,7 @@ import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmm_miam_sdk.android.ressource.Image.recipeIcon
 
 class RecipeView @JvmOverloads constructor(
     context: Context,
@@ -338,12 +339,15 @@ class RecipeView @JvmOverloads constructor(
                                     )
 
                                 }
-                                Text(
-                                    text = recipe.attributes!!.title,
-                                    modifier = RecipeDetailsStyle.titleModifier,
-                                    textAlign = TextAlign.Center,
-                                    style = Typography.subtitleBold
-                                )
+                                Clickable(
+                                    onClick = { vmRecipe.goToDetail() }){
+                                    Text(
+                                        text = recipe.attributes!!.title,
+                                        modifier = RecipeDetailsStyle.titleModifier,
+                                        textAlign = TextAlign.Center,
+                                        style = Typography.subtitleBold
+                                    )
+                                }
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -394,28 +398,11 @@ class RecipeView @JvmOverloads constructor(
                             }
                             if(isInshelve){
                                 Box(modifier = recipeCardFlagPositionContainer) {
-
-                                    Row(
-                                        modifier = Modifier
-                                            .background(Color(0xFFFBC702))
-                                            .padding(
-                                                horizontal = mPadding,
-                                                vertical = sPadding
-                                            ),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.Center
-                                    ) {
                                         Image(
-                                            painter = painterResource(ideeRepas),
+                                            painter = painterResource(recipeIcon),
                                             contentDescription = null,
-                                            colorFilter = ColorFilter.tint(Color.Black)
+                                            modifier = Modifier.width(120.dp)
                                         )
-                                        Text(
-                                            text = "Idée repas",
-                                            style = Typography.subtitleBold,
-                                            modifier = Modifier.padding(horizontal = sPadding)
-                                        )
-                                    }
                                 }
                             }
                         }
