@@ -1,3 +1,6 @@
+## 2.2.6
+- [FIX][AND] Difficulty checkbox in filter are now working 
+
 ## 2.2.5
 [FIX][COR] recipe like heart not well recycled makes unwanted apparition
 [FIX][COR] basket preview guest change was broken
