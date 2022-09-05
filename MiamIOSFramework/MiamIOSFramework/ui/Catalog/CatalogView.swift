@@ -59,14 +59,20 @@ public struct CatalogView: View {
                                                                                                                emptyView: CatalogEmptyView()).padding([.top], Dimension.sharedInstance.lPadding)
                                                                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-            }.popover(isPresented: $catalog.filterOpen) {
+            }.sheet(isPresented: $showingSearch, onDismiss: {
+                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+            }) {
+                CatalogSearchView(catalog: catalog, close: {
+                    showingSearch = false
+                })
+            }.sheet(isPresented: $showingFilters, onDismiss: {
+                catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            }) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
                 } close: {
-                    self.catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+                    showingFilters = false
                 }
-            }.popover(isPresented: $catalog.searchOpen) {
-                CatalogSearchView(catalog: catalog)
             }
         }
     }

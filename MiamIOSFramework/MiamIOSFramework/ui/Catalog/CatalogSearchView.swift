@@ -12,12 +12,12 @@ import miamCore
 struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
     var catalog: CatalogVM
-    
+    let close: () -> Void
     var body: some View {
         VStack(spacing: 10.0) {
             HStack {
                 Button {
-                    catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+                    close()
                 } label: {
                     Image.miamImage(icon: .arrow)
                 }
@@ -51,7 +51,7 @@ struct CatalogSearchView: View {
 struct CatalogSearchView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            CatalogSearchView(catalog: CatalogVM())
+            CatalogSearchView(catalog: CatalogVM(), close: {})
         }
     }
 }
