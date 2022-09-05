@@ -13,7 +13,7 @@ public struct CatalogRecipePageNoResultsView: View {
     let catalogViewModel: CatalogVM
     private var showingFavorites = false
 
-    let noRecipeFoundText = "Oups, aucune recette n'a été trouvée pour"
+    let noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
     let tryAnotherSearchText = "Essayez une nouvelle recherche"
     let browseRecipesText = "Parcourir les idées repas"
     let addRecipeText = "Ajouter une idée repas"
@@ -26,7 +26,8 @@ public struct CatalogRecipePageNoResultsView: View {
     public var body: some View {
         VStack(spacing: 32.0) {
             Image.miamImage(icon: .noResults)
-            Text("\(noRecipeFoundText) \"\(catalogViewModel.searchString)\"")
+            let noRecipeFound = showingFavorites ? "\(noRecipeFoundText)." : "\(noRecipeFoundText) pour \"\(catalogViewModel.searchString)\"."
+            Text(noRecipeFound)
                 .fontWeight(.bold)
                 .font(.system(size: 24.0))
                 .multilineTextAlignment(.center)
@@ -38,6 +39,7 @@ public struct CatalogRecipePageNoResultsView: View {
                     .foregroundColor(Color.miamColor(.white))
             }
 
+            /*
             if showingFavorites {
                 Button {
                     catalogViewModel.setEvent(event: CatalogContractEvent.GoToDefault())
@@ -60,6 +62,7 @@ public struct CatalogRecipePageNoResultsView: View {
                     .overlay(Capsule().stroke(.white, lineWidth: 1.0))
                 }
             }
+            */
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(10)
