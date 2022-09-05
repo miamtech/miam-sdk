@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.myMeal
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,41 +12,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Colors
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItem
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewRecipeLine
-import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
-import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItem
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewRecipeLine
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 
 @Composable
 fun ExpendableBasketPreviewLine(
-    line : BasketPreviewLine,
+    line: BasketPreviewLine,
     recipeVm: RecipeViewModel,
     vmBasketPreview: BasketPreviewViewModel,
     goToDetail: () -> Unit,
-    goToReplaceItem: ()-> Unit,
-    removeRecipe : () -> Unit
+    goToReplaceItem: () -> Unit,
+    removeRecipe: () -> Unit
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 270f else 90f
     )
 
-    Column() {
+    Column {
         Clickable(
-            onClick = { expandedState = !expandedState},
+            onClick = { expandedState = !expandedState },
             children = {
                 Row(
                     Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
                 ) {
-                    Column( Modifier.weight(1f)) {
+                    Column(Modifier.weight(1f)) {
                         BasketPreviewRecipeLine(
                             line = line,
                             { guestCount -> vmBasketPreview.updateGuest(recipeVm, guestCount) },
@@ -82,7 +80,7 @@ fun ExpendableBasketPreviewLine(
                             Image(
                                 painter = painterResource(BasketPreviewImage.toggleCaret),
                                 contentDescription = null,
-                                modifier =  RecipeDetailsStyle.totalTimeIcon
+                                modifier = RecipeDetailsStyle.totalTimeIcon
                             )
                         }
                     }
@@ -91,10 +89,10 @@ fun ExpendableBasketPreviewLine(
             }
         )
 
-        AnimatedVisibility(visible = expandedState ) {
+        AnimatedVisibility(visible = expandedState) {
             BasketPreviewItem(
                 line = line,
-                vmBasketPreview= vmBasketPreview,
+                vmBasketPreview = vmBasketPreview,
                 goToItemSelector = { goToReplaceItem() }
             )
         }

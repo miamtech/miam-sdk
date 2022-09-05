@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -29,17 +31,15 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 
 class CatalogSearch(
     private val catalogFilterVM: CatalogFilterViewModel,
-    private val closeDialog : () -> Unit,
-    private val goToSearchResult : () -> Unit,
+    private val closeDialog: () -> Unit,
+    private val goToSearchResult: () -> Unit,
 ) {
 
 
-    private fun updateResearch(searchString : String){
+    private fun updateResearch(searchString: String) {
         catalogFilterVM.setEvent(
             CatalogFilterContract.Event.SetSearchString(searchString)
         )
@@ -52,39 +52,47 @@ class CatalogSearch(
         val focusRequester = FocusRequester()
 
 
-        FullScreen{
-            if(Template.CatalogSearchTemplate != null){
+        FullScreen {
+            if (Template.CatalogSearchTemplate != null) {
                 Template.CatalogSearchTemplate?.let {
                     it(
                         state.value.searchString ?: "",
                         ::updateResearch,
-                        {closeDialog()},
-                        {goToSearchResult()},
+                        { closeDialog() },
+                        { goToSearchResult() },
                     )
                 }
             } else {
                 Box(
                     Modifier
                         .fillMaxSize()
-                        .background(white)) {
+                        .background(white)
+                ) {
                     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                         Row(Modifier.fillMaxWidth()) {
-                            Clickable(onClick = {closeDialog()}) {
+                            Clickable(onClick = { closeDialog() }) {
                                 Image(
                                     painter = painterResource(back),
                                     contentDescription = null,
-                                    Modifier.rotate(180f).padding(vertical = 8.dp)
+                                    Modifier
+                                        .rotate(180f)
+                                        .padding(vertical = 8.dp)
                                 )
                             }
                         }
-                        Row(Modifier.fillMaxWidth().border(
-                            border = BorderStroke(1.dp, Colors.primary),
-                            shape = RoundedCornerShape(50)
-                        ), verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween){
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .border(
+                                    border = BorderStroke(1.dp, Colors.primary),
+                                    shape = RoundedCornerShape(50)
+                                ), verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             TextField(
-                                modifier=Modifier.weight(1f,false).
-                                focusRequester(focusRequester),
+                                modifier = Modifier
+                                    .weight(1f, false)
+                                    .focusRequester(focusRequester),
                                 value = state.value.searchString ?: "",
                                 onValueChange = {
                                     updateResearch(it)
@@ -96,7 +104,7 @@ class CatalogSearch(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent
                                 ),
-                                placeholder = { Text( "Chercher un ingrédient ou une recette")}
+                                placeholder = { Text("Chercher un ingrédient ou une recette") }
 
                             )
                             Clickable(onClick = { goToSearchResult() }) {
@@ -108,7 +116,8 @@ class CatalogSearch(
                                     Box(
                                         Modifier
                                             .background(Colors.primary)
-                                            .padding(8.dp))
+                                            .padding(8.dp)
+                                    )
                                     {
                                         Image(
                                             painter = painterResource(search),

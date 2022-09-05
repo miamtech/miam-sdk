@@ -8,8 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.ui.window.Dialog
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,13 +18,14 @@ import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import com.miam.kmmMiamCore.component.basketTag.BasketTagContract
+import com.miam.kmmMiamCore.component.basketTag.BasketTagViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.link
 import com.miam.kmm_miam_sdk.android.theme.Typography.overLine
-import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
-import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagChipsBorderColor
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagChipsTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagColor.tagDialogRecipeLink
@@ -32,9 +34,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.Baske
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagImage.close
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPostRecipeCountText
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.customization.BasketTagText.tagPreRecipeCountText
-import com.miam.kmmMiamCore.component.basketTag.BasketTagContract
-import com.miam.kmmMiamCore.component.basketTag.BasketTagViewModel
-import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
+import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 class BasketTag @JvmOverloads constructor(
     context: Context,
@@ -45,14 +47,14 @@ class BasketTag @JvmOverloads constructor(
     private val fullscreen = RouterOutlet()
     private val vmTag = BasketTagViewModel(fullscreen.getViewModel())
 
-    private fun goToDetail(recipe: Recipe){
+    private fun goToDetail(recipe: Recipe) {
         vmTag.goToDetail(recipe)
     }
 
     /**
      * Don't delete use by client
      */
-    fun bind (retailerProductId: String) {
+    fun bind(retailerProductId: String) {
         vmTag.setEvent(BasketTagContract.Event.SetRetailerProductId(retailerProductId))
     }
 
@@ -74,21 +76,21 @@ class BasketTag @JvmOverloads constructor(
                     )
                 },
                 loadingView = {
-                    if(Template.recipeLoaderTemplate != null){
+                    if (Template.recipeLoaderTemplate != null) {
                         Template.recipeLoaderTemplate?.let { it() }
                     } else {
-                        Box{}
+                        Box {}
                     }
                 },
-                emptyView =  {
-                    if(Template.recipeEmptyTemplate !=  null){
-                        Template.recipeEmptyTemplate?.let {it()}
+                emptyView = {
+                    if (Template.recipeEmptyTemplate != null) {
+                        Template.recipeEmptyTemplate?.let { it() }
                     } else {
-                        Box{}
+                        Box {}
                     }
                 },
                 onTryAgain = { },
-                onCheckAgain = {  },
+                onCheckAgain = { },
             )
         }
 
@@ -98,10 +100,10 @@ class BasketTag @JvmOverloads constructor(
     private fun RecipesTag(
         recipes: List<Recipe>,
         goToDetails: (recipe: Recipe) -> Unit,
-    ){
-        if(Template.TagTemplate != null) {
+    ) {
+        if (Template.TagTemplate != null) {
             Template.TagTemplate?.let {
-                it(recipes,goToDetails)
+                it(recipes, goToDetails)
             }
         } else {
             val openRecipeLinkDialog = remember { mutableStateOf(false) }
@@ -109,31 +111,33 @@ class BasketTag @JvmOverloads constructor(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(openRecipeLinkDialog.value){
+                if (openRecipeLinkDialog.value) {
                     AllRecipeLinkDialog(openRecipeLinkDialog, recipes, goToDetails)
                 }
                 Clickable(
-                    onClick = { goToDetails(recipes[0])},
+                    onClick = { goToDetails(recipes[0]) },
                     children = {
-                        Box() {
+                        Box {
                             Text(
-                                text= recipes[0].attributes!!.title,
-                                Modifier.border(
-                                    width = 1.dp,
-                                    color = tagChipsBorderColor,
-                                    shape = RoundedCornerShape(16.dp)
-                                ).padding(
-                                    horizontal = 8.dp, vertical = 2.dp
-                                ),
+                                text = recipes[0].attributes!!.title,
+                                Modifier
+                                    .border(
+                                        width = 1.dp,
+                                        color = tagChipsBorderColor,
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                    .padding(
+                                        horizontal = 8.dp, vertical = 2.dp
+                                    ),
                                 color = tagChipsTextColor
                             )
                         }
                     }
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-                if(recipes.size > 1) {
+                if (recipes.size > 1) {
                     Clickable(
-                        onClick = { openRecipeLinkDialog.value = true},
+                        onClick = { openRecipeLinkDialog.value = true },
                         children = {
                             Box(
                                 Modifier
@@ -141,9 +145,9 @@ class BasketTag @JvmOverloads constructor(
                                     .padding(horizontal = 4.dp, vertical = 2.dp)
                             ) {
                                 Text(
-                                    text = "+" + (recipes.size -1),
-                                    color= tagExtraCountBubbleText,
-                                    style= overLine,
+                                    text = "+" + (recipes.size - 1),
+                                    color = tagExtraCountBubbleText,
+                                    style = overLine,
                                     modifier = Modifier.align(Alignment.Center)
                                 )
                             }
@@ -155,9 +159,9 @@ class BasketTag @JvmOverloads constructor(
     }
 
     @Composable
-    private fun  AllRecipeLinkDialog(
-        openRecipeLinkDialog : MutableState<Boolean>,
-        recipes : List<Recipe>,
+    private fun AllRecipeLinkDialog(
+        openRecipeLinkDialog: MutableState<Boolean>,
+        recipes: List<Recipe>,
         goToDetails: (recipe: Recipe) -> Unit
     ) {
         Dialog(
@@ -165,11 +169,11 @@ class BasketTag @JvmOverloads constructor(
                 openRecipeLinkDialog.value = false
             }
         ) {
-            Card() {
-                Column (Modifier.padding(16.dp)) {
+            Card {
+                Column(Modifier.padding(16.dp)) {
                     Text(
                         text = "$tagPreRecipeCountText ${recipes.size} $tagPostRecipeCountText",
-                        style =  bodyBold,
+                        style = bodyBold,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     recipes.forEach {
@@ -181,7 +185,7 @@ class BasketTag @JvmOverloads constructor(
                             children = {
                                 Text(
                                     text = it.attributes!!.title,
-                                    style = link.copy(textDecoration =  TextDecoration.Underline),
+                                    style = link.copy(textDecoration = TextDecoration.Underline),
                                     color = tagDialogRecipeLink,
                                     modifier = Modifier.padding(bottom = 16.dp)
                                 )

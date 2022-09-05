@@ -12,16 +12,23 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 
 object RecipeDetailsStyle {
-
     // header
     var headerMainContainer = Modifier.padding(horizontal = lPadding)
-    var headerRecipeIconModifier = Modifier.width(120.dp).padding(vertical = mPadding).padding(end = mPadding)
-    var headerCloseIconModifier = Modifier.size(40.dp).padding(end = mPadding)
+    var headerRecipeIconModifier =
+        Modifier
+            .width(120.dp)
+            .padding(vertical = mPadding)
+            .padding(end = mPadding)
+    var headerCloseIconModifier = Modifier
+        .size(40.dp)
+        .padding(end = mPadding)
 
 
     // recipe Infos
     var mainColumnsContainer = Modifier.fillMaxWidth()
-    var recipeImageModifier = Modifier.height(280.dp).fillMaxWidth()
+    var recipeImageModifier = Modifier
+        .height(280.dp)
+        .fillMaxWidth()
     var recipeDetailsActionsContainer = Modifier.padding(8.dp)
     var titleModifier = Modifier
         .fillMaxWidth()
@@ -38,14 +45,16 @@ object RecipeDetailsStyle {
         .fillMaxWidth()
         .padding(40.dp)
 
-    var moreInfoButtonShapeContainer =  Modifier.clip(RoundedCornerShape(16.dp))
+    var moreInfoButtonShapeContainer = Modifier.clip(RoundedCornerShape(16.dp))
     var moreInfoButton = Modifier
         .background(color = RecipeDetailsColor.moreInfosButtonBackground)
         .padding(horizontal = 8.dp, vertical = 4.dp)
 
 
     // Steps
-    var stepsMainContainer = Modifier.fillMaxSize().padding(8.dp)
+    var stepsMainContainer = Modifier
+        .fillMaxSize()
+        .padding(8.dp)
 
     // footer
     var footerMainContainer = Modifier.fillMaxWidth()
@@ -60,9 +69,6 @@ object RecipeDetailsStyle {
     var buyRecipeButtonIcon = Modifier
         .size(24.dp)
         .padding(start = 8.dp)
-
-
-
 
 
 }

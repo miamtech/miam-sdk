@@ -11,16 +11,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
-import com.miam.kmm_miam_sdk.android.theme.Typography
-import com.miam.kmm_miam_sdk.android.theme.Typography.body
-import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
-import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Ingredient
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
+import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
+import com.miam.kmm_miam_sdk.android.theme.Typography
+import com.miam.kmm_miam_sdk.android.theme.Typography.body
+import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
+import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
+import java.util.*
 
 @Composable
 fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
@@ -40,7 +41,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
         ) {
 
             Text(
-                text =  "${recipe.relationships?.ingredients?.data?.size} ingrédients",
+                text = "${recipe.relationships?.ingredients?.data?.size} ingrédients",
                 style = Typography.subtitleBold,
                 color = black
             )
@@ -49,11 +50,11 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 isDisable = false,
                 { vmRecipe.increaseGuest() },
                 { vmRecipe.decreaseGuest() },
-                )
+            )
         }
         Divider(Modifier.padding(8.dp))
         Column(
-            modifier =  Modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(ternary.copy(alpha = 0.1f))
@@ -62,12 +63,16 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 val ingredients: List<Ingredient> = recipe.relationships!!.ingredients!!.data
                 ingredients.forEach {
                     IngredientRow(
-                        it.attributes!!.name!!.capitalize(),
+                        it.attributes!!.name!!.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
                         vmRecipe.readableFloatNumber(
                             vmRecipe.realQuantities(
                                 it.attributes!!.quantity!!,
                                 state.guest,
-                                recipe.attributes!!.numberOfGuests!!
+                                recipe.attributes!!.numberOfGuests
                             ), it.attributes!!.unit!!
                         )
                     )

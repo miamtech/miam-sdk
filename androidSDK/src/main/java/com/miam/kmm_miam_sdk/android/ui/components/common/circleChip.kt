@@ -11,8 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
-
-import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 
 @Composable

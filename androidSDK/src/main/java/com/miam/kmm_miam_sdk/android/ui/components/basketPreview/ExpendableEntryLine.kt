@@ -5,7 +5,10 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +18,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.EEAddButtonTextColor
@@ -22,7 +26,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.toggleCaret
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
-import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -31,7 +34,7 @@ fun expendableEntryLine(
     title: String,
     backGroundColor: Color,
     fontColor: Color,
-    click: ((bpl : BasketEntry) -> Unit)? = null
+    click: ((bpl: BasketEntry) -> Unit)? = null
 ) {
 
     var expandedState by remember { mutableStateOf(false) }
@@ -39,12 +42,12 @@ fun expendableEntryLine(
         targetValue = if (expandedState) 180f else 0f
     )
 
-    fun toggle(){
+    fun toggle() {
         expandedState = !expandedState
     }
 
     Column {
-        if(Template.basketPreviewExpendHeaderTemplate != null ){
+        if (Template.basketPreviewExpendHeaderTemplate != null) {
             Template.basketPreviewExpendHeaderTemplate?.let {
                 it(expandedState) { toggle() }
             }
@@ -79,7 +82,7 @@ fun expendableEntryLine(
                             painter = painterResource(toggleCaret),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(fontColor),
-                            modifier =  RecipeDetailsStyle.totalTimeIcon
+                            modifier = RecipeDetailsStyle.totalTimeIcon
                         )
                     }
                 }
@@ -89,9 +92,10 @@ fun expendableEntryLine(
         AnimatedVisibility(visible = expandedState) {
             Column {
                 entries.forEach { entry ->
-                    val productName = entry.relationships?.groceriesEntry?.data?.attributes?.name ?: ""
+                    val productName =
+                        entry.relationships?.groceriesEntry?.data?.attributes?.name ?: ""
 
-                    if (Template.basketPreviewExpendRowTemplate != null){
+                    if (Template.basketPreviewExpendRowTemplate != null) {
 
                         Template.basketPreviewExpendRowTemplate?.let {
                             it(productName) {
@@ -110,14 +114,14 @@ fun expendableEntryLine(
 
                         ) {
                             Text(
-                                text = productName ,
-                                style= bodyBold
+                                text = productName,
+                                style = bodyBold
                             )
-                            if(click != null){
+                            if (click != null) {
                                 Clickable(
                                     onClick = { click(entry) },
                                     children = {
-                                        Row(verticalAlignment = Alignment.CenterVertically){
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
                                             Image(
                                                 painter = painterResource(add),
                                                 contentDescription = null,
@@ -128,7 +132,7 @@ fun expendableEntryLine(
                                             Text(
                                                 text = "Ajouter",
                                                 style = bodyBold,
-                                                color= EEAddButtonTextColor
+                                                color = EEAddButtonTextColor
                                             )
                                         }
                                     }

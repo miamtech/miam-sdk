@@ -4,31 +4,32 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miam.kmm_miam_sdk.android.theme.Colors.primary
-import com.miam.kmm_miam_sdk.android.theme.Typography
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.stepsMainContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
+import com.miam.kmm_miam_sdk.android.theme.Typography
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.stepsMainContainer
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText
 
 @Composable
-fun RecipeSteps(steps: List<RecipeStep>,vmRecipe: RecipeViewModel) {
+fun RecipeSteps(steps: List<RecipeStep>, vmRecipe: RecipeViewModel) {
     val state: RecipeContract.State = vmRecipe.uiState.collectAsState().value
 
     val onActivestep: (currentStep: Int) -> Unit =
         { currentStep: Int -> vmRecipe.setEvent(RecipeContract.Event.SetActiveStep(currentStep)) }
 
-    Column( modifier = stepsMainContainer ) {
+    Column(modifier = stepsMainContainer) {
         Text(
-            text = RecipeDetailsText.steps ,
+            text = RecipeDetailsText.steps,
             style = Typography.subtitleBold,
             color = black
         )
@@ -57,18 +58,19 @@ fun Step(stepNumber: Int, description: String, isActive: Boolean, onActivestep: 
                 .padding(vertical = 16.dp)
                 .clickable(onClick = { onActivestep(stepNumber) })
         ) {
-            CircleChips((stepNumber+1).toString())
+            CircleChips((stepNumber + 1).toString())
 
             Text(
                 text = description,
                 fontSize = 16.sp,
-                modifier = Modifier.weight(1F)
+                modifier = Modifier
+                    .weight(1F)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
 
             Checkbox(
                 checked = isActive,
-                colors =  CheckboxDefaults.colors(primary),
+                colors = CheckboxDefaults.colors(primary),
                 onCheckedChange = { onActivestep(stepNumber) }
             )
 

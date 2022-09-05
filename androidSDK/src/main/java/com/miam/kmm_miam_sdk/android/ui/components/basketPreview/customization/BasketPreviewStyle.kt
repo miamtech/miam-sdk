@@ -10,19 +10,19 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.continueButtonColor
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.removeButtonColor
 
-object BasketPreviewStyle{
+object BasketPreviewStyle {
 
     //  header
     var headerRowModifier = Modifier.fillMaxWidth()
-    var headerRowVerticalAlignment =  Alignment.CenterVertically
+    var headerRowVerticalAlignment = Alignment.CenterVertically
     var headerPreviousButton = Modifier
 
     // footer
-    var  footerContinueButton = Modifier
+    var footerContinueButton = Modifier
         .background(continueButtonColor)
         .height(80.dp)
         .padding(horizontal = 16.dp)
-    var  footerRemoveButton = Modifier
+    var footerRemoveButton = Modifier
         .background(removeButtonColor)
         .height(80.dp)
         .padding(horizontal = 16.dp)

@@ -8,45 +8,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
-
-import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 
 class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr)  {
+) : AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
-
-
+    
     @Composable
     override fun Content() {
 
         val state by vmCatalog.uiState.collectAsState()
 
-
-        Box(){
-                    Column {
-                        ManagementResourceState(
-                            resourceState = state.categories,
-                            successView = { categories ->
-                                requireNotNull(categories)
-                                CatalogSuccessView(categories,state, context,vmCatalog )
-                            },
-                            loadingView = {
-                                CatalogLoadingView()
-                            },
-                            emptyView =  {
-                               //TODO
-                            },
-                            onTryAgain = {},
-                            onCheckAgain = {},
-                        )
-                    }
+        Box {
+            Column {
+                ManagementResourceState(
+                    resourceState = state.categories,
+                    successView = { categories ->
+                        requireNotNull(categories)
+                        CatalogSuccessView(categories, state, context, vmCatalog)
+                    },
+                    loadingView = {
+                        CatalogLoadingView()
+                    },
+                    emptyView = {
+                        //TODO
+                    },
+                    onTryAgain = {},
+                    onCheckAgain = {},
+                )
             }
         }
     }
+}

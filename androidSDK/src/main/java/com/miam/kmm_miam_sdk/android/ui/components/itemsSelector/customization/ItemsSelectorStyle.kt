@@ -31,21 +31,27 @@ object ItemsSelectorStyle {
      * mainContainer is a Column modifier
      * wrap all other element
      */
-    var mainContainer : Modifier = Modifier.fillMaxSize().padding(horizontal = lPadding, vertical = xlPadding).background(Colors.white)
+    var mainContainer: Modifier =
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = lPadding, vertical = xlPadding)
+            .background(Colors.white)
+
     // column vertical alignment
-    var mainContainerArrangement : Arrangement.Vertical = Arrangement.Top
+    var mainContainerArrangement: Arrangement.Vertical = Arrangement.Top
+
     // column horizontal alignment
-    var mainContainerAlignment : Alignment.Horizontal = Alignment.CenterHorizontally
+    var mainContainerAlignment: Alignment.Horizontal = Alignment.CenterHorizontally
 
     /**
      * Previous button container is a Row
      */
-    var previousButtonContainer : Modifier = Modifier.fillMaxWidth()
+    var previousButtonContainer: Modifier = Modifier.fillMaxWidth()
 
     /**
      * PreviousButton is an IconButton modifier
      */
-    var previousButton : Modifier =  Modifier.size(xlButtonHeight)
+    var previousButton: Modifier = Modifier.size(xlButtonHeight)
 
     /**
      * Border of the selected item wrap selected item container
@@ -62,18 +68,20 @@ object ItemsSelectorStyle {
      * Selected item container row
      * wrap selectedItemImage, selectedItemInfosContainer
      */
-    var selectedItemContainer: Modifier =  Modifier
+    var selectedItemContainer: Modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = lPadding, vertical = mPadding)
+
     //  row horizontal alignment
-    var selectedItemContainerArrangement : Arrangement.Horizontal = Arrangement.SpaceEvenly
+    var selectedItemContainerArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly
+
     //  row vertical alignment
-    var selectedItemContainerAlignment: Alignment.Vertical =Alignment.CenterVertically
+    var selectedItemContainerAlignment: Alignment.Vertical = Alignment.CenterVertically
 
     /**
      * SelectedItemImage is an Image modifier
      */
-    var selectedItemImage : Modifier = Modifier
+    var selectedItemImage: Modifier = Modifier
         .height(72.dp)
         .width(72.dp)
         .clip(RoundedCornerShape(mRoundedCorner))
@@ -81,24 +89,25 @@ object ItemsSelectorStyle {
     /**
      * Column container that wrap info and price
      */
-    var selectedItemInfosContainer : Modifier = Modifier.fillMaxWidth()
+    var selectedItemInfosContainer: Modifier = Modifier.fillMaxWidth()
+
     // price alignment
-    var pricePosition : Arrangement.Horizontal = Arrangement.End
+    var pricePosition: Arrangement.Horizontal = Arrangement.End
 
 
     /**
      * Following are item not choose yet they are in a lazy grid
      * this is the size of each till
      */
-    var itemsWidth : Int = 140
+    var itemsWidth: Int = 140
 
     /**
      * Border or an Item
      */
-    var itemsBorder : Modifier = Modifier
+    var itemsBorder: Modifier = Modifier
         .padding(mPadding)
         .border(
-            BorderStroke(borderWidth, itemsBorderColor, ),
+            BorderStroke(borderWidth, itemsBorderColor),
             RoundedCornerShape(lRoundedCorner)
         )
 
@@ -110,7 +119,7 @@ object ItemsSelectorStyle {
     /**
      * Box that wrap swap icon
      */
-    var swapIconContainer : Modifier =  Modifier
+    var swapIconContainer: Modifier = Modifier
         .padding(sPadding)
         .size(lIconHeight)
         .clip(shape = CircleShape)
@@ -119,12 +128,12 @@ object ItemsSelectorStyle {
     /**
      * Image for swap icon
      */
-    var swapIcon : Modifier = Modifier.size(mIconHeight)
+    var swapIcon: Modifier = Modifier.size(mIconHeight)
 
     /**
      * Image of the product
      */
-    var itemsImage : Modifier = Modifier
+    var itemsImage: Modifier = Modifier
         .height(72.dp)
         .width(72.dp)
         .clip(RoundedCornerShape(mRoundedCorner))

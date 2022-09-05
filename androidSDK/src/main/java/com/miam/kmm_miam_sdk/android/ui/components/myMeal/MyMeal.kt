@@ -12,24 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Template
-import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
-
-import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.component.myMeal.MyMealContract
 import com.miam.kmmMiamCore.component.myMeal.MyMealViewModel
-import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmm_miam_sdk.android.theme.Template
+import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
+import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 
 class MyMeal @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr)
-{
+) : AbstractComposeView(context, attrs, defStyleAttr) {
     private val myMealVm = MyMealViewModel()
     private val modal = RouterOutlet()
 
@@ -47,29 +44,29 @@ class MyMeal @JvmOverloads constructor(
                     CurrentRecipeInBasket(
                         previewLines,
                         myMealVm,
-                        { vmRecipe -> modal.goToDetail(vmRecipe,false) },
+                        { vmRecipe -> modal.goToDetail(vmRecipe, false) },
                         { modal.goToReplaceItem() }
                     )
                 }
             },
             loadingView = {
-                if(Template.recipeLoaderTemplate != null){
+                if (Template.recipeLoaderTemplate != null) {
                     Template.recipeLoaderTemplate?.let { it() }
                 } else {
                     MyMealLoading()
                 }
             },
-            emptyView =  {
-                Box{}
+            emptyView = {
+                Box {}
             },
             onTryAgain = { },
-            onCheckAgain = {  },
+            onCheckAgain = { },
         )
     }
 
     @Composable
-    private fun MyMealLoading(){
-        if (Template.myMealLoaderTemplate != null){
+    private fun MyMealLoading() {
+        if (Template.myMealLoaderTemplate != null) {
             Template.myMealLoaderTemplate?.let { it() }
         } else {
             Column(
@@ -89,7 +86,7 @@ class MyMeal @JvmOverloads constructor(
         myMealVm: MyMealViewModel,
         goToDetail: (vmRecipe: RecipeViewModel) -> Unit,
         goToReplaceItem: () -> Unit
-    ){
+    ) {
 
         Column(
             Modifier.fillMaxSize(),
@@ -97,16 +94,16 @@ class MyMeal @JvmOverloads constructor(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            previewLines.forEach {  previewLine ->
+            previewLines.forEach { previewLine ->
                 val recipeVM = RecipeViewModel(modal.getViewModel())
-                val vmBasketPreview  = BasketPreviewViewModel(previewLine.id ?: "")
+                val vmBasketPreview = BasketPreviewViewModel(previewLine.id ?: "")
                 recipeVM.fetchRecipe(previewLine.id ?: "")
 
                 ExpendableBasketPreviewLine(
                     line = previewLine,
                     recipeVm = recipeVM,
                     vmBasketPreview = vmBasketPreview,
-                    goToDetail = { goToDetail(recipeVM)  },
+                    goToDetail = { goToDetail(recipeVM) },
                     removeRecipe = {
                         myMealVm.setEvent(MyMealContract.Event.RemoveRecipe(previewLine.id.toString()))
                     },

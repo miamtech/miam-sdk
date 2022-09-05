@@ -34,38 +34,38 @@ import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 
 @Composable
-fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) {
+fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
     val showFullHeader = state.content == CatalogContent.DEFAULT
     val isFavorit = catalogVm.currentState.catalogFilterVM.currentState.isFavorite
 
-    fun openFilter(){
+    fun openFilter() {
         catalogVm.setEvent(CatalogContract.Event.ToggleFilter)
     }
 
-    fun openSearch(){
+    fun openSearch() {
         catalogVm.setEvent(CatalogContract.Event.ToggleSearch)
     }
 
-    fun goToFavorite(){
+    fun goToFavorite() {
         catalogVm.setEvent(CatalogContract.Event.GoToFavorite)
     }
 
-    fun goToBack(){
+    fun goToBack() {
         catalogVm.setEvent(CatalogContract.Event.GoToDefault)
     }
 
-    fun getActiveFilterCount():Int{
-       return catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
+    fun getActiveFilterCount(): Int {
+        return catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
     }
 
-    if(Template.CatalogHeader != null){
+    if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-            it(::openFilter,::openSearch,::goToFavorite,::goToBack, ::getActiveFilterCount)
+            it(::openFilter, ::openSearch, ::goToFavorite, ::goToBack, ::getActiveFilterCount)
         }
     } else {
         Column(Modifier.background(color = primary)) {
-            if(showFullHeader){
+            if (showFullHeader) {
                 Box(
                     Modifier
                         .fillMaxWidth()
@@ -79,7 +79,7 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                             colorFilter = ColorFilter.tint(headerTextColor),
                             modifier = Modifier.padding(end = 8.dp)
                         )
-                        Box() {
+                        Box {
                             Text(
                                 text = headerTitle,
                                 color = headerTextColor,
@@ -103,22 +103,22 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                     .fillMaxWidth()
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = if(showFullHeader) Arrangement.Start else  Arrangement.SpaceBetween
+                horizontalArrangement = if (showFullHeader) Arrangement.Start else Arrangement.SpaceBetween
             ) {
-                if(!showFullHeader){
+                if (!showFullHeader) {
                     Clickable(onClick = { goToBack() }, children = {
                         Image(
                             painter = painterResource(back),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(white),
-                            modifier= Modifier
+                            modifier = Modifier
                                 .rotate(180f)
                                 .padding(vertical = 8.dp)
                         )
                     }
                     )
                 }
-                Row() {
+                Row {
 
                     Clickable(onClick = { openSearch() }, children = {
                         Surface(
@@ -129,7 +129,8 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                             Box(
                                 Modifier
                                     .background(white)
-                                    .padding(8.dp))
+                                    .padding(8.dp)
+                            )
                             {
                                 Image(
                                     painter = painterResource(search),
@@ -141,8 +142,8 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                     }
                     )
 
-                    Clickable(onClick = {openFilter()}, children = {
-                        Box() {
+                    Clickable(onClick = { openFilter() }, children = {
+                        Box {
                             Surface(
                                 shape = CircleShape,
                                 elevation = 8.dp,
@@ -181,8 +182,8 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                         }
                     })
 
-                    if(!isFavorit){
-                        if(showFullHeader){
+                    if (!isFavorit) {
+                        if (showFullHeader) {
                             Box(modifier = Modifier
                                 .padding(horizontal = 10.dp)
                                 .border(
@@ -219,7 +220,8 @@ fun CatalogHeader( state: CatalogContract.State , catalogVm : CatalogViewModel) 
                                     Box(
                                         Modifier
                                             .background(white)
-                                            .padding(8.dp))
+                                            .padding(8.dp)
+                                    )
                                     {
                                         Image(
                                             painter = painterResource(favorite),

@@ -7,10 +7,10 @@ object RecipeDetailsText {
     var alreadyInCart = Text.alreadyInCart
     var cookTime: String = Text.cookTime
     var checkBasketPreview: String = Text.checkBasketPreview
-    var ingredient: String= Text.ingredient
+    var ingredient: String = Text.ingredient
     var moreInfo = Text.moreInfo
     var prepTime: String = Text.prepTime
-    var restingTime: String= Text.restingTime
+    var restingTime: String = Text.restingTime
     var steps: String = Text.steps
     var totalTime: String = Text.totalTime
 }
