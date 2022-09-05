@@ -69,6 +69,7 @@ public struct CatalogView: View {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
             }) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
+                    showingFilters = false
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
                 } close: {
                     showingFilters = false
