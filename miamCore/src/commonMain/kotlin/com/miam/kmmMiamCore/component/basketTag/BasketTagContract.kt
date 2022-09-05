@@ -1,6 +1,9 @@
 package com.miam.kmmMiamCore.component.basketTag
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.UiEffect
+import com.miam.kmmMiamCore.base.mvi.UiEvent
+import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
@@ -12,9 +15,8 @@ interface BasketTagContract {
 
     data class State(
         val recipeList: BasicUiState<List<Recipe>>,
-        ) : UiState
+    ) : UiState
 
-    sealed class Effect : UiEffect {
-    }
+    sealed class Effect : UiEffect
 }
 

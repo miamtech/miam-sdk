@@ -12,12 +12,12 @@ import org.koin.core.component.inject
 open class MyMealViewModel :
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<MyMealContract.Event, MyMealContract.State, MyMealContract.Effect>() {
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println(" [ERROR][Miam][MyMeal] $exception")
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println(" [ERROR][Miam][MyMeal] $exception")
     }
 
-    private val basketStore : BasketStore by inject()
-    private val groceriesListStore : GroceriesListStore by inject()
+    private val basketStore: BasketStore by inject()
+    private val groceriesListStore: GroceriesListStore by inject()
 
     override fun createInitialState(): MyMealContract.State =
         MyMealContract.State(
@@ -28,22 +28,36 @@ open class MyMealViewModel :
 
     init {
         val bp = basketStore.observeState().value.basketPreview
-        if(bp != null ) {
-            setState { copy(lines = if(bp.isEmpty()) BasicUiState.Empty else BasicUiState.Success(bp),bpls = bp) }
+        if (bp != null) {
+            setState {
+                copy(
+                    lines = if (bp.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
+                        bp
+                    ), bpls = bp
+                )
+            }
         }
         val job = launch(coroutineHandler) {
-            basketStore.observeSideEffect().filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }.collect{
-                val bpls = basketStore.observeState().first {
-                    it.basketPreview != null
-                }.basketPreview!!
-                setState { copy(lines = if(bpls.isEmpty()) BasicUiState.Empty else BasicUiState.Success(bpls), bpls = bpls) }
-            }
+            basketStore.observeSideEffect()
+                .filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }
+                .collect {
+                    val bpls = basketStore.observeState().first {
+                        it.basketPreview != null
+                    }.basketPreview!!
+                    setState {
+                        copy(
+                            lines = if (bpls.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
+                                bpls
+                            ), bpls = bpls
+                        )
+                    }
+                }
         }
         setState { copy(job = job) }
     }
 
     override fun handleEvent(event: MyMealContract.Event) {
-        when(event){
+        when (event) {
             is MyMealContract.Event.RemoveRecipe -> removeRecipe(event.recipeId)
         }
     }
@@ -52,7 +66,7 @@ open class MyMealViewModel :
         val newBPL = currentState.bpls?.filter {
             it.id.toString() != recipeId
         } ?: emptyList()
-        setState { copy(lines = BasicUiState.Success(newBPL),bpls = newBPL) }
+        setState { copy(lines = BasicUiState.Success(newBPL), bpls = newBPL) }
         // TODO handle call back and error
         groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = recipeId))
     }

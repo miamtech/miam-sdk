@@ -13,12 +13,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class RecipeStep private constructor(
     override val id: String,
     override val attributes: RecipeStepAttributes? = null,
-    override  val relationships: RecipeStepRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: RecipeStepRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeStepAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeStepRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeStepAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeStepRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -28,15 +37,15 @@ data class RecipeStep private constructor(
 data class RecipeStepAttributes(
     @SerialName("step-number")
     val stepNumber: Int,
-    val title : String?,
+    val title: String?,
     @SerialName("description")
-    val stepDescription : String?,
+    val stepDescription: String?,
     @SerialName("media-url")
     val mediaUrl: String?
-): Attributes()
+) : Attributes()
 
 @Serializable
-class RecipeStepRelationships: Relationships() {
+class RecipeStepRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -46,7 +55,7 @@ class RecipeStepRelationships: Relationships() {
  */
 
 @Serializable(with = RecipeStepListListSerializer::class)
-class RecipeStepListRelationship(override var data: List<RecipeStep>): RelationshipList() {
+class RecipeStepListRelationship(override var data: List<RecipeStep>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeStep::class) as List<RecipeStep>
     }

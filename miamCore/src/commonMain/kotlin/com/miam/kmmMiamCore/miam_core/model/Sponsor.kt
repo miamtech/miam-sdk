@@ -13,12 +13,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class Sponsor private constructor(
     override val id: String,
     override val attributes: SponsorAttributes? = null,
-    override  val relationships: SponsorRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: SponsorRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<SponsorAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<SponsorRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<SponsorAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<SponsorRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -26,13 +35,13 @@ data class Sponsor private constructor(
 
 @Serializable
 data class SponsorAttributes(
-    val name : String,
+    val name: String,
     @SerialName("logo-url")
     val logoUrl: String
-): Attributes()
+) : Attributes()
 
 @Serializable
-class SponsorRelationships: Relationships() {
+class SponsorRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -42,7 +51,7 @@ class SponsorRelationships: Relationships() {
  */
 
 @Serializable(with = SponsorListSerializer::class)
-class SponsorListRelationship(override var data: List<Sponsor>): RelationshipList() {
+class SponsorListRelationship(override var data: List<Sponsor>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Sponsor::class) as List<Sponsor>
     }

@@ -22,11 +22,10 @@ import org.koin.core.component.inject
 open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception ->
-                LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
-                // TODO alex break in ios mutability
-                //setEvent(RecipeContract.Event.Error)
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
+        // TODO alex break in ios mutability
+        //setEvent(RecipeContract.Event.Error)
     }
 
     private val groceriesListStore: GroceriesListStore by inject()
@@ -35,13 +34,13 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
 
-    private val guestSubject : MutableSharedFlow<Int> = MutableSharedFlow()
+    private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val recipe: Recipe?
-    get() = this.currentState.recipe
+        get() = this.currentState.recipe
 
     val recipeId: String?
-    get() = recipe?.id
+        get() = recipe?.id
 
     override fun createInitialState(): RecipeContract.State = defaultState()
 
@@ -82,7 +81,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.OnToggleLike -> toggleLike()
-            RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty)  }
+            RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty) }
         }
     }
 
@@ -107,7 +106,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     private suspend fun listenguestSubjectChanges() {
-        guestSubject.debounce(500).collect{
+        guestSubject.debounce(500).collect {
             addOrAlterRecipe()
         }
     }
@@ -152,10 +151,10 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    fun setRecipeFromSuggestion(criteria: SuggestionsCriteria){
+    fun setRecipeFromSuggestion(criteria: SuggestionsCriteria) {
         LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
         setState { copy(recipeState = BasicUiState.Loading) }
-        launch(coroutineHandler){
+        launch(coroutineHandler) {
             pointOfSaleStore.observeState().value.idSupplier?.let { supplierId ->
                 setRecipe(recipeRepositoryImp.getRecipeSuggestions(supplierId, criteria))
             }
@@ -164,7 +163,11 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     fun setRecipe(recipe: Recipe) {
         // TODO : path + multiple sent ?
-        analyticsService.sendEvent(Analytics.EVENT_RECIPE_SHOW, "", Analytics.PlausibleProps(recipe_id = recipe.id))
+        analyticsService.sendEvent(
+            Analytics.EVENT_RECIPE_SHOW,
+            "",
+            Analytics.PlausibleProps(recipe_id = recipe.id)
+        )
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
@@ -190,11 +193,11 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         }
     }
 
-    private fun toggleLike(){
+    private fun toggleLike() {
         // TODO : make it loading and manage it on success with invokeOnCompletion
-        setState { copy(isLiked =  !currentState.isLiked) }
+        setState { copy(isLiked = !currentState.isLiked) }
         val currentRecipe = this.recipe
-        launch(coroutineHandler){
+        launch(coroutineHandler) {
             setRecipe(recipeRepositoryImp.toggleLike(currentRecipe!!))
         }
     }
@@ -205,7 +208,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
-    return (quantity.toFloat() * currentGuest / recipeGuest).toString()
+        return (quantity.toFloat() * currentGuest / recipeGuest).toString()
     }
 
 
@@ -272,7 +275,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     fun pluralize(unit: String): String {
         if (unit.isEmpty() || unit.length <= 3) {
-            return unit;
+            return unit
         }
 
         val unitArray = unit.split(' ').toMutableList()

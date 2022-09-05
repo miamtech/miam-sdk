@@ -17,33 +17,42 @@ import kotlin.time.Duration.Companion.minutes
 data class Recipe private constructor(
     override val id: String,
     override val attributes: RecipeAttributes? = null,
-    override  val relationships: RecipeRelationships? = null,
+    override val relationships: RecipeRelationships? = null,
     val recipeLike: RecipeLike? = null
-): Record(), BasketPreviewEntry {
+) : Record(), BasketPreviewEntry {
 
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
 
     val totalTime: String
         get() {
-            var duration : Duration = 0.minutes
+            var duration: Duration = 0.minutes
             duration = duration.plus(this.attributes!!.preparationTime ?: 0.minutes)
-            duration = duration.plus(this.attributes.cookingTime  ?: 0.minutes )
-            duration =  duration.plus(this.attributes.restingTime  ?: 0.minutes)
+            duration = duration.plus(this.attributes.cookingTime ?: 0.minutes)
+            duration = duration.plus(this.attributes.restingTime ?: 0.minutes)
             if (duration.inWholeMinutes < 10) {
-                return " < 10 min";
+                return " < 10 min"
             }
             return duration.toString()
         }
 
     val preparationTimeIos: String
         get() {
-           var duration = this.attributes!!.preparationTime ?: 0.minutes
+            var duration = this.attributes!!.preparationTime ?: 0.minutes
             return duration.toString()
         }
 
@@ -59,27 +68,27 @@ data class Recipe private constructor(
             return duration.toString()
         }
 
-    val difficultyLabel : String
-        get () {
-            return when(this.attributes!!.difficulty) {
+    val difficultyLabel: String
+        get() {
+            return when (this.attributes!!.difficulty) {
                 1 -> "Chef débutant"
                 2 -> "Chef intermédiaire"
-                3-> "Top chef"
+                3 -> "Top chef"
                 else -> "Chef débutant"
             }
         }
 
-    val costLabel : String
-        get () {
-            return when(this.attributes!!.difficulty) {
+    val costLabel: String
+        get() {
+            return when (this.attributes!!.difficulty) {
                 1 -> "faible"
                 2 -> "moyen"
-                3-> "difficile"
+                3 -> "difficile"
                 else -> "moyen"
             }
         }
 
-    val sortedStep : List<RecipeStep>
+    val sortedStep: List<RecipeStep>
         get() {
             val temp = mutableListOf<RecipeStep>()
             temp.addAll(this.relationships?.recipeSteps?.data ?: emptyList())
@@ -97,7 +106,7 @@ data class RecipeAttributes constructor(
 
     @SerialName("ext-link")
     val extLink: String? = null,
-    
+
     // description is a key word in swift
     @SerialName("description")
     val recipeDescription: String? = null,
@@ -125,22 +134,22 @@ data class RecipeAttributes constructor(
     val restingTime: Duration? = 0.minutes,
 
     @SerialName("media-url")
-    val mediaUrl: String ,
+    val mediaUrl: String,
 
-    val source : String? = "",
+    val source: String? = "",
 
     @SerialName("informational-page-html")
-    val informationalPageHtml: String?= "",
+    val informationalPageHtml: String? = "",
 
     @SerialName("filigrane-logo-url")
     val filigraneLogoUrl: String? = "",
 
     @SerialName("informational-sentence")
-    val informationalSentence: String? ="",
+    val informationalSentence: String? = "",
 
-    val difficulty : Int? = 1,
+    val difficulty: Int? = 1,
 
-    val cost : Int? = 2,
+    val cost: Int? = 2,
 
     val suggested: Boolean? = false,
 
@@ -150,10 +159,10 @@ data class RecipeAttributes constructor(
     val videoId: String? = "",
 
     val promoted: Boolean? = false,
-): Attributes()
+) : Attributes()
 
 @Serializable
-data class RecipeRelationships (
+data class RecipeRelationships(
     var ingredients: IngredientListRelationship? = null,
     @SerialName("recipe-provider")
     var recipeProvider: RecipeProviderRelationship? = null,
@@ -164,7 +173,7 @@ data class RecipeRelationships (
     var recipeSteps: RecipeStepListRelationship? = null,
     @SerialName("recipe-type")
     var recipeType: RecipeTypeRelationship? = null
-): Relationships() {
+) : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         ingredients?.buildFromIncluded(includedRecords)
         recipeProvider?.buildFromIncluded(includedRecords)
@@ -176,7 +185,7 @@ data class RecipeRelationships (
 }
 
 @Serializable
-data class RecipeInfos (
+data class RecipeInfos(
     val id: Int,
     var guests: Int,
 )
@@ -186,7 +195,7 @@ data class RecipeInfos (
  */
 
 @Serializable(with = RecipeRelationshipListSerializer::class)
-class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
+class RecipeRelationshipList(override var data: List<Recipe>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Recipe::class) as List<Recipe>
     }

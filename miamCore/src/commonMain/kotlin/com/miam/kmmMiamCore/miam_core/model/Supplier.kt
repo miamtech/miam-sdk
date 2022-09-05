@@ -15,9 +15,9 @@ data class Supplier(
 
 @Serializable
 data class SupplierAttributes(
-    val name : String?,
-    val description: String? =null,
-    val logo: String? =null,
+    val name: String?,
+    val description: String? = null,
+    val logo: String? = null,
 )
 
 @Serializable

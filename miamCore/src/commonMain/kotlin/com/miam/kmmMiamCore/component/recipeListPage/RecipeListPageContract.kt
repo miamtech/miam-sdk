@@ -11,8 +11,8 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 interface RecipeListPageContract {
 
     sealed class Event : UiEvent {
-        object LoadPage: RecipeListPageContract.Event()
-        data class InitPage(val title: String,val filter: String) : RecipeListPageContract.Event()
+        object LoadPage : RecipeListPageContract.Event()
+        data class InitPage(val title: String, val filter: String) : RecipeListPageContract.Event()
     }
 
     data class State(
@@ -24,5 +24,5 @@ interface RecipeListPageContract {
         val noMoreData: Boolean
     ) : UiState
 
-    sealed class Effect : UiEffect {}
+    sealed class Effect : UiEffect
 }

@@ -1,9 +1,7 @@
 package com.miam.kmmMiamCore.component.basketTag
 
-import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketStore
-import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -19,17 +17,16 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
     private val basketStore: BasketStore by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception ->
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in Tag view $exception ${exception.stackTraceToString()}")
     }
 
-     open fun goToDetail(recipe : Recipe){
-         val vmRecipe = RecipeViewModel(vmRouter)
-         LogHandler.info("goToDetail vmRecipe : $vmRecipe")
-         vmRecipe.setRecipe(recipe)
-         LogHandler.info("goToDetail setEvent :")
-         vmRouter.goToDetail(vmRecipe,false)
+    open fun goToDetail(recipe: Recipe) {
+        val vmRecipe = RecipeViewModel(vmRouter)
+        LogHandler.info("goToDetail vmRecipe : $vmRecipe")
+        vmRecipe.setRecipe(recipe)
+        LogHandler.info("goToDetail setEvent :")
+        vmRouter.goToDetail(vmRecipe, false)
     }
 
     override fun createInitialState(): BasketTagContract.State =
@@ -40,18 +37,18 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
 
     override fun handleEvent(event: BasketTagContract.Event) {
         when (event) {
-         is BasketTagContract.Event.SetRetailerProductId -> setItemExtId(event.productId)
+            is BasketTagContract.Event.SetRetailerProductId -> setItemExtId(event.productId)
         }
     }
 
-    private fun setItemExtId(itemExtId: String){
+    private fun setItemExtId(itemExtId: String) {
         LogHandler.info("getting belonging recipes for $itemExtId")
         LogHandler.info("getting belonging recipes : ${basketStore.getBasket()?.relationships?.basketEntries?.data} ")
         val recipeIds = basketStore.getBasket()?.relationships?.basketEntries?.data?.filter { be ->
             be.selectedItem?.attributes?.extId == itemExtId && be.attributes?.groceriesEntryStatus == "active"
         }?.flatMap { be ->
-          be.attributes?.recipeIds?.map { it.toString() }?: listOf()
-        }?: listOf()
+            be.attributes?.recipeIds?.map { it.toString() } ?: listOf()
+        } ?: listOf()
 
         if (recipeIds.isEmpty()) {
             setState { copy(recipeList = BasicUiState.Empty) }

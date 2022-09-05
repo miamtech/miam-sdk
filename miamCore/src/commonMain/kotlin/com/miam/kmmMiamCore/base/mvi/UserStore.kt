@@ -1,8 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
 
-import com.miam.kmmMiamCore.handler.LogHandler
-import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,17 +19,18 @@ data class UserState(
     val likeIsEnable: Boolean = true
 ) : State
 
-sealed class  UserAction : Action {
+sealed class UserAction : Action {
     data class RefreshUser(val idUser: String?) : UserAction()
 }
-sealed class UserEffect: Effect
+
+sealed class UserEffect : Effect
 
 class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    override val state = MutableStateFlow(UserState( null, null))
+    override val state = MutableStateFlow(UserState(null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()
-    private val groceriesListStore:  GroceriesListStore by inject()
+    private val groceriesListStore: GroceriesListStore by inject()
 
 
     override fun observeState(): StateFlow<UserState> = state
@@ -60,11 +59,11 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
     }
 
     fun sameSession(sessionId: String): Boolean {
-        return sessionId == state.value.sessionId;
+        return sessionId == state.value.sessionId
     }
 
     fun sameUser(userId: String?): Boolean {
-        return userId == state.value.userId;
+        return userId == state.value.userId
     }
 
     fun setProfilingAllowed(allowance: Boolean) {
@@ -75,7 +74,7 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
         return !state.value.profilingAllowed
     }
 
-    fun setEnableLike(isEnable: Boolean){
-        updateStateIfChanged(state.value.copy(likeIsEnable= isEnable))
+    fun setEnableLike(isEnable: Boolean) {
+        updateStateIfChanged(state.value.copy(likeIsEnable = isEnable))
     }
 }

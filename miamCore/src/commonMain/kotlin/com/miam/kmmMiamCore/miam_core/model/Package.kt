@@ -12,11 +12,20 @@ data class Package private constructor(
     override val id: String,
     override var attributes: PackageAttributes? = null,
     override val relationships: PackageRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) null else jsonFormat.decodeFromJsonElement<PackageAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<PackageRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) null else jsonFormat.decodeFromJsonElement<PackageAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<PackageRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -24,10 +33,10 @@ data class Package private constructor(
 
 @Serializable
 data class PackageAttributes(
-    val title : String,
+    val title: String,
     @SerialName("author-id")
     val authorId: String,
-    val editable : Boolean? = false,
+    val editable: Boolean? = false,
     val shared: Boolean? = false,
     @SerialName("catalog-category")
     val catalogCategory: Boolean? = false,
@@ -36,12 +45,12 @@ data class PackageAttributes(
     @SerialName("recipes-count")
     val recipesCount: Int,
     val settings: PackageSettings
-): Attributes()
+) : Attributes()
 
 @Serializable
 data class PackageRelationships constructor(
     var recipes: RecipeRelationshipList? = null,
-): Relationships() {
+) : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         // println("Miam will build package recipes")
         recipes?.buildFromIncluded(includedRecords)

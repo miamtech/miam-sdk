@@ -5,12 +5,12 @@ import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
 import org.koin.core.component.inject
 
-open class RouterOutletViewModel:
+open class RouterOutletViewModel :
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     private val analyticsService: Analytics by inject()
 
-    fun goToDetail(vmRecipe : RecipeViewModel, showDetailsFooter: Boolean = true){
+    fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
         LogHandler.info("Miam RouterOutletViewModel goToDetail $vmRecipe")
         setEvent(
             RouterOutletContract.Event.GoToDetail(
@@ -35,8 +35,16 @@ open class RouterOutletViewModel:
             is RouterOutletContract.Event.GoToDetail -> {
                 LogHandler.info("Miam RouterOutletViewModel goToDetail event $event")
                 // TODO : path
-                analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/detail", Analytics.PlausibleProps(recipe_id = event.vm.recipeId))
-                analyticsService.sendEvent(Analytics.EVENT_RECIPE_DISPLAY, "", Analytics.PlausibleProps(recipe_id = event.vm.recipeId))
+                analyticsService.sendEvent(
+                    Analytics.EVENT_PAGEVIEW,
+                    "/detail",
+                    Analytics.PlausibleProps(recipe_id = event.vm.recipeId)
+                )
+                analyticsService.sendEvent(
+                    Analytics.EVENT_RECIPE_DISPLAY,
+                    "",
+                    Analytics.PlausibleProps(recipe_id = event.vm.recipeId)
+                )
                 setState { copy(rvm = event.vm, showFooter = event.withFooter) }
                 LogHandler.info("Miam RouterOutletViewModel will navigate")
                 navigateTo(RouterContent.RECIPE_DETAIL)
@@ -44,26 +52,36 @@ open class RouterOutletViewModel:
             is RouterOutletContract.Event.GoToPreview -> {
                 LogHandler.info("Miam RouterOutletViewModel GoToPreview event $event")
                 // TODO : path
-                analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/basket-preview", Analytics.PlausibleProps(recipe_id = event.recipeId))
-                setState { copy(
-                    recipeId = event.recipeId,
-                    rvm = event.vm
-                )}
+                analyticsService.sendEvent(
+                    Analytics.EVENT_PAGEVIEW,
+                    "/basket-preview",
+                    Analytics.PlausibleProps(recipe_id = event.recipeId)
+                )
+                setState {
+                    copy(
+                        recipeId = event.recipeId,
+                        rvm = event.vm
+                    )
+                }
                 navigateTo(RouterContent.BASKET_PREVIEW)
             }
             is RouterOutletContract.Event.GoToItemSelector -> {
                 // TODO : path
-                analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/replace-item", Analytics.PlausibleProps(recipe_id = currentState.recipeId))
+                analyticsService.sendEvent(
+                    Analytics.EVENT_PAGEVIEW,
+                    "/replace-item",
+                    Analytics.PlausibleProps(recipe_id = currentState.recipeId)
+                )
                 navigateTo(RouterContent.ITEMS_SELECTOR)
             }
-            is RouterOutletContract.Event.CloseDialogFromPreview ->  {
+            is RouterOutletContract.Event.CloseDialogFromPreview -> {
                 setEvent(RouterOutletContract.Event.CloseDialog)
             }
             is RouterOutletContract.Event.GoToDetailFromPreview -> {
                 setEvent(RouterOutletContract.Event.GoToDetail(event.vm))
             }
             is RouterOutletContract.Event.SetRouterContent -> {
-                setState{
+                setState {
                     copy(
                         content = event.routerContent
                     )
@@ -76,11 +94,11 @@ open class RouterOutletViewModel:
                 setState { copy(isOpen = true) }
                 LogHandler.info("Miam RouterOutletViewModel will OpenDialog ${this.currentState}")
             }
-            RouterOutletContract.Event.CloseDialog ->  setState { copy(isOpen = false) }
+            RouterOutletContract.Event.CloseDialog -> setState { copy(isOpen = false) }
         }
     }
 
-    private fun navigateTo( destination : RouterContent) {
+    private fun navigateTo(destination: RouterContent) {
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {
             setEvent(RouterOutletContract.Event.OpenDialog)

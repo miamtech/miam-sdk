@@ -13,12 +13,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class RecipeProvider private constructor(
     override val id: String,
     override val attributes: RecipeProviderAttributes? = null,
-    override  val relationships: RecipeProviderRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: RecipeProviderRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeProviderAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeProviderRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeProviderAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeProviderRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -26,11 +35,11 @@ data class RecipeProvider private constructor(
 
 @Serializable
 data class RecipeProviderAttributes(
-    val name : String,
-): Attributes()
+    val name: String,
+) : Attributes()
 
 @Serializable
-class RecipeProviderRelationships: Relationships() {
+class RecipeProviderRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -40,7 +49,7 @@ class RecipeProviderRelationships: Relationships() {
  */
 
 @Serializable(with = RecipeProviderSerializer::class)
-class RecipeProviderRelationship(override var data: RecipeProvider): Relationship() {
+class RecipeProviderRelationship(override var data: RecipeProvider) : Relationship() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeProvider::class) as RecipeProvider
     }

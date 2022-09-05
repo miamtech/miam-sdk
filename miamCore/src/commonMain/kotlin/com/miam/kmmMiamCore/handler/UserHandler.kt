@@ -5,11 +5,11 @@ import com.miam.kmmMiamCore.base.mvi.UserStore
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object UserHandler: KoinComponent {
+object UserHandler : KoinComponent {
 
     private val store: UserStore by inject()
 
-    fun updateUserId(userId: String?){
+    fun updateUserId(userId: String?) {
         if (store.sameUser(userId)) return
 
         store.dispatch(UserAction.RefreshUser(userId))
@@ -19,7 +19,7 @@ object UserHandler: KoinComponent {
         store.setProfilingAllowed(allowance)
     }
 
-    fun setEnableLike(isEnable: Boolean){
+    fun setEnableLike(isEnable: Boolean) {
         store.setEnableLike(isEnable)
     }
 }

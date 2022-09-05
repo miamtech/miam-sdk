@@ -13,12 +13,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class RecipeType private constructor(
     override val id: String,
     override val attributes: RecipeTypeAttributes? = null,
-    override  val relationships: RecipeTypeRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: RecipeTypeRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeTypeAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeTypeRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeTypeAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeTypeRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -26,11 +35,11 @@ data class RecipeType private constructor(
 
 @Serializable
 data class RecipeTypeAttributes(
-    val name : String,
-): Attributes()
+    val name: String,
+) : Attributes()
 
 @Serializable
-class RecipeTypeRelationships: Relationships() {
+class RecipeTypeRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -40,7 +49,7 @@ class RecipeTypeRelationships: Relationships() {
  */
 
 @Serializable(with = RecipeTypeSerializer::class)
-class RecipeTypeRelationship(override var data: RecipeType): Relationship() {
+class RecipeTypeRelationship(override var data: RecipeType) : Relationship() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeType::class) as RecipeType
     }

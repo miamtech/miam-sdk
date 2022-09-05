@@ -16,29 +16,29 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
-startKoin {
-    appDeclaration()
-    modules(
-        repositoryModule,
-        dispatcherModule,
-        storeModule,
-        servicesModule,
-        platformModule()
-    )
-}
+    startKoin {
+        appDeclaration()
+        modules(
+            repositoryModule,
+            dispatcherModule,
+            storeModule,
+            servicesModule,
+            platformModule()
+        )
+    }
 
 // IOS
 fun initKoin() = initKoin {}
 
 val repositoryModule = module {
-    single { PricingRepositoryImp(get())}
+    single { PricingRepositoryImp(get()) }
     single { RecipeRepositoryImp(get()) }
     single { GroceriesListRepositoryImp(get()) }
     single { PointOfSaleRepositoryImp(get()) }
     single { BasketRepositoryImp(get()) }
-    single { BasketEntryRepositoryImp(get())}
-    single { MiamAPIDatasource()}
-    single { GroceriesEntryRepositoryImp(get())}
+    single { BasketEntryRepositoryImp(get()) }
+    single { MiamAPIDatasource() }
+    single { GroceriesEntryRepositoryImp(get()) }
     single { SupplierRepositoryImp(get()) }
     single { PackageRepositoryImp(get()) }
 }

@@ -15,9 +15,9 @@ data class BasketComparisonItem(
     }
 
     val retailerQuantity: Int
-         get() {
-             return retailerProduct?.quantity?: 0
-         }
+        get() {
+            return retailerProduct.quantity
+        }
 
     val miamQuantity: Int
         get() {
@@ -26,7 +26,7 @@ data class BasketComparisonItem(
 
     val firstBasketEntryId: String
         get() {
-            return  miamBasketEntryIds.keys.first()
+            return miamBasketEntryIds.keys.first()
         }
 
     fun addMiamEntry(basketEntry: BasketEntry): BasketComparisonItem {

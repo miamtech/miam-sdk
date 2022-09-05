@@ -14,12 +14,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class RecipeStatus private constructor(
     override val id: String,
     override val attributes: RecipeStatusAttributes? = null,
-    override  val relationships: RecipeStatusRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: RecipeStatusRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeStatusAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeStatusRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeStatusAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeStatusRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -28,11 +37,11 @@ data class RecipeStatus private constructor(
 @Serializable
 data class RecipeStatusAttributes(
     val name: String,
-    val label:String
-): Attributes()
+    val label: String
+) : Attributes()
 
 @Serializable
-class RecipeStatusRelationships: Relationships() {
+class RecipeStatusRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -42,7 +51,7 @@ class RecipeStatusRelationships: Relationships() {
  */
 
 @Serializable(with = RecipeStatusSerializer::class)
-class RecipeStatusRelationship(override var data: RecipeStatus): Relationship() {
+class RecipeStatusRelationship(override var data: RecipeStatus) : Relationship() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeStatus::class) as RecipeStatus
     }

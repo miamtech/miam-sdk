@@ -9,15 +9,14 @@ import kotlinx.coroutines.Job
 
 interface MyMealContract {
     sealed class Event : UiEvent {
-        data class RemoveRecipe(val recipeId: String): Event()
+        data class RemoveRecipe(val recipeId: String) : Event()
     }
 
     data class State(
         val lines: BasicUiState<List<BasketPreviewLine>>, // ui state
         val bpls: List<BasketPreviewLine>?, //service state
-        val job : Job?
+        val job: Job?
     ) : UiState
 
-    sealed class Effect : UiEffect {
-    }
+    sealed class Effect : UiEffect
 }
