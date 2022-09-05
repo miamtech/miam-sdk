@@ -8,22 +8,22 @@ import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object ContextHandlerInstance: KoinComponent {
+object ContextHandlerInstance : KoinComponent {
     val instance: ContextHandler by inject()
 }
 
 data class ContextHandlerState(
     val isInError: Boolean = false
-): State
+) : State
 
-sealed class ReadyEvent: Effect {
-    object isReady: ReadyEvent()
-    object isNotReady: ReadyEvent()
+sealed class ReadyEvent : Effect {
+    object isReady : ReadyEvent()
+    object isNotReady : ReadyEvent()
 }
 
-class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
+class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
     private val basketHandler: BasketHandler by inject()
@@ -56,7 +56,7 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
     fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
 
     @OptIn(InternalCoroutinesApi::class)
-    fun onReadyEvent(callback: (it: ReadyEvent) -> Unit){
+    fun onReadyEvent(callback: (it: ReadyEvent) -> Unit) {
         launch(coroutineHandler) {
             readyEvent.asSharedFlow().collect { callback(it) }
         }

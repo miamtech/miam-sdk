@@ -14,9 +14,9 @@ object DurationSerializer : KSerializer<Duration> {
 
 
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("Duration",PrimitiveKind.STRING)
+        get() = PrimitiveSerialDescriptor("Duration", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Duration) {
-         encoder.encodeString(value.toIsoString())
+        encoder.encodeString(value.toIsoString())
     }
 }

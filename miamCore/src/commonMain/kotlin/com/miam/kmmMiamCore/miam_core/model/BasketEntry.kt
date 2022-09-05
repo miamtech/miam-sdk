@@ -13,12 +13,21 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class BasketEntry private constructor(
     override val id: String,
     override val attributes: BasketEntryAttributes? = null,
-    override  val relationships: BasketEntryRelationships? = null
-): Record(), BasketPreviewEntry {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: BasketEntryRelationships? = null
+) : Record(), BasketPreviewEntry {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<BasketEntryAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<BasketEntryRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<BasketEntryAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<BasketEntryRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
@@ -29,7 +38,7 @@ data class BasketEntry private constructor(
 
     var needPatch: Boolean = false
 
-    val selectedItem : Item?
+    val selectedItem: Item?
         get() = relationships!!.items!!.data.find { item -> item.id == attributes!!.selectedItemId.toString() }
 
     fun updateQuantity(qty: Int): BasketEntry {
@@ -55,9 +64,15 @@ data class BasketEntry private constructor(
         )
         newRecord.needPatch = true
         if (this.relationships?.groceriesEntry?.data != null) {
-            newRecord = newRecord.copy(relationships = this.relationships.copy(
-                groceriesEntry = GroceriesEntryRelationship(this.relationships.groceriesEntry!!.data.updateStatus(status))
-            ))
+            newRecord = newRecord.copy(
+                relationships = this.relationships.copy(
+                    groceriesEntry = GroceriesEntryRelationship(
+                        this.relationships.groceriesEntry!!.data.updateStatus(
+                            status
+                        )
+                    )
+                )
+            )
         }
         return newRecord
     }
@@ -85,14 +100,14 @@ data class BasketEntryAttributes(
     @SerialName("groceries-entry-status")
     val groceriesEntryStatus: String? = "active",
     @SerialName("basket-entries-items")
-    var  basketEntriesItems: List<BasketEntriesItem>? = null,
-): Attributes()
+    var basketEntriesItems: List<BasketEntriesItem>? = null,
+) : Attributes()
 
 @Serializable
 data class BasketEntryRelationships constructor(
     var items: ItemRelationshipList? = null,
     @SerialName("groceries-entry") var groceriesEntry: GroceriesEntryRelationship? = null,
-): Relationships() {
+) : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         items?.buildFromIncluded(includedRecords)
         groceriesEntry?.buildFromIncluded(includedRecords)
@@ -125,7 +140,7 @@ data class BasketEntriesItem(
  */
 
 @Serializable(with = BasketEntryRelationshipListSerializer::class)
-class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
+class BasketEntryRelationshipList(override var data: List<BasketEntry>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, BasketEntry::class) as List<BasketEntry>
     }

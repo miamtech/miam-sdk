@@ -15,19 +15,19 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 
 @Composable
-fun CatalogLoadingView(){
+fun CatalogLoadingView() {
 
-    if(Template.CatalogLoaderTemplate != null){
+    if (Template.CatalogLoaderTemplate != null) {
         Template.CatalogLoaderTemplate?.let {
             it()
         }
     } else {
         Column(
             Modifier.fillMaxSize(),
-            horizontalAlignment =  Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
-            Text("Ça mijote...", style = Typography.subtitleBold , modifier = Modifier.padding(8.dp))
+        ) {
+            Text("Ça mijote...", style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
             CircularProgressIndicator(color = primary)
         }
     }

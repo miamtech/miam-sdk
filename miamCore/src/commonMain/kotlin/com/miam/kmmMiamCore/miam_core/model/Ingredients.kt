@@ -13,31 +13,40 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class Ingredient private constructor(
     override val id: String,
     override val attributes: IngredientAttributes? = null,
-    override  val relationships: IngredientRelationships? = null
-): Record() {
+    override val relationships: IngredientRelationships? = null
+) : Record() {
 
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<IngredientAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<IngredientRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<IngredientAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<IngredientRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
 }
 
 @Serializable
-data class IngredientAttributes (
-    val name : String?,
-    val quantity : String?,
-    val unit : String?,
-    val active : Boolean = true,
+data class IngredientAttributes(
+    val name: String?,
+    val quantity: String?,
+    val unit: String?,
+    val active: Boolean = true,
 
     @SerialName("forced-eans")
     val forcedEans: List<String>? = emptyList<String>(),
-): Attributes()
+) : Attributes()
 
 @Serializable
-class IngredientRelationships: Relationships() {
+class IngredientRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -47,7 +56,7 @@ class IngredientRelationships: Relationships() {
  */
 
 @Serializable(with = IngredientListSerializer::class)
-class IngredientListRelationship(override var data: List<Ingredient>): RelationshipList() {
+class IngredientListRelationship(override var data: List<Ingredient>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Ingredient::class) as List<Ingredient>
     }

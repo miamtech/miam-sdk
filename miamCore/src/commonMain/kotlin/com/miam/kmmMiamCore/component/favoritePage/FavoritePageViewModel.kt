@@ -1,6 +1,5 @@
 package com.miam.kmmMiamCore.component.favoritePage
 
-import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
@@ -16,8 +15,7 @@ open class FavoritePageViewModel :
         val FILTERS = mapOf("liked" to "true", "active" to "true,false")
     }
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception ->
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in favorite view $exception")
     }
 
@@ -42,20 +40,28 @@ open class FavoritePageViewModel :
     }
 
 
-    private fun loadPage(){
-        if(currentState.noMoreData) return
+    private fun loadPage() {
+        if (currentState.noMoreData) return
 
         val currentPage = this.currentState.currentPage
         val newRecipes: MutableList<Recipe> = this.getCurrentRecipes().toMutableList()
         var noMoreData = true
         launch(coroutineHandler) {
             setState { copy(isFetchingNewPage = true) }
-            val fetchedRecipes = recipeRepositoryImp.getRecipes(FILTERS, RecipeRepositoryImp.DEFAULT_INCLUDED, RecipeRepositoryImp.DEFAULT_PAGESIZE, currentPage)
+            val fetchedRecipes = recipeRepositoryImp.getRecipes(
+                FILTERS,
+                RecipeRepositoryImp.DEFAULT_INCLUDED,
+                RecipeRepositoryImp.DEFAULT_PAGESIZE,
+                currentPage
+            )
             newRecipes.addAll(fetchedRecipes)
             noMoreData = fetchedRecipes.size < RecipeRepositoryImp.DEFAULT_PAGESIZE
         }.invokeOnCompletion { error ->
             if (error == null) {
-                val uiState = if(newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
+                val uiState =
+                    if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
+                        newRecipes
+                    )
                 setState {
                     copy(
                         favoritesRecipes = uiState,
@@ -66,7 +72,12 @@ open class FavoritePageViewModel :
                 }
             } else {
                 LogHandler.error("Favorite loadPage is in error")
-                setState {copy(favoritesRecipes = BasicUiState.Error("Error while getting favorite pages"), isFetchingNewPage = false)}
+                setState {
+                    copy(
+                        favoritesRecipes = BasicUiState.Error("Error while getting favorite pages"),
+                        isFetchingNewPage = false
+                    )
+                }
             }
         }
     }
@@ -78,4 +89,4 @@ open class FavoritePageViewModel :
         }
         return listOf()
     }
- }
+}

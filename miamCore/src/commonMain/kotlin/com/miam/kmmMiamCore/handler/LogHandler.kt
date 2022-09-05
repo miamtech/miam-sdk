@@ -11,7 +11,7 @@ class LogHandler {
             info: (String) -> Unit = this.info,
             warn: (String) -> Unit = this.warn,
             error: (String) -> Unit = this.error
-        ){
+        ) {
             this.debug = debug
             this.info = info
             this.warn = warn

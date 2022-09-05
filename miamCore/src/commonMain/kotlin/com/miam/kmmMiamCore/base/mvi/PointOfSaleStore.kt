@@ -1,41 +1,43 @@
 package com.miam.kmmMiamCore.base.mvi
 
 
-import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.miam_core.data.repository.PointOfSaleRepositoryImp
 import kotlinx.coroutines.*
-
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 data class PointOfSaleState(
-    val idSupplier :Int?,
+    val idSupplier: Int?,
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
     val origin: String?,
     val currentJob: Job? = null
-): State
+) : State
 
-sealed class  PointOfSaleAction : Action {
-    data class SetExtId(val extId: String?) :PointOfSaleAction()
-    data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
+sealed class PointOfSaleAction : Action {
+    data class SetExtId(val extId: String?) : PointOfSaleAction()
+    data class SetSupplierId(val supplierId: Int) : PointOfSaleAction()
 }
 
-sealed class  PointOfSaleEffect : Effect
+sealed class PointOfSaleEffect : Effect
 
-class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>, KoinComponent,
+class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
+    KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
     override val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
-    private val basketStore:  BasketStore by inject()
-    private val pointOfSaleRepository : PointOfSaleRepositoryImp by inject()
+    private val basketStore: BasketStore by inject()
+    private val pointOfSaleRepository: PointOfSaleRepositoryImp by inject()
 
     override fun observeState(): StateFlow<PointOfSaleState> = state
 
@@ -74,7 +76,7 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
         return state.value.idPointOfSale
     }
 
-    fun getProviderId(): Int{
+    fun getProviderId(): Int {
         return state.value.idSupplier ?: -1
     }
 

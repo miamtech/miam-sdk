@@ -8,30 +8,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmm_miam_sdk.android.theme.Colors
 
 @Composable
 fun BasketPreviewItem(
-    line : BasketPreviewLine,
+    line: BasketPreviewLine,
     vmBasketPreview: BasketPreviewViewModel,
-    goToItemSelector : () -> Unit
+    goToItemSelector: () -> Unit
 ) {
-    if(vmBasketPreview.currentState.isReloading){
+    if (vmBasketPreview.currentState.isReloading) {
         BasketPreviewLoader()
     } else {
-        Column() {
+        Column {
             if (line.entries?.found?.isNotEmpty() == true) {
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)) {
-                    line.entries!!.found.map { entry ->  BasketPreviewLine.fromBasketEntry(entry) }.forEach { bpl ->
-                        EntryLine(bpl, vmBasketPreview, goToItemSelector)
-                    }
+                        .padding(horizontal = 16.dp)
+                ) {
+                    line.entries!!.found.map { entry -> BasketPreviewLine.fromBasketEntry(entry) }
+                        .forEach { bpl ->
+                            EntryLine(bpl, vmBasketPreview, goToItemSelector)
+                        }
                 }
             }
             if (line.entries?.notFound?.isNotEmpty() == true) {
@@ -50,8 +52,11 @@ fun BasketPreviewItem(
                     backGroundColor = Color(0xffD9EFF2),
                     fontColor = Colors.primary,
                     title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
-                    click = fun (entry : BasketEntry) { vmBasketPreview.setEvent(
-                        BasketPreviewContract.Event.AddEntry(entry)) }
+                    click = fun(entry: BasketEntry) {
+                        vmBasketPreview.setEvent(
+                            BasketPreviewContract.Event.AddEntry(entry)
+                        )
+                    }
                 )
             }
             if (line.entries?.removed?.isNotEmpty() == true) {
@@ -61,8 +66,11 @@ fun BasketPreviewItem(
                     backGroundColor = Color(0xffBBBBBB),
                     fontColor = Color(0xff252525),
                     title = "Article(s) retiré(s) du panier (${line.entries!!.removed.size})",
-                    click = fun (entry : BasketEntry) { vmBasketPreview.setEvent(
-                        BasketPreviewContract.Event.AddEntry(entry)) }
+                    click = fun(entry: BasketEntry) {
+                        vmBasketPreview.setEvent(
+                            BasketPreviewContract.Event.AddEntry(entry)
+                        )
+                    }
                 )
             }
         }

@@ -2,7 +2,8 @@ package com.miam.kmm_miam_sdk.android.ui.components.counter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -40,29 +41,29 @@ fun Counter(
     lightMode: Boolean = false
 ) {
     Row(
-        modifier =  mainRowContainer,
+        modifier = mainRowContainer,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(guests),
             contentDescription = "guests icon",
-            modifier = if(lightMode) guestIconLight else guestIcon
+            modifier = if (lightMode) guestIconLight else guestIcon
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            ) {
+        ) {
             IconButton(
-                    onClick = { decrease() },
-                    enabled = !isDisable,
-                    modifier =  lessButton.background(
-                        if(isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
-                    )
+                onClick = { decrease() },
+                enabled = !isDisable,
+                modifier = lessButton.background(
+                    if (isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
+                )
             ) {
                 Image(
                     painter = painterResource(less),
                     contentDescription = "less icon",
                     colorFilter = ColorFilter.tint(lessIconColor),
-                    modifier =  lessButtonIcon
+                    modifier = lessButtonIcon
                 )
             }
             Row(
@@ -71,22 +72,23 @@ fun Counter(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = count.toString()+ if (lightMode) "" else  " pers.",
+                    text = count.toString() + if (lightMode) "" else " pers.",
                     color = countTextColor,
-                    modifier =  countText
+                    modifier = countText
                 )
             }
             IconButton(
-                modifier =plusButton.background(
-                    if(isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
+                modifier = plusButton.background(
+                    if (isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
                 ),
                 onClick = { increase() },
-                enabled = !isDisable) {
+                enabled = !isDisable
+            ) {
                 Image(
                     painter = painterResource(plus),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(plusIconColor),
-                    modifier =  plusButtonIcon
+                    modifier = plusButtonIcon
                 )
             }
         }
@@ -97,11 +99,11 @@ fun Counter(
 @Preview
 @Composable
 fun CounterPreview() {
-    Counter( 12, false, {},{} ,false)
+    Counter(12, false, {}, {}, false)
 }
 
 @Preview
 @Composable
 fun lightCounterPreview() {
-    Counter( 12, false, {},{} ,true)
+    Counter(12, false, {}, {}, true)
 }

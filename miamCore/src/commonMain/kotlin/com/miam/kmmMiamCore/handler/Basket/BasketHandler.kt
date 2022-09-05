@@ -1,16 +1,20 @@
 package com.miam.kmmMiamCore.handler.Basket
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.AlterQuantityBasketEntry
+import com.miam.kmmMiamCore.base.mvi.BasketAction
+import com.miam.kmmMiamCore.base.mvi.BasketStore
+import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object BasketHandlerInstance: KoinComponent {
+object BasketHandlerInstance : KoinComponent {
     val instance: BasketHandler by inject()
 }
 
@@ -22,12 +26,12 @@ data class BasketHandlerState(
     val pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
         throw Error("pushProductsToBasket not implemented")
     },
-    val listenToRetailerBasket: () -> Unit = fun(){
+    val listenToRetailerBasket: () -> Unit = fun() {
         throw Error("listenToRetailerBasket not implemented")
     }
-): State
+) : State
 
-class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main)  {
+class BasketHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val basketStore: BasketStore by inject()
 
     val state = MutableStateFlow(BasketHandlerState())
@@ -51,7 +55,10 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         if (state.value.firstMiamActiveBasket == null || state.value.firstRetailerBasket == null) return
 
         var newComparator = BasketComparator()
-        newComparator = newComparator.init(state.value.firstRetailerBasket!!, state.value.firstMiamActiveBasket!!)
+        newComparator = newComparator.init(
+            state.value.firstRetailerBasket!!,
+            state.value.firstMiamActiveBasket!!
+        )
         state.value = state.value.copy(comparator = newComparator)
         processRetailerEvent(state.value.firstRetailerBasket!!)
         this.state.value.listenToRetailerBasket()
@@ -60,7 +67,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
 
     fun basketChange(miamActiveBasket: List<BasketEntry>) {
         LogHandler.info("Miam basket changed ${state.value.comparator} $miamActiveBasket")
-        if(!isReady()) return initFirstMiamBasket(miamActiveBasket)
+        if (!isReady()) return initFirstMiamBasket(miamActiveBasket)
 
         if (state.value.isProcessingRetailerEvent) return
 
@@ -89,9 +96,9 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         LogHandler.info("processRetailerEvent finished ${state.value.comparator} $retailerBasket")
     }
 
-    private fun sendUpdateToMiam(entriesToRemove : List<AlterQuantityBasketEntry>) {
+    private fun sendUpdateToMiam(entriesToRemove: List<AlterQuantityBasketEntry>) {
         LogHandler.info("Miam will sendUpdateToMiam $entriesToRemove")
-        if (entriesToRemove.isEmpty()){
+        if (entriesToRemove.isEmpty()) {
             state.value = state.value.copy(isProcessingRetailerEvent = false)
             return
         }
@@ -118,7 +125,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
 
     fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
         LogHandler.info("Miam Retailer basket changed $retailerBasket")
-        if(!isReady()) return initFirstRetailerBasket(retailerBasket)
+        if (!isReady()) return initFirstRetailerBasket(retailerBasket)
 
         processRetailerEvent(retailerBasket)
     }
@@ -131,7 +138,9 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
     fun handlePayment(totalAmount: Double) {
         //TODO handle analytic
         LogHandler.info("Miam will handle payment for ${basketStore.getBasket()}")
-        if (basketStore.basketIsEmpty()) { return }
+        if (basketStore.basketIsEmpty()) {
+            return
+        }
         basketStore.dispatch(BasketAction.ConfirmBasket(price = totalAmount.toString()))
     }
 }

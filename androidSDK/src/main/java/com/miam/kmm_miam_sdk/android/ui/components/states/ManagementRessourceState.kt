@@ -19,9 +19,9 @@ fun <T> ManagementResourceState(
     Box(
         contentAlignment = Alignment.Center,
 
-    ) {
+        ) {
         when (resourceState) {
-            is BasicUiState.Empty -> if (emptyView != null) emptyView() else  Empty(onCheckAgain = {})
+            is BasicUiState.Empty -> if (emptyView != null) emptyView() else Empty(onCheckAgain = {})
             is BasicUiState.Error -> Error(onTryAgain = {})
             BasicUiState.Loading -> loadingView()
             BasicUiState.Idle -> Unit

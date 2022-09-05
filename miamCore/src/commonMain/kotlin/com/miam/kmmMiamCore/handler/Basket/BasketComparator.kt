@@ -1,13 +1,14 @@
 package com.miam.kmmMiamCore.handler.Basket
 
 import com.miam.kmmMiamCore.base.mvi.AlterQuantityBasketEntry
-import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 
-data class BasketComparator(val extIdToComparisonItem: Map<String, BasketComparisonItem> = mapOf())
-{
-    fun init(retailerBasket: List<RetailerProduct>, miamActiveBasket: List<BasketEntry>): BasketComparator {
+data class BasketComparator(val extIdToComparisonItem: Map<String, BasketComparisonItem> = mapOf()) {
+    fun init(
+        retailerBasket: List<RetailerProduct>,
+        miamActiveBasket: List<BasketEntry>
+    ): BasketComparator {
         val comparatorData = BasketComparatorData()
         comparatorData.init(retailerBasket, miamActiveBasket)
         return this.copy(extIdToComparisonItem = comparatorData.extIdToComparisonItem)
@@ -34,7 +35,7 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
         val toPushToRetailer = mutableListOf<RetailerProduct>()
         toPushToRetailer.addAll(addedOrUpdatedFromMiam(newBasketComparator))
         toPushToRetailer.addAll(removedFromMiam(newBasketComparator))
-        return toPushToRetailer;
+        return toPushToRetailer
     }
 
     private fun addedOrUpdatedFromMiam(newBasketComparator: BasketComparator): List<RetailerProduct> {
@@ -72,7 +73,12 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
             val newCompItem = newComparator.extIdToComparisonItem[entry.key]
             if (newCompItem == null) {
                 // create a fake comp item just to reuse existing function miamProductRemoved
-                val fakeCompItem =  previousCompItem.copy(retailerProduct = RetailerProduct(previousCompItem.retailerId, 0))
+                val fakeCompItem = previousCompItem.copy(
+                    retailerProduct = RetailerProduct(
+                        previousCompItem.retailerId,
+                        0
+                    )
+                )
                 fakeCompItem.miamProductRemoved()
             } else {
                 newCompItem.miamProductRemoved()

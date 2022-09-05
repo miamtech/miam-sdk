@@ -8,12 +8,6 @@ object RecipeDetailsColor {
     var moreInfosButtonBackground = Colors.lightgrey
     var moreInfosButtonTextColor = Colors.grey
 
-
-    // step
-
-
-    // ingredient
-
     // footer
     var footerSectionBackgroundColor = Colors.white
     var closeButtonBackgroundColor = Colors.grey
@@ -21,5 +15,4 @@ object RecipeDetailsColor {
     var buyButtonTextColor = Colors.white
     var goToPreviewBackgroundColor = Colors.ternary
     var goToPreviewTextColor = Colors.white
-
 }

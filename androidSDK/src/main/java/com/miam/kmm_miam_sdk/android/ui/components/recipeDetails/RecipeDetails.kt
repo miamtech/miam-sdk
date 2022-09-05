@@ -1,31 +1,32 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
-import android.annotation.SuppressLint
+
 import androidx.activity.compose.BackHandler
-
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-
-
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-
+import com.miam.kmmMiamCore.component.recipe.RecipeContract
+import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.component.router.RouterOutletContract
+import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.ressource.Image.cart
+import com.miam.kmm_miam_sdk.android.ressource.Image.toggleCaret
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Template.recipeDetailFooterTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.recipeDetailIngredientTemplate
@@ -34,19 +35,14 @@ import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.button
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
-
-import com.miam.kmm_miam_sdk.android.ui.components.*
+import com.miam.kmm_miam_sdk.android.ui.components.RecipeIngredients
+import com.miam.kmm_miam_sdk.android.ui.components.RecipeSteps
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
-
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor.buyButtonTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor.footerSectionBackgroundColor
-
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor.goToPreviewTextColor
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor.moreInfosButtonTextColor
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage.close
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage.difficultyHard
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage.difficultyLow
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage.difficultyMid
@@ -59,14 +55,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsSt
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.difficultyContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.difficultyIconModifier
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.footerMainContainer
-
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.headerCloseIconModifier
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.headerMainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.headerRecipeIconModifier
-
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.mainColumnsContainer
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.moreInfoButton
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.moreInfoButtonShapeContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.moreInfoSection
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.recipeDetailsActionsContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.recipeImageModifier
@@ -74,26 +66,17 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsSt
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.totalTimeContainer
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.totalTimeIcon
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.addRecipe
-
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.checkBasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.cookTime
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.moreInfo
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.prepTime
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.restingTime
-
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmmMiamCore.component.recipe.RecipeContract
-import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
-import com.miam.kmmMiamCore.component.router.RouterOutletContract
-import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
-import com.miam.kmmMiamCore.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.ressource.Image.toggleCaret
 
 
 @Composable
 fun recipdeDetails(
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterOutletViewModel,
+    vmRouter: RouterOutletViewModel,
     closeDialogue: () -> Unit
 ) {
 
@@ -103,11 +86,17 @@ fun recipdeDetails(
         resourceState = state.recipeState,
         successView = { recipe ->
             requireNotNull(recipe)
-            recipeDetailContent(recipe, vmRecipeCard,vmRouter, closeDialogue, vmRouter.currentState.showFooter)
+            recipeDetailContent(
+                recipe,
+                vmRecipeCard,
+                vmRouter,
+                closeDialogue,
+                vmRouter.currentState.showFooter
+            )
         },
         onTryAgain = { },
         onCheckAgain = { },
-        loadingView = {   CircularProgressIndicator() }
+        loadingView = { CircularProgressIndicator() }
     )
 }
 
@@ -115,9 +104,9 @@ fun recipdeDetails(
 private fun recipeDetailContent(
     recipe: Recipe,
     vmRecipeCard: RecipeViewModel,
-    vmRouter : RouterOutletViewModel,
+    vmRouter: RouterOutletViewModel,
     closeDialogue: () -> Unit,
-    withBottomBar :Boolean = true
+    withBottomBar: Boolean = true
 ) {
     val scrollState = rememberScrollState()
 
@@ -143,7 +132,7 @@ private fun recipeDetailContent(
     Scaffold(
         topBar = {
             if (Template.recipeDetailHeaderTemplate != null) {
-                Template.recipeDetailHeaderTemplate?.let { it( { closeDialogue() }, recipe) }
+                Template.recipeDetailHeaderTemplate?.let { it({ closeDialogue() }, recipe) }
             } else {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -165,7 +154,7 @@ private fun recipeDetailContent(
                         contentDescription = null,
                         modifier = headerRecipeIconModifier
                     )
-                    if(scrollState.value > 900){
+                    if (scrollState.value > 900) {
                         Text(
                             modifier = Modifier.weight(1.0F),
                             text = recipe.attributes!!.title,
@@ -174,8 +163,8 @@ private fun recipeDetailContent(
                             overflow = TextOverflow.Ellipsis,
                             style = bodyBold
                         )
-                    }else {
-                        Spacer(modifier = Modifier.weight(1.0F) )
+                    } else {
+                        Spacer(modifier = Modifier.weight(1.0F))
                     }
 
                 }
@@ -186,8 +175,8 @@ private fun recipeDetailContent(
             Column(
                 modifier = mainColumnsContainer.verticalScroll(scrollState)
             ) {
-                if(Template.recipeDetailInfosTemplate !=  null){
-                    Template.recipeDetailInfosTemplate!!( { closeDialogue() },recipe)
+                if (Template.recipeDetailInfosTemplate != null) {
+                    Template.recipeDetailInfosTemplate!!({ closeDialogue() }, recipe)
                 } else {
                     Image(
                         painter = rememberImagePainter(recipe.attributes!!.mediaUrl),
@@ -195,14 +184,14 @@ private fun recipeDetailContent(
                         contentScale = ContentScale.Crop,
                         modifier = recipeImageModifier
                     )
-                    if(vmRecipeCard.currentState.likeIsEnable){
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = recipeDetailsActionsContainer
-                    ) {
-                        LikeButton(vmRecipeCard)
-                    }
+                    if (vmRecipeCard.currentState.likeIsEnable) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = recipeDetailsActionsContainer
+                        ) {
+                            LikeButton(vmRecipeCard)
+                        }
                     }
                     Text(
                         text = recipe.attributes!!.title,
@@ -212,7 +201,7 @@ private fun recipeDetailContent(
                     )
                     Row {
                         Column(
-                            modifier = difficultyContainer.weight(1f) ,
+                            modifier = difficultyContainer.weight(1f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -249,7 +238,7 @@ private fun recipeDetailContent(
                                 }
                             }
                         }
-                        Divider( difficultyAndTimeDivider)
+                        Divider(difficultyAndTimeDivider)
                         Column(
                             modifier = totalTimeContainer.weight(1f),
                             verticalArrangement = Arrangement.Center,
@@ -258,7 +247,7 @@ private fun recipeDetailContent(
                             Image(
                                 painter = painterResource(time),
                                 contentDescription = null,
-                                modifier =  totalTimeIcon
+                                modifier = totalTimeIcon
                             )
                             Text(text = recipe.totalTime)
                         }
@@ -268,33 +257,23 @@ private fun recipeDetailContent(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = moreInfoSection
                     ) {
-                            Column(Modifier.padding(bottom = 16.dp)) {
-                                Row(modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    if (recipe.attributes!!.preparationTime!!.inWholeSeconds != 0.toLong()) {
-                                        Row() {
-                                            Text(text = prepTime, style = body)
-                                            Text(
-                                                text = "${recipe.attributes!!.preparationTime}",
-                                                style = bodyBold
-                                            )
-                                        }
-                                    }
-                                    if (recipe.attributes!!.cookingTime!!.inWholeSeconds != 0.toLong()) {
-                                        Row() {
-                                            Text(text = cookTime, style = body)
-                                            Text(
-                                                text = "${recipe.attributes!!.cookingTime}",
-                                                style = bodyBold
-                                            )
-                                        }
+                        Column(Modifier.padding(bottom = 16.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                if (recipe.attributes!!.preparationTime!!.inWholeSeconds != 0.toLong()) {
+                                    Row {
+                                        Text(text = prepTime, style = body)
+                                        Text(
+                                            text = "${recipe.attributes!!.preparationTime}",
+                                            style = bodyBold
+                                        )
                                     }
                                 }
-
-                                if (recipe.attributes!!.restingTime!!.inWholeSeconds != 0.toLong()) {
-                                    Row(Modifier.fillMaxWidth()) {
-                                        Text(text = restingTime, style = body)
+                                if (recipe.attributes!!.cookingTime!!.inWholeSeconds != 0.toLong()) {
+                                    Row {
+                                        Text(text = cookTime, style = body)
                                         Text(
                                             text = "${recipe.attributes!!.cookingTime}",
                                             style = bodyBold
@@ -302,14 +281,25 @@ private fun recipeDetailContent(
                                     }
                                 }
                             }
+
+                            if (recipe.attributes!!.restingTime!!.inWholeSeconds != 0.toLong()) {
+                                Row(Modifier.fillMaxWidth()) {
+                                    Text(text = restingTime, style = body)
+                                    Text(
+                                        text = "${recipe.attributes!!.cookingTime}",
+                                        style = bodyBold
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
-                if(recipeDetailIngredientTemplate != null) {
+                if (recipeDetailIngredientTemplate != null) {
                     recipeDetailIngredientTemplate!!(recipe, vmRecipeCard)
                 } else {
                     RecipeIngredients(recipe, vmRecipeCard)
                 }
-                if(recipeDetailStepsTemplate != null ){
+                if (recipeDetailStepsTemplate != null) {
                     recipeDetailStepsTemplate!!(
                         recipe.sortedStep,
                         vmRecipeCard
@@ -351,7 +341,8 @@ private fun recipeDetailContent(
                             if (vmRecipeCard.currentState.isInCart) {
 
                                 Row(
-                                    modifier = checkProductButton.weight(2f)
+                                    modifier = checkProductButton
+                                        .weight(2f)
                                         .clickable { seeProductMatching() },
                                     horizontalArrangement = Arrangement.SpaceEvenly,
                                     verticalAlignment = Alignment.CenterVertically,
@@ -366,7 +357,9 @@ private fun recipeDetailContent(
 
                             } else {
                                 Row(
-                                    modifier = buyRecipeButton.weight(2f).clickable { buy() },
+                                    modifier = buyRecipeButton
+                                        .weight(2f)
+                                        .clickable { buy() },
                                     horizontalArrangement = Arrangement.SpaceEvenly,
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
@@ -386,12 +379,12 @@ private fun recipeDetailContent(
                     }
                 }
             } else {
-                Surface{}
+                Surface {}
             }
         }
     )
 
-    BackHandler( true) {
+    BackHandler(true) {
         closeDialogue()
     }
 }

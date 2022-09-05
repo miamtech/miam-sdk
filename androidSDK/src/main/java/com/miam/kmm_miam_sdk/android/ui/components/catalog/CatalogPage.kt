@@ -17,6 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
+import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -28,12 +31,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColo
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
-import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
-import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 @Composable
-fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnToCategoriesPage: () -> Unit) {
+fun CatalogPage(
+    recipePageVM: RecipeListPageViewModel,
+    context: Context,
+    returnToCategoriesPage: () -> Unit
+) {
 
     val state = recipePageVM.uiState.collectAsState()
 
@@ -48,10 +52,10 @@ fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnT
             )
         },
         emptyView = {
-            CatalogEmptyPage(recipePageVM,returnToCategoriesPage)
+            CatalogEmptyPage(recipePageVM, returnToCategoriesPage)
         },
         loadingView = {
-            if(Template.CatalogResultPageLoadingTemplate != null){
+            if (Template.CatalogResultPageLoadingTemplate != null) {
                 Template.CatalogResultPageLoadingTemplate?.let {
                     it()
                 }
@@ -65,24 +69,32 @@ fun CatalogPage(recipePageVM :RecipeListPageViewModel, context: Context, returnT
 }
 
 @Composable
-private fun CatalogSuccessPage (recipePageVM :RecipeListPageViewModel, recipes: List<Recipe>, context: Context){
+private fun CatalogSuccessPage(
+    recipePageVM: RecipeListPageViewModel,
+    recipes: List<Recipe>,
+    context: Context
+) {
     LazyColumn(
         modifier = FavoritePageStyle.favoriteMainContainer,
     ) {
-        item {  Row() {
-            Text(text = recipePageVM.currentState.title,
-                color= Colors.black,
-                style = Typography.subtitleBold )
-        } }
+        item {
+            Row {
+                Text(
+                    text = recipePageVM.currentState.title,
+                    color = Colors.black,
+                    style = Typography.subtitleBold
+                )
+            }
+        }
         itemsIndexed(recipes) { index, item ->
-            val recipe =  RecipeView(context = context)
+            val recipe = RecipeView(context = context)
             recipe.bind(recipe = item)
             recipe.isNotInShelf()
             recipe.Content()
-            if(index == recipes.lastIndex){
+            if (index == recipes.lastIndex) {
                 recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
-                if(recipePageVM.currentState.isFetchingNewPage){
-                    if(Template.CatalogResultPageLazyLoaderTemplate != null ) {
+                if (recipePageVM.currentState.isFetchingNewPage) {
+                    if (Template.CatalogResultPageLazyLoaderTemplate != null) {
                         Template.CatalogResultPageLazyLoaderTemplate?.let {
                             it()
                         }
@@ -104,34 +116,40 @@ private fun CatalogSuccessPage (recipePageVM :RecipeListPageViewModel, recipes: 
 }
 
 @Composable
-private fun CatalogLoadingPage(){
+private fun CatalogLoadingPage() {
     Column(
         Modifier.fillMaxSize(),
-        horizontalAlignment =  Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
-        Text("Chaud devant !!" , style = Typography.subtitleBold , modifier = Modifier.padding(8.dp))
+    ) {
+        Text("Chaud devant !!", style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
         CircularProgressIndicator(color = Colors.primary)
     }
 }
 
 @Composable
-private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCategoriesPage: () -> Unit){
+private fun CatalogEmptyPage(
+    recipePageVM: RecipeListPageViewModel,
+    returnToCategoriesPage: () -> Unit
+) {
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(primary)){
-        
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primary)
+    ) {
+
         Column(
             Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            if(isFavorit){
-                if(Template.CatalogFavoritEmptyTemplate !=  null){
+            if (isFavorit) {
+                if (Template.CatalogFavoritEmptyTemplate != null) {
                     Template.CatalogFavoritEmptyTemplate?.let {
                         it { returnToCategoriesPage() }
                     }
@@ -143,9 +161,10 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                             .padding(vertical = 16.dp)
                     )
                     Clickable(onClick = { returnToCategoriesPage() }) {
-                        Column() {
-                            Text(text ="Oups, vous n’avez pas encore d’idée repas",
-                                color= white,
+                        Column {
+                            Text(
+                                text = "Oups, vous n’avez pas encore d’idée repas",
+                                color = white,
                                 style = Typography.subtitleBold,
                                 textAlign = TextAlign.Center
                             )
@@ -158,7 +177,10 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                                     Text(
                                         text = "Parcourir les idées repas",
                                         color = primary,
-                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                        modifier = Modifier.padding(
+                                            horizontal = 16.dp,
+                                            vertical = 8.dp
+                                        ),
                                     )
                                     Image(
                                         painter = painterResource(CatalogImage.back),
@@ -170,9 +192,8 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                         }
                     }
                 }
-            }
-            else {
-                if(Template.CatalogSearchResultEmptyTemplate != null){
+            } else {
+                if (Template.CatalogSearchResultEmptyTemplate != null) {
                     Template.CatalogSearchResultEmptyTemplate?.let {
                         it { returnToCategoriesPage() }
                     }
@@ -183,13 +204,15 @@ private fun CatalogEmptyPage(recipePageVM :RecipeListPageViewModel, returnToCate
                         Modifier
                             .padding(vertical = 16.dp)
                     )
-                    Text(text ="Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                        color= white,
+                    Text(
+                        text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
+                        color = white,
                         style = Typography.subtitleBold,
                         textAlign = TextAlign.Center
                     )
-                    Text(text =  "Essayez une nouvelle recherche.",
-                        color= white
+                    Text(
+                        text = "Essayez une nouvelle recherche.",
+                        color = white
                     )
                 }
 

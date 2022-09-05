@@ -16,10 +16,10 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.sSpacerWidth
 
 object PriceStyle {
 
-    var priceEmptyState : Modifier = Modifier.padding(vertical = lSpacerHeight)
+    var priceEmptyState: Modifier = Modifier.padding(vertical = lSpacerHeight)
 
-    var mainContainer : Modifier = Modifier
-    var priceContainer : Modifier = Modifier
+    var mainContainer: Modifier = Modifier
+    var priceContainer: Modifier = Modifier
 
     var loaderInteger: Modifier = Modifier
         .padding(vertical = sPadding)

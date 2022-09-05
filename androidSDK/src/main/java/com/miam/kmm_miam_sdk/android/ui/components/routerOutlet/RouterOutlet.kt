@@ -15,19 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import com.miam.kmm_miam_sdk.android.R
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterContent
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
+import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -35,13 +35,13 @@ import org.koin.core.component.inject
 class RouterOutlet : KoinComponent {
 
     private var vmRouter: RouterOutletViewModel = RouterOutletViewModel()
-    private val itemSelectorViewModel : ItemSelectorViewModel by inject()
+    private val itemSelectorViewModel: ItemSelectorViewModel by inject()
 
     fun getViewModel(): RouterOutletViewModel {
         return vmRouter
     }
 
-    fun goToDetail(vmRecipe :RecipeViewModel, showDetailsFooter: Boolean = true){
+    fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
         vmRouter.setEvent(
             RouterOutletContract.Event.GoToDetail(
                 vmRecipe, showDetailsFooter
@@ -49,7 +49,7 @@ class RouterOutlet : KoinComponent {
         )
     }
 
-    fun goToPreview(recipeId: String ,vmRecipe :RecipeViewModel) {
+    fun goToPreview(recipeId: String, vmRecipe: RecipeViewModel) {
         vmRouter.setEvent(
             RouterOutletContract.Event.GoToPreview(
                 recipeId = recipeId,
@@ -62,7 +62,7 @@ class RouterOutlet : KoinComponent {
         itemSelectorViewModel.setEvent(
             ItemSelectorContract.Event.SetReturnToBasketPreview(
                 returnToPreview = {
-                    if(vmRouter.currentState.recipeId != null && vmRouter.currentState.rvm != null){
+                    if (vmRouter.currentState.recipeId != null && vmRouter.currentState.rvm != null) {
                         goToPreview(
                             vmRouter.currentState.recipeId!!,
                             vmRouter.currentState.rvm!!
@@ -75,28 +75,40 @@ class RouterOutlet : KoinComponent {
         )
         vmRouter.setEvent(
             RouterOutletContract.Event.GoToItemSelector
-            )
+        )
     }
 
-    private fun close(){
+    private fun close() {
         vmRouter.setEvent(RouterOutletContract.Event.CloseDialogFromPreview)
     }
 
     @Composable
-    fun Content()  {
+    fun Content() {
 
         val state by vmRouter.uiState.collectAsState()
 
         if (state.isOpen) {
-            Box(){
+            Box {
                 BackHandler {
                     vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)
                 }
                 FullScreen {
-                    Box(){
-                        when(state.content){
-                            RouterContent.RECIPE_DETAIL  -> state.rvm?.let { recipdeDetails(it, vmRouter, fun (){ vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)}) }
-                            RouterContent.BASKET_PREVIEW -> state.rvm?.let { BasketPreview( recipeId = state.recipeId!! ,it, {goToDetail(it)} ,::close,::goToReplaceItem).content() }
+                    Box {
+                        when (state.content) {
+                            RouterContent.RECIPE_DETAIL -> state.rvm?.let {
+                                recipdeDetails(
+                                    it,
+                                    vmRouter,
+                                    fun() { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) })
+                            }
+                            RouterContent.BASKET_PREVIEW -> state.rvm?.let {
+                                BasketPreview(
+                                    recipeId = state.recipeId!!,
+                                    it,
+                                    { goToDetail(it) },
+                                    ::close,
+                                    ::goToReplaceItem).content()
+                            }
                             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
                         }
                     }
@@ -109,25 +121,25 @@ class RouterOutlet : KoinComponent {
 @Composable
 fun FullScreen(content: @Composable () -> Unit) {
 
-    fun getActualStatusBarHeight(resources: Resources):Int {
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId >0 ){
-            return (resources.getDimensionPixelSize(resourceId) / resources.getDisplayMetrics().density).toInt()
+    fun getActualStatusBarHeight(resources: Resources): Int {
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            return (resources.getDimensionPixelSize(resourceId) / resources.displayMetrics.density).toInt()
         }
         return 0
     }
 
-    fun getActualNavigationBarHeight(resources: Resources) : Int {
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+    fun getActualNavigationBarHeight(resources: Resources): Int {
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
         if (resourceId > 0) {
-            return (resources.getDimensionPixelSize(resourceId) / resources.getDisplayMetrics().density).toInt()
+            return (resources.getDimensionPixelSize(resourceId) / resources.displayMetrics.density).toInt()
         }
-        return 0;
+        return 0
     }
 
     val view = LocalView.current
-    val statusBarHeight = getActualStatusBarHeight(view.context.getResources())
-    val bottomBarHeight = getActualNavigationBarHeight(view.context.getResources())
+    val statusBarHeight = getActualStatusBarHeight(view.context.resources)
+    val bottomBarHeight = getActualNavigationBarHeight(view.context.resources)
     val parentComposition = rememberCompositionContext()
     val currentContent by rememberUpdatedState(content)
 
@@ -136,7 +148,7 @@ fun FullScreen(content: @Composable () -> Unit) {
             view
         ).apply {
             setContent(parentComposition) {
-                Box(Modifier.padding(top= statusBarHeight.dp, bottom = bottomBarHeight.dp)) {
+                Box(Modifier.padding(top = statusBarHeight.dp, bottom = bottomBarHeight.dp)) {
                     currentContent()
                 }
             }
@@ -171,7 +183,6 @@ private class FullScreenLayout(
 
         setTag(R.id.compose_view_saveable_id_tag, "dialogLayout")
     }
-
 
 
     private var content: @Composable () -> Unit by mutableStateOf({})

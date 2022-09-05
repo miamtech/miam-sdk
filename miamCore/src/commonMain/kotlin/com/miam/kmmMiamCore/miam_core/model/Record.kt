@@ -2,7 +2,7 @@ package com.miam.kmmMiamCore.miam_core.model
 
 import io.ktor.http.*
 import io.ktor.util.reflect.*
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kotlin.reflect.KClass
@@ -28,15 +28,15 @@ data class RecordCounterWrapper(var links: RecordLink) {
 
     /**only work if page size is 1*/
     fun getCount(): Int {
-        val lastPageParams =  Url(this.links.last).parameters;
-        val pagesize = lastPageParams["page[size]"]?.toInt()?: 0
-        val pagenumber = lastPageParams["page[number]"]?.toInt()?: 0
+        val lastPageParams = Url(this.links.last).parameters
+        val pagesize = lastPageParams["page[size]"]?.toInt() ?: 0
+        val pagenumber = lastPageParams["page[number]"]?.toInt() ?: 0
         return pagesize * pagenumber
     }
 }
 
 @Serializable
-data class RecordLink(val first:String, val last:String)
+data class RecordLink(val first: String, val last: String)
 
 
 /**
@@ -77,22 +77,98 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
         )
     }
 
-    private fun createRecord(type: String, id: String, attributes: JsonElement?, relationships: JsonElement?, includedRecords: List<Record>): Record {
-        return when(type) {
-            GroceriesList.serializer().descriptor.serialName -> GroceriesList(id, attributes, relationships, includedRecords)
-            GroceriesEntry.serializer().descriptor.serialName -> GroceriesEntry(id, attributes, relationships, includedRecords)
-            Recipe.serializer().descriptor.serialName -> Recipe(id, attributes, relationships, includedRecords)
-            Ingredient.serializer().descriptor.serialName -> Ingredient(id, attributes, relationships, includedRecords)
-            RecipeProvider.serializer().descriptor.serialName -> RecipeProvider(id, attributes, relationships, includedRecords)
-            RecipeStatus.serializer().descriptor.serialName -> RecipeStatus(id, attributes, relationships, includedRecords)
-            Sponsor.serializer().descriptor.serialName -> Sponsor(id, attributes, relationships, includedRecords)
-            RecipeStep.serializer().descriptor.serialName -> RecipeStep(id, attributes, relationships, includedRecords)
-            RecipeType.serializer().descriptor.serialName -> RecipeType(id, attributes, relationships, includedRecords)
-            Basket.serializer().descriptor.serialName -> Basket(id, attributes, relationships, includedRecords)
-            BasketEntry.serializer().descriptor.serialName -> BasketEntry(id, attributes, relationships, includedRecords)
-            Item.serializer().descriptor.serialName -> Item(id, attributes, relationships, includedRecords)
-            RecipeLike.serializer().descriptor.serialName -> RecipeLike(id, attributes, relationships, includedRecords)
-            Package.serializer().descriptor.serialName -> Package(id, attributes, relationships, includedRecords)
+    private fun createRecord(
+        type: String,
+        id: String,
+        attributes: JsonElement?,
+        relationships: JsonElement?,
+        includedRecords: List<Record>
+    ): Record {
+        return when (type) {
+            GroceriesList.serializer().descriptor.serialName -> GroceriesList(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            GroceriesEntry.serializer().descriptor.serialName -> GroceriesEntry(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Recipe.serializer().descriptor.serialName -> Recipe(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Ingredient.serializer().descriptor.serialName -> Ingredient(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            RecipeProvider.serializer().descriptor.serialName -> RecipeProvider(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            RecipeStatus.serializer().descriptor.serialName -> RecipeStatus(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Sponsor.serializer().descriptor.serialName -> Sponsor(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            RecipeStep.serializer().descriptor.serialName -> RecipeStep(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            RecipeType.serializer().descriptor.serialName -> RecipeType(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Basket.serializer().descriptor.serialName -> Basket(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            BasketEntry.serializer().descriptor.serialName -> BasketEntry(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Item.serializer().descriptor.serialName -> Item(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            RecipeLike.serializer().descriptor.serialName -> RecipeLike(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
+            Package.serializer().descriptor.serialName -> Package(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
             else -> throw Exception("Unsuported record type $type")
         }
     }
@@ -103,7 +179,7 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
         }
 
         fun fromRecords(records: List<Record>): RecordWrapper {
-            return RecordWrapper(JsonArray(records.map {it.toJsonElement()}))
+            return RecordWrapper(JsonArray(records.map { it.toJsonElement() }))
         }
     }
 }
@@ -151,7 +227,8 @@ sealed class Relationship {
 
     fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): Record {
         // println("Miam Relationship start buildFromIncluded $subClass")
-        val existingEntry = includedRecords.find { record -> record.instanceOf(subClass) && record.id == data.id }
+        val existingEntry =
+            includedRecords.find { record -> record.instanceOf(subClass) && record.id == data.id }
         // println("Miam Relationship buildFromIncluded $subClass found $existingEntry")
         if (existingEntry != null) {
             // println("Miam existing relations " + existingEntry.relationships)
@@ -175,10 +252,14 @@ sealed class Relationship {
 sealed class RelationshipList {
     abstract val data: List<Record>
 
-    fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): List<Record> {
+    fun buildedFromIncluded(
+        includedRecords: List<Record>,
+        subClass: KClass<out Record>
+    ): List<Record> {
         // println("Miam RelationshipList start buildFromIncluded $subClass")
         return data.map { entry ->
-            val existingEntry = includedRecords.find { record -> record.instanceOf(subClass) && record.id == entry.id }
+            val existingEntry =
+                includedRecords.find { record -> record.instanceOf(subClass) && record.id == entry.id }
             // println("Miam RelationshipList buildFromIncluded $subClass found $existingEntry")
             if (existingEntry != null) {
                 // println("Miam existing relations " + existingEntry.relationships)

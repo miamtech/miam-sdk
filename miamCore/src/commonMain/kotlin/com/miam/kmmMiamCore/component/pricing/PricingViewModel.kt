@@ -1,6 +1,8 @@
 package com.miam.kmmMiamCore.component.pricing
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.BasketStore
+import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.miam_core.data.repository.PricingRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Pricing
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -10,16 +12,16 @@ import org.koin.core.component.inject
 import kotlin.math.roundToInt
 
 open class PricingViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>()  {
+    com.miam.kmmMiamCore.base.mvi.BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
     }
 
-    private val basketStore : BasketStore by inject()
+    private val basketStore: BasketStore by inject()
 
-    private val pointOfSaleStore :PointOfSaleStore by inject()
-    private val pricingRepository : PricingRepositoryImp by inject()
+    private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val pricingRepository: PricingRepositoryImp by inject()
 
     override fun createInitialState(): PricingContract.State =
         PricingContract.State(
@@ -29,20 +31,28 @@ open class PricingViewModel :
             guestNumber = -1,
             integerPart = "0",
             decimalPart = "00",
-            isInCart= false,
+            isInCart = false,
         )
 
-    override  fun handleEvent(event: PricingContract.Event) {
+    override fun handleEvent(event: PricingContract.Event) {
         when (event) {
             is PricingContract.Event.OnPriceUpdate -> getPrice()
-            is PricingContract.Event.SetPrice -> setState { copy(price = BasicUiState.Success(event.pricing))}
+            is PricingContract.Event.SetPrice -> setState { copy(price = BasicUiState.Success(event.pricing)) }
             is PricingContract.Event.SetDirectPrice -> {
-                setState { copy(
-                    price = BasicUiState.Success(Pricing(directPrice ?: 0.00,1)),
-                    directPrice = event.price) }
+                setState {
+                    copy(
+                        price = BasicUiState.Success(Pricing(directPrice ?: 0.00, 1)),
+                        directPrice = event.price
+                    )
+                }
                 getPrice()
             }
-            is PricingContract.Event.OnSetRecipe -> setState  { copy(recipeId = event.idRecipe, guestNumber = event.guestNumber) }
+            is PricingContract.Event.OnSetRecipe -> setState {
+                copy(
+                    recipeId = event.idRecipe,
+                    guestNumber = event.guestNumber
+                )
+            }
         }
     }
 
@@ -54,30 +64,31 @@ open class PricingViewModel :
         }
     }
 
-    private  fun getPrice() {
-        if (uiState.value.directPrice != null ) {
+    private fun getPrice() {
+        if (uiState.value.directPrice != null) {
             splitePrice(uiState.value.directPrice!!)
             return
         }
-        if( checkIsInCart()){
+        if (checkIsInCart()) {
             extactPricing()
         } else {
-            launch(coroutineHandler) { fetchPrice()}
+            launch(coroutineHandler) { fetchPrice() }
         }
     }
 
     private fun checkIsInCart(): Boolean {
-        if(currentState.recipeId == "" ) return false
+        if (currentState.recipeId == "") return false
         return basketStore.recipeInBasket(currentState.recipeId)
     }
 
     private fun extactPricing() {
-      val recipeBPL = basketStore.observeState().value.basketPreview?.first { it.isRecipe && it.id == currentState.recipeId }
-        if(recipeBPL != null){
+        val recipeBPL =
+            basketStore.observeState().value.basketPreview?.first { it.isRecipe && it.id == currentState.recipeId }
+        if (recipeBPL != null) {
             setState {
                 copy(
                     price = BasicUiState.Success(
-                        Pricing(recipeBPL.price.toDouble() ,currentState.guestNumber)
+                        Pricing(recipeBPL.price.toDouble(), currentState.guestNumber)
                     )
                 )
             }
@@ -85,19 +96,25 @@ open class PricingViewModel :
         }
     }
 
-    private fun splitePrice(price : Double){
+    private fun splitePrice(price: Double) {
         // will it work each time with different region format ?
         val priceCent = (price * 100).roundToInt().toString()
-        val intergerPart = if (priceCent.length <= 2) "0" else priceCent.substring(0, priceCent.length - 2)
-        val decimalPart = if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
-        setState { copy( integerPart = intergerPart.toInt().toString(),
-                         decimalPart = decimalPart) }
+        val intergerPart =
+            if (priceCent.length <= 2) "0" else priceCent.substring(0, priceCent.length - 2)
+        val decimalPart =
+            if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
+        setState {
+            copy(
+                integerPart = intergerPart.toInt().toString(),
+                decimalPart = decimalPart
+            )
+        }
     }
 
     private suspend fun fetchPrice() {
         val posId = pointOfSaleStore.observeState().value.idPointOfSale
-        if(uiState.value.recipeId == "" || posId == null ) return
-        setState { copy(price = BasicUiState.Loading)}
+        if (uiState.value.recipeId == "" || posId == null) return
+        setState { copy(price = BasicUiState.Loading) }
         try {
             launch(coroutineHandler) {
                 val recipePrice = pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
@@ -105,7 +122,7 @@ open class PricingViewModel :
                 setEvent(PricingContract.Event.SetPrice(recipePrice))
             }
         } catch (e: Exception) {
-            setState { copy(price =  BasicUiState.Empty ) }
+            setState { copy(price = BasicUiState.Empty) }
         }
     }
 }

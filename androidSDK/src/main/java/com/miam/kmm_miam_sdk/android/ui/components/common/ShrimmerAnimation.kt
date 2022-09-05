@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AnnimatedShimmer(){
+fun AnnimatedShimmer() {
 
     val shimerColors = listOf(
         Color.LightGray.copy(alpha = 0.6F),
@@ -37,9 +37,9 @@ fun AnnimatedShimmer(){
     val brush = Brush.linearGradient(
         colors = shimerColors,
         start = Offset.Zero,
-        end= Offset(
-                x= translateAnimation.value,
-                y=translateAnimation.value
+        end = Offset(
+            x = translateAnimation.value,
+            y = translateAnimation.value
         )
     )
 
@@ -47,29 +47,58 @@ fun AnnimatedShimmer(){
 }
 
 @Composable
-fun shimmerGridItem(brush: Brush){
-    
+fun shimmerGridItem(brush: Brush) {
+
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(all = 8.dp)) {
+            .padding(all = 8.dp)
+    ) {
         Spacer(modifier = Modifier.padding(30.dp))
-        Spacer(modifier = Modifier
-            .height(72.dp)
-            .width(72.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(brush = brush))
+        Spacer(
+            modifier = Modifier
+                .height(72.dp)
+                .width(72.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(brush = brush)
+        )
         Spacer(modifier = Modifier.padding(8.dp))
-        
-        Column() {
-            Spacer(modifier = Modifier.height(16.dp).clip(RoundedCornerShape(8.dp)).fillMaxWidth(fraction = 0.7f).background(brush = brush))
+
+        Column {
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth(fraction = 0.7f)
+                    .background(brush = brush)
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            Spacer(modifier = Modifier.width(16.dp).clip(RoundedCornerShape(8.dp)).fillMaxWidth(fraction = 0.9f).background(brush = brush))
-            Row( Modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly) {
-                Spacer(modifier = Modifier.width(16.dp).clip(RoundedCornerShape(8.dp)).fillMaxWidth(fraction = 0.4f).background(brush = brush))
-                Spacer(modifier = Modifier.width(16.dp).clip(RoundedCornerShape(8.dp)).fillMaxWidth(fraction = 0.4f).background(brush = brush))
+            Spacer(
+                modifier = Modifier
+                    .width(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth(fraction = 0.9f)
+                    .background(brush = brush)
+            )
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .width(16.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth(fraction = 0.4f)
+                        .background(brush = brush)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .width(16.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth(fraction = 0.4f)
+                        .background(brush = brush)
+                )
             }
         }
     }

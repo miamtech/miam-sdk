@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import com.miam.kmm_miam_sdk.android.theme.Template
 
 @Composable
-fun BasketPreviewLoader(){
-    if (Template.basketPreviewLoadingTemplate != null){
+fun BasketPreviewLoader() {
+    if (Template.basketPreviewLoadingTemplate != null) {
         (Template.basketPreviewLoadingTemplate!!)()
     } else {
         Column(
             Modifier.fillMaxSize(),
-            horizontalAlignment =  Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
             CircularProgressIndicator()
         }
     }

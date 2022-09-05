@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -20,12 +19,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sSpacerHeight
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmallBold
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.previousIconColor
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorColor.swapIconColor
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorImage.previous
@@ -46,26 +48,22 @@ import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.I
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.selectedItemContainerBorder
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.selectedItemImage
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.selectedItemInfosContainer
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIconContainer
-import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIcon
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIconContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorText.replaceBy
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
-import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
-import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
-
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ItemsSelector () :KoinComponent {
+class ItemsSelector : KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun Content () {
+    fun Content() {
 
-        val state  = vmItemSelector.uiState.collectAsState()
+        val state = vmItemSelector.uiState.collectAsState()
         Scaffold(
             topBar = {
                 Row(modifier = previousButtonContainer) {
@@ -112,7 +110,8 @@ class ItemsSelector () :KoinComponent {
                                     verticalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = state.value.selectedItem?.bplDescription?.get(0) ?: " ",
+                                        text = state.value.selectedItem?.bplDescription?.get(0)
+                                            ?: " ",
                                         textAlign = TextAlign.Center,
                                         style = bodySmallBold
                                     )
@@ -168,7 +167,7 @@ class ItemsSelector () :KoinComponent {
                                         onClick = {
                                             vmItemSelector.choose(index)
                                             vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
-                                                  },
+                                        },
                                         children = {
                                             Surface(modifier = itemsBorder) {
                                                 Column(
@@ -194,9 +193,9 @@ class ItemsSelector () :KoinComponent {
                                                     )
                                                     Text(
                                                         text = "${
-                                                            itemsList[index].bplDescription?.get(
+                                                            itemsList[index].bplDescription.get(
                                                                 0
-                                                            ) ?: ' '
+                                                            )
                                                         }",
                                                         textAlign = TextAlign.Center,
                                                         style = bodySmallBold

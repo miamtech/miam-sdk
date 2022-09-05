@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object GroceriesListHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+object GroceriesListHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val groceriesListStore: GroceriesListStore by inject()
 
-    private val coroutineHandler = CoroutineExceptionHandler {
-            _, exception -> println("Miam error in GroceriesListHandler $exception ${exception.stackTraceToString()}")
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println("Miam error in GroceriesListHandler $exception ${exception.stackTraceToString()}")
     }
 
     fun resetGroceriesList(): Job {
@@ -28,8 +28,8 @@ object GroceriesListHandler: KoinComponent, CoroutineScope by CoroutineScope(Dis
             .map { it as GroceriesListEffect.RecipeCountChanged }
     }
 
-    fun onRecipeCountChange(updateRecipeCount : (count: Int) -> Unit) {
-        updateRecipeCount(groceriesListStore.getGroceriesList()?.recipes?.size  ?: 0)
+    fun onRecipeCountChange(updateRecipeCount: (count: Int) -> Unit) {
+        updateRecipeCount(groceriesListStore.getGroceriesList()?.recipes?.size ?: 0)
         launch(coroutineHandler) {
             groceriesListStore.observeSideEffect()
                 .filter { it is GroceriesListEffect.RecipeCountChanged }

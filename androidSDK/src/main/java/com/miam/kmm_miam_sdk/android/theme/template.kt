@@ -2,8 +2,6 @@ package com.miam.kmm_miam_sdk.android.theme
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
-import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.*
 
@@ -189,9 +187,9 @@ object Template {
     var CatalogLoaderTemplate: (@Composable() () -> Unit)? = null
 
     var CatalogSearchTemplate: (@Composable() (
-        currentSearchValue :String,
-        updateResearch: (newSearchValue : String) -> Unit,
-        closeDialog : () -> Unit,
+        currentSearchValue: String,
+        updateResearch: (newSearchValue: String) -> Unit,
+        closeDialog: () -> Unit,
         goToResultPage: () -> Unit
     ) -> Unit)? = null
 
@@ -207,12 +205,12 @@ object Template {
 
 
     var CatalogFavoritEmptyTemplate: (@Composable() (
-             returnToCatalog : () -> Unit
-            ) -> Unit)? = null
+        returnToCatalog: () -> Unit
+    ) -> Unit)? = null
 
     var CatalogSearchResultEmptyTemplate: (@Composable() (
-        returnToCatalog : () -> Unit
-            ) -> Unit)? = null
+        returnToCatalog: () -> Unit
+    ) -> Unit)? = null
 
 
 }

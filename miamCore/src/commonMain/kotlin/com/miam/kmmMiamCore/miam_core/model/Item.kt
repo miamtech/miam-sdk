@@ -13,19 +13,28 @@ import kotlinx.serialization.json.decodeFromJsonElement
 data class Item private constructor(
     override val id: String,
     override val attributes: ItemAttributes? = null,
-    override  val relationships: ItemRelationships? = null
-): Record() {
-    constructor(id: String, attributes: JsonElement?, json_relationships: JsonElement?, includedRecords: List<Record>) : this(
+    override val relationships: ItemRelationships? = null
+) : Record() {
+    constructor(
+        id: String,
+        attributes: JsonElement?,
+        json_relationships: JsonElement?,
+        includedRecords: List<Record>
+    ) : this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<ItemAttributes>(attributes),
-        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<ItemRelationships>(Relationships.filterEmptyRelationships(json_relationships))
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<ItemAttributes>(
+            attributes
+        ),
+        if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<ItemRelationships>(
+            Relationships.filterEmptyRelationships(json_relationships)
+        )
     ) {
         relationships?.buildFromIncluded(includedRecords)
     }
 }
 
 @Serializable
-data class ItemAttributes (
+data class ItemAttributes(
     @SerialName("ext-id")
     val extId: String? = null,
     val name: String,
@@ -36,7 +45,7 @@ data class ItemAttributes (
     val brand: String? = null,
     @SerialName("product-page")
     val productPage: String? = null,
-    val image : String? = null,
+    val image: String? = null,
     @SerialName("unit-price")
     val unitPrice: String,
     @SerialName("capacity-unit")
@@ -49,13 +58,13 @@ data class ItemAttributes (
     val createdAt: String,
     @SerialName("updated-at")
     val updatedAt: String,
-    val promoted : Boolean = false,
+    val promoted: Boolean = false,
     @SerialName("variable-capacity")
     val variableCapacity: Boolean
-): Attributes()
+) : Attributes()
 
 @Serializable
-class ItemRelationships: Relationships() {
+class ItemRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -65,7 +74,7 @@ class ItemRelationships: Relationships() {
  */
 
 @Serializable(with = ItemRelationshipListSerializer::class)
-class ItemRelationshipList(override var data: List<Item>): RelationshipList() {
+class ItemRelationshipList(override var data: List<Item>) : RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Item::class) as List<Item>
     }

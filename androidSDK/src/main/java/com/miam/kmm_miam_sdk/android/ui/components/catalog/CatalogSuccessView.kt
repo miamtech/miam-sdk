@@ -12,29 +12,32 @@ import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
 
 @Composable
-fun CatalogSuccessView(categories: List<Package>, state:  CatalogContract.State, context: Context,vmCatalog: CatalogViewModel ) {
-
+fun CatalogSuccessView(
+    categories: List<Package>,
+    state: CatalogContract.State,
+    context: Context,
+    vmCatalog: CatalogViewModel
+) {
     val filter = CatalogFilter(vmCatalog.currentState.catalogFilterVM,
         { vmCatalog.setEvent(CatalogContract.Event.ToggleFilter) },
-        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList)}
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
     )
     val search = CatalogSearch(
         vmCatalog.currentState.catalogFilterVM,
         { vmCatalog.setEvent(CatalogContract.Event.ToggleSearch) },
-        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList)}
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
     )
 
-
-    Column() {
-        if(state.filterOpen){
+    Column {
+        if (state.filterOpen) {
             filter.Content()
         }
-        if(state.searchOpen){
+        if (state.searchOpen) {
             search.Content()
         }
 
-        CatalogHeader(state,vmCatalog)
-        when(state.content) {
+        CatalogHeader(state, vmCatalog)
+        when (state.content) {
             CatalogContent.DEFAULT -> {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     categories.forEach { cat ->
@@ -49,7 +52,7 @@ fun CatalogSuccessView(categories: List<Package>, state:  CatalogContract.State,
                 }
             }
             CatalogContent.RECIPE_LIST -> {
-                CatalogPage(vmCatalog.currentState.recipePageVM,context) {
+                CatalogPage(vmCatalog.currentState.recipePageVM, context) {
                     vmCatalog.setEvent(
                         CatalogContract.Event.GoToDefault
                     )

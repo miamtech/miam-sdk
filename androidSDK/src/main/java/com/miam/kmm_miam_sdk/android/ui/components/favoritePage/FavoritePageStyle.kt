@@ -11,17 +11,17 @@ import com.miam.kmm_miam_sdk.android.theme.Dimension.sPadding
 
 
 object FavoritePageStyle {
-
-
     // Success state
     var favoriteMainContainer = Modifier.fillMaxSize()
-    var spaceBetweenRecipe  = sPadding
-    var loadMoreContainer = Modifier.fillMaxWidth().padding(vertical = lPadding)
+    var spaceBetweenRecipe = sPadding
+    var loadMoreContainer = Modifier
+        .fillMaxWidth()
+        .padding(vertical = lPadding)
     var loadMoreModifier = Modifier
 
 
     // Loading state
-    var loadingStateMainContainer =  Modifier.fillMaxSize()
+    var loadingStateMainContainer = Modifier.fillMaxSize()
     var loadingStateLoaderModifier = Modifier
 
     // Empty state

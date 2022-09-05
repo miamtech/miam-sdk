@@ -21,22 +21,22 @@ data class PointOfSale(
 
 @Serializable
 data class PointOfSaleAttributes(
-    val name : String?,
+    val name: String?,
 
-    val settings: PointOfSaleSettings? =null,
+    val settings: PointOfSaleSettings? = null,
     @SerialName("active-items-count")
-    val activeItemsCount: Int? =0,
-    val distance: String? =null,
-    val address: String? =null,
-    val latitude: String? =null,
-    val longitude: String? =null,
+    val activeItemsCount: Int? = 0,
+    val distance: String? = null,
+    val address: String? = null,
+    val latitude: String? = null,
+    val longitude: String? = null,
 
-    var supplier : Supplier? = null
+    var supplier: Supplier? = null
 )
 
 @Serializable
 data class PointOfSaleSettings(
-    val drive : PointOfSaleOption? = null,
+    val drive: PointOfSaleOption? = null,
     val delivery: PointOfSaleOption? = null,
     val mobile_warning: Boolean = false
 )
