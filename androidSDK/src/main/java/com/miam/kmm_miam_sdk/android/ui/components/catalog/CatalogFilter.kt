@@ -169,7 +169,6 @@ class CatalogFilter(
                                     ),
                                 )
                             }
-
                         }
                     }
                 }
@@ -189,7 +188,6 @@ fun CheckboxRow(
             checked = checkedState.value,
             onCheckedChange = {
                 checkedState.value = it
-                catOption.isSelected = it
                 updateFilter(catOption)
             },
             colors = CheckboxDefaults.colors(primary)
