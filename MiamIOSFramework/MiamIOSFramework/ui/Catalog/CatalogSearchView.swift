@@ -13,6 +13,7 @@ struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
     var catalog: CatalogVM
     let close: () -> Void
+    let search: () -> Void
     var body: some View {
         VStack(spacing: 10.0) {
             HStack {
@@ -33,7 +34,7 @@ struct CatalogSearchView: View {
                         }
                     }
                     Button {
-                        catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
+                        search()
                     } label: {
                         Image.miamImage(icon: .search)
                             .padding(10)
@@ -51,7 +52,7 @@ struct CatalogSearchView: View {
 struct CatalogSearchView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            CatalogSearchView(catalog: CatalogVM(), close: {})
+            CatalogSearchView(catalog: CatalogVM(), close: {}, search: {})
         }
     }
 }

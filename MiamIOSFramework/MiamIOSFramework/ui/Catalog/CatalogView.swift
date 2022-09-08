@@ -64,7 +64,10 @@ public struct CatalogView: View {
             }) {
                 CatalogSearchView(catalog: catalog, close: {
                     showingSearch = false
-                })
+                }) {
+                    showingSearch = false
+                    catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
+                }
             }.sheet(isPresented: $showingFilters, onDismiss: {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
             }) {
