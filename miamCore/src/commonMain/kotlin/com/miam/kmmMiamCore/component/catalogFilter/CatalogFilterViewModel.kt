@@ -84,8 +84,7 @@ open class CatalogFilterViewModel :
 
     fun getRecipeCount() {
         launch(coroutineHandler) {
-            val count =
-                recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
+            val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
             setState { copy(numberOfResult = count) }
         }
     }
@@ -96,6 +95,7 @@ open class CatalogFilterViewModel :
                 category = catId
             )
         }
+        getRecipeCount()
     }
 
 

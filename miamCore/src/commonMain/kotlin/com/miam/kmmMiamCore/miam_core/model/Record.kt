@@ -24,10 +24,14 @@ val jsonFormat = Json {
 }
 
 @Serializable
-data class RecordCounterWrapper(var links: RecordLink) {
+data class RecordCounterWrapper(var links: RecordLink, var data: JsonElement? = null) {
 
     /**only work if page size is 1*/
     fun getCount(): Int {
+        // if there is no result you have size = 1 and page = 1 (and so size*number = 1) but with an empty list
+        // first check the empty list then if not empty just count the page size / number
+        if (data!!.jsonArray.isEmpty()) return 0
+
         val lastPageParams = Url(this.links.last).parameters
         val pagesize = lastPageParams["page[size]"]?.toInt() ?: 0
         val pagenumber = lastPageParams["page[number]"]?.toInt() ?: 0
