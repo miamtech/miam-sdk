@@ -91,11 +91,9 @@ open class CatalogViewModel :
             }
             is CatalogContract.Event.OnFilterValidation -> {
                 setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
-                fetchRecipes()
             }
             is CatalogContract.Event.OnSearchLaunch -> {
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
-                fetchRecipes()
             }
         }
     }
@@ -104,7 +102,7 @@ open class CatalogViewModel :
         fetchCategories()
     }
 
-    private fun fetchRecipes() {
+    fun fetchRecipes() {
         currentState.recipePageVM.setEvent(
             RecipeListPageContract.Event.InitPage(
                 if ((currentState.catalogFilterVM.currentState.searchString

@@ -67,6 +67,7 @@ public struct CatalogView: View {
                 }) {
                     showingSearch = false
                     catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
+                    catalog.fetchRecipes()
                 }
             }.sheet(isPresented: $showingFilters, onDismiss: {
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
@@ -74,6 +75,7 @@ public struct CatalogView: View {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
                     showingFilters = false
                     self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
+                    catalog.fetchRecipes()
                 } close: {
                     showingFilters = false
                 }
