@@ -1,12 +1,13 @@
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
+- [FIX][COR] Number of records given on filters is wrong
 - [FIX][AND] Fix search's textfield text disparition on typing
 
 ## 2.2.5
-[FIX][COR] recipe like heart not well recycled makes unwanted apparition
-[FIX][COR] basket preview guest change was broken
-[FIX][COR] basket preview when deleting a product its quantity artificialy stay on next one
-[FEA][COR] add missing Analytics
+- [FIX][COR] recipe like heart not well recycled makes unwanted apparition
+- [FIX][COR] basket preview guest change was broken
+- [FIX][COR] basket preview when deleting a product its quantity artificialy stay on next one
+- [FEA][COR] add missing Analytics
 
 ## 2.2.4
 - [FIX][IOS] Fix SwiftUI imports
