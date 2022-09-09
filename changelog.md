@@ -1,5 +1,6 @@
 ## 2.2.6
-- [FIX][AND] Difficulty checkbox in filter are now working 
+- [FIX][AND] Difficulty checkbox in filter are now working
+- [FIX][AND] Fix search's textfield text disparition on typing
 
 ## 2.2.5
 [FIX][COR] recipe like heart not well recycled makes unwanted apparition

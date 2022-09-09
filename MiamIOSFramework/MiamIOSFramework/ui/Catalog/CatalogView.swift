@@ -54,19 +54,31 @@ public struct CatalogView: View {
                 }
                 if let catalogState = catalog.state {
                     ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(resourceState: catalogState.categories,
-                                                                                         successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, headerHeight: $headerHeight),
+                                                                                                               successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, showingFavorites: $showingFavorites, headerHeight: $headerHeight),
                                                                                                                loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                                                                                                               emptyView: CatalogEmptyView()).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                                               emptyView: CatalogEmptyView())
                                                                                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-            }.popover(isPresented: $catalog.filterOpen) {
-                CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
-                    self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
-                } close: {
-                    self.catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            }.sheet(isPresented: $showingSearch, onDismiss: {
+                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+            }) {
+                CatalogSearchView(catalog: catalog, close: {
+                    showingSearch = false
+                }) {
+                    showingSearch = false
+                    catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
+                    catalog.fetchRecipes()
                 }
-            }.popover(isPresented: $catalog.searchOpen) {
-                CatalogSearchView(catalog: catalog)
+            }.sheet(isPresented: $showingFilters, onDismiss: {
+                catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            }) {
+                CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
+                    showingFilters = false
+                    self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
+                    catalog.fetchRecipes()
+                } close: {
+                    showingFilters = false
+                }
             }
         }
     }
@@ -77,14 +89,16 @@ internal struct CatalogSuccessView: View {
     @ObservedObject var catalog: CatalogVM
     @ObservedObject var recipeListPageModel: RecipeListPageVM
 
-    init(catalog: CatalogVM, showingPackageRecipes: Binding<Bool>, headerHeight: Binding<Double>) {
+    init(catalog: CatalogVM, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>, headerHeight: Binding<Double>) {
         self.catalog = catalog
         self.recipeListPageModel = RecipeListPageVM(model: catalog.recipePageViewModel!)
         _showingPackageRecipes = showingPackageRecipes
+        _showingFavorites = showingFavorites
         _headerHeight = headerHeight
     }
 
     @Binding var showingPackageRecipes: Bool
+    @Binding var showingFavorites: Bool
     @Binding var headerHeight: Double
     var body: some View {
         if case .categories = catalog.content {
@@ -101,10 +115,10 @@ internal struct CatalogSuccessView: View {
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
             if let modelState = recipeListPageModel.state {
-                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogEmptyView>(resourceState: modelState.recipes,
+                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(resourceState: modelState.recipes,
                                                                                                 successView: CatalogRecipesPageSuccessView(viewModel: recipeListPageModel, catalogViewModel: catalog),
                                                                                                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                                                                                                emptyView: CatalogEmptyView()).padding([.top], Dimension.sharedInstance.lPadding)
+                                                                                                emptyView: CatalogRecipePageNoResultsView(catalogViewModel: catalog, showingFavorites: showingFavorites))
             }
         }
     }
