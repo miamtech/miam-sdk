@@ -116,7 +116,8 @@ class CatalogSearch(
                 .border(
                     border = BorderStroke(1.dp, Colors.primary),
                     shape = RoundedCornerShape(50)
-                ), verticalAlignment = Alignment.CenterVertically,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             children()
@@ -140,7 +141,6 @@ class CatalogSearch(
                 disabledIndicatorColor = Color.Transparent
             ),
             placeholder = { Text("Chercher un ingrédient ou une recette") }
-
         )
     }
 
