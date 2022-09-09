@@ -66,14 +66,7 @@ open class CatalogViewModel :
                         filterOpen = false,
                     )
                 }
-                currentState.recipePageVM.setEvent(
-                    RecipeListPageContract.Event.InitPage(
-                        if ((currentState.catalogFilterVM.currentState.searchString
-                                ?: "").isEmpty()
-                        ) "Votre sélection" else "Votre recherche : \"${currentState.catalogFilterVM.currentState.searchString}\"",
-                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
-                    )
-                )
+                fetchRecipes()
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
                 currentState.catalogFilterVM.setCat(event.category.id)
@@ -107,6 +100,17 @@ open class CatalogViewModel :
 
     init {
         fetchCategories()
+    }
+
+    fun fetchRecipes() {
+        currentState.recipePageVM.setEvent(
+            RecipeListPageContract.Event.InitPage(
+                if ((currentState.catalogFilterVM.currentState.searchString
+                        ?: "").isEmpty()
+                ) "Votre sélection" else "Votre recherche : \"${currentState.catalogFilterVM.currentState.searchString}\"",
+                currentState.catalogFilterVM.getSelectedFilterAsQueryString()
+            )
+        )
     }
 
     private fun fetchCategories() {
