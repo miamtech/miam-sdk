@@ -34,14 +34,14 @@ object RecipeCardStyle {
      * image, recipeTitle, inCartTagBox, moreInfoButton,
      */
     var imageContainer = Modifier
-        .height(280.dp)
+        .height(180.dp)
         .fillMaxWidth()
 
     /**
      * image Manager for an Image add filter define size
      */
     var image = Modifier
-        .height(280.dp)
+        .height(180.dp)
         .fillMaxWidth()
 
     /**
