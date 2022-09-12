@@ -55,12 +55,13 @@
 		BF25E1582864740900328B4B /* miam.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF25E1572864740900328B4B /* miam.xcassets */; };
 		BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1602865B01B00328B4B /* CatalogVM.swift */; };
 		BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E168286611B200328B4B /* RecipePageListVM.swift */; };
+		BF6ACB7F28CB9F700005871D /* RecipesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6ACB7E28CB9F700005871D /* RecipesView.swift */; };
 		BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */; };
 		BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF882083287F0B8600D7353B /* TitleBarView.swift */; };
 		BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */; };
 		BFA507EA287C126B00F274CA /* CatalogFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E4287C126B00F274CA /* CatalogFiltersView.swift */; };
 		BFA507EB287C126B00F274CA /* CatalogLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E5287C126B00F274CA /* CatalogLoadingView.swift */; };
-		BFA507EC287C126B00F274CA /* CatalogRecipePageNoResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E6287C126B00F274CA /* CatalogRecipePageNoResults.swift */; };
+		BFA507EC287C126B00F274CA /* CatalogRecipePageNoResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E6287C126B00F274CA /* CatalogRecipePageNoResultsView.swift */; };
 		BFA507ED287C126B00F274CA /* CatalogRecipePageSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E7287C126B00F274CA /* CatalogRecipePageSuccessView.swift */; };
 		BFA507EE287C126B00F274CA /* CatalogSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E8287C126B00F274CA /* CatalogSearchView.swift */; };
 		BFA507EF287C126B00F274CA /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E9287C126B00F274CA /* CatalogView.swift */; };
@@ -140,12 +141,13 @@
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
 		BF2691BE2893CF7A00BF9D5A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		BF6ACB7E28CB9F700005871D /* RecipesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipesView.swift; path = MiamIOSFramework/ui/Catalog/RecipesView.swift; sourceTree = SOURCE_ROOT; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
 		BFA507E4287C126B00F274CA /* CatalogFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogFiltersView.swift; path = MiamIOSFramework/ui/Catalog/CatalogFiltersView.swift; sourceTree = SOURCE_ROOT; };
 		BFA507E5287C126B00F274CA /* CatalogLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogLoadingView.swift; path = MiamIOSFramework/ui/Catalog/CatalogLoadingView.swift; sourceTree = SOURCE_ROOT; };
-		BFA507E6287C126B00F274CA /* CatalogRecipePageNoResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogRecipePageNoResults.swift; path = MiamIOSFramework/ui/Catalog/CatalogRecipePageNoResults.swift; sourceTree = SOURCE_ROOT; };
+		BFA507E6287C126B00F274CA /* CatalogRecipePageNoResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogRecipePageNoResultsView.swift; path = MiamIOSFramework/ui/Catalog/CatalogRecipePageNoResultsView.swift; sourceTree = SOURCE_ROOT; };
 		BFA507E7287C126B00F274CA /* CatalogRecipePageSuccessView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogRecipePageSuccessView.swift; path = MiamIOSFramework/ui/Catalog/CatalogRecipePageSuccessView.swift; sourceTree = SOURCE_ROOT; };
 		BFA507E8287C126B00F274CA /* CatalogSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogSearchView.swift; path = MiamIOSFramework/ui/Catalog/CatalogSearchView.swift; sourceTree = SOURCE_ROOT; };
 		BFA507E9287C126B00F274CA /* CatalogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogView.swift; path = MiamIOSFramework/ui/Catalog/CatalogView.swift; sourceTree = SOURCE_ROOT; };
@@ -338,13 +340,14 @@
 			children = (
 				BFA507E4287C126B00F274CA /* CatalogFiltersView.swift */,
 				BFA507E5287C126B00F274CA /* CatalogLoadingView.swift */,
-				BFA507E6287C126B00F274CA /* CatalogRecipePageNoResults.swift */,
+				BFA507E6287C126B00F274CA /* CatalogRecipePageNoResultsView.swift */,
 				BFA507E7287C126B00F274CA /* CatalogRecipePageSuccessView.swift */,
 				BFA507E8287C126B00F274CA /* CatalogSearchView.swift */,
 				BFA507E9287C126B00F274CA /* CatalogView.swift */,
+				BF6ACB7E28CB9F700005871D /* RecipesView.swift */,
 			);
 			path = Catalog;
-			sourceTree = "<unknown>";
+			sourceTree = "<group>";
 		};
 		BF7B82CD2876DCFC00DAC4F3 /* iconWithText */ = {
 			isa = PBXGroup;
@@ -659,6 +662,7 @@
 				BFF5B65528534BA500CEC7C5 /* BasketPreviewHeader.swift in Sources */,
 				BFF5B65B2853932C00CEC7C5 /* BasketPreviewLine.swift in Sources */,
 				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
+				BF6ACB7F28CB9F700005871D /* RecipesView.swift in Sources */,
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,
 				BFA507EA287C126B00F274CA /* CatalogFiltersView.swift in Sources */,
 				0B61EB4B288992AB002E44FB /* MyMealSuccessView.swift in Sources */,
@@ -672,7 +676,7 @@
 				0B7C9BF2281A7EF700BFC7F8 /* Dimension.swift in Sources */,
 				BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */,
 				BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */,
-				BFA507EC287C126B00F274CA /* CatalogRecipePageNoResults.swift in Sources */,
+				BFA507EC287C126B00F274CA /* CatalogRecipePageNoResultsView.swift in Sources */,
 				0BF81ACD286220AB00FEBB92 /* ProgressLoader.swift in Sources */,
 				521D645B283230DA0092AC52 /* BasketPreviewRow.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
