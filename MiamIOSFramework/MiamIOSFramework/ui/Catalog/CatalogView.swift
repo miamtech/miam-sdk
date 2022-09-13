@@ -70,7 +70,6 @@ public struct CatalogView: View {
                             }),
                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                         emptyView: CatalogEmptyView())
-                            .padding([.top], Dimension.sharedInstance.lPadding)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }.sheet(isPresented: $showingSearch, onDismiss: {
