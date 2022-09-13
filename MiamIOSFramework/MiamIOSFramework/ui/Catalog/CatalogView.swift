@@ -58,8 +58,14 @@ public struct CatalogView: View {
                         successView: CatalogSuccessView(
                             recipeListPageViewModel: catalog.recipePageViewModel,
                             packages: catalog.packages,
-                            catalogContent: catalog.content,
-                            navigateToRecipeAction: { package in
+                            content: catalog.content,
+                            showingPackageRecipes: $showingPackageRecipes,
+                            showingFavorites: $showingFavorites,
+                            headerHeight: $headerHeight,
+                            searchString: catalog.searchString,
+                            browseCatalogAction: {
+                                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                            }, navigateToRecipeAction: { package in
                                 catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package))
                             }),
                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
@@ -97,7 +103,28 @@ internal struct CatalogSuccessView: View {
     let recipeListPageViewModel: RecipeListPageViewModel?
     let packages: [CatalogPackage]
     let catalogContent: CatalogModelContent
+    @Binding var showingPackageRecipes: Bool
+    @Binding var showingFavorites: Bool
+    @Binding var headerHeight: Double
+    let searchString: String
+    let browseCatalogAction: () -> Void
     let navigateToRecipeAction: (Package) -> Void
+    
+    init(recipeListPageViewModel: RecipeListPageViewModel?, packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+         headerHeight: Binding<Double>, searchString: String,
+         browseCatalogAction: @escaping () -> Void,
+         navigateToRecipeAction: @escaping (Package) -> Void) {
+        self.recipeListPageViewModel = recipeListPageViewModel
+        self.packages = packages
+        self.catalogContent = content
+        _showingPackageRecipes = showingPackageRecipes
+        _showingFavorites = showingFavorites
+        _headerHeight = headerHeight
+        self.searchString = searchString
+        self.browseCatalogAction = browseCatalogAction
+        self.navigateToRecipeAction = navigateToRecipeAction
+    }
+    
     var body: some View {
         if case .categories = catalogContent {
             ScrollView {
@@ -112,8 +139,8 @@ internal struct CatalogSuccessView: View {
         } else {
             if let recipeListPageViewModel {
                 RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
-                    
-                }, searchString: "")
+                    browseCatalogAction()
+                }, searchString: searchString, showingFavorites: showingFavorites)
             }
         }
     }
