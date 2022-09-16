@@ -55,101 +55,98 @@ struct RecipeCardSuccessView: View {
                     }
                 })
         } else {
-            
-            VStack {
-                VStack() {
-                    if(viewModel.recipe ?? nil != nil) {
-                        ZStack(alignment: .topLeading) {
-                            AsyncImage(
-                                url: URL(
-                                    string: viewModel.recipe!.attributes?.mediaUrl ?? ""
-                                )! ,
-                                placeholder: { Text("loading ...")},
-                                height : 240
-                            ).frame(height: 240)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    viewModel.goToDetail()
-                                    showingPopup = true
-                                }
-                            HStack(alignment: .center) {
-                                if (showMealIdeaTag) {
-                                    HStack(){
-                                        Image.miamImage(icon: .ideeRepas)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width:24, height:24)
-                                        Text(RecipeCardText.sharedInstance.recipeFlag)
-                                            .font(.system(size: 14.0, design: .default))
-                                    }.padding(.horizontal,16)
-                                        .padding(.vertical,4)
-                                        .background(Color.miamColor(.musterd))
-                                        .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
-                                }
-                                Spacer()
-                                if(viewModel.likeIsEnable()){
-                                    LikeButton(recipeVm: viewModel)
-                                }
-                            }.padding([.leading,.trailing],8).padding(.top,16)
-                        }.frame(height: 240)
-                        Text(viewModel.recipe!.attributes?.title ?? "")
-                            .lineLimit(2)
-                            .foregroundColor(Color.miamColor(.black))
-                            .font(.system(size: 13.0, weight: .bold, design: .default))
-                            .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
-                                                leading: Dimension.sharedInstance.lPadding,
-                                                bottom: Dimension.sharedInstance.mlPadding,
-                                                trailing: Dimension.sharedInstance.lPadding))
-                        
-                        HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
-                            IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
-                            Divider()
-                            IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
-                        }.padding(.bottom, Dimension.sharedInstance.mlPadding)
-                        
-                        Button {
-                            if !viewModel.isInCart {
-                                viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
-                                viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
-                            } else {
+            VStack() {
+                if(viewModel.recipe ?? nil != nil) {
+                    ZStack(alignment: .topLeading) {
+                        AsyncImage(
+                            url: URL(
+                                string: viewModel.recipe!.attributes?.mediaUrl ?? ""
+                            )! ,
+                            placeholder: { Text("loading ...")},
+                            height : 240
+                        ).frame(height: 240)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
                                 viewModel.goToDetail()
+                                showingPopup = true
                             }
-                            showingPopup = true
-                        } label: {
-                            if !viewModel.isInCart {
-                                HStack(alignment: .center) {
-                                    Text(MiamText.sharedInstance.checkBasketPreview)
-                                    Image.miamImage(icon: .cart)
-                                }
-                            } else {
-                                HStack(alignment: .center) {
-                                    Text(MiamText.sharedInstance.viewRecipeDetail)
-                                    Image.miamImage(icon: .check)
-                                }
+                        HStack(alignment: .center) {
+                            if (showMealIdeaTag) {
+                                HStack(){
+                                    Image.miamImage(icon: .ideeRepas)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:24, height:24)
+                                    Text(RecipeCardText.sharedInstance.recipeFlag)
+                                        .font(.system(size: 14.0, design: .default))
+                                }.padding(.horizontal,16)
+                                    .padding(.vertical,4)
+                                    .background(Color.miamColor(.musterd))
+                                    .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
                             }
-                        }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))
-                            .frame(minHeight: 40.0, maxHeight: 40.0)
-                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                            .background(!viewModel.isInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
-                            .cornerRadius(25)
-                            .font(.system(size: 15.0, weight: .bold, design: .default))
-                            .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
-                            .padding(.bottom, Dimension.sharedInstance.lPadding)
-                    }
+                            Spacer()
+                            if(viewModel.likeIsEnable()){
+                                LikeButton(recipeVm: viewModel)
+                            }
+                        }.padding([.leading,.trailing],8).padding(.top,16)
+                    }.frame(height: 240)
+                    Text(viewModel.recipe!.attributes?.title ?? "")
+                        .lineLimit(2)
+                        .foregroundColor(Color.miamColor(.black))
+                        .font(.system(size: 13.0, weight: .bold, design: .default))
+                        .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
+                                            leading: Dimension.sharedInstance.lPadding,
+                                            bottom: Dimension.sharedInstance.mlPadding,
+                                            trailing: Dimension.sharedInstance.lPadding))
                     
+                    HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
+                        IconWithText(icon: .clock, text: viewModel.recipe?.totalTime ?? "")
+                        Divider()
+                        IconWithText(icon: .whisk, text: viewModel.recipe?.difficultyLabel ?? "")
+                    }.padding(.bottom, Dimension.sharedInstance.mlPadding)
                     
-                }.sheet(isPresented: $showingPopup) {
-                    Dialog(
-                        close: { showingPopup = false },
-                        initialRoute : initialDialogScreen,
-                        routerVm: viewModel.routerVM
-                    )
-                }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()
-                    .overlay(!showMealIdeaTag ?   RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
-                    .overlay(showMealIdeaTag ?  Rectangle()
-                        .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
-            }.frame(height: 400)
+                    Button {
+                        if !viewModel.isInCart {
+                            viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
+                            viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
+                        } else {
+                            viewModel.goToDetail()
+                        }
+                        showingPopup = true
+                    } label: {
+                        if !viewModel.isInCart {
+                            HStack(alignment: .center) {
+                                Text(MiamText.sharedInstance.checkBasketPreview)
+                                Image.miamImage(icon: .cart)
+                            }
+                        } else {
+                            HStack(alignment: .center) {
+                                Text(MiamText.sharedInstance.viewRecipeDetail)
+                                Image.miamImage(icon: .check)
+                            }
+                        }
+                    }.foregroundColor(!viewModel.isInCart ? Color.miamColor(.white) : Color.miamColor(.primary))
+                        .frame(minHeight: 40.0, maxHeight: 40.0)
+                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                        .background(!viewModel.isInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
+                        .cornerRadius(25)
+                        .font(.system(size: 15.0, weight: .bold, design: .default))
+                        .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
+                        .padding(.bottom, Dimension.sharedInstance.lPadding)
+                }
+                
+                
+            }.sheet(isPresented: $showingPopup) {
+                Dialog(
+                    close: { showingPopup = false },
+                    initialRoute : initialDialogScreen,
+                    routerVm: viewModel.routerVM
+                )
+            }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()
+                .overlay(!showMealIdeaTag ? RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
+                .overlay(showMealIdeaTag ?  Rectangle()
+                    .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
         }
     }
 }
