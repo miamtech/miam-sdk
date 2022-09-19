@@ -19,8 +19,6 @@ import com.miam.kmmMiamCore.component.pricing.PricingViewModel
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.loaderColor
-import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimalColor
-import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceDecimalTotalPriceColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.priceIntegerTotalPriceColor
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.subtitleColor
@@ -32,53 +30,50 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.currency
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.preGuests
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
-class Price(
-    val recipeId: String? = "",
-    private val guestNumber: Int? = -1,
-    val price: Double? = null,
-    val isTotalPrice: Boolean = false,
+@Composable
+fun Price(
+    recipeId: String? = "",
+    guestNumber: Int = -1,
+    price: Double? = null,
+    isTotalPrice: Boolean = false,
 ) {
+    val vmPrice =
+        PricingViewModel()
 
-    private var vmPrice: PricingViewModel = PricingViewModel()
-
-    init {
-        if ((recipeId != "" || recipeId != null) && guestNumber != -1) {
-            vmPrice.setEvent(
-                PricingContract.Event.OnSetRecipe(recipeId!!, guestNumber!!)
-            )
-        } else if (price != null) {
-            vmPrice.setEvent(
-                PricingContract.Event.SetDirectPrice(price)
-            )
-        }
-
+    if (recipeId != "" && guestNumber != -1) {
         vmPrice.setEvent(
-            PricingContract.Event.OnPriceUpdate
+            PricingContract.Event.OnSetRecipe(recipeId!!, guestNumber)
+        )
+    } else if (price != null) {
+        vmPrice.setEvent(
+            PricingContract.Event.SetDirectPrice(price)
         )
     }
 
-    @Composable
-    fun content() {
-        val state by vmPrice.uiState.collectAsState()
-        Box {
-            ManagementResourceState(
-                resourceState = state.price,
-                successView = { price ->
-                    requireNotNull(price)
-                    PriceView(
-                        vmPrice.currentState.integerPart,
-                        vmPrice.currentState.decimalPart,
-                        isTotalPrice
-                    )
-                },
-                emptyView = { EmptyState() },
-                onTryAgain = { /*TODO*/ },
-                onCheckAgain = { /*TODO*/ },
-                loadingView = { PriceShimmer(isTotalPrice) }
-            )
-        }
-    }
+    PriceStateManager(vmPrice, isTotalPrice)
 
+}
+
+@Composable
+fun PriceStateManager(vmPrice: PricingViewModel, isTotalPrice: Boolean) {
+    val state by vmPrice.uiState.collectAsState()
+    
+    Box {
+        ManagementResourceState(
+            resourceState = state.price,
+            successView = { price ->
+                requireNotNull(price)
+                PriceView(
+                    price.price,
+                    isTotalPrice
+                )
+            },
+            emptyView = { EmptyState() },
+            onTryAgain = { /*TODO*/ },
+            onCheckAgain = { /*TODO*/ },
+            loadingView = { PriceShimmer(isTotalPrice) }
+        )
+    }
 }
 
 @Composable
@@ -87,20 +82,15 @@ fun EmptyState() {
 }
 
 @Composable
-fun PriceView(integerPart: String, decimalPart: String, isTotalPrice: Boolean) {
+fun PriceView(price: Double, isTotalPrice: Boolean) {
     Column(
         modifier = mainContainer,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = priceContainer) {
             Text(
-                "${integerPart},",
+                "$price$currency",
                 color = if (isTotalPrice) priceIntegerTotalPriceColor else priceIntegerColor,
-                style = subtitleBold
-            )
-            Text(
-                "${decimalPart}$currency",
-                color = if (isTotalPrice) priceDecimalTotalPriceColor else priceDecimalColor,
                 style = subtitleBold
             )
         }
@@ -172,13 +162,13 @@ fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean) {
 @Preview
 @Composable
 fun PricePreview() {
-    PriceView("10", "05", false)
+    PriceView(10.0, false)
 }
 
 @Preview
 @Composable
 fun TotalPricePreview() {
-    PriceView("10", "05", true)
+    PriceView(10.0, true)
 }
 
 @Preview

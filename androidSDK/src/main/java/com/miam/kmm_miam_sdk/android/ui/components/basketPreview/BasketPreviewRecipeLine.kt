@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,14 +30,12 @@ import kotlin.math.round
 
 
 @ExperimentalCoilApi
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,
     guestUpdate: (guestCount: Int) -> Unit,
     goToDetail: () -> Unit
 ) {
-    val price = Price(price = line.price.toDouble(), isTotalPrice = true)
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
     val pricePerGuest =
@@ -147,7 +144,7 @@ fun BasketPreviewRecipeLine(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                price.content()
+                Price(price = line.price.toDouble(), isTotalPrice = true)
                 Counter(
                     count = count,
                     increase = { increase() },

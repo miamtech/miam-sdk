@@ -1,12 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,14 +34,14 @@ object RecipeDetailsStyle {
     var difficultyContainer = Modifier
     var difficultyIconModifier = Modifier.height(24.dp)
     var difficultyAndTimeDivider = Modifier
-        .height(16.dp)
-        .width(1.dp)
+        .fillMaxHeight()
+        .width(3.dp)
     var totalTimeContainer = Modifier
     var totalTimeIcon = Modifier.size(24.dp)
 
     var moreInfoSection = Modifier
         .fillMaxWidth()
-        .padding(40.dp)
+        .padding(vertical = 24.dp, horizontal = 16.dp)
 
     var moreInfoButtonShapeContainer = Modifier.clip(RoundedCornerShape(16.dp))
     var moreInfoButton = Modifier
