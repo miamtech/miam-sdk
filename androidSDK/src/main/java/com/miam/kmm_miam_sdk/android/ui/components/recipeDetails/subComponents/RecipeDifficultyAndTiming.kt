@@ -23,8 +23,10 @@ fun RecipeDifficulty(ImageRef: Int, difficultyLabel: String) {
         contentDescription = null,
         modifier = RecipeDetailsStyle.difficultyIconModifier
     )
-    Spacer(modifier = Modifier
-        .height(8.dp))
+    Spacer(
+        modifier = Modifier
+            .height(8.dp)
+    )
     Text(
         text = difficultyLabel,
         style = Typography.bodySmallBold
@@ -34,10 +36,8 @@ fun RecipeDifficulty(ImageRef: Int, difficultyLabel: String) {
 @Composable
 fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTime: String) {
 
-    Row (
-        Modifier
-
-            .padding(vertical = 20.dp),
+    Row(
+        Modifier.padding(vertical = 20.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -66,7 +66,7 @@ fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTim
                 }
             }
         }
-        Divider(RecipeDetailsStyle.difficultyAndTimeDivider)
+        Divider(modifier = RecipeDetailsStyle.difficultyAndTimeDivider)
         Column(
             modifier = RecipeDetailsStyle.totalTimeContainer
                 .padding(horizontal = 16.dp),
@@ -78,9 +78,12 @@ fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTim
                 contentDescription = null,
                 modifier = RecipeDetailsStyle.totalTimeIcon
             )
-            Spacer(modifier = Modifier
-                .height(8.dp))
-            Text(text = totalTime,
+            Spacer(
+                modifier = Modifier
+                    .height(8.dp)
+            )
+            Text(
+                text = totalTime,
                 style = Typography.bodySmallBold
             )
         }
@@ -90,11 +93,13 @@ fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTim
 
 @Preview
 @Composable
-fun RecipeDifficultyAndTimingPreview(){
-    Box(modifier = Modifier.height(100.dp)
-        .fillMaxWidth()
-        .background(color = Color.White)
-    ){
+fun RecipeDifficultyAndTimingPreview() {
+    Box(
+        modifier = Modifier
+            .height(100.dp)
+            .fillMaxWidth()
+            .background(color = Color.White)
+    ) {
         RecipeDifficultyAndTiming("facile", 1, "20 min")
     }
 }
