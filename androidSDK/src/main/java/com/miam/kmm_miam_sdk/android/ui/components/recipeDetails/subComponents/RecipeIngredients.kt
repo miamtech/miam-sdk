@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,8 +15,8 @@ import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Ingredient
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
-import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
@@ -57,7 +57,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
             modifier = Modifier
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(ternary.copy(alpha = 0.1f))
+                .background(Colors.backgroundGrey)
         ) {
             if (recipe.relationships?.ingredients?.data != null) {
                 val ingredients: List<Ingredient> = recipe.relationships!!.ingredients!!.data

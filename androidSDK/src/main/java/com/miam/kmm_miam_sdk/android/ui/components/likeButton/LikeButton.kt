@@ -29,8 +29,7 @@ fun LikeButton(
         }
     ) {
         Surface(
-            shape = CircleShape,
-            elevation = 8.dp
+            shape = CircleShape
         ) {
             Box(
                 Modifier

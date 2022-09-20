@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -59,6 +60,7 @@ class ItemsSelector : KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun Content() {
@@ -123,7 +125,7 @@ class ItemsSelector : KoinComponent {
                                             price = state.value.selectedItem?.price?.toDouble()
                                                 ?: 0.0,
                                             isTotalPrice = true
-                                        ).content()
+                                        )
                                     }
                                 }
                             }
@@ -141,8 +143,6 @@ class ItemsSelector : KoinComponent {
                             }
                         }
                     } else {
-
-
                         Text(
                             text = replaceBy,
                             textAlign = TextAlign.Start,
@@ -192,18 +192,14 @@ class ItemsSelector : KoinComponent {
                                                         modifier = itemsImage,
                                                     )
                                                     Text(
-                                                        text = "${
-                                                            itemsList[index].bplDescription.get(
-                                                                0
-                                                            )
-                                                        }",
+                                                        text = itemsList[index].bplDescription[0],
                                                         textAlign = TextAlign.Center,
                                                         style = bodySmallBold
                                                     )
                                                     Price(
                                                         price = itemsList[index].price.toDouble(),
                                                         isTotalPrice = true
-                                                    ).content()
+                                                    )
                                                 }
                                             }
                                         }

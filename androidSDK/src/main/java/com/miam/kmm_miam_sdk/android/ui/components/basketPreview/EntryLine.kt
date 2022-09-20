@@ -41,7 +41,6 @@ fun EntryLine(
     vmBasketPreview: BasketPreviewViewModel,
     goToItemSelector: () -> Unit
 ) {
-    val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
     val productName =
         entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1)
             .lowercase(Locale.getDefault())
@@ -151,7 +150,7 @@ fun EntryLine(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    price.content()
+                    Price(price = entry.price.toDouble(), isTotalPrice = true)
                 }
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Row(

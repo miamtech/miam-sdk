@@ -1,3 +1,7 @@
+## 2.3.0
+- [FEA][AND] Improve recipe detail view recomposition 
+- [FEA][COR] Simplifying Price ViewModel
+
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
 - [FIX][COR] Number of records given on filters is wrong
