@@ -1,4 +1,6 @@
 ## 2.3.0
+- [FIX][IOS] Fix Auto resize for UIkit table cells
+- [FEA][AND] Improve recipe card view
 - [FEA][AND] Improve recipe detail view recomposition 
 - [FEA][COR] Simplifying Price ViewModel
 

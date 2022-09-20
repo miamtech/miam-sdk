@@ -27,21 +27,23 @@ public struct RecipeCardView: View {
     }
     
     public var body: some View {
-        if(viewModel.state != nil ){
-            ManagementResourceState<Recipe,RecipeCardSuccessView,RecipeCardLoadingView,RecipeCardEmptyView> (
-                resourceState: viewModel.state!.recipeState,
-                successView:  criteria != nil ? RecipeCardSuccessView(viewModel: viewModel, criteria: criteria!, showMealIdeaTag: showMealIdeaTag) :
-                    RecipeCardSuccessView(viewModel: viewModel, recipeId: recipeId!, showMealIdeaTag: showMealIdeaTag) ,
-                loadingView: RecipeCardLoadingView(),
-                emptyView: RecipeCardEmptyView()
-            ).onAppear(perform: {
-                if(recipeId != nil){
-                    viewModel.fetchRecipe(recipeId: self.recipeId!)
-                } else if (criteria != nil) {
-                    viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
-                }
-            })
-        }
+        VStack {
+            if(viewModel.state != nil ){
+                ManagementResourceState<Recipe,RecipeCardSuccessView,RecipeCardLoadingView,RecipeCardEmptyView> (
+                    resourceState: viewModel.state!.recipeState,
+                    successView:  criteria != nil ? RecipeCardSuccessView(viewModel: viewModel, criteria: criteria!, showMealIdeaTag: showMealIdeaTag) :
+                        RecipeCardSuccessView(viewModel: viewModel, recipeId: recipeId!, showMealIdeaTag: showMealIdeaTag) ,
+                    loadingView: RecipeCardLoadingView(),
+                    emptyView: RecipeCardEmptyView()
+                ).onAppear(perform: {
+                    if(recipeId != nil){
+                        viewModel.fetchRecipe(recipeId: self.recipeId!)
+                    } else if (criteria != nil) {
+                        viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
+                    }
+                })
+            }
+        }.frame(height: 400)
     }
 }
 
