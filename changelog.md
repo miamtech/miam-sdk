@@ -1,3 +1,7 @@
+## 2.3.0
+- [FIX][IOS] Fix Auto resize for UIkit table cells
+- [FEA][AND] Improve recipe card view
+
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
 - [FIX][COR] Number of records given on filters is wrong
