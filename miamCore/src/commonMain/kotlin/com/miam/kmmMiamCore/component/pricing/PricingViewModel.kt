@@ -41,17 +41,20 @@ open class PricingViewModel :
             is PricingContract.Event.SetDirectPrice -> {
                 setState {
                     copy(
-                        price = BasicUiState.Success(Pricing(directPrice ?: 0.00, 1)),
+                        price = BasicUiState.Success(Pricing(event.price, 1)),
                         directPrice = event.price
                     )
                 }
                 getPrice()
             }
-            is PricingContract.Event.OnSetRecipe -> setState {
-                copy(
-                    recipeId = event.idRecipe,
-                    guestNumber = event.guestNumber
-                )
+            is PricingContract.Event.OnSetRecipe -> {
+                setState {
+                    copy(
+                        recipeId = event.idRecipe,
+                        guestNumber = event.guestNumber
+                    )
+                }
+                getPrice()
             }
         }
     }
@@ -59,18 +62,17 @@ open class PricingViewModel :
     init {
         launch(coroutineHandler) {
             basketStore.observeSideEffect().collect {
-                setEvent(PricingContract.Event.OnPriceUpdate)
+                getPrice()
             }
         }
     }
 
-    private fun getPrice() {
+    fun getPrice() {
         if (uiState.value.directPrice != null) {
-            splitePrice(uiState.value.directPrice!!)
             return
         }
         if (checkIsInCart()) {
-            extactPricing()
+            extractPricing()
         } else {
             launch(coroutineHandler) { fetchPrice() }
         }
@@ -81,7 +83,7 @@ open class PricingViewModel :
         return basketStore.recipeInBasket(currentState.recipeId)
     }
 
-    private fun extactPricing() {
+    private fun extractPricing() {
         val recipeBPL =
             basketStore.observeState().value.basketPreview?.first { it.isRecipe && it.id == currentState.recipeId }
         if (recipeBPL != null) {
@@ -92,24 +94,9 @@ open class PricingViewModel :
                     )
                 )
             }
-            splitePrice(recipeBPL.price.toDouble() / currentState.guestNumber)
         }
     }
 
-    private fun splitePrice(price: Double) {
-        // will it work each time with different region format ?
-        val priceCent = (price * 100).roundToInt().toString()
-        val intergerPart =
-            if (priceCent.length <= 2) "0" else priceCent.substring(0, priceCent.length - 2)
-        val decimalPart =
-            if (priceCent.length <= 2) priceCent.substring(0) else priceCent.substring(priceCent.length - 2)
-        setState {
-            copy(
-                integerPart = intergerPart.toInt().toString(),
-                decimalPart = decimalPart
-            )
-        }
-    }
 
     private suspend fun fetchPrice() {
         val posId = pointOfSaleStore.observeState().value.idPointOfSale
@@ -118,8 +105,18 @@ open class PricingViewModel :
         try {
             launch(coroutineHandler) {
                 val recipePrice = pricingRepository.getRecipePrice(uiState.value.recipeId, posId)
-                splitePrice(recipePrice.price / uiState.value.guestNumber)
-                setEvent(PricingContract.Event.SetPrice(recipePrice))
+
+                val price =
+                    ((recipePrice.price / uiState.value.guestNumber) * 100).roundToInt()
+                        .toDouble() / 100
+                setEvent(
+                    PricingContract.Event.SetPrice(
+                        Pricing(
+                            price,
+                            currentState.guestNumber
+                        )
+                    )
+                )
             }
         } catch (e: Exception) {
             setState { copy(price = BasicUiState.Empty) }

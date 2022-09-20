@@ -13,8 +13,6 @@ object Image {
     var favorite: Int = R.drawable.ic_favorite
     var favoriteFilled: Int = R.drawable.ic_favorite_filled
     var close: Int = R.drawable.ic_close
-    var knife: Int = R.drawable.ic_knife
-    var oven: Int = R.drawable.ic_oven
     var guests: Int = R.drawable.ic_peoples
     var less: Int = R.drawable.ic_less
     var plus: Int = R.drawable.ic_plus
