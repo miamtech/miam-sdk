@@ -41,7 +41,7 @@ open class PricingViewModel :
             is PricingContract.Event.SetDirectPrice -> {
                 setState {
                     copy(
-                        price = BasicUiState.Success(Pricing(directPrice ?: 0.00, 1)),
+                        price = BasicUiState.Success(Pricing(event.price, 1)),
                         directPrice = event.price
                     )
                 }

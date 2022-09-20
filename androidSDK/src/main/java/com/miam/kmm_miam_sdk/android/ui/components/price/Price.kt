@@ -1,6 +1,10 @@
 package com.miam.kmm_miam_sdk.android.ui.components.price
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +33,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceEmptySt
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.currency
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.preGuests
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 @Composable
 fun Price(
@@ -57,7 +63,6 @@ fun Price(
 @Composable
 fun PriceStateManager(vmPrice: PricingViewModel, isTotalPrice: Boolean) {
     val state by vmPrice.uiState.collectAsState()
-    
     Box {
         ManagementResourceState(
             resourceState = state.price,
@@ -83,13 +88,16 @@ fun EmptyState() {
 
 @Composable
 fun PriceView(price: Double, isTotalPrice: Boolean) {
+    val df = DecimalFormat("#.##")
+    df.roundingMode = RoundingMode.DOWN
+
     Column(
         modifier = mainContainer,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = priceContainer) {
             Text(
-                "$price$currency",
+                "${df.format(price)}$currency",
                 color = if (isTotalPrice) priceIntegerTotalPriceColor else priceIntegerColor,
                 style = subtitleBold
             )

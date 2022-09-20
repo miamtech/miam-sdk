@@ -22,7 +22,7 @@ object PriceStyle {
 
     var loaderInteger: Modifier = Modifier
         .padding(vertical = sPadding)
-        .height(20.dp)
+        .height(22.dp)
         .width(sSpacerWidth)
         .clip(RoundedCornerShape(mRoundedCorner))
 
