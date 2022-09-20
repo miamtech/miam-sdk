@@ -232,7 +232,7 @@ fun RecipeCardCTAView(
                     .background(
                         if (isInCart) Colors.white else Colors.primary
                     )
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                    .padding(horizontal = 20.dp, vertical = 9.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -246,7 +246,7 @@ fun RecipeCardCTAView(
                     colorFilter = ColorFilter.tint(if (isInCart) Colors.primary else Colors.white),
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .size(20.dp)
+                        .size(12.dp)
                 )
             }
         }

@@ -1,9 +1,12 @@
 package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -52,7 +55,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 { vmRecipe.decreaseGuest() },
             )
         }
-        Divider(Modifier.padding(8.dp))
+
         Column(
             modifier = Modifier
                 .padding(16.dp)
