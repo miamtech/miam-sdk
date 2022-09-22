@@ -40,16 +40,15 @@ struct PriceView: View {
                 Int(viewModel.currentState.decimalPart)!
             )
         } else {
-        VStack{
-            HStack(alignment: .top, spacing: 2){
-                Text(String(viewModel.price?.price ?? 0.0)).font(.system(size: 14,weight: .bold));  Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
-            }
-            if(!isTotalPrice){
-                Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
+            VStack{
+                HStack(alignment: .top, spacing: 2){
+                    Text(String(viewModel.price?.price ?? 0.0)).font(.system(size: 14,weight: .bold));  Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
+                }
+                if(!isTotalPrice){
+                    Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
+                }
             }
         }
-        }
-        
     }
 }
 

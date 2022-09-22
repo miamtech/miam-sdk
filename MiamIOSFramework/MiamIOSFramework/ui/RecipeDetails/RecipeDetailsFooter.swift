@@ -38,6 +38,9 @@ struct RecipeDetailsFooter: View {
     
     
     var body: some View {
+        if #available(iOS 15.0, *) {
+            let _ = Self._printChanges()
+        }
         if(Template.sharedInstance.recipeDetailFooterTemplate != nil) {
             Template.sharedInstance.recipeDetailFooterTemplate!(
                 recipeVM,

@@ -55,7 +55,11 @@
 		BF25E1582864740900328B4B /* miam.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF25E1572864740900328B4B /* miam.xcassets */; };
 		BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1602865B01B00328B4B /* CatalogVM.swift */; };
 		BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E168286611B200328B4B /* RecipePageListVM.swift */; };
+		BF3FAEB628DB4B38009555A9 /* RecipeTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */; };
+		BF3FAEB828DB4B73009555A9 /* RecipeDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */; };
+		BF3FAEBA28DB4C15009555A9 /* RecipeStepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB928DB4C15009555A9 /* RecipeStepsView.swift */; };
 		BF6ACB7F28CB9F700005871D /* RecipesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6ACB7E28CB9F700005871D /* RecipesView.swift */; };
+		BF6F5FA228D4C9F300E37B65 /* RecipeIngredientsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6F5FA128D4C9F300E37B65 /* RecipeIngredientsListView.swift */; };
 		BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */; };
 		BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF882083287F0B8600D7353B /* TitleBarView.swift */; };
 		BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */; };
@@ -141,7 +145,11 @@
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
 		BF2691BE2893CF7A00BF9D5A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTimeView.swift; sourceTree = "<group>"; };
+		BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsHeaderView.swift; sourceTree = "<group>"; };
+		BF3FAEB928DB4C15009555A9 /* RecipeStepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeStepsView.swift; sourceTree = "<group>"; };
 		BF6ACB7E28CB9F700005871D /* RecipesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipesView.swift; path = MiamIOSFramework/ui/Catalog/RecipesView.swift; sourceTree = SOURCE_ROOT; };
+		BF6F5FA128D4C9F300E37B65 /* RecipeIngredientsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeIngredientsListView.swift; sourceTree = "<group>"; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
@@ -331,6 +339,10 @@
 				0BB5CA5F2847B3A2007AC86D /* RecipeDetailsFooter.swift */,
 				0BB5CA6528489B60007AC86D /* RecipeDetailsDifficulty.swift */,
 				0BB5CA672848AF63007AC86D /* RecipeDetailsMoreInfo.swift */,
+				BF6F5FA128D4C9F300E37B65 /* RecipeIngredientsListView.swift */,
+				BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */,
+				BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */,
+				BF3FAEB928DB4C15009555A9 /* RecipeStepsView.swift */,
 			);
 			path = RecipeDetails;
 			sourceTree = "<group>";
@@ -619,6 +631,7 @@
 				0B5325212874899E001906CD /* LikeButton.swift in Sources */,
 				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
 				BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */,
+				BF3FAEB628DB4B38009555A9 /* RecipeTimeView.swift in Sources */,
 				0BB5CA602847B3A2007AC86D /* RecipeDetailsFooter.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColor.swift in Sources */,
 				0B4B3E84285099EA00F25E7B /* ItemSelectorVM.swift in Sources */,
@@ -649,6 +662,7 @@
 				0B5325242876B9ED001906CD /* BasketTagVM.swift in Sources */,
 				0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */,
 				521D644C282E30C00092AC52 /* StepRow.swift in Sources */,
+				BF3FAEB828DB4B73009555A9 /* RecipeDetailsHeaderView.swift in Sources */,
 				BFB3957B288ACE1E00D696D0 /* Bundle.swift in Sources */,
 				BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */,
 				BFA507EE287C126B00F274CA /* CatalogSearchView.swift in Sources */,
@@ -669,6 +683,7 @@
 				0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */,
 				0B5325272876C70C001906CD /* BasketTag.swift in Sources */,
 				0BFD39212860C70600A7FCED /* RecipeCardSuccessView.swift in Sources */,
+				BF6F5FA228D4C9F300E37B65 /* RecipeIngredientsListView.swift in Sources */,
 				BFF5B65728534F5800CEC7C5 /* IngredientNotInBasketRow.swift in Sources */,
 				0B9AA66F28215B4D007D6C8A /* DialogVM.swift in Sources */,
 				BFD55AA2285B6E16009CBC1E /* MyMealVM.swift in Sources */,
@@ -685,6 +700,7 @@
 				521D6463283277EA0092AC52 /* MyMealItemRow.swift in Sources */,
 				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
 				0B10699728A131A40095580C /* BasketPreviewText.swift in Sources */,
+				BF3FAEBA28DB4C15009555A9 /* RecipeStepsView.swift in Sources */,
 				0BB5CA6628489B60007AC86D /* RecipeDetailsDifficulty.swift in Sources */,
 				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
 			);

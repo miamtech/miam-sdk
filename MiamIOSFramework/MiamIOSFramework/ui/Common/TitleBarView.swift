@@ -15,7 +15,9 @@ struct TitleBarView: View {
     let backAction: (() -> Void)?
     let titleView: AnyView
     var body: some View {
-        
+        if #available(iOS 15.0, *) {
+            let _ = Self._printChanges()
+        }
         VStack {
             HStack {
                 
