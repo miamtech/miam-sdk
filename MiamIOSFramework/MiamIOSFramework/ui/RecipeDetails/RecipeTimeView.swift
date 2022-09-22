@@ -18,9 +18,6 @@ struct RecipeTimeView: View {
     let noRestingTime = "0m"
     
     var body: some View {
-        if #available(iOS 15.0, *) {
-            let _ = Self._printChanges()
-        }
         HStack {
             if (preparationTime != noPreparationTime) {
                 HStack {

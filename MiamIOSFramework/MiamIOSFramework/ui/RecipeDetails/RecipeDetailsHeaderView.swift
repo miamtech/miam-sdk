@@ -20,9 +20,6 @@ struct RecipeDetailsHeaderView: View {
     let imageHeight = 280.0
     
     var body: some View {
-        if #available(iOS 15.0, *) {
-            let _ = Self._printChanges()
-        }
         AsyncImage(
             url: URL(
                 string: mediaURL ?? ""

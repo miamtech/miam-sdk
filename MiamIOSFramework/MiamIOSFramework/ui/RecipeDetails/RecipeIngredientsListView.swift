@@ -16,9 +16,6 @@ struct RecipeIngredientsListView: View {
     let counterView: AnyView
     
     var body: some View {
-        if #available(iOS 15.0, *) {
-            let _ = Self._printChanges()
-        }
         HStack {
             HStack {
                 Text("\(ingredients.count) ingrédients")
