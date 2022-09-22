@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItem
@@ -25,11 +24,11 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsSt
 @Composable
 fun ExpendableBasketPreviewLine(
     line: BasketPreviewLine,
-    recipeVm: RecipeViewModel,
     vmBasketPreview: BasketPreviewViewModel,
     goToDetail: () -> Unit,
     goToReplaceItem: () -> Unit,
-    removeRecipe: () -> Unit
+    removeRecipe: () -> Unit,
+    updateGuest: (guestInt: Int) -> Unit
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -48,7 +47,7 @@ fun ExpendableBasketPreviewLine(
                     Column(Modifier.weight(1f)) {
                         BasketPreviewRecipeLine(
                             line = line,
-                            { guestCount -> vmBasketPreview.updateGuest(recipeVm, guestCount) },
+                            { guestCount -> vmBasketPreview.updateGuest(updateGuest, guestCount) },
                             goToDetail
                         )
                     }

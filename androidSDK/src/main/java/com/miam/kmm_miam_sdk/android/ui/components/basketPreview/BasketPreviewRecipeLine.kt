@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -74,8 +73,7 @@ fun BasketPreviewRecipeLine(
             )
         }
     } else {
-
-        Column(modifier = Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
+        Column {
             Divider(Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.Top,
@@ -85,18 +83,17 @@ fun BasketPreviewRecipeLine(
             ) {
                 Clickable(
                     onClick = { goToRecipeDetail() },
-                    children = {
-                        Image(
-                            painter = rememberImagePainter(line.picture),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .height(120.dp)
-                                .width(120.dp)
-                                .clip(RoundedCornerShape(16.dp)),
-                        )
-                    }
-                )
+                ) {
+                    Image(
+                        painter = rememberImagePainter(line.picture),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                    )
+                }
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                 Column(
                     verticalArrangement = Arrangement.Top
@@ -144,7 +141,12 @@ fun BasketPreviewRecipeLine(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                Price(price = line.price.toDouble(), isTotalPrice = true)
+                Box(modifier = Modifier.padding(bottom = 4.dp, start = 16.dp)) {
+                    Price(
+                        price = line.price.toDouble(),
+                        isTotalPrice = true
+                    )
+                }
                 Counter(
                     count = count,
                     increase = { increase() },

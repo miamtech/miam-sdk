@@ -2,6 +2,8 @@
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FEA][AND] Improve recipe card view
 - [FEA][AND] Improve recipe detail view recomposition 
+- [FEA][AND] Improve product matching view recomposition 
+- [FEA][AND] Improve product matching default design 
 - [FEA][COR] Simplifying Price ViewModel
 
 ## 2.2.6
