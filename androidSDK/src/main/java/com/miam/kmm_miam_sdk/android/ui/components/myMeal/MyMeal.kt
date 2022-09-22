@@ -2,7 +2,6 @@ package com.miam.kmm_miam_sdk.android.ui.components.myMeal
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -79,7 +78,6 @@ class MyMeal @JvmOverloads constructor(
         }
     }
 
-    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     private fun CurrentRecipeInBasket(
         previewLines: List<BasketPreviewLine>,
@@ -101,7 +99,6 @@ class MyMeal @JvmOverloads constructor(
 
                 ExpendableBasketPreviewLine(
                     line = previewLine,
-                    recipeVm = recipeVM,
                     vmBasketPreview = vmBasketPreview,
                     goToDetail = { goToDetail(recipeVM) },
                     removeRecipe = {
@@ -109,7 +106,9 @@ class MyMeal @JvmOverloads constructor(
                     },
                     goToReplaceItem = {
                         goToReplaceItem()
-                    }
+                    },
+
+                    updateGuest = { recipeVM.updateGuest(it) }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
             }
