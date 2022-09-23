@@ -106,7 +106,7 @@ internal struct CatalogSuccessView: View {
                 VStack {
                     ForEach(catalog.packages) { package in
                         CatalogPackageRow(package: package) { package in
-                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
+                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.package.id,title:package.package.attributes?.title ?? "" ))
                             showingPackageRecipes = true
                             headerHeight = 0.0
                         }

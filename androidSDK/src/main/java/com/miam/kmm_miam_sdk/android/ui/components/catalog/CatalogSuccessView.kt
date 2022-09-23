@@ -44,7 +44,8 @@ fun CatalogSuccessView(
                         CatalogCategory(cat, context) {
                             vmCatalog.setEvent(
                                 CatalogContract.Event.GoToRecipeListFromCategory(
-                                    it
+                                    it.id,
+                                    it.attributes?.title ?: ""
                                 )
                             )
                         }
