@@ -140,7 +140,7 @@ internal struct CatalogSuccessView: View {
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
-            if let recipeListPageViewModel {
+            if let recipeListPageViewModel  = recipeListPageViewModel {
                 RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
                     browseCatalogAction()
                 }, searchString: searchString, showingFavorites: showingFavorites)
