@@ -35,7 +35,7 @@ data class Package private constructor(
 data class PackageAttributes(
     val title: String,
     @SerialName("author-id")
-    val authorId: String,
+    val authorId: String?,
     val editable: Boolean? = false,
     val shared: Boolean? = false,
     @SerialName("catalog-category")

@@ -68,7 +68,7 @@ public struct CatalogView: View {
                             browseCatalogAction: {
                                 catalog.setEvent(event: CatalogContractEvent.GoToDefault())
                             }, navigateToRecipeAction: { package in
-                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package))
+                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
                             }),
                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                         emptyView: CatalogEmptyView())
@@ -140,7 +140,7 @@ internal struct CatalogSuccessView: View {
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
-            if let recipeListPageViewModel {
+            if let recipeListPageViewModel  = recipeListPageViewModel {
                 RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
                     browseCatalogAction()
                 }, searchString: searchString, showingFavorites: showingFavorites)

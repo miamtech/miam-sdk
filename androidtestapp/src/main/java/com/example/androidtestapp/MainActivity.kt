@@ -223,7 +223,9 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
                     }
                 } else if (isCatalogPage) {
-                    Catalog(this@MainActivity).Content()
+                    var catalog = Catalog(this@MainActivity)
+                    catalog.bind("62", "test")
+                    catalog.Content()
                 } else {
                     Column(
                         Modifier
