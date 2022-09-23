@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.quantityFormatter.QuantityFormatter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Ingredient
@@ -71,8 +72,8 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                                 Locale.getDefault()
                             ) else it.toString()
                         },
-                        vmRecipe.readableFloatNumber(
-                            vmRecipe.realQuantities(
+                        QuantityFormatter.readableFloatNumber(
+                            QuantityFormatter.realQuantities(
                                 it.attributes!!.quantity!!,
                                 state.guest,
                                 recipe.attributes!!.numberOfGuests
