@@ -15,7 +15,6 @@ struct TitleBarView: View {
     let backAction: (() -> Void)?
     let titleView: AnyView
     var body: some View {
-        
         VStack {
             HStack {
                 

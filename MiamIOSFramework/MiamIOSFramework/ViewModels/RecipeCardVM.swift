@@ -43,7 +43,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
         setEvent(event: RecipeContractEvent.OnToggleLike())
     }
     
-    func likeIsEnable() -> Bool {
+    var isLikeEnabled: Bool {
         return state?.likeIsEnable ?? false
     }
 }

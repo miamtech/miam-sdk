@@ -9,19 +9,14 @@ import SwiftUI
 
 @available(iOS 14, *)
 struct LikeButton: View {
-    
-    @ObservedObject var recipeVm: RecipeCardVM
-    
-    init(recipeVm: RecipeCardVM){
-        self.recipeVm = recipeVm
-    }
-    
+    @State var isLiked: Bool
+    let likeButtonTapped: () -> Void
     
     var body: some View {
         ZStack(){
             Circle().fill(Color.miamColor(.white))
                 .frame(width: 40, height: 40)
-            if(recipeVm.currentState.isLiked){
+            if(isLiked){
                 Image.miamImage(icon: .likeFilled)
                     .renderingMode(.template)
                     .resizable()
@@ -39,7 +34,8 @@ struct LikeButton: View {
                     .padding(.top,3)
             }
         }.onTapGesture {
-            recipeVm.toggleLike()
+            isLiked.toggle()
+            likeButtonTapped()
         }
     }
 }
