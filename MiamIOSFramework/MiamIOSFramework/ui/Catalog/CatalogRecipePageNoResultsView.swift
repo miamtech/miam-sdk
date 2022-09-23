@@ -14,22 +14,17 @@ public struct CatalogRecipePageNoResultsView: View {
     let browseCatalogAction: () -> Void
     var showingFavorites = false
 
-    let noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
-    let tryAnotherSearchText = "Essayez une nouvelle recherche"
-    let browseRecipesText = "Parcourir les idées repas"
-    let addRecipeText = "Ajouter une idée repas"
-
     public var body: some View {
         VStack(spacing: 32.0) {
             Image.miamImage(icon: .noResults)
-            Text("\(noRecipeFoundText) \"\(searchString)\"")
+            Text("\(MiamText.sharedInstance.noRecipeFoundText) \"\(searchString)\"")
                 .fontWeight(.bold)
                 .font(.system(size: 24.0))
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color.miamColor(.white))
 
             if !showingFavorites {
-                Text("\(tryAnotherSearchText)")
+                Text("\(MiamText.sharedInstance.tryAnotherSearchText)")
                     .font(.system(size: 16.0))
                     .foregroundColor(Color.miamColor(.white))
             }

@@ -39,7 +39,10 @@ public class MiamText {
     public var viewRecipeDetail = "Voir le détail"
     public var selectedProduct = "Dans le panier"
     public var steps = "Étapes"
+    public var browseRecipesText = "Parcourir les idées repas"
+    public var noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
+    public var tryAnotherSearchText = "Essayez une nouvelle recherche"
+    public var addRecipeText = "Ajouter une idée repas"
     
     private init(){}
-
 }
