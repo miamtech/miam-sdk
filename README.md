@@ -1079,6 +1079,37 @@ func isActiveOnStore() -> KotlinBoolean {
 PointOfSaleHandler.shared.isAvailable = isActiveOnStore
 ```
 
+Miam provide a function that give you current active catalog's categories
+
+This feature is design to be use with deeplink that redirect to catalog
+
+```
+  CatalogCategory(
+      val id: String,
+      val title: String
+  )
+```
+
+An example of implementation :
+
+```swift
+// MiamManager
+import miamCore
+import MiamIOSFramework
+
+  public class Categories : ObservableObject {
+     @Published var categoriesList:[CatalogCategory]  = []
+  }
+
+private init() {
+  // CODE 
+  PointOfSaleHandler.shared.getCatalogCategories { categories in
+            self.categories.categoriesList = categories
+  }
+  // CODE
+  }
+```
+
 #### Basket synchronization
 
 Last but not least, the SDK embeds a complex synchronization system that will ensure Miam always keeps the knowledge of what products have been pushed to or removed from the in-app basket. This mechanism is **mandatory** to ensure products added via Miam recipes are kept consistent with the interactions users will have with the basket outside of Miam components.
@@ -1270,7 +1301,6 @@ you can find more info [here]("https://developer.apple.com/forums/thread/652405"
 
 ### Styling
 
-<<<<<<< HEAD
 ### Colors
 
 Colors can be globally overriden by redefining them in your main assets file. 
