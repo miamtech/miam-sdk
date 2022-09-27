@@ -1,5 +1,4 @@
 ## 2.3.0
-
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
 - [FEA][AND] Improve recipe card view
@@ -12,28 +11,23 @@
 - [FEA][COR] Exposition of catalog categories list
 
 ## 2.2.6
-
 - [FIX][AND] Difficulty checkbox in filter are now working
 - [FIX][COR] Number of records given on filters is wrong
 - [FIX][AND] Fix search's textfield text disparition on typing
 
 ## 2.2.5
-
 - [FIX][COR] recipe like heart not well recycled makes unwanted apparition
 - [FIX][COR] basket preview guest change was broken
 - [FIX][COR] basket preview when deleting a product its quantity artificialy stay on next one
 - [FEA][COR] add missing Analytics
 
 ## 2.2.4
-
 - [FIX][IOS] Fix SwiftUI imports
 
 ## 2.2.3
-
 - [FIX][IOS] Fix crash IOS older than 13
 
 ## 2.2.2
-
 - [FIX][IOS] Fix checkbox in recipe detail
 - [FIX][IOS] Fix like icon oppening next recipe card on catalog
 - [FIX][IOS] Fix recipe image size in recipe details
@@ -66,17 +60,14 @@
 - [FIX][COR] Price initial state is now Loading avoid showing 0 when repainting view
 
 ## 2.2.1
-
 - [FIX][CI] fix commit variable name CI
 - [FIX][CI] target only android SDK task
 
 ## 2.2.0
-
 - [FEA][AND] AAR available on maven central
 - [FEA][AND] CI:CD deploy and build
 
 ## 2.1.0
-
 - [BRK][IOS] RecpieDetails has been renamed to RecipeDetails
 - [FEA][IOS] Customizable colors
 - [FEA][IOS] Available on swift package manager
@@ -86,7 +77,6 @@
 - [FIX][IOS] Loader display
 
 ## 2.0.2
-
 - [FIX][CORE] Recipe 'is in cart' not well refreshed
 - [FIX][CORE] Handle loading and Empty state in MyMealViewModel
 - [FIX][IOS] Add my meal EmptyStateView
@@ -94,7 +84,6 @@
 - [FIX][IOS] Missing clock icon in recipe card and recipe details
 
 ## 2.0.1
-
 - [FIX] Missing clock icon in recipe card and recipe details
 - [FIX] Clip images that were bigger than their frame
 - [FIX] Right/left padding in item selector
@@ -102,12 +91,10 @@
 - [FIX][CORE] Remove miam core pods spec file
 
 ## 2.0.0
-
 - [BRK] shared module is now called miamCore module impact Ios and android
 - [BRK] kmm-miam-sdk in core module now call kmmMiamCore fix bundleId issue on Ios impact on android
 
 ## 1.2.0
-
 - [FEA][IOS] Like recipe.
 - [FEA][IOS][Android] You can disable like feature.
 - [FEA][IOS][Android] Recipe card v2.
@@ -117,7 +104,6 @@
 - [FIX][IOS] Infinit loading on add recipe from recipe card
 
 ## 1.1.0
-
 - [BRK] getReadyIos is now called onReadyEvent
 - [BRK][FEA] MiamGroceriesList is replaced by GroceriesListHandler with two functions
   onRecipeCountChange and getRecipeCountChangeFlow
