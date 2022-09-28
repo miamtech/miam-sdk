@@ -10,7 +10,7 @@ import miamCore
 
 @available(iOS 14, *)
 public struct FavoritesView: View {
-    let favoritesViewModel = FavoritesVM()
+    @ObservedObject var favoritesViewModel = FavoritesVM()
     
     public init() {}
     
