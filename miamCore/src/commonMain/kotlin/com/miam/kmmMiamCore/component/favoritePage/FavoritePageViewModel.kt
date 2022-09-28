@@ -55,22 +55,21 @@ open class FavoritePageViewModel :
                 currentPage
             )
             newRecipes.addAll(fetchedRecipes)
+            val uiState =
+                if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
+                    newRecipes
+                )
+            setState {
+                copy(
+                    favoritesRecipes = uiState,
+                    noMoreData = noMoreData,
+                    currentPage = currentPage + 1,
+                    isFetchingNewPage = false
+                )
+            }
             noMoreData = fetchedRecipes.size < RecipeRepositoryImp.DEFAULT_PAGESIZE
         }.invokeOnCompletion { error ->
-            if (error == null) {
-                val uiState =
-                    if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
-                        newRecipes
-                    )
-                setState {
-                    copy(
-                        favoritesRecipes = uiState,
-                        noMoreData = noMoreData,
-                        currentPage = currentPage + 1,
-                        isFetchingNewPage = false
-                    )
-                }
-            } else {
+            if (error != null) {
                 LogHandler.error("Favorite loadPage is in error")
                 setState {
                     copy(
