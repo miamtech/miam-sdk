@@ -34,10 +34,13 @@ struct TabbedView: View {
             CatalogTabView().tabItem {
                 Label("Catalog", systemImage: "book.fill")
             }
+            MyFavoritesView()
+                .tabItem {
+                    Label("Favorites", systemImage: "heart.fill")
+            }
+
         }
     }
-
-    
 }
 
 struct TabbedView_Previews: PreviewProvider {
