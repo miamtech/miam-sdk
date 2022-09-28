@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.android.R
 
 object Image {
     var delete: Int = R.drawable.ic_bin
+    var look: Int = R.drawable.ic_eye
     var time: Int = R.drawable.ic_clock
     var difficulty: Int = R.drawable.ic_diflow
     var difficultyLow: Int = R.drawable.ic_easy

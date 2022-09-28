@@ -21,7 +21,7 @@ public class MiamText {
     public var preGuests = "par personne"
     public var recipeFlag = "Idée repas"
     public var replaceBy = "Remplacer cet article par : "
-    public var steps = "Préparation"
+    public var preparation = "Préparation"
     public var totalTime = "Temps total"
     public let recpeitDetailsInfo = "Plus d'informations"
     public let mealRowAlready = "Déjà dans vos placards"
@@ -38,6 +38,7 @@ public class MiamText {
     public var simmering = "Ça mijote"
     public var viewRecipeDetail = "Voir le détail"
     public var selectedProduct = "Dans le panier"
+    public var steps = "Étapes"
     
     private init(){}
 

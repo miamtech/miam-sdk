@@ -10,24 +10,19 @@ import miamCore
 
 @available(iOS 14, *)
 public struct CatalogRecipePageNoResultsView: View {
-    let catalogViewModel: CatalogVM
-    private var showingFavorites = false
+    let searchString: String
+    let browseCatalogAction: () -> Void
+    var showingFavorites = false
 
     let noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
     let tryAnotherSearchText = "Essayez une nouvelle recherche"
     let browseRecipesText = "Parcourir les idées repas"
     let addRecipeText = "Ajouter une idée repas"
 
-    public init(catalogViewModel: CatalogVM, showingFavorites: Bool = false) {
-        self.catalogViewModel = catalogViewModel
-        self.showingFavorites = showingFavorites
-    }
-
     public var body: some View {
         VStack(spacing: 32.0) {
             Image.miamImage(icon: .noResults)
-            let noRecipeFound = showingFavorites ? "\(noRecipeFoundText)." : "\(noRecipeFoundText) pour \"\(catalogViewModel.searchString)\"."
-            Text(noRecipeFound)
+            Text("\(noRecipeFoundText) \"\(searchString)\"")
                 .fontWeight(.bold)
                 .font(.system(size: 24.0))
                 .multilineTextAlignment(.center)
@@ -42,7 +37,7 @@ public struct CatalogRecipePageNoResultsView: View {
             /*
             if showingFavorites {
                 Button {
-                    catalogViewModel.setEvent(event: CatalogContractEvent.GoToDefault())
+                    browseCatalogAction()
                 } label: {
                     Text("\(browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
                     Image.miamImage(icon: .rightArrow)

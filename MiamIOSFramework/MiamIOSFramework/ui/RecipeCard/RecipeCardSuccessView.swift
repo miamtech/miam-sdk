@@ -85,8 +85,10 @@ struct RecipeCardSuccessView: View {
                                     .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
                             }
                             Spacer()
-                            if(viewModel.likeIsEnable()){
-                                LikeButton(recipeVm: viewModel)
+                            if (viewModel.isLikeEnabled) {
+                                LikeButton(isLiked: viewModel.currentState.isLiked) {
+                                    viewModel.toggleLike()
+                                }
                             }
                         }.padding([.leading,.trailing],8).padding(.top,16)
                     }.frame(height: 240)

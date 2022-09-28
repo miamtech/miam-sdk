@@ -69,10 +69,10 @@ open class CatalogViewModel :
                 fetchRecipes()
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
-                currentState.catalogFilterVM.setCat(event.category.id)
+                currentState.catalogFilterVM.setCat(event.categoryId)
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
-                        "${event.category.attributes?.title}",
+                        "${event.title}",
                         currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
