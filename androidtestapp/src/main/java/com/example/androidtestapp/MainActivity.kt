@@ -63,6 +63,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
+    val categoriesState: MutableState<List<CatalogCategory>> =
+        mutableStateOf(listOf())
     private lateinit var basketHandler: BasketHandler
 
     private fun initMiam() {
@@ -80,6 +82,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        PointOfSaleHandler.getCatalogCategories(::fetchCategory)
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
@@ -114,6 +117,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 .size(40.dp)
                 .background(Color.Blue)
         )
+    }
+
+    private fun fetchCategory(categories: List<CatalogCategory>) {
+        categoriesState.value = categories
     }
 
     private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look: () -> Unit, buy: () -> Unit) -> Unit =
@@ -292,6 +299,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 }
             }
             Divider()
+
+            categoriesState.value.forEach {
+                Text(text = it.title)
+            }
         }
     }
 

@@ -8,6 +8,7 @@
 - [FEA][AND] Direct access to a category on catalog with an id
 - [FEA][COR] Simplifying Price ViewModel
 - [FEA][COR] Change category navigation event on Catalog ViewModel
+- [FEA][COR] Exposition of catalog categories list
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
