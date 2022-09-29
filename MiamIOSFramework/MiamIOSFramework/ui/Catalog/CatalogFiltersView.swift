@@ -12,69 +12,71 @@ import miamCore
 struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
     @ObservedObject var catalogFilters: CatalogFilterVM
-
+    
     let mainTitle = "Affiner ma sélection"
     let difficultySectionTitle = "Difficulté"
     let costSectionTitle = "Coût par personne"
     let preparationTimeSectionTitle = "Temps de préparation"
     let removeFiltersButtonTitle = "Retirer les filtres"
-
+    
     let closeFilters: () -> Void
     let applyFilters: () -> Void
-
+    
     init(catalogFiltersModel: CatalogFilterVM, apply: @escaping () -> Void, close: @escaping () -> Void) {
         catalogFilters = catalogFiltersModel
         applyFilters = apply
         closeFilters = close
     }
-
+    
     var body: some View {
         if (Template.sharedInstance.catalogFiltersViewTemplate != nil) {
             Template.sharedInstance.catalogFiltersViewTemplate!
         } else {
-            VStack() {
-                // Title and close button
-                HStack {
-                    Text(mainTitle).fontWeight(.bold)
-                    Spacer()
-                    Button {
-                        closeFilters()
-                    } label: {
-                        Image.miamImage(icon: .cross)
+            ScrollView {
+                VStack() {
+                    // Title and close button
+                    HStack {
+                        Text(mainTitle).fontWeight(.bold)
+                        Spacer()
+                        Button {
+                            closeFilters()
+                        } label: {
+                            Image.miamImage(icon: .cross)
+                        }
+                    }.padding([.top], 20)
+                    
+                    // Filters
+                    CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
+                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
                     }
-                }.padding([.top], 20)
-
-                // Filters
-                CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
-                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
-                }
-                Divider()
-                CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
-                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
-                }
-                Divider()
-                CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
-                    catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
-                }
-
-                Spacer()
-
-                Button {
-                    catalogFilters.model.clearFilter()
-                } label: {
-                    Text(removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
-                }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-                Divider().padding([.bottom, .top], 10)
-                Button {
-                    applyFilters()
-                } label: {
-                    Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
-                        .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
-                        .foregroundColor(.white)
-                        .background(Color.miamColor(.primary))
-                        .clipShape(Capsule())
-                }
-            }.padding(Dimension.sharedInstance.lPadding)
+                    Divider()
+                    CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
+                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
+                    }
+                    Divider()
+                    CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
+                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
+                    }
+                    
+                    Spacer()
+                    
+                    Button {
+                        catalogFilters.model.clearFilter()
+                    } label: {
+                        Text(removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
+                    }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                    Divider().padding([.bottom, .top], 10)
+                    Button {
+                        applyFilters()
+                    } label: {
+                        Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
+                            .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                            .foregroundColor(.white)
+                            .background(Color.miamColor(.primary))
+                            .clipShape(Capsule())
+                    }
+                }.padding(Dimension.sharedInstance.lPadding)
+            }
         }
     }
 }

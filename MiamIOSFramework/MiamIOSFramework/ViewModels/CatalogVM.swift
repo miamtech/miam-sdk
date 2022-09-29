@@ -68,4 +68,10 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
             }
         }
     }
+    
+    public convenience init(categoryID: String, title: String) {
+        self.init()
+        self.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: categoryID,
+                                                                             title: title))
+    }
 }
