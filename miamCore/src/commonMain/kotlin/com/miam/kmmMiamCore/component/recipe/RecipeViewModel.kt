@@ -1,22 +1,23 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
+import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
-
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
-
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
-
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
-
 import org.koin.core.component.inject
 
 open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
@@ -120,7 +121,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun updateGuest(nbGuest: Int) {
-        if (currentState.guest <= 1 || currentState.guest >= 100) return
+        if ((currentState.guest in (nbGuest + 1)..1) || (currentState.guest in 100 until nbGuest)) return
         setState { copy(guest = nbGuest) }
         if (currentState.isInCart) launch(coroutineHandler) {
             guestSubject.emit(currentState.guest)
