@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		0B64F93228E2F1D700C0C471 /* CategoriesMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */; };
 		0B7C9BD62812E98500BFC7F8 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */; };
 		0BAEE6D22891887C0020938D /* CatalogTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAEE6D12891887C0020938D /* CatalogTabView.swift */; };
 		0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEEA6B7280F138E00291155 /* MiamManager.swift */; };
@@ -59,6 +60,7 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesMenu.swift; sourceTree = "<group>"; };
 		0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MiamIOSFramework.xcodeproj; path = ../../MiamIOSFramework/MiamIOSFramework.xcodeproj; sourceTree = "<group>"; };
 		0BAEE6D12891887C0020938D /* CatalogTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTabView.swift; sourceTree = "<group>"; };
 		0BEEA6B7280F138E00291155 /* MiamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamManager.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				BFA267CF2887068300CC0E6B /* MealsView.swift */,
 				0BAEE6D12891887C0020938D /* CatalogTabView.swift */,
 				BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */,
+				0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				BF7305FF28DDEA0900CC5D6B /* MyFavoritesView.swift in Sources */,
 				BFA267CC2886EC9F00CC0E6B /* TabbedView.swift in Sources */,
 				BF3AF8912850F32D00E8B1F2 /* MyProductsRepository.swift in Sources */,
+				0B64F93228E2F1D700C0C471 /* CategoriesMenu.swift in Sources */,
 				BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */,
 				0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */,
 				BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */,

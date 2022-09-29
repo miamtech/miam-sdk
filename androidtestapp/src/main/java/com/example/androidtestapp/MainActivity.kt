@@ -5,15 +5,28 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,9 +39,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
-import com.miam.kmmMiamCore.handler.*
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.Basket.BasketHandlerInstance
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
+import com.miam.kmmMiamCore.handler.GroceriesListHandler
+import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
@@ -63,6 +80,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
+    val categoriesState: MutableState<List<CatalogCategory>> =
+        mutableStateOf(listOf())
     private lateinit var basketHandler: BasketHandler
 
     private fun initMiam() {
@@ -80,6 +99,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        PointOfSaleHandler.getCatalogCategories(::fetchCategory)
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
@@ -114,6 +134,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 .size(40.dp)
                 .background(Color.Blue)
         )
+    }
+
+    private fun fetchCategory(categories: List<CatalogCategory>) {
+        categoriesState.value = categories
     }
 
     private val recipeFunctionTemplateVariable: @Composable (recipe: Recipe, vmRecipe: RecipeViewModel, look: () -> Unit, buy: () -> Unit) -> Unit =
@@ -161,6 +185,44 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 }
             }
         }
+
+    private val basketPreviewProductLineTemplateVariable: @Composable (
+        productName: String,
+        description: String,
+        productPicture: String,
+        quantity: Int,
+        sharingCount: String,
+        delete: () -> Unit,
+        replace: () -> Unit,
+        increaseQty: () -> Unit,
+        decreaseQty: () -> Unit
+    ) -> Unit = { productName: String,
+                  description: String,
+                  productPicture: String,
+                  quantity: Int,
+                  sharingCount: String,
+                  delete: () -> Unit,
+                  replace: () -> Unit,
+                  increaseQty: () -> Unit,
+                  decreaseQty: () -> Unit ->
+
+        Column {
+            Text(text = productName)
+            Image(
+                painter = rememberImagePainter(productPicture),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(80.dp)
+                    .width(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+
+            )
+
+
+        }
+
+    }
 
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,7 +285,9 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
                     }
                 } else if (isCatalogPage) {
-                    Catalog(this@MainActivity).Content()
+                    var catalog = Catalog(this@MainActivity)
+                    catalog.bind("62", "test")
+                    catalog.Content()
                 } else {
                     Column(
                         Modifier
@@ -290,6 +354,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 }
             }
             Divider()
+
+            categoriesState.value.forEach {
+                Text(text = it.title)
+            }
         }
     }
 
@@ -311,7 +379,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
     }
 
     private fun initTemplate() {
-        /*     Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        /*   Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+             Template.recipeCardTemplate = recipeFunctionTemplateVariable
              Template.recipeLoaderTemplate = recipeloader*/
     }
 

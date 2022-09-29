@@ -18,7 +18,7 @@ public struct CatalogEmptyView: View {
 
 @available(iOS 14, *)
 public struct CatalogView: View {
-    @ObservedObject var catalog: CatalogVM = CatalogVM()
+    @ObservedObject var catalog: CatalogVM
     @SwiftUI.State private var showingFilters = false
     @SwiftUI.State private var showingSearch = false
     @SwiftUI.State private var showingFavorites = false
@@ -26,7 +26,11 @@ public struct CatalogView: View {
 
     @SwiftUI.State private var headerHeight = 50.0
     public init() {
-
+        self.catalog = CatalogVM()
+    }
+    
+    public init(categoryId: String, title: String) {
+        self.catalog = CatalogVM(categoryID: categoryId, title: title)
     }
 
     public var body: some View {
@@ -68,7 +72,7 @@ public struct CatalogView: View {
                             browseCatalogAction: {
                                 catalog.setEvent(event: CatalogContractEvent.GoToDefault())
                             }, navigateToRecipeAction: { package in
-                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package))
+                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
                             }),
                         loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                         emptyView: CatalogEmptyView())
@@ -140,7 +144,7 @@ internal struct CatalogSuccessView: View {
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
-            if let recipeListPageViewModel {
+            if let recipeListPageViewModel  = recipeListPageViewModel {
                 RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
                     browseCatalogAction()
                 }, searchString: searchString, showingFavorites: showingFavorites)

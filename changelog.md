@@ -1,10 +1,16 @@
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
+- [FIX][IOS] Improve recipe detail view recomposition
+- [FEA][IOS] Add stand alone favorite page
 - [FEA][AND] Improve recipe card view
-- [FEA][AND] Improve recipe detail view recomposition 
-- [FEA][AND] Improve product matching view recomposition 
-- [FEA][AND] Improve product matching default design 
+- [FEA][AND] Improve recipe detail view recomposition
+- [FEA][AND] Improve product matching view recomposition
+- [FEA][AND] Improve product matching default design
+- [FEA][AND] Direct access to a category on catalog with an id
+- [FIX][AND] Add piture field in product and recipe templates in basket preview
 - [FEA][COR] Simplifying Price ViewModel
+- [FEA][COR] Change category navigation event on Catalog ViewModel
+- [FEA][COR] Exposition of catalog categories list
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
@@ -25,7 +31,7 @@
 
 ## 2.2.2
 - [FIX][IOS] Fix checkbox in recipe detail
-- [FIX][IOS] Fix like icon oppening next recipe card on catalog 
+- [FIX][IOS] Fix like icon oppening next recipe card on catalog
 - [FIX][IOS] Fix recipe image size in recipe details
 - [FIX][IOS] Fix catalog recipe loader size
 - [FIX][IOS] Reduce meal tag border radius on recipe card
@@ -101,5 +107,6 @@
 
 ## 1.1.0
 - [BRK] getReadyIos is now called onReadyEvent
-- [BRK][FEA] MiamGroceriesList is replaced by GroceriesListHandler with two functions onRecipeCountChange and getRecipeCountChangeFlow
+- [BRK][FEA] MiamGroceriesList is replaced by GroceriesListHandler with two functions
+  onRecipeCountChange and getRecipeCountChangeFlow
 - [FEA] Expose resetGroceriesList on GroceriesListHandler
