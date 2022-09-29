@@ -11,6 +11,7 @@
 - [FEA][COR] Simplifying Price ViewModel
 - [FEA][COR] Change category navigation event on Catalog ViewModel
 - [FEA][COR] Exposition of catalog categories list
+- [FIX][COR] Gests counter block at 1 or 100 
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
