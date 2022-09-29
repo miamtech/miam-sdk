@@ -3,13 +3,7 @@ package com.miam.kmm_miam_sdk.android.ui.components.catalog
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -172,27 +166,35 @@ private fun CatalogEmptyPage(
                                 text = "Oups, vous n’avez pas encore d’idée repas",
                                 color = white,
                                 style = Typography.subtitleBold,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .padding(bottom = 8.dp)
                             )
-                            Box(
-                                Modifier
-                                    .clip(RoundedCornerShape(50))
-                                    .background(white)
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
                             ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(
-                                        text = "Parcourir les idées repas",
-                                        color = primary,
-                                        modifier = Modifier.padding(
-                                            horizontal = 16.dp,
-                                            vertical = 8.dp
-                                        ),
-                                    )
-                                    Image(
-                                        painter = painterResource(CatalogImage.back),
-                                        contentDescription = null,
-                                        Modifier.padding(start = 8.dp)
-                                    )
+                                Box(
+                                    Modifier
+                                        .clip(RoundedCornerShape(50))
+                                        .background(white)
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(
+                                            text = "Parcourir les idées repas",
+                                            color = primary,
+                                            modifier = Modifier.padding(
+                                                horizontal = 16.dp,
+                                                vertical = 8.dp
+                                            ),
+                                        )
+                                        Image(
+                                            painter = painterResource(CatalogImage.back),
+                                            contentDescription = null,
+                                            Modifier.padding(start = 8.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -214,7 +216,8 @@ private fun CatalogEmptyPage(
                         text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
                         color = white,
                         style = Typography.subtitleBold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Text(
                         text = "Essayez une nouvelle recherche.",
