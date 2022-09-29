@@ -246,4 +246,10 @@ public class Template {
         CatalogFilterOptions,
         (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var favoritesEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
 }

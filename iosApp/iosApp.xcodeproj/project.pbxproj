@@ -19,6 +19,7 @@
 		BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */; };
 		BF3AF88F2850EF3800E8B1F2 /* MyBasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */; };
 		BF3AF8912850F32D00E8B1F2 /* MyProductsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF8902850F32D00E8B1F2 /* MyProductsRepository.swift */; };
+		BF7305FF28DDEA0900CC5D6B /* MyFavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */; };
 		BFA267CC2886EC9F00CC0E6B /* TabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */; };
 		BFA267D02887068300CC0E6B /* MealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267CF2887068300CC0E6B /* MealsView.swift */; };
 		BFA267D22887086000CC0E6B /* Groceries.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267D12887086000CC0E6B /* Groceries.swift */; };
@@ -71,6 +72,7 @@
 		BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasket.swift; sourceTree = "<group>"; };
 		BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasketView.swift; sourceTree = "<group>"; };
 		BF3AF8902850F32D00E8B1F2 /* MyProductsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProductsRepository.swift; sourceTree = "<group>"; };
+		BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavoritesView.swift; sourceTree = "<group>"; };
 		BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedView.swift; sourceTree = "<group>"; };
 		BFA267CF2887068300CC0E6B /* MealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealsView.swift; sourceTree = "<group>"; };
 		BFA267D12887086000CC0E6B /* Groceries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groceries.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */,
 				BFA267CF2887068300CC0E6B /* MealsView.swift */,
 				0BAEE6D12891887C0020938D /* CatalogTabView.swift */,
+				BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */,
 				0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */,
 			);
 			path = Views;
@@ -190,7 +193,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1330;
-				ORGANIZATIONNAME = orgName;
+				ORGANIZATIONNAME = Miam;
 				TargetAttributes = {
 					7555FF7A242A565900829871 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -277,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF7305FF28DDEA0900CC5D6B /* MyFavoritesView.swift in Sources */,
 				BFA267CC2886EC9F00CC0E6B /* TabbedView.swift in Sources */,
 				BF3AF8912850F32D00E8B1F2 /* MyProductsRepository.swift in Sources */,
 				0B64F93228E2F1D700C0C471 /* CategoriesMenu.swift in Sources */,
