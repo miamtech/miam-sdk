@@ -10,6 +10,7 @@
 - [FEA][AND] Improve product matching default design
 - [FEA][AND] Direct access to a category on catalog with an id
 - [FIX][AND] Add piture field in product and recipe templates in basket preview
+- [FIX][AND] Text in catalog research ans favorit empty view is centred
 - [FEA][COR] Simplifying Price ViewModel
 - [FEA][COR] Change category navigation event on Catalog ViewModel
 - [FEA][COR] Exposition of catalog categories list
