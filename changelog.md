@@ -1,6 +1,7 @@
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
+- [FIX][IOS] Add CTA in empty favorite page 
 - [FIX][IOS] Catalog filter is now a scrollable view
 - [FEA][IOS] Add stand alone favorite page
 - [FEA][AND] Improve recipe card view
