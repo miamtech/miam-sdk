@@ -18,24 +18,18 @@ public struct CatalogRecipePageNoResultsView: View {
     let tryAnotherSearchText = "Essayez une nouvelle recherche"
     let browseRecipesText = "Parcourir les idées repas"
     let addRecipeText = "Ajouter une idée repas"
+    let noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
 
     public var body: some View {
         VStack(spacing: 32.0) {
             Image.miamImage(icon: .noResults)
-            Text("\(noRecipeFoundText) \"\(searchString)\"")
-                .fontWeight(.bold)
-                .font(.system(size: 24.0))
-                .multilineTextAlignment(.center)
-                .foregroundColor(Color.miamColor(.white))
-
-            if !showingFavorites {
-                Text("\(tryAnotherSearchText)")
-                    .font(.system(size: 16.0))
-                    .foregroundColor(Color.miamColor(.white))
-            }
-
-            /*
+            
             if showingFavorites {
+                Text(noFavoritRecipeYet)
+                    .fontWeight(.bold)
+                    .font(.system(size: 24.0))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.miamColor(.white))
                 Button {
                     browseCatalogAction()
                 } label: {
@@ -45,19 +39,16 @@ public struct CatalogRecipePageNoResultsView: View {
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .background(Capsule().foregroundColor(.white))
                 .overlay(Capsule().stroke(.white, lineWidth: 1.0))
-
-                Button {
-                    // TODO: Create recipe
-                } label: {
-                    HStack {
-                        Image.miamImage(icon: .plus)
-                        Text("\(addRecipeText)").foregroundColor(.white).fontWeight(.semibold)
-                    }
-                    .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
-                    .overlay(Capsule().stroke(.white, lineWidth: 1.0))
-                }
+            } else {
+                Text("\(noRecipeFoundText) \"\(searchString)\"")
+                    .fontWeight(.bold)
+                    .font(.system(size: 24.0))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.miamColor(.white))
+                    Text("\(tryAnotherSearchText)")
+                        .font(.system(size: 16.0))
+                        .foregroundColor(Color.miamColor(.white))
             }
-            */
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(10)
