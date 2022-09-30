@@ -55,6 +55,8 @@ public class MiamText {
     public var showAll = "Tout voir"
     public var mealIdeas = "Idées repas en 1 clic"
     public var myMealIdeas = "Mes idées repas"
+   
+    public var noMealIdeaInBasket = "Vous n'avez aucune idée repas dans votre panier."
     
     private init(){}
 }
