@@ -1,11 +1,6 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import com.miam.kmmMiamCore.base.mvi.BasicUiState
-import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
-import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
-import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
-import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
-import com.miam.kmmMiamCore.base.mvi.UserStore
+import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
@@ -36,6 +31,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val analyticsService: Analytics by inject()
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
+    val sideEffect: MutableSharedFlow<RecipeContract.Effect> = MutableSharedFlow()
 
     private val recipe: Recipe?
         get() = this.currentState.recipe
@@ -196,9 +192,13 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     private fun toggleLike() {
         // TODO : make it loading and manage it on success with invokeOnCompletion
+
         setState { copy(isLiked = !currentState.isLiked) }
         val currentRecipe = this.recipe
         launch(coroutineHandler) {
+            if (!currentState.isLiked) {
+                sideEffect.emit(RecipeContract.Effect.Disliked)
+            }
             setRecipe(recipeRepositoryImp.toggleLike(currentRecipe!!))
         }
     }

@@ -10,6 +10,7 @@ interface FavoritePageContract {
 
     sealed class Event : UiEvent {
         object LoadPage : FavoritePageContract.Event()
+        data class RemoveIndex(val index: Int) : FavoritePageContract.Event()
     }
 
     data class State(
