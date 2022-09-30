@@ -51,6 +51,10 @@ public class MiamText {
     public var removeFiltersButtonTitle = "Retirer les filtres"
     
     public var noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
+    public var search = "Rechercher"
+    public var showAll = "Tout voir"
+    public var mealIdeas = "Idées repas en 1 clic"
+    public var myMealIdeas = "Mes idées repas"
     
     private init(){}
 }
