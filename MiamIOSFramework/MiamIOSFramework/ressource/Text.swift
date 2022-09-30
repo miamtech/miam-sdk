@@ -44,5 +44,13 @@ public class MiamText {
     public var tryAnotherSearchText = "Essayez une nouvelle recherche"
     public var addRecipeText = "Ajouter une idée repas"
     
+    public var filtersTitle = "Affiner ma sélection"
+    public var filtersDifficultySectionTitle = "Difficulté"
+    public var filterCostSectionTitle = "Coût par personne"
+    public var filterPreparationTimeSectionTitle = "Temps de préparation"
+    public var removeFiltersButtonTitle = "Retirer les filtres"
+    
+    public var noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
+    
     private init(){}
 }
