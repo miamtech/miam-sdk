@@ -65,6 +65,8 @@ public class MiamText {
     
     public var moreInformation = "Plus d'infos"
     public var replaceIngredient = "Remplacer"
+   
+    public var persons = "pers."
     
     private init(){}
 }
