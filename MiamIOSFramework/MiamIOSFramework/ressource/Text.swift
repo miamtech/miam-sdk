@@ -17,7 +17,7 @@ public class MiamText {
     public var cookTime = "Temps de cuisson"
     public var checkBasketPreview = "Ajouter les ingrédients"
     public var currency = "€"
-    public var ingredient = "Ingredients"
+    public var ingredients = "ingredients"
     public var preGuests = "par personne"
     public var recipeFlag = "Idée repas"
     public var replaceBy = "Remplacer cet article par : "
@@ -57,6 +57,14 @@ public class MiamText {
     public var myMealIdeas = "Mes idées repas"
    
     public var noMealIdeaInBasket = "Vous n'avez aucune idée repas dans votre panier."
+    public var addIngredientText = "Ajouter"
+    public var showDetails = "Voir le détail"
+   
+    public var removeFromBasket = "Retirer du panier"
+    public var keepShopping = "Continuer mes achats"
+    
+    public var moreInformation = "Plus d'infos"
+    public var replaceIngredient = "Remplacer"
     
     private init(){}
 }
