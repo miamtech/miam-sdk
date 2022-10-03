@@ -26,7 +26,7 @@ struct CatalogSearchView: View {
             }.frame(height: 44).padding(Dimension.sharedInstance.mlPadding)
             HStack(spacing: 10.0) {
                 HStack(spacing: 10.0) {
-                    TextField("Rechercher", text: $searchString).frame(height: 45.0)
+                    TextField(MiamText.sharedInstance.search, text: $searchString).frame(height: 45.0)
                         .disableAutocorrection(true)
                         .onChange(of: searchString) { value in
                         if let filtersViewModel = catalog.filtersViewModel {

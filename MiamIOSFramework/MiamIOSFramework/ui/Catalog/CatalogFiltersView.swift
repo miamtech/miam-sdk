@@ -13,12 +13,6 @@ struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
     @ObservedObject var catalogFilters: CatalogFilterVM
     
-    let mainTitle = "Affiner ma sélection"
-    let difficultySectionTitle = "Difficulté"
-    let costSectionTitle = "Coût par personne"
-    let preparationTimeSectionTitle = "Temps de préparation"
-    let removeFiltersButtonTitle = "Retirer les filtres"
-    
     let closeFilters: () -> Void
     let applyFilters: () -> Void
     
@@ -36,7 +30,7 @@ struct CatalogFiltersView: View {
                 VStack() {
                     // Title and close button
                     HStack {
-                        Text(mainTitle).fontWeight(.bold)
+                        Text(MiamText.sharedInstance.filtersTitle).fontWeight(.bold)
                         Spacer()
                         Button {
                             closeFilters()
@@ -46,15 +40,15 @@ struct CatalogFiltersView: View {
                     }.padding([.top], 20)
                     
                     // Filters
-                    CatalogFilterSection(title: difficultySectionTitle, filters: catalogFilters.difficulty) { option in
+                    CatalogFilterSection(title: MiamText.sharedInstance.filtersDifficultySectionTitle, filters: catalogFilters.difficulty) { option in
                         catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
                     }
                     Divider()
-                    CatalogFilterSection(title: costSectionTitle, filters: catalogFilters.cost) { option in
+                    CatalogFilterSection(title: MiamText.sharedInstance.filterCostSectionTitle, filters: catalogFilters.cost) { option in
                         catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
                     }
                     Divider()
-                    CatalogFilterSection(title: preparationTimeSectionTitle, filters: catalogFilters.time) { option in
+                    CatalogFilterSection(title: MiamText.sharedInstance.filterPreparationTimeSectionTitle, filters: catalogFilters.time) { option in
                         catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
                     }
                     
@@ -63,7 +57,7 @@ struct CatalogFiltersView: View {
                     Button {
                         catalogFilters.model.clearFilter()
                     } label: {
-                        Text(removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
+                        Text(MiamText.sharedInstance.removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
                     }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
                     Divider().padding([.bottom, .top], 10)
                     Button {

@@ -21,7 +21,7 @@ internal struct BasketPreviewFooter: View {
                     Button(action: {
                         removeFromBasketAction()
                     }) {
-                        Text("Retirer du panier").font(.system(size: 16.0, weight: .regular, design: .default))
+                        Text(MiamText.sharedInstance.removeFromBasket).font(.system(size: 16.0, weight: .regular, design: .default))
                     }.foregroundColor(Color.miamColor(.secondaryText))
 
                 }.padding(.horizontal, Dimension.sharedInstance.mPadding).frame(minWidth: 155.0)
@@ -30,7 +30,7 @@ internal struct BasketPreviewFooter: View {
                     Button(action: {
                         continueShoppingAction()
                     }) {
-                        Text("Continuer mes achats").font(.system(size: 16.0, weight: .bold, design: .default))
+                        Text(MiamText.sharedInstance.keepShopping).font(.system(size: 16.0, weight: .bold, design: .default))
                     }.foregroundColor(Color.miamColor(.white)).padding(.horizontal, Dimension.sharedInstance.sPadding)
                 }.frame(maxWidth: .infinity)
                     .frame(height: 64.0)

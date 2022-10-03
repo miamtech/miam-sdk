@@ -14,18 +14,12 @@ public struct CatalogRecipePageNoResultsView: View {
     let browseCatalogAction: () -> Void
     var showingFavorites = false
 
-    let noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
-    let tryAnotherSearchText = "Essayez une nouvelle recherche"
-    let browseRecipesText = "Parcourir les idées repas"
-    let addRecipeText = "Ajouter une idée repas"
-    let noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
-
     public var body: some View {
         VStack(spacing: 32.0) {
             Image.miamImage(icon: .noResults)
             
             if showingFavorites {
-                Text(noFavoritRecipeYet)
+                Text(MiamText.sharedInstance.noFavoritRecipeYet)
                     .fontWeight(.bold)
                     .font(.system(size: 24.0))
                     .multilineTextAlignment(.center)
@@ -33,19 +27,19 @@ public struct CatalogRecipePageNoResultsView: View {
                 Button {
                     browseCatalogAction()
                 } label: {
-                    Text("\(browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
+                    Text("\(MiamText.sharedInstance.browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
                     Image.miamImage(icon: .rightArrow)
                 }
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .background(Capsule().foregroundColor(.white))
                 .overlay(Capsule().stroke(.white, lineWidth: 1.0))
             } else {
-                Text("\(noRecipeFoundText) \"\(searchString)\"")
+                Text("\(MiamText.sharedInstance.noRecipeFoundText) \"\(searchString)\"")
                     .fontWeight(.bold)
                     .font(.system(size: 24.0))
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color.miamColor(.white))
-                    Text("\(tryAnotherSearchText)")
+                Text("\(MiamText.sharedInstance.tryAnotherSearchText)")
                         .font(.system(size: 16.0))
                         .foregroundColor(Color.miamColor(.white))
             }
