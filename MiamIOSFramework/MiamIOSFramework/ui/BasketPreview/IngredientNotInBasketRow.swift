@@ -14,7 +14,6 @@ struct IngredientNotInBasketRow: View {
     let name: String
     let addIngredientAction: () -> Void
     let isAddable: Bool
-    private let addIngredientText = "Ajouter"
     var body: some View {
         if (Template.sharedInstance.ingredientNotInBasketRowTemplate != nil) {
             Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, addIngredientAction)
@@ -32,7 +31,7 @@ struct IngredientNotInBasketRow: View {
                         .aspectRatio( contentMode: .fit)
                         .frame(width: 30, height: 30, alignment: .center)
                         .foregroundColor(Color.miamColor(.primary))
-                    Text(addIngredientText)
+                    Text(MiamText.sharedInstance.addIngredientText)
                         .font(.system(size: 16.0, weight: .bold, design: .default))
                         .foregroundColor(Color.miamColor(.primary))
                 }

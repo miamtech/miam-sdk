@@ -17,7 +17,7 @@ public class MiamText {
     public var cookTime = "Temps de cuisson"
     public var checkBasketPreview = "Ajouter les ingrédients"
     public var currency = "€"
-    public var ingredient = "Ingredients"
+    public var ingredients = "ingredients"
     public var preGuests = "par personne"
     public var recipeFlag = "Idée repas"
     public var replaceBy = "Remplacer cet article par : "
@@ -43,6 +43,30 @@ public class MiamText {
     public var noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
     public var tryAnotherSearchText = "Essayez une nouvelle recherche"
     public var addRecipeText = "Ajouter une idée repas"
+    
+    public var filtersTitle = "Affiner ma sélection"
+    public var filtersDifficultySectionTitle = "Difficulté"
+    public var filterCostSectionTitle = "Coût par personne"
+    public var filterPreparationTimeSectionTitle = "Temps de préparation"
+    public var removeFiltersButtonTitle = "Retirer les filtres"
+    
+    public var noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
+    public var search = "Rechercher"
+    public var showAll = "Tout voir"
+    public var mealIdeas = "Idées repas en 1 clic"
+    public var myMealIdeas = "Mes idées repas"
+   
+    public var noMealIdeaInBasket = "Vous n'avez aucune idée repas dans votre panier."
+    public var addIngredientText = "Ajouter"
+    public var showDetails = "Voir le détail"
+   
+    public var removeFromBasket = "Retirer du panier"
+    public var keepShopping = "Continuer mes achats"
+    
+    public var moreInformation = "Plus d'infos"
+    public var replaceIngredient = "Remplacer"
+   
+    public var persons = "pers."
     
     private init(){}
 }

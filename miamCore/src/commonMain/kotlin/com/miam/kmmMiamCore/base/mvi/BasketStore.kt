@@ -231,7 +231,8 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private suspend fun confirmBasket(basket: Basket, price: String) {
         val eventProps = Analytics.PlausibleProps(
             total_amount = price,
-            miam_amount = basket.attributes!!.totalPrice
+            miam_amount = basket.attributes!!.totalPrice,
+            pos_id = pointOfSaleStore.getPosId().toString()
         )
         analyticsService.sendEvent(Analytics.EVENT_PAYMENT_CONFIRMED, "", eventProps)
         val newBasket =

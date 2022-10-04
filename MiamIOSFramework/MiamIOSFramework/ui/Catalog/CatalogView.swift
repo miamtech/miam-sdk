@@ -168,7 +168,7 @@ internal struct CatalogPackageRow: View {
                     Button {
                         showRecipes(package)
                     } label: {
-                        Text("Tout voir").foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
+                        Text(MiamText.sharedInstance.showAll).foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
                     }
                 }
                 ScrollView(.horizontal) {
@@ -197,7 +197,7 @@ internal struct CatalogViewHeader: View {
 
                 VStack (alignment: .leading) {
                     Spacer()
-                    Text("Idées repas en 1 clic")
+                    Text(MiamText.sharedInstance.mealIdeas)
                         .foregroundColor(.white)
                         .font(.system(size: 20)).bold()
                     Image.miamImage(icon: .yellowUnderline)
@@ -214,8 +214,6 @@ internal struct CatalogViewHeader: View {
 
 @available(iOS 14, *)
 internal struct CatalogToolbarView: View {
-    let myIdeas = "Mes idées repas"
-
     let showBackButton: Bool
     let favoritesFilterActive: Bool
     let backTapped: () -> Void
@@ -274,7 +272,7 @@ internal struct CatalogToolbarView: View {
                             Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
-                            Text(myIdeas).foregroundColor(.white)
+                            Text(MiamText.sharedInstance.myMealIdeas).foregroundColor(.white)
                         }
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))
