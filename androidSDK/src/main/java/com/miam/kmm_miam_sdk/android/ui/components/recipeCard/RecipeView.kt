@@ -41,10 +41,6 @@ class RecipeView @JvmOverloads constructor(
 
     }
 
-    init {
-        // memory leak ?
-        vmRecipe.sideEffect.
-    }
 
     fun unbind() {
         vmRecipe.unsetRecipe()

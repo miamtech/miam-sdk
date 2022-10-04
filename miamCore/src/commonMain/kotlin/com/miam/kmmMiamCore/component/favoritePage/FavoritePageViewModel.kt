@@ -1,10 +1,13 @@
 package com.miam.kmmMiamCore.component.favoritePage
 
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.LikeEffect
+import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -20,9 +23,23 @@ open class FavoritePageViewModel :
     }
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val likeStore: LikeStore by inject()
 
     init {
         loadPage()
+        launch(coroutineHandler) {
+            likeStore.observeSideEffect().collect { effect ->
+                if (effect is LikeEffect.Disliked) {
+                    val index =
+                        getCurrentRecipes().indexOfFirst { recipe -> recipe.id == effect.recipeId }
+                    if (index != -1) {
+                        removeIndex(index)
+                    }
+                } else if (effect is LikeEffect.LikeRecipe) {
+                    insertRecipe(effect.recipe)
+                }
+            }
+        }
     }
 
     override fun createInitialState(): FavoritePageContract.State =
@@ -38,7 +55,6 @@ open class FavoritePageViewModel :
             is FavoritePageContract.Event.LoadPage -> loadPage()
         }
     }
-
 
     private fun loadPage() {
         if (currentState.noMoreData) return
@@ -87,5 +103,29 @@ open class FavoritePageViewModel :
             return favoritesRecipes.data
         }
         return listOf()
+    }
+
+    private fun removeIndex(indexToRemove: Int) {
+        val newList = this.getCurrentRecipes().toMutableList()
+        newList.removeAt(indexToRemove)
+
+        val uiState =
+            if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
+
+        setState {
+            copy(
+                favoritesRecipes = uiState
+            )
+        }
+    }
+
+    private fun insertRecipe(recipe: Recipe) {
+        val newList = this.getCurrentRecipes().toMutableList()
+        newList.add(recipe)
+        setState {
+            copy(
+                favoritesRecipes = BasicUiState.Success(newList.toList())
+            )
+        }
     }
 }

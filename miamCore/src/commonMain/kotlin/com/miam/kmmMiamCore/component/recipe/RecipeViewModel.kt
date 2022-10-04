@@ -29,6 +29,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
+    private val likeStore: LikeStore by inject()
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
     val sideEffect: MutableSharedFlow<RecipeContract.Effect> = MutableSharedFlow()
@@ -192,6 +193,12 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
 
     private fun toggleLike() {
         // TODO : make it loading and manage it on success with invokeOnCompletion
+
+        if (currentState.isLiked) {
+            likeStore.emitEffect(LikeEffect.Disliked(currentState.recipe?.id ?: ""))
+        } else {
+            likeStore.emitEffect(LikeEffect.LikeRecipe(currentState.recipe!!))
+        }
 
         setState { copy(isLiked = !currentState.isLiked) }
         val currentRecipe = this.recipe
