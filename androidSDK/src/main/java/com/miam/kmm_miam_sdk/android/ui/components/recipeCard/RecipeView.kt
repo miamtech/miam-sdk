@@ -5,7 +5,11 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
@@ -28,8 +32,7 @@ class RecipeView @JvmOverloads constructor(
     fun bind(
         recipeId: String = "",
         criteria: SuggestionsCriteria? = null,
-        recipe: Recipe? = null,
-        onDislike: () -> Unit = {}
+        recipe: Recipe? = null
     ) {
         if (recipeId != "") {
             vmRecipe.fetchRecipe(recipeId)
@@ -40,7 +43,6 @@ class RecipeView @JvmOverloads constructor(
         }
 
     }
-
 
     fun unbind() {
         vmRecipe.unsetRecipe()

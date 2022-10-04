@@ -109,8 +109,7 @@ open class FavoritePageViewModel :
         val newList = this.getCurrentRecipes().toMutableList()
         newList.removeAt(indexToRemove)
 
-        val uiState =
-            if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
+        val uiState = if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
 
         setState {
             copy(
