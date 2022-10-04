@@ -1,7 +1,7 @@
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
-- [FIX][IOS] Add CTA in empty favorite page 
+- [FIX][IOS] Add CTA in empty favorite page
 - [FIX][IOS] Catalog filter is now a scrollable view
 - [FEA][IOS] Add stand alone favorite page
 - [FEA][AND] Improve recipe card view
@@ -14,7 +14,8 @@
 - [FEA][COR] Simplifying Price ViewModel
 - [FEA][COR] Change category navigation event on Catalog ViewModel
 - [FEA][COR] Exposition of catalog categories list
-- [FIX][COR] Gests counter block at 1 or 100 
+- [FIX][COR] Gests counter block at 1 or 100
+- [FIX][COR] Analytics add pos id to confirm event
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
