@@ -15,38 +15,42 @@ public struct CatalogRecipePageNoResultsView: View {
     var showingFavorites = false
 
     public var body: some View {
-        VStack(spacing: 32.0) {
-            Image.miamImage(icon: .noResults)
-            
-            if showingFavorites {
-                Text(MiamText.sharedInstance.noFavoritRecipeYet)
-                    .fontWeight(.bold)
-                    .font(.system(size: 24.0))
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.miamColor(.white))
-                Button {
-                    browseCatalogAction()
-                } label: {
-                    Text("\(MiamText.sharedInstance.browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
-                    Image.miamImage(icon: .rightArrow)
-                }
-                .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-                .background(Capsule().foregroundColor(.white))
-                .overlay(Capsule().stroke(.white, lineWidth: 1.0))
-            } else {
-                Text("\(MiamText.sharedInstance.noRecipeFoundText) \"\(searchString)\"")
-                    .fontWeight(.bold)
-                    .font(.system(size: 24.0))
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.miamColor(.white))
-                Text("\(MiamText.sharedInstance.tryAnotherSearchText)")
+        if let template = Template.sharedInstance.catalogRecipePageNoResultsViewTemplate {
+            template(searchString, browseCatalogAction, showingFavorites)
+        } else {
+            VStack(spacing: 32.0) {
+                Image.miamImage(icon: .noResults)
+                
+                if showingFavorites {
+                    Text(MiamText.sharedInstance.noFavoritRecipeYet)
+                        .fontWeight(.bold)
+                        .font(.system(size: 24.0))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color.miamColor(.white))
+                    Button {
+                        browseCatalogAction()
+                    } label: {
+                        Text("\(MiamText.sharedInstance.browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
+                        Image.miamImage(icon: .rightArrow)
+                    }
+                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                    .background(Capsule().foregroundColor(.white))
+                    .overlay(Capsule().stroke(.white, lineWidth: 1.0))
+                } else {
+                    Text("\(MiamText.sharedInstance.noRecipeFoundText) \"\(searchString)\"")
+                        .fontWeight(.bold)
+                        .font(.system(size: 24.0))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color.miamColor(.white))
+                    Text("\(MiamText.sharedInstance.tryAnotherSearchText)")
                         .font(.system(size: 16.0))
                         .foregroundColor(Color.miamColor(.white))
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(10)
+            .background(Color.miamColor(.primaryDark))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(10)
-        .background(Color.miamColor(.primaryDark))
     }
 }
 
