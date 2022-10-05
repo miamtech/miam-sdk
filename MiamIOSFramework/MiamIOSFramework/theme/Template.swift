@@ -247,9 +247,19 @@ public class Template {
         (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
     
+    
     /**
-     
+     favoriteRecipes: [Recipe]
+     loadMoreContentAction: () -> Void
+     */
+    public var favoritesSuccessViewTemplate: ((
+        [Recipe],
+        () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
      */
     public var favoritesEmptyViewTemplate: ((
+        
     ) -> AnyView)? = nil
 }

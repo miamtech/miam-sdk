@@ -13,12 +13,16 @@ struct FavoritesSuccessView: View {
     let favorites: [Recipe]
     let loadMoreRecipes: () -> Void
     var body: some View {
-        ScrollView(showsIndicators: true) {
-            LazyVStack {
-                ForEach(favorites, id: \.self) { favoriteRecipe in
-                    RecipeCardView(recipeId: favoriteRecipe.id)
-                }.padding(.top, Dimension.sharedInstance.lPadding)
-            }
-        }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
+        if let template = Template.sharedInstance.favoritesSuccessViewTemplate {
+            template(favorites, loadMoreRecipes)
+        } else {
+            ScrollView(showsIndicators: true) {
+                LazyVStack {
+                    ForEach(favorites, id: \.self) { favoriteRecipe in
+                        RecipeCardView(recipeId: favoriteRecipe.id)
+                    }.padding(.top, Dimension.sharedInstance.lPadding)
+                }
+            }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
+        }
     }
 }
