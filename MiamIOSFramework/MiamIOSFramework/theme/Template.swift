@@ -203,6 +203,17 @@ public class Template {
         () -> Void,
         () -> Void
     ) -> AnyView)? = nil
+   
+    /**
+     searchString: String
+     browseCatalogAction: () -> Void
+     showingFavorites = false
+     */
+    public var catalogRecipePageNoResultsViewTemplate: ((
+        String,
+        () -> Void,
+        Bool
+    ) -> AnyView)? = nil
     
     /**
      package: CatalogPackage
