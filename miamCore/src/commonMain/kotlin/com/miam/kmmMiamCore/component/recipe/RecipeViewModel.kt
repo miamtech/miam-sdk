@@ -32,7 +32,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     private val likeStore: LikeStore by inject()
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
-    val sideEffect: MutableSharedFlow<RecipeContract.Effect> = MutableSharedFlow()
+
 
     private val recipe: Recipe?
         get() = this.currentState.recipe
@@ -197,15 +197,12 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         if (currentState.isLiked) {
             likeStore.emitEffect(LikeEffect.Disliked(currentState.recipe?.id ?: ""))
         } else {
-            likeStore.emitEffect(LikeEffect.LikeRecipe(currentState.recipe!!))
+            likeStore.emitEffect(LikeEffect.Liked(currentState.recipe!!))
         }
 
         setState { copy(isLiked = !currentState.isLiked) }
         val currentRecipe = this.recipe
         launch(coroutineHandler) {
-            if (!currentState.isLiked) {
-                sideEffect.emit(RecipeContract.Effect.Disliked)
-            }
             setRecipe(recipeRepositoryImp.toggleLike(currentRecipe!!))
         }
     }

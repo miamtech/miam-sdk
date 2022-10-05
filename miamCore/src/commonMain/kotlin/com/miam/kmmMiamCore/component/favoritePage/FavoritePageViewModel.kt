@@ -27,19 +27,7 @@ open class FavoritePageViewModel :
 
     init {
         loadPage()
-        launch(coroutineHandler) {
-            likeStore.observeSideEffect().collect { effect ->
-                if (effect is LikeEffect.Disliked) {
-                    val index =
-                        getCurrentRecipes().indexOfFirst { recipe -> recipe.id == effect.recipeId }
-                    if (index != -1) {
-                        removeIndex(index)
-                    }
-                } else if (effect is LikeEffect.LikeRecipe) {
-                    insertRecipe(effect.recipe)
-                }
-            }
-        }
+        listenToLikeStoreEffects()
     }
 
     override fun createInitialState(): FavoritePageContract.State =
@@ -105,26 +93,33 @@ open class FavoritePageViewModel :
         return listOf()
     }
 
-    private fun removeIndex(indexToRemove: Int) {
-        val newList = this.getCurrentRecipes().toMutableList()
-        newList.removeAt(indexToRemove)
-
-        val uiState = if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
-
-        setState {
-            copy(
-                favoritesRecipes = uiState
-            )
+    private fun listenToLikeStoreEffects() {
+        launch(coroutineHandler) {
+            likeStore.observeSideEffect().collect { effect ->
+                if (effect is LikeEffect.Disliked) {
+                    removeRecipe(effect.recipeId)
+                } else if (effect is LikeEffect.Liked) {
+                    insertRecipe(effect.recipe)
+                }
+            }
         }
     }
 
+    private fun removeRecipe(recipeId: String) {
+        val indexToRemove = getCurrentRecipes().indexOfFirst { recipe -> recipe.id == recipeId }
+        if (indexToRemove == -1) return
+        val newList = this.getCurrentRecipes().toMutableList()
+        newList.removeAt(indexToRemove)
+        val uiState =
+            if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
+        setState { copy(favoritesRecipes = uiState) }
+    }
+
     private fun insertRecipe(recipe: Recipe) {
+        val indexToRemove = getCurrentRecipes().indexOfFirst { recip -> recip.id == recipe.id }
+        if (indexToRemove != -1) return
         val newList = this.getCurrentRecipes().toMutableList()
         newList.add(recipe)
-        setState {
-            copy(
-                favoritesRecipes = BasicUiState.Success(newList.toList())
-            )
-        }
+        setState { copy(favoritesRecipes = BasicUiState.Success(newList.toList())) }
     }
 }
