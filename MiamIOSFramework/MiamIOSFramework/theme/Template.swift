@@ -192,7 +192,18 @@ public class Template {
     public var catalogViewTemplate: ((
         CatalogVM
     ) -> AnyView)? = nil
-
+    
+    /**
+     catalog: CatalogVM
+     close: () -> Void
+     search: () -> Void
+     */
+    public var catalogSearchViewTemplate: ((
+        CatalogVM,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+    
     /**
      package: CatalogPackage
      showRecipes: (CatalogPackage) -> Void
