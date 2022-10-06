@@ -89,7 +89,6 @@ class FavoritePage @JvmOverloads constructor(
     ) {
         LazyColumn(
             modifier = favoriteMainContainer,
-//            contentPadding = spaceBetweenRecipe as PaddingValues
         ) {
             itemsIndexed(favoritesRecipes) { index, item ->
                 val recipe = RecipeView(context = context)

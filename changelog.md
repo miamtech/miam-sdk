@@ -14,7 +14,8 @@
 - [FEA][COR] Simplifying Price ViewModel
 - [FEA][COR] Change category navigation event on Catalog ViewModel
 - [FEA][COR] Exposition of catalog categories list
-- [FIX][COR] Gests counter block at 1 or 100
+- [FIX][COR] Gests counter block at 1 or 100 
+- [FIX][COR] Dynamic stand alone favorite page controleur
 - [FIX][COR] Analytics add pos id to confirm event
 
 ## 2.2.6
