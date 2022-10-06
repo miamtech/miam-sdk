@@ -59,10 +59,7 @@ open class FavoritePageViewModel :
                 currentPage
             )
             newRecipes.addAll(fetchedRecipes)
-            val uiState =
-                if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
-                    newRecipes
-                )
+            val uiState = if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success( newRecipes )
             setState {
                 copy(
                     favoritesRecipes = uiState,
@@ -110,14 +107,13 @@ open class FavoritePageViewModel :
         if (indexToRemove == -1) return
         val newList = this.getCurrentRecipes().toMutableList()
         newList.removeAt(indexToRemove)
-        val uiState =
-            if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
+        val uiState = if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
         setState { copy(favoritesRecipes = uiState) }
     }
 
     private fun insertRecipe(recipe: Recipe) {
-        val indexToRemove = getCurrentRecipes().indexOfFirst { recip -> recip.id == recipe.id }
-        if (indexToRemove != -1) return
+        val recipeIndex = getCurrentRecipes().indexOfFirst { recip -> recip.id == recipe.id }
+        if (recipeIndex != -1) return
         val newList = this.getCurrentRecipes().toMutableList()
         newList.add(recipe)
         setState { copy(favoritesRecipes = BasicUiState.Success(newList.toList())) }

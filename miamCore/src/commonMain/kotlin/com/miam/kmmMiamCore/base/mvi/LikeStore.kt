@@ -24,8 +24,6 @@ class LikeStore : CoroutineScope by CoroutineScope(Dispatchers.Main) {
     fun observeSideEffect(): Flow<LikeEffect> = sideEffect
 
     fun emitEffect(le: LikeEffect) {
-        launch(coroutineHandler) {
-            sideEffect.emit(le)
-        }
+        launch(coroutineHandler) { sideEffect.emit(le)}
     }
 }
