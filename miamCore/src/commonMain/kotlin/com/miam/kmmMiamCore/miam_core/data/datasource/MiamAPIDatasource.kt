@@ -214,6 +214,7 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
+        size: Int,
         criteria: SuggestionsCriteria,
         included: List<String>
     ): List<Recipe> {
@@ -224,6 +225,7 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria $returnValue")
         return returnValue.map { record -> record as Recipe }
     }
+
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeNumberOfResult $filter&page[size]=1")

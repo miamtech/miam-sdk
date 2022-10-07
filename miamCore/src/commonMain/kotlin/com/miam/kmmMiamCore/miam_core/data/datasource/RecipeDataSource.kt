@@ -28,6 +28,7 @@ interface RecipeDataSource {
 
     suspend fun getRecipeSuggestions(
         supplierId: Int,
+        size: Int = 1,
         criteria: SuggestionsCriteria,
         included: List<String> = listOf()
     ): List<Recipe>

@@ -157,7 +157,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
             pointOfSaleStore.observeState().value.idSupplier?.let { supplierId ->
-                setRecipe(recipeRepositoryImp.getRecipeSuggestions(supplierId, criteria))
+                setRecipe(recipeRepositoryImp.getRecipeSuggestion(supplierId, criteria))
             }
         }
     }

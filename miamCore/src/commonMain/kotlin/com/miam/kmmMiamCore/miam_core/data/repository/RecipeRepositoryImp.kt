@@ -52,17 +52,33 @@ class RecipeRepositoryImp(
         return addRecipeLikes(recipes)
     }
 
-    override suspend fun getRecipeSuggestions(
+    override suspend fun getRecipeSuggestion(
         supplierId: Int,
         criteria: SuggestionsCriteria
     ): Recipe {
         val recipes = recipeDataSource.getRecipeSuggestions(
             supplierId,
+            1,
             criteria,
             listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
         )
         // TODO : WARNING what if list is empty !!??
         return addRecipeLike(recipes[0])
+    }
+
+    override suspend fun getRecipeSuggestions(
+        supplierId: Int,
+        criteria: SuggestionsCriteria,
+        size: Int
+    ): List<Recipe> {
+        val recipes = recipeDataSource.getRecipeSuggestions(
+            supplierId,
+            size,
+            criteria,
+            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+        )
+        // TODO : WARNING what if list is empty !!??
+        return recipes.map { addRecipeLike(it) }
     }
 
     suspend fun addRecipeLikes(recipeList: List<Recipe>): List<Recipe> {
