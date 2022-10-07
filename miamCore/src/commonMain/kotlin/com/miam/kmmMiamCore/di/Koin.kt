@@ -1,6 +1,11 @@
 package com.miam.kmmMiamCore.di
 
-import com.miam.kmmMiamCore.base.mvi.*
+import Filter
+import com.miam.kmmMiamCore.base.mvi.BasketStore
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.LikeStore
+import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.ContextHandler
@@ -57,4 +62,5 @@ val storeModule = module {
 
 val servicesModule = module {
     single { Analytics() }
+    single { Filter() }
 }

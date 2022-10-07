@@ -1,3 +1,6 @@
+## 3.0.0
+- [FEA][COR] Singleton catalog filter service
+
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
