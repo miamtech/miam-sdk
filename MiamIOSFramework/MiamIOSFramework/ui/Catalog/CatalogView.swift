@@ -34,72 +34,68 @@ public struct CatalogView: View {
     }
 
     public var body: some View {
-        if (Template.sharedInstance.catalogViewTemplate != nil) {
-            Template.sharedInstance.catalogViewTemplate!(catalog)
-        } else {
-            VStack(alignment: .center, spacing: 0.0) {
-                CatalogViewHeader()
-                    .frame(height: catalog.content == .categories ? 60.0 : 0.0)
+        VStack(alignment: .center, spacing: 0.0) {
+            CatalogViewHeader()
+                .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
-                CatalogToolbarView(showBackButton: (catalog.content != .categories),
-                                   favoritesFilterActive: showingFavorites) {
-                    catalog.setEvent(event: CatalogContractEvent.GoToDefault())
-                    showingFavorites = false
-                    headerHeight = 50.0
-                } filtersTapped: {
-                    // TODO: remove call to toggle
-                    catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
-                    showingFilters = true
-                } searchTapped: {
-                    // TODO: remove call to toggle
-                    catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
-                    showingSearch = true
-                } favoritesTapped: {
-                    catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
-                    showingFavorites = true
-                }
-                if let catalogState = catalog.state {
-                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(
-                        resourceState: catalogState.categories,
-                        successView: CatalogSuccessView(
-                            recipeListPageViewModel: catalog.recipePageViewModel,
-                            packages: catalog.packages,
-                            content: catalog.content,
-                            showingPackageRecipes: $showingPackageRecipes,
-                            showingFavorites: $showingFavorites,
-                            headerHeight: $headerHeight,
-                            searchString: catalog.searchString,
-                            browseCatalogAction: {
-                                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
-                            }, navigateToRecipeAction: { package in
-                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
-                            }),
-                        loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                        emptyView: CatalogEmptyView())
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }.sheet(isPresented: $showingSearch, onDismiss: {
-                // TODO: remove call to toggle
-                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
-            }) {
-                CatalogSearchView(catalog: catalog, close: {
-                    showingSearch = false
-                }) {
-                    showingSearch = false
-                    catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
-                    catalog.fetchRecipes()
-                }
-            }.sheet(isPresented: $showingFilters, onDismiss: {
+            CatalogToolbarView(showBackButton: (catalog.content != .categories),
+                               favoritesFilterActive: showingFavorites) {
+                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                showingFavorites = false
+                headerHeight = 50.0
+            } filtersTapped: {
                 // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+                showingFilters = true
+            } searchTapped: {
+                // TODO: remove call to toggle
+                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+                showingSearch = true
+            } favoritesTapped: {
+                catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
+                showingFavorites = true
+            }
+            if let catalogState = catalog.state {
+                ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(
+                    resourceState: catalogState.categories,
+                    successView: CatalogSuccessView(
+                        recipeListPageViewModel: catalog.recipePageViewModel,
+                        packages: catalog.packages,
+                        content: catalog.content,
+                        showingPackageRecipes: $showingPackageRecipes,
+                        showingFavorites: $showingFavorites,
+                        headerHeight: $headerHeight,
+                        searchString: catalog.searchString,
+                        browseCatalogAction: {
+                            catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                        }, navigateToRecipeAction: { package in
+                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
+                        }),
+                    loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
+                    emptyView: CatalogEmptyView())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }.sheet(isPresented: $showingSearch, onDismiss: {
+            // TODO: remove call to toggle
+            catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+        }) {
+            CatalogSearchView(catalog: catalog, close: {
+                showingSearch = false
             }) {
-                CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
-                    showingFilters = false
-                    self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
-                    catalog.fetchRecipes()
-                } close: {
-                    showingFilters = false
-                }
+                showingSearch = false
+                catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
+                catalog.fetchRecipes()
+            }
+        }.sheet(isPresented: $showingFilters, onDismiss: {
+            // TODO: remove call to toggle
+            catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+        }) {
+            CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
+                showingFilters = false
+                self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
+                catalog.fetchRecipes()
+            } close: {
+                showingFilters = false
             }
         }
     }
@@ -133,21 +129,26 @@ internal struct CatalogSuccessView: View {
     }
     
     var body: some View {
-        if case .categories = catalogContent {
-            ScrollView {
-                VStack {
-                    ForEach(packages) { package in
-                        CatalogPackageRow(package: package) { package in
-                            navigateToRecipeAction(package.package)
+        if let template = Template.sharedInstance.catalogSuccessViewTemplate {
+            template(recipeListPageViewModel, packages, catalogContent, $showingPackageRecipes,
+                     $showingFavorites, $headerHeight, searchString, browseCatalogAction, navigateToRecipeAction)
+        } else {
+            if case .categories = catalogContent {
+                ScrollView {
+                    VStack {
+                        ForEach(packages) { package in
+                            CatalogPackageRow(package: package) { package in
+                                navigateToRecipeAction(package.package)
+                            }
                         }
                     }
+                }.padding([.top], Dimension.sharedInstance.lPadding)
+            } else {
+                if let recipeListPageViewModel  = recipeListPageViewModel {
+                    RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
+                        browseCatalogAction()
+                    }, searchString: searchString, showingFavorites: showingFavorites)
                 }
-            }.padding([.top], Dimension.sharedInstance.lPadding)
-        } else {
-            if let recipeListPageViewModel  = recipeListPageViewModel {
-                RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
-                    browseCatalogAction()
-                }, searchString: searchString, showingFavorites: showingFavorites)
             }
         }
     }

@@ -198,10 +198,26 @@ public class Template {
 
 
     /**
-     catalogViewModel: CatalogVM
+     recipeListPageViewModel: RecipeListPageViewModel?
+     packages: [CatalogPackage]
+     catalogContent: CatalogModelContent
+     Binding var showingPackageRecipes: Bool
+     Binding var showingFavorites: Bool
+     Binding var headerHeight: Double
+     searchString: String
+     browseCatalogAction: () -> Void
+     navigateToRecipeAction: (Package) -> Void
      */
-    public var catalogViewTemplate: ((
-        CatalogVM
+    public var catalogSuccessViewTemplate: ((
+        RecipeListPageViewModel?,
+        [CatalogPackage],
+        CatalogModelContent,
+        Binding<Bool>,
+        Binding<Bool>,
+        Binding<Double>,
+        String,
+        () -> Void,
+        (Package) -> Void
     ) -> AnyView)? = nil
     
     /**
