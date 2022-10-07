@@ -92,6 +92,8 @@ fun EntryLine(
                 entry.picture,
                 count,
                 sharingCount.toString(),
+                entry.price,
+                (entry.record as BasketEntry).relationships!!.items!!.data.size,
                 { delete() },
                 { replace() },
                 { increaseQty() },
@@ -162,7 +164,7 @@ fun EntryLine(
 
 @Composable
 fun EntryPriceAndActionRow(
-    numberOfRecipe: Int,
+    itemsCount: Int,
     price: Double,
     count: Int,
     increaseQty: () -> Unit,
@@ -175,7 +177,7 @@ fun EntryPriceAndActionRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (numberOfRecipe > 1) {
+        if (itemsCount > 1) {
             Clickable(
                 onClick = { replace() },
                 children = {

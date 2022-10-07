@@ -10,7 +10,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -49,7 +53,7 @@ fun expendableEntryLine(
     Column {
         if (Template.basketPreviewExpendHeaderTemplate != null) {
             Template.basketPreviewExpendHeaderTemplate?.let {
-                it(expandedState) { toggle() }
+                it(expandedState, title) { toggle() }
             }
         } else {
             Box(
