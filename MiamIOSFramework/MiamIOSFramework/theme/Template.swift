@@ -64,13 +64,24 @@ public class Template {
 
     
     /**
-     closeDetail : () -> Unit
-     recipe : Recipe
-     
+     mediaURL: String?
+     title: String
+     difficulty: Int
+     totalTime: String
+     showTitleInHeader: Bool
+     isLikeEnabled: Bool
+     isLiked: Bool
+     likeAction: () -> Void
      */
-    public var recipeDetailHeaderTemplate : ((
-             _: @escaping  () -> Void,
-            _: Recipe
+    public var recipeDetailsHeaderTemplate : ((
+            String?,
+            String,
+            Int,
+            String,
+            Binding<Bool>,
+            Bool,
+            Bool,
+            () -> Void
                 ) -> AnyView
         )? = nil
     
