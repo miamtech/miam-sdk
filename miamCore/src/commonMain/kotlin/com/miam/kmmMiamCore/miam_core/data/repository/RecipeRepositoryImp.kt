@@ -58,9 +58,8 @@ class RecipeRepositoryImp(
     ): Recipe {
         val recipes = recipeDataSource.getRecipeSuggestions(
             supplierId,
-            1,
-            criteria,
-            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+            criteria = criteria,
+            included = listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
         )
         // TODO : WARNING what if list is empty !!??
         return addRecipeLike(recipes[0])
@@ -77,7 +76,6 @@ class RecipeRepositoryImp(
             criteria,
             listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
         )
-        // TODO : WARNING what if list is empty !!??
         return recipes.map { addRecipeLike(it) }
     }
 

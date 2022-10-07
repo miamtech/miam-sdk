@@ -15,8 +15,7 @@ class RecipeCarouselViewModel :
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
-
-
+    
     override fun createInitialState(): RecipeCarouselContract.State = RecipeCarouselContract.State(
         suggestions = BasicUiState.Loading,
     )

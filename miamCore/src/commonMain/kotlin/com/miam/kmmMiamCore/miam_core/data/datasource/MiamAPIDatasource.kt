@@ -214,7 +214,7 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
-        size: Int,
+        size: Int?,
         criteria: SuggestionsCriteria,
         included: List<String>
     ): List<Recipe> {
