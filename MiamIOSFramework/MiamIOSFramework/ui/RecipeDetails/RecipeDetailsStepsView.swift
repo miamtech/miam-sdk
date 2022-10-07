@@ -35,7 +35,7 @@ struct RecipeDetailsStepsView: View {
                     ForEach(steps, id: \.self) { step in
                         let index = Int(step.attributes!.stepNumber)
                         let isChecked = activeStep > index
-                        StepRow(
+                        RecipeDetailsStepRow(
                             index: index,
                             step: step,
                             isCheck: isChecked,

@@ -112,7 +112,7 @@ public class Template {
      steps : [RecipeStep],
      */
     public  var recipeDetailStepsViewTemplate :  ((
-        [RecipeStep],
+        [RecipeStep]
     ) -> AnyView )? =  nil
     
     /**
