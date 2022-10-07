@@ -93,27 +93,27 @@ public class Template {
         )? = nil
         
     /**
-     ingredients: [Ingredient],
-     vmRecipe : RecipeViewModel
-     guest: count,
-     increase function
-     decrese function
+     ingredients: [Ingredient]
+     recipeGuests: Int
+     currentGuests: Int
+     increaseGuestsAction: () -> Void
+     decreaseGuestsAction: () -> Void
      */
-    public  var recipeDetailIngredientsTemplate : ( (
-            _: [Ingredient],
-            _: RecipeViewModel,
-            _ : Int,
-            _ : @escaping () -> Void,
-            _ : @escaping () -> Void
-                ) -> AnyView )? = nil
+    public  var recipeDetailsIngredientsViewTemplate : ( (
+        [Ingredient],
+        Int,
+        Int,
+        () -> Void,
+        () -> Void
+    ) -> AnyView )? = nil
+    
+    
     /**
      steps : [RecipeStep],
-     vmRecipe : RecipeViewModel
      */
-    public  var recipeDetailStepsTemplate :  ((
-            _ : [RecipeStep],
-            _ : RecipeViewModel
-                ) -> AnyView )? =  nil
+    public  var recipeDetailStepsViewTemplate :  ((
+        [RecipeStep],
+    ) -> AnyView )? =  nil
     
     /**
      recipe: Recipe,

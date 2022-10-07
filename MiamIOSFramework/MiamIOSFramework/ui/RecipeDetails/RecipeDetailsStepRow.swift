@@ -9,7 +9,7 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct StepRow: View {
+struct RecipeDetailsStepRow: View {
     
     private var index : Int
     private var step : RecipeStep
