@@ -34,8 +34,8 @@ struct RecipeCardSuccessView: View {
     }
     
     var body: some View {
-        if (Template.sharedInstance.recipeCardTemplate != nil) {
-            Template.sharedInstance.recipeCardTemplate!(
+        if let template = Template.sharedInstance.recipeCardSuccessViewTemplate {
+            template(
                 viewModel,
                 {
                     viewModel.goToDetail()
@@ -53,7 +53,8 @@ struct RecipeCardSuccessView: View {
                     } else if (criteria != nil) {
                         viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
                     }
-                })
+                }
+            )
         } else {
             VStack() {
                 if(viewModel.recipe ?? nil != nil) {

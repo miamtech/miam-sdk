@@ -22,7 +22,7 @@ public class Template {
          look : ( ) -> Void
          buy: () -> Void
      */
-    public var recipeCardTemplate : ((_: RecipeCardVM,
+    public var recipeCardSuccessViewTemplate : ((_: RecipeCardVM,
                                       _ : @escaping () -> Void,
                                       _ : @escaping () -> Void)  -> AnyView)? = nil
     
@@ -31,7 +31,7 @@ public class Template {
      Second parameter is decrese function
      Third parameter is increase function
      */
-    public var counterTemplate : ((_ : Int,
+    public var counterViewTemplate : ((_ : Int,
                                    _ : @escaping () -> Void,
                                    _ : @escaping () -> Void)  -> AnyView)? = nil
     
@@ -39,7 +39,7 @@ public class Template {
      Second parameter Int is de interger part of the price
      First parameter Int is decimal part of the price
      */
-    public var priceTemplate : ((_ : Int,_ : Int )  -> AnyView)? = nil
+    public var priceViewTemplate : ((_ : Int,_ : Int )  -> AnyView)? = nil
     
     /// ItemSelector Templates
     
