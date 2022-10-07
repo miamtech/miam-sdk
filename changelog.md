@@ -17,6 +17,7 @@
 - [FIX][COR] Gests counter block at 1 or 100 
 - [FIX][COR] Dynamic stand alone favorite page controleur
 - [FIX][COR] Analytics add pos id to confirm event
+- [FIX][COR] add params to template
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working

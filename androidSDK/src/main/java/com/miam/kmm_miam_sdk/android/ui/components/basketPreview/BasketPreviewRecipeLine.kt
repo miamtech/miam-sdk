@@ -68,8 +68,10 @@ fun BasketPreviewRecipeLine(
         Template.basketPreviewRecipeLineTemplate?.let {
             it(
                 recipeName,
+                line.picture,
                 recipeDescription,
                 line.picture,
+                line.price,
                 pricePerGuest,
                 count,
                 { goToRecipeDetail() },
