@@ -323,4 +323,13 @@ public class Template {
      */
     public var myMealsEmptyViewTemplate: ((
     ) -> AnyView)? = nil
+    
+    /**
+     isLiked: Bool
+     likeButtonTapped: () -> Void
+     */
+    public var likeButtonTemplate: ((
+        Binding<Bool>,
+        () -> Void
+    ) -> AnyView)? = nil
 }
