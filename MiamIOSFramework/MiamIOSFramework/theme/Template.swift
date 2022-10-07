@@ -295,4 +295,16 @@ public class Template {
     public var favoritesEmptyViewTemplate: ((
         
     ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealsLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealsEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
 }
