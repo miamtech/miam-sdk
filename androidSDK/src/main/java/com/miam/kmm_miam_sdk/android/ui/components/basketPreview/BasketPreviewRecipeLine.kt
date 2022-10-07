@@ -43,23 +43,23 @@ fun BasketPreviewRecipeLine(
     val recipeDescription = line.bplDescription[0]
     val pricePerGuest =
         "${(round(((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()).toDouble()) / 100)}€ /personne"
-    var count by remember { mutableStateOf(line.count) }
+    var guestCount by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail() {
         goToDetail()
     }
 
     fun increase() {
-        if (count != 100) {
-            count++
-            guestUpdate(count)
+        if (guestCount != 100) {
+            guestCount++
+            guestUpdate(guestCount)
         }
     }
 
     fun decrease() {
-        if (count != 0) {
-            count--
-            guestUpdate(count)
+        if (guestCount != 0) {
+            guestCount--
+            guestUpdate(guestCount)
         }
     }
 
@@ -70,10 +70,9 @@ fun BasketPreviewRecipeLine(
                 recipeName,
                 line.picture,
                 recipeDescription,
-                line.picture,
                 line.price,
                 pricePerGuest,
-                count,
+                guestCount,
                 { goToRecipeDetail() },
                 { increase() },
                 { decrease() }
@@ -155,7 +154,7 @@ fun BasketPreviewRecipeLine(
                     )
                 }
                 Counter(
-                    count = count,
+                    count = guestCount,
                     increase = { increase() },
                     decrease = { decrease() },
                     lightMode = false,

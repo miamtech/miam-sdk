@@ -118,7 +118,6 @@ object Template {
         recipeName: String,
         picture: String,
         recipeDescription: String,
-        recipePicture: String,
         price: String,
         pricePerGuest: String,
         guestCount: Int,
