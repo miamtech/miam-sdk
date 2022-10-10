@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components.catalog
+package com.miam.kmm_miam_sdk.android.ui.components.catalogHeader
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -11,6 +11,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,53 +23,56 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.catalog.CatalogContent
-import com.miam.kmmMiamCore.component.catalog.CatalogContract
-import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.CatalogFilter
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.CatalogSearch
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogColor.headerTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.back
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.favorite
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.filter
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.recipeId
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.trait
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
 @Composable
-fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
+fun CatalogHeader(showFullHeader: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
 
-    val showFullHeader = state.content == CatalogContent.DEFAULT
-    val isFavorit = catalogVm.currentState.catalogFilterVM.currentState.isFavorite
+    var filterOpened by remember { mutableStateOf(false) }
+    var searchOpened by remember { mutableStateOf(false) }
+    val catalogFilterVm = CatalogFilterViewModel()
+
 
     fun openFilter() {
-        catalogVm.setEvent(CatalogContract.Event.ToggleFilter)
+        filterOpened = true
+        searchOpened = false
     }
 
     fun openSearch() {
-        catalogVm.setEvent(CatalogContract.Event.ToggleSearch)
+        filterOpened = false
+        searchOpened = true
     }
 
-    fun goToFavorite() {
-        catalogVm.setEvent(CatalogContract.Event.GoToFavorite)
+    fun closeModal() {
+        filterOpened = false
+        searchOpened = false
     }
 
-    fun goToBack() {
-        catalogVm.setEvent(CatalogContract.Event.GoToDefault)
-    }
+    val filter = CatalogFilter(catalogFilterVm, ::closeModal, goToRecipeList)
+    val search = CatalogSearch(catalogFilterVm, ::closeModal, goToRecipeList)
 
     fun getActiveFilterCount(): Int {
-        return catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
+        // (TODO) use filter service
+        return -1
     }
 
     if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-            it(::openFilter, ::openSearch, ::goToFavorite, ::goToBack, ::getActiveFilterCount)
+            it(::openFilter, ::openSearch, goToFavorite, goToBack, ::getActiveFilterCount)
         }
     } else {
         Column(Modifier.background(color = primary)) {
@@ -136,11 +143,11 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                                     .padding(8.dp)
                             )
                             {
-                                Image(
-                                    painter = painterResource(search),
-                                    contentDescription = null,
-                                    colorFilter = ColorFilter.tint(primary),
-                                )
+//                                Image(
+//                                    painter = painterResource(search),
+//                                    contentDescription = null,
+//                                    colorFilter = ColorFilter.tint(primary),
+//                                )
                             }
                         }
                     }
@@ -159,11 +166,11 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                                         .padding(8.dp)
                                 )
                                 {
-                                    Image(
-                                        painter = painterResource(filter),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(primary),
-                                    )
+//                                    Image(
+//                                        painter = painterResource(filter),
+//                                        contentDescription = null,
+//                                        colorFilter = ColorFilter.tint(primary),
+//                                    )
 
                                 }
                             }
