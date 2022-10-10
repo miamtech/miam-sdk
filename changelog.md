@@ -1,4 +1,4 @@
-## 3.0.0
+## 2.4.0
 - [FEA][COR] carousel view model
 
 ## 2.3.0
