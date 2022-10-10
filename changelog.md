@@ -1,6 +1,7 @@
 ## 2.4.0
 - [FEA][COR] carousel view model
-
+- [FEA][AND] recipe carousel component
+ 
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
