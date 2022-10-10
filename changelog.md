@@ -1,3 +1,7 @@
+#### 3.0.0
+- [FEA][AND] Refact catalog header
+
+
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition
