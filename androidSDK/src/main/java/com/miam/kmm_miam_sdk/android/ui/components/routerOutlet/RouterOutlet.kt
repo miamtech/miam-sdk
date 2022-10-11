@@ -124,7 +124,7 @@ fun FullScreen(content: @Composable () -> Unit) {
 
     fun getActualStatusBarHeight(resources: Resources): Int {
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) {
+        if (resourceId > 0 && resources.displayMetrics.density != 0f) {
             return (resources.getDimensionPixelSize(resourceId) / resources.displayMetrics.density).toInt()
         }
         return 0
