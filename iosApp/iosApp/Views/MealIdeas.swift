@@ -2,7 +2,8 @@ import SwiftUI
 import MiamIOSFramework
 import miamCore
 
-struct MealIdeas: View {    
+@available(iOS 15, *)
+struct MealIdeas: View {
     @SwiftUI.State private var recipeCount: Int = 0
     @SwiftUI.State private var showTag: Bool = false
     @SwiftUI.State private var showRecipeCount: Bool = false
@@ -19,8 +20,9 @@ struct MealIdeas: View {
             Color.white.edgesIgnoringSafeArea(.all)
             NavigationView {
                 VStack {
-                    ScrollView {
+                    ScrollView {             
                         Button("toggle tag", action: { showTag = !showTag})
+                        CategoriesMenu(categorie: MiamManager.sharedInstance.categories)                                  
                         VStack(spacing: 24.0) {
                             if(showTag){
                                 BasketTag(itemId: "1088020")
@@ -45,6 +47,7 @@ struct MealIdeas: View {
         }
     }
 
+    @available(iOS 15, *)
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             MealIdeas()

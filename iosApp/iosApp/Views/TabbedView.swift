@@ -19,10 +19,12 @@ struct TabbedView: View {
 
     var body: some View {
         TabView {
-            MealIdeas()
-                .tabItem {
-                    Label("Idées repas", systemImage: "questionmark.square")
-                }
+            if #available(iOS 15, *) {
+                MealIdeas()
+                    .tabItem {
+                        Label("Idées repas", systemImage: "questionmark.square")
+                    }
+            } 
             MealsView()
                 .tabItem {
                     Label("Mes repas", systemImage: "fork.knife.circle")
@@ -34,10 +36,13 @@ struct TabbedView: View {
             CatalogTabView().tabItem {
                 Label("Catalog", systemImage: "book.fill")
             }
+            MyFavoritesView()
+                .tabItem {
+                    Label("Favorites", systemImage: "heart.fill")
+            }
+
         }
     }
-
-    
 }
 
 struct TabbedView_Previews: PreviewProvider {

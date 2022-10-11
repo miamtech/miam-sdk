@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,12 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.quantityFormatter.QuantityFormatter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Ingredient
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
-import com.miam.kmm_miam_sdk.android.theme.Colors.ternary
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
@@ -57,12 +57,12 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 maxValue = 99
             )
         }
-        Divider(Modifier.padding(8.dp))
+
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(ternary.copy(alpha = 0.1f))
+                .background(Colors.backgroundGrey)
         ) {
             if (recipe.relationships?.ingredients?.data != null) {
                 val ingredients: List<Ingredient> = recipe.relationships!!.ingredients!!.data
@@ -73,8 +73,8 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                                 Locale.getDefault()
                             ) else it.toString()
                         },
-                        vmRecipe.readableFloatNumber(
-                            vmRecipe.realQuantities(
+                        QuantityFormatter.readableFloatNumber(
+                            QuantityFormatter.realQuantities(
                                 it.attributes!!.quantity!!,
                                 state.guest,
                                 recipe.attributes!!.numberOfGuests

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		0B64F93228E2F1D700C0C471 /* CategoriesMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */; };
 		0B7C9BD62812E98500BFC7F8 /* MiamIOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B7C9BD32812E74E00BFC7F8 /* MiamIOSFramework.framework */; };
 		0BAEE6D22891887C0020938D /* CatalogTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAEE6D12891887C0020938D /* CatalogTabView.swift */; };
 		0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEEA6B7280F138E00291155 /* MiamManager.swift */; };
@@ -18,6 +19,7 @@
 		BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */; };
 		BF3AF88F2850EF3800E8B1F2 /* MyBasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */; };
 		BF3AF8912850F32D00E8B1F2 /* MyProductsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AF8902850F32D00E8B1F2 /* MyProductsRepository.swift */; };
+		BF7305FF28DDEA0900CC5D6B /* MyFavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */; };
 		BFA267CC2886EC9F00CC0E6B /* TabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */; };
 		BFA267D02887068300CC0E6B /* MealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267CF2887068300CC0E6B /* MealsView.swift */; };
 		BFA267D22887086000CC0E6B /* Groceries.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA267D12887086000CC0E6B /* Groceries.swift */; };
@@ -58,6 +60,7 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesMenu.swift; sourceTree = "<group>"; };
 		0B7C9BCD2812E74E00BFC7F8 /* MiamIOSFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MiamIOSFramework.xcodeproj; path = ../../MiamIOSFramework/MiamIOSFramework.xcodeproj; sourceTree = "<group>"; };
 		0BAEE6D12891887C0020938D /* CatalogTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTabView.swift; sourceTree = "<group>"; };
 		0BEEA6B7280F138E00291155 /* MiamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamManager.swift; sourceTree = "<group>"; };
@@ -69,6 +72,7 @@
 		BF3AF88B2850D6A700E8B1F2 /* MyBasket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasket.swift; sourceTree = "<group>"; };
 		BF3AF88E2850EF3800E8B1F2 /* MyBasketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBasketView.swift; sourceTree = "<group>"; };
 		BF3AF8902850F32D00E8B1F2 /* MyProductsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProductsRepository.swift; sourceTree = "<group>"; };
+		BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavoritesView.swift; sourceTree = "<group>"; };
 		BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedView.swift; sourceTree = "<group>"; };
 		BFA267CF2887068300CC0E6B /* MealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealsView.swift; sourceTree = "<group>"; };
 		BFA267D12887086000CC0E6B /* Groceries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groceries.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				BFA267CB2886EC9F00CC0E6B /* TabbedView.swift */,
 				BFA267CF2887068300CC0E6B /* MealsView.swift */,
 				0BAEE6D12891887C0020938D /* CatalogTabView.swift */,
+				BF7305FE28DDEA0900CC5D6B /* MyFavoritesView.swift */,
+				0B64F93128E2F1D700C0C471 /* CategoriesMenu.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,7 +193,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1330;
-				ORGANIZATIONNAME = orgName;
+				ORGANIZATIONNAME = Miam;
 				TargetAttributes = {
 					7555FF7A242A565900829871 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -274,8 +280,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF7305FF28DDEA0900CC5D6B /* MyFavoritesView.swift in Sources */,
 				BFA267CC2886EC9F00CC0E6B /* TabbedView.swift in Sources */,
 				BF3AF8912850F32D00E8B1F2 /* MyProductsRepository.swift in Sources */,
+				0B64F93228E2F1D700C0C471 /* CategoriesMenu.swift in Sources */,
 				BF3AF88C2850D6A700E8B1F2 /* MyBasket.swift in Sources */,
 				0BEEA6B8280F138E00291155 /* MiamManager.swift in Sources */,
 				BF3AF88A2850D63800E8B1F2 /* MyProduct.swift in Sources */,
@@ -413,9 +421,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 38CGT7EPPY;
+				DEVELOPMENT_TEAM = VLHN7Y8965;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../miamCore/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -444,7 +452,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = VLHN7Y8965;
 				ENABLE_BITCODE = YES;

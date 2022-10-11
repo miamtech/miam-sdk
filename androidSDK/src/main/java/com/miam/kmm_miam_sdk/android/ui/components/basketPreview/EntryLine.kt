@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,21 +18,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
-import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Template
+import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
-import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
+import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmallBold
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.BPPLDescriptionColor
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.delete
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.swap
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.subcomponent.MultipleRecipeTag
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
@@ -46,7 +47,6 @@ fun EntryLine(
     vmBasketPreview: BasketPreviewViewModel,
     goToItemSelector: () -> Unit
 ) {
-    val price = Price(price = entry.price.toDouble(), isTotalPrice = true)
     val productName =
         entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1)
             .lowercase(Locale.getDefault())
@@ -85,8 +85,11 @@ fun EntryLine(
             it(
                 productName,
                 description,
+                entry.picture,
                 entry.count,
                 sharingCount.toString(),
+                entry.price,
+                (entry.record as BasketEntry).relationships!!.items!!.data.size,
                 { delete() },
                 { replace() },
                 { newQuantity -> onQuantityChanged(newQuantity) }
@@ -116,25 +119,15 @@ fun EntryLine(
                         text = productName,
                         style = bodyBold
                     )
-                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
                     Text(
                         text = description,
                         color = BPPLDescriptionColor,
-                        style = bodySmall,
+                        style = bodySmallBold,
                         modifier = Modifier.widthIn(200.dp, 200.dp)
                     )
-                    if (sharingCount != null) {
-                        Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                        Surface(
-                            border = BorderStroke(1.dp, BPPLDescriptionColor),
-                            shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = sharingCount
-                            )
-                        }
-                    }
+                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
+                    MultipleRecipeTag(sharingCount)
                 }
                 IconButton(
                     modifier = Modifier.size(30.dp),
@@ -148,52 +141,85 @@ fun EntryLine(
             }
 
             Column(Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    price.content()
-                }
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if ((entry.record as BasketEntry).relationships!!.items!!.data.size > 1) {
-                        Clickable(
-                            onClick = { replace() },
-                            children = {
-                                Row {
-                                    Image(
-                                        painter = painterResource(swap),
-                                        contentDescription = "swap"
-                                    )
-                                    Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                                    Text(
-                                        text = BasketPreviewText.swap,
-                                        color = Color(0xff037E92),
-                                        style = bodyBold
-                                    )
-                                }
-                            }
-                        )
-                    } else {
-                        Surface {}
-                    }
-                    Counter(
-                        initialCount = entry.count,
-                        onCounterChanged = { counterValue -> onQuantityChanged(counterValue) },
-                        lightMode = true,
-                        isDisable = false,
-                        minValue = 0,
-                        maxValue = 99,
-                        forceRepaint = forceRepaintCounter
-                    )
-                }
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                EntryPriceAndActionRow(
+                    (entry.record as BasketEntry).relationships!!.items!!.data.size,
+                    entry.price.toDouble(),
+                    entry.count,
+                    { counterValue -> onQuantityChanged(counterValue) },
+                    ::replace,
+                    forceRepaintCounter
+                )
+                Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Divider(Modifier.fillMaxWidth(), color = Color.LightGray)
             }
         }
     }
+}
+
+
+@Composable
+fun EntryPriceAndActionRow(
+    itemsCount: Int,
+    price: Double,
+    currentEntryCount: Int,
+    onCounterChanged: (counterValue: Int) -> Unit,
+    replace: () -> Unit,
+    forceRepaintCounter: Boolean
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (itemsCount > 1) {
+            Clickable(
+                onClick = { replace() },
+                children = {
+                    Row(Modifier) {
+                        Image(
+                            painter = painterResource(swap),
+                            contentDescription = "swap",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                        Text(
+                            text = BasketPreviewText.swap,
+                            color = Color(0xff037E92),
+                            style = body,
+                            modifier = Modifier
+                        )
+                    }
+                }
+            )
+        } else {
+            Surface {}
+        }
+        Spacer(
+            modifier =
+            Modifier.weight(1f)
+        )
+        Box(modifier = Modifier.padding(end = 16.dp)) {
+            Price(
+                price = price,
+                isTotalPrice = true
+            )
+        }
+        Counter(
+            initialCount = currentEntryCount,
+            onCounterChanged = onCounterChanged,
+            lightMode = true,
+            isDisable = false,
+            minValue = 0,
+            maxValue = 99,
+            forceRepaint = forceRepaintCounter
+        )
+    }
+}
+
+@Preview
+@Composable
+fun EntryPriceAndActionRowPreview() {
+    EntryPriceAndActionRow(2, 14.90, 4, {}, {}, false)
 }

@@ -27,7 +27,7 @@ import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmm_miam_sdk.android.R
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.recipdeDetails
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -96,7 +96,7 @@ class RouterOutlet : KoinComponent {
                     Box {
                         when (state.content) {
                             RouterContent.RECIPE_DETAIL -> state.rvm?.let {
-                                recipdeDetails(
+                                RecipeDetails(
                                     it,
                                     vmRouter,
                                     fun() { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) })

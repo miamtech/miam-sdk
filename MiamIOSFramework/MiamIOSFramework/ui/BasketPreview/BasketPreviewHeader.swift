@@ -67,7 +67,7 @@ struct BasketPreviewHeader: View {
                         Button {
                             goToDetail()
                         } label: {
-                            Text("Voir le détail").fontWeight(.heavy).foregroundColor(Color.miamColor(.primaryText))
+                            Text(MiamText.sharedInstance.showDetails).fontWeight(.heavy).foregroundColor(Color.miamColor(.primaryText))
                         }.padding([.top], Dimension.sharedInstance.sPadding)
                     }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)

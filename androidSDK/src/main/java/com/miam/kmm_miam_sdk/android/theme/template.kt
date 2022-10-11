@@ -116,7 +116,9 @@ object Template {
 
     var basketPreviewRecipeLineTemplate: (@Composable() (
         recipeName: String,
+        picture: String,
         recipeDescription: String,
+        price: String,
         pricePerGuest: String,
         guestCount: Int,
         goToRecipeDetail: () -> Unit,
@@ -128,8 +130,11 @@ object Template {
     var basketPreviewProductLine: (@Composable() (
         productName: String,
         description: String,
+        productPicture: String,
         quantity: Int,
         sharingCount: String, // ex : partager avec x recette
+        price: String,
+        itemsCount: Int,
         delete: () -> Unit,
         replace: () -> Unit,
         onQuantityChanged: (newQuantity: Int) -> Unit
@@ -137,6 +142,7 @@ object Template {
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (
         isOpen: Boolean,
+        title: String,
         toggle: () -> Unit,
     ) -> Unit)? = null
 

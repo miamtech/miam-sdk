@@ -3,13 +3,29 @@ package com.miam.kmmMiamCore.handler
 
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleAction
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.services.Analytics
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.native.concurrent.ThreadLocal
 
+open class CatalogCategory(
+    val id: String,
+    val title: String
+)
+
 @ThreadLocal
-object PointOfSaleHandler : KoinComponent {
+object PointOfSaleHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+
+    private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
+        println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
+    }
+
+    private val packageRepositoryImp: PackageRepositoryImp by inject()
 
     var isAvailable = fun(): Boolean { return true }
     private val store: PointOfSaleStore by inject()
@@ -30,5 +46,13 @@ object PointOfSaleHandler : KoinComponent {
     fun setSupplierOrigin(origin: String) {
         store.setOrigin(origin)
         analytics.init(origin)
+    }
+
+    fun getCatalogCategories(setLocalCategories: (catalog: List<CatalogCategory>) -> Unit) {
+        launch(coroutineHandler) {
+            setLocalCategories(packageRepositoryImp.getActivePackageForRetailer(
+                store.getProviderId().toString()
+            ).map { CatalogCategory(it.id, it.attributes?.title ?: "") })
+        }
     }
 }

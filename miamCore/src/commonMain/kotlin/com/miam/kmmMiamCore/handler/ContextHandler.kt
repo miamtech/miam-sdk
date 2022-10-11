@@ -3,8 +3,11 @@ package com.miam.kmmMiamCore.handler
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -27,6 +30,7 @@ class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatche
     }
 
     private val basketHandler: BasketHandler by inject()
+
 
     val state = MutableStateFlow(ContextHandlerState())
     private val readyEvent = MutableSharedFlow<ReadyEvent>()
@@ -55,7 +59,6 @@ class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatche
 
     fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
 
-    @OptIn(InternalCoroutinesApi::class)
     fun onReadyEvent(callback: (it: ReadyEvent) -> Unit) {
         launch(coroutineHandler) {
             readyEvent.asSharedFlow().collect { callback(it) }

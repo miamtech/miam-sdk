@@ -37,9 +37,9 @@ fun CatalogCategory(
     } else {
         Column {
             Row(
-                    Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
                 Column {
                     category.attributes?.title?.let {
@@ -59,10 +59,10 @@ fun CatalogCategory(
                 }
             }
             Row(
-                    Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { goToCategoryPage(category) },
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable { goToCategoryPage(category) },
                 horizontalArrangement = Arrangement.End
             ) {
                 Text(
@@ -79,8 +79,8 @@ fun CatalogCategory(
                 ) { recipeModel ->
                     Box(
                         modifier = Modifier
-                                .width(350.dp)
-                                .height(600.dp)
+                            .width(350.dp)
+                            .height(380.dp)
                     ) {
                         val recipe = RecipeView(context)
                         recipe.bind(recipeId = recipeModel.id)

@@ -1,4 +1,4 @@
-package com.miam.kmm_miam_sdk.android.ui.components
+package com.miam.kmm_miam_sdk.android.ui.components.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +19,7 @@ fun CircleChips(label: String) {
         Surface(
             shape = CircleShape,
             color = primary,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(32.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

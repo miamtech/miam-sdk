@@ -1,11 +1,9 @@
 package com.miam.kmm_miam_sdk.android.ui.components.basketPreview
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,14 +30,12 @@ import kotlin.math.round
 
 
 @ExperimentalCoilApi
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,
     guestUpdate: (guestCount: Int) -> Unit,
     goToDetail: () -> Unit
 ) {
-    val price = Price(price = line.price.toDouble(), isTotalPrice = true)
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
     val guestDivider = max(1, line.count)
@@ -54,7 +50,9 @@ fun BasketPreviewRecipeLine(
         Template.basketPreviewRecipeLineTemplate?.let {
             it(
                 recipeName,
+                line.picture,
                 recipeDescription,
+                line.price,
                 pricePerGuest,
                 line.count,
                 { goToRecipeDetail() },
@@ -62,8 +60,7 @@ fun BasketPreviewRecipeLine(
             )
         }
     } else {
-
-        Column(modifier = Modifier.background(Colors.ternary.copy(alpha = 0.1f))) {
+        Column {
             Divider(Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.Top,
@@ -73,18 +70,17 @@ fun BasketPreviewRecipeLine(
             ) {
                 Clickable(
                     onClick = { goToRecipeDetail() },
-                    children = {
-                        Image(
-                            painter = rememberImagePainter(line.picture),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .height(120.dp)
-                                .width(120.dp)
-                                .clip(RoundedCornerShape(16.dp)),
-                        )
-                    }
-                )
+                ) {
+                    Image(
+                        painter = rememberImagePainter(line.picture),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                    )
+                }
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                 Column(
                     verticalArrangement = Arrangement.Top
@@ -132,7 +128,12 @@ fun BasketPreviewRecipeLine(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                price.content()
+                Box(modifier = Modifier.padding(bottom = 4.dp, start = 16.dp)) {
+                    Price(
+                        price = line.price.toDouble(),
+                        isTotalPrice = true
+                    )
+                }
                 Counter(
                     initialCount = line.count,
                     onCounterChanged = guestUpdate,

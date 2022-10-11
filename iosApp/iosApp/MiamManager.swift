@@ -12,6 +12,10 @@ import MiamIOSFramework
 import SwiftUI
 import Combine
 
+@available(iOS 14, *)
+public class Categories : ObservableObject {
+    @Published var categoriesList:[CatalogCategory]  = []
+}
 
 public class MiamManager {
     
@@ -19,6 +23,7 @@ public class MiamManager {
     private let availableStoreIdLists = ["454", "652"]
     private let basketHandler: BasketHandler
     private var cancelable : AnyCancellable?
+    public let categories = Categories()
     
     func isActiveOnStore() -> KotlinBoolean {
         return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
@@ -37,6 +42,10 @@ public class MiamManager {
         PointOfSaleHandler.shared.setSupplierOrigin(origin:"app.coursesu.com")
         PointOfSaleHandler.shared.setSupplier(supplierId: 7)
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
+        PointOfSaleHandler.shared.getCatalogCategories { categories in
+            self.categories.categoriesList = categories
+            
+        }
         UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)

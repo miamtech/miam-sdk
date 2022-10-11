@@ -9,4 +9,5 @@ object BasketPreviewImage {
     var delete = Image.delete
     var previous = Image.previous
     var swap = Image.swap
+    var look = Image.look
 }

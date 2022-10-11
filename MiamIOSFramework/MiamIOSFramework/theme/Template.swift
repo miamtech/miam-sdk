@@ -192,7 +192,29 @@ public class Template {
     public var catalogViewTemplate: ((
         CatalogVM
     ) -> AnyView)? = nil
-
+    
+    /**
+     catalog: CatalogVM
+     close: () -> Void
+     search: () -> Void
+     */
+    public var catalogSearchViewTemplate: ((
+        CatalogVM,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+   
+    /**
+     searchString: String
+     browseCatalogAction: () -> Void
+     showingFavorites = false
+     */
+    public var catalogRecipePageNoResultsViewTemplate: ((
+        String,
+        () -> Void,
+        Bool
+    ) -> AnyView)? = nil
+    
     /**
      package: CatalogPackage
      showRecipes: (CatalogPackage) -> Void
@@ -245,5 +267,21 @@ public class Template {
     public var catalogFilterRowTemplate: ((
         CatalogFilterOptions,
         (CatalogFilterOptions) -> Void
+    ) -> AnyView)? = nil
+    
+    
+    /**
+     favoriteRecipes: [Recipe]
+     loadMoreContentAction: () -> Void
+     */
+    public var favoritesSuccessViewTemplate: ((
+        [Recipe],
+        () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     */
+    public var favoritesEmptyViewTemplate: ((
+        
     ) -> AnyView)? = nil
 }
