@@ -10,13 +10,10 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 interface RecipeCarouselContract {
 
     sealed class Event : UiEvent {
-        data class GetSuggestionsFromIdAndSize(val productId: String, val numberOfResult: Int) : RecipeCarouselContract.Event()
-        data class GetSuggestionFromId(val productId: String) : RecipeCarouselContract.Event()
+        data class GetRecipeSuggestions(val productId: String, val numberOfResult: Int?) : Event()
     }
 
-    data class State(
-        val suggestions: BasicUiState<List<Recipe>>
-    ) : UiState
+    data class State(val suggestions: BasicUiState<List<Recipe>>) : UiState
 
     sealed class Effect : UiEffect
 }
