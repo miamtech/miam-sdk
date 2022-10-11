@@ -15,7 +15,6 @@ data class FilterState(
 
 class Filter : KoinComponent {
 
-
     private val initialfilters: FilterState =
         FilterState(
             difficulty = listOf(
@@ -53,19 +52,11 @@ class Filter : KoinComponent {
 
 
     fun setCat(catId: String) {
-        setState {
-            copy(
-                category = catId
-            )
-        }
+        setState { copy(category = catId) }
     }
 
     fun setFavorite() {
-        setState {
-            copy(
-                isFavorite = true
-            )
-        }
+        setState { copy(isFavorite = true) }
     }
 
     fun getSelectedFilterAsQueryString(): String {
@@ -99,7 +90,7 @@ class Filter : KoinComponent {
         }
         return filter
     }
-    
+
     fun getActiveFilterCount(): Int {
         val temp = listOf(
             currentState.difficulty.filter { it.isSelected },
