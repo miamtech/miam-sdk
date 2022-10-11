@@ -13,12 +13,15 @@ import miamCore
 struct RecipeCarouselView: View {
     let productId: String
     let index: Int = 4
-    var recipesListViewModel: RecipeListPageVM?
+    
+    var recipeCarouselVm: RecipeCarouselVM = RecipeCarouselVM()
+
     var body: some View {
-//        ManagementResourceState<RecipeListPageContractState, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(resourceState: recipesListViewModel?.state,
-//                                  successView: RecipesCarouselSuccessView(title: "Idées de repas", showAllButtonTitle: "Voir tout", recipes: []),
-//                                  loadingView: ProgressLoader(color: Color.miamColor(.primary)),
-//                                  emptyView: EmptyView())
+        ManagementResourceState<RecipeCarouselContractState, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
+            resourceState: recipeCarouselVm.state!,
+                                  successView: RecipesCarouselSuccessView(title: "Idées de repas", showAllButtonTitle: "Voir tout", recipes: []),
+                                  loadingView: ProgressLoader(color: Color.miamColor(.primary)),
+                                  emptyView: EmptyView())
     }
 }
 
