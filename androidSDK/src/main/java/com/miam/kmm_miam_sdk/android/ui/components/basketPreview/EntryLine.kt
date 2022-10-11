@@ -8,7 +8,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +24,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -47,12 +52,14 @@ fun EntryLine(
             .lowercase(Locale.getDefault())
     val description = entry.bplDescription[0]
     val sharingCount = entry.inlineTag
-    var count by remember { mutableStateOf(entry.count) }
-    val rememberedEntry by remember { mutableStateOf(entry) }
+
+    var forceRepaintCounter = false
+    var rememberedEntry by remember { mutableStateOf(entry) }
 
     if (rememberedEntry.id != entry.id) {
         // object is reused reset remembered count
-        count = entry.count
+        rememberedEntry = entry
+        forceRepaintCounter = true
     }
 
 
@@ -65,18 +72,12 @@ fun EntryLine(
         goToItemSelector()
     }
 
-    fun increaseQty() {
-        count++
-        vmBasketPreview.updateBasketEntry(entry.record as BasketEntry, count)
-    }
-
-    fun decreaseQty() {
-        if (count == 1) {
+    fun onQuantityChanged(newQuantity: Int) {
+        if (newQuantity == 0) {
             vmBasketPreview.removeBasketEntry(entry.record as BasketEntry)
-        } else {
-            count--
-            vmBasketPreview.updateBasketEntry(entry.record as BasketEntry, count)
+            return
         }
+        vmBasketPreview.updateBasketEntry(entry.record as BasketEntry, newQuantity)
     }
 
     if (Template.basketPreviewProductLine != null) {
@@ -84,12 +85,12 @@ fun EntryLine(
             it(
                 productName,
                 description,
-                count,
+                entry.count,
                 sharingCount.toString(),
                 { delete() },
                 { replace() },
-                { increaseQty() },
-                { decreaseQty() })
+                { newQuantity -> onQuantityChanged(newQuantity) }
+            )
         }
     } else {
 
@@ -181,11 +182,13 @@ fun EntryLine(
                         Surface {}
                     }
                     Counter(
-                        count = count,
-                        increase = { increaseQty() },
-                        decrease = { decreaseQty() },
+                        initialCount = entry.count,
+                        onCounterChanged = { counterValue -> onQuantityChanged(counterValue) },
                         lightMode = true,
-                        isDisable = false
+                        isDisable = false,
+                        minValue = 0,
+                        maxValue = 99,
+                        forceRepaint = forceRepaintCounter
                     )
                 }
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))

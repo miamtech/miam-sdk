@@ -3,7 +3,11 @@ package com.miam.kmm_miam_sdk.android.theme
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
-import com.miam.kmmMiamCore.miam_core.model.*
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
+import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.RecipeStep
 
 object Template {
 
@@ -116,8 +120,7 @@ object Template {
         pricePerGuest: String,
         guestCount: Int,
         goToRecipeDetail: () -> Unit,
-        increaseGuest: () -> Unit,
-        decreaseGuest: () -> Unit
+        guestUpdate: (guestCount: Int) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewLoadingTemplate: (@Composable() () -> Unit)? = null
@@ -129,8 +132,7 @@ object Template {
         sharingCount: String, // ex : partager avec x recette
         delete: () -> Unit,
         replace: () -> Unit,
-        increaseQty: () -> Unit,
-        decreaseQty: () -> Unit
+        onQuantityChanged: (newQuantity: Int) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (

@@ -8,10 +8,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,7 +16,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
@@ -50,26 +45,10 @@ fun BasketPreviewRecipeLine(
     val guestDivider = max(1, line.count)
     val pricePerGuest =
         "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
-    var count by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail() {
         goToDetail()
     }
-
-    fun increase() {
-        if (count != 100) {
-            count++
-            guestUpdate(count)
-        }
-    }
-
-    fun decrease() {
-        if (count != 0) {
-            count--
-            guestUpdate(count)
-        }
-    }
-
 
     if (Template.basketPreviewRecipeLineTemplate != null) {
         Template.basketPreviewRecipeLineTemplate?.let {
@@ -77,10 +56,9 @@ fun BasketPreviewRecipeLine(
                 recipeName,
                 recipeDescription,
                 pricePerGuest,
-                count,
+                line.count,
                 { goToRecipeDetail() },
-                { increase() },
-                { decrease() }
+                guestUpdate,
             )
         }
     } else {
@@ -156,12 +134,14 @@ fun BasketPreviewRecipeLine(
             ) {
                 price.content()
                 Counter(
-                    count = count,
-                    increase = { increase() },
-                    decrease = { decrease() },
+                    initialCount = line.count,
+                    onCounterChanged = guestUpdate,
                     lightMode = false,
-                    isDisable = false
-                )
+                    isDisable = false,
+                    minValue = 1,
+                    maxValue = 99,
+
+                    )
             }
             Divider(Modifier.fillMaxWidth())
         }
