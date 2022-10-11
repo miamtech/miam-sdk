@@ -39,27 +39,27 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
-@Composable
-fun CatalogHeader(showFullHeader: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
 
-    var filterOpened by remember { mutableStateOf(false) }
-    var searchOpened by remember { mutableStateOf(false) }
+enum class HeaderState {
+    DEFAULT, FILTER, SEARCH
+}
+
+@Composable
+fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
+
+    var headerState by remember { mutableStateOf(HeaderState.DEFAULT) }
     val catalogFilterVm = CatalogFilterViewModel()
 
-
     fun openFilter() {
-        filterOpened = true
-        searchOpened = false
+        headerState = HeaderState.FILTER
     }
 
     fun openSearch() {
-        filterOpened = false
-        searchOpened = true
+        headerState = HeaderState.SEARCH
     }
 
     fun closeModal() {
-        filterOpened = false
-        searchOpened = false
+        headerState = HeaderState.DEFAULT
     }
 
     // TODO Refact with filter service
@@ -189,65 +189,104 @@ fun CatalogHeader(showFullHeader: Boolean, isFavorit: Boolean, goToRecipeList: (
 
     @Composable
     fun FavoriteButton() {
-        if (!isFavorit) {
-            if (showFullHeader) {
-                Box(modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .border(
-                        border = BorderStroke(1.dp, white),
-                        shape = RoundedCornerShape(50)
+        Clickable(onClick = { goToFavorite() }) {
+            Surface(
+                shape = CircleShape,
+                elevation = 8.dp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            ) {
+                Box(
+                    Modifier
+                        .background(white)
+                        .padding(8.dp)
+                )
+                {
+                    Image(
+                        painter = painterResource(Image.favorite),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(primary),
                     )
-                    .clickable { goToFavorite() }
-                ) {
-                    Row(
-                        Modifier
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .background(primary),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(Image.favorite),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(white),
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = CatalogText.favoriteButtonText,
-                            color = white
-                        )
-                    }
-                }
-            } else {
-                Clickable(onClick = { goToFavorite() } ) {
-                    Surface(
-                        shape = CircleShape,
-                        elevation = 8.dp,
-                        modifier = Modifier.padding(horizontal = 10.dp)
-                    ) {
-                        Box(
-                            Modifier
-                                .background(white)
-                                .padding(8.dp)
-                        )
-                        {
-                            Image(
-                                painter = painterResource(Image.favorite),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(primary),
-                            )
-                        }
-                    }
                 }
             }
         }
     }
 
-    Box {
-        if (filterOpened) {
-            filter.Content()
+    @Composable
+    fun MainPageFavoriteButton() {
+        Box(modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .border(
+                border = BorderStroke(1.dp, white),
+                shape = RoundedCornerShape(50)
+            )
+            .clickable { goToFavorite() }
+        ) {
+            Row(
+                Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .background(primary),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(Image.favorite),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(white),
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                Text(
+                    text = CatalogText.favoriteButtonText,
+                    color = white
+                )
+            }
         }
-        if (searchOpened) {
-            search.Content()
+    }
+
+    @Composable
+    fun MainPageHeader() {
+        HeaderTitle()
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            BackButton()
+            Row {
+                SearchButton()
+                FilterButton()
+                MainPageFavoriteButton()
+            }
+        }
+    }
+
+    @Composable
+    fun DefaultHeader() {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row {
+                SearchButton()
+                FilterButton()
+                if (!isFavorit) {
+                    FavoriteButton()
+                }
+            }
+        }
+    }
+
+    //  current returned component
+    Box {
+        when (headerState) {
+            HeaderState.FILTER -> filter.Content()
+            HeaderState.SEARCH -> search.Content()
+            else -> {
+                Box {}
+            }
         }
         if (Template.CatalogHeader != null) {
             Template.CatalogHeader?.let {
@@ -255,25 +294,11 @@ fun CatalogHeader(showFullHeader: Boolean, isFavorit: Boolean, goToRecipeList: (
             }
         } else {
             Column(Modifier.background(color = primary)) {
-                if (showFullHeader) {
-                    HeaderTitle()
+                if (isMainPage) {
+                    MainPageHeader()
+                    return
                 }
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = if (showFullHeader) Arrangement.Start else Arrangement.SpaceBetween
-                ) {
-                    if (!showFullHeader) {
-                        BackButton()
-                    }
-                    Row {
-                        SearchButton()
-                        FilterButton()
-                        FavoriteButton()
-                    }
-                }
+                DefaultHeader()
             }
         }
     }
