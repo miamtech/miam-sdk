@@ -1,26 +1,32 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
+import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
-
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
-
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
-
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
-
 import org.koin.core.component.inject
+import kotlin.math.max
+import kotlin.math.min
 
 open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+
+    private val MAX_GUESTS = 100
+    private val MIN_GUESTS = 1
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
@@ -106,8 +112,13 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     private suspend fun listenguestSubjectChanges() {
-        guestSubject.debounce(500).collect {
-            addOrAlterRecipe()
+        guestSubject.debounce(500).collect { boundedGuests ->
+            if (currentState.guest != boundedGuests) {
+                setState { copy(guest = boundedGuests) }
+                if (currentState.isInCart) {
+                    addOrAlterRecipe()
+                }
+            }
         }
     }
 
@@ -120,11 +131,10 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun updateGuest(nbGuest: Int) {
-        if (currentState.guest <= 1 || currentState.guest >= 100) return
-        setState { copy(guest = nbGuest) }
-        if (currentState.isInCart) launch(coroutineHandler) {
-            guestSubject.emit(currentState.guest)
-        }
+        // reduce guest between min and max
+        var boundedGuests = max(MIN_GUESTS, nbGuest)
+        boundedGuests = min(MAX_GUESTS, boundedGuests)
+        launch(coroutineHandler) { guestSubject.emit(boundedGuests) }
     }
 
     private fun addOrAlterRecipe(): Job {
