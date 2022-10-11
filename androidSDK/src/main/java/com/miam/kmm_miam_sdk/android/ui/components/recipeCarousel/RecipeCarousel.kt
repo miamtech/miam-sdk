@@ -24,12 +24,11 @@ class RecipeCarousel @JvmOverloads constructor(
         productId: String = "",
         recipeListSize: Int?
     ) {
-        if (recipeListSize != null) {
-            vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetSuggestionsFromIdAndSize(productId, recipeListSize))
-            this.recipeListSize = recipeListSize
-            return
-        }
-        vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetSuggestionFromId(productId))
+
+        vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetRecipeSuggestions(productId, recipeListSize))
+        this.recipeListSize = recipeListSize ?: 4
+        return
+
     }
 
     @Composable

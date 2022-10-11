@@ -296,9 +296,11 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         content(retailerBasketSubject)
-                        recipes(this@MainActivity)
                         Divider()
                         Carousel(context = this@MainActivity)
+                        Divider()
+                        recipes(this@MainActivity)
+
 
                     }
                 }
