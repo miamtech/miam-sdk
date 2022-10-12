@@ -21,8 +21,6 @@ public struct RecipeCardLoadingView: View {
     @State private var opacity: Double = Constants.minOpacity
     
     public var body: some View {
-        
-        VStack {
             VStack() {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
@@ -65,8 +63,5 @@ public struct RecipeCardLoadingView: View {
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(Color.miamColor(.border), lineWidth: 1)
                 )
-            
-        }.frame(height: 430)
-    }
-    
+        }
 }

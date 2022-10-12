@@ -3,7 +3,6 @@ package com.miam.kmmMiamCore.component.basketPreview
 import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
-import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
@@ -114,9 +113,9 @@ open class BasketPreviewViewModel(val recipeId: String?) :
         setState { copy(showLines = !uiState.value.showLines) }
     }
 
-    fun updateGuest(recipeVm: RecipeViewModel, guestCount: Int) {
+    fun updateGuest(updateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
         reloadState()
-        recipeVm.updateGuest(guestCount)
+        updateGuest(guestCount)
     }
 
     private fun updateBplEntries(basketEntries: List<BasketEntry>): BasketPreviewLine {

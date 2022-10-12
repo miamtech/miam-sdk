@@ -6,13 +6,24 @@ import com.miam.kmmMiamCore.miam_core.data.repository.BasketEntryRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.BasketRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesEntryRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.SupplierRepositoryImp
-import com.miam.kmmMiamCore.miam_core.model.*
+import com.miam.kmmMiamCore.miam_core.model.Basket
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
+import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.miam_core.model.GroceriesList
+import com.miam.kmmMiamCore.miam_core.model.LineEntries
+import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
 import com.miam.kmmMiamCore.services.Analytics
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -231,7 +242,9 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
     private suspend fun confirmBasket(basket: Basket, price: String) {
         val eventProps = Analytics.PlausibleProps(
             total_amount = price,
-            miam_amount = basket.attributes!!.totalPrice
+            miam_amount = basket.attributes!!.totalPrice,
+            pos_id = pointOfSaleStore.getPosId().toString(),
+            pos_total_amount = "${pointOfSaleStore.getPosId().toString()}#${price}"
         )
         analyticsService.sendEvent(Analytics.EVENT_PAYMENT_CONFIRMED, "", eventProps)
         val newBasket =

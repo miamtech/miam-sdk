@@ -7,37 +7,41 @@
 
 import Foundation
 import SwiftUI
+import miamCore
 
 @available(iOS 14, *)
 internal struct CatalogRecipesPageSuccessView: View {
-    @ObservedObject var recipesListPageModel: RecipeListPageVM
-    let catalogViewModel: CatalogVM
-    init(viewModel: RecipeListPageVM, catalogViewModel: CatalogVM) {
-        recipesListPageModel = viewModel
-        self.catalogViewModel = catalogViewModel
-    }
+    let title: String
+    let recipes: [Recipe]
+    let hasNoResults: Bool
+    let searchString: String
+    let loadMoreContentAction: (Recipe) -> Void
+    let browseCatalogAction: () -> Void
     
     var body: some View {
-        if !recipesListPageModel.hasNoResults {
+        if !hasNoResults {
             ScrollView {
                 VStack {
-                    HStack{
-                        Text(recipesListPageModel.title).font(Font.system(size: 20.0))
+                    HStack {
+                        Text(title).font(Font.system(size: 20.0))
                             .fontWeight(.heavy).frame(height: 40.0)
                         Spacer()
                     }
                     
                     LazyVStack {
-                        ForEach(recipesListPageModel.recipes, id: \.self) { recipe in
+                        ForEach(recipes, id: \.self) { recipe in
                             RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
-                                recipesListPageModel.loadMoreContent(currentRecipe: recipe)
+                                loadMoreContentAction(recipe)
+                                //
                             }.padding(.top,Dimension.sharedInstance.lPadding)
                         }
                     }
                 }
             }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
         } else {
-            CatalogRecipePageNoResultsView(catalogViewModel: catalogViewModel, showingFavorites: false)
+            CatalogRecipePageNoResultsView(searchString: searchString, browseCatalogAction: {
+                browseCatalogAction()
+            }, showingFavorites: false)
         }
     }
 }

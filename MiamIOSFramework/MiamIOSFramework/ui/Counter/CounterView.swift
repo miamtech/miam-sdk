@@ -62,7 +62,7 @@ struct CounterView: View {
                 }.padding(.leading, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
-                    Text(String(count) + " \( lightMode ? "" : "pers.")")
+                Text(String(count) + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
                     .foregroundColor(Color.miamColor(.white))
                     .font(.system(size: 13, weight: .bold, design: .default))
                     Spacer()

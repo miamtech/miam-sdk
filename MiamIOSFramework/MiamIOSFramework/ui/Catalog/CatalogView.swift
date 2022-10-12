@@ -18,7 +18,7 @@ public struct CatalogEmptyView: View {
 
 @available(iOS 14, *)
 public struct CatalogView: View {
-    @ObservedObject var catalog: CatalogVM = CatalogVM()
+    @ObservedObject var catalog: CatalogVM
     @SwiftUI.State private var showingFilters = false
     @SwiftUI.State private var showingSearch = false
     @SwiftUI.State private var showingFavorites = false
@@ -26,7 +26,11 @@ public struct CatalogView: View {
 
     @SwiftUI.State private var headerHeight = 50.0
     public init() {
-
+        self.catalog = CatalogVM()
+    }
+    
+    public init(categoryId: String, title: String) {
+        self.catalog = CatalogVM(categoryID: categoryId, title: title)
     }
 
     public var body: some View {
@@ -37,15 +41,17 @@ public struct CatalogView: View {
                 CatalogViewHeader()
                     .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
-                CatalogViewToolbar(showBackButton: (catalog.content != .categories),
+                CatalogToolbarView(showBackButton: (catalog.content != .categories),
                                    favoritesFilterActive: showingFavorites) {
                     catalog.setEvent(event: CatalogContractEvent.GoToDefault())
                     showingFavorites = false
                     headerHeight = 50.0
                 } filtersTapped: {
+                    // TODO: remove call to toggle
                     catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
                     showingFilters = true
                 } searchTapped: {
+                    // TODO: remove call to toggle
                     catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                     showingSearch = true
                 } favoritesTapped: {
@@ -53,13 +59,27 @@ public struct CatalogView: View {
                     showingFavorites = true
                 }
                 if let catalogState = catalog.state {
-                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(resourceState: catalogState.categories,
-                                                                                                               successView: CatalogSuccessView(catalog: catalog, showingPackageRecipes: $showingPackageRecipes, showingFavorites: $showingFavorites, headerHeight: $headerHeight),
-                                                                                                               loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                                                                                                               emptyView: CatalogEmptyView())
-                                                                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(
+                        resourceState: catalogState.categories,
+                        successView: CatalogSuccessView(
+                            recipeListPageViewModel: catalog.recipePageViewModel,
+                            packages: catalog.packages,
+                            content: catalog.content,
+                            showingPackageRecipes: $showingPackageRecipes,
+                            showingFavorites: $showingFavorites,
+                            headerHeight: $headerHeight,
+                            searchString: catalog.searchString,
+                            browseCatalogAction: {
+                                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                            }, navigateToRecipeAction: { package in
+                                catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
+                            }),
+                        loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
+                        emptyView: CatalogEmptyView())
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }.sheet(isPresented: $showingSearch, onDismiss: {
+                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
             }) {
                 CatalogSearchView(catalog: catalog, close: {
@@ -70,6 +90,7 @@ public struct CatalogView: View {
                     catalog.fetchRecipes()
                 }
             }.sheet(isPresented: $showingFilters, onDismiss: {
+                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
             }) {
                 CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
@@ -86,39 +107,47 @@ public struct CatalogView: View {
 
 @available(iOS 14, *)
 internal struct CatalogSuccessView: View {
-    @ObservedObject var catalog: CatalogVM
-    @ObservedObject var recipeListPageModel: RecipeListPageVM
-
-    init(catalog: CatalogVM, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>, headerHeight: Binding<Double>) {
-        self.catalog = catalog
-        self.recipeListPageModel = RecipeListPageVM(model: catalog.recipePageViewModel!)
-        _showingPackageRecipes = showingPackageRecipes
-        _showingFavorites = showingFavorites
-        _headerHeight = headerHeight
-    }
-
+    let recipeListPageViewModel: RecipeListPageViewModel?
+    let packages: [CatalogPackage]
+    let catalogContent: CatalogModelContent
     @Binding var showingPackageRecipes: Bool
     @Binding var showingFavorites: Bool
     @Binding var headerHeight: Double
+    let searchString: String
+    let browseCatalogAction: () -> Void
+    let navigateToRecipeAction: (Package) -> Void
+    
+    init(recipeListPageViewModel: RecipeListPageViewModel?, packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+         headerHeight: Binding<Double>, searchString: String,
+         browseCatalogAction: @escaping () -> Void,
+         navigateToRecipeAction: @escaping (Package) -> Void) {
+        self.recipeListPageViewModel = recipeListPageViewModel
+        self.packages = packages
+        self.catalogContent = content
+        _showingPackageRecipes = showingPackageRecipes
+        _showingFavorites = showingFavorites
+        _headerHeight = headerHeight
+        self.searchString = searchString
+        self.browseCatalogAction = browseCatalogAction
+        self.navigateToRecipeAction = navigateToRecipeAction
+    }
+    
     var body: some View {
-        if case .categories = catalog.content {
+        if case .categories = catalogContent {
             ScrollView {
                 VStack {
-                    ForEach(catalog.packages) { package in
+                    ForEach(packages) { package in
                         CatalogPackageRow(package: package) { package in
-                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(category: package.package))
-                            showingPackageRecipes = true
-                            headerHeight = 0.0
+                            navigateToRecipeAction(package.package)
                         }
                     }
                 }
             }.padding([.top], Dimension.sharedInstance.lPadding)
         } else {
-            if let modelState = recipeListPageModel.state {
-                ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(resourceState: modelState.recipes,
-                                                                                                successView: CatalogRecipesPageSuccessView(viewModel: recipeListPageModel, catalogViewModel: catalog),
-                                                                                                loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                                                                                                emptyView: CatalogRecipePageNoResultsView(catalogViewModel: catalog, showingFavorites: showingFavorites))
+            if let recipeListPageViewModel  = recipeListPageViewModel {
+                RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
+                    browseCatalogAction()
+                }, searchString: searchString, showingFavorites: showingFavorites)
             }
         }
     }
@@ -139,7 +168,7 @@ internal struct CatalogPackageRow: View {
                     Button {
                         showRecipes(package)
                     } label: {
-                        Text("Tout voir").foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
+                        Text(MiamText.sharedInstance.showAll).foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
                     }
                 }
                 ScrollView(.horizontal) {
@@ -168,7 +197,7 @@ internal struct CatalogViewHeader: View {
 
                 VStack (alignment: .leading) {
                     Spacer()
-                    Text("Idées repas en 1 clic")
+                    Text(MiamText.sharedInstance.mealIdeas)
                         .foregroundColor(.white)
                         .font(.system(size: 20)).bold()
                     Image.miamImage(icon: .yellowUnderline)
@@ -184,9 +213,7 @@ internal struct CatalogViewHeader: View {
 }
 
 @available(iOS 14, *)
-internal struct CatalogViewToolbar: View {
-    let myIdeas = "Mes idées repas"
-
+internal struct CatalogToolbarView: View {
     let showBackButton: Bool
     let favoritesFilterActive: Bool
     let backTapped: () -> Void
@@ -245,7 +272,7 @@ internal struct CatalogViewToolbar: View {
                             Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
-                            Text(myIdeas).foregroundColor(.white)
+                            Text(MiamText.sharedInstance.myMealIdeas).foregroundColor(.white)
                         }
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))

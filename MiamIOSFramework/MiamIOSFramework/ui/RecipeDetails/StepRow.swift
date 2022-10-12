@@ -52,8 +52,8 @@ struct StepRow: View {
                                 .border(.black, width: 1)
                                         .frame(width:20, height:20, alignment: .center)
                                         
-                            if(self.checkState){
-                                Image("miamCheck", bundle: Bundle(for: RecipeCardVM.self))
+                            if(self.checkState) {
+                                Image.miamImage(icon: .check)
                                     .renderingMode(.original).frame( alignment: .center)
                             }
                             

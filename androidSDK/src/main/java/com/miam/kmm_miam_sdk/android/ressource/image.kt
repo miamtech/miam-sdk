@@ -4,6 +4,7 @@ import com.miam.kmm_miam_sdk.android.R
 
 object Image {
     var delete: Int = R.drawable.ic_bin
+    var look: Int = R.drawable.ic_eye
     var time: Int = R.drawable.ic_clock
     var difficulty: Int = R.drawable.ic_diflow
     var difficultyLow: Int = R.drawable.ic_easy
@@ -13,8 +14,6 @@ object Image {
     var favorite: Int = R.drawable.ic_favorite
     var favoriteFilled: Int = R.drawable.ic_favorite_filled
     var close: Int = R.drawable.ic_close
-    var knife: Int = R.drawable.ic_knife
-    var oven: Int = R.drawable.ic_oven
     var guests: Int = R.drawable.ic_peoples
     var less: Int = R.drawable.ic_less
     var plus: Int = R.drawable.ic_plus

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
+import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
@@ -19,7 +20,19 @@ class Catalog @JvmOverloads constructor(
 ) : AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
-    
+
+    fun bind(
+        categoryId: String,
+        title: String?
+    ) {
+        vmCatalog.setEvent(
+            CatalogContract.Event.GoToRecipeListFromCategory(
+                categoryId,
+                title ?: ""
+            )
+        )
+    }
+
     @Composable
     override fun Content() {
 

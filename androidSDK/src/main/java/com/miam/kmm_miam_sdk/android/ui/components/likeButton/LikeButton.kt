@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.recipe.RecipeContract
-import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonColor.buttonBackgroundColor
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonColor.iconColor
@@ -22,40 +20,38 @@ import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonStyle.ic
 
 @Composable
 fun LikeButton(
-    vmRecipe: RecipeViewModel
+    isCurrentlyLiked: Boolean,
+    toggleLike: () -> Unit
 ) {
     Clickable(
         onClick = {
-            vmRecipe.setEvent(
-                RecipeContract.Event.OnToggleLike
+            toggleLike()
+        }
+    ) {
+        Surface(
+            shape = CircleShape
+        ) {
+            Box(
+                Modifier
+                    .background(buttonBackgroundColor)
+                    .padding(8.dp)
             )
-        },
-        children = {
-            Surface(
-                shape = CircleShape,
-                elevation = 8.dp
-            ) {
-                Box(
-                    Modifier
-                        .background(buttonBackgroundColor)
-                        .padding(8.dp))
-                {
+            {
+                Image(
+                    painter = painterResource(LikeButtonImage.favorite),
+                    contentDescription = "favorite",
+                    modifier = iconModifier,
+                    colorFilter = ColorFilter.tint(color = iconColor)
+                )
+                if (isCurrentlyLiked) {
                     Image(
-                        painter = painterResource(LikeButtonImage.favorite),
+                        painter = painterResource(LikeButtonImage.favoriteFilled),
                         contentDescription = "favorite",
                         modifier = iconModifier,
                         colorFilter = ColorFilter.tint(color = iconColor)
                     )
-                    if (vmRecipe.currentState.isLiked) {
-                        Image(
-                            painter = painterResource(LikeButtonImage.favoriteFilled),
-                            contentDescription = "favorite",
-                            modifier = iconModifier,
-                            colorFilter = ColorFilter.tint(color = iconColor)
-                        )
-                    }
                 }
             }
         }
-    )
+    }
 }

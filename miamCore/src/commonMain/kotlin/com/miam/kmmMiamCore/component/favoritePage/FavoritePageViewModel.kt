@@ -1,10 +1,13 @@
 package com.miam.kmmMiamCore.component.favoritePage
 
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.LikeEffect
+import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -20,9 +23,11 @@ open class FavoritePageViewModel :
     }
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val likeStore: LikeStore by inject()
 
     init {
         loadPage()
+        listenToLikeStoreEffects()
     }
 
     override fun createInitialState(): FavoritePageContract.State =
@@ -39,7 +44,6 @@ open class FavoritePageViewModel :
         }
     }
 
-
     private fun loadPage() {
         if (currentState.noMoreData) return
 
@@ -55,22 +59,18 @@ open class FavoritePageViewModel :
                 currentPage
             )
             newRecipes.addAll(fetchedRecipes)
+            val uiState = if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success( newRecipes )
+            setState {
+                copy(
+                    favoritesRecipes = uiState,
+                    noMoreData = noMoreData,
+                    currentPage = currentPage + 1,
+                    isFetchingNewPage = false
+                )
+            }
             noMoreData = fetchedRecipes.size < RecipeRepositoryImp.DEFAULT_PAGESIZE
         }.invokeOnCompletion { error ->
-            if (error == null) {
-                val uiState =
-                    if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(
-                        newRecipes
-                    )
-                setState {
-                    copy(
-                        favoritesRecipes = uiState,
-                        noMoreData = noMoreData,
-                        currentPage = currentPage + 1,
-                        isFetchingNewPage = false
-                    )
-                }
-            } else {
+            if (error != null) {
                 LogHandler.error("Favorite loadPage is in error")
                 setState {
                     copy(
@@ -88,5 +88,34 @@ open class FavoritePageViewModel :
             return favoritesRecipes.data
         }
         return listOf()
+    }
+
+    private fun listenToLikeStoreEffects() {
+        launch(coroutineHandler) {
+            likeStore.observeSideEffect().collect { effect ->
+                if (effect is LikeEffect.Disliked) {
+                    removeRecipe(effect.recipeId)
+                } else if (effect is LikeEffect.Liked) {
+                    insertRecipe(effect.recipe)
+                }
+            }
+        }
+    }
+
+    private fun removeRecipe(recipeId: String) {
+        val indexToRemove = getCurrentRecipes().indexOfFirst { recipe -> recipe.id == recipeId }
+        if (indexToRemove == -1) return
+        val newList = this.getCurrentRecipes().toMutableList()
+        newList.removeAt(indexToRemove)
+        val uiState = if (newList.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newList.toList())
+        setState { copy(favoritesRecipes = uiState) }
+    }
+
+    private fun insertRecipe(recipe: Recipe) {
+        val recipeIndex = getCurrentRecipes().indexOfFirst { recip -> recip.id == recipe.id }
+        if (recipeIndex != -1) return
+        val newList = this.getCurrentRecipes().toMutableList()
+        newList.add(recipe)
+        setState { copy(favoritesRecipes = BasicUiState.Success(newList.toList())) }
     }
 }

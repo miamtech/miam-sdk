@@ -21,7 +21,20 @@ public struct MyMealRow: View {
 
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State private var showingPopup = false
+    @SwiftUI.State private var showingItemSelector = false
 
+    
+    private let itemSelectorViewModel = ItemSelectorVM()
+    
+    private func goToItemSelector() {
+        itemSelectorViewModel.sharedInstance.setEvent(event: ItemSelectorContractEvent.SetReturnToBasketPreview(returnToPreview : { closeItemSelector() }))
+        showingItemSelector.toggle()
+    }
+    
+    private func closeItemSelector() {
+        showingItemSelector.toggle()
+    }
+    
     public init(myMealViewModel: MyMealVM, meal: MyMeal) {
         self.meal = meal
         self.myMealViewModel = myMealViewModel
@@ -54,7 +67,7 @@ public struct MyMealRow: View {
 
     func replaceProduct(_ previewLine: BasketPreviewLine) {
         basketPreviewViewModel.setEvent(event: BasketPreviewContractEvent.OpenItemSelector(bpl: previewLine))
-        //goToItemSelector()
+        goToItemSelector()
     }
 
     public var body: some View {
@@ -99,7 +112,7 @@ public struct MyMealRow: View {
                 VStack {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
-
+                        
                         BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine) {
                             removeProduct(entry)
                         } replaceProductAction: {
@@ -107,20 +120,20 @@ public struct MyMealRow: View {
                         }
                     }
                 }
-
+                
                 if meal.basketPreviewLine.productsOftenDeleted.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: meal.basketPreviewLine.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
-
+                    
                 }
-
+                
                 if meal.basketPreviewLine.productsNotFound.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: meal.basketPreviewLine.productsNotFound, isAddable: false, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
                 }
-
+                
                 if meal.basketPreviewLine.productsRemoved.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: meal.basketPreviewLine.productsRemoved, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
@@ -133,6 +146,9 @@ public struct MyMealRow: View {
                 initialRoute : initialDialogScreen,
                 routerVm: recipeViewModel.routerVM
             )
+        }.sheet(isPresented: $showingItemSelector) {
+            
+            ItemSelector()
         }.onAppear(perform: {
             recipeViewModel.fetchRecipe(recipeId: meal.id)
         })

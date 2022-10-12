@@ -12,13 +12,13 @@ import miamCore
 struct IngredientRow: View {
     
     private var ingredientName : String
-    private var qty : String
+    private var quantity : String
     
-    init(ingredientName : String, qty: String){
+    init(ingredientName : String, quantity: String){
         var ingredientNameCapitailized = ingredientName
         ingredientNameCapitailized.capitalizeFirstLetter()
         self.ingredientName = ingredientNameCapitailized
-        self.qty = qty
+        self.quantity = quantity
     }
         
     var body: some View {
@@ -30,11 +30,10 @@ struct IngredientRow: View {
             
             Spacer()
             
-            Text(qty)
+            Text(quantity)
                 .foregroundColor(Color.miamColor(.black))
                 .font(.system(size: 16, weight: .bold, design: .default))
                 .padding(Dimension.sharedInstance.mPadding)
         }
     }
 }
-
