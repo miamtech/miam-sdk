@@ -332,4 +332,26 @@ public class Template {
         Binding<Bool>,
         () -> Void
     ) -> AnyView)? = nil
+   
+    /**
+     recipes: [Recipe]
+     tagTappedAction: () -> Void
+     */
+    public var tagViewTemplate: ((
+        [Recipe],
+        () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     showingListModal: Binding<Bool>
+     showingPopup: Binding<Bool>
+     recipeList : NSArray
+     basketTagVm : BasketTagVM
+     */
+    public var basketTagListModal: ((
+        Binding<Bool>,
+        Binding<Bool>,
+        NSArray,
+        BasketTagVM
+    ) -> AnyView)? = nil
 }

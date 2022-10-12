@@ -25,7 +25,7 @@ struct MealIdeas: View {
                         CategoriesMenu(categorie: MiamManager.sharedInstance.categories)                                  
                         VStack(spacing: 24.0) {
                             if(showTag){
-                                BasketTag(itemId: "1088020")
+                                BasketTagView(itemId: "1088020")
                             }
 
                             RecipeCardView(recipeId: "9422")
