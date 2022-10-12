@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
@@ -29,6 +30,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import kotlin.math.max
 import kotlin.math.round
 
 
@@ -41,8 +43,9 @@ fun BasketPreviewRecipeLine(
 ) {
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
+    val guestDivider = max(1, line.count)
     val pricePerGuest =
-        "${(round(((line.price.toDouble() * 100).toBigDecimal() / line.count.toBigDecimal()).toDouble()) / 100)}€ /personne"
+        "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
     var guestCount by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail() {

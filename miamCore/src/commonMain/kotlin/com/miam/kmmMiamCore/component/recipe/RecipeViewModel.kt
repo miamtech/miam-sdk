@@ -14,9 +14,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import kotlin.math.max
+import kotlin.math.min
 
 open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+
+    private val MAX_GUESTS = 100
+    private val MIN_GUESTS = 1
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in recipe view $exception ${exception.stackTraceToString()}")
@@ -104,8 +109,13 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     private suspend fun listenguestSubjectChanges() {
-        guestSubject.debounce(500).collect {
-            addOrAlterRecipe()
+        guestSubject.debounce(500).collect { boundedGuests ->
+            if (currentState.guest != boundedGuests) {
+                setState { copy(guest = boundedGuests) }
+                if (currentState.isInCart) {
+                    addOrAlterRecipe()
+                }
+            }
         }
     }
 
@@ -118,11 +128,10 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun updateGuest(nbGuest: Int) {
-        if ((currentState.guest in (nbGuest + 1)..1) || (currentState.guest in 100 until nbGuest)) return
-        setState { copy(guest = nbGuest) }
-        if (currentState.isInCart) launch(coroutineHandler) {
-            guestSubject.emit(currentState.guest)
-        }
+        // reduce guest between min and max
+        var boundedGuests = max(MIN_GUESTS, nbGuest)
+        boundedGuests = min(MAX_GUESTS, boundedGuests)
+        launch(coroutineHandler) { guestSubject.emit(boundedGuests) }
     }
 
     private fun addOrAlterRecipe(): Job {

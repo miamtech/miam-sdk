@@ -19,6 +19,9 @@
 - [FIX][COR] Analytics add pos id to confirm event
 - [FIX][COR] add params to template
 
+## 2.2.7
+- [FIX][COR] Avoid div by zero
+
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
 - [FIX][COR] Number of records given on filters is wrong
