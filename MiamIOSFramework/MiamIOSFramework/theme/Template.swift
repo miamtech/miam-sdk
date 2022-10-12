@@ -354,4 +354,13 @@ public class Template {
         NSArray,
         BasketTagVM
     ) -> AnyView)? = nil
+   
+    /**
+     product : BasketPreviewLine
+     isSelected : Bool
+     */
+    public var itemSelectorProductRowTemplate: ((
+        BasketPreviewLine,
+        Bool
+    ) -> AnyView)? = nil
 }
