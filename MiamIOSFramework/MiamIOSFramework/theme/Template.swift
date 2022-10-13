@@ -18,13 +18,23 @@ public class Template {
     
     
     /**
-        recipe view Model
-         look : ( ) -> Void
-         buy: () -> Void
+    recipe: Recipe?
+    isRecipeInCart: Bool
+    isLikeEnabled: Bool
+    isLiked: Bool
+    showMealIdeaTag: Bool
+    goToDetailsAction: () -> Void
+    showOrAddRecipeAction: () -> Void
+    toggleLikeAction: () -> Void
      */
-    public var recipeCardSuccessViewTemplate : ((_: RecipeCardVM,
-                                      _ : @escaping () -> Void,
-                                      _ : @escaping () -> Void)  -> AnyView)? = nil
+    public var recipeCardTemplate : ((Recipe?,
+                                      Bool,
+                                      Bool,
+                                      Bool,
+                                      Bool,
+                                      () -> Void,
+                                      () -> Void,
+                                      () -> Void)  -> AnyView)? = nil
     
     /**
      First parameter Int is the current value of counter
