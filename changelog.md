@@ -1,4 +1,5 @@
 ## 2.4.0
+- [FEA][COR] carousel view model
 - [FIX][IOS] Infinite loading on recipe card when using a template
 - [FIX][IOS] Add missing templates
 
