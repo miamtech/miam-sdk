@@ -11,7 +11,7 @@ import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 interface RecipeCarouselContract {
 
     sealed class Event : UiEvent {
-        data class GetRecipeSuggestionsId(val productId: String, val numberOfResult: Int = 4) : Event()
+        data class GetRecipeSuggestionsFromId(val productId: String, val numberOfResult: Int = 4) : Event()
         data class GetRecipeSuggestionsFromCriteria(val criteria: SuggestionsCriteria, val numberOfResult: Int = 4) : Event()
     }
 
