@@ -34,8 +34,8 @@ struct PriceView: View {
     }
     
     var body: some View {
-        if(Template.sharedInstance.priceTemplate != nil) {
-            Template.sharedInstance.priceTemplate!(
+        if let template = Template.sharedInstance.priceViewTemplate {
+            template(
                 Int(viewModel.currentState.integerPart)!,
                 Int(viewModel.currentState.decimalPart)!
             )

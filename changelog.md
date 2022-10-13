@@ -1,3 +1,7 @@
+## 2.4.0
+- [FIX][IOS] Infinite loading on recipe card when using a template
+- [FIX][IOS] Add missing templates
+
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
 - [FIX][IOS] Improve recipe detail view recomposition

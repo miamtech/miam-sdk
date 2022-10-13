@@ -21,37 +21,41 @@ struct ItemSelectorProductRow: View {
     }
     
     var body: some View {
-        VStack{
-            HStack{
-                AsyncImage(
-                    url: URL(
-                        string: product.picture
-                    )! ,
-                    placeholder: { Text("loading ...")},
-                    height: 90
-                ).frame(width: 90, height: 90)
-                VStack(alignment: .leading){
-                    Text(product.productBrand )
-                        .font(.system(size: 13,weight: .heavy))
-                        .padding(.bottom,8)
-                    Text(product.productDescription )
-                        .font(.system(size: 13,weight: .heavy))
-                        .padding(.bottom,32).frame(width:200)
-                    HStack{
-                        Spacer()
-                        Text(product.price + "€")
-                            .font(.system(size: 16, weight: .heavy)).padding(.trailing,16)
-                        Text(isSelected ? ItemSelectorText.sharedInstance.selectedProduct : ItemSelectorText.sharedInstance.select )
-                            .font(.system(size: 14, weight: .heavy))
-                            .padding(.horizontal,20)
-                            .padding(.vertical,9)
-                            .foregroundColor(Color.miamColor(.white))
-                            .background( isSelected ? Color.miamColor(.grey) : Color.miamColor(.primary))
-                            .cornerRadius(1000)
-                    }
-                }.padding(16)
+        if let template = Template.sharedInstance.itemSelectorProductRowTemplate {
+           template(product, isSelected)
+        } else {
+            VStack{
+                HStack{
+                    AsyncImage(
+                        url: URL(
+                            string: product.picture
+                        )! ,
+                        placeholder: { Text("loading ...")},
+                        height: 90
+                    ).frame(width: 90, height: 90)
+                    VStack(alignment: .leading){
+                        Text(product.productBrand )
+                            .font(.system(size: 13,weight: .heavy))
+                            .padding(.bottom,8)
+                        Text(product.productDescription )
+                            .font(.system(size: 13,weight: .heavy))
+                            .padding(.bottom,32).frame(width:200)
+                        HStack{
+                            Spacer()
+                            Text(product.price + "€")
+                                .font(.system(size: 16, weight: .heavy)).padding(.trailing,16)
+                            Text(isSelected ? ItemSelectorText.sharedInstance.selectedProduct : ItemSelectorText.sharedInstance.select )
+                                .font(.system(size: 14, weight: .heavy))
+                                .padding(.horizontal,20)
+                                .padding(.vertical,9)
+                                .foregroundColor(Color.miamColor(.white))
+                                .background( isSelected ? Color.miamColor(.grey) : Color.miamColor(.primary))
+                                .cornerRadius(1000)
+                        }
+                    }.padding(16)
+                }
+                Divider()
             }
-            Divider()
         }
     }
 }

@@ -43,12 +43,8 @@ struct CounterView: View {
     }
     
     var body: some View {
-        if(Template.sharedInstance.counterTemplate != nil) {
-            Template.sharedInstance.counterTemplate!(
-                count
-               ,{increase()}
-               ,{decrease()}
-            )
+        if let template = Template.sharedInstance.counterViewTemplate {
+            template(count, {increase()}, {decrease()})
         } else {
             HStack{
                 Button(action: {
