@@ -5,15 +5,29 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,9 +40,14 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
-import com.miam.kmmMiamCore.handler.*
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.Basket.BasketHandlerInstance
+import com.miam.kmmMiamCore.handler.CatalogCategory
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
+import com.miam.kmmMiamCore.handler.GroceriesListHandler
+import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
@@ -352,7 +371,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
         recipe1.bind(recipeId = "305")
         recipe2.bind(criteria = RandomCriteria())
-        recipe3.bind(recipeId = "1")
+        // recette a base de poulet
+        recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
         Column {
             recipe1.Content()

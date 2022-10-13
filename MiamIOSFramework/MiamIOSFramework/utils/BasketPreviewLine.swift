@@ -60,8 +60,8 @@ internal extension BasketPreviewLine {
         guard let parsedPrice = Double(price) else {
             return ""
         }
-
-        let price = parsedPrice * 100 / Double(count) / 100
+        let guardCount = count > 0 ? count : 1
+        let price = parsedPrice * 100 / Double(guardCount) / 100
         let formattedPrice = String(format: "%.2f", price)
         return "\(formattedPrice)€ /personne"
     }

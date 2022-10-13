@@ -58,7 +58,7 @@ public struct RecipeDetailsView: View {
             ScrollView {
                 ZStack {
                     VStack {
-                        if(viewModel.recipe != nil ){
+                        if (viewModel.recipe != nil) {
                             if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
                                 Template.sharedInstance.recipeDetailInfosTemplate!(
                                     viewModel.recipe!
@@ -81,41 +81,16 @@ public struct RecipeDetailsView: View {
                                                restingTime: viewModel.recipe!.restingTimeIos)
                             }
                             
-                            if (Template.sharedInstance.recipeDetailIngredientsTemplate != nil) {
-                                Template.sharedInstance.recipeDetailIngredientsTemplate!(
-                                    viewModel.recipe!.relationships?.ingredients!.data ?? [],
-                                    viewModel,
-                                    Int(viewModel.currentState.guest),
-                                    { viewModel.increaseGuest() },
-                                    { viewModel.decreaseGuest() }
-                                )
-                            } else {
-                                //Ingredients Heading
-                                if let ingredients = viewModel.recipe?.relationships?.ingredients?.data {
-                                    let counterView = AnyView(
-                                        CounterView(
-                                            count: Int(viewModel.currentState.guest),
-                                            isDisable: false,
-                                            increase: { viewModel.increaseGuest() },
-                                            decrease: { viewModel.decreaseGuest() }
-                                        )
-                                    )
-                                    RecipeIngredientsListView(ingredients: ingredients,
-                                                              recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
-                                                              currentGuests: Int(viewModel.currentState.guest),
-                                                              counterView: counterView)
-                                }
-                            }
                             
-                            if (Template.sharedInstance.recipeDetailStepsTemplate != nil) {
-                                Template.sharedInstance.recipeDetailStepsTemplate!(
-                                    viewModel.recipe?.sortedStep ?? [RecipeStep](),
-                                    viewModel
-                                )
+                            if let ingredients = viewModel.recipe?.relationships?.ingredients?.data {
+                                RecipeDetailsIngredientsView(ingredients: ingredients,
+                                                          recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
+                                                          currentGuests: Int(viewModel.currentState.guest),
+                                                          increaseGuestsAction: {viewModel.increaseGuest()},
+                                                          decreaseGuestsAction: {viewModel.decreaseGuest()})
                             }
-                            else {
-                                RecipeStepsView(steps: viewModel.sortedSteps)
-                            }
+                        
+                            RecipeDetailsStepsView(steps: viewModel.sortedSteps)
                         }
                     }.padding(.bottom, 100.0)
                 }.onAppear(perform: {
