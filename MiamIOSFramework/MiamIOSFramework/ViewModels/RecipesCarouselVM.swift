@@ -10,9 +10,7 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class RecipeCarouselVM :RecipeCarouselViewModel ,ObservableObject {
-  
-    
+class RecipeCarouselVM: RecipeCarouselViewModel ,ObservableObject {
     @Published var suggestions: [Recipe] = []
     @Published var state: RecipeCarouselContractState?
     

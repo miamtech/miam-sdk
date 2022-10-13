@@ -17,8 +17,8 @@ struct RecipeCarouselView: View {
     var recipeCarouselVm: RecipeCarouselVM = RecipeCarouselVM()
 
     var body: some View {
-        ManagementResourceState<RecipeCarouselContractState, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
-            resourceState: recipeCarouselVm.state!,
+        ManagementResourceState<NSArray, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
+            resourceState: recipeCarouselVm.state!.suggestions,
                                   successView: RecipesCarouselSuccessView(title: "Idées de repas", showAllButtonTitle: "Voir tout", recipes: []),
                                   loadingView: ProgressLoader(color: Color.miamColor(.primary)),
                                   emptyView: EmptyView())
