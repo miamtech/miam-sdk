@@ -56,13 +56,8 @@ class RecipeRepositoryImp(
         supplierId: Int,
         criteria: SuggestionsCriteria
     ): Recipe {
-        val recipes = recipeDataSource.getRecipeSuggestions(
-            supplierId,
-            criteria = criteria,
-            included = listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
-        )
         // TODO : WARNING what if list is empty !!??
-        return addRecipeLike(recipes[0])
+        return getRecipeSuggestions(supplierId, criteria, 1)[0]
     }
 
     override suspend fun getRecipeSuggestions(

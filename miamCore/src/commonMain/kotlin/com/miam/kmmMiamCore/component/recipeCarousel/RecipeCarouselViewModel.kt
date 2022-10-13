@@ -24,7 +24,8 @@ class RecipeCarouselViewModel : BaseViewModel<RecipeCarouselContract.Event, Reci
 
     override fun handleEvent(event: RecipeCarouselContract.Event) {
         when (event) {
-            is RecipeCarouselContract.Event.GetRecipeSuggestions -> getRecipeSuggestionsFromId(event.productId, event.numberOfResult ?: 4)
+            is RecipeCarouselContract.Event.GetRecipeSuggestionsFromId -> getRecipeSuggestionsFromId(event.productId, event.numberOfResult)
+            is RecipeCarouselContract.Event.GetRecipeSuggestionsFromCriteria -> getRecipeSuggestionsFromCriteria(event.criteria, event.numberOfResult)
         }
     }
 

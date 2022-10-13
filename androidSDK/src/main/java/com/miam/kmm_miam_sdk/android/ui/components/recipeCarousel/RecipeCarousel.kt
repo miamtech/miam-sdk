@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.recipeCarousel.RecipeCarouselContract
 import com.miam.kmmMiamCore.component.recipeCarousel.RecipeCarouselViewModel
+import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 class RecipeCarousel @JvmOverloads constructor(
@@ -21,11 +22,16 @@ class RecipeCarousel @JvmOverloads constructor(
     private var recipeListSize = 4
 
     fun bind(
-        productId: String = "",
+        productId: String?,
+        criteria: SuggestionsCriteria?,
         recipeListSize: Int?
     ) {
+        if (productId != null) {
+            vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetRecipeSuggestionsFromId(productId, recipeListSize ?: 4))
+        } else if (criteria != null) {
+            vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetRecipeSuggestionsFromCriteria(criteria, recipeListSize ?: 4))
+        }
 
-        vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetRecipeSuggestions(productId, recipeListSize))
         this.recipeListSize = recipeListSize ?: 4
         return
 
