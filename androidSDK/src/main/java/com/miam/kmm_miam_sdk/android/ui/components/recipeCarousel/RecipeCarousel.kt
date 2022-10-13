@@ -22,9 +22,9 @@ class RecipeCarousel @JvmOverloads constructor(
     private var recipeListSize = 4
 
     fun bind(
-        productId: String?,
-        criteria: SuggestionsCriteria?,
-        recipeListSize: Int?
+        productId: String? = null,
+        criteria: SuggestionsCriteria? = null,
+        recipeListSize: Int? = null
     ) {
         if (productId != null) {
             vmRecipeCarousel.setEvent(RecipeCarouselContract.Event.GetRecipeSuggestionsFromId(productId, recipeListSize ?: 4))

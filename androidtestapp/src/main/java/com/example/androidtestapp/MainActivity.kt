@@ -387,7 +387,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
     fun Carousel(context: Context) {
         // bananas recipes
         val recipeCarousel = RecipeCarousel(context)
-        recipeCarousel.bind("6134471", 3)
+        recipeCarousel.bind("6134471", recipeListSize = 3)
         recipeCarousel.Content()
     }
 
