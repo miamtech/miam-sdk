@@ -61,5 +61,6 @@ interface RecipeContract {
 
     sealed class Effect : UiEffect {
         object HideCard : Effect()
+        object Disliked : Effect()
     }
 }

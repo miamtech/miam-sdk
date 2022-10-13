@@ -374,7 +374,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
         recipe1.bind(recipeId = "305")
         recipe2.bind(criteria = RandomCriteria())
-        recipe3.bind(recipeId = "1")
+        // recette a base de poulet
+        recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
         Column {
             recipe1.Content()
