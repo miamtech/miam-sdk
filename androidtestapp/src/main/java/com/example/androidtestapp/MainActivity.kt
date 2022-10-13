@@ -58,6 +58,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCarousel.RecipeCarousel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -218,10 +219,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     .height(80.dp)
                     .width(80.dp)
                     .clip(RoundedCornerShape(8.dp))
-
             )
-
-
         }
 
     }
@@ -298,7 +296,12 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         content(retailerBasketSubject)
+                        Divider()
+                        Carousel(context = this@MainActivity)
+                        Divider()
                         recipes(this@MainActivity)
+
+
                     }
                 }
             }
@@ -379,6 +382,14 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             recipe2.Content()
             recipe3.Content()
         }
+    }
+
+    @Composable
+    fun Carousel(context: Context) {
+        // bananas recipes
+        val recipeCarousel = RecipeCarousel(context)
+        recipeCarousel.bind("6134471", recipeListSize = 3)
+        recipeCarousel.Content()
     }
 
     private fun initTemplate() {
