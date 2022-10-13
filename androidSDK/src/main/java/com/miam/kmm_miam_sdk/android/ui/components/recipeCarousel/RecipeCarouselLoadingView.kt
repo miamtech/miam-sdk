@@ -12,12 +12,12 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeLoadingView
 
 @Composable
-fun RecipeCarouselLoadingView(size: Int) {
+fun RecipeCarouselLoadingView(numberOfSkeleton: Int) {
 
     val scrollState = rememberScrollState()
 
     Row(modifier = Modifier.horizontalScroll(scrollState)) {
-        for (i in 1..size) {
+        for (i in 1..numberOfSkeleton) {
             Box(
                 modifier = Modifier
                     .width(350.dp)
