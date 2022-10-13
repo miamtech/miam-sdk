@@ -32,9 +32,9 @@ public class Template {
                                       Bool,
                                       Bool,
                                       Bool,
-                                      () -> Void,
-                                      () -> Void,
-                                      () -> Void)  -> AnyView)? = nil
+                                      @escaping () -> Void,
+                                      @escaping () -> Void,
+                                      @escaping () -> Void)  -> AnyView)? = nil
     
     /**
      First parameter Int is the current value of counter
@@ -91,9 +91,8 @@ public class Template {
             Binding<Bool>,
             Bool,
             Bool,
-            () -> Void
-                ) -> AnyView
-        )? = nil
+            @escaping () -> Void
+    ) -> AnyView)? = nil
     
     /**
      _: Recipe
@@ -109,12 +108,12 @@ public class Template {
      increaseGuestsAction: () -> Void
      decreaseGuestsAction: () -> Void
      */
-    public  var recipeDetailsIngredientsViewTemplate : ( (
+    public  var recipeDetailsIngredientsViewTemplate : ((
         [Ingredient],
         Int,
         Int,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView )? = nil
     
     
@@ -134,8 +133,8 @@ public class Template {
     public var recipeDetailFooterTemplate : ((
            // _: Recipe,
             _ : RecipeViewModel,
-            _ : () -> Void,
-            _ : () -> Void
+            _ : @escaping () -> Void,
+            _ : @escaping () -> Void
                 ) -> AnyView )? =  nil
 
 
@@ -156,8 +155,8 @@ public class Template {
         String,
         Int,
         String,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -165,8 +164,8 @@ public class Template {
      continueShoppingAction: () -> Void
      */
     public var basketPreviewFooterTemplate: ((
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -184,8 +183,8 @@ public class Template {
         String,
         String,
         String,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -203,7 +202,7 @@ public class Template {
      */
     public var ingredientNotInBasketRowTemplate: ((
         String,
-        () -> Void
+        @escaping () -> Void
     )-> AnyView)? = nil
 
 
@@ -226,8 +225,8 @@ public class Template {
         Binding<Bool>,
         Binding<Double>,
         String,
-        () -> Void,
-        (Package) -> Void
+        @escaping () -> Void,
+        @escaping (Package) -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -237,18 +236,18 @@ public class Template {
      */
     public var catalogSearchViewTemplate: ((
         CatalogVM,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
    
     /**
      searchString: String
      browseCatalogAction: () -> Void
-     showingFavorites = false
+     showingFavorites
      */
     public var catalogRecipePageNoResultsViewTemplate: ((
         String,
-        () -> Void,
+        @escaping () -> Void,
         Bool
     ) -> AnyView)? = nil
     
@@ -258,7 +257,7 @@ public class Template {
      */
     public var catalogPackageRowTemplate: ((
         CatalogPackage,
-        (CatalogPackage) -> Void
+        @escaping (CatalogPackage) -> Void
     ) -> AnyView)? = nil
 
 
@@ -275,10 +274,10 @@ public class Template {
     public var catalogViewToolbarTemplate: ((
         Bool,
         Bool,
-        () -> Void,
-        () -> Void,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
 
@@ -294,7 +293,7 @@ public class Template {
     public var catalogFiltersSectionTemplate: ((
         String,
         Array<CatalogFilterOptions>,
-        (CatalogFilterOptions) -> Void
+        @escaping (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -303,7 +302,7 @@ public class Template {
      */
     public var catalogFilterRowTemplate: ((
         CatalogFilterOptions,
-        (CatalogFilterOptions) -> Void
+        @escaping (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
     
     
@@ -313,7 +312,7 @@ public class Template {
      */
     public var favoritesSuccessViewTemplate: ((
         [Recipe],
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -340,7 +339,7 @@ public class Template {
      */
     public var likeButtonTemplate: ((
         Binding<Bool>,
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
    
     /**
@@ -349,7 +348,7 @@ public class Template {
      */
     public var tagViewTemplate: ((
         [Recipe],
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
