@@ -1,5 +1,7 @@
 ## 2.5.0
 - [FIX][IOS] Add missing template for recipe card loading view
+- [FEA][IOS] Add a parameter to control the height of recipe card view. 
+- [FEA][IOS] Recipe carousel
 
 ## 2.4.0
 - [FEA][COR] carousel view model

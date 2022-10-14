@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
-class RecipeCarouselViewModel : BaseViewModel<RecipeCarouselContract.Event, RecipeCarouselContract.State, RecipeCarouselContract.Effect>() {
+open class RecipeCarouselViewModel : BaseViewModel<RecipeCarouselContract.Event, RecipeCarouselContract.State, RecipeCarouselContract.Effect>() {
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()

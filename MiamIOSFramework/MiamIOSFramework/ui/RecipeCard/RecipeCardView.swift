@@ -12,20 +12,23 @@ import miamCore
 public struct RecipeCardView: View {
     public var criteria: SuggestionsCriteria?
     public var recipeId: String?
+    let recipeCardHeight: CGFloat
     private let showMealIdeaTag: Bool
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
     
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
     
-    public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true) {
+    public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.criteria = criteria
         self.showMealIdeaTag = showMealIdeaTag
+        self.recipeCardHeight = recipeCardHeight
     }
     
-    public init(recipeId: String, showMealIdeaTag: Bool = true) {
+    public init(recipeId: String, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.recipeId = recipeId
         self.showMealIdeaTag = showMealIdeaTag
+        self.recipeCardHeight = recipeCardHeight
     }
     
     public var body: some View {
@@ -66,7 +69,7 @@ public struct RecipeCardView: View {
                     }
                 })
             }
-        }.frame(height: 400)
+        }.frame(height: recipeCardHeight)
          .sheet(isPresented: $showingPopup) {
             Dialog(
                 close: { showingPopup = false },
@@ -88,4 +91,3 @@ public struct RecipeCardEmptyView: View {
         HStack{}
     }
 }
- 
