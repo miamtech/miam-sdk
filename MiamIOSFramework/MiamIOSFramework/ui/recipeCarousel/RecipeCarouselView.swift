@@ -13,12 +13,14 @@ import miamCore
 public struct RecipeCarouselView: View {
     public let index: Int = 4
     
-    let productId: String
+    let productId: String?
+    let criteria: SuggestionsCriteria?
     let numberOfResults: Int
     @ObservedObject var recipeCarouselVm: RecipeCarouselVM = RecipeCarouselVM()
 
-    public init(productId: String, numberOfResults: Int) {
+    public init(productId: String? = nil, criteria: SuggestionsCriteria? = nil, numberOfResults: Int) {
         self.productId = productId
+        self.criteria = criteria
         self.numberOfResults = numberOfResults
     }
     
@@ -30,8 +32,13 @@ public struct RecipeCarouselView: View {
                 loadingView: ProgressLoader(color: Color.miamColor(.primary)),
                 emptyView: EmptyView())
             .onAppear {
-                recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestions(productId: productId,
-                                                                                                  numberOfResult: KotlinInt(int: Int32(numberOfResults))))
+                if let productId = self.productId {
+                    recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestionsFromId(productId: productId,
+                                                                                                            numberOfResult:  Int32(numberOfResults)))
+                } else if let criteria = self.criteria {
+                    recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestionsFromCriteria(criteria: criteria,
+                                                                                                            numberOfResult:  Int32(numberOfResults)))
+                }
             }
         }
     }
