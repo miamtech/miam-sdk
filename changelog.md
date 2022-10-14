@@ -1,3 +1,6 @@
+## 2.5.0
+- [FEA][IOS] Recipe carousel
+
 ## 2.4.0
 - [FEA][COR] carousel view model
 - [FEA][AND] recipe carousel component

@@ -19,6 +19,9 @@ struct MyBasketView: View {
     var body: some View {
         NavigationView {
             VStack {
+                HStack {
+                    RecipeCarouselView(productId: "7345", numberOfResults: 4)
+                }
                 List {
                     ForEach(basket.items) { product in
                         BasketItemView(product: product)
