@@ -16,8 +16,7 @@ class RecipeCarouselVM: RecipeCarouselViewModel ,ObservableObject {
     
     override init() {
         super.init()
-       
-        self.collect(flow: self.uiState) { data in
+        self.collect(flow: uiState) { data in
             let state = data as! RecipeCarouselContractState
             self.state = state
             switch(state.suggestions) {
@@ -31,4 +30,3 @@ class RecipeCarouselVM: RecipeCarouselViewModel ,ObservableObject {
         }
     }
 }
-

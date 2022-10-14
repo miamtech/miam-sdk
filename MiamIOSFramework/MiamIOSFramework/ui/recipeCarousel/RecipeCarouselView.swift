@@ -10,24 +10,36 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct RecipeCarouselView: View {
-    let productId: String
-    let index: Int = 4
+public struct RecipeCarouselView: View {
+    public let index: Int = 4
     
-    var recipeCarouselVm: RecipeCarouselVM = RecipeCarouselVM()
+    let productId: String
+    let numberOfResults: Int
+    @ObservedObject var recipeCarouselVm: RecipeCarouselVM = RecipeCarouselVM()
 
-    var body: some View {
-        ManagementResourceState<NSArray, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
-            resourceState: recipeCarouselVm.state!.suggestions,
-                                  successView: RecipesCarouselSuccessView(title: "Idées de repas", showAllButtonTitle: "Voir tout", recipes: []),
-                                  loadingView: ProgressLoader(color: Color.miamColor(.primary)),
-                                  emptyView: EmptyView())
+    public init(productId: String, numberOfResults: Int) {
+        self.productId = productId
+        self.numberOfResults = numberOfResults
+    }
+    
+    public var body: some View {
+        if let carouselState = recipeCarouselVm.state {
+            ManagementResourceState<NSArray, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
+                resourceState: carouselState.suggestions,
+                successView: RecipesCarouselSuccessView(recipes: recipeCarouselVm.suggestions),
+                loadingView: ProgressLoader(color: Color.miamColor(.primary)),
+                emptyView: EmptyView())
+            .onAppear {
+                recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestions(productId: productId,
+                                                                                                  numberOfResult: KotlinInt(int: Int32(numberOfResults))))
+            }
+        }
     }
 }
 
 @available(iOS 14, *)
 struct RecipeCarouselView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeCarouselView(productId: "100")
+        RecipeCarouselView(productId: "100", numberOfResults: 4)
     }
 }
