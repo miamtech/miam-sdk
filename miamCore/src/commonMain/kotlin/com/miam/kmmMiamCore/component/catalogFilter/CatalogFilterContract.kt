@@ -8,14 +8,10 @@ import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 interface CatalogFilterContract {
 
     sealed class Event : UiEvent {
-        data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions) :
-            CatalogFilterContract.Event()
+        data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions) : Event()
+        data class OnCostFilterChanged(val costFilter: CatalogFilterOptions) : Event()
+        data class OnDifficultyChanged(val difficulty: CatalogFilterOptions) : Event()
 
-        data class OnCostFilterChanged(val costFilter: CatalogFilterOptions) :
-            CatalogFilterContract.Event()
-
-        data class OnDifficultyChanged(val difficulty: CatalogFilterOptions) :
-            CatalogFilterContract.Event()
     }
 
     data class State(
@@ -28,5 +24,7 @@ interface CatalogFilterContract {
         val category: String? = null
     ) : UiState
 
-    sealed class Effect : UiEffect
+    sealed class Effect : UiEffect {
+        object OnUpdate : Effect()
+    }
 }
