@@ -36,6 +36,8 @@ public class Template {
                                       @escaping () -> Void,
                                       @escaping () -> Void)  -> AnyView)? = nil
     
+    public var recipeCardLoadingViewTemplate: (()->AnyView)? = nil
+    
     /**
      First parameter Int is the current value of counter
      Second parameter is decrese function
