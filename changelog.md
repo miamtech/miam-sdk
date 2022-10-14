@@ -1,3 +1,6 @@
+## 2.5.0
+- [FIX][IOS] Add missing template for recipe card loading view
+
 ## 2.4.0
 - [FEA][COR] carousel view model
 - [FEA][AND] recipe carousel component
