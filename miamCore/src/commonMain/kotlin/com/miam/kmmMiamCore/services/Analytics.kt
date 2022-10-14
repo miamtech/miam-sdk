@@ -85,6 +85,7 @@ class Analytics : KoinComponent {
         val miam_amount: Float? = null,
         val total_amount: String? = null,
         val pos_id: String? = null,
+        val pos_total_amount: String? = null,
         val pos_name: String? = null,
         val search_term: String? = null,
     )

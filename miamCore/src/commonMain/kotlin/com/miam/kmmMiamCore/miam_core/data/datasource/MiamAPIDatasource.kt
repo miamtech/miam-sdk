@@ -214,12 +214,12 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
     override suspend fun getRecipeSuggestions(
         supplierId: Int,
+        size: Int?,
         criteria: SuggestionsCriteria,
         included: List<String>
     ): List<Recipe> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
-        val url =
-            "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&${includedToString(included)}"
+        val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&page[size]=${size}&${includedToString(included)}"
         val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria $returnValue")
         return returnValue.map { record -> record as Recipe }
@@ -329,7 +329,6 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
 
-
     override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale {
         // this filter is suppose to return a single result or nothing
         LogHandler.info("[Miam][MiamAPIDatasource] starting getPosFormExtId $extId $supplierId")
@@ -342,7 +341,6 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
     }
 
 /////////////////////// BASKET ////////////////////////////////////////////////
-
 
     override suspend fun getFromListAndPos(
         listId: String,
@@ -417,7 +415,6 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
     /////////////////////////////////////SUPPLIER /////////////////////////////////////////////////
 
-
     override suspend fun notifyBasketUpdated(
         basketToken: String,
         supplierId: Int,
@@ -452,6 +449,4 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
         return returnValue.map { record -> record as Package }
     }
-
-
 }

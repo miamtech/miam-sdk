@@ -12,26 +12,28 @@ struct MyMealLoadingView: View {
     let loadingText: String
     
     var body: some View {
-        VStack {
-            Spacer()
-            HStack{
+        if let template = Template.sharedInstance.myMealsLoadingViewTemplate {
+            template()
+        } else {
+            VStack {
                 Spacer()
-                VStack{
-                    ProgressLoader(color: Color.miamColor(.primary))
-                    Text(MiamText.sharedInstance.simmering)
+                HStack{
+                    Spacer()
+                    VStack{
+                        ProgressLoader(color: Color.miamColor(.primary))
+                        Text(MiamText.sharedInstance.simmering)
+                    }
+                    Spacer()
+                    
                 }
                 Spacer()
-                
-            }
-            Spacer()
-        }.frame(
-            minWidth: 0,
-            maxWidth: .infinity,
-            minHeight: 0,
-            maxHeight: .infinity,
-            alignment: .topLeading
-        )
+            }.frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                minHeight: 0,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
+        }
     }
 }
-
-

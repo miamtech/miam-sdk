@@ -102,7 +102,7 @@ public class MiamManager {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.counterTemplate =
+        Template.sharedInstance.counterViewTemplate =
         {(count: Int,
           increase: @escaping () -> Void,
           decrease: @escaping () -> Void ) -> AnyView in
@@ -123,4 +123,3 @@ public class MiamManager {
             )}
     }
 }
-

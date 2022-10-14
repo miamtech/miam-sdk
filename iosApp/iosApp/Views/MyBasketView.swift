@@ -75,7 +75,7 @@ struct BasketItemView: View {
                 Text("x\(product.quantity)").bold()
             }
             HStack {
-                BasketTag(itemId: product.id)
+                BasketTagView(itemId: product.id)
             }
         }
     }

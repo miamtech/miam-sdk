@@ -1,5 +1,10 @@
 ## 3.0.0
 - [FEA][COR] Singleton catalog filter service
+## 2.4.0
+- [FEA][COR] carousel view model
+- [FEA][AND] recipe carousel component
+- [FIX][IOS] Infinite loading on recipe card when using a template
+- [FIX][IOS] Add missing templates
 
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
@@ -20,6 +25,10 @@
 - [FIX][COR] Gests counter block at 1 or 100 
 - [FIX][COR] Dynamic stand alone favorite page controleur
 - [FIX][COR] Analytics add pos id to confirm event
+- [FIX][COR] add params to template
+
+## 2.2.7
+- [FIX][COR] Avoid div by zero
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working
