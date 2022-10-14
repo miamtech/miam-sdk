@@ -1,3 +1,6 @@
+## 2.5.0
+- [FEA][IOS] Add a parameter to control the height of recipe card view. 
+
 ## 2.4.0
 - [FEA][COR] carousel view model
 - [FEA][AND] recipe carousel component
