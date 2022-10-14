@@ -1,3 +1,5 @@
+## 2.5.0
+- [FEA][COR] Prevent infinit loading on basket preview if miam is not well configure
 ## 2.4.0
 - [FEA][COR] carousel view model
 - [FEA][AND] recipe carousel component
