@@ -49,9 +49,7 @@ class CatalogSearch(
 ) {
 
     private fun updateResearch(searchString: String) {
-        catalogFilterVM.setEvent(
-            CatalogFilterContract.Event.SetSearchString(searchString)
-        )
+        catalogFilterVM.setSearchString(searchString)
     }
 
     @Composable

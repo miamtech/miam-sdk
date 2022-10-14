@@ -1,11 +1,12 @@
 package com.miam.kmmMiamCore.di
 
-import Filter
+
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
 import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
+import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.ContextHandler
