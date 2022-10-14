@@ -1,71 +1,59 @@
 package com.miam.kmmMiamCore.component.catalogFilter
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogFilterViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<CatalogFilterContract.Event, CatalogFilterContract.State, CatalogFilterContract.Effect>() {
+object CatalogFilterInstance : KoinComponent {
+    val instance: CatalogFilterViewModel by inject()
+}
+
+open class CatalogFilterViewModel : BaseViewModel<CatalogFilterContract.Event, CatalogFilterContract.State, CatalogFilterContract.Effect>() {
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+
+
+    override fun createInitialState(): CatalogFilterContract.State = CatalogFilterContract.State(
+        difficulty = listOf(
+            CatalogFilterOptions("1", "Chef débutant"),
+            CatalogFilterOptions("2", "Chef intermédiaire"),
+            CatalogFilterOptions("3", "Top chef"),
+        ),
+        cost = listOf(
+            CatalogFilterOptions("0-5", "Moins de 5€"),
+            CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
+            CatalogFilterOptions("10-1000", "Plus de 10€"),
+        ),
+        time = listOf(
+            CatalogFilterOptions("15", "Moins de 15 min"),
+            CatalogFilterOptions("30", "Moins de 30 min"),
+            CatalogFilterOptions("60", "Moins de 1 h"),
+            CatalogFilterOptions("120", "Moins de 2 h"),
+        ),
+        searchString = null,
+        isFavorite = false,
+        category = null,
+        numberOfResult = 0
+    )
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
     }
 
-    init {
-        getRecipeCount()
-    }
-
-    override fun createInitialState(): CatalogFilterContract.State =
-        CatalogFilterContract.State(
-            numberOfResult = 0,
-            difficulty = listOf(
-                CatalogFilterOptions("1", "Chef débutant"),
-                CatalogFilterOptions("2", "Chef intermédiaire"),
-                CatalogFilterOptions("3", "Top chef"),
-            ),
-            cost = listOf(
-                CatalogFilterOptions("0-5", "Moins de 5€"),
-                CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
-                CatalogFilterOptions("10-1000", "Plus de 10€"),
-            ),
-            time = listOf(
-                CatalogFilterOptions("15", "Moins de 15 min"),
-                CatalogFilterOptions("30", "Moins de 30 min"),
-                CatalogFilterOptions("60", "Moins de 1 h"),
-                CatalogFilterOptions("120", "Moins de 2 h"),
-            ),
-            searchString = null,
-            isFavorite = false,
-            category = null
-        )
 
     override fun handleEvent(event: CatalogFilterContract.Event) {
         when (event) {
-            is CatalogFilterContract.Event.SetSearchString -> {
-                setState {
-                    copy(
-                        searchString = event.searchString
-                    )
-                }
-            }
             is CatalogFilterContract.Event.OnTimeFilterChanged -> {
-                setState {
-                    copy(
-                        time = singleChoiceGroupUpdate(currentState.time, event.timeFilter)
-                    )
-                }
+                setState { copy(time = singleChoiceGroupUpdate(currentState.time, event.timeFilter)) }
+                setEffect { CatalogFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
             is CatalogFilterContract.Event.OnCostFilterChanged -> {
-                setState {
-                    copy(
-                        cost = singleChoiceGroupUpdate(currentState.cost, event.costFilter)
-                    )
-                }
+                setState { copy(cost = singleChoiceGroupUpdate(currentState.cost, event.costFilter)) }
+                setEffect { CatalogFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
             is CatalogFilterContract.Event.OnDifficultyChanged -> {
@@ -77,6 +65,7 @@ open class CatalogFilterViewModel :
                         )
                     )
                 }
+                setEffect { CatalogFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
         }
@@ -86,24 +75,6 @@ open class CatalogFilterViewModel :
         launch(coroutineHandler) {
             val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
             setState { copy(numberOfResult = count) }
-        }
-    }
-
-    fun setCat(catId: String) {
-        setState {
-            copy(
-                category = catId
-            )
-        }
-        getRecipeCount()
-    }
-
-
-    fun setFavorite() {
-        setState {
-            copy(
-                isFavorite = true
-            )
         }
     }
 
@@ -124,6 +95,48 @@ open class CatalogFilterViewModel :
             .map { currentOption ->
                 if (currentOption.name == option.name) currentOption.toogle() else currentOption
             }
+    }
+
+    fun setCat(catId: String) {
+        setState { copy(category = catId) }
+        setEffect { CatalogFilterContract.Effect.OnUpdate }
+    }
+
+    fun setFavorite() {
+        setState { copy(isFavorite = true) }
+        setEffect { CatalogFilterContract.Effect.OnUpdate }
+    }
+
+    fun setSearchString(searchString: String) {
+        setState { copy(searchString = searchString) }
+        setEffect { CatalogFilterContract.Effect.OnUpdate }
+    }
+
+    fun clear() {
+        setState {
+            copy(
+                difficulty = listOf(
+                    CatalogFilterOptions("1", "Chef débutant"),
+                    CatalogFilterOptions("2", "Chef intermédiaire"),
+                    CatalogFilterOptions("3", "Top chef"),
+                ),
+                cost = listOf(
+                    CatalogFilterOptions("0-5", "Moins de 5€"),
+                    CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
+                    CatalogFilterOptions("10-1000", "Plus de 10€"),
+                ),
+                time = listOf(
+                    CatalogFilterOptions("15", "Moins de 15 min"),
+                    CatalogFilterOptions("30", "Moins de 30 min"),
+                    CatalogFilterOptions("60", "Moins de 1 h"),
+                    CatalogFilterOptions("120", "Moins de 2 h"),
+                ),
+                searchString = null,
+                isFavorite = false,
+                category = null,
+                numberOfResult = 0
+            )
+        }
     }
 
     fun getSelectedFilterAsQueryString(): String {
@@ -156,29 +169,6 @@ open class CatalogFilterViewModel :
             filter += "filter[liked]=true&"
         }
         return filter
-    }
-
-    fun clearFilter() {
-        setState {
-            copy(
-                difficulty = listOf(
-                    CatalogFilterOptions("1", "Chef débutant"),
-                    CatalogFilterOptions("2", "Chef intermédiaire"),
-                    CatalogFilterOptions("3", "Top chef"),
-                ),
-                cost = listOf(
-                    CatalogFilterOptions("0-5", "Moins de 5€"),
-                    CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
-                    CatalogFilterOptions("10-1000", "Plus de 10€"),
-                ),
-                time = listOf(
-                    CatalogFilterOptions("15", "Moins de 15 min"),
-                    CatalogFilterOptions("30", "Moins de 30 min"),
-                    CatalogFilterOptions("60", "Moins de 1 h"),
-                    CatalogFilterOptions("120", "Moins de 2 h"),
-                ),
-            )
-        }
     }
 
     fun getActiveFilterCount(): Int {

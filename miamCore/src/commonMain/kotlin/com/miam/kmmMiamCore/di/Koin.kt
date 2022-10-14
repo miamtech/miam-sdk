@@ -62,5 +62,5 @@ val storeModule = module {
 
 val servicesModule = module {
     single { Analytics() }
-    single { Filter() }
+    single { CatalogFilterViewModel() }
 }

@@ -16,8 +16,6 @@ interface CatalogFilterContract {
 
         data class OnDifficultyChanged(val difficulty: CatalogFilterOptions) :
             CatalogFilterContract.Event()
-
-        data class SetSearchString(val searchString: String) : CatalogFilterContract.Event()
     }
 
     data class State(
