@@ -4323,7 +4323,6 @@ __attribute__((swift_name("RecipeCarouselContractState")))
 @property (readonly) MiamCoreBasicUiState<NSArray<MiamCoreRecipe *> *> *suggestions __attribute__((swift_name("suggestions")));
 @end;
 
-__attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("RecipeCarouselViewModel")))
 @interface MiamCoreRecipeCarouselViewModel : MiamCoreBaseViewModel<MiamCoreRecipeCarouselContractEvent *, MiamCoreRecipeCarouselContractState *, MiamCoreRecipeCarouselContractEffect *>
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
