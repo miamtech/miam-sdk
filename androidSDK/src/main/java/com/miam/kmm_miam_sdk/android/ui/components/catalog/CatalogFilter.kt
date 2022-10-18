@@ -27,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
@@ -40,20 +40,20 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
 
 class CatalogFilter(
-    private val catalogFilterVM: CatalogFilterViewModel,
+    private val catalogFilterVM: SingletonFilterViewModel,
     private val closeDialog: () -> Unit,
     private val goToFilterResult: () -> Unit
 ) {
     private fun onCostFilterChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnCostFilterChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnCostFilterChanged(catOption))
     }
 
     private fun onTimeFilterChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnTimeFilterChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnTimeFilterChanged(catOption))
     }
 
     private fun onDifficultyChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnDifficultyChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnDifficultyChanged(catOption))
     }
 
     private fun clearFilter() {
