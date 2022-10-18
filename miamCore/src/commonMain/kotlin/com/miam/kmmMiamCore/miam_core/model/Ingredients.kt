@@ -40,6 +40,8 @@ data class IngredientAttributes(
     val quantity: String?,
     val unit: String?,
     val active: Boolean = true,
+    @SerialName("picture-url")
+    val pictureUrl: String?,
 
     @SerialName("forced-eans")
     val forcedEans: List<String>? = emptyList<String>(),

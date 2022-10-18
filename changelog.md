@@ -1,3 +1,5 @@
+## 3.0.0
+- [FEA][COR] Picture is avalaible in recipes ingredients
 ## 2.5.0
 - [FEA][COR] Prevent infinit loading on basket preview if miam is not well configure
 - [FIX][IOS] Add missing template for recipe card loading view
