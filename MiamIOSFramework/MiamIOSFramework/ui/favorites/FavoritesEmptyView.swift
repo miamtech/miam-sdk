@@ -12,7 +12,7 @@ struct FavoritesEmptyView: View {
     let browseCatalogAction: () -> Void
     var body: some View {
         if let template = Template.sharedInstance.favoritesEmptyViewTemplate {
-            template()
+            template(browseCatalogAction)
         } else {
             EmptyView()
             Button {
