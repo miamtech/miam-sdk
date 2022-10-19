@@ -7,35 +7,11 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-@Suppress("unused until 3.0.0")
 open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
-
-    override fun createInitialState(): SingletonFilterContract.State = SingletonFilterContract.State(
-        difficulty = listOf(
-            CatalogFilterOptions("1", "Chef débutant"),
-            CatalogFilterOptions("2", "Chef intermédiaire"),
-            CatalogFilterOptions("3", "Top chef"),
-        ),
-        cost = listOf(
-            CatalogFilterOptions("0-5", "Moins de 5€"),
-            CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
-            CatalogFilterOptions("10-1000", "Plus de 10€"),
-        ),
-        time = listOf(
-            CatalogFilterOptions("15", "Moins de 15 min"),
-            CatalogFilterOptions("30", "Moins de 30 min"),
-            CatalogFilterOptions("60", "Moins de 1 h"),
-            CatalogFilterOptions("120", "Moins de 2 h"),
-        ),
-        searchString = null,
-        isFavorite = false,
-        category = null,
-        numberOfResult = 0
-    )
-
+    override fun createInitialState(): SingletonFilterContract.State = initialState
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
     }
@@ -96,43 +72,25 @@ open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Even
 
     fun setCat(catId: String) {
         setState { copy(category = catId) }
+        @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setFavorite() {
         setState { copy(isFavorite = true) }
+        @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setSearchString(searchString: String) {
         setState { copy(searchString = searchString) }
+        @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun clear() {
         setState {
-            copy(
-                difficulty = listOf(
-                    CatalogFilterOptions("1", "Chef débutant"),
-                    CatalogFilterOptions("2", "Chef intermédiaire"),
-                    CatalogFilterOptions("3", "Top chef"),
-                ),
-                cost = listOf(
-                    CatalogFilterOptions("0-5", "Moins de 5€"),
-                    CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
-                    CatalogFilterOptions("10-1000", "Plus de 10€"),
-                ),
-                time = listOf(
-                    CatalogFilterOptions("15", "Moins de 15 min"),
-                    CatalogFilterOptions("30", "Moins de 30 min"),
-                    CatalogFilterOptions("60", "Moins de 1 h"),
-                    CatalogFilterOptions("120", "Moins de 2 h"),
-                ),
-                searchString = null,
-                isFavorite = false,
-                category = null,
-                numberOfResult = 0
-            )
+            initialState
         }
     }
 
@@ -176,5 +134,30 @@ open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Even
         ).flatten()
 
         return temp.size
+    }
+
+    companion object {
+        val initialState = SingletonFilterContract.State(
+            difficulty = listOf(
+                CatalogFilterOptions("1", "Chef débutant"),
+                CatalogFilterOptions("2", "Chef intermédiaire"),
+                CatalogFilterOptions("3", "Top chef"),
+            ),
+            cost = listOf(
+                CatalogFilterOptions("0-5", "Moins de 5€"),
+                CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
+                CatalogFilterOptions("10-1000", "Plus de 10€"),
+            ),
+            time = listOf(
+                CatalogFilterOptions("15", "Moins de 15 min"),
+                CatalogFilterOptions("30", "Moins de 30 min"),
+                CatalogFilterOptions("60", "Moins de 1 h"),
+                CatalogFilterOptions("120", "Moins de 2 h"),
+            ),
+            searchString = null,
+            isFavorite = false,
+            category = null,
+            numberOfResult = 0
+        )
     }
 }
