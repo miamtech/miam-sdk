@@ -164,7 +164,6 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 )
                 Row {
-
                     recipe.relationships!!.ingredients!!.data.subList(0, 3).forEachIndexed { index, ingredient ->
                         Image(
                             painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
@@ -177,9 +176,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                                 .border(2.dp, Color.White, CircleShape)
 
                         )
-
                     }
-
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     Icon(
@@ -416,9 +413,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
     private fun initTemplate() {
         Template.recipeCardTemplate = recipeFunctionTemplateVariable
-        /*   Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-             T
-             Template.recipeLoaderTemplate = recipeloader*/
+        /*   
+            Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+            Template.recipeLoaderTemplate = recipeloader
+        */
     }
 
     private fun RandomCriteria(): SuggestionsCriteria {
