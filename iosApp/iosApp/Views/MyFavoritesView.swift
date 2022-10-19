@@ -12,7 +12,7 @@ import MiamIOSFramework
 struct MyFavoritesView: View {
     var body: some View {
         VStack {
-            FavoritesView()
+            FavoritesView({})
         }
     }
 }
