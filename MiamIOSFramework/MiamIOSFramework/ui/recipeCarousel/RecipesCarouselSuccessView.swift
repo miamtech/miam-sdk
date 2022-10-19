@@ -14,7 +14,7 @@ import miamCore
 struct RecipesCarouselSuccessView: View {
     let recipes: [Recipe]
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(recipes, id: \.self) { recipe in
                     RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
