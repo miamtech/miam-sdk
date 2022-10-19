@@ -11,8 +11,10 @@ import miamCore
 @available(iOS 14, *)
 public struct FavoritesView: View {
     @ObservedObject var favoritesViewModel = FavoritesVM()
-    
-    public init() {}
+    private let browseCatalogAction: () -> Void
+    public init(_ browseCatalogAction: @escaping () -> Void) {
+        self.browseCatalogAction = browseCatalogAction
+    }
     
     public var body: some View {
         if let currentState = favoritesViewModel.state {
@@ -21,7 +23,7 @@ public struct FavoritesView: View {
                 successView: FavoritesSuccessView(favorites: favoritesViewModel.favorites,
                                                   loadMoreRecipes: { favoritesViewModel.setEvent(event: FavoritePageContractEvent.LoadPage()) }),
                 loadingView: ProgressLoader(color: .primary),
-                emptyView: FavoritesEmptyView(browseCatalogAction: { }))
+                emptyView: FavoritesEmptyView(browseCatalogAction: browseCatalogAction))
         }
     }
 }
