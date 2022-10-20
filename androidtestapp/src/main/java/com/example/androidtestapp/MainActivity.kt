@@ -174,7 +174,6 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                                 .zIndex((4 - index).toFloat())
                                 .clip(CircleShape)
                                 .border(2.dp, Color.White, CircleShape)
-
                         )
                     }
                 }
