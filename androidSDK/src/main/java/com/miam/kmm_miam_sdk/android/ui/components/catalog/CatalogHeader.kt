@@ -1,6 +1,10 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.catalog.CatalogContent
+import com.miam.kmmMiamCore.component.catalog.CatalogContract
+import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -29,9 +36,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmmMiamCore.component.catalog.CatalogContent
-import com.miam.kmmMiamCore.component.catalog.CatalogContract
-import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 
 @Composable
 fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
