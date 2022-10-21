@@ -223,4 +223,16 @@ object Template {
     ) -> Unit)? = null
 
 
+    //////////////// Preferences /////////////////////////
+
+    var PreferencesLoadingTemplate: (@Composable() () -> Unit)? = null
+
+    var GuestPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+
+    var DietPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+
+    var IngredientPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+
+    var EquipmentPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+
 }

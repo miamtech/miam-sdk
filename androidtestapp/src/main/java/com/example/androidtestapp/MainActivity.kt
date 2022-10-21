@@ -57,6 +57,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
+import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCarousel.RecipeCarousel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -295,10 +296,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        content(retailerBasketSubject)
-                        Divider()
-                        Carousel(context = this@MainActivity)
-                        Divider()
+//                        content(retailerBasketSubject)
+//                        Divider()
+//                        Carousel(context = this@MainActivity)
+//                        Divider()
                         recipes(this@MainActivity)
 
 
@@ -378,9 +379,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
         Column {
-            recipe1.Content()
-            recipe2.Content()
-            recipe3.Content()
+            Preferences(context).Content()
         }
     }
 

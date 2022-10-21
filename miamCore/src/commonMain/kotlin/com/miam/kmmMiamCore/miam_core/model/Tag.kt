@@ -30,6 +30,14 @@ data class Tag private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
+    fun toCheckableTag(without: Boolean): CheckableTag {
+        return CheckableTag(
+            tag = this,
+            isChecked = false,
+            without = without
+        )
+    }
+
     companion object {
         fun createDefault(recipeId: String): Tag {
             val attributes = TagAttributes("-1", "example", "", "")
@@ -55,3 +63,9 @@ class TagRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
+
+data class CheckableTag(
+    val tag: Tag,
+    val isChecked: Boolean,
+    val without: Boolean
+)
