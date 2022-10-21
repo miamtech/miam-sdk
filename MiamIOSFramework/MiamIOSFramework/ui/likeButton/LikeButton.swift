@@ -13,29 +13,33 @@ struct LikeButton: View {
     let likeButtonTapped: () -> Void
     
     var body: some View {
-        ZStack(){
-            Circle().fill(Color.miamColor(.white))
-                .frame(width: 40, height: 40)
-            if(isLiked){
-                Image.miamImage(icon: .likeFilled)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 26.0, height: 26.0, alignment: .center)
-                    .foregroundColor(Color.miamColor(.primaryText))
-                    .padding(.top,3)
-            } else {
-                Image.miamImage(icon: .like)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 26.0, height: 26.0, alignment: .center)
-                    .foregroundColor(Color.miamColor(.primaryText))
-                    .padding(.top,3)
+        if let template = Template.sharedInstance.likeButtonTemplate {
+           template($isLiked, likeButtonTapped)
+        } else {
+            ZStack(){
+                Circle().fill(Color.miamColor(.white))
+                    .frame(width: 40, height: 40)
+                if(isLiked){
+                    Image.miamImage(icon: .likeFilled)
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 26.0, height: 26.0, alignment: .center)
+                        .foregroundColor(Color.miamColor(.primaryText))
+                        .padding(.top,3)
+                } else {
+                    Image.miamImage(icon: .like)
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 26.0, height: 26.0, alignment: .center)
+                        .foregroundColor(Color.miamColor(.primaryText))
+                        .padding(.top,3)
+                }
+            }.onTapGesture {
+                isLiked.toggle()
+                likeButtonTapped()
             }
-        }.onTapGesture {
-            isLiked.toggle()
-            likeButtonTapped()
         }
     }
 }

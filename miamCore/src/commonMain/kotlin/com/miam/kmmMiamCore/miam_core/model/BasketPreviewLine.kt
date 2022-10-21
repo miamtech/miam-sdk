@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.miam_core.model
 
+import kotlin.math.max
 import kotlin.math.truncate
 
 interface BasketPreviewEntry
@@ -150,11 +151,13 @@ data class BasketPreviewLine(
                             ?: null
                     val qty = entry.attributes.quantity ?: 1
                     val unitPrice = selectedItem?.unitPrice ?: 0.0
-                    val numberOfRecipesForEntry = entry.attributes.recipeIds?.size ?: 1
+                    var numberOfRecipesForEntry = entry.attributes.recipeIds?.size ?: 1
+                    numberOfRecipesForEntry = max(1, numberOfRecipesForEntry)
                     recipePrice += (qty * unitPrice) / numberOfRecipesForEntry
                 }
 
-                val pricePerGuest = recipePrice / guests
+                val guestDivider = max(1, guests)
+                val pricePerGuest = recipePrice / guestDivider
 
                 fromRecipe(
                     recipe,

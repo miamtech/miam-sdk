@@ -21,6 +21,9 @@ public struct RecipeCardLoadingView: View {
     @State private var opacity: Double = Constants.minOpacity
     
     public var body: some View {
+        if let template = Template.sharedInstance.recipeCardLoadingViewTemplate {
+            template()
+        } else {
             VStack() {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
@@ -38,7 +41,7 @@ public struct RecipeCardLoadingView: View {
                     .foregroundColor(Color.miamColor(.black))
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(Dimension.sharedInstance.sPadding)
-               
+                
                 Rectangle()
                     .fill(Color.miamColor(.border)).opacity(0.1)
                     .frame(minHeight: 50.0, maxHeight: 50.0)
@@ -48,7 +51,7 @@ public struct RecipeCardLoadingView: View {
                     .cornerRadius(25)
                     .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
-           
+                
                 
             }.redacted(reason: .placeholder).opacity(opacity)
                 .transition(.opacity).onAppear {
@@ -64,4 +67,5 @@ public struct RecipeCardLoadingView: View {
                         .stroke(Color.miamColor(.border), lineWidth: 1)
                 )
         }
+    }
 }
