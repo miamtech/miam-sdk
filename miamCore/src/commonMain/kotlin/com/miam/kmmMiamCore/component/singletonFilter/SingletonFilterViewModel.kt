@@ -1,10 +1,10 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
-import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -16,10 +16,19 @@ object FilterViewModelInstance : KoinComponent {
 open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
-    override fun createInitialState(): SingletonFilterContract.State = initialState
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
     }
+
+    init {
+        launch(coroutineHandler) {
+            uiState.first { it != null }
+            getRecipeCount()
+        }
+    }
+
+    override fun createInitialState(): SingletonFilterContract.State = initialState
+
 
     override fun handleEvent(event: SingletonFilterContract.Event) {
         when (event) {
@@ -76,18 +85,21 @@ open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Even
 
     fun setCat(catId: String) {
         setState { copy(category = catId) }
+        getRecipeCount()
         @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setFavorite() {
         setState { copy(isFavorite = true) }
+        getRecipeCount()
         @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setSearchString(searchString: String) {
         setState { copy(searchString = searchString) }
+        getRecipeCount()
         @Suppress("unused until 3.0.0")
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }

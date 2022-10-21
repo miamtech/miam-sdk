@@ -84,7 +84,6 @@ open class CatalogViewModel :
                 }
             }
             is CatalogContract.Event.ToggleFilter -> {
-                currentState.catalogFilterVM.getRecipeCount()
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
             is CatalogContract.Event.ToggleSearch -> {
