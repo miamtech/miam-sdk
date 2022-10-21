@@ -1,5 +1,13 @@
-## 3.0.0
+#### 3.0.0
+- [FEA][AND] Refact catalog header
 - [FEA][COR] Picture is avalaible in recipes ingredients
+
+## 2.5.2
+- [FIX][IOS] Pass browse catalog action to favorites empty view template
+
+## 2.5.1
+- [FIX][IOS] Add missing browse catalog action in FavoritesView
+
 ## 2.5.0
 - [FEA][COR] Prevent infinit loading on basket preview if miam is not well configure
 - [FIX][IOS] Add missing template for recipe card loading view
