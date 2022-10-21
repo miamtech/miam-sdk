@@ -1,5 +1,8 @@
 ## 3.0.0
 - [FEA][COR] Singleton catalog filter service
+## 2.5.2
+- [FIX][IOS] Pass browse catalog action to favorites empty view template
+
 ## 2.5.1
 - [FIX][IOS] Add missing browse catalog action in FavoritesView
 
