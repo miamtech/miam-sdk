@@ -164,7 +164,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 )
                 Row {
-                    recipe.relationships!!.ingredients!!.data.subList(0, 3).forEachIndexed { index, ingredient ->
+                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null }).subList(0, 3).forEachIndexed { index, ingredient ->
                         Image(
                             painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
                             contentDescription = null,
@@ -413,7 +413,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
     private fun initTemplate() {
         Template.recipeCardTemplate = recipeFunctionTemplateVariable
-        /*   
+        /*
             Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
             Template.recipeLoaderTemplate = recipeloader
         */
