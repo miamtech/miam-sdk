@@ -1,21 +1,25 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
+object FilterViewModelInstance : KoinComponent {
+    val instance: SingletonFilterViewModel by inject()
+}
 
+open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     override fun createInitialState(): SingletonFilterContract.State = initialState
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
     }
-
 
     override fun handleEvent(event: SingletonFilterContract.Event) {
         when (event) {

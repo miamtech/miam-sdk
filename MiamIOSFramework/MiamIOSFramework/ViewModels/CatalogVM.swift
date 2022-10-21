@@ -37,7 +37,7 @@ public enum CatalogModelContent {
 public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
     @Published var recipePageViewModel: RecipeListPageViewModel?
-    @Published var filtersViewModel: CatalogFilterViewModel?
+    @Published var filtersViewModel: SingletonFilterViewModel?
 
     @Published var content: CatalogModelContent = .categories
     @Published var filterOpen = false
