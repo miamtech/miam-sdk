@@ -39,6 +39,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
 
+// TODO Refact with filter service
 class CatalogFilter(
     private val catalogFilterVM: SingletonFilterViewModel,
     private val closeDialog: () -> Unit,
