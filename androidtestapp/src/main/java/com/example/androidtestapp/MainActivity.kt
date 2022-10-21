@@ -164,18 +164,21 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 )
                 Row {
-                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null }).subList(0, 3).forEachIndexed { index, ingredient ->
-                        Image(
-                            painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .zIndex((4 - index).toFloat())
-                                .clip(CircleShape)
-                                .border(2.dp, Color.White, CircleShape)
-                        )
-                    }
+                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null })
+                        .forEachIndexed { index, ingredient ->
+                            if (index < 3) {
+                                Image(
+                                    painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .zIndex((4 - index).toFloat())
+                                        .clip(CircleShape)
+                                        .border(2.dp, Color.White, CircleShape)
+                                )
+                            }
+                        }
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     Icon(
