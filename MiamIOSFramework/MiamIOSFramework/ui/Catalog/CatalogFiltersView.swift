@@ -22,9 +22,6 @@ struct CatalogFiltersView: View {
     }
     
     var body: some View {
-        if #available(iOS 15, *) {
-            let _ = Self._printChanges()
-        }
         if (Template.sharedInstance.catalogFiltersViewTemplate != nil) {
             Template.sharedInstance.catalogFiltersViewTemplate!
         } else {
