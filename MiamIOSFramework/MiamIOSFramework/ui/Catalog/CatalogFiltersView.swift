@@ -11,13 +11,12 @@ import miamCore
 @available(iOS 14, *)
 struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
-    var catalogFilters: CatalogFilterViewModel
+    @ObservedObject var catalogFilters = CatalogFilterViewModel.sharedInstance
     
     let closeFilters: () -> Void
     let applyFilters: () -> Void
     
-    init(catalogFiltersModel: CatalogFilterViewModel, apply: @escaping () -> Void, close: @escaping () -> Void) {
-        catalogFilters = catalogFiltersModel
+    init(apply: @escaping () -> Void, close: @escaping () -> Void) {
         applyFilters = apply
         closeFilters = close
     }
