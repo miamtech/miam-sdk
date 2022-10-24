@@ -4,8 +4,8 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.UiEffect
 import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
 
 enum class CatalogContent {
@@ -29,7 +29,7 @@ interface CatalogContract {
     data class State(
         val categories: BasicUiState<List<Package>>,
         val content: CatalogContent,
-        val catalogFilterVM: CatalogFilterViewModel,
+        val catalogFilterVM: SingletonFilterViewModel,
         val recipePageVM: RecipeListPageViewModel,
         val filterOpen: Boolean,
         val searchOpen: Boolean

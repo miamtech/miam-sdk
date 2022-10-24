@@ -22,11 +22,6 @@ internal struct RecipeCardSuccessView: View {
     public let toggleLikeAction: () -> Void
     
     var body: some View {
-        if #available(iOS 15.0, *) {
-            let _ = Self._printChanges()
-        } else {
-            // Fallback on earlier versions
-        }
         if let template = Template.sharedInstance.recipeCardTemplate {
             template(recipe, isRecipeInCart, isLikeEnabled, isLiked, showMealIdeaTag, goToDetailsAction,
                      showOrAddRecipeAction, toggleLikeAction)

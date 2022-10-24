@@ -32,8 +32,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -44,15 +44,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
 
 // TODO Refact with filter service
 class CatalogSearch(
-    private val catalogFilterVM: CatalogFilterViewModel,
+    private val catalogFilterVM: SingletonFilterViewModel,
     private val closeDialog: () -> Unit,
     private val goToSearchResult: () -> Unit,
 ) {
 
     private fun updateResearch(searchString: String) {
-        catalogFilterVM.setEvent(
-            CatalogFilterContract.Event.SetSearchString(searchString)
-        )
+        catalogFilterVM.setSearchString(searchString)
     }
 
     @Composable
@@ -83,7 +81,7 @@ class CatalogSearch(
     }
 
     @Composable
-    fun TemplateView(state: State<CatalogFilterContract.State>) {
+    fun TemplateView(state: State<SingletonFilterContract.State>) {
         Template.CatalogSearchTemplate?.let {
             it(
                 state.value.searchString ?: "",

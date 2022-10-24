@@ -1,4 +1,6 @@
-#### 3.0.0
+## 3.0.0
+
+- [FEA][COR] Singleton catalog filter service
 - [FEA][AND] Refact catalog header
 
 ## 2.5.2

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import miamCore
 
 @available(iOS 14, *)
@@ -25,7 +24,7 @@ public class ItemSelectorVM : ObservableObject {
         
     }
     
-    public func returnToPreview(){
+    public func returnToPreview() {
         sharedInstance.setEvent(event: ItemSelectorContractEvent.ReturnToBasketPreview())
     }
     

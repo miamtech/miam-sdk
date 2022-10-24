@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -48,7 +48,7 @@ enum class HeaderState {
 fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
 
     var headerState by remember { mutableStateOf(HeaderState.DEFAULT) }
-    val catalogFilterVm = CatalogFilterViewModel()
+    val catalogFilterVm = SingletonFilterViewModel()
 
     fun openFilter() {
         headerState = HeaderState.FILTER
