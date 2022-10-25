@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 
@@ -27,7 +26,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-serialization:1.6.7")
                 implementation("io.ktor:ktor-client-logging:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
-                implementation("io.insert-koin:koin-core:3.1.2")
+                implementation("io.insert-koin:koin-core:3.2.2")
             }
         }
         val commonTest by getting {
@@ -39,7 +38,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation( "io.ktor:ktor-client-android:1.6.7")
+                implementation("io.ktor:ktor-client-android:1.6.7")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
             }
         }

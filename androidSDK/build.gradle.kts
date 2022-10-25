@@ -1,4 +1,3 @@
-
 plugins {
     kotlin("android")
     id("com.android.library")
@@ -37,19 +36,19 @@ dependencies {
     embed(project(":miamCore"))
 
     // dependency injection
-    implementation("io.insert-koin:koin-android:3.1.2")
-    implementation("io.insert-koin:koin-core:3.1.2")
+    implementation("io.insert-koin:koin-android:3.2.2")
+    implementation("io.insert-koin:koin-core:3.2.2")
     // Http Client
-    implementation( "io.ktor:ktor-client-android:1.6.7")
+    implementation("io.ktor:ktor-client-android:1.6.7")
     implementation("io.ktor:ktor-client-serialization:1.6.7")
     implementation("io.ktor:ktor-client-core:1.6.7")
 
     implementation("com.google.android.material:material:1.6.0")
 
-    implementation ("androidx.compose.ui:ui-tooling:1.1.1")
+    implementation("androidx.compose.ui:ui-tooling:1.1.1")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
-    implementation ( "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1")
 
 
     implementation("androidx.compose.compiler:compiler:1.1.1")
@@ -67,7 +66,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-rxjava2:1.1.1")
 
     implementation("io.coil-kt:coil-compose:1.3.1")
-    implementation ("io.coil-kt:coil-svg:1.3.1")
+    implementation("io.coil-kt:coil-svg:1.3.1")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
