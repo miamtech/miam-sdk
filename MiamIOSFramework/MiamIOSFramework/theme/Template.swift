@@ -262,8 +262,12 @@ public class Template {
         @escaping (CatalogPackage) -> Void
     ) -> AnyView)? = nil
 
-
-    public var catalogViewHeaderTemplate: AnyView? = nil
+    /**
+     closeCatalogAction: (() -> Void)?
+     */
+    public var catalogViewHeaderTemplate: ((
+        (() -> Void)?
+    ) -> AnyView)? = nil
 
     /**
      showBackButton: Bool
