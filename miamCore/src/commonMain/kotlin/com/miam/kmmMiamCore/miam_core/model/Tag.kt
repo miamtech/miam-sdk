@@ -53,9 +53,9 @@ data class TagAttributes constructor(
     val tagTypeId: String,
     val name: String,
     @SerialName("icon-url")
-    val iconUrl: String,
+    val iconUrl: String?,
     @SerialName("picture-url")
-    val pictureUrl: String,
+    val pictureUrl: String?,
 ) : Attributes()
 
 @Serializable

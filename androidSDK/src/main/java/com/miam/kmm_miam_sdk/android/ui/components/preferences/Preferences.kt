@@ -25,7 +25,11 @@ class Preferences @JvmOverloads constructor(
         ManagementResourceState(
             resourceState = state.basicState,
             successView = { _ ->
-                PreferencesSuccessView(state.ingredients)
+                PreferencesSuccessView(
+                    state.ingredients,
+                    state.diets,
+                    state.equipments
+                ) { preferencesVM.togglePreference(it) }
             },
             loadingView = {
                 PreferencesLoadingView()

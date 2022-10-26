@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
         basketHandler = BasketHandlerInstance.instance
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
-        launch {
+        launch(coroutineHandler) {
             ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
                 LogHandler.info("I know you are readdy !!! $it")
             }
@@ -113,7 +113,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
-        launch {
+        launch(coroutineHandler) {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} ")
                 retailerBasketSubject.emit(
@@ -392,9 +392,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
     }
 
     private fun initTemplate() {
-        /*   Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-             Template.recipeCardTemplate = recipeFunctionTemplateVariable
-             Template.recipeLoaderTemplate = recipeloader*/
+//        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+//        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+//        Template.recipeLoaderTemplate = recipeloader
+
     }
 
     private fun RandomCriteria(): SuggestionsCriteria {
