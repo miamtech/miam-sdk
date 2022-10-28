@@ -57,6 +57,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
+import com.miam.kmm_miam_sdk.android.ui.components.myMealButton.MyMealButton
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCarousel.RecipeCarousel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -300,7 +301,14 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         Divider()
                         recipes(this@MainActivity)
 
-
+                        val mmb = MyMealButton(this@MainActivity)
+                        mmb.bind {
+                            isMyMealPage = !isMyMealPage
+                            isFavoritePage = false
+                            isTagPage = false
+                            isCatalogPage = false
+                        }
+                        mmb.Content()
                     }
                 }
             }

@@ -2,6 +2,7 @@
 
 - [FEA][COR] Singleton catalog filter service
 - [FEA][AND] Refact catalog header
+- [FEA][AND] My meal counter button
 
 ## 2.5.2
 - [FIX][IOS] Pass browse catalog action to favorites empty view template
