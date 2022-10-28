@@ -528,8 +528,6 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
     }
-
-
     companion object {
         val productSampleCoursesU = listOf(
             CoursesUProduct("12726", "Farine de blé T45 FRANCINE, 1k", 1, 0.88, "id_12726"),
