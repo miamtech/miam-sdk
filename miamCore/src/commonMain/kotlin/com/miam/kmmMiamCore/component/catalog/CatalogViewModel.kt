@@ -2,9 +2,9 @@ package com.miam.kmmMiamCore.component.catalog
 
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ open class CatalogViewModel :
         CatalogContract.State(
             categories = BasicUiState.Loading,
             content = CatalogContent.DEFAULT,
-            catalogFilterVM = CatalogFilterViewModel(),
+            catalogFilterVM = SingletonFilterViewModel(),
             recipePageVM = RecipeListPageViewModel(),
             filterOpen = false,
             searchOpen = false
@@ -38,7 +38,7 @@ open class CatalogViewModel :
                         content = CatalogContent.DEFAULT,
                         searchOpen = false,
                         filterOpen = false,
-                        catalogFilterVM = CatalogFilterViewModel()
+                        catalogFilterVM = SingletonFilterViewModel()
                     )
                 }
             }

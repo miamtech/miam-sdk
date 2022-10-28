@@ -32,11 +32,6 @@ public struct RecipeCardView: View {
     }
     
     public var body: some View {
-        if #available(iOS 15.0, *) {
-            let _ = Self._printChanges()
-        } else {
-            // Fallback on earlier versions
-        }
         VStack {
             if(viewModel.state != nil ){
                 ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (

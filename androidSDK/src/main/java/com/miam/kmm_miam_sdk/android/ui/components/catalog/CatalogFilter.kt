@@ -1,8 +1,19 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
@@ -16,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterContract
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
@@ -28,25 +39,26 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
 
+// TODO Refact with filter service
 class CatalogFilter(
-    private val catalogFilterVM: CatalogFilterViewModel,
+    private val catalogFilterVM: SingletonFilterViewModel,
     private val closeDialog: () -> Unit,
     private val goToFilterResult: () -> Unit
 ) {
     private fun onCostFilterChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnCostFilterChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnCostFilterChanged(catOption))
     }
 
     private fun onTimeFilterChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnTimeFilterChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnTimeFilterChanged(catOption))
     }
 
     private fun onDifficultyChanged(catOption: CatalogFilterOptions) {
-        catalogFilterVM.setEvent(CatalogFilterContract.Event.OnDifficultyChanged(catOption))
+        catalogFilterVM.setEvent(SingletonFilterContract.Event.OnDifficultyChanged(catOption))
     }
 
     private fun clearFilter() {
-        catalogFilterVM.clearFilter()
+        catalogFilterVM.clear()
         catalogFilterVM.getRecipeCount()
     }
 

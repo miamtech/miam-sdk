@@ -33,7 +33,7 @@ struct CatalogSearchView: View {
                             .disableAutocorrection(true)
                             .onChange(of: searchString) { value in
                                 if let filtersViewModel = catalog.filtersViewModel {
-                                    filtersViewModel.setEvent(event: CatalogFilterContractEvent.SetSearchString(searchString: value))
+                                    filtersViewModel.setSearchString(searchString: value)
                                 }
                             }
                         Button {

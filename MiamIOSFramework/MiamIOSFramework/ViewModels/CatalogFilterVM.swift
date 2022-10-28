@@ -9,22 +9,35 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class CatalogFilterVM: ObservableObject {
-    let model: CatalogFilterViewModel
+public class CatalogFilterViewModel: ObservableObject {
+    public static let sharedInstance = CatalogFilterViewModel()
+    
+    private let viewModelInstance = FilterViewModelInstance.shared.instance
 
-    @Published var numberOfRecipes: Int = 0
-    @Published var difficulty: Array<CatalogFilterOptions> = []
-    @Published var cost: Array<CatalogFilterOptions> = []
-    @Published var time: Array<CatalogFilterOptions> = []
+    @Published public var state: SingletonFilterContractState?
+    
+    public var numberOfRecipes: Int = 0
+    public var difficulty: Array<CatalogFilterOptions> = []
+    public var cost: Array<CatalogFilterOptions> = []
+    public var time: Array<CatalogFilterOptions> = []
 
-    init(model: CatalogFilterViewModel) {
-        self.model = model
-        self.model.collect(flow: model.uiState) { data in
-            let state = data as! CatalogFilterContractState
+    private init() {
+        self.viewModelInstance.collect(flow: viewModelInstance.uiState) { data in
+            let state = data as! SingletonFilterContractState
+           
+            self.state = state
             self.numberOfRecipes = Int(state.numberOfResult)
             self.difficulty = state.difficulty
             self.cost = state.cost
             self.time = state.time
         }
+    }
+    
+    public func setEvent(event: SingletonFilterContractEvent) {
+        viewModelInstance.setEvent(event: event)
+    }
+    
+    public func clear() {
+        viewModelInstance.clear()
     }
 }

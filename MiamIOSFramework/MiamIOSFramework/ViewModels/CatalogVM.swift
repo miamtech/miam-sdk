@@ -15,11 +15,11 @@ public struct CatalogPackage: Identifiable {
         return UUID.init().uuidString
     }
 
-    var title: String {
+    public var title: String {
         return package.attributes?.title ?? ""
     }
 
-    var recipes: [Recipe] {
+    public var recipes: [Recipe] {
         guard let recipes = package.relationships?.recipes?.data else {
             return []
         }
@@ -37,7 +37,7 @@ public enum CatalogModelContent {
 public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
     @Published var recipePageViewModel: RecipeListPageViewModel?
-    @Published var filtersViewModel: CatalogFilterViewModel?
+    @Published var filtersViewModel: SingletonFilterViewModel?
 
     @Published var content: CatalogModelContent = .categories
     @Published var filterOpen = false
