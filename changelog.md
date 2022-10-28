@@ -1,3 +1,12 @@
+## 3.0.0
+- [FEA][COR] Toaster handler for add and like recipes
+- [FEA][COR] Singleton catalog filter service
+- [FEA][AND] Refact catalog header
+- [FEA][COR] Picture is avalaible in recipes ingredients
+
+## 2.5.2
+- [FIX][IOS] Pass browse catalog action to favorites empty view template
+
 ## 2.5.1
 - [FIX][IOS] Add missing browse catalog action in FavoritesView
 

@@ -318,9 +318,10 @@ public class Template {
     ) -> AnyView)? = nil
     
     /**
+     browseCatalogAction: () -> Void
      */
     public var favoritesEmptyViewTemplate: ((
-        
+       @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**

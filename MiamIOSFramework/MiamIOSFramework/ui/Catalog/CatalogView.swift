@@ -90,7 +90,7 @@ public struct CatalogView: View {
             // TODO: remove call to toggle
             catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
         }) {
-            CatalogFiltersView(catalogFiltersModel: CatalogFilterVM(model: catalog.filtersViewModel!)) {
+            CatalogFiltersView() {
                 showingFilters = false
                 self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
                 catalog.fetchRecipes()

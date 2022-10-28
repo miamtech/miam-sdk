@@ -3,12 +3,15 @@ package com.example.androidtestapp
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
@@ -35,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
@@ -45,17 +49,18 @@ import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.GroceriesListHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
-import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCarousel.RecipeCarousel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -94,6 +99,12 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
 
+        ToasterHandler.setOnSuccess { message ->
+            val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+        ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
+        ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
         launch(coroutineHandler) {
@@ -158,6 +169,23 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         )
                     }
                 )
+                Row {
+                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null })
+                        .forEachIndexed { index, ingredient ->
+                            if (index < 3) {
+                                Image(
+                                    painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .zIndex((4 - index).toFloat())
+                                        .clip(CircleShape)
+                                        .border(2.dp, Color.White, CircleShape)
+                                )
+                            }
+                        }
+                }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     Icon(
                         tint = Color.Gray,
@@ -285,7 +313,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 } else if (isCatalogPage) {
                     var catalog = Catalog(this@MainActivity)
-                    catalog.bind("62", "test")
+                    catalog.enablePreference()
                     catalog.Content()
                 } else {
                     Column(
@@ -294,10 +322,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         //.verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-//                        content(retailerBasketSubject)
-//                        Divider()
-//                        Carousel(context = this@MainActivity)
-//                        Divider()
+                        content(retailerBasketSubject)
+                        Divider()
+                        Carousel(context = this@MainActivity)
+                        Divider()
                         recipes(this@MainActivity)
 
 
@@ -377,7 +405,9 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
         Column(Modifier.fillMaxSize()) {
-            Preferences(context).Content()
+            recipe1.Content()
+            recipe2.Content()
+            recipe3.Content()
         }
     }
 
@@ -390,9 +420,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
     }
 
     private fun initTemplate() {
+        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-//        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader
+
 
     }
 
