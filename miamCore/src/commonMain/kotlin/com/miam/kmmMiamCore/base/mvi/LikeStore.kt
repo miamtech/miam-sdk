@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +25,9 @@ class LikeStore : CoroutineScope by CoroutineScope(Dispatchers.Main) {
     fun observeSideEffect(): Flow<LikeEffect> = sideEffect
 
     fun emitEffect(le: LikeEffect) {
-        launch(coroutineHandler) { sideEffect.emit(le)}
+        if (le is LikeEffect.Liked) {
+            ToasterHandler.onLikeRecipe()
+        }
+        launch(coroutineHandler) { sideEffect.emit(le) }
     }
 }

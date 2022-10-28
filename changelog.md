@@ -1,5 +1,5 @@
 ## 3.0.0
-
+- [FEA][COR] Toaster handler for add and like recipes
 - [FEA][COR] Singleton catalog filter service
 - [FEA][AND] Refact catalog header
 

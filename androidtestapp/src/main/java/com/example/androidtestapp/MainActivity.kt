@@ -3,6 +3,7 @@ package com.example.androidtestapp
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -47,6 +48,7 @@ import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.GroceriesListHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
@@ -95,6 +97,12 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
 
+        ToasterHandler.setOnSuccess { message ->
+            val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+        ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
+        ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
         launch {
@@ -519,7 +527,6 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
     }
-
     companion object {
         val productSampleCoursesU = listOf(
             CoursesUProduct("12726", "Farine de blé T45 FRANCINE, 1k", 1, 0.88, "id_12726"),
