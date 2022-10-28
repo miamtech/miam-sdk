@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.preferencesSearch.PreferencesSearchViewModel
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.preferenceSearch.customization.PreferencesText.searchPreferencePlaceholder
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class PreferencesSearch @JvmOverloads constructor(
     context: Context,
@@ -62,19 +63,20 @@ class PreferencesSearch @JvmOverloads constructor(
         this.addTag = addTag
     }
 
-    private val preferencesSearchVM: PreferencesSearchViewModel by inject()
+    private val preferencesSearchVM = PreferencesSearchViewModel()
 
     @Composable
     override fun Content() {
 
         var text by remember { mutableStateOf(TextFieldValue("")) }
-
+        // TODO ALEX creation du template
         Column(
             Modifier
                 .fillMaxSize()
+                .background(white)
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 BackButton(back)
                 SearchContainer {
                     TextField(

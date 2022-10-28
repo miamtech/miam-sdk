@@ -60,7 +60,6 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         setState { copy(ingredients = newIngredientPreferences.toList()) }
     }
 
-
     fun resetPreferences() {
         setState { getInitialPref() }
         updateRecipesCount()
@@ -75,7 +74,10 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
     }
 
     private fun updateRecipesCount() {
-        // TODO get count from recipe repo
+        launch(coroutineHandler) {
+            val count = recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
+            setState { copy(recipesFound = count) }
+        }
     }
 
     private fun initStatusWatcher() {
@@ -84,7 +86,6 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         }
 
         launch(coroutineHandler) {
-            // TODO check memory leak
             dietCombineWithEquipmentReadyness.combine(isIngredientPrefReady) { dietAndEquipment, ingredient ->
                 return@combine dietAndEquipment && ingredient
             }.collect {
@@ -94,7 +95,13 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
                 }
             }
         }
+    }
 
+    fun changeGlobaleGuest(numberOfGuest: Int) {
+        //TODO Alex map with recipes card and detail
+        if (numberOfGuest in 1..100) {
+            setState { copy(guests = numberOfGuest) }
+        }
     }
 
     private fun initDietTag() {
@@ -120,18 +127,19 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
             defaultIngredientTagIds.forEach { id ->
                 ingredientTags.add(tagsRepositoryImp.getTagById(id))
             }
+            //TODO ALEXI fetch LocalStorage tags Ingredient ID
             setState { copy(basicState = BasicUiState.Success(true), ingredients = ingredientTags.map { it.toCheckableTag(true) }) }
             isIngredientPrefReady.value = true
         }
     }
 
     private fun savePref(preferences: List<CheckableTag>) {
-        // TODO
+        // TODO ALEX save local pref
     }
 
     fun getPreferencesAsQueryString(): String {
         var query = ""
-
+        // TODO ALEX return concat string of preferences like filter
         return query
     }
 
@@ -151,9 +159,7 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
                 diets = emptyList(),
                 ingredients = emptyList(),
                 equipments = emptyList(),
-                counterWasRearranged = false,
                 recipesFound = 0,
-                hasRecipesInList = false,
                 guests = 4
             )
         }

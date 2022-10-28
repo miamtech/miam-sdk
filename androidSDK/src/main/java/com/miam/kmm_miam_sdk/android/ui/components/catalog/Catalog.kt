@@ -33,6 +33,10 @@ class Catalog @JvmOverloads constructor(
         )
     }
 
+    fun enablePreference() {
+        vmCatalog.enablePreference()
+    }
+
     @Composable
     override fun Content() {
 

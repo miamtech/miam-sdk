@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmm_miam_sdk.android.ressource.Image.guests
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -56,6 +57,10 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
         catalogVm.setEvent(CatalogContract.Event.GoToFavorite)
     }
 
+    fun openPreferences() {
+        catalogVm.setEvent(CatalogContract.Event.TogglePreference)
+    }
+
     fun goToBack() {
         catalogVm.setEvent(CatalogContract.Event.GoToDefault)
     }
@@ -66,7 +71,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
     if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-            it(::openFilter, ::openSearch, ::goToFavorite, ::goToBack, ::getActiveFilterCount)
+            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount)
         }
     } else {
         Column(Modifier.background(color = primary)) {
@@ -146,7 +151,28 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                         }
                     }
                     )
-
+                    if (state.enablePreferences) {
+                        Clickable(onClick = { openPreferences() }) {
+                            Surface(
+                                shape = CircleShape,
+                                elevation = 8.dp,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            ) {
+                                Box(
+                                    Modifier
+                                        .background(white)
+                                        .padding(8.dp)
+                                )
+                                {
+                                    Image(
+                                        painter = painterResource(guests),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(primary),
+                                    )
+                                }
+                            }
+                        }
+                    }
                     Clickable(onClick = { openFilter() }, children = {
                         Box {
                             Surface(

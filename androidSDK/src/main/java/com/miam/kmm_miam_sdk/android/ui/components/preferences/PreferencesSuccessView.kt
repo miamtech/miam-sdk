@@ -52,13 +52,15 @@ import com.miam.kmm_miam_sdk.android.utils.FlowLayout
 
 
 @Composable
-fun GuestPreferencesSection() {
+fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
+
     if (GuestPreferencesSectionTemplate != null) {
+        // TODO ALEX completer le model du template
         GuestPreferencesSectionTemplate?.let { it() }
     } else {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Text(text = PreferencesText.guestLabel, style = bodyBold)
-            Counter(count = 1, isDisable = false, increase = { /*TODO*/ }, decrease = { /*TODO*/ })
+            Counter(count = guests, isDisable = false, increase = { guestChanged(guests + 1) }, decrease = { guestChanged(guests - 1) })
         }
     }
 }
@@ -66,6 +68,7 @@ fun GuestPreferencesSection() {
 @Composable
 fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
     if (DietPreferencesSectionTemplate != null) {
+        // TODO ALEX completer le model du template
         DietPreferencesSectionTemplate?.let { it() }
     } else {
         Column {
@@ -98,6 +101,7 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
 @Composable
 fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit, toggleSearch: () -> Unit) {
     if (IngredientPreferencesSectionTemplate != null) {
+        // TODO ALEX completer le model du template
         IngredientPreferencesSectionTemplate?.let { it() }
     } else {
         Column(Modifier.fillMaxWidth()) {
@@ -161,6 +165,7 @@ fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePrefe
 @Composable
 fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
     if (EquipmentPreferencesSectionTemplate != null) {
+        // TODO ALEX completer le model du template
         //  EquipmentPreferencesSectionTemplate.let { it() }
     } else {
         Column {
@@ -192,6 +197,7 @@ fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePrefere
 
 @Composable
 fun PreferencesHeader(closePref: () -> Unit) {
+    // TODO ALEX creation du template
     Column {
         Row(
             modifier = Modifier
@@ -221,7 +227,8 @@ fun PreferencesHeader(closePref: () -> Unit) {
 }
 
 @Composable
-fun PreferencesFooter(closePref: () -> Unit) {
+fun PreferencesFooter(closePref: () -> Unit, recipesFound: Int) {
+    // TODO ALEX creation du template
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -248,7 +255,7 @@ fun PreferencesFooter(closePref: () -> Unit) {
                 }
             }
         }
-        Clickable(onClick = {}) {
+        Clickable(onClick = { closePref() }) {
             Box(
                 Modifier
                     .clip(RoundedCornerShape(50))
@@ -261,7 +268,7 @@ fun PreferencesFooter(closePref: () -> Unit) {
 
                 ) {
                     Text(
-                        text = "Voir les 60 repas",
+                        text = "Voir les $recipesFound repas",
                         style = subtitle.copy(fontWeight = FontWeight.Bold),
                         color = white
                     )
@@ -274,11 +281,14 @@ fun PreferencesFooter(closePref: () -> Unit) {
 @Composable
 fun PreferencesSuccessView(
     context: Context,
+    guests: Int,
+    recipesFound: Int,
     ingredientsTag: List<CheckableTag>,
     dietsTag: List<CheckableTag>,
     equipmentTag: List<CheckableTag>,
     togglePreference: (pref: CheckableTag) -> Unit,
     closePreference: () -> Unit,
+    guestChanged: (count: Int) -> Unit,
     addIngredientPreferences: (tag: Tag) -> Unit
 
 ) {
@@ -303,7 +313,7 @@ fun PreferencesSuccessView(
                         .padding(horizontal = 16.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    GuestPreferencesSection()
+                    GuestPreferencesSection(guests, guestChanged)
                     Spacer(modifier = Modifier.height(24.dp))
                     DietPreferencesSection(dietsTag, togglePreference)
                     Spacer(modifier = Modifier.height(24.dp))
@@ -313,6 +323,6 @@ fun PreferencesSuccessView(
                     Spacer(modifier = Modifier.height(100.dp))
                 }
             },
-            bottomBar = { PreferencesFooter(closePreference) })
+            bottomBar = { PreferencesFooter(closePreference, recipesFound) })
     }
 }

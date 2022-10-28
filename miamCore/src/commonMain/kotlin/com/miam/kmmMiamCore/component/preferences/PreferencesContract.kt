@@ -15,9 +15,7 @@ interface PreferencesContract {
         val diets: List<CheckableTag>,
         val ingredients: List<CheckableTag>,
         val equipments: List<CheckableTag>,
-        val counterWasRearranged: Boolean,
         val recipesFound: Int,
-        val hasRecipesInList: Boolean,
         val guests: Int
     ) : UiState
 

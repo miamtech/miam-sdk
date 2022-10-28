@@ -27,7 +27,9 @@ open class CatalogViewModel :
             catalogFilterVM = SingletonFilterViewModel(),
             recipePageVM = RecipeListPageViewModel(),
             filterOpen = false,
-            searchOpen = false
+            searchOpen = false,
+            preferenceOpen = false,
+            enablePreferences = false
         )
 
     override fun handleEvent(event: CatalogContract.Event) {
@@ -83,6 +85,9 @@ open class CatalogViewModel :
                     )
                 }
             }
+            is CatalogContract.Event.TogglePreference -> {
+                setState { copy(preferenceOpen = !currentState.preferenceOpen) }
+            }
             is CatalogContract.Event.ToggleFilter -> {
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
@@ -100,6 +105,10 @@ open class CatalogViewModel :
 
     init {
         fetchCategories()
+    }
+
+    fun enablePreference() {
+        setState { copy(enablePreferences = true) }
     }
 
     fun fetchRecipes() {

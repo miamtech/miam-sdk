@@ -41,7 +41,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
 
 enum class HeaderState {
-    DEFAULT, FILTER, SEARCH
+    DEFAULT, FILTER, SEARCH, PREFERENCES
 }
 
 @Composable
@@ -62,10 +62,15 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
         headerState = HeaderState.DEFAULT
     }
 
+    fun openPreferences() {
+        headerState = HeaderState.PREFERENCES
+    }
+
     // TODO Refact with filter service
     val filter = CatalogFilter(catalogFilterVm, ::closeModal, goToRecipeList)
     // TODO Refact with filter service
     val search = CatalogSearch(catalogFilterVm, ::closeModal, goToRecipeList)
+
 
     fun getActiveFilterCount(): Int {
         // (TODO) use filter service
@@ -290,7 +295,7 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
         }
         if (Template.CatalogHeader != null) {
             Template.CatalogHeader?.let {
-                it(::openFilter, ::openSearch, goToFavorite, goToBack, ::getActiveFilterCount)
+                it(::openFilter, ::openSearch, ::openPreferences, goToFavorite, goToBack, ::getActiveFilterCount)
             }
         } else {
             Column(Modifier.background(color = primary)) {

@@ -6,7 +6,7 @@ import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
-import com.miam.kmmMiamCore.component.preferencesSearch.PreferencesSearchViewModel
+import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.ContextHandler
@@ -66,6 +66,6 @@ val storeModule = module {
 
 val servicesModule = module {
     single { Analytics() }
-    single { PreferencesSearchViewModel() }
+    single { SingletonPreferencesViewModel() }
     single { SingletonFilterViewModel() }
 }

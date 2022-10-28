@@ -170,6 +170,7 @@ object Template {
     var CatalogHeader: (@Composable() (
         openFilter: () -> Unit,
         openSearch: () -> Unit,
+        openPreferences: () -> Unit,
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
         getActiveFilterCount: () -> Int

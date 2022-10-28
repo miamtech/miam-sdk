@@ -31,7 +31,7 @@ data class Tag private constructor(
     }
 
     private fun isAlreadyInUserPref(): Boolean {
-        // TODO: check in bdd if filter id is present
+        // TODO Alex : check if filter id is present in local storage
         return false
     }
 
