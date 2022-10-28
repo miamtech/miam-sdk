@@ -9,8 +9,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -38,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
@@ -54,6 +57,7 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -167,6 +171,23 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         )
                     }
                 )
+                Row {
+                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null })
+                        .forEachIndexed { index, ingredient ->
+                            if (index < 3) {
+                                Image(
+                                    painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .zIndex((4 - index).toFloat())
+                                        .clip(CircleShape)
+                                        .border(2.dp, Color.White, CircleShape)
+                                )
+                            }
+                        }
+                }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     Icon(
                         tint = Color.Gray,
@@ -400,9 +421,11 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
     }
 
     private fun initTemplate() {
-        /*   Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-             Template.recipeCardTemplate = recipeFunctionTemplateVariable
-             Template.recipeLoaderTemplate = recipeloader*/
+        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        /*
+            Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+            Template.recipeLoaderTemplate = recipeloader
+        */
     }
 
     private fun RandomCriteria(): SuggestionsCriteria {
