@@ -9,4 +9,5 @@ object PreferencesText {
     var dietSubtitle = "Avez-vous un régime particulier ?"
     var ingredientSubtitle = "Y a-t-il des ingrédients que vous n’aimez pas ?"
     var equipmentSubtitle = "Quel(s) équipement(s) possédez-vous chez vous ?"
+    var title = "Mes préférences"
 }

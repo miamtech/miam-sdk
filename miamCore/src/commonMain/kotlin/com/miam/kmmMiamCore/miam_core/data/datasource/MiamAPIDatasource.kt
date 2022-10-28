@@ -465,7 +465,7 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getTagsByTagType ")
         return returnValue.map { record -> record as Tag }
     }
-    
+
     override suspend fun getTagById(id: String): Tag {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getTagById $id")
         val returnValue = httpClient.get<RecordWrapper> {
@@ -474,4 +474,5 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getTagById ")
         return returnValue as Tag
     }
+    
 }

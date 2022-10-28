@@ -9,9 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -292,8 +290,8 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 } else {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                            .fillMaxWidth(),
+                        //.verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 //                        content(retailerBasketSubject)
@@ -378,7 +376,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         // recette a base de poulet
         recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
-        Column {
+        Column(Modifier.fillMaxSize()) {
             Preferences(context).Content()
         }
     }

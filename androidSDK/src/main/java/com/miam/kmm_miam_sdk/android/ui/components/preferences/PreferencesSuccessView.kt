@@ -1,24 +1,39 @@
 package com.miam.kmm_miam_sdk.android.ui.components.preferences
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
+import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmm_miam_sdk.android.ressource.Image
+import com.miam.kmm_miam_sdk.android.ressource.Image.close
 import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.theme.Colors.backgroundGrey
+import com.miam.kmm_miam_sdk.android.theme.Colors.primary
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template.DietPreferencesSectionTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.EquipmentPreferencesSectionTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.GuestPreferencesSectionTemplate
@@ -26,10 +41,13 @@ import com.miam.kmm_miam_sdk.android.theme.Template.IngredientPreferencesSection
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
+import com.miam.kmm_miam_sdk.android.theme.Typography.subtitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.common.RoundedCheckbox
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
+import com.miam.kmm_miam_sdk.android.ui.components.preferenceSearch.PreferencesSearch
 import com.miam.kmm_miam_sdk.android.ui.components.preferences.customization.PreferencesText
+import com.miam.kmm_miam_sdk.android.ui.components.preferences.customization.PreferencesText.title
 import com.miam.kmm_miam_sdk.android.utils.FlowLayout
 
 
@@ -54,7 +72,7 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
             Text(text = PreferencesText.dietLabel, style = bodyBold, modifier = Modifier.padding(bottom = 4.dp))
             Text(text = PreferencesText.dietSubtitle, style = bodySmall)
             Spacer(modifier = Modifier.height(16.dp))
-            Column {
+            Column(Modifier.background(color = white, shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))) {
                 dietsTag.forEach { diet ->
                     Clickable(onClick = { togglePreference(diet) }) {
                         Column {
@@ -78,7 +96,7 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
 }
 
 @Composable
-fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
+fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit, toggleSearch: () -> Unit) {
     if (IngredientPreferencesSectionTemplate != null) {
         IngredientPreferencesSectionTemplate?.let { it() }
     } else {
@@ -99,8 +117,9 @@ fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePrefe
                                     BorderStroke(1.dp, if (checkableTag.isChecked) Colors.primary else Color.Gray),
                                     RoundedCornerShape(50)
                                 )
-                                .background(if (checkableTag.isChecked) Colors.primary else Colors.white)
                                 .clip(RoundedCornerShape(50))
+                                .background(if (checkableTag.isChecked) Colors.primary else Colors.white)
+
                         ) {
                             Row(Modifier.padding(horizontal = 8.dp, vertical = 11.dp)) {
                                 Text(
@@ -120,16 +139,18 @@ fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePrefe
                         }
                     }
                 }
-                Box(
-                    Modifier
-                        .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
-                        .background(Colors.white)
-                ) {
-                    Row(Modifier.padding(horizontal = 8.dp, vertical = 11.dp)) {
-                        Text(
-                            text = "Ajouter +",
-                            color = Color.Gray
-                        )
+                Clickable(onClick = { toggleSearch() }) {
+                    Box(
+                        Modifier
+                            .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
+                            .background(Colors.white)
+                    ) {
+                        Row(Modifier.padding(horizontal = 8.dp, vertical = 11.dp)) {
+                            Text(
+                                text = "Ajouter +",
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
@@ -146,7 +167,7 @@ fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePrefere
             Text(text = PreferencesText.equipmentLabel, style = bodyBold, modifier = Modifier.padding(bottom = 4.dp))
             Text(text = PreferencesText.equipmentSubtitle, style = bodySmall)
             Spacer(modifier = Modifier.height(16.dp))
-            Column {
+            Column(Modifier.background(color = white, shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))) {
                 equipmentsTag.forEach { equipment ->
                     Clickable(onClick = { togglePreference(equipment) }) {
                         Column {
@@ -170,23 +191,128 @@ fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePrefere
 }
 
 @Composable
+fun PreferencesHeader(closePref: () -> Unit) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Clickable(onClick = { closePref() }) {
+                Box(
+                    Modifier
+                        .padding(12.dp)
+                        .clip(CircleShape)
+                        .background(backgroundGrey)
+                ) {
+                    Image(
+                        painter = painterResource(close),
+                        contentDescription = null,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = title, style = subtitle.copy(fontWeight = FontWeight.Bold))
+        }
+        Divider(Modifier.fillMaxWidth())
+    }
+
+}
+
+@Composable
+fun PreferencesFooter(closePref: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(
+                color = white,
+                shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
+            ),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Clickable(onClick = { closePref() }) {
+            Box(
+                Modifier
+                    .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
+                    .background(Colors.white)
+            ) {
+                Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Text(
+                        text = "Annuler",
+                        style = subtitle.copy(fontWeight = FontWeight.Bold),
+                        color = Color.Black
+                    )
+                }
+            }
+        }
+        Clickable(onClick = {}) {
+            Box(
+                Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(primary)
+                    .border(BorderStroke(1.dp, primary), RoundedCornerShape(50))
+            ) {
+                Row(
+                    Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+
+                ) {
+                    Text(
+                        text = "Voir les 60 repas",
+                        style = subtitle.copy(fontWeight = FontWeight.Bold),
+                        color = white
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun PreferencesSuccessView(
+    context: Context,
     ingredientsTag: List<CheckableTag>,
     dietsTag: List<CheckableTag>,
     equipmentTag: List<CheckableTag>,
-    togglePreference: (pref: CheckableTag) -> Unit
+    togglePreference: (pref: CheckableTag) -> Unit,
+    closePreference: () -> Unit,
+    addIngredientPreferences: (tag: Tag) -> Unit
+
 ) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    ) {
-        GuestPreferencesSection()
-        Spacer(modifier = Modifier.height(24.dp))
-        DietPreferencesSection(dietsTag, togglePreference)
-        Spacer(modifier = Modifier.height(24.dp))
-        IngredientPreferencesSection(ingredientsTag, togglePreference)
-        Spacer(modifier = Modifier.height(24.dp))
-        EquipmentPreferencesSection(equipmentTag, togglePreference)
+
+    var showSearch by remember { mutableStateOf(false) }
+
+    if (showSearch) {
+        val prefSearch = PreferencesSearch(context)
+        prefSearch.bind({ showSearch = !showSearch }, {
+            addIngredientPreferences(it)
+            showSearch = !showSearch
+        })
+        prefSearch.Content()
+    } else {
+        Scaffold(
+            topBar = { PreferencesHeader(closePreference) },
+            content = {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = backgroundGrey)
+                        .padding(horizontal = 16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    GuestPreferencesSection()
+                    Spacer(modifier = Modifier.height(24.dp))
+                    DietPreferencesSection(dietsTag, togglePreference)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    IngredientPreferencesSection(ingredientsTag, togglePreference) { showSearch = !showSearch }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    EquipmentPreferencesSection(equipmentTag, togglePreference)
+                    Spacer(modifier = Modifier.height(100.dp))
+                }
+            },
+            bottomBar = { PreferencesFooter(closePreference) })
     }
 }

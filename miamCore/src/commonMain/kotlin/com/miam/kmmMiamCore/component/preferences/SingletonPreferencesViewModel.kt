@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class PreferencesViewModel : BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
+open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println(" [ERROR][Miam][Preference] $exception")
@@ -50,8 +50,14 @@ open class PreferencesViewModel : BaseViewModel<PreferencesContract.Event, Prefe
                 setState { copy(equipments = updatedPrefList(currentState.equipments.toMutableList(), newTag)) }
             }
         }
-        // TODO update pref
         updateRecipesCount()
+    }
+
+    fun addIngredientPreference(tag: Tag) {
+        val newIngredientPreferences = currentState.ingredients.toMutableList()
+        newIngredientPreferences.add(CheckableTag(tag, isChecked = true, without = true))
+        savePref(newIngredientPreferences.toList())
+        setState { copy(ingredients = newIngredientPreferences.toList()) }
     }
 
 
@@ -64,6 +70,7 @@ open class PreferencesViewModel : BaseViewModel<PreferencesContract.Event, Prefe
         val tagIndex = checkablesTag.indexOfFirst { it.tag.id === tagToInject.tag.id }
         if (tagIndex == -1) return checkablesTag.toList()
         checkablesTag[tagIndex] = tagToInject
+        savePref(checkablesTag.toList())
         return checkablesTag.toList()
     }
 
@@ -93,8 +100,6 @@ open class PreferencesViewModel : BaseViewModel<PreferencesContract.Event, Prefe
     private fun initDietTag() {
         launch(coroutineHandler) {
             val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(false) }
-            // TODO is check ?
-            // TODO Local BDD ?
             setState { copy(basicState = BasicUiState.Success(true), diets = dietsTags) }
             isDietPrefReady.value = true
         }
@@ -120,17 +125,23 @@ open class PreferencesViewModel : BaseViewModel<PreferencesContract.Event, Prefe
         }
     }
 
+    private fun savePref(preferences: List<CheckableTag>) {
+        // TODO
+    }
+
+    fun getPreferencesAsQueryString(): String {
+        var query = ""
+
+        return query
+    }
+
     companion object {
-        // TODO handle ingredient tag (that aren't tag ...)
         val defaultIngredientTagIds = listOf(
             "ingredient_category_lgumes",
             "ingredient_category_viandes-blanches",
             "ingredient_category_fromage",
             "ingredient_category_poissons",
             "ingredient_category_fruits",
-//            "ingredientsdefinition_131",
-//            "ingredientsdefinition_334",
-//            "ingredientsdefinition_64",
             "ingredient_category_alcool"
         )
 

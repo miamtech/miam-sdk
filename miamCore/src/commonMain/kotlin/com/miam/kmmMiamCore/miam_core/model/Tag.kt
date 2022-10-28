@@ -30,10 +30,15 @@ data class Tag private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
+    private fun isAlreadyInUserPref(): Boolean {
+        // TODO: check in bdd if filter id is present
+        return false
+    }
+
     fun toCheckableTag(without: Boolean): CheckableTag {
         return CheckableTag(
             tag = this,
-            isChecked = false,
+            isChecked = isAlreadyInUserPref(),
             without = without
         )
     }
