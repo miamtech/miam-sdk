@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -26,27 +27,32 @@ import com.miam.kmm_miam_sdk.android.ui.components.myMealButton.customization.My
 
 @Composable
 fun MyMealButtonSuccessView(recipeCount: Int, onclick: () -> Unit) {
-    //TODO add template
-    Clickable(onClick = { onclick() }) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(topStart = 100f, topEnd = 100f))
-                .background(color = primary),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(BasketPreviewImage.toggleCaret),
-                contentDescription = null,
-                modifier = Modifier.rotate(-90f),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-            Text(
-                text = "$recipeCount" + if (recipeCount == 1) singleMealText else multipleMealText,
-                color = white,
-                style = subtitleBold
-            )
+    if (Template.myMealButtonSuccessViewTemplate != null) {
+        Template.myMealButtonSuccessViewTemplate?.let {
+            it(recipeCount, onclick)
+        }
+    } else {
+        Clickable(onClick = { onclick() }) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 100f, topEnd = 100f))
+                    .background(color = primary),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(BasketPreviewImage.toggleCaret),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(-90f),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    text = if (recipeCount == 1) singleMealText else "$recipeCount" + multipleMealText,
+                    color = white,
+                    style = subtitleBold
+                )
+            }
         }
     }
 }

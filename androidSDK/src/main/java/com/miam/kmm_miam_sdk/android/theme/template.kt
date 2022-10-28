@@ -223,4 +223,14 @@ object Template {
     ) -> Unit)? = null
 
 
+////////////////// MY MEAL BUTTON ////////////
+
+    var myMealButtonSuccessViewTemplate: (@Composable() (
+        recipeCount: Int, onclick: () -> Unit
+    ) -> Unit)? = null
+
+    var myMealButtonEmptyViewTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+
 }
