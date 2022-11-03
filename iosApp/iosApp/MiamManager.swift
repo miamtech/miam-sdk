@@ -32,8 +32,6 @@ public class MiamManager {
     // need to be private
     private init() {
         KoinKt.doInitKoin()
-        ToasterHandler.shared.setOnAddRecipeText(message: <#T##String#>)
-        ToasterHandler.shared.setOnLikeRecipeText(message: <#T##String#>)
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
         ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
         basketHandler = BasketHandlerInstance.shared.instance
