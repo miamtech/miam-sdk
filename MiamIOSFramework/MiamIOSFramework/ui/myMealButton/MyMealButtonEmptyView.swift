@@ -11,6 +11,10 @@ import SwiftUI
 @available(iOS 14, *)
 struct MyMealButtonEmptyView: View {
     var body: some View {
-        EmptyView()
+        if let template = Template.sharedInstance.myMealButtonEmptyViewTemplate {
+            template()
+        } else {
+            EmptyView()
+        }
     }
 }
