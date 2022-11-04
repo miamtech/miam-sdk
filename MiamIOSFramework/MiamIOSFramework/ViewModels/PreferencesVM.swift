@@ -28,7 +28,7 @@ class PreferencesVM: SingletonPreferencesViewModel, ObservableObject {
             self.state = state
             
             switch(state.basicState) {
-            case let _ as BasicUiStateSuccess<KotlinBoolean>:
+            case _ as BasicUiStateSuccess<KotlinBoolean>:
                 self.diets = state.diets
                 self.ingredients = state.ingredients
                 self.equipments = state.equipments
