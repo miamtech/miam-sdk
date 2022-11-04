@@ -74,7 +74,7 @@ fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
 }
 
 @Composable
-fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
+fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit) {
     if (DietPreferencesSectionTemplate != null) {
         DietPreferencesSectionTemplate?.let { it(dietsTag, togglePreference) }
     } else {
@@ -84,11 +84,11 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
             Spacer(modifier = Modifier.height(16.dp))
             Column(Modifier.background(color = white, shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))) {
                 dietsTag.forEach { diet ->
-                    Clickable(onClick = { togglePreference(diet) }) {
+                    Clickable(onClick = { togglePreference(diet.tag.id) }) {
                         Column {
                             Row(Modifier.padding(vertical = 14.dp, horizontal = 18.dp)) {
                                 RoundedCheckbox(check = diet.isChecked) {
-                                    togglePreference(diet)
+                                    togglePreference(diet.tag.id)
                                 }
                                 Text(
                                     text = diet.tag.attributes!!.name,
@@ -108,7 +108,7 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
 @Composable
 fun IngredientPreferencesSection(
     ingredientsTag: List<CheckableTag>,
-    togglePreference: (pref: CheckableTag) -> Unit,
+    togglePreference: (tagIdToToogle: String) -> Unit,
     toggleSearch: () -> Unit
 ) {
     if (IngredientPreferencesSectionTemplate != null) {
@@ -124,7 +124,7 @@ fun IngredientPreferencesSection(
             Spacer(modifier = Modifier.height(16.dp))
             FlowLayout(verticalSpacing = 4.dp, horizontalSpacing = 8.dp) {
                 ingredientsTag.forEach { checkableTag ->
-                    Clickable(onClick = { togglePreference(checkableTag) }) {
+                    Clickable(onClick = { togglePreference(checkableTag.tag.id) }) {
                         Box(
                             Modifier
                                 .border(
@@ -172,7 +172,7 @@ fun IngredientPreferencesSection(
 }
 
 @Composable
-fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
+fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit) {
     if (EquipmentPreferencesSectionTemplate != null) {
         EquipmentPreferencesSectionTemplate?.let { it(equipmentsTag, togglePreference) }
     } else {
@@ -182,11 +182,11 @@ fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePrefere
             Spacer(modifier = Modifier.height(16.dp))
             Column(Modifier.background(color = white, shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))) {
                 equipmentsTag.forEach { equipment ->
-                    Clickable(onClick = { togglePreference(equipment) }) {
+                    Clickable(onClick = { togglePreference(equipment.tag.id) }) {
                         Column {
                             Row(Modifier.padding(vertical = 14.dp, horizontal = 18.dp)) {
                                 RoundedCheckbox(check = equipment.isChecked) {
-                                    togglePreference(equipment)
+                                    togglePreference(equipment.tag.id)
                                 }
                                 Text(
                                     text = equipment.tag.attributes!!.name,
@@ -267,7 +267,7 @@ fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound
                     }
                 }
             }
-            Clickable(onClick = { closePref() }) {
+            Clickable(onClick = { applyPref() }) {
                 Box(
                     Modifier
                         .clip(RoundedCornerShape(50))
@@ -299,7 +299,7 @@ fun PreferencesSuccessView(
     ingredientsTag: List<CheckableTag>,
     dietsTag: List<CheckableTag>,
     equipmentTag: List<CheckableTag>,
-    togglePreference: (pref: CheckableTag) -> Unit,
+    togglePreference: (tagIdToToogle: String) -> Unit,
     closePreferences: () -> Unit,
     applyPreferences: () -> Unit,
     guestChanged: (count: Int) -> Unit,

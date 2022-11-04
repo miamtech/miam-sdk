@@ -238,14 +238,14 @@ object Template {
     var GuestPreferencesSectionTemplate: (@Composable() (guests: Int, guestChanged: (count: Int) -> Unit) -> Unit)? = null
 
     var DietPreferencesSectionTemplate: (@Composable() (
-        dietsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit
+        dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
 
     var IngredientPreferencesSectionTemplate: (@Composable() (
-        ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit, toggleSearch: () -> Unit
+        ingredientsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit, toggleSearch: () -> Unit
     ) -> Unit)? = null
 
     var EquipmentPreferencesSectionTemplate: (@Composable() (
-        equipmentsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit
+        equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
 }

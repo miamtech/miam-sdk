@@ -2,15 +2,19 @@ package com.miam.kmmMiamCore.component.preferences
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonArray
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -29,116 +33,100 @@ open class SingletonPreferencesViewModel:
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
-    private val isDietPrefReady = MutableStateFlow(false)
-    private val isEquipmentPrefReady = MutableStateFlow(false)
-    private val isIngredientPrefReady = MutableStateFlow(false)
-
     init {
-        initStatusWatcher()
-        initDietTag()
-        initEquipmentsTag()
-        initIngredientTag()
+        LogHandler.info("Init preferences-------------------------")
+        launch(coroutineHandler) {
+            val jsonSelectedTags = loadFromLocal()
+            // get tags, wait for all to complete and then set state
+            listOf(
+                async { initDietTag(selectedTagOrNull(jsonSelectedTags, JSON_DIET_KEY)) },
+                async { initEquipmentsTag(selectedTagOrNull(jsonSelectedTags, JSON_EQUIPMENT_KEY)) },
+                async { initIngredientTag(selectedTagOrNull(jsonSelectedTags, JSON_INGREDIENT_KEY)) }
+            ).awaitAll()
+            loadFromLocal()
+            val count = getRecipeCount()
+            setState { copy(basicState = BasicUiState.Success(true), recipesFound = count, localSelectedTags = jsonSelectedTags) }
+        }
+    }
+
+    private fun selectedTagOrNull(jsonSelectedTags: JsonObject, key: String): List<String>? {
+        return jsonSelectedTags[key]?.jsonArray?.map { it -> it.toString() }
     }
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
 
-    private fun initStatusWatcher() {
-        val dietCombineWithEquipmentReadyness = isDietPrefReady.combine(flow = isEquipmentPrefReady) { diet, equipment ->
-            return@combine diet && equipment
-        }
-
-        launch(coroutineHandler) {
-            dietCombineWithEquipmentReadyness.combine(isIngredientPrefReady) { dietAndEquipment, ingredient ->
-                return@combine dietAndEquipment && ingredient
-            }.collect {
-                setState { copy(basicState = if (it) BasicUiState.Success(true) else BasicUiState.Loading) }
-                if (it) {
-                    updateRecipesCount()
-                }
-            }
-        }
+    private suspend fun initDietTag(selectedTagIds: List<String>?) {
+        val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(selectedTagIds) }
+        setState { copy(diets = dietsTags) }
     }
 
-    private fun initDietTag() {
-        launch(coroutineHandler) {
-            val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(false) }
-            setState { copy(basicState = BasicUiState.Success(true), diets = dietsTags) }
-            isDietPrefReady.value = true
-        }
+    private suspend fun initEquipmentsTag(selectedTagIds: List<String>?) {
+        val equipmentTags = tagsRepositoryImp.fetchEquipmentTags().map { it.toCheckableTag(selectedTagIds, true) }
+        setState { copy(equipments = equipmentTags) }
     }
 
-    private fun initEquipmentsTag() {
-        if (currentState.basicState != BasicUiState.Loading) setState { copy(basicState = BasicUiState.Loading) }
-        launch(coroutineHandler) {
-            val equipmentTags = tagsRepositoryImp.fetchEquipmentTags().map { it.toCheckableTag(false) }
-            setState { copy(basicState = BasicUiState.Success(true), equipments = equipmentTags) }
-            isEquipmentPrefReady.value = true
-        }
+    private suspend fun initIngredientTag(selectedTagIds: List<String>?) {
+        LogHandler.info("init initIngredientTag with $selectedTagIds -------------------------")
+        val ingredientTags = defaultIngredientTagIds.map { id -> tagsRepositoryImp.getTagById(id) }.map { it.toCheckableTag(selectedTagIds) }
+        setState { copy(ingredients = ingredientTags) }
     }
 
-    private fun initIngredientTag() {
-        val ingredientTags = mutableListOf<Tag>()
-        launch(coroutineHandler) {
-            defaultIngredientTagIds.forEach { id ->
-                ingredientTags.add(tagsRepositoryImp.getTagById(id))
-            }
-            //TODO ALEXI fetch LocalStorage tags Ingredient ID
-            setState {
-                copy(
-                    basicState = BasicUiState.Success(true),
-                    ingredients = ingredientTags.map { it.toCheckableTag(true) })
-            }
-            isIngredientPrefReady.value = true
-        }
+    private fun loadFromLocal(): JsonObject {
+        return JsonObject(
+            mapOf(
+                JSON_INGREDIENT_KEY to JsonArray(listOf(JsonPrimitive("ingredient_category_lgumes")))
+            )
+        )
+    }
+
+    private fun saveToLocal(): JsonObject {
+        return JsonObject(mapOf())
     }
 
     override fun handleEvent(event: PreferencesContract.Event) {
         TODO("Not yet implemented")
     }
 
-    fun togglePreference(checkableTag: CheckableTag) {
-        val newTag = checkableTag.copy(isChecked = !checkableTag.isChecked)
-        if (newTag.without) {
-            setState { copy(ingredients = updatedPrefList(currentState.ingredients.toMutableList(), newTag)) }
-        } else {
-            if (checkableTag.tag.attributes!!.tagTypeId == "diet") {
-                setState { copy(diets = updatedPrefList(currentState.diets.toMutableList(), newTag)) }
-            } else {
-                setState { copy(equipments = updatedPrefList(currentState.equipments.toMutableList(), newTag)) }
-            }
+    fun togglePreference(tagIdToToogle: String) {
+        setState {
+            copy(
+                ingredients = ingredients.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) },
+                diets = diets.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) },
+                equipments = equipments.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) }
+            )
         }
         updateRecipesCount()
     }
 
     fun addIngredientPreference(tag: Tag) {
-        val newIngredientPreferences = currentState.ingredients.toMutableList()
-        newIngredientPreferences.add(CheckableTag(tag, isChecked = true, without = true))
-        savePref(newIngredientPreferences.toList())
-        setState { copy(ingredients = newIngredientPreferences.toList()) }
+        setState { copy(ingredients = listOf(*currentState.ingredients.toTypedArray(), CheckableTag(tag, isChecked = true))) }
+        updateRecipesCount()
     }
 
     fun resetPreferences() {
-        setState { getInitialPref() }
+        setState {
+            copy(
+                ingredients = ingredients.map { it.resetWith(selectedTagOrNull(currentState.localSelectedTags, JSON_INGREDIENT_KEY)) },
+                diets = diets.map { it.resetWith(selectedTagOrNull(currentState.localSelectedTags, JSON_DIET_KEY)) },
+                equipments = equipments.map { it.resetWith(selectedTagOrNull(currentState.localSelectedTags, JSON_EQUIPMENT_KEY), true) }
+            )
+        }
         updateRecipesCount()
     }
 
     fun applyPreferences() {
-
-    }
-
-    private fun updatedPrefList(checkablesTag: MutableList<CheckableTag>, tagToInject: CheckableTag): List<CheckableTag> {
-        val tagIndex = checkablesTag.indexOfFirst { it.tag.id === tagToInject.tag.id }
-        if (tagIndex == -1) return checkablesTag.toList()
-        checkablesTag[tagIndex] = tagToInject
-        savePref(checkablesTag.toList())
-        return checkablesTag.toList()
+        setState { copy(localSelectedTags = saveToLocal()) }
     }
 
     private fun updateRecipesCount() {
         launch(coroutineHandler) {
-            val count = recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
+            val count = getRecipeCount()
             setState { copy(recipesFound = count) }
         }
+    }
+
+    private suspend fun getRecipeCount(): Int {
+        return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
     }
 
     fun changeGlobaleGuest(numberOfGuest: Int) {
@@ -153,12 +141,21 @@ open class SingletonPreferencesViewModel:
     }
 
     fun getPreferencesAsQueryString(): String {
-        var query = ""
-        // TODO ALEX return concat string of preferences like filter
-        return query
+        val toInclude = currentState.diets.filter { tag -> tag.isChecked }.map { it.tag.id }
+        val toExclude = listOf(
+            *currentState.ingredients.filter { tag -> tag.isChecked }.toTypedArray(),
+            *currentState.equipments.filter { tag -> !tag.isChecked }.toTypedArray()
+        ).map { it.tag.id }
+        val includedStr = if (toInclude.isNotEmpty()) "&filter[include-tags]=${toInclude.joinToString(",")}" else ""
+        val excludedStr = if (toExclude.isNotEmpty()) "&filter[exclude-tags]=${toExclude.joinToString(",")}" else ""
+        return includedStr + excludedStr
     }
 
     companion object {
+        const val JSON_DIET_KEY = "diet"
+        const val JSON_EQUIPMENT_KEY = "equipment"
+        const val JSON_INGREDIENT_KEY = "ingredient"
+
         val defaultIngredientTagIds = listOf(
             "ingredient_category_lgumes",
             "ingredient_category_viandes-blanches",
@@ -174,6 +171,7 @@ open class SingletonPreferencesViewModel:
                 diets = emptyList(),
                 ingredients = emptyList(),
                 equipments = emptyList(),
+                localSelectedTags = JsonObject(mapOf()),
                 recipesFound = 0,
                 guests = 4
             )

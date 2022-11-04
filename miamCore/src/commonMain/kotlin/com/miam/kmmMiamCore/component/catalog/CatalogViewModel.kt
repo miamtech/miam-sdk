@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel : BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
@@ -46,7 +46,6 @@ open class CatalogViewModel : BaseViewModel<CatalogContract.Event, CatalogContra
                 }
             }
             is CatalogContract.Event.GoToFavorite -> {
-
                 currentState.catalogFilterVM.setFavorite()
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
@@ -67,6 +66,7 @@ open class CatalogViewModel : BaseViewModel<CatalogContract.Event, CatalogContra
                         content = CatalogContent.RECIPE_LIST,
                         searchOpen = false,
                         filterOpen = false,
+                        preferenceOpen = false,
                     )
                 }
                 fetchRecipes()

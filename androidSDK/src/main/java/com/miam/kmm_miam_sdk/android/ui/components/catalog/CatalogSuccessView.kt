@@ -30,7 +30,10 @@ fun CatalogSuccessView(
     )
 
     val preference = Preferences(context)
-    preference.bind { vmCatalog.setEvent(CatalogContract.Event.TogglePreference) }
+    preference.bind(
+        { vmCatalog.setEvent(CatalogContract.Event.TogglePreference) },
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
+    )
 
     Column {
         if (state.filterOpen && state.enableFilters) {

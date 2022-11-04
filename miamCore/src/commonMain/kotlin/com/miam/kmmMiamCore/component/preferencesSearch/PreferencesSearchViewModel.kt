@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class PreferencesSearchViewModel : BaseViewModel<PreferencesSearchContract.Event, PreferencesSearchContract.State, PreferencesSearchContract.Effect>() {
+open class PreferencesSearchViewModel:
+    BaseViewModel<PreferencesSearchContract.Event, PreferencesSearchContract.State, PreferencesSearchContract.Effect>() {
 
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -47,6 +48,4 @@ open class PreferencesSearchViewModel : BaseViewModel<PreferencesSearchContract.
             }
         }
     }
-
-
 }

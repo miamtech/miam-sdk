@@ -17,21 +17,31 @@ class Preferences @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var close: () -> Unit = {
         throw IllegalArgumentException("[Miam][Error] you must bind close function")
     }
 
-    fun bind(close: () -> Unit) {
+    private var onApply: () -> Unit = {
+        throw IllegalArgumentException("[Miam][Error] you must bind close function")
+    }
+
+    fun bind(close: () -> Unit, onApply: () -> Unit) {
         this.close = close
+        this.onApply = onApply
     }
 
     private val preferencesVM: SingletonPreferencesViewModel by inject()
 
+    private fun resetAndClose() {
+        preferencesVM.resetPreferences()
+        close()
+    }
+
     private fun applyAndClose() {
         preferencesVM.applyPreferences()
-        close()
+        onApply()
     }
 
     @Composable
@@ -49,7 +59,7 @@ class Preferences @JvmOverloads constructor(
                         state.diets,
                         state.equipments,
                         { preferencesVM.togglePreference(it) },
-                        { close() },
+                        { resetAndClose() },
                         { applyAndClose() },
                         { preferencesVM.changeGlobaleGuest(it) },
                         { preferencesVM.addIngredientPreference(it) }
