@@ -25,12 +25,17 @@ public struct CatalogView: View {
     @SwiftUI.State private var showingPackageRecipes = false
 
     @SwiftUI.State private var headerHeight = 50.0
-    public init() {
+    
+    private var usesPreferences = false
+    
+    public init(usesPreferences: Bool = false) {
         self.catalog = CatalogVM()
+        self.usesPreferences = usesPreferences
     }
     
-    public init(categoryId: String, title: String) {
+    public init(categoryId: String, title: String, usesPreferences: Bool = false) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
+        self.usesPreferences = usesPreferences
     }
 
     public var body: some View {
@@ -88,14 +93,24 @@ public struct CatalogView: View {
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
             // TODO: remove call to toggle
-            catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            if (!self.usesPreferences) {
+                catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            } else {
+                catalog.setEvent(event: CatalogContractEvent.TogglePreference())
+            }
         }) {
-            CatalogFiltersView() {
-                showingFilters = false
-                self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
-                catalog.fetchRecipes()
-            } close: {
-                showingFilters = false
+            if (!usesPreferences) {
+                CatalogFiltersView() {
+                    showingFilters = false
+                    self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
+                    catalog.fetchRecipes()
+                } close: {
+                    showingFilters = false
+                }
+            } else {
+                CatalogPreferencesView {
+                    showingFilters = false
+                }
             }
         }
     }
