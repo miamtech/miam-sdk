@@ -9,11 +9,12 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object FilterViewModelInstance : KoinComponent {
+object FilterViewModelInstance: KoinComponent {
     val instance: SingletonFilterViewModel by inject()
 }
 
-open class SingletonFilterViewModel : BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
+open class SingletonFilterViewModel:
+    BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->

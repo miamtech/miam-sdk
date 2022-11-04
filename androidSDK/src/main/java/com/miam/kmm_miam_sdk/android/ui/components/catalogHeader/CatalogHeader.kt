@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -44,11 +44,18 @@ enum class HeaderState {
     DEFAULT, FILTER, SEARCH, PREFERENCES
 }
 
+@Suppress("CatalogHeader", "To be used when going standalone")
 @Composable
-fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
+fun CatalogHeader(
+    isMainPage: Boolean,
+    isFavorite: Boolean,
+    goToRecipeList: () -> Unit,
+    goToFavorite: () -> Unit,
+    goToBack: () -> Unit
+) {
 
     var headerState by remember { mutableStateOf(HeaderState.DEFAULT) }
-    val catalogFilterVm = SingletonFilterViewModel()
+    val catalogFilterVm = FilterViewModelInstance.instance
 
     fun openFilter() {
         headerState = HeaderState.FILTER
@@ -277,7 +284,7 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
             Row {
                 SearchButton()
                 FilterButton()
-                if (!isFavorit) {
+                if (!isFavorite) {
                     FavoriteButton()
                 }
             }

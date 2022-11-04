@@ -38,6 +38,8 @@ import com.miam.kmm_miam_sdk.android.theme.Template.DietPreferencesSectionTempla
 import com.miam.kmm_miam_sdk.android.theme.Template.EquipmentPreferencesSectionTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.GuestPreferencesSectionTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.IngredientPreferencesSectionTemplate
+import com.miam.kmm_miam_sdk.android.theme.Template.PreferencesFooterTemplate
+import com.miam.kmm_miam_sdk.android.theme.Template.PreferencesHeaderTemplate
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
@@ -53,14 +55,20 @@ import com.miam.kmm_miam_sdk.android.utils.FlowLayout
 
 @Composable
 fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
-
     if (GuestPreferencesSectionTemplate != null) {
-        // TODO ALEX completer le model du template
-        GuestPreferencesSectionTemplate?.let { it() }
+        GuestPreferencesSectionTemplate?.let { it(guests, guestChanged) }
     } else {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(text = PreferencesText.guestLabel, style = bodyBold)
-            Counter(count = guests, isDisable = false, increase = { guestChanged(guests + 1) }, decrease = { guestChanged(guests - 1) })
+            Counter(
+                count = guests,
+                isDisable = false,
+                increase = { guestChanged(guests + 1) },
+                decrease = { guestChanged(guests - 1) })
         }
     }
 }
@@ -68,8 +76,7 @@ fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
 @Composable
 fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
     if (DietPreferencesSectionTemplate != null) {
-        // TODO ALEX completer le model du template
-        DietPreferencesSectionTemplate?.let { it() }
+        DietPreferencesSectionTemplate?.let { it(dietsTag, togglePreference) }
     } else {
         Column {
             Text(text = PreferencesText.dietLabel, style = bodyBold, modifier = Modifier.padding(bottom = 4.dp))
@@ -99,10 +106,13 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (pref
 }
 
 @Composable
-fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit, toggleSearch: () -> Unit) {
+fun IngredientPreferencesSection(
+    ingredientsTag: List<CheckableTag>,
+    togglePreference: (pref: CheckableTag) -> Unit,
+    toggleSearch: () -> Unit
+) {
     if (IngredientPreferencesSectionTemplate != null) {
-        // TODO ALEX completer le model du template
-        IngredientPreferencesSectionTemplate?.let { it() }
+        IngredientPreferencesSectionTemplate?.let { it(ingredientsTag, togglePreference, toggleSearch) }
     } else {
         Column(Modifier.fillMaxWidth()) {
             Text(
@@ -123,7 +133,6 @@ fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePrefe
                                 )
                                 .clip(RoundedCornerShape(50))
                                 .background(if (checkableTag.isChecked) Colors.primary else Colors.white)
-
                         ) {
                             Row(Modifier.padding(horizontal = 8.dp, vertical = 11.dp)) {
                                 Text(
@@ -165,8 +174,7 @@ fun IngredientPreferencesSection(ingredientsTag: List<CheckableTag>, togglePrefe
 @Composable
 fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit) {
     if (EquipmentPreferencesSectionTemplate != null) {
-        // TODO ALEX completer le model du template
-        //  EquipmentPreferencesSectionTemplate.let { it() }
+        EquipmentPreferencesSectionTemplate?.let { it(equipmentsTag, togglePreference) }
     } else {
         Column {
             Text(text = PreferencesText.equipmentLabel, style = bodyBold, modifier = Modifier.padding(bottom = 4.dp))
@@ -197,81 +205,86 @@ fun EquipmentPreferencesSection(equipmentsTag: List<CheckableTag>, togglePrefere
 
 @Composable
 fun PreferencesHeader(closePref: () -> Unit) {
-    // TODO ALEX creation du template
-    Column {
+    if (PreferencesHeaderTemplate != null) {
+        PreferencesHeaderTemplate?.let { it(closePref) }
+    } else {
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Clickable(onClick = { closePref() }) {
+                    Box(
+                        Modifier
+                            .padding(12.dp)
+                            .clip(CircleShape)
+                            .background(backgroundGrey)
+                    ) {
+                        Image(
+                            painter = painterResource(close),
+                            contentDescription = null,
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = title, style = subtitle.copy(fontWeight = FontWeight.Bold))
+            }
+            Divider(Modifier.fillMaxWidth())
+        }
+    }
+}
+
+@Composable
+fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound: Int) {
+    if (PreferencesFooterTemplate != null) {
+        PreferencesFooterTemplate?.let { it(closePref, applyPref, recipesFound) }
+    } else {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
+                .height(60.dp)
+                .background(
+                    color = white,
+                    shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
+                ),
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Clickable(onClick = { closePref() }) {
                 Box(
                     Modifier
-                        .padding(12.dp)
-                        .clip(CircleShape)
-                        .background(backgroundGrey)
+                        .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
+                        .background(Colors.white)
                 ) {
-                    Image(
-                        painter = painterResource(close),
-                        contentDescription = null,
-                    )
+                    Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                        Text(
+                            text = "Annuler",
+                            style = subtitle.copy(fontWeight = FontWeight.Bold),
+                            color = Color.Black
+                        )
+                    }
                 }
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(text = title, style = subtitle.copy(fontWeight = FontWeight.Bold))
-        }
-        Divider(Modifier.fillMaxWidth())
-    }
-
-}
-
-@Composable
-fun PreferencesFooter(closePref: () -> Unit, recipesFound: Int) {
-    // TODO ALEX creation du template
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(
-                color = white,
-                shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
-            ),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Clickable(onClick = { closePref() }) {
-            Box(
-                Modifier
-                    .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
-                    .background(Colors.white)
-            ) {
-                Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    Text(
-                        text = "Annuler",
-                        style = subtitle.copy(fontWeight = FontWeight.Bold),
-                        color = Color.Black
-                    )
-                }
-            }
-        }
-        Clickable(onClick = { closePref() }) {
-            Box(
-                Modifier
-                    .clip(RoundedCornerShape(50))
-                    .background(primary)
-                    .border(BorderStroke(1.dp, primary), RoundedCornerShape(50))
-            ) {
-                Row(
+            Clickable(onClick = { closePref() }) {
+                Box(
                     Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-
+                        .clip(RoundedCornerShape(50))
+                        .background(primary)
+                        .border(BorderStroke(1.dp, primary), RoundedCornerShape(50))
                 ) {
-                    Text(
-                        text = "Voir les $recipesFound repas",
-                        style = subtitle.copy(fontWeight = FontWeight.Bold),
-                        color = white
-                    )
+                    Row(
+                        Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+
+                    ) {
+                        Text(
+                            text = "Voir les $recipesFound repas",
+                            style = subtitle.copy(fontWeight = FontWeight.Bold),
+                            color = white
+                        )
+                    }
                 }
             }
         }
@@ -287,12 +300,11 @@ fun PreferencesSuccessView(
     dietsTag: List<CheckableTag>,
     equipmentTag: List<CheckableTag>,
     togglePreference: (pref: CheckableTag) -> Unit,
-    closePreference: () -> Unit,
+    closePreferences: () -> Unit,
+    applyPreferences: () -> Unit,
     guestChanged: (count: Int) -> Unit,
     addIngredientPreferences: (tag: Tag) -> Unit
-
 ) {
-
     var showSearch by remember { mutableStateOf(false) }
 
     if (showSearch) {
@@ -304,7 +316,7 @@ fun PreferencesSuccessView(
         prefSearch.Content()
     } else {
         Scaffold(
-            topBar = { PreferencesHeader(closePreference) },
+            topBar = { PreferencesHeader(closePreferences) },
             content = {
                 Column(
                     Modifier
@@ -323,6 +335,6 @@ fun PreferencesSuccessView(
                     Spacer(modifier = Modifier.height(100.dp))
                 }
             },
-            bottomBar = { PreferencesFooter(closePreference, recipesFound) })
+            bottomBar = { PreferencesFooter(closePreferences, applyPreferences, recipesFound) })
     }
 }

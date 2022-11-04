@@ -29,6 +29,11 @@ class Preferences @JvmOverloads constructor(
 
     private val preferencesVM: SingletonPreferencesViewModel by inject()
 
+    private fun applyAndClose() {
+        preferencesVM.applyPreferences()
+        close()
+    }
+
     @Composable
     override fun Content() {
         val state by preferencesVM.uiState.collectAsState()
@@ -45,8 +50,10 @@ class Preferences @JvmOverloads constructor(
                         state.equipments,
                         { preferencesVM.togglePreference(it) },
                         { close() },
-                        { preferencesVM.changeGlobaleGuest(it) }
-                    ) { preferencesVM.addIngredientPreference(it) }
+                        { applyAndClose() },
+                        { preferencesVM.changeGlobaleGuest(it) },
+                        { preferencesVM.addIngredientPreference(it) }
+                    )
                 },
                 loadingView = {
                     PreferencesLoadingView()

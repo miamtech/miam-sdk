@@ -11,9 +11,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
+@Suppress("PreferencesViewModelInstance used by ios and component")
+object PreferencesViewModelInstance: KoinComponent {
+    val instance: SingletonPreferencesViewModel by inject()
+}
+
+open class SingletonPreferencesViewModel:
+    BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println(" [ERROR][Miam][Preference] $exception")
@@ -34,6 +41,56 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
     }
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
+
+    private fun initStatusWatcher() {
+        val dietCombineWithEquipmentReadyness = isDietPrefReady.combine(flow = isEquipmentPrefReady) { diet, equipment ->
+            return@combine diet && equipment
+        }
+
+        launch(coroutineHandler) {
+            dietCombineWithEquipmentReadyness.combine(isIngredientPrefReady) { dietAndEquipment, ingredient ->
+                return@combine dietAndEquipment && ingredient
+            }.collect {
+                setState { copy(basicState = if (it) BasicUiState.Success(true) else BasicUiState.Loading) }
+                if (it) {
+                    updateRecipesCount()
+                }
+            }
+        }
+    }
+
+    private fun initDietTag() {
+        launch(coroutineHandler) {
+            val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(false) }
+            setState { copy(basicState = BasicUiState.Success(true), diets = dietsTags) }
+            isDietPrefReady.value = true
+        }
+    }
+
+    private fun initEquipmentsTag() {
+        if (currentState.basicState != BasicUiState.Loading) setState { copy(basicState = BasicUiState.Loading) }
+        launch(coroutineHandler) {
+            val equipmentTags = tagsRepositoryImp.fetchEquipmentTags().map { it.toCheckableTag(false) }
+            setState { copy(basicState = BasicUiState.Success(true), equipments = equipmentTags) }
+            isEquipmentPrefReady.value = true
+        }
+    }
+
+    private fun initIngredientTag() {
+        val ingredientTags = mutableListOf<Tag>()
+        launch(coroutineHandler) {
+            defaultIngredientTagIds.forEach { id ->
+                ingredientTags.add(tagsRepositoryImp.getTagById(id))
+            }
+            //TODO ALEXI fetch LocalStorage tags Ingredient ID
+            setState {
+                copy(
+                    basicState = BasicUiState.Success(true),
+                    ingredients = ingredientTags.map { it.toCheckableTag(true) })
+            }
+            isIngredientPrefReady.value = true
+        }
+    }
 
     override fun handleEvent(event: PreferencesContract.Event) {
         TODO("Not yet implemented")
@@ -65,6 +122,10 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         updateRecipesCount()
     }
 
+    fun applyPreferences() {
+
+    }
+
     private fun updatedPrefList(checkablesTag: MutableList<CheckableTag>, tagToInject: CheckableTag): List<CheckableTag> {
         val tagIndex = checkablesTag.indexOfFirst { it.tag.id === tagToInject.tag.id }
         if (tagIndex == -1) return checkablesTag.toList()
@@ -80,56 +141,10 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         }
     }
 
-    private fun initStatusWatcher() {
-        val dietCombineWithEquipmentReadyness = isDietPrefReady.combine(flow = isEquipmentPrefReady) { diet, equipment ->
-            return@combine diet && equipment
-        }
-
-        launch(coroutineHandler) {
-            dietCombineWithEquipmentReadyness.combine(isIngredientPrefReady) { dietAndEquipment, ingredient ->
-                return@combine dietAndEquipment && ingredient
-            }.collect {
-                setState { copy(basicState = if (it) BasicUiState.Success(true) else BasicUiState.Loading) }
-                if (it) {
-                    updateRecipesCount()
-                }
-            }
-        }
-    }
-
     fun changeGlobaleGuest(numberOfGuest: Int) {
         //TODO Alex map with recipes card and detail
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
-        }
-    }
-
-    private fun initDietTag() {
-        launch(coroutineHandler) {
-            val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(false) }
-            setState { copy(basicState = BasicUiState.Success(true), diets = dietsTags) }
-            isDietPrefReady.value = true
-        }
-    }
-
-    private fun initEquipmentsTag() {
-        if (currentState.basicState != BasicUiState.Loading) setState { copy(basicState = BasicUiState.Loading) }
-        launch(coroutineHandler) {
-            val equipmentTags = tagsRepositoryImp.fetchEquipmentTags().map { it.toCheckableTag(false) }
-            setState { copy(basicState = BasicUiState.Success(true), equipments = equipmentTags) }
-            isEquipmentPrefReady.value = true
-        }
-    }
-
-    private fun initIngredientTag() {
-        val ingredientTags = mutableListOf<Tag>()
-        launch(coroutineHandler) {
-            defaultIngredientTagIds.forEach { id ->
-                ingredientTags.add(tagsRepositoryImp.getTagById(id))
-            }
-            //TODO ALEXI fetch LocalStorage tags Ingredient ID
-            setState { copy(basicState = BasicUiState.Success(true), ingredients = ingredientTags.map { it.toCheckableTag(true) }) }
-            isIngredientPrefReady.value = true
         }
     }
 

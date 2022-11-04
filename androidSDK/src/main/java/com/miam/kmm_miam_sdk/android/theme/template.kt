@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
+import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
@@ -228,12 +229,23 @@ object Template {
 
     var PreferencesLoadingTemplate: (@Composable() () -> Unit)? = null
 
-    var GuestPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+    var PreferencesHeaderTemplate: (@Composable() (closePref: () -> Unit) -> Unit)? = null
 
-    var DietPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+    var PreferencesFooterTemplate: (@Composable() (
+        closePref: () -> Unit, applyPref: () -> Unit, recipesFound: Int
+    ) -> Unit)? = null
 
-    var IngredientPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int, guestChanged: (count: Int) -> Unit) -> Unit)? = null
 
-    var EquipmentPreferencesSectionTemplate: (@Composable() () -> Unit)? = null
+    var DietPreferencesSectionTemplate: (@Composable() (
+        dietsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit
+    ) -> Unit)? = null
 
+    var IngredientPreferencesSectionTemplate: (@Composable() (
+        ingredientsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit, toggleSearch: () -> Unit
+    ) -> Unit)? = null
+
+    var EquipmentPreferencesSectionTemplate: (@Composable() (
+        equipmentsTag: List<CheckableTag>, togglePreference: (pref: CheckableTag) -> Unit
+    ) -> Unit)? = null
 }
