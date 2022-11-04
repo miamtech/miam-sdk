@@ -26,15 +26,18 @@ class Catalog @JvmOverloads constructor(
         title: String?
     ) {
         vmCatalog.setEvent(
-            CatalogContract.Event.GoToRecipeListFromCategory(
-                categoryId,
-                title ?: ""
-            )
+            CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
         )
     }
 
-    fun enablePreference() {
-        vmCatalog.enablePreference()
+    @Suppress("Used in component injecting catalog")
+    fun enablePreference(enable: Boolean = true) {
+        vmCatalog.enablePreferences(enable)
+    }
+
+    @Suppress("Used in component injecting catalog")
+    fun enableFilters(enable: Boolean = true) {
+        vmCatalog.enableFilters(enable)
     }
 
     @Composable

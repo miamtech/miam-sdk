@@ -33,7 +33,7 @@ fun CatalogSuccessView(
     preference.bind { vmCatalog.setEvent(CatalogContract.Event.TogglePreference) }
 
     Column {
-        if (state.filterOpen) {
+        if (state.filterOpen && state.enableFilters) {
             filter.Content()
         }
         if (state.searchOpen) {

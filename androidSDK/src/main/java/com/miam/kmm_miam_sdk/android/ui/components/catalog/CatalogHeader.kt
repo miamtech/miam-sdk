@@ -129,7 +129,6 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                     )
                 }
                 Row {
-
                     Clickable(onClick = { openSearch() }, children = {
                         Surface(
                             shape = CircleShape,
@@ -173,46 +172,47 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                             }
                         }
                     }
-                    Clickable(onClick = { openFilter() }, children = {
-                        Box {
-                            Surface(
-                                shape = CircleShape,
-                                elevation = 8.dp,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            ) {
-                                Row(
-                                    Modifier
-                                        .background(white)
-                                        .padding(8.dp)
-                                )
-                                {
-                                    Image(
-                                        painter = painterResource(filter),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(primary),
-                                    )
-
-                                }
-                            }
-                            if (getActiveFilterCount() != 0) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .clip(CircleShape)
-                                        .background(Color.Red)
-                                        .align(Alignment.TopEnd)
+                    if (state.enableFilters) {
+                        Clickable(onClick = { openFilter() }, children = {
+                            Box {
+                                Surface(
+                                    shape = CircleShape,
+                                    elevation = 8.dp,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
                                 ) {
-                                    Text(
-                                        text = getActiveFilterCount().toString(),
-                                        color = white,
-                                        modifier = Modifier.align(Alignment.Center)
-
+                                    Row(
+                                        Modifier
+                                            .background(white)
+                                            .padding(8.dp)
                                     )
+                                    {
+                                        Image(
+                                            painter = painterResource(filter),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(primary),
+                                        )
+
+                                    }
+                                }
+                                if (getActiveFilterCount() != 0) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .clip(CircleShape)
+                                            .background(Color.Red)
+                                            .align(Alignment.TopEnd)
+                                    ) {
+                                        Text(
+                                            text = getActiveFilterCount().toString(),
+                                            color = white,
+                                            modifier = Modifier.align(Alignment.Center)
+
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    })
-
+                        })
+                    }
                     if (!isFavorit) {
                         if (showFullHeader) {
                             Box(modifier = Modifier

@@ -23,8 +23,7 @@ interface CatalogContract {
         object TogglePreference : CatalogContract.Event()
         object OnFilterValidation : CatalogContract.Event()
         object OnSearchLaunch : CatalogContract.Event()
-        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") :
-            CatalogContract.Event()
+        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") : CatalogContract.Event()
     }
 
     data class State(
@@ -35,6 +34,7 @@ interface CatalogContract {
         val filterOpen: Boolean,
         val searchOpen: Boolean,
         val preferenceOpen: Boolean,
+        val enableFilters: Boolean,
         val enablePreferences: Boolean
     ) : UiState
 

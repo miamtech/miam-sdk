@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.catalog
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
@@ -10,8 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel : BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
@@ -29,6 +29,7 @@ open class CatalogViewModel :
             filterOpen = false,
             searchOpen = false,
             preferenceOpen = false,
+            enableFilters = true,
             enablePreferences = false
         )
 
@@ -107,8 +108,12 @@ open class CatalogViewModel :
         fetchCategories()
     }
 
-    fun enablePreference() {
-        setState { copy(enablePreferences = true) }
+    fun enablePreferences(enable: Boolean = true) {
+        setState { copy(enablePreferences = enable) }
+    }
+
+    fun enableFilters(enable: Boolean = true) {
+        setState { copy(enableFilters = enable) }
     }
 
     fun fetchRecipes() {
