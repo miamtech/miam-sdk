@@ -6,13 +6,11 @@ import com.miam.kmmMiamCore.miam_core.data.repository.putArray
 
 class KMMPreference(private val context: KMMContext) {
 
-    fun put(key: String, value: List<String>) {
-        println(context)
+    fun putByTagType(key: String, value: List<String>) {
         context.putArray(key, value)
     }
 
-    fun getList(key: String): List<String> {
-        println(context)
+    fun getByTagType(key: String): List<String> {
         return context.getArray(key, emptySet())
     }
 }
