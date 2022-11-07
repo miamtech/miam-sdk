@@ -11,10 +11,22 @@ import SwiftUI
 @available(iOS 14, *)
 struct CatalogPreferencesView: View {
     let close: () -> Void
+    @State var showSearch = false
     var body: some View {
         NavigationView {
-            PreferencesView()
-                .navigationTitle("Mes préférences")
+            VStack {
+                PreferencesView {
+                    showSearch = true
+                }
+                
+                PreferencesFooterView(cancelTapped: close,
+                                             applyTapped: close)
+                
+                NavigationLink("Search", isActive: $showSearch) {
+                    // TODO: Show search view
+                    PreferencesSearchView().navigationTitle("Je n'aime pas")
+                }.hidden()
+            }.navigationTitle("Mes préférences")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -24,8 +36,6 @@ struct CatalogPreferencesView: View {
                             Image.miamImage(icon: .cross)
                         }
                     }
-                    
-
                 }
         }
     }

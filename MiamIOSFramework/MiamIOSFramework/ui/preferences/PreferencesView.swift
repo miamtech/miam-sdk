@@ -12,27 +12,37 @@ import miamCore
 @available(iOS 14, *)
 public struct PreferencesView: View {
     @ObservedObject private var preferencesViewModel: PreferencesVM = PreferencesVM.sharedInstance
+   
+    let onAddTagTapped: () -> Void
     
-    public init() {}
+    public init(onAddTagTapped: @escaping () -> Void) {
+        self.onAddTagTapped = onAddTagTapped
+    }
     
     public var body: some View {
         if let currentState = preferencesViewModel.state {
-            ManagementResourceState<KotlinBoolean, PreferencesSuccessView, PreferencesLoadingView, EmptyView>(
-                resourceState: currentState.basicState,
-                successView: PreferencesSuccessView(numberOfPersons: Int(currentState.guests),
-                                                    ingredients: currentState.ingredients,
-                                                    equipments: currentState.equipments,
-                                                    diets: currentState.diets,
-                                                    onNumberOfGuestsChanged: { numberOfGuests in
-                                                        preferencesViewModel.changeGlobaleGuest(numberOfGuest: Int32(numberOfGuests))
-                                                    },
-                                                    onToggleTag: { tag in
-                                                        preferencesViewModel.togglePreference(checkableTag: tag)
-                                                    }
-                                                    ),
-                loadingView: PreferencesLoadingView(),
-                emptyView: EmptyView()
-            )
+            VStack {
+                ManagementResourceState<KotlinBoolean, PreferencesSuccessView, PreferencesLoadingView, EmptyView>(
+                    resourceState: currentState.basicState,
+                    successView: PreferencesSuccessView(numberOfPersons: Int(currentState.guests),
+                                                        ingredients: currentState.ingredients,
+                                                        equipments: currentState.equipments,
+                                                        diets: currentState.diets,
+                                                        onNumberOfGuestsChanged: { numberOfGuests in
+                                                            preferencesViewModel.updateGuestsNumber(numberOfGuests)
+                                                        },
+                                                        onToggleTag: { tag in
+                                                            preferencesViewModel.togglePreference(tag)
+                                                        },
+                                                        onAddTagTapped: {
+                                                            onAddTagTapped()
+                                                        }
+                                                        
+                                                       ),
+                    loadingView: PreferencesLoadingView(),
+                    emptyView: EmptyView()
+                ).frame(maxHeight: .infinity)
+            }
         }
     }
 }

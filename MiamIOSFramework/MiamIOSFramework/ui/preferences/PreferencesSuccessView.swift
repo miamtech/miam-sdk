@@ -16,7 +16,7 @@ struct PreferencesSuccessView: View {
     let diets: [CheckableTag]
     let onNumberOfGuestsChanged: (Int) -> Void
     let onToggleTag: (CheckableTag) -> Void
-    
+    let onAddTagTapped: () -> Void
     
     var body: some View {
         GeometryReader { geometry in
@@ -43,9 +43,12 @@ struct PreferencesSuccessView: View {
                     
                     PreferencesTagsListView(title: "Gouts",
                                             subtitle: "Y a-t-il des ingrédients que vous n'aimez pas ?",
-                                            tags: ingredients, geometry: geometry) { tag in
+                                            tags: ingredients, geometry: geometry,
+                                            onToggleTag: { tag in
                         onToggleTag(tag)
-                    }
+                    }, onAddTagTapped: {
+                        onAddTagTapped()
+                    })
                     
                     PreferencesListView(title: "Mode de cuisson",
                                         subtitle: "De quels modes de cuissons disposez-vous ?",
