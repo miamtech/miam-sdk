@@ -2,11 +2,13 @@ package com.miam.kmmMiamCore.component.preferences
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
+import com.miam.kmmMiamCore.services.KMMPreference
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -19,11 +21,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("PreferencesViewModelInstance used by ios and component")
-object PreferencesViewModelInstance: KoinComponent {
+object PreferencesViewModelInstance : KoinComponent {
     val instance: SingletonPreferencesViewModel by inject()
 }
 
-open class SingletonPreferencesViewModel:
+open class SingletonPreferencesViewModel :
     BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -32,6 +34,7 @@ open class SingletonPreferencesViewModel:
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val contextHandler: ContextHandler by inject()
 
     init {
         LogHandler.info("Init preferences-------------------------")
@@ -39,7 +42,7 @@ open class SingletonPreferencesViewModel:
             val jsonSelectedTags = loadFromLocal()
             // get tags, wait for all to complete and then set state
             listOf(
-                async { initDietTag(selectedTagOrNull(jsonSelectedTags, JSON_DIET_KEY)) },
+                async { initDietTag() },
                 async { initEquipmentsTag(selectedTagOrNull(jsonSelectedTags, JSON_EQUIPMENT_KEY)) },
                 async { initIngredientTag(selectedTagOrNull(jsonSelectedTags, JSON_INGREDIENT_KEY)) }
             ).awaitAll()
@@ -55,7 +58,9 @@ open class SingletonPreferencesViewModel:
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
 
-    private suspend fun initDietTag(selectedTagIds: List<String>?) {
+    private suspend fun initDietTag() {
+        val loulou = KMMPreference(context = contextHandler.state.value.applicationContext!!)
+        val selectedTagIds = loulou.getList(JSON_DIET_KEY)
         val dietsTags = tagsRepositoryImp.fetchDietTags().map { it.toCheckableTag(selectedTagIds) }
         setState { copy(diets = dietsTags) }
     }
@@ -79,8 +84,9 @@ open class SingletonPreferencesViewModel:
         )
     }
 
-    private fun saveToLocal(): JsonObject {
-        return JsonObject(mapOf())
+    private fun saveToLocal() {
+        KMMPreference(context = contextHandler.state.value.applicationContext!!).put(JSON_DIET_KEY, listOf("diet_sans-gluten"))
+
     }
 
     override fun handleEvent(event: PreferencesContract.Event) {
@@ -115,7 +121,7 @@ open class SingletonPreferencesViewModel:
     }
 
     fun applyPreferences() {
-        setState { copy(localSelectedTags = saveToLocal()) }
+        // setState { copy(localSelectedTags = saveToLocal()) }
     }
 
     private fun updateRecipesCount() {

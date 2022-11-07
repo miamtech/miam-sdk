@@ -98,7 +98,6 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 KoinInitializer.miamModuleList
             )
         }
-
         ToasterHandler.setOnSuccess { message ->
             val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
             toast.show()
@@ -106,6 +105,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
         ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
+        ContextHandlerInstance.instance.setContext(this@MainActivity)
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
         launch(coroutineHandler) {
             ContextHandlerInstance.instance.observeReadyEvent().collect { it ->

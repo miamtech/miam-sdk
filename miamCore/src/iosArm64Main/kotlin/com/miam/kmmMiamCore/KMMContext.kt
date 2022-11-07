@@ -1,4 +1,3 @@
 package com.miam.kmmMiamCore
 
-expect class KMMContext
-
+actual class KMMContext
