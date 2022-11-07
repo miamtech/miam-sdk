@@ -47,7 +47,7 @@ class PreferencesVM: ObservableObject {
     }
     
     func togglePreference(_ preference: CheckableTag) {
-        preferencesViewModelInstance.togglePreference(checkableTag: preference)
+        preferencesViewModelInstance.togglePreference(tagIdToToogle: preference.tag.id)
 
     }
 }
