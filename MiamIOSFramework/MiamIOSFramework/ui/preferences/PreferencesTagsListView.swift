@@ -22,12 +22,6 @@ struct PreferencesTagsListView: View {
             Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
             
             displayTags(in: geometry)
-            
-//            HStack {
-//                ForEach(tags, id: \.tag.id) { tag in
-//                    PreferenceTagView(tag: tag)
-//                }
-//            }
         }
     }
     

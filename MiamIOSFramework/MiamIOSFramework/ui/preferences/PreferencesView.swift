@@ -11,7 +11,7 @@ import miamCore
 
 @available(iOS 14, *)
 public struct PreferencesView: View {
-    @ObservedObject private var preferencesViewModel: PreferencesVM = PreferencesVM()
+    @ObservedObject private var preferencesViewModel: PreferencesVM = PreferencesVM.sharedInstance
     
     public init() {}
     
