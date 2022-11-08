@@ -1,6 +1,5 @@
 *.iml
 .gradle
-.editorconfig
 /local.properties
 .idea
 .DS_Store
