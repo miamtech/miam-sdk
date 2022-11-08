@@ -1,12 +1,17 @@
 package com.miam.kmmMiamCore.handler
 
+import com.miam.kmmMiamCore.KMMContext
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -16,7 +21,8 @@ object ContextHandlerInstance : KoinComponent {
 }
 
 data class ContextHandlerState(
-    val isInError: Boolean = false
+    val isInError: Boolean = false,
+    val applicationContext: KMMContext? = null
 ) : State
 
 sealed class ReadyEvent : Effect {
@@ -45,7 +51,6 @@ class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatche
     fun emitReadiness() {
         launch(coroutineHandler) {
             readyEvent.emit(if (isReady()) ReadyEvent.isReady else ReadyEvent.isNotReady)
-
         }
     }
 
@@ -63,5 +68,9 @@ class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatche
         launch(coroutineHandler) {
             readyEvent.asSharedFlow().collect { callback(it) }
         }
+    }
+
+    fun setContext(context: KMMContext) {
+        state.value = state.value.copy(applicationContext = context)
     }
 }

@@ -2,12 +2,14 @@ package com.miam.kmmMiamCore.component.preferences
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmmMiamCore.miam_core.model.TagTypes
+import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -17,11 +19,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("PreferencesViewModelInstance used by ios and component")
-object PreferencesViewModelInstance: KoinComponent {
+object PreferencesViewModelInstance : KoinComponent {
     val instance: SingletonPreferencesViewModel by inject()
 }
 
-open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
+open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println(" [ERROR][Miam][Preference] $exception")
@@ -29,6 +31,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val userPreferences: UserPreferences by inject()
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
 
@@ -91,32 +94,30 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     private fun dietsOrEmptyFromLocal(): List<String> {
-        // TODO
-        return listOf("diet_vegan")
+        return userPreferences.getList(LOCAL_DIET_KEY)
     }
 
     private fun ingredientsOrEmptyFromLocal(): List<String> {
-        // TODO
-        return listOf("ingredient_category_lgumes")
+        return userPreferences.getList(LOCAL_INGREDIENT_KEY)
     }
 
     private fun equipmentsOrEmptyFromLocal(): List<String> {
-        // TODO
-        return listOf()
+        return userPreferences.getList(LOCAL_EQUIPMENT_KEY)
     }
 
     override fun handleEvent(event: PreferencesContract.Event) {
         TODO("Not yet implemented")
     }
 
-    fun togglePreference(tagIdToToogle: String) {
+    fun togglePreference(tagIdToToggle: String) {
         setState {
             copy(
-                ingredients = ingredients.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) },
-                diets = diets.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) },
-                equipments = equipments.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToogle) }
+                diets = diets.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToggle) },
+                ingredients = ingredients.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToggle) },
+                equipments = equipments.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToggle) }
             )
         }
+        updateLocalPreferences(tagIdToToggle)
         updateRecipesCount()
     }
 
@@ -156,6 +157,19 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         //TODO Alex map with recipes card and detail
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
+        }
+    }
+
+    private fun updateLocalPreferences(tagIdToToggle: String) {
+        val tag = allTags.firstOrNull { tag -> tag.tag.id == tagIdToToggle } ?: return
+        when (tag.tag.attributes!!.tagTypeId) {
+            "diet" -> userPreferences.putList(LOCAL_DIET_KEY, currentState.diets.filter { diet -> diet.isChecked }.map { diet -> diet.tag.id })
+            "ingredient_category" -> userPreferences.putList(
+                LOCAL_INGREDIENT_KEY,
+                currentState.ingredients.filter { ingredient -> ingredient.isChecked }.map { ingredient -> ingredient.tag.id })
+            "equipment" -> userPreferences.putList(
+                LOCAL_EQUIPMENT_KEY,
+                currentState.equipments.filter { equipment -> !equipment.isChecked }.map { equipment -> equipment.tag.id })
         }
     }
 
