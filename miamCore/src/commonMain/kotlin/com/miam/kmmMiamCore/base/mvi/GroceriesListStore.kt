@@ -1,14 +1,19 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
 import com.miam.kmmMiamCore.services.Analytics
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -131,6 +136,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
                 Analytics.PlausibleProps(recipe_id = recipeId)
             )
             newRecipesInfos.add(RecipeInfos(recipeId.toInt(), guest))
+            ToasterHandler.onAddRecipe()
         }
         return alterRecipeInfo(groceriesList, newRecipesInfos)
     }
