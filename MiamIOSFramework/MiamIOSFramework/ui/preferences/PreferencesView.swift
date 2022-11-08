@@ -14,9 +14,14 @@ public struct PreferencesView: View {
     @ObservedObject private var preferencesViewModel: PreferencesVM = PreferencesVM.sharedInstance
    
     let onAddTagTapped: () -> Void
+    let closeTapped: () -> Void
+    let applyPreferencesTapped: () -> Void
     
-    public init(onAddTagTapped: @escaping () -> Void) {
+    public init(onAddTagTapped: @escaping () -> Void, closeTapped: @escaping () -> Void,
+                applyPreferencesTapped: @escaping () -> Void) {
         self.onAddTagTapped = onAddTagTapped
+        self.closeTapped = closeTapped
+        self.applyPreferencesTapped = applyPreferencesTapped
     }
     
     public var body: some View {
@@ -28,6 +33,7 @@ public struct PreferencesView: View {
                                                         ingredients: currentState.ingredients,
                                                         equipments: currentState.equipments,
                                                         diets: currentState.diets,
+                                                        numberOfRecipesFound: Int(currentState.recipesFound),
                                                         onNumberOfGuestsChanged: { numberOfGuests in
                                                             preferencesViewModel.updateGuestsNumber(numberOfGuests)
                                                         },
@@ -36,9 +42,13 @@ public struct PreferencesView: View {
                                                         },
                                                         onAddTagTapped: {
                                                             onAddTagTapped()
-                                                        }
-                                                        
-                                                       ),
+                                                        }, closeTapped: {
+                                                            preferencesViewModel.resetPreferences()
+                                                            closeTapped()
+                                                        }, applyTapped: {
+                                                            preferencesViewModel.applyPreferences()
+                                                            closeTapped()
+                                                        }),
                     loadingView: PreferencesLoadingView(),
                     emptyView: EmptyView()
                 ).frame(maxHeight: .infinity)

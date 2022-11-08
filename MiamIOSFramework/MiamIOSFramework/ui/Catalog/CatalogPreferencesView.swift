@@ -15,12 +15,13 @@ struct CatalogPreferencesView: View {
     var body: some View {
         NavigationView {
             VStack {
-                PreferencesView {
+                PreferencesView(onAddTagTapped: {
                     showSearch = true
-                }
-                
-                PreferencesFooterView(cancelTapped: close,
-                                             applyTapped: close)
+                }, closeTapped: {
+                    close()
+                }, applyPreferencesTapped: {
+                    close()
+                })
                 
                 NavigationLink("Search", isActive: $showSearch) {
                     // TODO: Show search view

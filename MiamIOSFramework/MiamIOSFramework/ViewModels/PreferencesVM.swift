@@ -48,6 +48,13 @@ class PreferencesVM: ObservableObject {
     
     func togglePreference(_ preference: CheckableTag) {
         preferencesViewModelInstance.togglePreference(tagIdToToogle: preference.tag.id)
+    }
+    
+    func resetPreferences() {
+        preferencesViewModelInstance.resetPreferences()
+    }
 
+    func applyPreferences() {
+        preferencesViewModelInstance.applyPreferences()
     }
 }

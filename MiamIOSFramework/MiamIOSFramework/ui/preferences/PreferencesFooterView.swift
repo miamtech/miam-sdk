@@ -9,10 +9,10 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct PreferencesFooterView: View {
+struct PreferencesFooterView: View {    
     let cancelTapped: () -> Void
     let applyTapped: () -> Void
-    
+    let numberOfRecipesFound: Int
     var body: some View {
         HStack {
             Button {
@@ -29,7 +29,7 @@ struct PreferencesFooterView: View {
             Button {
                 applyTapped()
             } label: {
-                Text("Voir").foregroundColor(Color.miamColor(.white)).bold()
+                Text("Voir les \(numberOfRecipesFound)").foregroundColor(Color.miamColor(.white)).bold()
             }
             .frame(maxWidth: .infinity)
             .fixedSize(horizontal: false, vertical: true)
