@@ -38,7 +38,7 @@ struct PreferencesSuccessView: View {
                                 onNumberOfGuestsChanged(numberOfPersons - 1)
                             }
                             
-                        }.background(Color.miamColor(.lightGreyBackground))
+                        }.background(Color.miamColor(.greyLighter))
                         PreferencesListView(title: "Régime particulier",
                                             subtitle: "Avez-vous un régime particulier ?",
                                             preferences: diets) { tag in
