@@ -14,7 +14,7 @@ actual fun KMMContext.putArray(key: String, value: List<String>) {
 }
 
 actual fun KMMContext.getArrayOrNull(key: String): List<String>? {
-    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList()
+    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList() as List<String>?
 }
 
 actual fun KMMContext.putInt(key: String, value: Int) {
@@ -22,5 +22,6 @@ actual fun KMMContext.putInt(key: String, value: Int) {
 }
 
 actual fun KMMContext.getIntOrNull(key: String): Int? {
-    return NSUserDefaults.standardUserDefaults.intForKey(key)
+    if (NSUserDefaults.standardUserDefaults().objectForKey(key) == null) return null
+    return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
 }

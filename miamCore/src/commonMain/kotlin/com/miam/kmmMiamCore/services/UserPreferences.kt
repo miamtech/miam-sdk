@@ -8,6 +8,11 @@ import com.miam.kmmMiamCore.miam_core.data.repository.putInt
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+@Suppress("UserPreferencesInstance used by ios and component")
+object UserPreferencesInstance: KoinComponent {
+    val instance: UserPreferences by inject()
+}
+
 class UserPreferences: KoinComponent {
 
     private val contextHandler: ContextHandler by inject()

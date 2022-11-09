@@ -32,10 +32,13 @@ public class MiamManager {
     // need to be private
     private init() {
         KoinKt.doInitKoin()
-        ToasterHandler.shared.setOnAddRecipeText(message: <#T##String#>)
-        ToasterHandler.shared.setOnLikeRecipeText(message: <#T##String#>)
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
         ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
+        ContextHandlerInstance.shared.instance.setContext(context: NSObject())
+        UserPreferencesInstance.shared.instance.putInt(key: "testInt", value: 42)
+        UserPreferencesInstance.shared.instance.putList(key: "testString", value: ["1","2","3"])
+        print("IntPref success \( UserPreferencesInstance.shared.instance.getIntOrNull(key: "testInt"))")
+        print("ListPref success \( UserPreferencesInstance.shared.instance.getListOrNull(key: "testString"))")
         basketHandler = BasketHandlerInstance.shared.instance
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
