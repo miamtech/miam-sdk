@@ -16,23 +16,24 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object ContextHandlerInstance : KoinComponent {
+object ContextHandlerInstance: KoinComponent {
     val instance: ContextHandler by inject()
 }
 
 data class ContextHandlerState(
     val isInError: Boolean = false,
     val applicationContext: KMMContext? = null
-) : State
+): State
 
-sealed class ReadyEvent : Effect {
-    object isReady : ReadyEvent()
-    object isNotReady : ReadyEvent()
+sealed class ReadyEvent: Effect {
+    object isReady: ReadyEvent()
+    object isNotReady: ReadyEvent()
 }
 
-class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
+        LogHandler.error("[ContextHandler] $exception ${exception.stackTraceToString()}")
     }
 
     private val basketHandler: BasketHandler by inject()
@@ -72,5 +73,11 @@ class ContextHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatche
 
     fun setContext(context: KMMContext) {
         state.value = state.value.copy(applicationContext = context)
+    }
+
+    fun getContextOrNull(): KMMContext? {
+        val context = state.value.applicationContext
+        if (context == null) LogHandler.error("[ContextHandler] Application context must be provided")
+        return context
     }
 }

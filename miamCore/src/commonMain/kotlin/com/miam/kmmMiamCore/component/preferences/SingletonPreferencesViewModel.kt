@@ -2,14 +2,13 @@ package com.miam.kmmMiamCore.component.preferences
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
-import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmmMiamCore.miam_core.model.TagTypes
-import com.miam.kmmMiamCore.services.KMMPreference
+import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -18,11 +17,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("PreferencesViewModelInstance used by ios and component")
-object PreferencesViewModelInstance : KoinComponent {
+object PreferencesViewModelInstance: KoinComponent {
     val instance: SingletonPreferencesViewModel by inject()
 }
 
-open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
+open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println(" [ERROR][Miam][Preference] $exception")
@@ -30,8 +29,7 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val contextHandler: ContextHandler by inject()
-    private val localPreference = KMMPreference(context = contextHandler.state.value.applicationContext!!)
+    private val userPreferences: UserPreferences by inject()
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
 
@@ -94,15 +92,15 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
     }
 
     private fun dietsOrEmptyFromLocal(): List<String> {
-        return KMMPreference(context = contextHandler.state.value.applicationContext!!).getByTagType(LOCAL_DIET_KEY)
+        return userPreferences.getListOrNull(LOCAL_DIET_KEY) ?: emptyList()
     }
 
     private fun ingredientsOrEmptyFromLocal(): List<String> {
-        return localPreference.getByTagType(LOCAL_INGREDIENT_KEY)
+        return userPreferences.getListOrNull(LOCAL_INGREDIENT_KEY) ?: emptyList()
     }
 
     private fun equipmentsOrEmptyFromLocal(): List<String> {
-        return KMMPreference(context = contextHandler.state.value.applicationContext!!).getByTagType(LOCAL_EQUIPMENT_KEY)
+        return userPreferences.getListOrNull(LOCAL_EQUIPMENT_KEY) ?: emptyList()
     }
 
     override fun handleEvent(event: PreferencesContract.Event) {
@@ -117,7 +115,6 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
                 equipments = equipments.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToggle) }
             )
         }
-        updateLocalPreferences(tagIdToToggle)
         updateRecipesCount()
     }
 
@@ -135,11 +132,14 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
     }
 
     fun applyPreferences() {
-        // TODO
-        val dietsToSaveIds = currentState.diets.filter { it.saveInStorage }
-        val ingredientsToSaveIds = currentState.ingredients.filter { it.saveInStorage }
-        val equipmentToSaveIds = currentState.equipments.filter { it.saveInStorage }
-        LogHandler.info("Will save in storage $dietsToSaveIds $ingredientsToSaveIds $equipmentToSaveIds")
+        userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageIds(currentState.diets))
+        userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageIds(currentState.ingredients))
+        userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageIds(currentState.equipments))
+        LogHandler.info("save in storage done")
+    }
+
+    private fun toSaveInStorageIds(checkableTagList: List<CheckableTag>): List<String> {
+        return checkableTagList.filter { it.saveInStorage }.map { diet -> diet.tag.id }
     }
 
     private fun updateRecipesCount() {
@@ -157,19 +157,6 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         //TODO Alex map with recipes card and detail
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
-        }
-    }
-
-    private fun updateLocalPreferences(tagIdToToggle: String) {
-        val tag = allTags.firstOrNull { tag -> tag.tag.id == tagIdToToggle } ?: return
-        when (tag.tag.attributes!!.tagTypeId) {
-            "diet" -> localPreference.putByTagType(LOCAL_DIET_KEY, currentState.diets.filter { diet -> diet.isChecked }.map { diet -> diet.tag.id })
-            "ingredient_category" -> localPreference.putByTagType(
-                LOCAL_INGREDIENT_KEY,
-                currentState.ingredients.filter { ingredient -> ingredient.isChecked }.map { ingredient -> ingredient.tag.id })
-            "equipment" -> localPreference.putByTagType(
-                LOCAL_EQUIPMENT_KEY,
-                currentState.equipments.filter { equipment -> !equipment.isChecked }.map { equipment -> equipment.tag.id })
         }
     }
 
