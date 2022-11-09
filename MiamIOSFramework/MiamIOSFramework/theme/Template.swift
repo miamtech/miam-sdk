@@ -379,4 +379,19 @@ public class Template {
         BasketPreviewLine,
         Bool
     ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealButtonEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     mealsCount: Int
+     onButtonTapped: () -> Void
+     */
+    public var myMealButtonSuccessViewTemplate: ((
+        Int,
+        () -> Void
+    ) -> AnyView)? = nil
 }

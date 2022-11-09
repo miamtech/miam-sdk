@@ -12,9 +12,10 @@ import MiamIOSFramework
 struct CatalogTabView: View {
     var body: some View {
         VStack{
-            CatalogView()
+            ZStack(alignment: .bottom) {
+                CatalogView()
+                MyMealButtonView()
+            }
         }
     }
 }
-
-
