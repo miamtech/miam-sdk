@@ -54,6 +54,7 @@ import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
@@ -72,18 +73,21 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.random.Random
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
-class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
+class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
     Dispatchers.Main
 ) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
+
+    val userPreferences: UserPreferences by inject()
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
@@ -112,6 +116,12 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        ContextHandlerInstance.instance.setContext(this@MainActivity)
+        userPreferences.putInt("testInt", 42)
+        userPreferences.putList("testList", listOf("1", "2", "3"))
+        LogHandler.info("user pref list is working ${userPreferences.getListOrNull("testList")}")
+        LogHandler.info("user pref Int is working ${userPreferences.getIntOrNull("testInt")}")
+        LogHandler.info("user pref Int is not working ${userPreferences.getIntOrNull("faileTest")}")
         PointOfSaleHandler.getCatalogCategories(::fetchCategory)
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)

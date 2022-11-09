@@ -3,19 +3,24 @@ package com.miam.kmmMiamCore.miam_core.data.repository
 import com.miam.kmmMiamCore.KMMContext
 import platform.Foundation.NSUserDefaults
 
+/**
+ * Ios implementation of LocalSharedPreferenceRepository from common main
+ * Use NSUserDefaults to access local user preference
+ * KMMContext is an NSObject and can be any reference
+ */
+
 actual fun KMMContext.putArray(key: String, value: List<String>) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-actual fun KMMContext.getArray(key: String, default: Set<String>): List<String> {
-    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList() as List<String>?
-        ?: emptyList()
+actual fun KMMContext.getArrayOrNull(key: String): List<String>? {
+    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList()
 }
 
 actual fun KMMContext.putInt(key: String, value: Int) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-actual fun KMMContext.getInt(key: String): Int {
+actual fun KMMContext.getInt(key: String): Int? {
     return NSUserDefaults.standardUserDefaults.intForKey(key)
 }

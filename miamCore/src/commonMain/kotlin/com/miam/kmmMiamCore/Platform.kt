@@ -1,4 +1,8 @@
 package com.miam.kmmMiamCore
 
-expect class KMMContext
+/**
+ * This file set general platform (Android/Ios) settings
+ * Have to be implemented in both platform
+ */
 
+expect class KMMContext
