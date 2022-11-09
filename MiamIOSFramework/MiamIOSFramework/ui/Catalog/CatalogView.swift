@@ -25,17 +25,22 @@ public struct CatalogView: View {
     @SwiftUI.State private var showingPackageRecipes = false
 
     @SwiftUI.State private var headerHeight = 50.0
-    public init() {
+    
+    let closeCatalogAction: (() -> Void)?
+    
+    public init(closeCatalogAction: (() -> Void)? = nil) {
         self.catalog = CatalogVM()
+        self.closeCatalogAction = closeCatalogAction
     }
     
-    public init(categoryId: String, title: String) {
+    public init(categoryId: String, title: String, closeCatalogAction: (() -> Void)? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
+        self.closeCatalogAction = closeCatalogAction
     }
 
     public var body: some View {
         VStack(alignment: .center, spacing: 0.0) {
-            CatalogViewHeader()
+            CatalogViewHeader(closeCatalogAction: closeCatalogAction)
                 .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
             CatalogToolbarView(showBackButton: (catalog.content != .categories),
@@ -186,9 +191,10 @@ internal struct CatalogPackageRow: View {
 
 @available(iOS 14, *)
 internal struct CatalogViewHeader: View {
+    let closeCatalogAction: (() -> Void)?
     var body: some View {
         if (Template.sharedInstance.catalogViewHeaderTemplate != nil) {
-            Template.sharedInstance.catalogViewHeaderTemplate!
+            Template.sharedInstance.catalogViewHeaderTemplate!(closeCatalogAction)
         } else {
             HStack {
                 Image.miamImage(icon: .ideeRepas)
