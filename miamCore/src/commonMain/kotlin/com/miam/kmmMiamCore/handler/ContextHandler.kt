@@ -60,7 +60,7 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
      */
 
     fun isReady(): Boolean {
-        return basketHandler.isReady() && !state.value.isInError
+        return basketHandler.isReady() && !state.value.isInError && state.value.applicationContext != null
     }
 
     fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent

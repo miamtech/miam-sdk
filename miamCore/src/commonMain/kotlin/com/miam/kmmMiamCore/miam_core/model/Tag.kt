@@ -12,13 +12,13 @@ data class Tag private constructor(
     override val id: String,
     override val attributes: TagAttributes? = null,
     override val relationships: TagRelationships? = null
-): Record() {
+) : Record() {
     constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ): this(
+    ) : this(
         id,
         if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<TagAttributes>(
             attributes
@@ -40,10 +40,10 @@ data class TagAttributes constructor(
     val iconUrl: String?,
     @SerialName("picture-url")
     val pictureUrl: String?,
-): Attributes()
+) : Attributes()
 
 @Serializable
-class TagRelationships: Relationships() {
+class TagRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -57,7 +57,7 @@ data class CheckableTag private constructor(
     val tag: Tag,
     val isChecked: Boolean
 ) {
-    constructor(tagType: TagTypes, tag: Tag): this(tagType, tag, checkedByDefault(tagType))
+    constructor(tagType: TagTypes, tag: Tag) : this(tagType, tag, checkedByDefault(tagType))
 
     fun toggleIfNeeded(tagIdToToggle: String): CheckableTag {
         if (tag.id != tagIdToToggle) return this

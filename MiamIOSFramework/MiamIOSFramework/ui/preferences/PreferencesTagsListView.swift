@@ -16,18 +16,13 @@ struct PreferencesTagsListView: View {
     let tags: [CheckableTag]
     let geometry: GeometryProxy
     let onToggleTag: (CheckableTag) -> Void
+    let onAddTagTapped: () -> Void
     var body: some View {
         VStack(alignment: .leading) {
             Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
             Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
             
             displayTags(in: geometry)
-            
-//            HStack {
-//                ForEach(tags, id: \.tag.id) { tag in
-//                    PreferenceTagView(tag: tag)
-//                }
-//            }
         }
     }
     
@@ -40,30 +35,73 @@ struct PreferencesTagsListView: View {
                 PreferenceTagView(tag: tag, onToggleTag: { tag in
                     onToggleTag(tag)
                 })
-                    .padding([.horizontal, .vertical], 4)
-                    .alignmentGuide(.leading, computeValue: { d in
-                        if (abs(width - d.width) > g.size.width)
-                        {
-                            width = 0
-                            height -= d.height
-                        }
-                        let result = width
-                        if tag == self.tags.first! {
-                            width = 0 //last item
-                        } else {
-                            width -= d.width
-                        }
-                        return result
-                    })
-                    .alignmentGuide(.top, computeValue: {d in
-                        let result = height
-                        if tag == self.tags.first! {
-                            height = 0 // last item
-                        }
-                        return result
-                    })
+                .padding([.horizontal, .vertical], 4)
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width)
+                    {
+                        width = 0
+                        height -= d.height
+                    }
+                    let result = width
+                    if tag == self.tags.first! {
+                        width = 0 //last item
+                    } else {
+                        width -= d.width
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: {d in
+                    let result = height
+                    if tag == self.tags.first! {
+                        height = 0 // last item
+                    }
+                    return result
+                })
             }
+            AddTagView(onTapped: {
+                onAddTagTapped()
+            })
+            .padding([.horizontal, .vertical], 4)
+            .alignmentGuide(.leading, computeValue: { d in
+                if (abs(width - d.width) > g.size.width)
+                {
+                    width = 0
+                    height -= d.height
+                }
+                let result = width
+//                if tag == self.tags.first! {
+                    width = 0 //last item
+//                } else {
+//                    width -= d.width
+//                }
+                return result
+            })
+            .alignmentGuide(.top, computeValue: {d in
+                let result = height
+//                if tag == self.tags.first! {
+                    height = 0 // last item
+//                }
+                return result
+            })
         }
+    }
+}
+
+@available(iOS 14, *)
+struct AddTagView: View {
+    let onTapped: () -> Void
+    
+    var body: some View {
+        Text("Ajouter +")
+            .padding(14.0)
+            .frame(height: 40.0)
+            .foregroundColor(Color.miamColor(.black))
+            .background(Color.miamColor(.white))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
+            .onTapGesture {
+                onTapped()
+            }
     }
 }
 

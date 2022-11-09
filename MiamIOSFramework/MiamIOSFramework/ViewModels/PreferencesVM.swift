@@ -10,8 +10,9 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class PreferencesVM: SingletonPreferencesViewModel, ObservableObject {
+class PreferencesVM: ObservableObject {
     static let sharedInstance = PreferencesVM()
+    private let preferencesViewModelInstance = PreferencesViewModelInstance.shared.instance
     
     @Published var state: PreferencesContractState?
   
@@ -19,16 +20,15 @@ class PreferencesVM: SingletonPreferencesViewModel, ObservableObject {
     var equipments: [CheckableTag] = []
     var ingredients: [CheckableTag] = []
     
-    override init() {
-        super.init()
-        self.collect(flow: uiState) { data in
+    private init() {
+        self.preferencesViewModelInstance.collect(flow: self.preferencesViewModelInstance.uiState) { data in
             guard let state = data as? PreferencesContractState else {
                 return
             }
             self.state = state
             
             switch(state.basicState) {
-            case let _ as BasicUiStateSuccess<KotlinBoolean>:
+            case _ as BasicUiStateSuccess<KotlinBoolean>:
                 self.diets = state.diets
                 self.ingredients = state.ingredients
                 self.equipments = state.equipments
@@ -36,5 +36,25 @@ class PreferencesVM: SingletonPreferencesViewModel, ObservableObject {
                 break
             }
         }
+    }
+    
+    func addTag(_ tag: Tag) {
+        preferencesViewModelInstance.addIngredientPreference(tag: tag)
+    }
+    
+    func updateGuestsNumber(_ numberOfGuests: Int) {
+        preferencesViewModelInstance.changeGlobaleGuest(numberOfGuest: Int32(numberOfGuests))
+    }
+    
+    func togglePreference(_ preference: CheckableTag) {
+        preferencesViewModelInstance.togglePreference(tagIdToToggle: preference.tag.id)
+    }
+    
+    func resetPreferences() {
+        preferencesViewModelInstance.resetPreferences()
+    }
+
+    func applyPreferences() {
+        preferencesViewModelInstance.applyPreferences()
     }
 }

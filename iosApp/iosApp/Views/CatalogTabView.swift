@@ -11,8 +11,8 @@ import MiamIOSFramework
 
 struct CatalogTabView: View {
     var body: some View {
-        VStack{
-            CatalogView()
+        VStack {
+            CatalogView(usesPreferences: true)
         }
     }
 }

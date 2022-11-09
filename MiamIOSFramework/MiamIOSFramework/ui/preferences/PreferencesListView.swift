@@ -28,6 +28,9 @@ struct PreferencesListView: View {
                     }
                 }
             }.background(Color.miamColor(.white))
+                .padding([.bottom], 8.0)
+                .cornerRadius(8.0)
+                .padding([.bottom], -8.0)
         }.background(Color.miamColor(.lightGreyBackground))
     }
 }
