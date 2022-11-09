@@ -86,7 +86,7 @@ struct AddTagView: View {
     let onTapped: () -> Void
     
     var body: some View {
-        Text("Ajouter +")
+        Text(MiamText.sharedInstance.addTag)
             .padding(14.0)
             .frame(height: 40.0)
             .foregroundColor(Color.miamColor(.black))

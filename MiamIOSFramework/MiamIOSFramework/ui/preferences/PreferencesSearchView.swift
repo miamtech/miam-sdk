@@ -23,7 +23,7 @@ struct PreferencesSearchView: View {
                     Image.miamImage(icon: .search)
                         .foregroundColor(Color.miamColor(.black))
                         .padding(5)
-                    TextField("Rechercher un ingrédient", text: $searchString).frame(height: 45.0)
+                    TextField(MiamText.sharedInstance.searchTagPlaceholder, text: $searchString).frame(height: 45.0)
                         .disableAutocorrection(true)
                         .onChange(of: searchString) { value in
                             preferencesSearchViewModel.search(search: value)
