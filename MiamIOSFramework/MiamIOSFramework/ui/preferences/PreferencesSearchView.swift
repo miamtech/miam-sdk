@@ -17,12 +17,11 @@ struct PreferencesSearchView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: 10.0) {
-                HStack(spacing: 10.0) {
+            HStack(spacing: 5.0) {
+                HStack(spacing: 5.0) {
                     Image.miamImage(icon: .search)
                         .foregroundColor(Color.miamColor(.black))
-                        .rotationEffect(Angle(degrees: -180))
-                        .padding(10)
+                        .padding(5)
                     TextField("Rechercher un ingrédient", text: $searchString).frame(height: 45.0)
                         .disableAutocorrection(true)
                         .onChange(of: searchString) { value in
