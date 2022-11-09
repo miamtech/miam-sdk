@@ -68,5 +68,9 @@ public class MiamText {
    
     public var persons = "pers."
     public var numberOfPersons = "Nombre de personnes"
+    
+    public var mealsAdded = "repas ajouté"
+    public var mealsAddedPlural = "repas ajoutés"
+    
     private init(){}
 }

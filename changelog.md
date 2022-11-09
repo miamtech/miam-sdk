@@ -2,6 +2,8 @@
 - [FEA][COR] Toaster handler for add and like recipes
 - [FEA][COR] Singleton catalog filter service
 - [FEA][AND] Refact catalog header
+- [FEA][AND] My meal counter button
+- [FEA][IOS] My meal counter button
 - [FEA][COR] Picture is avalaible in recipes ingredients
 
 ## 2.5.2

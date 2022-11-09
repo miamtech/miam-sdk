@@ -248,4 +248,15 @@ object Template {
     var EquipmentPreferencesSectionTemplate: (@Composable() (
         equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
+    
+////////////////// MY MEAL BUTTON ////////////
+
+    var myMealButtonSuccessViewTemplate: (@Composable() (
+        recipeCount: Int, onclick: () -> Unit
+    ) -> Unit)? = null
+
+    var myMealButtonEmptyViewTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+
 }

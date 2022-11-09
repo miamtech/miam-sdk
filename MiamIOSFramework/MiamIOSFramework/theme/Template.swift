@@ -262,8 +262,12 @@ public class Template {
         @escaping (CatalogPackage) -> Void
     ) -> AnyView)? = nil
 
-
-    public var catalogViewHeaderTemplate: AnyView? = nil
+    /**
+     closeCatalogAction: (() -> Void)?
+     */
+    public var catalogViewHeaderTemplate: ((
+        (() -> Void)?
+    ) -> AnyView)? = nil
 
     /**
      showBackButton: Bool
@@ -374,5 +378,20 @@ public class Template {
     public var itemSelectorProductRowTemplate: ((
         BasketPreviewLine,
         Bool
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealButtonEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     mealsCount: Int
+     onButtonTapped: () -> Void
+     */
+    public var myMealButtonSuccessViewTemplate: ((
+        Int,
+        () -> Void
     ) -> AnyView)? = nil
 }
