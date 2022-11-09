@@ -33,10 +33,12 @@ struct PreferencesSearchView: View {
             
             VStack(alignment: .leading) {
                 ForEach(preferencesSearchViewModel.tagsSuggestions, id: \.id) { tag in
+                    // Tags without name will not be displayed in search results
                     if let name = tag.attributes?.name {
-                        // Tags without name will not be displayed in search results
-                        Text(name).padding(8.0).onTapGesture {
+                        Button {
                             PreferencesVM.sharedInstance.addTag(tag)
+                        } label: {
+                            Text(name).padding(8.0)
                         }
                     }
                 }
