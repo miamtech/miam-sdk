@@ -12,9 +12,10 @@ import miamCore
 @available(iOS 14, *)
 struct PreferencesSearchView: View {
     @ObservedObject private var preferencesSearchViewModel = PreferencesSearchVM()
-
     @SwiftUI.State var searchString: String = ""
 
+    let close: () -> Void
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack(spacing: 5.0) {
@@ -37,6 +38,7 @@ struct PreferencesSearchView: View {
                     if let name = tag.attributes?.name {
                         Button {
                             PreferencesVM.sharedInstance.addTag(tag)
+                            close()
                         } label: {
                             Text(name).padding(8.0)
                         }

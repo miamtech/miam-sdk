@@ -25,7 +25,9 @@ struct CatalogPreferencesView: View {
                 
                 NavigationLink("Search", isActive: $showSearch) {
                     // TODO: Show search view
-                    PreferencesSearchView().navigationTitle("Je n'aime pas")
+                    PreferencesSearchView(close: {
+                        self.showSearch = false
+                    }).navigationTitle("Je n'aime pas")
                 }.hidden()
             }.navigationTitle("Mes préférences")
                 .navigationBarTitleDisplayMode(.inline)
