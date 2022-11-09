@@ -11,10 +11,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -56,6 +54,7 @@ import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
@@ -75,18 +74,21 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.random.Random
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
-class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
+class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
     Dispatchers.Main
 ) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
+
+    val userPreferences: UserPreferences by inject()
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
@@ -110,11 +112,17 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
-        launch {
+        launch(coroutineHandler) {
             ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        ContextHandlerInstance.instance.setContext(this@MainActivity)
+        userPreferences.putInt("testInt", 42)
+        userPreferences.putList("testList", listOf("1", "2", "3"))
+        LogHandler.info("user pref list is working ${userPreferences.getListOrNull("testList")}")
+        LogHandler.info("user pref Int is working ${userPreferences.getIntOrNull("testInt")}")
+        LogHandler.info("user pref Int is not working ${userPreferences.getIntOrNull("faileTest")}")
         PointOfSaleHandler.getCatalogCategories(::fetchCategory)
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
@@ -125,7 +133,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
-        launch {
+        launch(coroutineHandler) {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} ")
                 retailerBasketSubject.emit(
@@ -316,12 +324,13 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 } else if (isCatalogPage) {
                     var catalog = Catalog(this@MainActivity)
+                    catalog.enablePreference()
                     catalog.Content()
                 } else {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                            .fillMaxWidth(),
+                        //.verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         content(retailerBasketSubject)
@@ -413,7 +422,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         // recette a base de poulet
         recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
-        Column {
+        Column(Modifier.fillMaxSize()) {
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
@@ -430,10 +439,10 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
 
     private fun initTemplate() {
         Template.recipeCardTemplate = recipeFunctionTemplateVariable
-        /*
-            Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-            Template.recipeLoaderTemplate = recipeloader
-        */
+//        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+//        Template.recipeLoaderTemplate = recipeloader
+
+
     }
 
     private fun RandomCriteria(): SuggestionsCriteria {
@@ -558,6 +567,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
     }
+
     companion object {
         val productSampleCoursesU = listOf(
             CoursesUProduct("12726", "Farine de blé T45 FRANCINE, 1k", 1, 0.88, "id_12726"),

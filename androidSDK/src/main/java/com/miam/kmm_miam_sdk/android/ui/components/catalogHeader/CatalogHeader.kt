@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -41,14 +41,21 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
 
 enum class HeaderState {
-    DEFAULT, FILTER, SEARCH
+    DEFAULT, FILTER, SEARCH, PREFERENCES
 }
 
+@Suppress("CatalogHeader", "To be used when going standalone")
 @Composable
-fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () -> Unit, goToFavorite: () -> Unit, goToBack: () -> Unit) {
+fun CatalogHeader(
+    isMainPage: Boolean,
+    isFavorite: Boolean,
+    goToRecipeList: () -> Unit,
+    goToFavorite: () -> Unit,
+    goToBack: () -> Unit
+) {
 
     var headerState by remember { mutableStateOf(HeaderState.DEFAULT) }
-    val catalogFilterVm = SingletonFilterViewModel()
+    val catalogFilterVm = FilterViewModelInstance.instance
 
     fun openFilter() {
         headerState = HeaderState.FILTER
@@ -62,10 +69,15 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
         headerState = HeaderState.DEFAULT
     }
 
+    fun openPreferences() {
+        headerState = HeaderState.PREFERENCES
+    }
+
     // TODO Refact with filter service
     val filter = CatalogFilter(catalogFilterVm, ::closeModal, goToRecipeList)
     // TODO Refact with filter service
     val search = CatalogSearch(catalogFilterVm, ::closeModal, goToRecipeList)
+
 
     fun getActiveFilterCount(): Int {
         // (TODO) use filter service
@@ -272,7 +284,7 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
             Row {
                 SearchButton()
                 FilterButton()
-                if (!isFavorit) {
+                if (!isFavorite) {
                     FavoriteButton()
                 }
             }
@@ -290,7 +302,7 @@ fun CatalogHeader(isMainPage: Boolean, isFavorit: Boolean, goToRecipeList: () ->
         }
         if (Template.CatalogHeader != null) {
             Template.CatalogHeader?.let {
-                it(::openFilter, ::openSearch, goToFavorite, goToBack, ::getActiveFilterCount)
+                it(::openFilter, ::openSearch, ::openPreferences, goToFavorite, goToBack, ::getActiveFilterCount)
             }
         } else {
             Column(Modifier.background(color = primary)) {

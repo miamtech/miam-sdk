@@ -4,17 +4,13 @@ import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.*
-
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-
 import io.ktor.http.*
-import io.ktor.util.*
-
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -33,13 +29,13 @@ object HttpRoutes {
     const val RECIPE_SUGGESTIONS = "$BASE_URL/recipes/suggestions"
     const val SUPPLIER = "$BASE_URL/suppliers/"
     const val PACKAGE_ENDPOINT = "$BASE_URL/packages"
+    const val TAGS_ENDPOINT = "$BASE_URL/tags"
 }
 
 
-@OptIn(InternalAPI::class)
 class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
-    SupplierDataSource, PackageDataSource, KoinComponent {
+    SupplierDataSource, PackageDataSource, TagDataSource, KoinComponent {
 
     private val userStore: UserStore by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
@@ -449,4 +445,34 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
         return returnValue.map { record -> record as Package }
     }
+
+    ///////////////////////////////////// TAG /////////////////////////////////////////////////
+
+    override suspend fun autocompleteTag(searchStr: String): List<Tag> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting autocompleteTag $searchStr")
+        val returnValue = httpClient.get<RecordWrapper> {
+            url(HttpRoutes.TAGS_ENDPOINT + "/autocomplete/$searchStr")
+        }.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end autocompleteTag ")
+        return returnValue.map { record -> record as Tag }
+    }
+
+    override suspend fun getTagsByTagType(tagType: String): List<Tag> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getTagsByTagType $tagType")
+        val returnValue = httpClient.get<RecordWrapper> {
+            url(HttpRoutes.TAGS_ENDPOINT + "?filter[tag_type]=$tagType")
+        }.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getTagsByTagType ")
+        return returnValue.map { record -> record as Tag }
+    }
+
+    override suspend fun getTagById(id: String): Tag {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getTagById $id")
+        val returnValue = httpClient.get<RecordWrapper> {
+            url(HttpRoutes.TAGS_ENDPOINT + "/$id")
+        }.toRecord()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getTagById ")
+        return returnValue as Tag
+    }
+    
 }

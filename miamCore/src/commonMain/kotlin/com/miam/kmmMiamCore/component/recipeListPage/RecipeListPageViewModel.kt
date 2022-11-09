@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.recipeListPage
 
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
@@ -16,6 +17,7 @@ class RecipeListPageViewModel :
     }
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val preference: SingletonPreferencesViewModel by inject()
 
     override fun createInitialState(): RecipeListPageContract.State =
         RecipeListPageContract.State(
@@ -44,7 +46,7 @@ class RecipeListPageViewModel :
         launch(coroutineHandler) {
             setState { copy(isFetchingNewPage = true) }
             val fetchedRecipes = recipeRepositoryImp.getRecipesFromStringFilter(
-                currentState.filter,
+                currentState.filter + preference.getPreferencesAsQueryString(),
                 RecipeRepositoryImp.DEFAULT_INCLUDED,
                 RecipeRepositoryImp.DEFAULT_PAGESIZE,
                 currentPage

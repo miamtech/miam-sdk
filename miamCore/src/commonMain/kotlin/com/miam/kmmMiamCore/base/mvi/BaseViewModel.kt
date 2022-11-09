@@ -1,7 +1,12 @@
 package com.miam.kmmMiamCore.base.mvi
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<Event : com.miam.kmmMiamCore.base.mvi.UiEvent, State : com.miam.kmmMiamCore.base.mvi.UiState, Effect : com.miam.kmmMiamCore.base.mvi.UiEffect> :

@@ -22,18 +22,21 @@ public struct CatalogView: View {
     @SwiftUI.State private var showingFilters = false
     @SwiftUI.State private var showingSearch = false
     @SwiftUI.State private var showingFavorites = false
+    @SwiftUI.State private var showingPreferences = false
     @SwiftUI.State private var showingPackageRecipes = false
 
     @SwiftUI.State private var headerHeight = 50.0
     
     let closeCatalogAction: (() -> Void)?
+    private var usesPreferences = false
     
-    public init(closeCatalogAction: (() -> Void)? = nil) {
+    public init(usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil) {
         self.catalog = CatalogVM()
+        self.usesPreferences = usesPreferences
         self.closeCatalogAction = closeCatalogAction
     }
     
-    public init(categoryId: String, title: String, closeCatalogAction: (() -> Void)? = nil) {
+    public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
         self.closeCatalogAction = closeCatalogAction
     }
@@ -44,21 +47,21 @@ public struct CatalogView: View {
                 .frame(height: catalog.content == .categories ? 60.0 : 0.0)
 
             CatalogToolbarView(showBackButton: (catalog.content != .categories),
-                               favoritesFilterActive: showingFavorites) {
+                               favoritesFilterActive: showingFavorites, useFilters: true, usePreferences: usesPreferences) {
                 catalog.setEvent(event: CatalogContractEvent.GoToDefault())
                 showingFavorites = false
                 headerHeight = 50.0
             } filtersTapped: {
-                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
                 showingFilters = true
             } searchTapped: {
-                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                 showingSearch = true
             } favoritesTapped: {
                 catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
                 showingFavorites = true
+            } preferencesTapped: {
+                showingPreferences = true
             }
             if let catalogState = catalog.state {
                 ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(
@@ -81,7 +84,6 @@ public struct CatalogView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            // TODO: remove call to toggle
             catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
         }) {
             CatalogSearchView(catalog: catalog, close: {
@@ -92,7 +94,6 @@ public struct CatalogView: View {
                 catalog.fetchRecipes()
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
-            // TODO: remove call to toggle
             catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
         }) {
             CatalogFiltersView() {
@@ -101,6 +102,12 @@ public struct CatalogView: View {
                 catalog.fetchRecipes()
             } close: {
                 showingFilters = false
+            }
+        }.sheet(isPresented: $showingPreferences, onDismiss: {
+            catalog.setEvent(event: CatalogContractEvent.TogglePreference())
+        }) {
+            CatalogPreferencesView {
+                showingPreferences = false
             }
         }
     }
@@ -223,11 +230,15 @@ internal struct CatalogViewHeader: View {
 internal struct CatalogToolbarView: View {
     let showBackButton: Bool
     let favoritesFilterActive: Bool
+    let useFilters: Bool
+    let usePreferences: Bool
     let backTapped: () -> Void
     let filtersTapped: () -> Void
     let searchTapped: () -> Void
     let favoritesTapped: () -> Void
-
+    let preferencesTapped: () -> Void
+    
+    
     var body: some View {
         if (Template.sharedInstance.catalogViewToolbarTemplate != nil) {
             Template.sharedInstance.catalogViewToolbarTemplate!(showBackButton, favoritesFilterActive, backTapped, filtersTapped, searchTapped, favoritesTapped)
@@ -252,14 +263,26 @@ internal struct CatalogToolbarView: View {
                     Spacer()
                 }
 
-                Button {
-                    filtersTapped()
-                } label: {
-                    Image.miamImage(icon: .filters)
-                        .renderingMode(.template)
-                        .foregroundColor(Color.miamColor(.primary))
-                }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
-
+                if (useFilters) {
+                    Button {
+                        filtersTapped()
+                    } label: {
+                        Image.miamImage(icon: .filters)
+                            .renderingMode(.template)
+                            .foregroundColor(Color.miamColor(.primary))
+                    }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
+                }
+                
+                if (usePreferences) {
+                    Button {
+                        preferencesTapped()
+                    } label: {
+                        Image.miamImage(icon: .preferences)
+                            .renderingMode(.template)
+                            .foregroundColor(Color.miamColor(.primary))
+                    }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
+                }
+                
                 if (!favoritesFilterActive) {
                     if (showBackButton) {
                         Button {

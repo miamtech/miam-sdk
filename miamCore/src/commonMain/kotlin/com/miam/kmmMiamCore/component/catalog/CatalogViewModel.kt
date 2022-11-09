@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.catalog
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
@@ -10,8 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in catalog view $exception")
@@ -27,7 +27,10 @@ open class CatalogViewModel :
             catalogFilterVM = SingletonFilterViewModel(),
             recipePageVM = RecipeListPageViewModel(),
             filterOpen = false,
-            searchOpen = false
+            searchOpen = false,
+            preferenceOpen = false,
+            enableFilters = true,
+            enablePreferences = false
         )
 
     override fun handleEvent(event: CatalogContract.Event) {
@@ -43,7 +46,6 @@ open class CatalogViewModel :
                 }
             }
             is CatalogContract.Event.GoToFavorite -> {
-
                 currentState.catalogFilterVM.setFavorite()
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
@@ -64,6 +66,7 @@ open class CatalogViewModel :
                         content = CatalogContent.RECIPE_LIST,
                         searchOpen = false,
                         filterOpen = false,
+                        preferenceOpen = false,
                     )
                 }
                 fetchRecipes()
@@ -83,6 +86,9 @@ open class CatalogViewModel :
                     )
                 }
             }
+            is CatalogContract.Event.TogglePreference -> {
+                setState { copy(preferenceOpen = !currentState.preferenceOpen) }
+            }
             is CatalogContract.Event.ToggleFilter -> {
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
@@ -100,6 +106,14 @@ open class CatalogViewModel :
 
     init {
         fetchCategories()
+    }
+
+    fun enablePreferences(enable: Boolean = true) {
+        setState { copy(enablePreferences = enable) }
+    }
+
+    fun enableFilters(enable: Boolean = true) {
+        setState { copy(enableFilters = enable) }
     }
 
     fun fetchRecipes() {

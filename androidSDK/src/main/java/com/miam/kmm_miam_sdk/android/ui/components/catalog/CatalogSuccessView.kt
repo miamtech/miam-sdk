@@ -10,6 +10,7 @@ import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 
 @Composable
 fun CatalogSuccessView(
@@ -28,12 +29,21 @@ fun CatalogSuccessView(
         { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
     )
 
+    val preference = Preferences(context)
+    preference.bind(
+        { vmCatalog.setEvent(CatalogContract.Event.TogglePreference) },
+        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
+    )
+
     Column {
-        if (state.filterOpen) {
+        if (state.filterOpen && state.enableFilters) {
             filter.Content()
         }
         if (state.searchOpen) {
             search.Content()
+        }
+        if (state.preferenceOpen && state.enablePreferences) {
+            preference.Content()
         }
 
         CatalogHeader(state, vmCatalog)

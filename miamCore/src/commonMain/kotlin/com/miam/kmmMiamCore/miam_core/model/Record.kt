@@ -173,6 +173,12 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
                 relationships,
                 includedRecords
             )
+            Tag.serializer().descriptor.serialName -> Tag(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
             else -> throw Exception("Unsuported record type $type")
         }
     }
