@@ -27,9 +27,9 @@ struct CatalogPreferencesView: View {
                     // TODO: Show search view
                     PreferencesSearchView(close: {
                         self.showSearch = false
-                    }).navigationTitle("Je n'aime pas")
+                    }).navigationTitle(MiamText.sharedInstance.preferencesSearchTitle)
                 }.hidden()
-            }.navigationTitle("Mes préférences")
+            }.navigationTitle(MiamText.sharedInstance.preferencesTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

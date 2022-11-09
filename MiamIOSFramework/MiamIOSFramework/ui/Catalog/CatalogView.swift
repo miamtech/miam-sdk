@@ -52,11 +52,9 @@ public struct CatalogView: View {
                 showingFavorites = false
                 headerHeight = 50.0
             } filtersTapped: {
-                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
                 showingFilters = true
             } searchTapped: {
-                // TODO: remove call to toggle
                 catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                 showingSearch = true
             } favoritesTapped: {
@@ -86,7 +84,6 @@ public struct CatalogView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            // TODO: remove call to toggle
             catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
         }) {
             CatalogSearchView(catalog: catalog, close: {
@@ -107,7 +104,6 @@ public struct CatalogView: View {
                 showingFilters = false
             }
         }.sheet(isPresented: $showingPreferences, onDismiss: {
-            // TODO: remove call to toggle
             catalog.setEvent(event: CatalogContractEvent.TogglePreference())
         }) {
             CatalogPreferencesView {

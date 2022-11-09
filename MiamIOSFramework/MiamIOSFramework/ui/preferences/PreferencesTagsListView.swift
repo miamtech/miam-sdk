@@ -69,18 +69,12 @@ struct PreferencesTagsListView: View {
                     height -= d.height
                 }
                 let result = width
-//                if tag == self.tags.first! {
-                    width = 0 //last item
-//                } else {
-//                    width -= d.width
-//                }
+                width = 0
                 return result
             })
             .alignmentGuide(.top, computeValue: {d in
                 let result = height
-//                if tag == self.tags.first! {
-                    height = 0 // last item
-//                }
+                height = 0
                 return result
             })
         }
@@ -92,7 +86,7 @@ struct AddTagView: View {
     let onTapped: () -> Void
     
     var body: some View {
-        Text("Ajouter +")
+        Text(MiamText.sharedInstance.addTag)
             .padding(14.0)
             .frame(height: 40.0)
             .foregroundColor(Color.miamColor(.black))

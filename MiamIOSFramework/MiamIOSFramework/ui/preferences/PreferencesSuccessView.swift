@@ -39,14 +39,14 @@ struct PreferencesSuccessView: View {
                             }
                             
                         }.background(Color.miamColor(.greyLighter))
-                        PreferencesListView(title: "Régime particulier",
-                                            subtitle: "Avez-vous un régime particulier ?",
+                        PreferencesListView(title: MiamText.sharedInstance.dietTitle,
+                                            subtitle: MiamText.sharedInstance.dietSubtitle,
                                             preferences: diets) { tag in
                             onToggleTag(tag)
                         }
                         
-                        PreferencesTagsListView(title: "Gouts",
-                                                subtitle: "Y a-t-il des ingrédients que vous n'aimez pas ?",
+                        PreferencesTagsListView(title: MiamText.sharedInstance.tastesTitle,
+                                                subtitle: MiamText.sharedInstance.tastesSubtitle,
                                                 tags: ingredients, geometry: geometry,
                                                 onToggleTag: { tag in
                             onToggleTag(tag)
@@ -54,8 +54,8 @@ struct PreferencesSuccessView: View {
                             onAddTagTapped()
                         })
                         
-                        PreferencesListView(title: "Mode de cuisson",
-                                            subtitle: "De quels modes de cuissons disposez-vous ?",
+                        PreferencesListView(title: MiamText.sharedInstance.cookingModesTitle,
+                                            subtitle: MiamText.sharedInstance.cookingModesSubtitle,
                                             preferences: equipments) { tag in
                             onToggleTag(tag)
                         }
