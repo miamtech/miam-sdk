@@ -10,20 +10,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
-import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+) : AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
-    private val contextHandler: ContextHandler by inject()
 
     fun bind(
         categoryId: String,

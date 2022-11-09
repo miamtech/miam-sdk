@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonObject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -90,7 +89,7 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
         val missingIngredients = missingIngredientsTag(ingredientsOrEmptyFromLocal, existingTagsId)
         return listOf(
             *currentState.ingredients.map { it.resetWith(ingredientsOrEmptyFromLocal) }.toTypedArray(),
-            *missingIngredients.map { CheckableTag(TagTypes.INGREDIENT, it) }.toTypedArray()
+        *missingIngredients.map { CheckableTag(TagTypes.INGREDIENT, it) }.toTypedArray()
         )
     }
 
@@ -175,7 +174,7 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
     }
 
     val allTags: List<CheckableTag>
-        get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
+    get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
 
     fun getPreferencesAsQueryString(): String {
         val toInclude = allTags.filter { tag -> tag.isIncludedInQUery }.filter { tag -> tag.isChecked }.map { it.tag.id }
@@ -205,7 +204,6 @@ open class SingletonPreferencesViewModel : BaseViewModel<PreferencesContract.Eve
                 diets = emptyList(),
                 ingredients = emptyList(),
                 equipments = emptyList(),
-                localSelectedTags = JsonObject(mapOf()),
                 recipesFound = 0,
                 guests = 4
             )
