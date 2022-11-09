@@ -8,4 +8,4 @@ expect fun KMMContext.getArrayOrNull(key: String): List<String>?
 
 expect fun KMMContext.putInt(key: String, value: Int)
 
-expect fun KMMContext.getInt(key: String): Int?
+expect fun KMMContext.getIntOrNull(key: String): Int?

@@ -2,7 +2,7 @@ package com.miam.kmmMiamCore.services
 
 import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.getArrayOrNull
-import com.miam.kmmMiamCore.miam_core.data.repository.getInt
+import com.miam.kmmMiamCore.miam_core.data.repository.getIntOrNull
 import com.miam.kmmMiamCore.miam_core.data.repository.putArray
 import com.miam.kmmMiamCore.miam_core.data.repository.putInt
 import org.koin.core.component.KoinComponent
@@ -25,6 +25,6 @@ class UserPreferences: KoinComponent {
     }
 
     fun getIntOrNull(key: String): Int? {
-        return contextHandler.getContextOrNull()?.getInt(key)
+        return contextHandler.getContextOrNull()?.getIntOrNull(key)
     }
 }

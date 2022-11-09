@@ -23,7 +23,7 @@ actual fun KMMContext.putInt(key: String, value: Int) {
     getSpEditor()?.putInt(key, value)?.apply()
 }
 
-actual fun KMMContext.getInt(key: String): Int? {
+actual fun KMMContext.getIntOrNull(key: String): Int? {
     if (this.getSp()?.contains(key) != true) return null
     // arbitrary -1, should never be used has we are sure key exists
     return this.getSp()?.getInt(key, -1)

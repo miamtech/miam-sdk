@@ -78,7 +78,7 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
     fun getContextOrNull(): KMMContext? {
         val context = state.value.applicationContext
         if (context == null) {
-            LogHandler.error(" [ERROR][Miam][UserPreferences] Application context must be provided")
+            LogHandler.error("[ContextHandler] Application context must be provided")
             return null
         }
         return context

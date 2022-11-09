@@ -21,6 +21,6 @@ actual fun KMMContext.putInt(key: String, value: Int) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-actual fun KMMContext.getInt(key: String): Int? {
+actual fun KMMContext.getIntOrNull(key: String): Int? {
     return NSUserDefaults.standardUserDefaults.intForKey(key)
 }
