@@ -1,10 +1,13 @@
 ## 3.0.0
 - [FEA][COR] Toaster handler for add and like recipes
 - [FEA][COR] Singleton catalog filter service
+- [FEA][COR] Picture is avalaible in recipes ingredients
+- [FEA][AND] Add user preferences
 - [FEA][AND] Refact catalog header
 - [FEA][AND] My meal counter button
+- [FEA][IOS] Add user preferences
 - [FEA][IOS] My meal counter button
-- [FEA][COR] Picture is avalaible in recipes ingredients
+- [BRK][AND] Upgrade koin version 
 
 ## 2.5.2
 - [FIX][IOS] Pass browse catalog action to favorites empty view template
