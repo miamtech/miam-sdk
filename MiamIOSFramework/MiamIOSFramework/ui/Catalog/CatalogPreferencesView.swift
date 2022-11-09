@@ -38,6 +38,6 @@ struct CatalogPreferencesView: View {
                         }
                     }
                 }
-        }
+        }.accentColor(Color.miamColor(.black))
     }
 }
