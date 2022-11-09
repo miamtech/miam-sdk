@@ -22,9 +22,12 @@ struct MyMealButtonSuccessView: View {
                 VStack {
                     Image.miamImage(icon: .greyChevronDown)
                         .rotationEffect(Angle(degrees: 180.0))
-                    
-                    Text("\(mealsCount) repas ajouté").bold()
-                    
+                    if mealsCount > 1 {
+                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAddedPlural)").bold()
+                    } else {
+                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAdded)").bold()
+                    }
+                }
                 .frame(maxWidth: .infinity)
                 .padding(EdgeInsets(top: 16.0, leading: 20.0, bottom: 8.0, trailing: 20.0))
                 
