@@ -25,15 +25,15 @@ struct MyMealButtonSuccessView: View {
                     
                     Text("\(mealsCount) repas ajouté").bold()
                     
-                }.padding(EdgeInsets(top: 16.0, leading: 20.0, bottom: 8.0, trailing: 20.0))
-                    .frame(maxWidth: .infinity)
-                    .background(Color.miamColor(.primaryDark))
-                    .foregroundColor(Color.miamColor(.white))
+                .frame(maxWidth: .infinity)
+                .padding(EdgeInsets(top: 16.0, leading: 20.0, bottom: 8.0, trailing: 20.0))
+                
                 // Little trick to have corner radius only on top corners
-                    .padding(.bottom, 20.0)
-                    .cornerRadius(20.0)
-                    .padding(.bottom, -20.0)
             }
+            .background(Color.clear)
+            .foregroundColor(Color.miamColor(.white))
+            .background(SimpleQuadCurve().foregroundColor(Color.miamColor(.primaryDark)))
+            .clipShape(SimpleQuadCurve())
         }
     }
 }

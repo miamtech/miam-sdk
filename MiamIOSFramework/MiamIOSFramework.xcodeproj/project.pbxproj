@@ -55,6 +55,7 @@
 		BF25E1582864740900328B4B /* miam.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF25E1572864740900328B4B /* miam.xcassets */; };
 		BF25E1612865B01B00328B4B /* CatalogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E1602865B01B00328B4B /* CatalogVM.swift */; };
 		BF25E169286611B200328B4B /* RecipePageListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25E168286611B200328B4B /* RecipePageListVM.swift */; };
+		BF3DF4D4291BE074009A015F /* SimpleQuadCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3DF4D3291BE074009A015F /* SimpleQuadCurve.swift */; };
 		BF3FAEB628DB4B38009555A9 /* RecipeTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */; };
 		BF3FAEB828DB4B73009555A9 /* RecipeDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */; };
 		BF3FAEBA28DB4C15009555A9 /* RecipeDetailsStepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB928DB4C15009555A9 /* RecipeDetailsStepsView.swift */; };
@@ -155,6 +156,7 @@
 		BF25E1602865B01B00328B4B /* CatalogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogVM.swift; sourceTree = "<group>"; };
 		BF25E168286611B200328B4B /* RecipePageListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipePageListVM.swift; sourceTree = "<group>"; };
 		BF2691BE2893CF7A00BF9D5A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		BF3DF4D3291BE074009A015F /* SimpleQuadCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleQuadCurve.swift; sourceTree = "<group>"; };
 		BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTimeView.swift; sourceTree = "<group>"; };
 		BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsHeaderView.swift; sourceTree = "<group>"; };
 		BF3FAEB928DB4C15009555A9 /* RecipeDetailsStepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsStepsView.swift; sourceTree = "<group>"; };
@@ -509,6 +511,7 @@
 				0BE594132849050C00D146F8 /* FirstLetterCapitalizer.swift */,
 				BFF5B65A2853932C00CEC7C5 /* BasketPreviewLine.swift */,
 				0BF81ACC286220AB00FEBB92 /* ProgressLoader.swift */,
+				BF3DF4D3291BE074009A015F /* SimpleQuadCurve.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -686,6 +689,7 @@
 				0B5325212874899E001906CD /* LikeButton.swift in Sources */,
 				521D645F283277B20092AC52 /* MyMealsView.swift in Sources */,
 				BFF70574289016C200CB4EC6 /* MiamIcons.swift in Sources */,
+				BF3DF4D4291BE074009A015F /* SimpleQuadCurve.swift in Sources */,
 				BF3FAEB628DB4B38009555A9 /* RecipeTimeView.swift in Sources */,
 				0BB5CA602847B3A2007AC86D /* RecipeDetailsFooter.swift in Sources */,
 				0B7C9BE42819933D00BFC7F8 /* MiamColor.swift in Sources */,
