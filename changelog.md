@@ -3,7 +3,7 @@
 - [FIX][AND] Disable guests pref
 - [FIX][COR] Fetch local excluded ingredient pref on init
 - [FIX][COR] Can't add two time same ingredient to excluded list in pref
-- [FIX][COR] Select an ingredient now add it to excluded ingredient pref list
+- [FIX][COR] Check an ingredient when you search and select it
 
 ## 3.0.0
 - [FEA][COR] Toaster handler for add and like recipes
