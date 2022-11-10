@@ -56,7 +56,8 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     private suspend fun initIngredientTag() {
-        val ingredientTags = defaultIngredientTagIds.map { id -> tagsRepositoryImp.getTagById(id) }.map { CheckableTag(TagTypes.INGREDIENT, it) }
+        val allIngredientId = listOf(*defaultIngredientTagIds.toTypedArray(), *ingredientsOrEmptyFromLocal().toTypedArray()).distinct()
+        val ingredientTags = allIngredientId.map { id -> tagsRepositoryImp.getTagById(id) }.map { CheckableTag(TagTypes.INGREDIENT, it) }
         setState { copy(ingredients = ingredientTags) }
     }
 
@@ -87,7 +88,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         val missingIngredients = missingIngredientsTag(ingredientsOrEmptyFromLocal, existingTagsId)
         return listOf(
             *currentState.ingredients.map { it.resetWith(ingredientsOrEmptyFromLocal) }.toTypedArray(),
-        *missingIngredients.map { CheckableTag(TagTypes.INGREDIENT, it) }.toTypedArray()
+            *missingIngredients.map { CheckableTag(TagTypes.INGREDIENT, it) }.toTypedArray()
         )
     }
 
@@ -119,7 +120,8 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     fun addIngredientPreference(tag: Tag) {
-        setState { copy(ingredients = listOf(*currentState.ingredients.toTypedArray(), CheckableTag(TagTypes.INGREDIENT, tag))) }
+        if (currentState.ingredients.any { cTag: CheckableTag -> cTag.tag.id == tag.id }) return
+        setState { copy(ingredients = listOf(*currentState.ingredients.toTypedArray(), CheckableTag(TagTypes.INGREDIENT, tag, true))) }
         updateRecipesCount()
     }
 
@@ -154,14 +156,13 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     fun changeGlobaleGuest(numberOfGuest: Int) {
-        //TODO Alex map with recipes card and detail
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
         }
     }
 
     val allTags: List<CheckableTag>
-    get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
+        get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
 
     fun getPreferencesAsQueryString(): String {
         val toInclude = allTags.filter { tag -> tag.isIncludedInQUery }.filter { tag -> tag.isChecked }.map { it.tag.id }
