@@ -1,6 +1,5 @@
 package com.miam.kmmMiamCore.miam_core.model
 
-import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -8,7 +7,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("tags")
-data class Tag private constructor(
+data class Tag constructor(
     override val id: String,
     override val attributes: TagAttributes? = null,
     override val relationships: TagRelationships? = null
@@ -66,7 +65,6 @@ data class CheckableTag constructor(
     }
 
     fun resetWith(storageTagIds: List<String>): CheckableTag {
-        LogHandler.info("Will reset $this with $storageTagIds contains is ${storageTagIds.contains(this.tag.id)}")
         val savedInStorage = savedInStorage(storageTagIds)
         if (this.isChecked == savedInStorage) return this
 
