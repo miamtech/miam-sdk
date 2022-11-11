@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.preferences
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 
 @Composable
@@ -16,7 +18,9 @@ fun PreferencesLoadingView() {
         Template.PreferencesLoadingTemplate?.let { it() }
     } else {
         Column(
-            Modifier.fillMaxSize(),
+            Modifier
+                .fillMaxSize()
+                .background(color = white),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
