@@ -3,7 +3,13 @@ package com.miam.kmm_miam_sdk.android.ui.components.catalog
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,11 +49,11 @@ fun CatalogPage(
 
     ManagementResourceState(
         resourceState = state.value.recipes,
-        successView = { favoritesRecipes ->
-            requireNotNull(favoritesRecipes)
+        successView = { recipes ->
+            requireNotNull(recipes)
             CatalogSuccessPage(
                 recipePageVM,
-                favoritesRecipes,
+                recipes,
                 context
             )
         },
@@ -74,45 +80,48 @@ private fun CatalogSuccessPage(
     recipes: List<Recipe>,
     context: Context
 ) {
-    LazyColumn(
-        modifier = FavoritePageStyle.favoriteMainContainer,
-    ) {
-        item {
-            Row {
-                Text(
-                    text = recipePageVM.currentState.title,
-                    color = Colors.black,
-                    style = Typography.subtitleBold
-                )
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = FavoritePageStyle.favoriteMainContainer,
+        ) {
+            item {
+                Row {
+                    Text(
+                        text = recipePageVM.currentState.title,
+                        color = Colors.black,
+                        style = Typography.subtitleBold
+                    )
+                }
             }
-        }
-        itemsIndexed(recipes) { index, item ->
-            val recipe = RecipeView(context = context)
-            recipe.bind(recipe = item)
-            recipe.isNotInShelf()
-            recipe.Content()
-            if (index == recipes.lastIndex) {
-                recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
-                if (recipePageVM.currentState.isFetchingNewPage) {
-                    if (Template.CatalogResultPageLazyLoaderTemplate != null) {
-                        Template.CatalogResultPageLazyLoaderTemplate?.let {
-                            it()
-                        }
-                    } else {
-                        Row(
-                            modifier = FavoritePageStyle.loadMoreContainer,
-                            Arrangement.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = FavoritePageColor.loaderColor,
-                                modifier = FavoritePageStyle.loadMoreModifier
-                            )
+            itemsIndexed(recipes) { index, item ->
+                val recipe = RecipeView(context = context)
+                recipe.bind(recipe = item)
+                recipe.isNotInShelf()
+                recipe.Content()
+                if (index == recipes.lastIndex) {
+                    recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
+                    if (recipePageVM.currentState.isFetchingNewPage) {
+                        if (Template.CatalogResultPageLazyLoaderTemplate != null) {
+                            Template.CatalogResultPageLazyLoaderTemplate?.let {
+                                it()
+                            }
+                        } else {
+                            Row(
+                                modifier = FavoritePageStyle.loadMoreContainer,
+                                Arrangement.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = FavoritePageColor.loaderColor,
+                                    modifier = FavoritePageStyle.loadMoreModifier
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable
@@ -224,8 +233,6 @@ private fun CatalogEmptyPage(
                         color = white
                     )
                 }
-
-
             }
         }
     }

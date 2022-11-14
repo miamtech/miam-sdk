@@ -7,12 +7,11 @@ import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 class RecipeRepositoryImp(
     private val recipeDataSource: MiamAPIDatasource
-) : RecipeRepository {
+): RecipeRepository {
 
     companion object {
-        val DEFAULT_INCLUDED =
-            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
-        val DEFAULT_PAGESIZE = 20
+        val DEFAULT_INCLUDED = listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+        const val DEFAULT_PAGESIZE = 20
     }
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {

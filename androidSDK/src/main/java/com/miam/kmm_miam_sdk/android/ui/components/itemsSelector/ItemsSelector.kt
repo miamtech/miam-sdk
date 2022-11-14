@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -36,7 +36,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.I
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemColumnContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsBorder
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsImage
-import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsWidth
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainerAlignment
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainerArrangement
@@ -153,7 +152,7 @@ class ItemsSelector : KoinComponent {
 
 
                         LazyVerticalGrid(
-                            cells = GridCells.Adaptive(itemsWidth.dp),
+                            columns = GridCells.Adaptive(minSize = 128.dp),
                             contentPadding = PaddingValues(
                                 start = mPadding,
                                 top = lPadding,
