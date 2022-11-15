@@ -80,7 +80,6 @@ private fun CatalogSuccessPage(
     recipes: List<Recipe>,
     context: Context
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = FavoritePageStyle.favoriteMainContainer,
         ) {
@@ -120,8 +119,6 @@ private fun CatalogSuccessPage(
                 }
             }
         }
-    }
-
 }
 
 @Composable

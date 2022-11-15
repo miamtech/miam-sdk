@@ -36,6 +36,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.I
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemColumnContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsBorder
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsImage
+import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.itemsWidth
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainerAlignment
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.mainContainerArrangement
@@ -55,7 +56,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ItemsSelector : KoinComponent {
+class ItemsSelector: KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
 
@@ -152,7 +153,7 @@ class ItemsSelector : KoinComponent {
 
 
                         LazyVerticalGrid(
-                            columns = GridCells.Adaptive(minSize = 128.dp),
+                            columns = GridCells.Adaptive(minSize = itemsWidth.dp),
                             contentPadding = PaddingValues(
                                 start = mPadding,
                                 top = lPadding,

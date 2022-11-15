@@ -1,5 +1,6 @@
 ## 3.1.1
 - [BRK][FIX][AND] Fix recipes page lazy loading by upgrading compose (1.3.1) and android SDK (33)
+
 ## 3.0.1
 - [FIX][AND] Fix loader on prefrences screen
 - [FIX][AND] Disable guests pref
