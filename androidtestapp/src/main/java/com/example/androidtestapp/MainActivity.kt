@@ -215,7 +215,12 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                         imageVector = Icons.Default.School,
                         contentDescription = "hat"
                     )
-                    Text(text = "Difficulté  ${recipe.difficultyLabel}")
+                    when (recipe.attributes!!.difficulty!!) {
+                        1 -> Text(text = "Les doigts dans le nez")
+                        2 -> Text(text = "Là on parle")
+                        3 -> Text(text = "Il va falloir se lever tôt")
+                    }
+
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     Text(
