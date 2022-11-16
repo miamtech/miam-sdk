@@ -30,6 +30,9 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyHigh
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyLow
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyMedium
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 
@@ -152,7 +155,11 @@ fun RecipeCardMetricsView(recipe: Recipe) {
                 .height(30.dp)
                 .width(1.dp)
         )
-        MetricView(recipe.difficultyLabel, RecipeCardImage.difficulty)
+        when (recipe.attributes!!.difficulty) {
+            1 -> MetricView(difficultyLow, RecipeCardImage.difficultyLow)
+            2 -> MetricView(difficultyMedium, RecipeCardImage.difficultyMid)
+            3 -> MetricView(difficultyHigh, RecipeCardImage.difficultyHard)
+        }
     }
 }
 

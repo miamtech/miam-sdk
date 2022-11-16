@@ -1,3 +1,7 @@
+## 3.1.0
+- [FIX][AND] Fix difficulty texts and icons are customisable
+
+
 ## 3.0.1
 - [FIX][AND] Fix loader on prefrences screen
 - [FIX][AND] Disable guests pref
