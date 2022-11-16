@@ -100,9 +100,7 @@ private fun CatalogSuccessPage(
             verticalArrangement = Arrangement.spacedBy(verticalSpacing.dp, Alignment.Top),
             horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
         ) {
-            item(span = {
-                GridItemSpan(columns)
-            }) {
+            item(span = { GridItemSpan(columns) }) {
                 if (Template.CatalogPageTitleTemplate != null) {
                     Template.CatalogPageTitleTemplate?.let {
                         it(recipePageVM.currentState.title)
@@ -126,9 +124,7 @@ private fun CatalogSuccessPage(
                     recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
                 }
             }
-            item(span = {
-                GridItemSpan(columns)
-            }) {
+            item(span = { GridItemSpan(columns) }) {
                 if (recipePageVM.currentState.isFetchingNewPage) {
                     if (Template.CatalogResultPageLazyLoaderTemplate != null) {
                         Template.CatalogResultPageLazyLoaderTemplate?.let {

@@ -198,7 +198,6 @@ object Template {
 
     var CatalogLoaderTemplate: (@Composable() () -> Unit)? = null
 
-
     var CatalogSearchTemplate: (@Composable() (
         currentSearchValue: String,
         updateResearch: (newSearchValue: String) -> Unit,

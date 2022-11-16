@@ -66,9 +66,7 @@ fun CatalogSuccessView(
                 }
             }
             CatalogContent.RECIPE_LIST -> {
-                CatalogPage(
-                    vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing
-                ) {
+                CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing) {
                     vmCatalog.setEvent(
                         CatalogContract.Event.GoToDefault
                     )
