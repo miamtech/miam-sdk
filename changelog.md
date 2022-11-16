@@ -1,3 +1,6 @@
+## 3.1.0
+- [FEA][AND] Change lazy column into lazy grid in recipes list
+
 ## 3.0.1
 - [FIX][AND] Fix loader on prefrences screen
 - [FIX][AND] Disable guests pref

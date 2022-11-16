@@ -198,6 +198,7 @@ object Template {
 
     var CatalogLoaderTemplate: (@Composable() () -> Unit)? = null
 
+
     var CatalogSearchTemplate: (@Composable() (
         currentSearchValue: String,
         updateResearch: (newSearchValue: String) -> Unit,
@@ -215,6 +216,9 @@ object Template {
      */
     var CatalogResultPageLazyLoaderTemplate: (@Composable() () -> Unit)? = null
 
+    var CatalogPageTitleTemplate: (@Composable() (
+        title: String
+    ) -> Unit)? = null
 
     var CatalogFavoritEmptyTemplate: (@Composable() (
         returnToCatalog: () -> Unit
@@ -248,7 +252,7 @@ object Template {
     var EquipmentPreferencesSectionTemplate: (@Composable() (
         equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
-    
+
 ////////////////// MY MEAL BUTTON ////////////
 
     var myMealButtonSuccessViewTemplate: (@Composable() (
