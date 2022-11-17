@@ -8,17 +8,17 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct LikeButton: View {
-    @ObservedObject var viewModel: LikeButtonVM
+public struct LikeButton: View {
     private let recipeId: String
     
+    @ObservedObject var viewModel: LikeButtonVM
     public init(recipeId : String) {
         self.recipeId = recipeId
         self.viewModel = LikeButtonVM()
         self.viewModel.setRecipe(recipeId: recipeId)
     }
 
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.likeButtonTemplate {
             template(recipeId)
         } else {
