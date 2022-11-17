@@ -15,12 +15,16 @@ internal struct RecipesView: View {
     let browseCatalogAction: () -> Void
     let searchString: String
     let showingFavorites: Bool
+    let columns:Int
+    let spacing: CGFloat
     
-    init(recipesListPageModel: RecipeListPageViewModel, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
+    init(recipesListPageModel: RecipeListPageViewModel,recipesListColumns:Int, recipeListSpacing:CGFloat, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
         self.recipesListPageModel = RecipeListPageVM(model: recipesListPageModel)
         self.browseCatalogAction = browseCatalogAction
         self.searchString = searchString
         self.showingFavorites = showingFavorites
+        self.columns = recipesListColumns
+        self.spacing = recipeListSpacing
     }
     
     var body: some View {
@@ -32,6 +36,8 @@ internal struct RecipesView: View {
                     recipes: recipesListPageModel.recipes,
                     hasNoResults: recipesListPageModel.hasNoResults,
                     searchString: searchString,
+                    columns:columns,
+                    spacing:spacing,
                     loadMoreContentAction: { recipe in
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     },
