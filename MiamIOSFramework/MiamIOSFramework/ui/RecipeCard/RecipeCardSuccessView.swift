@@ -73,7 +73,13 @@ internal struct RecipeCardSuccessView: View {
                 HStack(alignment: .center, spacing: Dimension.sharedInstance.lPadding) {
                     IconWithText(icon: .clock, text: recipe?.totalTime ?? "")
                     Divider()
-                    IconWithText(icon: .whisk, text: recipe?.difficultyLabel ?? "")
+                    switch recipe?.attributes?.difficulty {
+                    case 1: IconWithText(icon: .difficultyLow, text:  MiamText.sharedInstance.difficultyEasy)
+                    case 2: IconWithText(icon: .difficultyMedium, text:  MiamText.sharedInstance.difficultyMid)
+                    case 3: IconWithText(icon: .difficultyHigh, text:  MiamText.sharedInstance.difficultyHard)
+                    default: IconWithText(icon: .difficultyLow, text: MiamText.sharedInstance.difficultyEasy)
+                    }
+                    
                 }.padding(.bottom, Dimension.sharedInstance.mlPadding)
                 
                 Button {
