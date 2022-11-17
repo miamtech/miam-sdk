@@ -39,7 +39,6 @@ public struct RecipeCardView: View {
                     successView:  RecipeCardSuccessView(recipe: viewModel.recipe,
                                                         isRecipeInCart: viewModel.currentState.isInCart,
                                                         isLikeEnabled: viewModel.isLikeEnabled,
-                                                        isLiked: viewModel.currentState.isLiked,
                                                         showMealIdeaTag: showMealIdeaTag,
                                                         goToDetailsAction: {
                                                             viewModel.goToDetail()
@@ -51,8 +50,6 @@ public struct RecipeCardView: View {
                                                                 addToCart()
                                                             }
                                                             showingPopup = true
-                                                        }, toggleLikeAction: {
-                                                            viewModel.toggleLike()
                                                         }),
                     loadingView: RecipeCardLoadingView(),
                     emptyView: RecipeCardEmptyView()

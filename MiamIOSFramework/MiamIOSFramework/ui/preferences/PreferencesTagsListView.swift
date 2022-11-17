@@ -18,11 +18,15 @@ struct PreferencesTagsListView: View {
     let onToggleTag: (CheckableTag) -> Void
     let onAddTagTapped: () -> Void
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
-            Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
-            
-            displayTags(in: geometry)
+        if let template = Template.sharedInstance.preferencesTagsListViewTemplate {
+            template(title, subtitle, tags, geometry, onToggleTag, onAddTagTapped)
+        } else {
+            VStack(alignment: .leading) {
+                Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
+                Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
+                
+                displayTags(in: geometry)
+            }
         }
     }
     
@@ -82,11 +86,14 @@ struct PreferencesTagsListView: View {
 }
 
 @available(iOS 14, *)
-struct AddTagView: View {
-    let onTapped: () -> Void
+public struct AddTagView: View {
+    public let onTapped: () -> Void
     
-    var body: some View {
-        Text(MiamText.sharedInstance.addTag)
+    public var body: some View {
+        if let template = Template.sharedInstance.addTagViewTemplate {
+            template(onTapped)
+        } else {
+            Text(MiamText.sharedInstance.addTag)
             .padding(14.0)
             .frame(height: 40.0)
             .foregroundColor(Color.miamColor(.black))
@@ -96,14 +103,15 @@ struct AddTagView: View {
             .onTapGesture {
                 onTapped()
             }
+        }
     }
 }
 
 @available(iOS 14, *)
-struct PreferenceTagView: View {
-    let tag: CheckableTag
-    let onToggleTag: (CheckableTag) -> Void
-    var tagName: String {
+public struct PreferenceTagView: View {
+    public let tag: CheckableTag
+    public let onToggleTag: (CheckableTag) -> Void
+    public var tagName: String {
         get {
             if let name = tag.tag.attributes?.name {
                 return name
@@ -112,7 +120,7 @@ struct PreferenceTagView: View {
         }
     }
     
-    var backgroundColor: Color {
+    public var backgroundColor: Color {
         get {
             if tag.isChecked {
                 return Color.miamColor(.black)
@@ -122,7 +130,7 @@ struct PreferenceTagView: View {
         }
     }
     
-    var foregroundColor: Color {
+    public var foregroundColor: Color {
         get {
             if tag.isChecked {
                 return Color.miamColor(.white)
@@ -133,16 +141,20 @@ struct PreferenceTagView: View {
     }
     
     
-    var body: some View {
-        Text(tagName)
-            .padding(14.0)
-            .frame(height: 40.0)
-            .foregroundColor(foregroundColor)
-            .background(backgroundColor)
-            .clipShape(Capsule())
-            .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
-            .onTapGesture {
-                onToggleTag(tag)
-            }
+    public var body: some View {
+        if let template = Template.sharedInstance.preferencesTagViewTemplate {
+            template(tag, onToggleTag)
+        } else {
+            Text(tagName)
+                .padding(14.0)
+                .frame(height: 40.0)
+                .foregroundColor(foregroundColor)
+                .background(backgroundColor)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
+                .onTapGesture {
+                    onToggleTag(tag)
+                }
+        }
     }
 }

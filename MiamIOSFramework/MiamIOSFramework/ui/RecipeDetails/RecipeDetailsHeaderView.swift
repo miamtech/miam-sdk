@@ -15,8 +15,7 @@ struct RecipeDetailsHeaderView: View {
     let totalTime: String
     @Binding var showTitleInHeader: Bool
     let isLikeEnabled: Bool
-    let isLiked: Bool
-    let likeAction: () -> Void
+    let recipeId: String?
     let imageHeight = 280.0
     
     var body: some View {
@@ -26,9 +25,7 @@ struct RecipeDetailsHeaderView: View {
                      difficulty,
                      totalTime,
                      $showTitleInHeader,
-                     isLikeEnabled,
-                     isLiked,
-                     likeAction)
+                     isLikeEnabled)
         } else {
             AsyncImage(
                 url: URL(
@@ -40,9 +37,7 @@ struct RecipeDetailsHeaderView: View {
             
             if (isLikeEnabled) {
                 HStack {
-                    LikeButton(isLiked: isLiked) {
-                        likeAction()
-                    }
+                    LikeButton(recipeId: recipeId!)
                     
                     Spacer()
                     
