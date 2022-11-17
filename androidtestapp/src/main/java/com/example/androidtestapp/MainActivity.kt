@@ -56,7 +56,6 @@ import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
-import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -95,6 +94,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     val categoriesState: MutableState<List<CatalogCategory>> =
         mutableStateOf(listOf())
     private lateinit var basketHandler: BasketHandler
+
 
     private fun initMiam() {
         initKoin {
@@ -329,6 +329,9 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                     }
                 } else if (isCatalogPage) {
                     var catalog = Catalog(this@MainActivity)
+                    catalog.bind(
+                        catalogPageColumns = 2
+                    )
                     catalog.enablePreference()
                     catalog.Content()
                 } else {
@@ -443,7 +446,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     private fun initTemplate() {
-        // Template.recipeCardTemplate = recipeFunctionTemplateVariable
+//        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader
 

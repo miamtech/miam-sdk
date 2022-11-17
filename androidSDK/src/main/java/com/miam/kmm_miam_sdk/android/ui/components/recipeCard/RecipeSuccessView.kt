@@ -237,7 +237,7 @@ fun RecipeCardCTAView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (isInCart) "Voir le détail" else "Ajouter les ingrédients",
+                    text = if (isInCart) RecipeCardText.isInCart else RecipeCardText.addToCart,
                     color = if (isInCart) Colors.primary else Colors.white,
                     style = Typography.bodySmallBold
                 )

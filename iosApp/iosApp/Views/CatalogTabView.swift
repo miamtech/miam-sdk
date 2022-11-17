@@ -13,7 +13,7 @@ struct CatalogTabView: View {
     var body: some View {
         VStack{
             ZStack(alignment: .bottom) {
-                CatalogView(usesPreferences: true)
+                CatalogView(usesPreferences: true,recipesListColumns: 2)
                 MyMealButtonView()
             }
         }

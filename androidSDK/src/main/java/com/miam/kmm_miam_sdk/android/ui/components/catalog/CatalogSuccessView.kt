@@ -17,6 +17,9 @@ fun CatalogSuccessView(
     categories: List<Package>,
     state: CatalogContract.State,
     context: Context,
+    columns: Int,
+    verticalSpacing: Int,
+    horizontalSpacing: Int,
     vmCatalog: CatalogViewModel
 ) {
     val filter = CatalogFilter(vmCatalog.currentState.catalogFilterVM,
@@ -63,7 +66,7 @@ fun CatalogSuccessView(
                 }
             }
             CatalogContent.RECIPE_LIST -> {
-                CatalogPage(vmCatalog.currentState.recipePageVM, context) {
+                CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing) {
                     vmCatalog.setEvent(
                         CatalogContract.Event.GoToDefault
                     )
