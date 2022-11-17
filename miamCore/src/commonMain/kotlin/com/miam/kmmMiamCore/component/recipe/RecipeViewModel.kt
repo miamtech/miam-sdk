@@ -17,8 +17,7 @@ import org.koin.core.component.inject
 import kotlin.math.max
 import kotlin.math.min
 
-open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val MAX_GUESTS = 100
     private val MIN_GUESTS = 1
@@ -169,12 +168,16 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun setRecipe(recipe: Recipe) {
-        // TODO : path + multiple sent ?
-        analyticsService.sendEvent(
-            Analytics.EVENT_RECIPE_SHOW,
-            "",
-            Analytics.PlausibleProps(recipe_id = recipe.id)
-        )
+        // TODO : path + on view displayed ?
+        if (!currentState.show_event_sent) {
+            analyticsService.sendEvent(
+                Analytics.EVENT_RECIPE_SHOW,
+                "",
+                Analytics.PlausibleProps(recipe_id = recipe.id)
+            )
+            setState { copy(show_event_sent = true) }
+        }
+        
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
