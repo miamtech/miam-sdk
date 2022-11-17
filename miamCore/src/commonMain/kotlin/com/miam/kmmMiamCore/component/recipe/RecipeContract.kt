@@ -14,7 +14,6 @@ interface RecipeContract {
         data class SetHeader(val header: String): Event()
         data class SetActiveStep(val stepIndex: Int): Event()
         object OnAddRecipe: Event()
-        object OnToggleLike: Event()
         object ShowIngredient: Event()
         object ShowSteps: Event()
         object Error: Event()
@@ -32,7 +31,6 @@ interface RecipeContract {
         val tabState: TabEnum,
         val activeStep: Int,
         val recipeLoaded: Boolean,
-        val isLiked: Boolean,
         val likeIsEnable: Boolean,
         val show_event_sent: Boolean = false
     ): UiState {

@@ -71,9 +71,7 @@ public struct RecipeDetailsView: View {
                                                             totalTime: viewModel.recipe?.totalTime ?? "10 min",
                                                             showTitleInHeader: $showTitleInHeader,
                                                             isLikeEnabled: viewModel.isLikeEnabled,
-                                                            isLiked: viewModel.currentState.isLiked) {
-                                        viewModel.toggleLike()
-                                    }
+                                                            recipeId: recipeId ?? viewModel.recipe?.id)
                                 }
                                 
                                 RecipeTimeView(preparationTime: viewModel.recipe!.preparationTimeIos,
