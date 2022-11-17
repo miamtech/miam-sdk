@@ -13,4 +13,7 @@ object RecipeDetailsText {
     var restingTime: String = Text.restingTime
     var steps: String = Text.steps
     var totalTime: String = Text.totalTime
+    var difficultyLow = Text.difficultyLow
+    var difficultyMedium = Text.difficultyMedium
+    var difficultyHigh = Text.difficultyHigh
 }

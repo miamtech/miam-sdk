@@ -139,18 +139,8 @@ private fun recipeDetailContent(
                         textAlign = TextAlign.Left,
                         style = subtitleBold
                     )
-                    recipe.attributes!!.difficulty?.let { difficulty ->
-                        RecipeDifficultyAndTiming(
-                            recipe.difficultyLabel,
-                            difficulty,
-                            recipe.totalTime
-                        )
-                    }
-                    RecipeDetailTimeComposition(
-                        recipe.attributes!!.preparationTime,
-                        recipe.attributes!!.cookingTime,
-                        recipe.attributes!!.restingTime
-                    )
+                    RecipeDifficultyAndTiming(recipe.attributes!!.difficulty!!, recipe.totalTime)
+                    RecipeDetailTimeComposition(recipe.attributes!!.preparationTime, recipe.attributes!!.cookingTime, recipe.attributes!!.restingTime)
                 }
                 Divider(Modifier.padding(8.dp))
                 if (recipeDetailIngredientTemplate != null) {
