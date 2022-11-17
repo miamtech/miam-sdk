@@ -9,17 +9,21 @@ import SwiftUI
 
 @available(iOS 14, *)
 struct LikeButton: View {
-    @State var isLiked: Bool
-    let likeButtonTapped: () -> Void
+    @ObservedObject var viewModel: LikeButtonVM
     
+    public init(recipeId : String){
+        self.viewModel = LikeButtonVM()
+        self.viewModel.setRecipe(recipeId: recipeId)
+    }
+
     var body: some View {
         if let template = Template.sharedInstance.likeButtonTemplate {
-           template($isLiked, likeButtonTapped)
+            template(self.recipeId)
         } else {
             ZStack(){
                 Circle().fill(Color.miamColor(.white))
                     .frame(width: 40, height: 40)
-                if(isLiked){
+                if(self.viewModel.isLiked){
                     Image.miamImage(icon: .likeFilled)
                         .renderingMode(.template)
                         .resizable()
@@ -37,9 +41,9 @@ struct LikeButton: View {
                         .padding(.top,3)
                 }
             }.onTapGesture {
-                isLiked.toggle()
-                likeButtonTapped()
-            }
+                self.viewModel.toggleLike()
+            }.onAppear(perform: self.viewModel.listenRecipeLikeChanges).onDisappear(perform: self.viewModel.stopListenRecipeLikeChanges)
+            
         }
     }
 }

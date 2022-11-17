@@ -14,17 +14,15 @@ internal struct RecipeCardSuccessView: View {
     public let recipe: Recipe?
     public let isRecipeInCart: Bool
     public let isLikeEnabled: Bool
-    public let isLiked: Bool
     public let showMealIdeaTag: Bool
 
     public let goToDetailsAction: () -> Void
     public let showOrAddRecipeAction: () -> Void
-    public let toggleLikeAction: () -> Void
     
     var body: some View {
         if let template = Template.sharedInstance.recipeCardTemplate {
-            template(recipe, isRecipeInCart, isLikeEnabled, isLiked, showMealIdeaTag, goToDetailsAction,
-                     showOrAddRecipeAction, toggleLikeAction)
+            template(recipe, isRecipeInCart, isLikeEnabled, showMealIdeaTag, goToDetailsAction,
+                     showOrAddRecipeAction)
         } else {
             VStack() {
                 ZStack(alignment: .topLeading) {
@@ -55,9 +53,7 @@ internal struct RecipeCardSuccessView: View {
                         }
                         Spacer()
                         if (isLikeEnabled) {
-                            LikeButton(isLiked: isLiked) {
-                                toggleLikeAction()
-                            }
+                            LikeButton(recipeId: recipe!.id)
                         }
                     }.padding([.leading,.trailing],8).padding(.top,16)
                 }.frame(height: 240)

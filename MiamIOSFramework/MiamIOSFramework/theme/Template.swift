@@ -31,8 +31,6 @@ public class Template {
                                       Bool,
                                       Bool,
                                       Bool,
-                                      Bool,
-                                      @escaping () -> Void,
                                       @escaping () -> Void,
                                       @escaping () -> Void)  -> AnyView)? = nil
     
@@ -91,9 +89,7 @@ public class Template {
             Int,
             String,
             Binding<Bool>,
-            Bool,
-            Bool,
-            @escaping () -> Void
+            Bool
     ) -> AnyView)? = nil
     
     /**
@@ -345,8 +341,7 @@ public class Template {
      likeButtonTapped: () -> Void
      */
     public var likeButtonTemplate: ((
-        Binding<Bool>,
-        @escaping () -> Void
+        String
     ) -> AnyView)? = nil
    
     /**
