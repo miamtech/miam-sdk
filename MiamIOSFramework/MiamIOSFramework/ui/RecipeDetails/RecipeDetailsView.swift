@@ -56,14 +56,14 @@ public struct RecipeDetailsView: View {
             ))
             
             ScrollView {
-                ZStack {
-                    VStack {
-                        if (viewModel.recipe != nil) {
-                            if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
-                                Template.sharedInstance.recipeDetailInfosTemplate!(
-                                    viewModel.recipe!
-                                )
-                            } else {
+                if (viewModel.recipe != nil) {
+                    if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
+                        Template.sharedInstance.recipeDetailInfosTemplate!(
+                            viewModel.recipe!
+                        )
+                    } else {
+                        VStack {
+                            VStack {
                                 VStack {
                                     RecipeDetailsHeaderView(mediaURL: viewModel.recipe?.attributes?.mediaUrl,
                                                             title: viewModel.recipe?.attributes?.title ?? "",
@@ -84,27 +84,28 @@ public struct RecipeDetailsView: View {
                             
                             if let ingredients = viewModel.recipe?.relationships?.ingredients?.data {
                                 RecipeDetailsIngredientsView(ingredients: ingredients,
-                                                          recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
-                                                          currentGuests: Int(viewModel.currentState.guest),
-                                                          increaseGuestsAction: {viewModel.increaseGuest()},
-                                                          decreaseGuestsAction: {viewModel.decreaseGuest()})
+                                                             recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
+                                                             currentGuests: Int(viewModel.currentState.guest),
+                                                             increaseGuestsAction: {viewModel.increaseGuest()},
+                                                             decreaseGuestsAction: {viewModel.decreaseGuest()})
                             }
-                        
+                            
                             RecipeDetailsStepsView(steps: viewModel.sortedSteps)
                         }
-                    }.padding(.bottom, 100.0)
-                }.onAppear(perform: {
-                    if (recipeId != nil) {
-                        viewModel.fetchRecipe(recipeId: self.recipeId!)
                     }
                 }
-                )
+                
             }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
                 RecipeDetailsFooter(recipeVM: viewModel)
             }
+        }.onAppear(perform: {
+            if (recipeId != nil) {
+                viewModel.fetchRecipe(recipeId: self.recipeId!)
+            }
         }
+        )
     }
 }
 

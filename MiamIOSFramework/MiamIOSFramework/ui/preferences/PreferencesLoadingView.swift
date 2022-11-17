@@ -11,6 +11,10 @@ import SwiftUI
 @available(iOS 14, *)
 struct PreferencesLoadingView: View {
     var body: some View {
-        ProgressLoader(color: Color.miamColor(.black))
+        if let template = Template.sharedInstance.preferencesLoadingViewTemplate {
+            template()
+        } else {
+            ProgressLoader(color: Color.miamColor(.black))
+        }
     }
 }
