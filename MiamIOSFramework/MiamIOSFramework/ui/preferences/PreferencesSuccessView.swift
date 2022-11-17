@@ -22,52 +22,58 @@ struct PreferencesSuccessView: View {
     let applyTapped: () -> Void
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                ScrollView {
-                    VStack(alignment: .leading) {
-//                        HStack {
-//                            Text(MiamText.sharedInstance.numberOfPersons)
-//                            Spacer()
-//                            CounterView(count: numberOfPersons, isDisable: false) {
-//                                onNumberOfGuestsChanged(numberOfPersons + 1)
-//                            } decrease: {
-//                                guard numberOfPersons > 1 else {
-//                                    return
-//                                }
-//                                onNumberOfGuestsChanged(numberOfPersons - 1)
-//                            }
-//                            
-//                        }.background(Color.miamColor(.greyLighter))
-                        PreferencesListView(title: MiamText.sharedInstance.dietTitle,
-                                            subtitle: MiamText.sharedInstance.dietSubtitle,
-                                            preferences: diets) { tag in
-                            onToggleTag(tag)
+        if let template = Template.sharedInstance.preferencesSuccessViewTemplate {
+            template(numberOfPersons, ingredients, equipments, diets, numberOfRecipesFound, onNumberOfGuestsChanged, onToggleTag,
+                     onAddTagTapped,
+                     closeTapped,
+                     applyTapped)
+        } else {
+            GeometryReader { geometry in
+                VStack {
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            //                        HStack {
+                            //                            Text(MiamText.sharedInstance.numberOfPersons)
+                            //                            Spacer()
+                            //                            CounterView(count: numberOfPersons, isDisable: false) {
+                            //                                onNumberOfGuestsChanged(numberOfPersons + 1)
+                            //                            } decrease: {
+                            //                                guard numberOfPersons > 1 else {
+                            //                                    return
+                            //                                }
+                            //                                onNumberOfGuestsChanged(numberOfPersons - 1)
+                            //                            }
+                            //
+                            //                        }.background(Color.miamColor(.greyLighter))
+                            PreferencesListView(title: MiamText.sharedInstance.dietTitle,
+                                                subtitle: MiamText.sharedInstance.dietSubtitle,
+                                                preferences: diets) { tag in
+                                onToggleTag(tag)
+                            }
+                            
+                            PreferencesTagsListView(title: MiamText.sharedInstance.tastesTitle,
+                                                    subtitle: MiamText.sharedInstance.tastesSubtitle,
+                                                    tags: ingredients, geometry: geometry,
+                                                    onToggleTag: { tag in
+                                onToggleTag(tag)
+                            }, onAddTagTapped: {
+                                onAddTagTapped()
+                            })
+                            
+                            PreferencesListView(title: MiamText.sharedInstance.cookingModesTitle,
+                                                subtitle: MiamText.sharedInstance.cookingModesSubtitle,
+                                                preferences: equipments) { tag in
+                                onToggleTag(tag)
+                            }
                         }
                         
-                        PreferencesTagsListView(title: MiamText.sharedInstance.tastesTitle,
-                                                subtitle: MiamText.sharedInstance.tastesSubtitle,
-                                                tags: ingredients, geometry: geometry,
-                                                onToggleTag: { tag in
-                            onToggleTag(tag)
-                        }, onAddTagTapped: {
-                            onAddTagTapped()
-                        })
-                        
-                        PreferencesListView(title: MiamText.sharedInstance.cookingModesTitle,
-                                            subtitle: MiamText.sharedInstance.cookingModesSubtitle,
-                                            preferences: equipments) { tag in
-                            onToggleTag(tag)
-                        }
                     }
-                    
+                    .padding(16.0)
+                    .background(Color.miamColor(.lightGreyBackground))
+                    PreferencesFooterView(cancelTapped: closeTapped, applyTapped: applyTapped,
+                                          numberOfRecipesFound: numberOfRecipesFound)
                 }
-                .padding(16.0)
-                .background(Color.miamColor(.lightGreyBackground))
-                PreferencesFooterView(cancelTapped: closeTapped, applyTapped: applyTapped,
-                                      numberOfRecipesFound: numberOfRecipesFound)
             }
-            
         }
     }
 }

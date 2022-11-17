@@ -78,13 +78,7 @@ fun RecipeSuccessCard(
                         }
                         // absolut positioning
                         if (vmRecipe.currentState.likeIsEnable) {
-                            RecipeLikeButton(
-                                vmRecipe.currentState.isLiked
-                            ) {
-                                vmRecipe.setEvent(
-                                    RecipeContract.Event.OnToggleLike
-                                )
-                            }
+                            RecipeLikeButton(recipe.id)
                         }
                         // absolut positioning
                         if (isInShelve) {
@@ -186,16 +180,16 @@ fun MetricView(text: String, image: Int) {
 }
 
 @Composable
-fun RecipeLikeButton(isCurrentlyLiked: Boolean, toggleLike: () -> Unit) {
+fun RecipeLikeButton(recipeId: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, end = 8.dp),
         horizontalArrangement = Arrangement.End
     ) {
-        LikeButton(isCurrentlyLiked) {
-            toggleLike()
-        }
+        val likeButton = LikeButton()
+        likeButton.bind(recipeId)
+        likeButton.Content()
     }
 }
 

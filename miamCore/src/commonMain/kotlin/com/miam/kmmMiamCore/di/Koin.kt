@@ -38,6 +38,7 @@ fun initKoin() = initKoin {}
 val repositoryModule = module {
     single { PricingRepositoryImp(get()) }
     single { RecipeRepositoryImp(get()) }
+    single { RecipeLikeRepositoryImp(get()) }
     single { GroceriesListRepositoryImp(get()) }
     single { PointOfSaleRepositoryImp(get()) }
     single { BasketRepositoryImp(get()) }

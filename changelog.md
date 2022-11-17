@@ -1,6 +1,6 @@
 ## 3.1.0
 - [FIX][AND] Fix difficulty texts and icons are customisable
-
+- [FIX][AND] Fix modal now fit correctly in screen
 
 ## 3.0.1
 - [FIX][AND] Fix loader on prefrences screen

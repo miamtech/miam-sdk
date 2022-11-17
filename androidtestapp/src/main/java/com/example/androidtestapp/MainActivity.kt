@@ -129,7 +129,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
-        PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
+        PointOfSaleHandler.setSupplierOrigin("miam.test")
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
@@ -443,7 +443,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     private fun initTemplate() {
-        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+        // Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader
 

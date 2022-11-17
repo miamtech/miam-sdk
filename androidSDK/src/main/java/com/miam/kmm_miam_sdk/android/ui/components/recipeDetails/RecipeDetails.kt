@@ -130,12 +130,8 @@ private fun recipeDetailContent(
                     )
                     ActionRow(
                         vmRecipeCard.currentState.likeIsEnable,
-                        vmRecipeCard.currentState.isLiked
-                    ) {
-                        vmRecipeCard.setEvent(
-                            RecipeContract.Event.OnToggleLike
-                        )
-                    }
+                        recipe.id
+                    )
                     Divider()
                     Text(
                         text = recipe.attributes!!.title,
@@ -196,16 +192,16 @@ private fun recipeDetailContent(
 
 
 @Composable
-fun ActionRow(likeIsEnable: Boolean, isLiked: Boolean, likeAction: () -> Unit) {
+fun ActionRow(likeIsEnable: Boolean, recipeId: String) {
     if (likeIsEnable) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = recipeDetailsActionsContainer
         ) {
-            LikeButton(isLiked) {
-                likeAction()
-            }
+            val likeButton = LikeButton()
+            likeButton.bind(recipeId)
+            likeButton.Content()
         }
     }
 }

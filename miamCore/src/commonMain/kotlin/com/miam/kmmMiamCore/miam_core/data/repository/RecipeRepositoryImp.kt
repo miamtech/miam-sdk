@@ -1,18 +1,20 @@
 package com.miam.kmmMiamCore.miam_core.data.repository
 
+import com.miam.kmmMiamCore.base.mvi.LikeStore
+import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
-class RecipeRepositoryImp(
-    private val recipeDataSource: MiamAPIDatasource
-) : RecipeRepository {
+class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
+
+    private val likeStore: LikeStore = LikeStoreInstance.instance
 
     companion object {
         val DEFAULT_INCLUDED =
             listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
-        val DEFAULT_PAGESIZE = 20
+        const val DEFAULT_PAGESIZE = 20
     }
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {
@@ -74,42 +76,25 @@ class RecipeRepositoryImp(
         return recipes.map { addRecipeLike(it) }
     }
 
-    suspend fun addRecipeLikes(recipeList: List<Recipe>): List<Recipe> {
-        val recipeLikes = recipeDataSource.getRecipeLikes(recipeList.map { recipe -> recipe.id })
+    private suspend fun addRecipeLikes(recipeList: List<Recipe>): List<Recipe> {
+        val recipeLikes = likeStore.fetchAndGetRecipeLikes(recipeList.map { recipe -> recipe.id })
         return recipeList.map { recipe ->
             findAndAddLike(recipe, recipeLikes)
         }
     }
 
-    suspend fun addRecipeLike(recipe: Recipe): Recipe {
-        val recipeLikes = recipeDataSource.getRecipeLikes(listOf(recipe.id))
+    private suspend fun addRecipeLike(recipe: Recipe): Recipe {
+        val recipeLikes = likeStore.fetchAndGetRecipeLikes(listOf(recipe.id))
         return findAndAddLike(recipe, recipeLikes)
     }
 
     private fun findAndAddLike(recipe: Recipe, recipeLikes: List<RecipeLike>): Recipe {
         var recipeToReturn = recipe
-        val recipeLikesFiltered =
-            recipeLikes.filter { like -> like.attributes!!.recipeId.toString() == recipe.id }
+        val recipeLikesFiltered = recipeLikes.filter { like -> like.attributes!!.recipeId.toString() == recipe.id }
         if (recipeLikesFiltered.size == 1) {
             val recipeLike = recipeLikesFiltered[0]
             recipeToReturn = recipe.copy(recipeLike = recipeLike)
         }
         return recipeToReturn
-    }
-
-    suspend fun toggleLike(recipe: Recipe): Recipe {
-        if (recipe.recipeLike != null) {
-            val currentLike = recipe.recipeLike
-            val currentAttributes = currentLike.attributes!!
-            val newLike = recipeDataSource.updateRecipeLike(
-                currentLike.copy(
-                    attributes = currentAttributes.copy(isPast = !currentAttributes.isPast)
-                )
-            )
-            return recipe.copy(recipeLike = newLike)
-        }
-        val newLike = RecipeLike.createDefault(recipe.id)
-        val createdLike = recipeDataSource.createRecipeLike(newLike)
-        return recipe.copy(recipeLike = createdLike)
     }
 }

@@ -10,14 +10,13 @@ enum class TabEnum {
 
 interface RecipeContract {
 
-    sealed class Event : UiEvent {
-        data class SetHeader(val header: String) : Event()
-        data class SetActiveStep(val stepIndex: Int) : Event()
-        object OnAddRecipe : Event()
-        object OnToggleLike : Event()
-        object ShowIngredient : Event()
-        object ShowSteps : Event()
-        object Error : Event()
+    sealed class Event: UiEvent {
+        data class SetHeader(val header: String): Event()
+        data class SetActiveStep(val stepIndex: Int): Event()
+        object OnAddRecipe: Event()
+        object ShowIngredient: Event()
+        object ShowSteps: Event()
+        object Error: Event()
     }
 
     data class State(
@@ -32,9 +31,9 @@ interface RecipeContract {
         val tabState: TabEnum,
         val activeStep: Int,
         val recipeLoaded: Boolean,
-        val isLiked: Boolean,
-        val likeIsEnable: Boolean
-    ) : UiState {
+        val likeIsEnable: Boolean,
+        val show_event_sent: Boolean = false
+    ): UiState {
         fun refreshFromGl(groceriesListStore: GroceriesListStore): State {
             val isInCart = retrieveIsInCart(groceriesListStore)
             return this.copy(
@@ -59,8 +58,8 @@ interface RecipeContract {
         }
     }
 
-    sealed class Effect : UiEffect {
-        object HideCard : Effect()
-        object Disliked : Effect()
+    sealed class Effect: UiEffect {
+        object HideCard: Effect()
+        object Disliked: Effect()
     }
 }

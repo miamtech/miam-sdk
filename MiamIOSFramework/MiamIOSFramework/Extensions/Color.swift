@@ -35,7 +35,7 @@ extension Color {
         )
     }
 
-    static func miamColor(_ from: MiamColor) -> Color {
+    public static func miamColor(_ from: MiamColor) -> Color {
         guard let color = UIColor(named: from.rawValue) else {
             return Color(from.rawValue, bundle: Bundle.miamBundle)
         }
