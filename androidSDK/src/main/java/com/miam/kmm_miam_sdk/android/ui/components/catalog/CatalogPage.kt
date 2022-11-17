@@ -1,10 +1,19 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.GridItemSpan
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
@@ -36,6 +45,9 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 fun CatalogPage(
     recipePageVM: RecipeListPageViewModel,
     context: Context,
+    columns: Int,
+    verticalSpacing: Int,
+    horizontalSpacing: Int,
     returnToCategoriesPage: () -> Unit
 ) {
 
@@ -43,11 +55,14 @@ fun CatalogPage(
 
     ManagementResourceState(
         resourceState = state.value.recipes,
-        successView = { favoritesRecipes ->
-            requireNotNull(favoritesRecipes)
+        successView = { recipes ->
+            requireNotNull(recipes)
             CatalogSuccessPage(
                 recipePageVM,
-                favoritesRecipes,
+                recipes,
+                columns,
+                verticalSpacing,
+                horizontalSpacing,
                 context
             )
         },
@@ -68,31 +83,48 @@ fun CatalogPage(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CatalogSuccessPage(
     recipePageVM: RecipeListPageViewModel,
     recipes: List<Recipe>,
+    columns: Int,
+    verticalSpacing: Int,
+    horizontalSpacing: Int,
     context: Context
 ) {
-    LazyColumn(
-        modifier = FavoritePageStyle.favoriteMainContainer,
-    ) {
-        item {
-            Row {
-                Text(
-                    text = recipePageVM.currentState.title,
-                    color = Colors.black,
-                    style = Typography.subtitleBold
-                )
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            modifier = FavoritePageStyle.favoriteMainContainer,
+            cells = GridCells.Fixed(columns),
+            verticalArrangement = Arrangement.spacedBy(verticalSpacing.dp, Alignment.Top),
+            horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
+        ) {
+            item(span = { GridItemSpan(columns) }) {
+                if (Template.CatalogPageTitleTemplate != null) {
+                    Template.CatalogPageTitleTemplate?.let {
+                        it(recipePageVM.currentState.title)
+                    }
+                } else {
+                    Row {
+                        Text(
+                            text = recipePageVM.currentState.title,
+                            color = Colors.black,
+                            style = Typography.subtitleBold
+                        )
+                    }
+                }
             }
-        }
-        itemsIndexed(recipes) { index, item ->
-            val recipe = RecipeView(context = context)
-            recipe.bind(recipe = item)
-            recipe.isNotInShelf()
-            recipe.Content()
-            if (index == recipes.lastIndex) {
-                recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
+            itemsIndexed(recipes) { index, item ->
+                val recipe = RecipeView(context = context)
+                recipe.bind(recipe = item)
+                recipe.isNotInShelf()
+                recipe.Content()
+                if (index == recipes.lastIndex) {
+                    recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
+                }
+            }
+            item(span = { GridItemSpan(columns) }) {
                 if (recipePageVM.currentState.isFetchingNewPage) {
                     if (Template.CatalogResultPageLazyLoaderTemplate != null) {
                         Template.CatalogResultPageLazyLoaderTemplate?.let {
@@ -224,8 +256,6 @@ private fun CatalogEmptyPage(
                         color = white
                     )
                 }
-
-
             }
         }
     }
