@@ -3,18 +3,14 @@ package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
@@ -32,7 +28,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class RouterOutlet : KoinComponent {
+class RouterOutlet: KoinComponent {
 
     private var vmRouter: RouterOutletViewModel = RouterOutletViewModel()
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
@@ -122,25 +118,7 @@ class RouterOutlet : KoinComponent {
 @Composable
 fun FullScreen(content: @Composable () -> Unit) {
 
-    fun getActualStatusBarHeight(resources: Resources): Int {
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0 && resources.displayMetrics.density != 0f) {
-            return (resources.getDimensionPixelSize(resourceId) / resources.displayMetrics.density).toInt()
-        }
-        return 0
-    }
-
-    fun getActualNavigationBarHeight(resources: Resources): Int {
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0 && resources.displayMetrics.density != 0f) {
-            return (resources.getDimensionPixelSize(resourceId) / resources.displayMetrics.density).toInt()
-        }
-        return 0
-    }
-
     val view = LocalView.current
-    val statusBarHeight = getActualStatusBarHeight(view.context.resources)
-    val bottomBarHeight = getActualNavigationBarHeight(view.context.resources)
     val parentComposition = rememberCompositionContext()
     val currentContent by rememberUpdatedState(content)
 
@@ -149,7 +127,7 @@ fun FullScreen(content: @Composable () -> Unit) {
             view
         ).apply {
             setContent(parentComposition) {
-                Box(Modifier.padding(top = statusBarHeight.dp, bottom = bottomBarHeight.dp)) {
+                Box {
                     currentContent()
                 }
             }
@@ -165,7 +143,7 @@ fun FullScreen(content: @Composable () -> Unit) {
 @SuppressLint("ViewConstructor")
 private class FullScreenLayout(
     private val composeView: View
-) : AbstractComposeView(composeView.context) {
+): AbstractComposeView(composeView.context) {
 
     private val windowManager =
         composeView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -206,8 +184,8 @@ private class FullScreenLayout(
             width = WindowManager.LayoutParams.MATCH_PARENT
             height = WindowManager.LayoutParams.MATCH_PARENT
             format = PixelFormat.TRANSLUCENT
-            flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
         }
 
     fun show() {
