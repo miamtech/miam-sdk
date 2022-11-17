@@ -10,7 +10,7 @@ import SwiftUI
 
 @available(iOS 14, *)
 extension Image {
-    static func miamImage(icon: MiamIcon) -> Image {
+    public static func miamImage(icon: MiamIcon) -> Image {
         guard let image = UIImage(named: icon.rawValue) else {
             return Image(icon.rawValue, bundle: Bundle.miamBundle)
         }

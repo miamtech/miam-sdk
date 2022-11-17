@@ -394,4 +394,112 @@ public class Template {
         Int,
         () -> Void
     ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var preferencesLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+   
+    /**
+     numberOfPersons: Int
+     ingredients: [CheckableTag]
+     equipments: [CheckableTag]
+     diets: [CheckableTag]
+     numberOfRecipesFound: Int
+     onNumberOfGuestsChanged: (Int) -> Void
+     onToggleTag: (CheckableTag) -> Void
+     onAddTagTapped: () -> Void
+     closeTapped: () -> Void
+     applyTapped: () -> Void
+     */
+    public var preferencesSuccessViewTemplate: ((
+        Int,
+        [CheckableTag],
+        [CheckableTag],
+        [CheckableTag],
+        Int,
+        (Int) -> Void,
+        (CheckableTag) -> Void,
+        () -> Void,
+        () -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     tag: CheckableTag
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferenceListItemViewTemplate: ((
+        CheckableTag,
+        (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     title: String
+     subtitle: String
+     preferences: [CheckableTag]
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferencesListViewTemplate: ((
+        String,
+        String,
+        [CheckableTag],
+        (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+   
+    /**
+     title: String
+     subtitle: String
+     tags: [CheckableTag]
+     geometry: GeometryProxy
+     onToggleTag: (CheckableTag) -> Void
+     onAddTagTapped: () -> Void
+     */
+    public var preferencesTagsListViewTemplate: ((
+        String,
+        String,
+        [CheckableTag],
+        GeometryProxy,
+        (CheckableTag) -> Void,
+        () -> Void
+    ) -> AnyView)? = nil
+    
+   
+    /**
+     onTapped: () -> Void
+     */
+    public var addTagViewTemplate: ((
+        () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     tag: CheckableTag
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferencesTagViewTemplate: ((
+        CheckableTag,
+        (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+    
+    
+    /**
+     cancelTapped: () -> Void
+     applyTapped: () -> Void
+     numberOfRecipesFound: Int
+     */
+    public var preferencesFooterView: ((
+        () -> Void,
+        () -> Void,
+        Int
+    ) -> AnyView)? = nil
+    
+    /**
+     preferencesSearchViewModel: PreferencesSearchVM
+     closeAction: () -> Void
+     */
+    public var preferencesSearchViewTemplate: ((
+        PreferencesSearchVM,
+        () -> Void
+    ) -> AnyView)? = nil
 }

@@ -17,28 +17,32 @@ struct PreferencesListView: View {
     let onToggleTag: (CheckableTag) -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
-            Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
-            
+        if let template = Template.sharedInstance.preferencesListViewTemplate {
+            template(title, subtitle, preferences, onToggleTag)
+        } else {
             VStack(alignment: .leading) {
-                ForEach(preferences, id: \.self) { tag in
-                    PreferenceListItemView(tag: tag) { tag in
-                        onToggleTag(tag)
+                Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
+                Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
+                
+                VStack(alignment: .leading) {
+                    ForEach(preferences, id: \.self) { tag in
+                        PreferenceListItemView(tag: tag) { tag in
+                            onToggleTag(tag)
+                        }
                     }
-                }
-            }.background(Color.miamColor(.white))
-                .padding([.bottom], 8.0)
-                .cornerRadius(8.0)
-                .padding([.bottom], -8.0)
-        }.background(Color.miamColor(.lightGreyBackground))
+                }.background(Color.miamColor(.white))
+                    .padding([.bottom], 8.0)
+                    .cornerRadius(8.0)
+                    .padding([.bottom], -8.0)
+            }.background(Color.miamColor(.lightGreyBackground))
+        }
     }
 }
 
 @available(iOS 14, *)
-struct PreferenceListItemView: View {
-    let tag: CheckableTag
-    let onToggleTag: (CheckableTag) -> Void
+public struct PreferenceListItemView: View {
+    public let tag: CheckableTag
+    public let onToggleTag: (CheckableTag) -> Void
     var tagName: String {
         get {
             if let name = tag.tag.attributes?.name {
@@ -48,29 +52,33 @@ struct PreferenceListItemView: View {
         }
     }
     
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Button(action:{
-                    onToggleTag(tag)
-                }) {
-                    ZStack(alignment: .center) {
-                           Rectangle()
-                            .fill(.white)
-                            .cornerRadius(4)
-                            .border(Color.miamColor(.borderLight), width: 1)
-                                    .frame(width:20, height:20, alignment: .center)
-                                    
-                        if(tag.isChecked) {
-                            Image.miamImage(icon: .check)
-                                .renderingMode(.original).frame( alignment: .center)
+    public var body: some View {
+        if let template = Template.sharedInstance.preferenceListItemViewTemplate {
+            template(tag, onToggleTag)
+        } else {
+            VStack(alignment: .leading) {
+                HStack {
+                    Button(action:{
+                        onToggleTag(tag)
+                    }) {
+                        ZStack(alignment: .center) {
+                            Rectangle()
+                                .fill(.white)
+                                .cornerRadius(4)
+                                .border(Color.miamColor(.borderLight), width: 1)
+                                .frame(width:20, height:20, alignment: .center)
+                            
+                            if(tag.isChecked) {
+                                Image.miamImage(icon: .check)
+                                    .renderingMode(.original).frame( alignment: .center)
+                            }
                         }
                     }
-                }
-                .foregroundColor(Color.white)
-                Text(tagName)
-            }.padding(Dimension.sharedInstance.lPadding)
-            Divider()
+                    .foregroundColor(Color.white)
+                    Text(tagName)
+                }.padding(Dimension.sharedInstance.lPadding)
+                Divider()
+            }
         }
     }
 }

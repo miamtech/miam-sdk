@@ -39,8 +39,8 @@ build-sdk:
   stage: build
   script:
     - ./gradlew :androidSDK:assembleRelease
-  only:
-    - merge_requests
+  rules:
+    - when: manual
 
 publish-sdk-maven:
   stage: deploy
