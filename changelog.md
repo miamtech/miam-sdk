@@ -1,5 +1,8 @@
 ## 3.1.0
+- [FIX][AND] Fix Recipe card CTA text is now customizable
 - [FIX][AND] Fix modal now fit correctly in screen
+- [FIX][COR] Analytics domain, user agent and multiple sent show event
+- [FIX][IOS] Add templates and some public modifiers
 
 ## 3.0.1
 - [FIX][AND] Fix loader on prefrences screen
