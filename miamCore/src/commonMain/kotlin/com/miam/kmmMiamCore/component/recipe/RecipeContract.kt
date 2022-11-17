@@ -31,7 +31,8 @@ interface RecipeContract {
         val tabState: TabEnum,
         val activeStep: Int,
         val recipeLoaded: Boolean,
-        val likeIsEnable: Boolean
+        val likeIsEnable: Boolean,
+        val show_event_sent: Boolean = false
     ): UiState {
         fun refreshFromGl(groceriesListStore: GroceriesListStore): State {
             val isInCart = retrieveIsInCart(groceriesListStore)

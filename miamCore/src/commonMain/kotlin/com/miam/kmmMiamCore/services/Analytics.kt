@@ -2,6 +2,7 @@ package com.miam.kmmMiamCore.services
 
 import com.miam.kmmMiamCore.handler.LogHandler
 import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -15,7 +16,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.encodeToJsonElement
 import org.koin.core.component.KoinComponent
 
-class Analytics : KoinComponent {
+class Analytics: KoinComponent {
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in Analytics $exception ${exception.stackTraceToString()}")
     }
@@ -31,6 +32,8 @@ class Analytics : KoinComponent {
 
     private val httpClient = HttpClient {
         install(JsonFeature) { serializer = KotlinxSerializer(kotlinx.serialization.json.Json) }
+        BrowserUserAgent()
+        install(DefaultRequest)
     }
 
     private suspend fun HttpClient.postEvent(event: PlausibleEvent) {
@@ -41,15 +44,10 @@ class Analytics : KoinComponent {
     }
 
     fun init(supplierOrigin: String) {
-        domain.apply { value = originToDomain[supplierOrigin] }
+        domain.apply { value = originToDomain[supplierOrigin] ?: supplierOrigin }
         val isHttp = supplierOrigin.startsWith("https://")
         httpOrigin.apply { value = if (isHttp) supplierOrigin else "https://$supplierOrigin" }
-
-        sendEvent(
-            "test",
-            "/mypath",
-            PlausibleProps(recipe_id = "test_recipe_id", pos_name = "test_pos_name")
-        )
+        LogHandler.info("Analytics init for $domain")
     }
 
     fun sendEvent(eventType: String, path: String, props: PlausibleProps) {

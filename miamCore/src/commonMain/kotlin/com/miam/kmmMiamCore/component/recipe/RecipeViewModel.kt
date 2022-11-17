@@ -166,12 +166,16 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     }
 
     fun setRecipe(recipe: Recipe) {
-        // TODO : path + multiple sent ?
-        analyticsService.sendEvent(
-            Analytics.EVENT_RECIPE_SHOW,
-            "",
-            Analytics.PlausibleProps(recipe_id = recipe.id)
-        )
+        // TODO : path + on view displayed ?
+        if (!currentState.show_event_sent) {
+            analyticsService.sendEvent(
+                Analytics.EVENT_RECIPE_SHOW,
+                "",
+                Analytics.PlausibleProps(recipe_id = recipe.id)
+            )
+            setState { copy(show_event_sent = true) }
+        }
+        
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
