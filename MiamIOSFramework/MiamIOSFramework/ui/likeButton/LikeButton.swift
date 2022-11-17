@@ -10,15 +10,17 @@ import SwiftUI
 @available(iOS 14, *)
 struct LikeButton: View {
     @ObservedObject var viewModel: LikeButtonVM
+    private let recipeId: String
     
-    public init(recipeId : String){
+    public init(recipeId : String) {
+        self.recipeId = recipeId
         self.viewModel = LikeButtonVM()
         self.viewModel.setRecipe(recipeId: recipeId)
     }
 
     var body: some View {
         if let template = Template.sharedInstance.likeButtonTemplate {
-            template(self.recipeId)
+            template(recipeId)
         } else {
             ZStack(){
                 Circle().fill(Color.miamColor(.white))
