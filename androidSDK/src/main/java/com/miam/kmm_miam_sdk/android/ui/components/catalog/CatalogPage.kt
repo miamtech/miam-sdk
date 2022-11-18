@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -96,7 +96,7 @@ private fun CatalogSuccessPage(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             modifier = FavoritePageStyle.favoriteMainContainer,
-            cells = GridCells.Fixed(columns),
+            columns = GridCells.Fixed(columns),
             verticalArrangement = Arrangement.spacedBy(verticalSpacing.dp, Alignment.Top),
             horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
         ) {

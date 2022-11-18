@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -56,7 +56,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ItemsSelector : KoinComponent {
+class ItemsSelector: KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
 
@@ -153,7 +153,7 @@ class ItemsSelector : KoinComponent {
 
 
                         LazyVerticalGrid(
-                            cells = GridCells.Adaptive(itemsWidth.dp),
+                            columns = GridCells.Adaptive(minSize = itemsWidth.dp),
                             contentPadding = PaddingValues(
                                 start = mPadding,
                                 top = lPadding,

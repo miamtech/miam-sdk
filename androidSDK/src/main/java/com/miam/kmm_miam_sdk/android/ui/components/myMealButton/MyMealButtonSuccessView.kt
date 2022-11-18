@@ -74,7 +74,7 @@ fun MyMealButtonSuccessView(recipeCount: Int, onclick: () -> Unit) {
     }
 }
 
-class BottomRoundedArcShape : Shape {
+class BottomRoundedArcShape: Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
