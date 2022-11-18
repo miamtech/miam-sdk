@@ -15,28 +15,29 @@ internal struct CatalogRecipesPageSuccessView: View {
     let recipes: [Recipe]
     let hasNoResults: Bool
     let searchString: String
+    let columns: Int 
+    let spacing: CGFloat
     let loadMoreContentAction: (Recipe) -> Void
     let browseCatalogAction: () -> Void
-    
+      
     var body: some View {
         if !hasNoResults {
             ScrollView {
                 VStack {
-                    HStack {
-                        Text(title).font(Font.system(size: 20.0))
-                            .fontWeight(.heavy).frame(height: 40.0)
-                        Spacer()
-                    }
-                    
-                    LazyVStack {
-                        ForEach(recipes, id: \.self) { recipe in
-                            RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
-                                loadMoreContentAction(recipe)
-                                //
-                            }.padding(.top,Dimension.sharedInstance.lPadding)
+                        HStack {
+                            Text(title).font(Font.system(size: 20.0))
+                                .fontWeight(.heavy).frame(height: 40.0)
+                            Spacer()
+                        }
+                        LazyVGrid( columns:  Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing){
+                            ForEach(recipes, id: \.self) { recipe in
+                                RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
+                                    loadMoreContentAction(recipe)
+                                    //
+                                }.padding(.top,Dimension.sharedInstance.lPadding)
+                            }
                         }
                     }
-                }
             }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
         } else {
             CatalogRecipePageNoResultsView(searchString: searchString, browseCatalogAction: {

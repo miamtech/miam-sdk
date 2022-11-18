@@ -11,23 +11,25 @@ data class RecipeLike private constructor(
     override val id: String? = null,
     override val attributes: RecipeLikeAttributes? = null,
     override val relationships: RecipeLikeRelationships? = null
-) : Record(), BasketPreviewEntry {
+): Record(), BasketPreviewEntry {
 
     constructor(
         id: String?,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ) : this(
+    ): this(
         id,
-        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeLikeAttributes>(
-            attributes
-        ),
+        if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeLikeAttributes>(attributes),
         if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<RecipeLikeRelationships>(
             Relationships.filterEmptyRelationships(json_relationships)
         )
     ) {
         relationships?.buildFromIncluded(includedRecords)
+    }
+
+    fun toggle(): RecipeLike {
+        return copy(attributes = attributes!!.copy(isPast = !attributes.isPast))
     }
 
     companion object {
@@ -45,10 +47,10 @@ data class RecipeLikeAttributes constructor(
     val isPast: Boolean,
     @SerialName("recipe-id")
     val recipeId: Int
-) : Attributes()
+): Attributes()
 
 @Serializable
-class RecipeLikeRelationships : Relationships() {
+class RecipeLikeRelationships: Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }

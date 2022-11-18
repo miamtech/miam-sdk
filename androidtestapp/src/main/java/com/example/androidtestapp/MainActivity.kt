@@ -56,7 +56,6 @@ import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
-import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -96,6 +95,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         mutableStateOf(listOf())
     private lateinit var basketHandler: BasketHandler
 
+
     private fun initMiam() {
         initKoin {
             androidContext(this@MainActivity)
@@ -129,7 +129,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
-        PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
+        PointOfSaleHandler.setSupplierOrigin("miam.test")
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
@@ -215,7 +215,12 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                         imageVector = Icons.Default.School,
                         contentDescription = "hat"
                     )
-                    Text(text = "Difficulté  ${recipe.difficultyLabel}")
+                    when (recipe.attributes!!.difficulty!!) {
+                        1 -> Text(text = "Les doigts dans le nez")
+                        2 -> Text(text = "Là on parle")
+                        3 -> Text(text = "Il va falloir se lever tôt")
+                    }
+
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     Text(
@@ -324,6 +329,9 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                     }
                 } else if (isCatalogPage) {
                     var catalog = Catalog(this@MainActivity)
+                    catalog.bind(
+                        catalogPageColumns = 2
+                    )
                     catalog.enablePreference()
                     catalog.Content()
                 } else {
@@ -438,7 +446,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     private fun initTemplate() {
-        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+//        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader
 

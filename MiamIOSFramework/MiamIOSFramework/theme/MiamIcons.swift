@@ -40,7 +40,11 @@ public enum MiamIcon: String {
     case search = "miamSearch"
     case sync = "miamSync"
     case whisk = "miamWhisk"
+    case difficultyLow = "miamDifficultyLow"
+    case difficultyMedium = "miamDifficultyMedium"
+    case difficultyHigh = "miamDifficultyHigh"
     case yellowUnderline = "miamYellowUnderline"
     case look = "miamLook"
     case preferences = "miamPreferences"
 }
+

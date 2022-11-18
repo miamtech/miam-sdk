@@ -7,9 +7,9 @@ object Image {
     var look: Int = R.drawable.ic_eye
     var time: Int = R.drawable.ic_clock
     var difficulty: Int = R.drawable.ic_diflow
-    var difficultyLow: Int = R.drawable.ic_easy
-    var difficultyMid: Int = R.drawable.ic_mid
-    var difficultyHard: Int = R.drawable.ic_hard
+    var difficultyLow: Int = R.drawable.ic_diflow
+    var difficultyMid: Int = R.drawable.ic_diflow
+    var difficultyHard: Int = R.drawable.ic_diflow
     var cart: Int = R.drawable.ic_cart
     var favorite: Int = R.drawable.ic_favorite
     var favoriteFilled: Int = R.drawable.ic_favorite_filled

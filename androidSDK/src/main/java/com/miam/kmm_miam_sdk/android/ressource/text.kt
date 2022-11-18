@@ -24,4 +24,7 @@ object Text {
     var tagPreRecipeCountText = "Ce produit est utilisé pour"
     var tagPostRecipeCountText = "recettes"
     var swap = "Remplacer"
+    var difficultyLow = "Chef débutant"
+    var difficultyMedium = "Chef intermédiaire"
+    var difficultyHigh = "Top chef"
 }

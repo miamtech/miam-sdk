@@ -17,17 +17,28 @@ class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
+    var catalogPageColumns = 1
+    var catalogPageVerticalSpacing = 12
+    var catalogPageHorizontalSpacing = 12
 
     fun bind(
-        categoryId: String,
-        title: String?
+        categoryId: String? = null,
+        title: String? = null,
+        catalogPageColumns: Int? = null,
+        catalogPageVerticalSpacing: Int? = null,
+        catalogPageHorizontalSpacing: Int? = null,
     ) {
-        vmCatalog.setEvent(
-            CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
-        )
+        this.catalogPageColumns = catalogPageColumns ?: this.catalogPageColumns
+        this.catalogPageVerticalSpacing = catalogPageVerticalSpacing ?: this.catalogPageVerticalSpacing
+        this.catalogPageHorizontalSpacing = catalogPageHorizontalSpacing ?: this.catalogPageHorizontalSpacing
+        if (categoryId != null) {
+            vmCatalog.setEvent(
+                CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
+            )
+        }
     }
 
     @Suppress("Used in component injecting catalog")
@@ -52,7 +63,15 @@ class Catalog @JvmOverloads constructor(
                     resourceState = state.categories,
                     successView = { categories ->
                         requireNotNull(categories)
-                        CatalogSuccessView(categories, state, context, vmCatalog)
+                        CatalogSuccessView(
+                            categories,
+                            state,
+                            context,
+                            catalogPageColumns,
+                            catalogPageVerticalSpacing,
+                            catalogPageHorizontalSpacing,
+                            vmCatalog
+                        )
                     },
                     loadingView = {
                         CatalogLoadingView()

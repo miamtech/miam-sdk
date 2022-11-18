@@ -17,8 +17,7 @@ import org.koin.core.component.inject
 import kotlin.math.max
 import kotlin.math.min
 
-open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val MAX_GUESTS = 100
     private val MIN_GUESTS = 1
@@ -60,7 +59,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             tabState = TabEnum.INGREDIENT,
             activeStep = 0,
             recipeLoaded = false,
-            isLiked = false,
             likeIsEnable = true
         )
     }
@@ -83,7 +81,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
             RecipeContract.Event.OnAddRecipe -> addOrAlterRecipe()
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
-            RecipeContract.Event.OnToggleLike -> toggleLike()
             RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty) }
         }
     }
@@ -169,18 +166,21 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
     }
 
     fun setRecipe(recipe: Recipe) {
-        // TODO : path + multiple sent ?
-        analyticsService.sendEvent(
-            Analytics.EVENT_RECIPE_SHOW,
-            "",
-            Analytics.PlausibleProps(recipe_id = recipe.id)
-        )
+        // TODO : path + on view displayed ?
+        if (!currentState.show_event_sent) {
+            analyticsService.sendEvent(
+                Analytics.EVENT_RECIPE_SHOW,
+                "",
+                Analytics.PlausibleProps(recipe_id = recipe.id)
+            )
+            setState { copy(show_event_sent = true) }
+        }
+        
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
                 recipe = recipe,
                 recipeLoaded = true,
-                isLiked = recipe.recipeLike?.attributes?.isPast == false
             ).refreshFromGl(groceriesListStore)
         }
         displayPrice()
@@ -193,26 +193,9 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel) :
                 recipeState = defaultState.recipeState,
                 recipe = defaultState.recipe,
                 recipeLoaded = defaultState.recipeLoaded,
-                isLiked = defaultState.isLiked,
                 isInCart = defaultState.isInCart,
                 guest = defaultState.guest
             )
-        }
-    }
-
-    private fun toggleLike() {
-        // TODO : make it loading and manage it on success with invokeOnCompletion
-
-        if (currentState.isLiked) {
-            likeStore.emitEffect(LikeEffect.Disliked(currentState.recipe?.id ?: ""))
-        } else {
-            likeStore.emitEffect(LikeEffect.Liked(currentState.recipe!!))
-        }
-
-        setState { copy(isLiked = !currentState.isLiked) }
-        val currentRecipe = this.recipe
-        launch(coroutineHandler) {
-            setRecipe(recipeRepositoryImp.toggleLike(currentRecipe!!))
         }
     }
 

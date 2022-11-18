@@ -29,16 +29,24 @@ public struct CatalogView: View {
     
     let closeCatalogAction: (() -> Void)?
     private var usesPreferences = false
+    private var recipesListColumns : Int = 1
+    private var recipesListSpacing: CGFloat = 12
     
-    public init(usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil) {
+    
+    public init(usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil, recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil) {
         self.catalog = CatalogVM()
         self.usesPreferences = usesPreferences
         self.closeCatalogAction = closeCatalogAction
+        self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
+        self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
     }
     
-    public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil) {
+    public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil, recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
         self.closeCatalogAction = closeCatalogAction
+        self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
+        self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
+        
     }
 
     public var body: some View {
@@ -68,6 +76,8 @@ public struct CatalogView: View {
                     resourceState: catalogState.categories,
                     successView: CatalogSuccessView(
                         recipeListPageViewModel: catalog.recipePageViewModel,
+                        recipesListColumns: recipesListColumns,
+                        recipesListSpacing: recipesListSpacing,
                         packages: catalog.packages,
                         content: catalog.content,
                         showingPackageRecipes: $showingPackageRecipes,
@@ -124,8 +134,10 @@ internal struct CatalogSuccessView: View {
     let searchString: String
     let browseCatalogAction: () -> Void
     let navigateToRecipeAction: (Package) -> Void
+    let recipesListColumns : Int
+    let recipesListSpacing: CGFloat
     
-    init(recipeListPageViewModel: RecipeListPageViewModel?, packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+    init(recipeListPageViewModel: RecipeListPageViewModel?,recipesListColumns: Int, recipesListSpacing: CGFloat ,packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
          headerHeight: Binding<Double>, searchString: String,
          browseCatalogAction: @escaping () -> Void,
          navigateToRecipeAction: @escaping (Package) -> Void) {
@@ -138,8 +150,11 @@ internal struct CatalogSuccessView: View {
         self.searchString = searchString
         self.browseCatalogAction = browseCatalogAction
         self.navigateToRecipeAction = navigateToRecipeAction
+        self.recipesListColumns = recipesListColumns
+        self.recipesListSpacing = recipesListSpacing
+        
     }
-    
+
     var body: some View {
         if let template = Template.sharedInstance.catalogSuccessViewTemplate {
             template(recipeListPageViewModel, packages, catalogContent, $showingPackageRecipes,
@@ -157,7 +172,7 @@ internal struct CatalogSuccessView: View {
                 }.padding([.top], Dimension.sharedInstance.lPadding)
             } else {
                 if let recipeListPageViewModel  = recipeListPageViewModel {
-                    RecipesView(recipesListPageModel: recipeListPageViewModel, browseCatalogAction: {
+                    RecipesView(recipesListPageModel: recipeListPageViewModel,recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, browseCatalogAction: {
                         browseCatalogAction()
                     }, searchString: searchString, showingFavorites: showingFavorites)
                 }

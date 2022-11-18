@@ -30,6 +30,9 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButton
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyHigh
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyLow
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeCardText.difficultyMedium
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 
@@ -75,13 +78,7 @@ fun RecipeSuccessCard(
                         }
                         // absolut positioning
                         if (vmRecipe.currentState.likeIsEnable) {
-                            RecipeLikeButton(
-                                vmRecipe.currentState.isLiked
-                            ) {
-                                vmRecipe.setEvent(
-                                    RecipeContract.Event.OnToggleLike
-                                )
-                            }
+                            RecipeLikeButton(recipe.id)
                         }
                         // absolut positioning
                         if (isInShelve) {
@@ -152,7 +149,11 @@ fun RecipeCardMetricsView(recipe: Recipe) {
                 .height(30.dp)
                 .width(1.dp)
         )
-        MetricView(recipe.difficultyLabel, RecipeCardImage.difficulty)
+        when (recipe.attributes!!.difficulty) {
+            1 -> MetricView(difficultyLow, RecipeCardImage.difficultyLow)
+            2 -> MetricView(difficultyMedium, RecipeCardImage.difficultyMid)
+            3 -> MetricView(difficultyHigh, RecipeCardImage.difficultyHard)
+        }
     }
 }
 
@@ -179,16 +180,16 @@ fun MetricView(text: String, image: Int) {
 }
 
 @Composable
-fun RecipeLikeButton(isCurrentlyLiked: Boolean, toggleLike: () -> Unit) {
+fun RecipeLikeButton(recipeId: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, end = 8.dp),
         horizontalArrangement = Arrangement.End
     ) {
-        LikeButton(isCurrentlyLiked) {
-            toggleLike()
-        }
+        val likeButton = LikeButton()
+        likeButton.bind(recipeId)
+        likeButton.Content()
     }
 }
 
@@ -236,7 +237,7 @@ fun RecipeCardCTAView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (isInCart) "Voir le détail" else "Ajouter les ingrédients",
+                    text = if (isInCart) RecipeCardText.isInCart else RecipeCardText.addToCart,
                     color = if (isInCart) Colors.primary else Colors.white,
                     style = Typography.bodySmallBold
                 )

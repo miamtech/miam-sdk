@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 @available(iOS 14, *)
-struct SimpleQuadCurve: Shape {    
-    func path(in rect: CGRect) -> Path {
+public struct SimpleQuadCurve: Shape {
+    public func path(in rect: CGRect) -> Path {
         var path = Path()
         path.move(to: CGPoint(x: 0, y: rect.maxY))
         path.addQuadCurve(
