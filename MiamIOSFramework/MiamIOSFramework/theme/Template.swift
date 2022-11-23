@@ -80,8 +80,6 @@ public class Template {
      totalTime: String
      showTitleInHeader: Bool
      isLikeEnabled: Bool
-     isLiked: Bool
-     likeAction: () -> Void
      */
     public var recipeDetailsHeaderTemplate : ((
             String?,
