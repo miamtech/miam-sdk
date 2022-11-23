@@ -17,10 +17,7 @@ let package = Package(
         .target(
             name: "MiamIOSFramework",
             dependencies: ["miamCore"],
-            path: "MiamIOSFramework/MiamIOSFramework",
-            resources: [
-                .process("miam.xcassets"),
-            ]
+            path: "MiamIOSFramework/MiamIOSFramework"
         ),
         .binaryTarget(
             name: "miamCore",
