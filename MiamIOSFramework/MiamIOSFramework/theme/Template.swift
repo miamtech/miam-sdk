@@ -339,7 +339,8 @@ public class Template {
      likeButtonTapped: () -> Void
      */
     public var likeButtonTemplate: ((
-        String
+        Bool,
+        () -> Void
     ) -> AnyView)? = nil
    
     /**
