@@ -82,10 +82,10 @@ data class CheckableTag constructor(
         return if (isCheckedByDefault) !isInSelection else isInSelection
     }
 
-    val saveInStorage: Boolean
+    val changedFromItsDefaultValue: Boolean
         get() = if (isCheckedByDefault) !isChecked else isChecked
 
-    val isIncludedInQUery: Boolean
+    val isIncludedInQuery: Boolean
         get() = tagType == TagTypes.DIET
 
     companion object {
