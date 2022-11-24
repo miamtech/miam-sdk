@@ -154,8 +154,8 @@ object Template {
     ) -> Unit)? = null
 
     var basketPreviewExpendRowTemplate: (@Composable() (
-        productName: String,
-        add: () -> Unit,
+        add: (() -> Unit)?,
+        productName: String
     ) -> Unit)? = null
 
 /////////////// My Meal Page  //////////////////////
@@ -184,7 +184,8 @@ object Template {
         openPreferences: () -> Unit,
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
-        getActiveFilterCount: () -> Int
+        getActiveFilterCount: () -> Int,
+        isMainPage: Boolean
     ) -> Unit)? = null
 
     var CatalogCategoryTemplate: (@Composable() (

@@ -142,10 +142,11 @@ private fun recipeDetailContent(
                     RecipeDifficultyAndTiming(recipe.attributes!!.difficulty!!, recipe.totalTime)
                     RecipeDetailTimeComposition(recipe.attributes!!.preparationTime, recipe.attributes!!.cookingTime, recipe.attributes!!.restingTime)
                 }
-                Divider(Modifier.padding(8.dp))
+
                 if (recipeDetailIngredientTemplate != null) {
                     recipeDetailIngredientTemplate!!(recipe, vmRecipeCard)
                 } else {
+                    Divider(Modifier.padding(8.dp))
                     RecipeIngredients(recipe, vmRecipeCard)
                 }
                 if (recipeDetailStepsTemplate != null) {
@@ -160,8 +161,9 @@ private fun recipeDetailContent(
                     ) { currentStep: Int ->
                         vmRecipeCard.setEvent(RecipeContract.Event.SetActiveStep(currentStep))
                     }
+                    Spacer(modifier = Modifier.padding(vertical = 50.dp))
                 }
-                Spacer(modifier = Modifier.padding(vertical = 50.dp))
+
             }
         },
         bottomBar = {
