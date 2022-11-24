@@ -80,8 +80,6 @@ public class Template {
      totalTime: String
      showTitleInHeader: Bool
      isLikeEnabled: Bool
-     isLiked: Bool
-     likeAction: () -> Void
      */
     public var recipeDetailsHeaderTemplate : ((
             String?,
@@ -200,7 +198,7 @@ public class Template {
      */
     public var ingredientNotInBasketRowTemplate: ((
         String,
-        @escaping () -> Void
+        (() -> Void)?
     )-> AnyView)? = nil
 
 
@@ -341,7 +339,8 @@ public class Template {
      likeButtonTapped: () -> Void
      */
     public var likeButtonTemplate: ((
-        String
+        Bool,
+        @escaping () -> Void
     ) -> AnyView)? = nil
    
     /**
@@ -387,7 +386,7 @@ public class Template {
      */
     public var myMealButtonSuccessViewTemplate: ((
         Int,
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -414,11 +413,11 @@ public class Template {
         [CheckableTag],
         [CheckableTag],
         Int,
-        (Int) -> Void,
-        (CheckableTag) -> Void,
-        () -> Void,
-        () -> Void,
-        () -> Void
+        @escaping (Int) -> Void,
+        @escaping (CheckableTag) -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -427,7 +426,7 @@ public class Template {
      */
     public var preferenceListItemViewTemplate: ((
         CheckableTag,
-        (CheckableTag) -> Void
+        @escaping (CheckableTag) -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -440,7 +439,7 @@ public class Template {
         String,
         String,
         [CheckableTag],
-        (CheckableTag) -> Void
+        @escaping (CheckableTag) -> Void
     ) -> AnyView)? = nil
    
     /**
@@ -456,8 +455,8 @@ public class Template {
         String,
         [CheckableTag],
         GeometryProxy,
-        (CheckableTag) -> Void,
-        () -> Void
+        @escaping (CheckableTag) -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
    
@@ -465,7 +464,7 @@ public class Template {
      onTapped: () -> Void
      */
     public var addTagViewTemplate: ((
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -474,7 +473,7 @@ public class Template {
      */
     public var preferencesTagViewTemplate: ((
         CheckableTag,
-        (CheckableTag) -> Void
+        @escaping (CheckableTag) -> Void
     ) -> AnyView)? = nil
     
     
@@ -484,8 +483,8 @@ public class Template {
      numberOfRecipesFound: Int
      */
     public var preferencesFooterView: ((
-        () -> Void,
-        () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void,
         Int
     ) -> AnyView)? = nil
     
@@ -495,6 +494,6 @@ public class Template {
      */
     public var preferencesSearchViewTemplate: ((
         PreferencesSearchVM,
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
 }
