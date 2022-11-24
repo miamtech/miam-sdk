@@ -10,14 +10,24 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct PreferencesTagsListView: View {
+public struct PreferencesTagsListView: View {
     let title: String
     let subtitle: String
     let tags: [CheckableTag]
     let geometry: GeometryProxy
     let onToggleTag: (CheckableTag) -> Void
     let onAddTagTapped: () -> Void
-    var body: some View {
+    
+    public init(title: String, subtitle: String, tags: [CheckableTag], geometry: GeometryProxy, onToggleTag: @escaping (CheckableTag) -> Void, onAddTagTapped: @escaping () -> Void) {
+        self.title = title
+        self.subtitle = subtitle
+        self.tags = tags
+        self.geometry = geometry
+        self.onToggleTag = onToggleTag
+        self.onAddTagTapped = onAddTagTapped
+    }
+    
+    public var body: some View {
         if let template = Template.sharedInstance.preferencesTagsListViewTemplate {
             template(title, subtitle, tags, geometry, onToggleTag, onAddTagTapped)
         } else {
@@ -30,7 +40,7 @@ struct PreferencesTagsListView: View {
         }
     }
     
-    private func displayTags(in g: GeometryProxy) -> some View {
+    public func displayTags(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
 

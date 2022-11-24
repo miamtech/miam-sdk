@@ -10,13 +10,20 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct PreferencesListView: View {
+public struct PreferencesListView: View {
     let title: String
     let subtitle: String
     let preferences: [CheckableTag]
     let onToggleTag: (CheckableTag) -> Void
+   
+    public init(title: String, subtitle: String, preferences: [CheckableTag], onToggleTag: @escaping (CheckableTag) -> Void) {
+        self.title = title
+        self.subtitle = subtitle
+        self.preferences = preferences
+        self.onToggleTag = onToggleTag
+    }
     
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.preferencesListViewTemplate {
             template(title, subtitle, preferences, onToggleTag)
         } else {

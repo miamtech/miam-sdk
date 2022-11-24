@@ -9,11 +9,18 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct PreferencesFooterView: View {    
+public struct PreferencesFooterView: View {
     let cancelTapped: () -> Void
     let applyTapped: () -> Void
     let numberOfRecipesFound: Int
-    var body: some View {
+    
+    public init(cancelTapped: @escaping () -> Void, applyTapped: @escaping () -> Void, numberOfRecipesFound: Int) {
+        self.cancelTapped = cancelTapped
+        self.applyTapped = applyTapped
+        self.numberOfRecipesFound = numberOfRecipesFound
+    }
+    
+    public var body: some View {
         if let template = Template.sharedInstance.preferencesFooterView {
             template(cancelTapped, applyTapped, numberOfRecipesFound)
         } else {
