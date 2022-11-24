@@ -1,8 +1,9 @@
 ## 3.2.0
-- [fix][AND] Fix Error in basket preview when context was not set
-- [fix][IOS] Fix white screen in basket preview when context was not set
-- [fix][IOS] Fix AsyncImage constructor visibility
-- [fix][IOS] Add missing parametter to like button template
+- [FIX][AND] Fix Error in basket preview when context was not set
+- [FIX][AND] Add missing templates in myMeal and item selector
+- [FIX][IOS] Fix white screen in basket preview when context was not set
+- [FIX][IOS] Fix AsyncImage constructor visibility
+- [FIX][IOS] Add missing parametter to like button template
 - [FEA][IOS] SPM is available for IOS 12
 
 ## 3.1.0

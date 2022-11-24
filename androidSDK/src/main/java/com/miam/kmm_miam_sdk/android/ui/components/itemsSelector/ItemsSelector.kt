@@ -68,18 +68,24 @@ class ItemsSelector: KoinComponent {
         val state = vmItemSelector.uiState.collectAsState()
         Scaffold(
             topBar = {
-                Row(modifier = previousButtonContainer) {
-                    IconButton(
-                        modifier = previousButton,
-                        onClick = {
-                            vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                if (Template.productSelectorHeaderTemplate != null) {
+                    Template.productSelectorHeaderTemplate?.let {
+                        it { vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview) }
+                    }
+                } else {
+                    Row(modifier = previousButtonContainer) {
+                        IconButton(
+                            modifier = previousButton,
+                            onClick = {
+                                vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                            }
+                        ) {
+                            Image(
+                                colorFilter = ColorFilter.tint(previousIconColor),
+                                painter = painterResource(previous),
+                                contentDescription = "Previous"
+                            )
                         }
-                    ) {
-                        Image(
-                            colorFilter = ColorFilter.tint(previousIconColor),
-                            painter = painterResource(previous),
-                            contentDescription = "Previous"
-                        )
                     }
                 }
             },
@@ -95,43 +101,46 @@ class ItemsSelector: KoinComponent {
                             it(state.value.selectedItem!!)
                         }
                     } else {
-                        Surface(modifier = selectedItemContainerBorder) {
-                            Row(
-                                modifier = selectedItemContainer,
-                                horizontalArrangement = selectedItemContainerArrangement,
-                                verticalAlignment = selectedItemContainerAlignment
-                            ) {
-                                Image(
-                                    painter = rememberImagePainter(state.value.selectedItem?.picture),
-                                    contentDescription = "product image",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = selectedItemImage,
-                                )
-                                Column(
-                                    modifier = selectedItemInfosContainer,
-                                    verticalArrangement = Arrangement.SpaceBetween
+                        Column {
+                            Surface(modifier = selectedItemContainerBorder) {
+                                Row(
+                                    modifier = selectedItemContainer,
+                                    horizontalArrangement = selectedItemContainerArrangement,
+                                    verticalAlignment = selectedItemContainerAlignment
                                 ) {
-                                    Text(
-                                        text = state.value.selectedItem?.bplDescription?.get(0)
-                                            ?: " ",
-                                        textAlign = TextAlign.Center,
-                                        style = bodySmallBold
+                                    Image(
+                                        painter = rememberImagePainter(state.value.selectedItem?.picture),
+                                        contentDescription = "product image",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = selectedItemImage,
                                     )
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = pricePosition
+                                    Column(
+                                        modifier = selectedItemInfosContainer,
+                                        verticalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Price(
-                                            price = state.value.selectedItem?.price?.toDouble()
-                                                ?: 0.0,
-                                            isTotalPrice = true
+                                        Text(
+                                            text = state.value.selectedItem?.bplDescription?.get(0)
+                                                ?: " ",
+                                            textAlign = TextAlign.Center,
+                                            style = bodySmallBold
                                         )
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = pricePosition
+                                        ) {
+                                            Price(
+                                                price = state.value.selectedItem?.price?.toDouble()
+                                                    ?: 0.0,
+                                                isTotalPrice = true
+                                            )
+                                        }
                                     }
                                 }
                             }
+                            Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
                         }
                     }
-                    Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
+
 
                     if (Template.productOptionListTemplate != null) {
                         Template.productOptionListTemplate?.let {
@@ -213,5 +222,3 @@ class ItemsSelector: KoinComponent {
         )
     }
 }
-  
-
