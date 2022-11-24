@@ -174,7 +174,8 @@ object Template {
         openPreferences: () -> Unit,
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
-        getActiveFilterCount: () -> Int
+        getActiveFilterCount: () -> Int,
+        isMainPage: Boolean
     ) -> Unit)? = null
 
     var CatalogCategoryTemplate: (@Composable() (
