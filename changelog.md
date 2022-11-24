@@ -1,3 +1,10 @@
+## 3.2.0
+- [fix][AND] Fix Error in basket preview when context was not set
+- [fix][IOS] Fix white screen in basket preview when context was not set
+- [fix][IOS] Fix AsyncImage constructor visibility
+- [fix][IOS] Add missing parametter to like button template
+- [FEA][IOS] SPM is available for IOS 12
+
 ## 3.1.0
 - [FIX][AND] Fix Recipe card CTA text is now customizable
 - [FIX][AND] Fix modal now fit correctly in screen
