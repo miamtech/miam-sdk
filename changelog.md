@@ -1,3 +1,8 @@
+## 3.2.0
+- [FIX][COR] Do not need context to be set to be ready
+- [FIX][COR] Préferences didn not take into account default value to get filter string
+- [FIX][COR] Expendable entry line template. Action can be null (usd when no item is found)
+
 ## 3.1.0
 - [FIX][AND] Fix Recipe card CTA text is now customizable
 - [FIX][AND] Fix modal now fit correctly in screen
