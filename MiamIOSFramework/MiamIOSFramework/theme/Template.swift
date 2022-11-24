@@ -203,6 +203,13 @@ public class Template {
 
 
     /**
+     loadingText: String
+     */
+    public var catalogLoadingViewTemplate: ((
+        String
+    ) -> AnyView)? = nil
+    
+    /**
      recipeListPageViewModel: RecipeListPageViewModel?
      packages: [CatalogPackage]
      catalogContent: CatalogModelContent
