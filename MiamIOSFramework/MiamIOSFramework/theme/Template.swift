@@ -37,13 +37,15 @@ public class Template {
     public var recipeCardLoadingViewTemplate: (()->AnyView)? = nil
     
     /**
-     First parameter Int is the current value of counter
-     Second parameter is decrese function
-     Third parameter is increase function
+     count: Int - the current value of counter
+     lightMode: Bool - Show or hide "persons" text
+     decrease: () -> Void
+     increase: () -> Void
      */
-    public var counterViewTemplate : ((_ : Int,
-                                   _ : @escaping () -> Void,
-                                   _ : @escaping () -> Void)  -> AnyView)? = nil
+    public var counterViewTemplate : ((Int,
+                                       Bool,
+                                       @escaping () -> Void,
+                                       @escaping () -> Void)  -> AnyView)? = nil
     
     /**
      Second parameter Int is de interger part of the price

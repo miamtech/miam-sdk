@@ -75,7 +75,7 @@ struct BasketPreviewHeader: View {
                     Text(formattedPrice).foregroundColor(Color.miamColor(.primary)).fontWeight(.bold)
                     Spacer()
 
-                    CounterView(count: numberOfGuests, isDisable: false) {
+                    CounterView(count: numberOfGuests) {
                         increaseGuestsCount()
                     } decrease: {
                         decreaseGuestsCount()

@@ -16,7 +16,7 @@ struct RecipeDetailsIngredientsView: View {
     let increaseGuestsAction: () -> Void
     let decreaseGuestsAction: () -> Void
     
-    var counterView: CounterView
+    public var counterView: CounterView
     init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int, increaseGuestsAction: @escaping () -> Void, decreaseGuestsAction: @escaping () -> Void) {
         self.ingredients = ingredients
         self.recipeGuests = recipeGuests
@@ -26,7 +26,6 @@ struct RecipeDetailsIngredientsView: View {
         
         self.counterView = CounterView(
                 count: recipeGuests,
-                isDisable: false,
                 increase: increaseGuestsAction,
                 decrease: decreaseGuestsAction
             )
