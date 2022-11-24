@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "MiamIOSFramework",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v12),
     ],
     products: [
         .library(
@@ -17,10 +17,7 @@ let package = Package(
         .target(
             name: "MiamIOSFramework",
             dependencies: ["miamCore"],
-            path: "MiamIOSFramework/MiamIOSFramework",
-            resources: [
-                .process("miam.xcassets"),
-            ]
+            path: "MiamIOSFramework/MiamIOSFramework"
         ),
         .binaryTarget(
             name: "miamCore",
