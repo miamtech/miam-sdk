@@ -109,6 +109,7 @@ public class MiamManager {
     private func initTemplate(){
         Template.sharedInstance.counterViewTemplate =
         {(count: Int,
+          lightMode: Bool,
           increase: @escaping () -> Void,
           decrease: @escaping () -> Void ) -> AnyView in
             AnyView(
