@@ -26,7 +26,6 @@ struct RecipeDetailsIngredientsView: View {
         
         self.counterView = CounterView(
                 count: recipeGuests,
-                isDisable: false,
                 increase: increaseGuestsAction,
                 decrease: decreaseGuestsAction
             )

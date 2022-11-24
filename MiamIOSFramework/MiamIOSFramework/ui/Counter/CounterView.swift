@@ -11,32 +11,27 @@ import SwiftUI
 public struct CounterView: View {
     
     public var count: Int
-    public var isDisable: Bool
     public var increase:  () -> Void
     public var decrease:  () -> Void
     public var lightMode: Bool = false
     
     public init(
         count: Int,
-        isDisable: Bool,
         increase: @escaping () -> Void,
         decrease: @escaping () -> Void
     ) {
         self.count = count
-        self.isDisable = isDisable
         self.increase = increase
         self.decrease = decrease
     }
     
     public init(
         count: Int,
-        isDisable: Bool,
         lightMode: Bool,
         increase: @escaping () -> Void,
         decrease: @escaping () -> Void
     ) {
         self.count = count
-        self.isDisable = isDisable
         self.lightMode = lightMode
         self.increase = increase
         self.decrease = decrease
@@ -83,7 +78,6 @@ public struct CounterView: View {
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         CounterView(count: 12 ,
-                    isDisable: false,
                     increase: {() -> () in  print("ok")},
                     decrease: {() -> () in  print("not ok")}
             )
