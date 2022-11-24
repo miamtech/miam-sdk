@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct CounterView: View {
+public struct CounterView: View {
     
     public var count: Int
     public var isDisable: Bool
@@ -42,7 +42,7 @@ struct CounterView: View {
         self.decrease = decrease
     }
     
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.counterViewTemplate {
             template(count, {increase()}, {decrease()})
         } else {
