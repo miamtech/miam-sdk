@@ -440,6 +440,14 @@
 			path = recipeCarousel;
 			sourceTree = "<group>";
 		};
+		BFAB5838292E80C800D1D3A4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BF25E1572864740900328B4B /* miam.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		BFB39579288A9DCE00D696D0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,7 +486,6 @@
 			isa = PBXGroup;
 			children = (
 				BF2691BE2893CF7A00BF9D5A /* Package.swift */,
-				BF25E1572864740900328B4B /* miam.xcassets */,
 				DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */,
 				DCD4E30E27BE914A000D3EA6 /* MiamIOSFrameworkTests */,
 				DCD4E30127BE914A000D3EA6 /* Products */,
@@ -497,6 +504,7 @@
 		DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */ = {
 			isa = PBXGroup;
 			children = (
+				BFAB5838292E80C800D1D3A4 /* Resources */,
 				BFB39579288A9DCE00D696D0 /* Extensions */,
 				0B7C9BDD28196BED00BFC7F8 /* ressource */,
 				0B7C9BDA28196B9300BFC7F8 /* theme */,
