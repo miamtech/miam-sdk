@@ -54,7 +54,7 @@ public class MiamManager {
         UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
-        //initCustomText()
+        //initTemplate()
     }
 
     
@@ -107,23 +107,17 @@ public class MiamManager {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.counterViewTemplate =
-        {(count: Int,
-          lightMode: Bool,
-          increase: @escaping () -> Void,
-          decrease: @escaping () -> Void ) -> AnyView in
+        Template.sharedInstance.ingredientNotInBasketRowTemplate =
+        {(name: String,
+          action: (() -> Void)?) -> AnyView in
             AnyView(
                 HStack{
                     Button(action: {
-                        decrease()
+                        if(action != nil){
+                            action!()
+                        }
                     }) {
                         Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                    }
-                    Text(String(count))
-                    Button(action: {
-                        increase()
-                    }) {
-                        Image(systemName: "plus.circle").foregroundColor(.blue)
                     }
                 }
             )}

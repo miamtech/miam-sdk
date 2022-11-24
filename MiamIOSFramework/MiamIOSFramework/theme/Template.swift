@@ -200,10 +200,17 @@ public class Template {
      */
     public var ingredientNotInBasketRowTemplate: ((
         String,
-        @escaping () -> Void
+        (() -> Void)?
     )-> AnyView)? = nil
 
 
+    /**
+     loadingText: String
+     */
+    public var catalogLoadingViewTemplate: ((
+        String
+    ) -> AnyView)? = nil
+    
     /**
      recipeListPageViewModel: RecipeListPageViewModel?
      packages: [CatalogPackage]

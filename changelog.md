@@ -1,3 +1,11 @@
+## 3.2.0
+- [FIX][COR] Do not need context to be set to be ready
+- [FIX][COR] Préferences didn not take into account default value to get filter string
+- [FIX][COR] Expendable entry line template. Action can be null (usd when no item is found)
+- [fix][IOS] Fix AsyncImage constructor visibility
+- [fix][IOS] Add missing parametter to like button template
+- [FEA][IOS] SPM is available for IOS 12
+
 ## 3.1.0
 - [FIX][AND] Fix Recipe card CTA text is now customizable
 - [FIX][AND] Fix modal now fit correctly in screen

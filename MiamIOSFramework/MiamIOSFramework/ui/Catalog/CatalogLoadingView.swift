@@ -11,9 +11,13 @@ import SwiftUI
 struct CatalogLoadingView: View {
     let loadingText: String
     var body: some View {
-        VStack {
-            Text(loadingText)
-            ProgressLoader(color: Color.miamColor(.primary))
+        if let template = Template.sharedInstance.catalogLoadingViewTemplate {
+            template(loadingText)
+        } else {
+            VStack {
+                Text(loadingText)
+                ProgressLoader(color: Color.miamColor(.primary))
+            }
         }
     }
 }

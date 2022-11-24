@@ -39,7 +39,7 @@ public struct AsyncImage<Placeholder:View> : View {
     private let placeholder: Placeholder
     private let height: CGFloat
     
-    init(url:URL, @ViewBuilder placeholder: () -> Placeholder, height: CGFloat ){
+    public init(url:URL, @ViewBuilder placeholder: () -> Placeholder, height: CGFloat ){
         self.placeholder = placeholder()
         self.height = height
         _loader = StateObject(wrappedValue: ImageLoader(url: url))
