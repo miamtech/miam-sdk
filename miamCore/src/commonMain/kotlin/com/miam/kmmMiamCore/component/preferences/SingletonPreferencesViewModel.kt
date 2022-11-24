@@ -128,13 +128,13 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     fun applyPreferences() {
-        userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageSerializedtags(currentState.diets))
-        userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageSerializedtags(currentState.ingredients))
-        userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageSerializedtags(currentState.equipments))
+        userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageSerializedTags(currentState.diets))
+        userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageSerializedTags(currentState.ingredients))
+        userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageSerializedTags(currentState.equipments))
     }
 
-    private fun toSaveInStorageSerializedtags(checkableTagList: List<CheckableTag>): List<String> {
-        return checkableTagList.filter { it.saveInStorage }.map { diet -> diet.tag.toJsonElement().toString() }
+    private fun toSaveInStorageSerializedTags(checkableTagList: List<CheckableTag>): List<String> {
+        return checkableTagList.filter { it.changedFromItsDefaultValue }.map { diet -> diet.tag.toJsonElement().toString() }
     }
 
     private fun updateRecipesCount() {
@@ -158,8 +158,8 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
 
     fun getPreferencesAsQueryString(): String {
-        val toInclude = allTags.filter { tag -> tag.isIncludedInQUery }.filter { tag -> tag.isChecked }.map { it.tag.id }
-        val toExclude = allTags.filter { tag -> !tag.isIncludedInQUery }.filter { tag -> tag.isChecked }.map { it.tag.id }
+        val toInclude = allTags.filter { tag -> tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
+        val toExclude = allTags.filter { tag -> !tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
         val includedStr = if (toInclude.isNotEmpty()) "&filter[include-tags]=${toInclude.joinToString(",")}" else ""
         val excludedStr = if (toExclude.isNotEmpty()) "&filter[exclude-tags]=${toExclude.joinToString(",")}" else ""
         return includedStr + excludedStr
