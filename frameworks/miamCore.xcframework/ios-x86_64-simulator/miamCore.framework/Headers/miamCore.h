@@ -789,9 +789,9 @@ __attribute__((swift_name("CheckableTag")))
 - (MiamCoreCheckableTag *)resetWithStorageTagIds:(NSArray<NSString *> *)storageTagIds __attribute__((swift_name("resetWith(storageTagIds:)")));
 - (NSString *)description __attribute__((swift_name("description()")));
 - (MiamCoreCheckableTag *)toggleIfNeededTagIdToToggle:(NSString *)tagIdToToggle __attribute__((swift_name("toggleIfNeeded(tagIdToToggle:)")));
+@property (readonly) BOOL changedFromItsDefaultValue __attribute__((swift_name("changedFromItsDefaultValue")));
 @property (readonly) BOOL isChecked __attribute__((swift_name("isChecked")));
-@property (readonly) BOOL isIncludedInQUery __attribute__((swift_name("isIncludedInQUery")));
-@property (readonly) BOOL saveInStorage __attribute__((swift_name("saveInStorage")));
+@property (readonly) BOOL isIncludedInQuery __attribute__((swift_name("isIncludedInQuery")));
 @property (readonly) MiamCoreTag *tag __attribute__((swift_name("tag")));
 @property (readonly) MiamCoreTagTypes *tagType __attribute__((swift_name("tagType")));
 @end;
