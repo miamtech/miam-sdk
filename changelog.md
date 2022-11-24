@@ -1,11 +1,13 @@
 ## 3.2.0
-- [FIX][AND] Fix Error in basket preview when context was not set
 - [FIX][AND] Add missing parameter in catalog header template
 - [FIX][AND] Remove divider not overridable from recipe detail
-- [FIX][IOS] Fix white screen in basket preview when context was not set
 - [FIX][IOS] Fix AsyncImage constructor visibility
-- [FIX][IOS] Add missing parameter to like button template
+- [FIX][IOS] Add missing parametter to like button template
 - [FEA][IOS] SPM is available for IOS 12
+- [FIX][IOS] Add missing parameter to like button template
+- [FIX][COR] Do not need context to be set to be ready
+- [FIX][COR] Préferences didn not take into account default value to get filter string
+- [FIX][COR] Expendable entry line template. Action can be null (usd when no item is found)
 
 ## 3.1.0
 - [FIX][AND] Fix Recipe card CTA text is now customizable

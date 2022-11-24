@@ -198,7 +198,7 @@ public class Template {
      */
     public var ingredientNotInBasketRowTemplate: ((
         String,
-        @escaping () -> Void
+        (() -> Void)?
     )-> AnyView)? = nil
 
 
