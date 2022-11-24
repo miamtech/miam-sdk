@@ -91,6 +91,10 @@ object Template {
 
 ////////////////// Product Selector //////////////////
 
+    var  productSelectorHeaderTemplate: (@Composable()(
+        back : () -> Unit
+    ) -> Unit )? = null
+
     var currentProductTemplate: (@Composable() (
         selectedItem: BasketPreviewLine
     ) -> Unit)? = null
@@ -157,6 +161,12 @@ object Template {
 /////////////// My Meal Page  //////////////////////
 
     var myMealLoaderTemplate: (@Composable() () -> Unit)? = null
+
+    var myMealRecipeExpendableAction: (@Composable() (
+        isExpended: Boolean,
+        expend: () -> Unit,
+        removeRecipe: () -> Unit,
+    ) -> Unit)? = null
 
 ///////////////////  Tag  //////////////////////////
 

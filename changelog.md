@@ -1,4 +1,5 @@
 ## 3.2.0
+- [FIX][AND] Add missing templates in myMeal and item selector
 - [FIX][AND] Add missing parameter in catalog header template
 - [FIX][AND] Remove divider not overridable from recipe detail
 - [FIX][IOS] Fix AsyncImage constructor visibility
