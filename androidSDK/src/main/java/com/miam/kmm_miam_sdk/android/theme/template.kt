@@ -91,9 +91,9 @@ object Template {
 
 ////////////////// Product Selector //////////////////
 
-    var  productSelectorHeaderTemplate: (@Composable()(
-        back : () -> Unit
-    ) -> Unit )? = null
+    var productSelectorHeaderTemplate: (@Composable() (
+        back: () -> Unit
+    ) -> Unit)? = null
 
     var currentProductTemplate: (@Composable() (
         selectedItem: BasketPreviewLine
@@ -272,5 +272,10 @@ object Template {
     var myMealButtonEmptyViewTemplate: (@Composable() (
     ) -> Unit)? = null
 
+///////////// LIKE BUTTON ////////////////////////
+
+    var LikeButtonTemplate: (@Composable() (
+        isLiked: Boolean, likeAction: () -> Unit
+    ) -> Unit)? = null
 
 }

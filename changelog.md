@@ -1,4 +1,6 @@
-## 3.2.0
+# 3.2.1
+- [FIX][AND] Add missing templates in like button 
+# 3.2.0
 - [FIX][AND] Add missing templates in myMeal and item selector
 - [FIX][AND] Add missing parameter in catalog header template
 - [FIX][AND] Remove divider not overridable from recipe detail

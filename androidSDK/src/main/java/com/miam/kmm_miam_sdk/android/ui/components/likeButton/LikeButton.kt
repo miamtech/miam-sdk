@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.recipeLike.LikeButtonViewModel
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonColor.buttonBackgroundColor
 import com.miam.kmm_miam_sdk.android.ui.components.likeButton.LikeButtonColor.iconColor
@@ -43,7 +44,11 @@ class LikeButton {
             resourceState = state.isLiked,
             successView = { isLiked ->
                 requireNotNull(isLiked)
-                RecipeLikeSuccessButton({ likeButtonViewModel.toggleLike() }, isLiked)
+                if (Template.LikeButtonTemplate != null) {
+                    Template.LikeButtonTemplate?.let { it(isLiked) { likeButtonViewModel.toggleLike() } }
+                } else {
+                    RecipeLikeSuccessButton({ likeButtonViewModel.toggleLike() }, isLiked)
+                }
             },
             loadingView = {
                 //TODO
