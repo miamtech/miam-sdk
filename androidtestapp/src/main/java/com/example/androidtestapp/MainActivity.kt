@@ -3,15 +3,16 @@ package com.example.androidtestapp
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -37,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
@@ -47,17 +49,21 @@ import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.GroceriesListHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
+import com.miam.kmm_miam_sdk.android.ui.components.myMealButton.MyMealButton
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
+import com.miam.kmm_miam_sdk.android.ui.components.recipeCarousel.RecipeCarousel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,12 +73,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.random.Random
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
-class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
+class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by CoroutineScope(
     Dispatchers.Main
 ) {
 
@@ -80,11 +87,14 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
 
+    val userPreferences: UserPreferences by inject()
+
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
     val categoriesState: MutableState<List<CatalogCategory>> =
         mutableStateOf(listOf())
     private lateinit var basketHandler: BasketHandler
+
 
     private fun initMiam() {
         initKoin {
@@ -94,24 +104,36 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
             )
         }
 
+        ToasterHandler.setOnSuccess { message ->
+            val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+        ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
+        ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
         LogHandler.info("Are you ready ? ${ContextHandlerInstance.instance.isReady()}")
-        launch {
+        launch(coroutineHandler) {
             ContextHandlerInstance.instance.observeReadyEvent().collect { it ->
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        ContextHandlerInstance.instance.setContext(this@MainActivity)
+        userPreferences.putInt("testInt", 42)
+        userPreferences.putList("testList", listOf("1", "2", "3"))
+        LogHandler.info("user pref list is working ${userPreferences.getListOrNull("testList")}")
+        LogHandler.info("user pref Int is working ${userPreferences.getIntOrNull("testInt")}")
+        LogHandler.info("user pref Int is not working ${userPreferences.getIntOrNull("faileTest")}")
         PointOfSaleHandler.getCatalogCategories(::fetchCategory)
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.updateStoreId("35290")
         PointOfSaleHandler.setSupplier(7)
-        PointOfSaleHandler.setSupplierOrigin("app.qualif.coursesu")
+        PointOfSaleHandler.setSupplierOrigin("miam.test")
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
-        launch {
+        launch(coroutineHandler) {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} ")
                 retailerBasketSubject.emit(
@@ -158,6 +180,23 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         )
                     }
                 )
+                Row {
+                    (recipe.relationships!!.ingredients!!.data.filter { it.attributes?.pictureUrl != null })
+                        .forEachIndexed { index, ingredient ->
+                            if (index < 3) {
+                                Image(
+                                    painter = rememberImagePainter(ingredient.attributes!!.pictureUrl),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .zIndex((4 - index).toFloat())
+                                        .clip(CircleShape)
+                                        .border(2.dp, Color.White, CircleShape)
+                                )
+                            }
+                        }
+                }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     Icon(
                         tint = Color.Gray,
@@ -176,7 +215,12 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                         imageVector = Icons.Default.School,
                         contentDescription = "hat"
                     )
-                    Text(text = "Difficulté  ${recipe.difficultyLabel}")
+                    when (recipe.attributes!!.difficulty!!) {
+                        1 -> Text(text = "Les doigts dans le nez")
+                        2 -> Text(text = "Là on parle")
+                        3 -> Text(text = "Il va falloir se lever tôt")
+                    }
+
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     Text(
@@ -218,10 +262,7 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     .height(80.dp)
                     .width(80.dp)
                     .clip(RoundedCornerShape(8.dp))
-
             )
-
-
         }
 
     }
@@ -288,17 +329,32 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
                     }
                 } else if (isCatalogPage) {
                     var catalog = Catalog(this@MainActivity)
-                    catalog.bind("62", "test")
+                    catalog.bind(
+                        catalogPageColumns = 2
+                    )
+                    catalog.enablePreference()
                     catalog.Content()
                 } else {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                            .fillMaxWidth(),
+                        //.verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         content(retailerBasketSubject)
+                        Divider()
+                        Carousel(context = this@MainActivity)
+                        Divider()
                         recipes(this@MainActivity)
+
+                        val mmb = MyMealButton(this@MainActivity)
+                        mmb.bind {
+                            isMyMealPage = !isMyMealPage
+                            isFavoritePage = false
+                            isTagPage = false
+                            isCatalogPage = false
+                        }
+                        mmb.Content()
                     }
                 }
             }
@@ -374,17 +430,27 @@ class MainActivity : ComponentActivity(), KoinComponent, CoroutineScope by Corou
         // recette a base de poulet
         recipe3.bind(criteria = SuggestionsCriteria(currentIngredientsIds = listOf("5319173")))
 
-        Column {
+        Column(Modifier.fillMaxSize()) {
             recipe1.Content()
             recipe2.Content()
             recipe3.Content()
         }
     }
 
+    @Composable
+    fun Carousel(context: Context) {
+        // bananas recipes
+        val recipeCarousel = RecipeCarousel(context)
+        recipeCarousel.bind("6134471", recipeListSize = 3)
+        recipeCarousel.Content()
+    }
+
     private fun initTemplate() {
-        /*   Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
-             Template.recipeCardTemplate = recipeFunctionTemplateVariable
-             Template.recipeLoaderTemplate = recipeloader*/
+//        Template.recipeCardTemplate = recipeFunctionTemplateVariable
+//        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
+//        Template.recipeLoaderTemplate = recipeloader
+
+
     }
 
     private fun RandomCriteria(): SuggestionsCriteria {

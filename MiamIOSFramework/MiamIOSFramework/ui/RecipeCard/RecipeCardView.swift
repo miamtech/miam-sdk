@@ -10,29 +10,47 @@ import miamCore
 
 @available(iOS 14, *)
 public struct RecipeCardView: View {
-    
     public var criteria: SuggestionsCriteria?
     public var recipeId: String?
+    let recipeCardHeight: CGFloat
     private let showMealIdeaTag: Bool
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
     
-    public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true) {
+    @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
+    @SwiftUI.State var showingPopup = false
+    
+    public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.criteria = criteria
         self.showMealIdeaTag = showMealIdeaTag
+        self.recipeCardHeight = recipeCardHeight
     }
     
-    public init(recipeId: String, showMealIdeaTag: Bool = true) {
+    public init(recipeId: String, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.recipeId = recipeId
         self.showMealIdeaTag = showMealIdeaTag
+        self.recipeCardHeight = recipeCardHeight
     }
     
     public var body: some View {
         VStack {
             if(viewModel.state != nil ){
-                ManagementResourceState<Recipe,RecipeCardSuccessView,RecipeCardLoadingView,RecipeCardEmptyView> (
+                ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (
                     resourceState: viewModel.state!.recipeState,
-                    successView:  criteria != nil ? RecipeCardSuccessView(viewModel: viewModel, criteria: criteria!, showMealIdeaTag: showMealIdeaTag) :
-                        RecipeCardSuccessView(viewModel: viewModel, recipeId: recipeId!, showMealIdeaTag: showMealIdeaTag) ,
+                    successView:  RecipeCardSuccessView(recipe: viewModel.recipe,
+                                                        isRecipeInCart: viewModel.currentState.isInCart,
+                                                        isLikeEnabled: viewModel.isLikeEnabled,
+                                                        showMealIdeaTag: showMealIdeaTag,
+                                                        goToDetailsAction: {
+                                                            viewModel.goToDetail()
+                                                            showingPopup = true
+                                                        }, showOrAddRecipeAction: {
+                                                            if viewModel.isInCart {
+                                                                viewModel.goToDetail()
+                                                            } else {
+                                                                addToCart()
+                                                            }
+                                                            showingPopup = true
+                                                        }),
                     loadingView: RecipeCardLoadingView(),
                     emptyView: RecipeCardEmptyView()
                 ).onAppear(perform: {
@@ -43,7 +61,19 @@ public struct RecipeCardView: View {
                     }
                 })
             }
-        }.frame(height: 400)
+        }.frame(height: recipeCardHeight)
+         .sheet(isPresented: $showingPopup) {
+            Dialog(
+                close: { showingPopup = false },
+                initialRoute : initialDialogScreen,
+                routerVm: viewModel.routerVM
+            )
+        }
+    }
+    
+    private func addToCart() {
+        viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
+        viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
     }
 }
 
@@ -53,4 +83,3 @@ public struct RecipeCardEmptyView: View {
         HStack{}
     }
 }
- 

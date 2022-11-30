@@ -8,8 +8,8 @@
 import Foundation
 import miamCore
 
-internal extension BasketPreviewLine {
-    static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine   {
+extension BasketPreviewLine {
+    public static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine   {
         let item = entry.selectedItem
         let beI = entry.attributes!.basketEntriesItems?.first(where: { item in
             item.itemId == entry.attributes?.selectedItemId
@@ -44,45 +44,45 @@ internal extension BasketPreviewLine {
         )
     }
 
-    var pictureURL: URL? {
+    public var pictureURL: URL? {
         return URL(string: picture)
     }
 
-    var basketTitle: String {
+    public var basketTitle: String {
         return title
     }
 
-    var basketDescription: String {
+    public var basketDescription: String {
         return bplDescription[0]
     }
 
-    var pricePerGuest: String {
+    public var pricePerGuest: String {
         guard let parsedPrice = Double(price) else {
             return ""
         }
-
-        let price = parsedPrice * 100 / Double(count) / 100
+        let guardCount = count > 0 ? count : 1
+        let price = parsedPrice * 100 / Double(guardCount) / 100
         let formattedPrice = String(format: "%.2f", price)
         return "\(formattedPrice)€ /personne"
     }
 
-    var numberOfGuests: Int {
+    public var numberOfGuests: Int {
         return Int(count)
     }
 
-    var productBrand: String {
+    public var productBrand: String {
         return bplDescription.count > 1 ? bplDescription[1] : ""
     }
 
-    var productDescription: String {
+    public var productDescription: String {
         return bplDescription.count > 0 ? bplDescription[0] : ""
     }
 
-    var  numberOfproductsInBasket: Int {
+    public var numberOfproductsInBasket: Int {
         return entries?.found.count ?? 0
     }
 
-    var productsInBasket: Array<BasketEntry> {
+    public var productsInBasket: Array<BasketEntry> {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
         guard let entries = entries?.found as? Array<BasketEntry> else {
             return []
@@ -91,7 +91,7 @@ internal extension BasketPreviewLine {
         return entries
     }
 
-    var productsNotFound: Array<BasketEntry> {
+    public var productsNotFound: Array<BasketEntry> {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
         guard let entries = entries?.notFound as? Array<BasketEntry> else {
             return []
@@ -100,7 +100,7 @@ internal extension BasketPreviewLine {
         return entries
     }
 
-    var productsOftenDeleted: Array<BasketEntry> {
+    public var productsOftenDeleted: Array<BasketEntry> {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
         guard let entries = entries?.oftenDeleted as? Array<BasketEntry> else {
             return []
@@ -109,7 +109,7 @@ internal extension BasketPreviewLine {
         return entries
     }
 
-    var productsRemoved: Array<BasketEntry> {
+    public var productsRemoved: Array<BasketEntry> {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
         guard let entries = entries?.removed as? Array<BasketEntry> else {
             return []

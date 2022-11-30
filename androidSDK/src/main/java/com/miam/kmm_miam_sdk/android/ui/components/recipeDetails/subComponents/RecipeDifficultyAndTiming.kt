@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsImage
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.difficultyHigh
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.difficultyLow
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.difficultyMedium
 
 @Composable
 fun RecipeDifficulty(ImageRef: Int, difficultyLabel: String) {
@@ -34,7 +37,7 @@ fun RecipeDifficulty(ImageRef: Int, difficultyLabel: String) {
 }
 
 @Composable
-fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTime: String) {
+fun RecipeDifficultyAndTiming(difficulty: Int, totalTime: String) {
 
     Row(
         Modifier.padding(vertical = 20.dp),
@@ -47,23 +50,9 @@ fun RecipeDifficultyAndTiming(difficultyLabel: String, difficulty: Int, totalTim
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (difficulty) {
-                1 -> {
-                    RecipeDifficulty(
-                        RecipeDetailsImage.difficultyLow, difficultyLabel
-                    )
-                }
-
-                2 -> {
-                    RecipeDifficulty(
-                        RecipeDetailsImage.difficultyMid, difficultyLabel
-                    )
-                }
-
-                3 -> {
-                    RecipeDifficulty(
-                        RecipeDetailsImage.difficultyHard, difficultyLabel
-                    )
-                }
+                1 -> RecipeDifficulty(RecipeDetailsImage.difficultyLow, difficultyLow)
+                2 -> RecipeDifficulty(RecipeDetailsImage.difficultyMid, difficultyMedium)
+                3 -> RecipeDifficulty(RecipeDetailsImage.difficultyHard, difficultyHigh)
             }
         }
         Divider(modifier = RecipeDetailsStyle.difficultyAndTimeDivider)
@@ -100,7 +89,7 @@ fun RecipeDifficultyAndTimingPreview() {
             .fillMaxWidth()
             .background(color = Color.White)
     ) {
-        RecipeDifficultyAndTiming("facile", 1, "20 min")
+        RecipeDifficultyAndTiming(1, "20 min")
     }
 }
 

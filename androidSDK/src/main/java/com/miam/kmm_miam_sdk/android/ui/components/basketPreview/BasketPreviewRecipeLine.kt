@@ -41,6 +41,7 @@ fun BasketPreviewRecipeLine(
     val guestDivider = max(1, line.count)
     val pricePerGuest =
         "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
+    var guestCount by remember { mutableStateOf(line.count) }
 
     fun goToRecipeDetail() {
         goToDetail()

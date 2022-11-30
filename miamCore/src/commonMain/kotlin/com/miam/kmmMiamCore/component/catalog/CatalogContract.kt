@@ -4,8 +4,8 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.UiEffect
 import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
-import com.miam.kmmMiamCore.component.catalogFilter.CatalogFilterViewModel
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
 
 enum class CatalogContent {
@@ -20,19 +20,22 @@ interface CatalogContract {
         object GoToRecipeList : CatalogContract.Event()
         object ToggleFilter : CatalogContract.Event()
         object ToggleSearch : CatalogContract.Event()
+        object TogglePreference : CatalogContract.Event()
         object OnFilterValidation : CatalogContract.Event()
         object OnSearchLaunch : CatalogContract.Event()
-        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") :
-            CatalogContract.Event()
+        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") : CatalogContract.Event()
     }
 
     data class State(
         val categories: BasicUiState<List<Package>>,
         val content: CatalogContent,
-        val catalogFilterVM: CatalogFilterViewModel,
+        val catalogFilterVM: SingletonFilterViewModel,
         val recipePageVM: RecipeListPageViewModel,
         val filterOpen: Boolean,
-        val searchOpen: Boolean
+        val searchOpen: Boolean,
+        val preferenceOpen: Boolean,
+        val enableFilters: Boolean,
+        val enablePreferences: Boolean
     ) : UiState
 
     sealed class Effect : UiEffect

@@ -1,8 +1,10 @@
 package com.miam.kmmMiamCore.miam_core.model
 
+import com.miam.kmmMiamCore.handler.LogHandler
 import io.ktor.http.*
 import io.ktor.util.reflect.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kotlin.reflect.KClass
@@ -173,6 +175,12 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
                 relationships,
                 includedRecords
             )
+            Tag.serializer().descriptor.serialName -> Tag(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
             else -> throw Exception("Unsuported record type $type")
         }
     }
@@ -199,6 +207,17 @@ sealed class Record {
 
     fun toJsonElement(): JsonElement {
         return jsonFormat.encodeToJsonElement(serializer(), this)
+    }
+
+    companion object {
+        fun fromString(str: String): Record? {
+            return try {
+                jsonFormat.decodeFromString(str)
+            } catch (e: Exception) {
+                LogHandler.error("Error decoding record: $e")
+                null
+            }
+        }
     }
 }
 

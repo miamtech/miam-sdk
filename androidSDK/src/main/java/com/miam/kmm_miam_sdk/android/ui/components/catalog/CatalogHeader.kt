@@ -1,6 +1,10 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.catalog.CatalogContent
+import com.miam.kmmMiamCore.component.catalog.CatalogContract
+import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmm_miam_sdk.android.ressource.Image.guests
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -29,15 +37,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmmMiamCore.component.catalog.CatalogContent
-import com.miam.kmmMiamCore.component.catalog.CatalogContract
-import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 
 @Composable
 fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
     val showFullHeader = state.content == CatalogContent.DEFAULT
     val isFavorit = catalogVm.currentState.catalogFilterVM.currentState.isFavorite
+
 
     fun openFilter() {
         catalogVm.setEvent(CatalogContract.Event.ToggleFilter)
@@ -51,6 +57,10 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
         catalogVm.setEvent(CatalogContract.Event.GoToFavorite)
     }
 
+    fun openPreferences() {
+        catalogVm.setEvent(CatalogContract.Event.TogglePreference)
+    }
+
     fun goToBack() {
         catalogVm.setEvent(CatalogContract.Event.GoToDefault)
     }
@@ -61,7 +71,8 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
     if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-            it(::openFilter, ::openSearch, ::goToFavorite, ::goToBack, ::getActiveFilterCount)
+
+            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount, showFullHeader)
         }
     } else {
         Column(Modifier.background(color = primary)) {
@@ -119,7 +130,6 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                     )
                 }
                 Row {
-
                     Clickable(onClick = { openSearch() }, children = {
                         Surface(
                             shape = CircleShape,
@@ -141,47 +151,69 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                         }
                     }
                     )
-
-                    Clickable(onClick = { openFilter() }, children = {
-                        Box {
+                    if (state.enablePreferences) {
+                        Clickable(onClick = { openPreferences() }) {
                             Surface(
                                 shape = CircleShape,
                                 elevation = 8.dp,
                                 modifier = Modifier.padding(horizontal = 10.dp)
                             ) {
-                                Row(
+                                Box(
                                     Modifier
                                         .background(white)
                                         .padding(8.dp)
                                 )
                                 {
                                     Image(
-                                        painter = painterResource(filter),
+                                        painter = painterResource(guests),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(primary),
-                                    )
-
-                                }
-                            }
-                            if (getActiveFilterCount() != 0) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .clip(CircleShape)
-                                        .background(Color.Red)
-                                        .align(Alignment.TopEnd)
-                                ) {
-                                    Text(
-                                        text = getActiveFilterCount().toString(),
-                                        color = white,
-                                        modifier = Modifier.align(Alignment.Center)
-
                                     )
                                 }
                             }
                         }
-                    })
+                    }
+                    if (state.enableFilters) {
+                        Clickable(onClick = { openFilter() }, children = {
+                            Box {
+                                Surface(
+                                    shape = CircleShape,
+                                    elevation = 8.dp,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                ) {
+                                    Row(
+                                        Modifier
+                                            .background(white)
+                                            .padding(8.dp)
+                                    )
+                                    {
+                                        Image(
+                                            painter = painterResource(filter),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(primary),
+                                        )
 
+                                    }
+                                }
+                                if (getActiveFilterCount() != 0) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .clip(CircleShape)
+                                            .background(Color.Red)
+                                            .align(Alignment.TopEnd)
+                                    ) {
+                                        Text(
+                                            text = getActiveFilterCount().toString(),
+                                            color = white,
+                                            modifier = Modifier.align(Alignment.Center)
+
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                    }
                     if (!isFavorit) {
                         if (showFullHeader) {
                             Box(modifier = Modifier

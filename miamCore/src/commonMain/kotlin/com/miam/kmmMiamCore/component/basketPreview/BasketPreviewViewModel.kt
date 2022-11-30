@@ -1,14 +1,25 @@
 package com.miam.kmmMiamCore.component.basketPreview
 
-import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.BasketAction
+import com.miam.kmmMiamCore.base.mvi.BasketEffect
+import com.miam.kmmMiamCore.base.mvi.BasketStore
+import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -23,6 +34,7 @@ open class BasketPreviewViewModel(val recipeId: String?) :
     private val basketStore: BasketStore by inject()
     private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
+    private val miamContext: ContextHandler by inject()
     private val lineEntriesSubject = MutableSharedFlow<List<BasketEntry>>()
 
     data class LineUpdateState(val lineUpdates: List<BasketEntry>) : State
@@ -41,18 +53,25 @@ open class BasketPreviewViewModel(val recipeId: String?) :
         )
 
     init {
-        if (recipeId != null) {
-            basketChange()
-            val job = launch(coroutineHandler) {
-                basketStore.observeSideEffect()
-                    .filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }
-                    .collect {
-                        basketChange()
-                    }
+
+        if (miamContext.isReady()) {
+            if (recipeId != null) {
+
+                basketChange()
+                val job = launch(coroutineHandler) {
+                    basketStore.observeSideEffect()
+                        .filter { basketEffect -> basketEffect == BasketEffect.BasketPreviewChange }
+                        .collect {
+                            basketChange()
+                        }
+                }
+                setState { copy(job = job) }
+                listenEntriesChanges()
             }
-            setState { copy(job = job) }
-            listenEntriesChanges()
+        } else {
+            setState { copy(line = BasicUiState.Error("Miam is not well configure check if miam is ready")) }
         }
+
     }
 
     fun dispose() {

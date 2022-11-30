@@ -1,8 +1,62 @@
-## 3.0.0
-- [FEA][COR] Clean coiunter usage
+# 3.3.0
+- [FIX][AND] Add missing templates in like button
+- [FEA][COR] Clean counter usage
 
-## 2.2.7
-- [FIX][COR] Avoid div by zero
+# 3.2.0
+- [FIX][AND] Add missing templates in myMeal and item selector
+- [FIX][AND] Add missing parameter in catalog header template
+- [FIX][AND] Remove divider not overridable from recipe detail
+- [FIX][IOS] Fix AsyncImage constructor visibility
+- [FIX][IOS] Add missing parametter to like button template
+- [FEA][IOS] SPM is available for IOS 12
+- [FIX][IOS] Add missing parameter to like button template
+- [FIX][COR] Do not need context to be set to be ready
+- [FIX][COR] Préferences didn not take into account default value to get filter string
+- [FIX][COR] Expendable entry line template. Action can be null (usd when no item is found)
+
+## 3.1.0
+- [FIX][AND] Fix Recipe card CTA text is now customizable
+- [FIX][AND] Fix modal now fit correctly in screen
+- [FIX][COR] Analytics domain, user agent and multiple sent show event
+- [FIX][IOS] Add templates and some public modifiers
+- [FEA][AND] Change lazy column into lazy grid in recipes list
+- [BRK][FIX][AND] Fix recipes page lazy loading by upgrading compose (1.3.1) and android SDK (33)
+
+## 3.0.1
+- [FIX][AND] Fix loader on prefrences screen
+- [FIX][AND] Disable guests pref
+- [FIX][COR] Fetch local excluded ingredient pref on init
+- [FIX][COR] Can't add two time same ingredient to excluded list in pref
+- [FIX][COR] Check an ingredient when you search and select it
+
+## 3.0.0
+- [FEA][COR] Toaster handler for add and like recipes
+- [FEA][COR] Singleton catalog filter service
+- [FEA][COR] Picture is avalaible in recipes ingredients
+- [FEA][AND] Add user preferences
+- [FEA][AND] Refact catalog header
+- [FEA][AND] My meal counter button
+- [FEA][IOS] Add user preferences
+- [FEA][IOS] My meal counter button
+- [BRK][AND] Upgrade koin version 
+
+## 2.5.2
+- [FIX][IOS] Pass browse catalog action to favorites empty view template
+
+## 2.5.1
+- [FIX][IOS] Add missing browse catalog action in FavoritesView
+
+## 2.5.0
+- [FEA][COR] Prevent infinit loading on basket preview if miam is not well configure
+- [FIX][IOS] Add missing template for recipe card loading view
+- [FEA][IOS] Add a parameter to control the height of recipe card view. 
+- [FEA][IOS] Recipe carousel
+
+## 2.4.0
+- [FEA][COR] carousel view model
+- [FEA][AND] recipe carousel component
+- [FIX][IOS] Infinite loading on recipe card when using a template
+- [FIX][IOS] Add missing templates
 
 ## 2.3.0
 - [FIX][IOS] Fix Auto resize for UIkit table cells
@@ -24,6 +78,9 @@
 - [FIX][COR] Dynamic stand alone favorite page controleur
 - [FIX][COR] Analytics add pos id to confirm event
 - [FIX][COR] add params to template
+
+## 2.2.7
+- [FIX][COR] Avoid div by zero
 
 ## 2.2.6
 - [FIX][AND] Difficulty checkbox in filter are now working

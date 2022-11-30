@@ -152,7 +152,7 @@ struct BasketPreviewRow: View {
                         })
                         
                         // Plus Minus View
-                        CounterView(count: count, isDisable: false, lightMode: true) {
+                        CounterView(count: count, lightMode: true) {
                             increaseQty()
                         } decrease: {
                             decreaseQty()

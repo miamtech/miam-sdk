@@ -34,19 +34,19 @@ class ImageLoader : ObservableObject {
 }
 
 @available(iOS 14, *)
-struct AsyncImage<Placeholder:View> : View {
+public struct AsyncImage<Placeholder:View> : View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
     private let height: CGFloat
     
-    init(url:URL, @ViewBuilder placeholder: () -> Placeholder, height: CGFloat ){
+    public init(url:URL, @ViewBuilder placeholder: () -> Placeholder, height: CGFloat ){
         self.placeholder = placeholder()
         self.height = height
         _loader = StateObject(wrappedValue: ImageLoader(url: url))
         
     }
     
-    var body: some View {
+    public var body: some View {
         HStack {
             if (loader.image != nil) {
                 GeometryReader { geo in

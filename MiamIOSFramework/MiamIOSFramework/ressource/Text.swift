@@ -67,6 +67,25 @@ public class MiamText {
     public var replaceIngredient = "Remplacer"
    
     public var persons = "pers."
+    public var numberOfPersons = "Nombre de personnes"
+    
+    public var mealsAdded = "repas ajouté"
+    public var mealsAddedPlural = "repas ajoutés"
+    public var cancel = "Annuler"
+    public var see = "Voir les"
+    public var meals = "repas"
+    public var addTag = "Ajouter +"
+   
+    public var searchTagPlaceholder = "Rechercher un ingrédient"
+  
+    public var preferencesTitle = "Mes préférences"
+    public var preferencesSearchTitle = "Je n'aime pas"
+    public var dietTitle = "Régime particulier"
+    public var dietSubtitle = "Avez-vous un régime particulier ?"
+    public var cookingModesTitle = "Mode de cuisson"
+    public var cookingModesSubtitle = "De quels modes de cuissons disposez-vous ?"
+    public var tastesTitle = "Goûts"
+    public var tastesSubtitle = "Y a-t-il des ingrédients que vous n'aimez pas ?"
     
     private init(){}
 }

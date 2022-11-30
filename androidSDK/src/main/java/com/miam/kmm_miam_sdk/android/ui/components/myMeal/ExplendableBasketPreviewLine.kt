@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewItem
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreviewRecipeLine
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
@@ -51,7 +52,14 @@ fun ExpendableBasketPreviewLine(
                             goToDetail
                         )
                     }
-                    Column(
+                    if (Template.myMealRecipeExpendableAction != null) {
+                        Template.myMealRecipeExpendableAction?.let {
+                            it(expandedState,{expandedState = !expandedState}){
+                                removeRecipe()
+                            }
+                        }
+                    } else {
+                        Column(
                         Modifier
                             .fillMaxHeight()
                             .background(Colors.ternary.copy(alpha = 0.1f))
@@ -83,8 +91,8 @@ fun ExpendableBasketPreviewLine(
                             )
                         }
                     }
+                    }
                 }
-
             }
         )
 

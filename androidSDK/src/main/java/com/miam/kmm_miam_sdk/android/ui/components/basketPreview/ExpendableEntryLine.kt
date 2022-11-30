@@ -105,14 +105,8 @@ fun expendableEntryLine(
                         entry.relationships?.groceriesEntry?.data?.attributes?.name ?: ""
 
                     if (Template.basketPreviewExpendRowTemplate != null) {
-
-                        Template.basketPreviewExpendRowTemplate?.let {
-                            it(productName) {
-                                if (click != null) {
-                                    click(entry)
-                                }
-                            }
-                        }
+                        val action = if (click == null) null else ({ click(entry) })
+                        Template.basketPreviewExpendRowTemplate?.let { it(action, productName) }
                     } else {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,

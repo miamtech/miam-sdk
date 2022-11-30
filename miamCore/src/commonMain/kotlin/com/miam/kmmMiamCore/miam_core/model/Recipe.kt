@@ -19,14 +19,14 @@ data class Recipe private constructor(
     override val attributes: RecipeAttributes? = null,
     override val relationships: RecipeRelationships? = null,
     val recipeLike: RecipeLike? = null
-) : Record(), BasketPreviewEntry {
+): Record(), BasketPreviewEntry {
 
     constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ) : this(
+    ): this(
         id,
         if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<RecipeAttributes>(
             attributes
@@ -66,26 +66,6 @@ data class Recipe private constructor(
         get() {
             var duration = this.attributes!!.cookingTime ?: 0.minutes
             return duration.toString()
-        }
-
-    val difficultyLabel: String
-        get() {
-            return when (this.attributes!!.difficulty) {
-                1 -> "Chef débutant"
-                2 -> "Chef intermédiaire"
-                3 -> "Top chef"
-                else -> "Chef débutant"
-            }
-        }
-
-    val costLabel: String
-        get() {
-            return when (this.attributes!!.difficulty) {
-                1 -> "faible"
-                2 -> "moyen"
-                3 -> "difficile"
-                else -> "moyen"
-            }
         }
 
     val sortedStep: List<RecipeStep>
@@ -159,7 +139,7 @@ data class RecipeAttributes constructor(
     val videoId: String? = "",
 
     val promoted: Boolean? = false,
-) : Attributes()
+): Attributes()
 
 @Serializable
 data class RecipeRelationships(
@@ -173,7 +153,7 @@ data class RecipeRelationships(
     var recipeSteps: RecipeStepListRelationship? = null,
     @SerialName("recipe-type")
     var recipeType: RecipeTypeRelationship? = null
-) : Relationships() {
+): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         ingredients?.buildFromIncluded(includedRecords)
         recipeProvider?.buildFromIncluded(includedRecords)
@@ -195,14 +175,14 @@ data class RecipeInfos(
  */
 
 @Serializable(with = RecipeRelationshipListSerializer::class)
-class RecipeRelationshipList(override var data: List<Recipe>) : RelationshipList() {
+class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Recipe::class) as List<Recipe>
     }
 }
 
 @Serializer(forClass = RecipeRelationshipList::class)
-object RecipeRelationshipListSerializer : KSerializer<RecipeRelationshipList> {
+object RecipeRelationshipListSerializer: KSerializer<RecipeRelationshipList> {
     override fun serialize(encoder: Encoder, value: RecipeRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)

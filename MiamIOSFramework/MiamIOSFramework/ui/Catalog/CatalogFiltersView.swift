@@ -11,13 +11,12 @@ import miamCore
 @available(iOS 14, *)
 struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
-    @ObservedObject var catalogFilters: CatalogFilterVM
+    @ObservedObject var catalogFilters = CatalogFilterViewModel.sharedInstance
     
     let closeFilters: () -> Void
     let applyFilters: () -> Void
     
-    init(catalogFiltersModel: CatalogFilterVM, apply: @escaping () -> Void, close: @escaping () -> Void) {
-        catalogFilters = catalogFiltersModel
+    init(apply: @escaping () -> Void, close: @escaping () -> Void) {
         applyFilters = apply
         closeFilters = close
     }
@@ -41,21 +40,21 @@ struct CatalogFiltersView: View {
                     
                     // Filters
                     CatalogFilterSection(title: MiamText.sharedInstance.filtersDifficultySectionTitle, filters: catalogFilters.difficulty) { option in
-                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnDifficultyChanged(difficulty: option))
+                        catalogFilters.setEvent(event: SingletonFilterContractEvent.OnDifficultyChanged(difficulty: option))
                     }
                     Divider()
                     CatalogFilterSection(title: MiamText.sharedInstance.filterCostSectionTitle, filters: catalogFilters.cost) { option in
-                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnCostFilterChanged(costFilter: option))
+                        catalogFilters.setEvent(event: SingletonFilterContractEvent.OnCostFilterChanged(costFilter: option))
                     }
                     Divider()
                     CatalogFilterSection(title: MiamText.sharedInstance.filterPreparationTimeSectionTitle, filters: catalogFilters.time) { option in
-                        catalogFilters.model.setEvent(event: CatalogFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
+                        catalogFilters.setEvent(event: SingletonFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
                     }
                     
                     Spacer()
                     
                     Button {
-                        catalogFilters.model.clearFilter()
+                        catalogFilters.clear()
                     } label: {
                         Text(MiamText.sharedInstance.removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
                     }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))

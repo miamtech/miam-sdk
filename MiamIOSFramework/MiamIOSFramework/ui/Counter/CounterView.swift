@@ -8,47 +8,38 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct CounterView: View {
+public struct CounterView: View {
     
     public var count: Int
-    public var isDisable: Bool
     public var increase:  () -> Void
     public var decrease:  () -> Void
     public var lightMode: Bool = false
     
     public init(
         count: Int,
-        isDisable: Bool,
         increase: @escaping () -> Void,
         decrease: @escaping () -> Void
     ) {
         self.count = count
-        self.isDisable = isDisable
         self.increase = increase
         self.decrease = decrease
     }
     
     public init(
         count: Int,
-        isDisable: Bool,
         lightMode: Bool,
         increase: @escaping () -> Void,
         decrease: @escaping () -> Void
     ) {
         self.count = count
-        self.isDisable = isDisable
         self.lightMode = lightMode
         self.increase = increase
         self.decrease = decrease
     }
     
-    var body: some View {
-        if(Template.sharedInstance.counterTemplate != nil) {
-            Template.sharedInstance.counterTemplate!(
-                count
-               ,{increase()}
-               ,{decrease()}
-            )
+    public var body: some View {
+        if let template = Template.sharedInstance.counterViewTemplate {
+            template(count, lightMode, {increase()}, {decrease()})
         } else {
             HStack{
                 Button(action: {
@@ -87,7 +78,6 @@ struct CounterView: View {
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         CounterView(count: 12 ,
-                    isDisable: false,
                     increase: {() -> () in  print("ok")},
                     decrease: {() -> () in  print("not ok")}
             )

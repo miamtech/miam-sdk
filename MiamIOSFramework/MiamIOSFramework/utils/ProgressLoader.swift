@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct ProgressLoader: View {
+public struct ProgressLoader: View {
     
     @State private var isAnimating = false
     @State private var showProgress = false
@@ -18,11 +18,12 @@ struct ProgressLoader: View {
         Animation.linear(duration: 0.5)
             .repeatForever(autoreverses: false)
     }
-    init(color: Color){
+    
+    public init(color: Color){
         self.color = color
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             Circle()
                 .stroke(lineWidth: 8.0)

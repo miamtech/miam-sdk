@@ -156,7 +156,8 @@ data class BasketPreviewLine(
                     recipePrice += (qty * unitPrice) / numberOfRecipesForEntry
                 }
 
-                val pricePerGuest = recipePrice / guests
+                val guestDivider = max(1, guests)
+                val pricePerGuest = recipePrice / guestDivider
 
                 fromRecipe(
                     recipe,

@@ -34,6 +34,11 @@ public class MiamManager {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
         ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
+        ContextHandlerInstance.shared.instance.setContext(context: NSObject())
+        UserPreferencesInstance.shared.instance.putInt(key: "testInt", value: 42)
+        UserPreferencesInstance.shared.instance.putList(key: "testString", value: ["1","2","3"])
+        print("IntPref success \( UserPreferencesInstance.shared.instance.getIntOrNull(key: "testInt"))")
+        print("ListPref success \( UserPreferencesInstance.shared.instance.getListOrNull(key: "testString"))")
         basketHandler = BasketHandlerInstance.shared.instance
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
@@ -49,7 +54,7 @@ public class MiamManager {
         UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
-        //initCustomText()
+        //initTemplate()
     }
 
     
@@ -102,25 +107,19 @@ public class MiamManager {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.counterTemplate =
-        {(count: Int,
-          increase: @escaping () -> Void,
-          decrease: @escaping () -> Void ) -> AnyView in
+        Template.sharedInstance.ingredientNotInBasketRowTemplate =
+        {(name: String,
+          action: (() -> Void)?) -> AnyView in
             AnyView(
                 HStack{
                     Button(action: {
-                        decrease()
+                        if(action != nil){
+                            action!()
+                        }
                     }) {
                         Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                    }
-                    Text(String(count))
-                    Button(action: {
-                        increase()
-                    }) {
-                        Image(systemName: "plus.circle").foregroundColor(.blue)
                     }
                 }
             )}
     }
 }
-

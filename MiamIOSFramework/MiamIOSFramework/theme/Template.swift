@@ -18,28 +18,40 @@ public class Template {
     
     
     /**
-        recipe view Model
-         look : ( ) -> Void
-         buy: () -> Void
+    recipe: Recipe?
+    isRecipeInCart: Bool
+    isLikeEnabled: Bool
+    isLiked: Bool
+    showMealIdeaTag: Bool
+    goToDetailsAction: () -> Void
+    showOrAddRecipeAction: () -> Void
+    toggleLikeAction: () -> Void
      */
-    public var recipeCardTemplate : ((_: RecipeCardVM,
-                                      _ : @escaping () -> Void,
-                                      _ : @escaping () -> Void)  -> AnyView)? = nil
+    public var recipeCardTemplate : ((Recipe?,
+                                      Bool,
+                                      Bool,
+                                      Bool,
+                                      @escaping () -> Void,
+                                      @escaping () -> Void)  -> AnyView)? = nil
+    
+    public var recipeCardLoadingViewTemplate: (()->AnyView)? = nil
     
     /**
-     First parameter Int is the current value of counter
-     Second parameter is decrese function
-     Third parameter is increase function
+     count: Int - the current value of counter
+     lightMode: Bool - Show or hide "persons" text
+     decrease: () -> Void
+     increase: () -> Void
      */
-    public var counterTemplate : ((_ : Int,
-                                   _ : @escaping () -> Void,
-                                   _ : @escaping () -> Void)  -> AnyView)? = nil
+    public var counterViewTemplate : ((Int,
+                                       Bool,
+                                       @escaping () -> Void,
+                                       @escaping () -> Void)  -> AnyView)? = nil
     
     /**
      Second parameter Int is de interger part of the price
      First parameter Int is decimal part of the price
      */
-    public var priceTemplate : ((_ : Int,_ : Int )  -> AnyView)? = nil
+    public var priceViewTemplate : ((_ : Int,_ : Int )  -> AnyView)? = nil
     
     /// ItemSelector Templates
     
@@ -64,15 +76,21 @@ public class Template {
 
     
     /**
-     closeDetail : () -> Unit
-     recipe : Recipe
-     
+     mediaURL: String?
+     title: String
+     difficulty: Int
+     totalTime: String
+     showTitleInHeader: Bool
+     isLikeEnabled: Bool
      */
-    public var recipeDetailHeaderTemplate : ((
-             _: @escaping  () -> Void,
-            _: Recipe
-                ) -> AnyView
-        )? = nil
+    public var recipeDetailsHeaderTemplate : ((
+            String?,
+            String,
+            Int,
+            String,
+            Binding<Bool>,
+            Bool
+    ) -> AnyView)? = nil
     
     /**
      _: Recipe
@@ -82,27 +100,27 @@ public class Template {
         )? = nil
         
     /**
-     ingredients: [Ingredient],
-     vmRecipe : RecipeViewModel
-     guest: count,
-     increase function
-     decrese function
+     ingredients: [Ingredient]
+     recipeGuests: Int
+     currentGuests: Int
+     increaseGuestsAction: () -> Void
+     decreaseGuestsAction: () -> Void
      */
-    public  var recipeDetailIngredientsTemplate : ( (
-            _: [Ingredient],
-            _: RecipeViewModel,
-            _ : Int,
-            _ : @escaping () -> Void,
-            _ : @escaping () -> Void
-                ) -> AnyView )? = nil
+    public  var recipeDetailsIngredientsViewTemplate : ((
+        [Ingredient],
+        Int,
+        Int,
+        @escaping () -> Void,
+        @escaping () -> Void
+    ) -> AnyView )? = nil
+    
+    
     /**
      steps : [RecipeStep],
-     vmRecipe : RecipeViewModel
      */
-    public  var recipeDetailStepsTemplate :  ((
-            _ : [RecipeStep],
-            _ : RecipeViewModel
-                ) -> AnyView )? =  nil
+    public  var recipeDetailStepsViewTemplate :  ((
+        [RecipeStep]
+    ) -> AnyView )? =  nil
     
     /**
      recipe: Recipe,
@@ -113,8 +131,8 @@ public class Template {
     public var recipeDetailFooterTemplate : ((
            // _: Recipe,
             _ : RecipeViewModel,
-            _ : () -> Void,
-            _ : () -> Void
+            _ : @escaping () -> Void,
+            _ : @escaping () -> Void
                 ) -> AnyView )? =  nil
 
 
@@ -135,8 +153,8 @@ public class Template {
         String,
         Int,
         String,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -144,8 +162,8 @@ public class Template {
      continueShoppingAction: () -> Void
      */
     public var basketPreviewFooterTemplate: ((
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -163,8 +181,8 @@ public class Template {
         String,
         String,
         String,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -182,15 +200,38 @@ public class Template {
      */
     public var ingredientNotInBasketRowTemplate: ((
         String,
-        () -> Void
+        (() -> Void)?
     )-> AnyView)? = nil
 
 
     /**
-     catalogViewModel: CatalogVM
+     loadingText: String
      */
-    public var catalogViewTemplate: ((
-        CatalogVM
+    public var catalogLoadingViewTemplate: ((
+        String
+    ) -> AnyView)? = nil
+    
+    /**
+     recipeListPageViewModel: RecipeListPageViewModel?
+     packages: [CatalogPackage]
+     catalogContent: CatalogModelContent
+     Binding var showingPackageRecipes: Bool
+     Binding var showingFavorites: Bool
+     Binding var headerHeight: Double
+     searchString: String
+     browseCatalogAction: () -> Void
+     navigateToRecipeAction: (Package) -> Void
+     */
+    public var catalogSuccessViewTemplate: ((
+        RecipeListPageViewModel?,
+        [CatalogPackage],
+        CatalogModelContent,
+        Binding<Bool>,
+        Binding<Bool>,
+        Binding<Double>,
+        String,
+        @escaping () -> Void,
+        @escaping (Package) -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -200,18 +241,18 @@ public class Template {
      */
     public var catalogSearchViewTemplate: ((
         CatalogVM,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
    
     /**
      searchString: String
      browseCatalogAction: () -> Void
-     showingFavorites = false
+     showingFavorites
      */
     public var catalogRecipePageNoResultsViewTemplate: ((
         String,
-        () -> Void,
+        @escaping () -> Void,
         Bool
     ) -> AnyView)? = nil
     
@@ -221,11 +262,15 @@ public class Template {
      */
     public var catalogPackageRowTemplate: ((
         CatalogPackage,
-        (CatalogPackage) -> Void
+        @escaping (CatalogPackage) -> Void
     ) -> AnyView)? = nil
 
-
-    public var catalogViewHeaderTemplate: AnyView? = nil
+    /**
+     closeCatalogAction: (() -> Void)?
+     */
+    public var catalogViewHeaderTemplate: ((
+        (() -> Void)?
+    ) -> AnyView)? = nil
 
     /**
      showBackButton: Bool
@@ -238,10 +283,10 @@ public class Template {
     public var catalogViewToolbarTemplate: ((
         Bool,
         Bool,
-        () -> Void,
-        () -> Void,
-        () -> Void,
-        () -> Void
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 
 
@@ -257,7 +302,7 @@ public class Template {
     public var catalogFiltersSectionTemplate: ((
         String,
         Array<CatalogFilterOptions>,
-        (CatalogFilterOptions) -> Void
+        @escaping (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
 
     /**
@@ -266,7 +311,7 @@ public class Template {
      */
     public var catalogFilterRowTemplate: ((
         CatalogFilterOptions,
-        (CatalogFilterOptions) -> Void
+        @escaping (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
     
     
@@ -276,12 +321,188 @@ public class Template {
      */
     public var favoritesSuccessViewTemplate: ((
         [Recipe],
-        () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
+     browseCatalogAction: () -> Void
      */
     public var favoritesEmptyViewTemplate: ((
-        
+       @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealsLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealsEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     isLiked: Bool
+     likeButtonTapped: () -> Void
+     */
+    public var likeButtonTemplate: ((
+        Bool,
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+   
+    /**
+     recipes: [Recipe]
+     tagTappedAction: () -> Void
+     */
+    public var tagViewTemplate: ((
+        [Recipe],
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     showingListModal: Binding<Bool>
+     showingPopup: Binding<Bool>
+     recipeList : NSArray
+     basketTagVm : BasketTagVM
+     */
+    public var basketTagListModal: ((
+        Binding<Bool>,
+        Binding<Bool>,
+        NSArray,
+        BasketTagVM
+    ) -> AnyView)? = nil
+   
+    /**
+     product : BasketPreviewLine
+     isSelected : Bool
+     */
+    public var itemSelectorProductRowTemplate: ((
+        BasketPreviewLine,
+        Bool
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var myMealButtonEmptyViewTemplate: ((
+    ) -> AnyView)? = nil
+    
+    /**
+     mealsCount: Int
+     onButtonTapped: () -> Void
+     */
+    public var myMealButtonSuccessViewTemplate: ((
+        Int,
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     
+     */
+    public var preferencesLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+   
+    /**
+     numberOfPersons: Int
+     ingredients: [CheckableTag]
+     equipments: [CheckableTag]
+     diets: [CheckableTag]
+     numberOfRecipesFound: Int
+     onNumberOfGuestsChanged: (Int) -> Void
+     onToggleTag: (CheckableTag) -> Void
+     onAddTagTapped: () -> Void
+     closeTapped: () -> Void
+     applyTapped: () -> Void
+     */
+    public var preferencesSuccessViewTemplate: ((
+        Int,
+        [CheckableTag],
+        [CheckableTag],
+        [CheckableTag],
+        Int,
+        @escaping (Int) -> Void,
+        @escaping (CheckableTag) -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void,
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     tag: CheckableTag
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferenceListItemViewTemplate: ((
+        CheckableTag,
+        @escaping (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     title: String
+     subtitle: String
+     preferences: [CheckableTag]
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferencesListViewTemplate: ((
+        String,
+        String,
+        [CheckableTag],
+        @escaping (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+   
+    /**
+     title: String
+     subtitle: String
+     tags: [CheckableTag]
+     geometry: GeometryProxy
+     onToggleTag: (CheckableTag) -> Void
+     onAddTagTapped: () -> Void
+     */
+    public var preferencesTagsListViewTemplate: ((
+        String,
+        String,
+        [CheckableTag],
+        GeometryProxy,
+        @escaping (CheckableTag) -> Void,
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+   
+    /**
+     onTapped: () -> Void
+     */
+    public var addTagViewTemplate: ((
+        @escaping () -> Void
+    ) -> AnyView)? = nil
+    
+    /**
+     tag: CheckableTag
+     onToggleTag: (CheckableTag) -> Void
+     */
+    public var preferencesTagViewTemplate: ((
+        CheckableTag,
+        @escaping (CheckableTag) -> Void
+    ) -> AnyView)? = nil
+    
+    
+    /**
+     cancelTapped: () -> Void
+     applyTapped: () -> Void
+     numberOfRecipesFound: Int
+     */
+    public var preferencesFooterView: ((
+        @escaping () -> Void,
+        @escaping () -> Void,
+        Int
+    ) -> AnyView)? = nil
+    
+    /**
+     preferencesSearchViewModel: PreferencesSearchVM
+     closeAction: () -> Void
+     */
+    public var preferencesSearchViewTemplate: ((
+        PreferencesSearchVM,
+        @escaping () -> Void
     ) -> AnyView)? = nil
 }

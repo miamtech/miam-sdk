@@ -8,34 +8,47 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct LikeButton: View {
-    @State var isLiked: Bool
-    let likeButtonTapped: () -> Void
+public struct LikeButton: View {
+    private let recipeId: String
     
-    var body: some View {
-        ZStack(){
-            Circle().fill(Color.miamColor(.white))
-                .frame(width: 40, height: 40)
-            if(isLiked){
-                Image.miamImage(icon: .likeFilled)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 26.0, height: 26.0, alignment: .center)
-                    .foregroundColor(Color.miamColor(.primaryText))
-                    .padding(.top,3)
+    @ObservedObject var viewModel: LikeButtonVM
+    public init(recipeId : String) {
+        self.recipeId = recipeId
+        self.viewModel = LikeButtonVM()
+        self.viewModel.setRecipe(recipeId: recipeId)
+    }
+
+    public var body: some View {
+        HStack {
+            if let template = Template.sharedInstance.likeButtonTemplate {
+                template(self.viewModel.isLiked, { self.viewModel.toggleLike() })
             } else {
-                Image.miamImage(icon: .like)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 26.0, height: 26.0, alignment: .center)
-                    .foregroundColor(Color.miamColor(.primaryText))
-                    .padding(.top,3)
+                ZStack(){
+                    Circle().fill(Color.miamColor(.white))
+                        .frame(width: 40, height: 40)
+                    if(self.viewModel.isLiked){
+                        Image.miamImage(icon: .likeFilled)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 26.0, height: 26.0, alignment: .center)
+                            .foregroundColor(Color.miamColor(.primaryText))
+                            .padding(.top,3)
+                    } else {
+                        Image.miamImage(icon: .like)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 26.0, height: 26.0, alignment: .center)
+                            .foregroundColor(Color.miamColor(.primaryText))
+                            .padding(.top,3)
+                    }
+                }.onTapGesture {
+                    self.viewModel.toggleLike()
+                }
             }
-        }.onTapGesture {
-            isLiked.toggle()
-            likeButtonTapped()
         }
+        .onAppear(perform: self.viewModel.listenRecipeLikeChanges)
+        .onDisappear(perform: self.viewModel.stopListenRecipeLikeChanges)
     }
 }

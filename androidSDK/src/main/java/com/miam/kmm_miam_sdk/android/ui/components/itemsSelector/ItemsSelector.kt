@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -56,7 +56,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.Price
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ItemsSelector : KoinComponent {
+class ItemsSelector: KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
 
@@ -68,18 +68,24 @@ class ItemsSelector : KoinComponent {
         val state = vmItemSelector.uiState.collectAsState()
         Scaffold(
             topBar = {
-                Row(modifier = previousButtonContainer) {
-                    IconButton(
-                        modifier = previousButton,
-                        onClick = {
-                            vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                if (Template.productSelectorHeaderTemplate != null) {
+                    Template.productSelectorHeaderTemplate?.let {
+                        it { vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview) }
+                    }
+                } else {
+                    Row(modifier = previousButtonContainer) {
+                        IconButton(
+                            modifier = previousButton,
+                            onClick = {
+                                vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
+                            }
+                        ) {
+                            Image(
+                                colorFilter = ColorFilter.tint(previousIconColor),
+                                painter = painterResource(previous),
+                                contentDescription = "Previous"
+                            )
                         }
-                    ) {
-                        Image(
-                            colorFilter = ColorFilter.tint(previousIconColor),
-                            painter = painterResource(previous),
-                            contentDescription = "Previous"
-                        )
                     }
                 }
             },
@@ -95,43 +101,46 @@ class ItemsSelector : KoinComponent {
                             it(state.value.selectedItem!!)
                         }
                     } else {
-                        Surface(modifier = selectedItemContainerBorder) {
-                            Row(
-                                modifier = selectedItemContainer,
-                                horizontalArrangement = selectedItemContainerArrangement,
-                                verticalAlignment = selectedItemContainerAlignment
-                            ) {
-                                Image(
-                                    painter = rememberImagePainter(state.value.selectedItem?.picture),
-                                    contentDescription = "product image",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = selectedItemImage,
-                                )
-                                Column(
-                                    modifier = selectedItemInfosContainer,
-                                    verticalArrangement = Arrangement.SpaceBetween
+                        Column {
+                            Surface(modifier = selectedItemContainerBorder) {
+                                Row(
+                                    modifier = selectedItemContainer,
+                                    horizontalArrangement = selectedItemContainerArrangement,
+                                    verticalAlignment = selectedItemContainerAlignment
                                 ) {
-                                    Text(
-                                        text = state.value.selectedItem?.bplDescription?.get(0)
-                                            ?: " ",
-                                        textAlign = TextAlign.Center,
-                                        style = bodySmallBold
+                                    Image(
+                                        painter = rememberImagePainter(state.value.selectedItem?.picture),
+                                        contentDescription = "product image",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = selectedItemImage,
                                     )
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = pricePosition
+                                    Column(
+                                        modifier = selectedItemInfosContainer,
+                                        verticalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Price(
-                                            price = state.value.selectedItem?.price?.toDouble()
-                                                ?: 0.0,
-                                            isTotalPrice = true
+                                        Text(
+                                            text = state.value.selectedItem?.bplDescription?.get(0)
+                                                ?: " ",
+                                            textAlign = TextAlign.Center,
+                                            style = bodySmallBold
                                         )
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = pricePosition
+                                        ) {
+                                            Price(
+                                                price = state.value.selectedItem?.price?.toDouble()
+                                                    ?: 0.0,
+                                                isTotalPrice = true
+                                            )
+                                        }
                                     }
                                 }
                             }
+                            Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
                         }
                     }
-                    Spacer(modifier = Modifier.padding(vertical = sSpacerHeight))
+
 
                     if (Template.productOptionListTemplate != null) {
                         Template.productOptionListTemplate?.let {
@@ -153,7 +162,7 @@ class ItemsSelector : KoinComponent {
 
 
                         LazyVerticalGrid(
-                            cells = GridCells.Adaptive(itemsWidth.dp),
+                            columns = GridCells.Adaptive(minSize = itemsWidth.dp),
                             contentPadding = PaddingValues(
                                 start = mPadding,
                                 top = lPadding,
@@ -213,5 +222,3 @@ class ItemsSelector : KoinComponent {
         )
     }
 }
-  
-

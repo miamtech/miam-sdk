@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
+import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
@@ -90,6 +91,10 @@ object Template {
 
 ////////////////// Product Selector //////////////////
 
+    var productSelectorHeaderTemplate: (@Composable() (
+        back: () -> Unit
+    ) -> Unit)? = null
+
     var currentProductTemplate: (@Composable() (
         selectedItem: BasketPreviewLine
     ) -> Unit)? = null
@@ -147,13 +152,19 @@ object Template {
     ) -> Unit)? = null
 
     var basketPreviewExpendRowTemplate: (@Composable() (
-        productName: String,
-        add: () -> Unit,
+        add: (() -> Unit)?,
+        productName: String
     ) -> Unit)? = null
 
 /////////////// My Meal Page  //////////////////////
 
     var myMealLoaderTemplate: (@Composable() () -> Unit)? = null
+
+    var myMealRecipeExpendableAction: (@Composable() (
+        isExpended: Boolean,
+        expend: () -> Unit,
+        removeRecipe: () -> Unit,
+    ) -> Unit)? = null
 
 ///////////////////  Tag  //////////////////////////
 
@@ -168,9 +179,11 @@ object Template {
     var CatalogHeader: (@Composable() (
         openFilter: () -> Unit,
         openSearch: () -> Unit,
+        openPreferences: () -> Unit,
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
-        getActiveFilterCount: () -> Int
+        getActiveFilterCount: () -> Int,
+        isMainPage: Boolean
     ) -> Unit)? = null
 
     var CatalogCategoryTemplate: (@Composable() (
@@ -211,6 +224,9 @@ object Template {
      */
     var CatalogResultPageLazyLoaderTemplate: (@Composable() () -> Unit)? = null
 
+    var CatalogPageTitleTemplate: (@Composable() (
+        title: String
+    ) -> Unit)? = null
 
     var CatalogFavoritEmptyTemplate: (@Composable() (
         returnToCatalog: () -> Unit
@@ -220,5 +236,44 @@ object Template {
         returnToCatalog: () -> Unit
     ) -> Unit)? = null
 
+
+    //////////////// Preferences /////////////////////////
+
+    var PreferencesLoadingTemplate: (@Composable() () -> Unit)? = null
+
+    var PreferencesHeaderTemplate: (@Composable() (closePref: () -> Unit) -> Unit)? = null
+
+    var PreferencesFooterTemplate: (@Composable() (
+        closePref: () -> Unit, applyPref: () -> Unit, recipesFound: Int
+    ) -> Unit)? = null
+
+    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int, guestChanged: (count: Int) -> Unit) -> Unit)? = null
+
+    var DietPreferencesSectionTemplate: (@Composable() (
+        dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
+    ) -> Unit)? = null
+
+    var IngredientPreferencesSectionTemplate: (@Composable() (
+        ingredientsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit, toggleSearch: () -> Unit
+    ) -> Unit)? = null
+
+    var EquipmentPreferencesSectionTemplate: (@Composable() (
+        equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
+    ) -> Unit)? = null
+
+////////////////// MY MEAL BUTTON ////////////
+
+    var myMealButtonSuccessViewTemplate: (@Composable() (
+        recipeCount: Int, onclick: () -> Unit
+    ) -> Unit)? = null
+
+    var myMealButtonEmptyViewTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+///////////// LIKE BUTTON ////////////////////////
+
+    var LikeButtonTemplate: (@Composable() (
+        isLiked: Boolean, likeAction: () -> Unit
+    ) -> Unit)? = null
 
 }
