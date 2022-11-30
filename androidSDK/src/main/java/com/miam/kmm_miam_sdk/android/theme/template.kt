@@ -142,7 +142,9 @@ object Template {
         itemsCount: Int,
         delete: () -> Unit,
         replace: () -> Unit,
-        onQuantityChanged: (newQuantity: Int) -> Unit
+        onQuantityChanged: (newQuantity: Int) -> Unit,
+        // Compose bug, build crash with exactly 10 parameters
+        composeBugParam: Int?
     ) -> Unit)? = null
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (

@@ -76,7 +76,8 @@ fun EntryLine(
                 (entry.record as BasketEntry).itemsCountOrZero,
                 { delete() },
                 { replace() },
-                { newQuantity -> onQuantityChanged(newQuantity) }
+                { newQuantity -> onQuantityChanged(newQuantity) },
+                null
             )
         }
     } else {
