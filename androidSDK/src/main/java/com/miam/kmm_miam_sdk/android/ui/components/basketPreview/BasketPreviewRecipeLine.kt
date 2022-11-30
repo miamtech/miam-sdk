@@ -39,9 +39,7 @@ fun BasketPreviewRecipeLine(
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
     val guestDivider = max(1, line.count)
-    val pricePerGuest =
-        "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
-    var guestCount by remember { mutableStateOf(line.count) }
+    val pricePerGuest = "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
 
     fun goToRecipeDetail() {
         goToDetail()
@@ -141,9 +139,8 @@ fun BasketPreviewRecipeLine(
                     lightMode = false,
                     isDisable = false,
                     minValue = 1,
-                    maxValue = 99,
-
-                    )
+                    maxValue = 99
+                )
             }
             Divider(Modifier.fillMaxWidth())
         }

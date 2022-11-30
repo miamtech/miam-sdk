@@ -8,10 +8,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +27,7 @@ import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodyBold
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmallBold
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewColor.BPPLDescriptionColor
-import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.delete
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.swap
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.subcomponent.MultipleRecipeTag
@@ -47,21 +43,9 @@ fun EntryLine(
     vmBasketPreview: BasketPreviewViewModel,
     goToItemSelector: () -> Unit
 ) {
-    val productName =
-        entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1)
-            .lowercase(Locale.getDefault())
+    val productName = entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1).lowercase(Locale.getDefault())
     val description = entry.bplDescription[0]
     val sharingCount = entry.inlineTag
-
-    var forceRepaintCounter = false
-    var rememberedEntry by remember { mutableStateOf(entry) }
-
-    if (rememberedEntry.id != entry.id) {
-        // object is reused reset remembered count
-        rememberedEntry = entry
-        forceRepaintCounter = true
-    }
-
 
     fun delete() {
         vmBasketPreview.removeBasketEntry(entry.record as BasketEntry)
@@ -89,70 +73,94 @@ fun EntryLine(
                 entry.count,
                 sharingCount.toString(),
                 entry.price,
-                (entry.record as BasketEntry).relationships!!.items!!.data.size,
+                (entry.record as BasketEntry).itemsCountOrZero,
                 { delete() },
                 { replace() },
                 { newQuantity -> onQuantityChanged(newQuantity) }
             )
         }
     } else {
+        BasketPreviewProductLine(
+            productName,
+            description,
+            entry.picture,
+            entry.count,
+            sharingCount.toString(),
+            entry.price,
+            (entry.record as BasketEntry).itemsCountOrZero,
+            { delete() },
+            { replace() }
+        ) { newQuantity -> onQuantityChanged(newQuantity) }
+    }
+}
 
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.SpaceBetween
+@Composable
+fun BasketPreviewProductLine(
+    productName: String,
+    description: String,
+    picture: String,
+    quantity: Int,
+    sharingCount: String,
+    price: String,
+    itemsCount: Int,
+    delete: () -> Unit,
+    replace: () -> Unit,
+    onQuantityChanged: (Int) -> Unit
+) {
+    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                painter = rememberImagePainter(picture),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(80.dp)
+                    .width(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+            )
+            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+            Column {
+                Text(
+                    text = productName,
+                    style = bodyBold
+                )
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+                Text(
+                    text = description,
+                    color = BPPLDescriptionColor,
+                    style = bodySmallBold,
+                    modifier = Modifier.widthIn(200.dp, 200.dp)
+                )
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+                MultipleRecipeTag(sharingCount)
+            }
+            IconButton(
+                modifier = Modifier.size(30.dp),
+                onClick = { delete() }
             ) {
                 Image(
-                    painter = rememberImagePainter(entry.picture),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(80.dp)
-                        .width(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                    painter = painterResource(BasketPreviewImage.delete),
+                    contentDescription = "delete"
                 )
-                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                Column {
-                    Text(
-                        text = productName,
-                        style = bodyBold
-                    )
-                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
-                    Text(
-                        text = description,
-                        color = BPPLDescriptionColor,
-                        style = bodySmallBold,
-                        modifier = Modifier.widthIn(200.dp, 200.dp)
-                    )
-                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
-                    MultipleRecipeTag(sharingCount)
-                }
-                IconButton(
-                    modifier = Modifier.size(30.dp),
-                    onClick = { delete() }
-                ) {
-                    Image(
-                        painter = painterResource(delete),
-                        contentDescription = "delete"
-                    )
-                }
             }
+        }
 
-            Column(Modifier.fillMaxWidth()) {
-                Spacer(modifier = Modifier.padding(vertical = 4.dp))
-                EntryPriceAndActionRow(
-                    (entry.record as BasketEntry).relationships!!.items!!.data.size,
-                    entry.price.toDouble(),
-                    entry.count,
-                    { counterValue -> onQuantityChanged(counterValue) },
-                    ::replace,
-                    forceRepaintCounter
-                )
-                Spacer(modifier = Modifier.padding(vertical = 4.dp))
-                Divider(Modifier.fillMaxWidth(), color = Color.LightGray)
-            }
+        Column(Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
+            EntryPriceAndActionRow(
+                itemsCount,
+                price.toDouble(),
+                quantity,
+                { onQuantityChanged(it) },
+                { replace() },
+            )
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
+            Divider(Modifier.fillMaxWidth(), color = Color.LightGray)
         }
     }
 }
@@ -164,8 +172,7 @@ fun EntryPriceAndActionRow(
     price: Double,
     currentEntryCount: Int,
     onCounterChanged: (counterValue: Int) -> Unit,
-    replace: () -> Unit,
-    forceRepaintCounter: Boolean
+    replace: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -212,8 +219,7 @@ fun EntryPriceAndActionRow(
             lightMode = true,
             isDisable = false,
             minValue = 0,
-            maxValue = 99,
-            forceRepaint = forceRepaintCounter
+            maxValue = 99
         )
     }
 }
@@ -221,5 +227,5 @@ fun EntryPriceAndActionRow(
 @Preview
 @Composable
 fun EntryPriceAndActionRowPreview() {
-    EntryPriceAndActionRow(2, 14.90, 4, {}, {}, false)
+    EntryPriceAndActionRow(2, 14.90, 4, {}, {})
 }

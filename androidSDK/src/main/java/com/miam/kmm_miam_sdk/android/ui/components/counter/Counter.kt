@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.countTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundDisableColor
@@ -44,35 +43,25 @@ fun Counter(
     onCounterChanged: (newValue: Int) -> Unit,
     lightMode: Boolean = false,
     minValue: Int? = null,
-    maxValue: Int? = null,
-    forceRepaint: Boolean = false
+    maxValue: Int? = null
 ) {
-    var currentCount by remember { mutableStateOf(initialCount) }
-
-    // counter may be re-used, in this case the remembered count may be false and need to be adjusted
-    // the one calling the counter now it
-    if (forceRepaint) {
-        currentCount = initialCount
-    }
+    var localCount by remember(initialCount) { mutableStateOf(initialCount) }
 
     fun newValueBounded(newValue: Int): Boolean {
-        if (minValue == null || maxValue == null) return true
-
-        return newValue in (minValue..maxValue)
+        return (minValue == null || newValue >= minValue) && (maxValue == null || newValue <= maxValue)
     }
 
     fun increase() {
-        if (!newValueBounded(currentCount + 1)) return
+        if (!newValueBounded(localCount + 1)) return
 
-        onCounterChanged(++currentCount)
+        onCounterChanged(++localCount)
     }
 
     fun decrease() {
-        if (!newValueBounded(currentCount - 1)) return
+        if (!newValueBounded(localCount - 1)) return
 
-        onCounterChanged(--currentCount)
+        onCounterChanged(--localCount)
     }
-
 
     Row(
         modifier = mainRowContainer,
@@ -106,7 +95,7 @@ fun Counter(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = currentCount.toString() + if (lightMode) "" else " pers.",
+                    text = localCount.toString() + if (lightMode) "" else " pers.",
                     color = countTextColor,
                     modifier = countText
                 )

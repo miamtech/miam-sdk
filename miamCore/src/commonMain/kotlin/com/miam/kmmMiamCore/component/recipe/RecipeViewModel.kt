@@ -116,14 +116,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    fun increaseGuest() {
-        updateGuest(currentState.guest + 1)
-    }
-
-    fun decreaseGuest() {
-        updateGuest(currentState.guest - 1)
-    }
-
     fun updateGuest(nbGuest: Int) {
         // reduce guest between min and max
         var boundedGuests = max(MIN_GUESTS, nbGuest)
@@ -175,7 +167,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             )
             setState { copy(show_event_sent = true) }
         }
-        
+
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),
