@@ -35,30 +35,31 @@ public struct ItemSelector: View  {
                 )
                 ScrollView{
                     VStack(alignment: .leading){
-                        if (Template.sharedInstance.currentProductTemplate != nil) {
-                            Template.sharedInstance.currentProductTemplate!(
-                                viewModel.state!.selectedItem!
-                            )
-                        } else {
-                            ItemSelectorProductRow(product: viewModel.state!.selectedItem! ,isSelected: true)
+                        if let selectedItem = viewModel.state?.selectedItem {
+                            if let template = Template.sharedInstance.currentProductTemplate {
+                                template(selectedItem)
+                            } else {
+                                ItemSelectorProductRow(product: selectedItem, isSelected: true)
+                            }
                         }
-                        if(Template.sharedInstance.productOptionListTemplate != nil) {
-                            Template.sharedInstance.productOptionListTemplate!(
-                                viewModel.state!.itemList ?? [],
+                        
+                        if let template = Template.sharedInstance.productOptionListTemplate {
+                            template(
+                                viewModel.state?.itemList ?? [],
                                 viewModel.chooseItem
                             )
                         }
                         else {
-                            ForEach((viewModel.state!.itemList ?? []).indices, id: \.self)
-                            { i in
+                            ForEach((viewModel.state?.itemList ?? []), id: \.self) { item in
                                 HStack{
                                     ItemSelectorProductRow(
-                                        product: viewModel.state!.itemList![i]
+                                        product: item
                                     )
                                 }.onTapGesture {
-                                    viewModel.chooseItem(index: i)
+                                    if let index = viewModel.state?.itemList?.firstIndex(of: item) {
+                                        viewModel.chooseItem(index: index)
+                                    }
                                 }
-                                
                             }
                         }
                     }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
