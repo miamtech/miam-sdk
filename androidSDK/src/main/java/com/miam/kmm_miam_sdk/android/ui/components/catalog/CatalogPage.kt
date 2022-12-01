@@ -241,23 +241,37 @@ private fun CatalogEmptyPage(
                 it { returnToCategoriesPage() }
             }
         } else {
-            Image(
-                painter = painterResource(CatalogImage.empty),
-                contentDescription = null,
-                Modifier
-                    .padding(vertical = 16.dp)
-            )
-            Text(
-                text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                color = white,
-                style = Typography.subtitleBold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Text(
-                text = "Essayez une nouvelle recherche.",
-                color = white
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primary)
+            ) {
+
+                Column(
+                    Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(CatalogImage.empty),
+                        contentDescription = null,
+                        Modifier
+                            .padding(vertical = 16.dp)
+                    )
+                    Text(
+                        text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
+                        color = white,
+                        style = Typography.subtitleBold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Text(
+                        text = "Essayez une nouvelle recherche.",
+                        color = white
+                    )
+                }
+            }
         }
     }
 }
