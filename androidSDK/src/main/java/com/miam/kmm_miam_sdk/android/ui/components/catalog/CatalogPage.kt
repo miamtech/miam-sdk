@@ -167,25 +167,26 @@ private fun CatalogEmptyPage(
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(primary)
-    ) {
 
-        Column(
-            Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
-            if (isFavorit) {
-                if (Template.CatalogFavoritEmptyTemplate != null) {
-                    Template.CatalogFavoritEmptyTemplate?.let {
-                        it { returnToCategoriesPage() }
-                    }
-                } else {
+    if (isFavorit) {
+        if (Template.CatalogFavoritEmptyTemplate != null) {
+            Template.CatalogFavoritEmptyTemplate?.let {
+                it { returnToCategoriesPage() }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primary)
+            ) {
+
+                Column(
+                    Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(CatalogImage.empty),
                         contentDescription = null,
@@ -232,31 +233,31 @@ private fun CatalogEmptyPage(
                         }
                     }
                 }
-            } else {
-                if (Template.CatalogSearchResultEmptyTemplate != null) {
-                    Template.CatalogSearchResultEmptyTemplate?.let {
-                        it { returnToCategoriesPage() }
-                    }
-                } else {
-                    Image(
-                        painter = painterResource(CatalogImage.empty),
-                        contentDescription = null,
-                        Modifier
-                            .padding(vertical = 16.dp)
-                    )
-                    Text(
-                        text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                        color = white,
-                        style = Typography.subtitleBold,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Text(
-                        text = "Essayez une nouvelle recherche.",
-                        color = white
-                    )
-                }
             }
+        }
+    } else {
+        if (Template.CatalogSearchResultEmptyTemplate != null) {
+            Template.CatalogSearchResultEmptyTemplate?.let {
+                it { returnToCategoriesPage() }
+            }
+        } else {
+            Image(
+                painter = painterResource(CatalogImage.empty),
+                contentDescription = null,
+                Modifier
+                    .padding(vertical = 16.dp)
+            )
+            Text(
+                text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
+                color = white,
+                style = Typography.subtitleBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Text(
+                text = "Essayez une nouvelle recherche.",
+                color = white
+            )
         }
     }
 }
