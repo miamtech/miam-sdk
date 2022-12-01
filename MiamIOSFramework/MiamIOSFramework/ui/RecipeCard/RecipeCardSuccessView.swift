@@ -30,7 +30,6 @@ internal struct RecipeCardSuccessView: View {
                         url: URL(
                             string: recipe?.attributes?.mediaUrl ?? ""
                         )! ,
-                        placeholder: { Text("loading ...")},
                         height : 240
                     ).frame(height: 240)
                         .contentShape(Rectangle())
