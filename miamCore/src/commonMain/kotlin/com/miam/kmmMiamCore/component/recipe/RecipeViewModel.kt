@@ -125,8 +125,9 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
 
     private fun addOrAlterRecipe(): Job {
         val action = GroceriesListAction.AlterRecipeList(recipe!!.id, uiState.value.guest)
+        setState { copy(guestUpdating = true) }
         val job = groceriesListStore.dispatch(action)
-        setState { copy(isInCart = true) }
+        job.invokeOnCompletion { setState { copy(guestUpdating = false) } }
         return job
     }
 

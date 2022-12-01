@@ -54,6 +54,7 @@ object CounterStyle {
     var countBorder: Modifier = Modifier
         .background(color = primary)
         .height(48.dp)
+        .width(70.dp)
 
 
     /**

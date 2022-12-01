@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +44,8 @@ fun Counter(
     onCounterChanged: (newValue: Int) -> Unit,
     lightMode: Boolean = false,
     minValue: Int? = null,
-    maxValue: Int? = null
+    maxValue: Int? = null,
+    isLoading: Boolean = false
 ) {
     var localCount by remember(initialCount) { mutableStateOf(initialCount) }
 
@@ -75,46 +77,62 @@ fun Counter(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(
-                onClick = { decrease() },
-                enabled = !isDisable,
-                modifier = lessButton.background(
-                    if (isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
-                )
-            ) {
-                Image(
-                    painter = painterResource(less),
-                    contentDescription = "less icon",
-                    colorFilter = ColorFilter.tint(lessIconColor),
-                    modifier = lessButtonIcon
-                )
-            }
-            Row(
-                modifier = countBorder,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = localCount.toString() + if (lightMode) "" else " pers.",
-                    color = countTextColor,
-                    modifier = countText
-                )
-            }
-            IconButton(
-                modifier = plusButton.background(
-                    if (isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
-                ),
-                onClick = { increase() },
-                enabled = !isDisable
-            ) {
-                Image(
-                    painter = painterResource(plus),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(plusIconColor),
-                    modifier = plusButtonIcon
-                )
-            }
+            Plus({ decrease() }, isDisable)
+            MiddleText(localCount, lightMode, isLoading)
+            Minus({ increase() }, isDisable)
         }
+    }
+}
+
+@Composable
+fun Plus(decrease: () -> Unit, isDisable: Boolean) {
+    IconButton(
+        onClick = { decrease() },
+        enabled = !isDisable,
+        modifier = lessButton.background(if (isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor)
+    ) {
+        Image(
+            painter = painterResource(less),
+            contentDescription = "less icon",
+            colorFilter = ColorFilter.tint(lessIconColor),
+            modifier = lessButtonIcon
+        )
+    }
+}
+
+@Composable
+fun MiddleText(localCount: Int, lightMode: Boolean, isLoading: Boolean) {
+
+    Row(
+        modifier = countBorder,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(color = countTextColor)
+        } else {
+            Text(
+                text = localCount.toString() + if (lightMode) "" else " pers.",
+                color = countTextColor,
+                modifier = countText
+            )
+        }
+    }
+}
+
+@Composable
+fun Minus(increase: () -> Unit, isDisable: Boolean) {
+    IconButton(
+        onClick = { increase() },
+        enabled = !isDisable,
+        modifier = plusButton.background(if (isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor)
+    ) {
+        Image(
+            painter = painterResource(plus),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(plusIconColor),
+            modifier = plusButtonIcon
+        )
     }
 }
 
