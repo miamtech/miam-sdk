@@ -1,8 +1,5 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import Route
-import RouteService
-import RouteServiceAction
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
@@ -42,7 +39,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
-    private val routeService: RouteService by inject()
+
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
@@ -157,17 +154,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         setState { copy(activeStep = newActiveStep) }
     }
 
-    fun onClose() {
-        routeService.popRoute()
-    }
-
-    fun onNavigateToDetail() {
-        routeService.dispatch(RouteServiceAction.SetRoute(Route("detail", "", true, {}, routeService.getCurrentRoute())))
-    }
-
-    fun onNavigateToPreview() {
-        routeService.dispatch(RouteServiceAction.SetRoute(Route("preview", "", true, {}, routeService.getCurrentRoute())))
-    }
 
     fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }

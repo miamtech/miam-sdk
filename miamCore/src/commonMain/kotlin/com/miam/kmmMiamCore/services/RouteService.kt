@@ -59,7 +59,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
                         }
                     }
                     state.value = state.value.copy(route = action.route)
-
+                    state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
             else -> launch { }

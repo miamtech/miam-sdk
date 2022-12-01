@@ -2,7 +2,6 @@ package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 
 import RouteService
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -80,17 +79,14 @@ class RouterOutlet: KoinComponent {
         val state by vmRouter.uiState.collectAsState()
 
         if (state.isOpen) {
-            Box {
-                BackHandler {
-                    vmRouter.setEvent(RouterOutletContract.Event.CloseDialog)
-                }
-                Dialog(
-                    onDismissRequest = { routeService.previous() },
-                    properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = true)
-                ) {
-                    FullScreenContent({ close() }, { goToReplaceItem() }, { goToDetail(it) }, state, vmRouter)
-                }
+
+            Dialog(
+                onDismissRequest = { routeService.previous() },
+                properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = true)
+            ) {
+                FullScreenContent({ close() }, { goToReplaceItem() }, { goToDetail(it) }, state, vmRouter)
             }
+
         }
     }
 }
@@ -123,11 +119,6 @@ fun FullScreenContent(
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
         }
     }
-}
-
-@Composable
-fun FullScreen(content: @Composable () -> Unit) {
-    // TODO replace usage
 }
 
 

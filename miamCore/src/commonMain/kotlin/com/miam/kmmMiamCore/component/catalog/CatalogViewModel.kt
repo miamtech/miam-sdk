@@ -102,14 +102,17 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 }
             }
             is CatalogContract.Event.TogglePreference -> {
+                if (currentState.preferenceOpen) routeService.popRoute()
                 routeService.dispatch(RouteServiceAction.SetRoute(Route("preferences", "", true, {}, routeService.getCurrentRoute())))
                 setState { copy(preferenceOpen = !currentState.preferenceOpen) }
             }
             is CatalogContract.Event.ToggleFilter -> {
+                if (currentState.filterOpen) routeService.popRoute()
                 routeService.dispatch(RouteServiceAction.SetRoute(Route("filter", "", true, {}, routeService.getCurrentRoute())))
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
             is CatalogContract.Event.ToggleSearch -> {
+                if (currentState.searchOpen) routeService.popRoute()
                 routeService.dispatch(RouteServiceAction.SetRoute(Route("search", "", true, {}, routeService.getCurrentRoute())))
                 setState { copy(searchOpen = !currentState.searchOpen) }
             }
@@ -124,7 +127,6 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
             is CatalogContract.Event.OnCloseModal -> {
-                routeService.popRoute()
                 setState { copy(searchOpen = false, filterOpen = false, preferenceOpen = false) }
             }
         }

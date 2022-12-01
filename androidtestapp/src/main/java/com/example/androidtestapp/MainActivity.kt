@@ -115,6 +115,10 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
             toast.show()
         }
+        routeService.onRouteChange {
+            val toast = Toast.makeText(this@MainActivity, it?.name ?: "", Toast.LENGTH_SHORT)
+            toast.show()
+        }
         ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
         ToasterHandler.setOnLikeRecipeText("Votre repas a été ajouté à votre liste de favoris. Retrouvez-le à tout moment.")
         basketHandler = BasketHandlerInstance.instance
@@ -157,10 +161,6 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                 retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it))
             }
         }
-//        routeService.onRouteChange {
-//            Toast.makeText(this@MainActivity, it?.title, Toast.LENGTH_LONG).show()
-//        }
-
     }
 
     private val recipeloader: @Composable () -> Unit = {
@@ -284,7 +284,12 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
 
         super.onCreate(savedInstanceState)
-
+//        val onBackPressedCallback = object: OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                routeService.previous()
+//            }
+//        }
+//        this@MainActivity.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initMiam()
         initFakeBasket()
         setContent {
@@ -295,10 +300,10 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             var isCatalogPage by remember { mutableStateOf(false) }
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") {
+                    BackHandler {
+                        routeService.previous()
+                    }
                     Column {
-                        BackHandler {
-                            routeService.previous()
-                        }
                         Row {
                             Button(onClick = {
                                 isMyMealPage = !isMyMealPage

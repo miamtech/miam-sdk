@@ -1,14 +1,18 @@
 package com.miam.kmmMiamCore.component.router
 
+import Route
+import RouteService
+import RouteServiceAction
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
 import org.koin.core.component.inject
 
-open class RouterOutletViewModel :
+open class RouterOutletViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     private val analyticsService: Analytics by inject()
+    private val routeService: RouteService by inject()
 
     fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
         LogHandler.info("Miam RouterOutletViewModel goToDetail $vmRecipe")
@@ -94,12 +98,30 @@ open class RouterOutletViewModel :
                 setState { copy(isOpen = true) }
                 LogHandler.info("Miam RouterOutletViewModel will OpenDialog ${this.currentState}")
             }
-            RouterOutletContract.Event.CloseDialog -> setState { copy(isOpen = false) }
+            RouterOutletContract.Event.CloseDialog -> onClose()
         }
     }
 
+    fun onClose() {
+        setState { copy(isOpen = false) }
+        routeService.popRoute()
+    }
+
+    fun onPrevious() {
+        val route = routeService.getCurrentRoute()
+        route?.let {
+            if (route.previous != null) {
+                setState { copy(content = RouterContent.valueOf(route.previous.name)) }
+                return
+            }
+        }
+        onClose()
+    }
+
+
     private fun navigateTo(destination: RouterContent) {
         setState { copy(content = destination) }
+        routeService.dispatch(RouteServiceAction.SetRoute(Route(destination.name, "", true, { onPrevious() }, routeService.getCurrentRoute())))
         if (!uiState.value.isOpen) {
             setEvent(RouterOutletContract.Event.OpenDialog)
             LogHandler.info("Miam RouterOutletViewModel dialog should be open ${this.currentState}")
