@@ -1,6 +1,7 @@
 # 3.2.1
 - [FIX][AND] Add missing templates in like button 
 - [FIX][IOS] Unwrapp AsyncImage URL and replace placeholder 
+
 # 3.2.0
 - [FIX][AND] Add missing templates in myMeal and item selector
 - [FIX][AND] Add missing parameter in catalog header template

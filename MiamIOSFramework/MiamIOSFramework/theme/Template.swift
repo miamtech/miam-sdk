@@ -16,6 +16,11 @@ public class Template {
     
     private init(){}
     
+    /**
+     width: CGFloat
+     height: CGFloat
+     */
+    public var asyncImageLoadingTemplate :  ((CGFloat, CGFloat) -> AnyView )? =  nil
     
     /**
     recipe: Recipe?

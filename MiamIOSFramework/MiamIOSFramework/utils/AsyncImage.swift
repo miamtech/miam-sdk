@@ -56,10 +56,14 @@ public struct AsyncImage : View {
                        .frame(width: geo.size.width * 1, height: height)
                        .clipped()
                 } else {
-                    Rectangle()
-                        .fill( Color.miamColor(.borderLight))
-                        .frame(width: geo.size.width * 1, height: height)
-                        .clipped()
+                    if let template = Template.sharedInstance.asyncImageLoadingTemplate {
+                        template(geo.size.width * 1,height)
+                    } else {
+                        Rectangle()
+                            .fill( Color.miamColor(.borderLight))
+                            .frame(width: geo.size.width * 1, height: height)
+                            .clipped()
+                    }
                 }
             }
         }.onAppear(perform: loader.load)
