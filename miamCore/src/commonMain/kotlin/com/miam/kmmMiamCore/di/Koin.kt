@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.di
 
+import RouteService
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
 import com.miam.kmmMiamCore.base.mvi.LikeStore
@@ -68,6 +69,7 @@ val storeModule = module {
 
 val servicesModule = module {
     single { Analytics() }
+    single { RouteService() }
     single { UserPreferences() }
     single { SingletonPreferencesViewModel() }
     single { SingletonFilterViewModel() }

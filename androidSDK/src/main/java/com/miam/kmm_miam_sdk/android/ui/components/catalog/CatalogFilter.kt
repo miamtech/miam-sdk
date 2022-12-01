@@ -1,5 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
+import RouteService
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,10 +24,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
@@ -37,14 +41,16 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.close
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 
 // TODO Refact with filter service
 class CatalogFilter(
     private val catalogFilterVM: SingletonFilterViewModel,
     private val closeDialog: () -> Unit,
     private val goToFilterResult: () -> Unit
-) {
+): KoinComponent {
     private fun onCostFilterChanged(catOption: CatalogFilterOptions) {
         catalogFilterVM.setEvent(SingletonFilterContract.Event.OnCostFilterChanged(catOption))
     }
@@ -62,12 +68,18 @@ class CatalogFilter(
         catalogFilterVM.getRecipeCount()
     }
 
+    private val routeService: RouteService by inject()
+
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Content() {
 
         val state = catalogFilterVM.uiState.collectAsState()
 
-        FullScreen {
+        Dialog(
+            onDismissRequest = { routeService.previous() },
+            properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = true)
+        ) {
             if (Template.CatalogFilterTemplate != null) {
                 Template.CatalogFilterTemplate?.let {
                     it(
@@ -150,7 +162,7 @@ class CatalogFilter(
                             Box(
                                 modifier = Modifier
                                     .border(
-                                        border = BorderStroke(1.dp, Colors.primary),
+                                        border = BorderStroke(1.dp, primary),
                                         shape = RoundedCornerShape(50)
                                     )
                             ) {

@@ -1,6 +1,15 @@
 package com.miam.kmmMiamCore.component.recipe
 
-import com.miam.kmmMiamCore.base.mvi.*
+import Route
+import RouteService
+import RouteServiceAction
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
+import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
@@ -33,7 +42,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
-    private val likeStore: LikeStore by inject()
+    private val routeService: RouteService by inject()
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
@@ -148,6 +157,18 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         setState { copy(activeStep = newActiveStep) }
     }
 
+    fun onClose() {
+        routeService.popRoute()
+    }
+
+    fun onNavigateToDetail() {
+        routeService.dispatch(RouteServiceAction.SetRoute(Route("detail", "", true, {}, routeService.getCurrentRoute())))
+    }
+
+    fun onNavigateToPreview() {
+        routeService.dispatch(RouteServiceAction.SetRoute(Route("preview", "", true, {}, routeService.getCurrentRoute())))
+    }
+
     fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
@@ -175,7 +196,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             )
             setState { copy(show_event_sent = true) }
         }
-        
+
         setState {
             copy(
                 recipeState = BasicUiState.Success(recipe),

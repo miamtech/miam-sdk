@@ -1,10 +1,12 @@
 package com.example.androidtestapp
 
+import RouteService
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -39,6 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
@@ -69,12 +74,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.random.Random
+
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -87,7 +92,9 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
 
+
     val userPreferences: UserPreferences by inject()
+    val routeService: RouteService by inject()
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
@@ -150,6 +157,10 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                 retailerBasketSubject.emit(ExampleState(retailerBasketSubject.value.items, it))
             }
         }
+//        routeService.onRouteChange {
+//            Toast.makeText(this@MainActivity, it?.title, Toast.LENGTH_LONG).show()
+//        }
+
     }
 
     private val recipeloader: @Composable () -> Unit = {
@@ -267,94 +278,106 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
     }
 
+
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
+
         initMiam()
         initFakeBasket()
         setContent {
+            val navController = rememberNavController()
             var isMyMealPage by remember { mutableStateOf(false) }
             var isFavoritePage by remember { mutableStateOf(false) }
             var isTagPage by remember { mutableStateOf(false) }
             var isCatalogPage by remember { mutableStateOf(false) }
-            Column {
-                Row {
-                    Button(onClick = {
-                        isMyMealPage = !isMyMealPage
-                        isFavoritePage = false
-                        isTagPage = false
-                        isCatalogPage = false
-                    }) {
-                        Text("my meal")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isFavoritePage = !isFavoritePage
-                        isTagPage = false
-                        isCatalogPage = false
-                    }) {
-                        Text("favorite")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isTagPage = !isTagPage
-                        isCatalogPage = false
-                        isFavoritePage = false
-                    }) {
-                        Text("tags")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isCatalogPage = !isCatalogPage
-                        isTagPage = false
-                        isFavoritePage = false
-                    }) {
-                        Text("Catalog")
-                    }
-                }
-
-                if (isMyMealPage) {
-                    MyMeal(this@MainActivity).Content()
-                } else if (isFavoritePage) {
-                    FavoritePage(this@MainActivity).Content()
-                } else if (isTagPage) {
-                    if (ContextHandlerInstance.instance.isReady()) {
-                        val tag = BasketTag(this@MainActivity)
-                        val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
-                        if (items.size > 0) {
-                            tag.bind(items[items.size - 1].id)
-                            tag.Content()
+            NavHost(navController = navController, startDestination = "home") {
+                composable("home") {
+                    Column {
+                        BackHandler {
+                            routeService.previous()
+                        }
+                        Row {
+                            Button(onClick = {
+                                isMyMealPage = !isMyMealPage
+                                isFavoritePage = false
+                                isTagPage = false
+                                isCatalogPage = false
+                            }) {
+                                Text("my meal")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isFavoritePage = !isFavoritePage
+                                isTagPage = false
+                                isCatalogPage = false
+                            }) {
+                                Text("favorite")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isTagPage = !isTagPage
+                                isCatalogPage = false
+                                isFavoritePage = false
+                            }) {
+                                Text("tags")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isCatalogPage = !isCatalogPage
+                                isTagPage = false
+                                isFavoritePage = false
+                            }) {
+                                Text("Catalog")
+                            }
                         }
 
-                    }
-                } else if (isCatalogPage) {
-                    var catalog = Catalog(this@MainActivity)
-                    catalog.bind(
-                        catalogPageColumns = 2
-                    )
-                    catalog.enablePreference()
-                    catalog.Content()
-                } else {
-                    Column(
-                        Modifier
-                            .fillMaxWidth(),
-                        //.verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        content(retailerBasketSubject)
-                        Divider()
-                        Carousel(context = this@MainActivity)
-                        Divider()
-                        recipes(this@MainActivity)
+                        if (isMyMealPage) {
+                            MyMeal(this@MainActivity).Content()
+                        } else if (isFavoritePage) {
+                            FavoritePage(this@MainActivity).Content()
+                        } else if (isTagPage) {
+                            if (ContextHandlerInstance.instance.isReady()) {
+                                val tag = BasketTag(this@MainActivity)
+                                val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
+                                if (items.size > 0) {
+                                    tag.bind(items[items.size - 1].id)
+                                    tag.Content()
+                                }
 
-                        val mmb = MyMealButton(this@MainActivity)
-                        mmb.bind {
-                            isMyMealPage = !isMyMealPage
-                            isFavoritePage = false
-                            isTagPage = false
-                            isCatalogPage = false
+                            }
+                        } else if (isCatalogPage) {
+                            var catalog = Catalog(this@MainActivity)
+                            catalog.bind(
+                                catalogPageColumns = 2
+                            )
+                            catalog.enablePreference()
+                            catalog.Content()
+                        } else {
+                            Column(
+                                Modifier
+                                    .fillMaxWidth(),
+                                //.verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                content(retailerBasketSubject)
+                                Divider()
+                                Carousel(context = this@MainActivity)
+                                Divider()
+                                recipes(this@MainActivity)
+
+                                val mmb = MyMealButton(this@MainActivity)
+                                mmb.bind {
+                                    isMyMealPage = !isMyMealPage
+                                    isFavoritePage = false
+                                    isTagPage = false
+                                    isCatalogPage = false
+                                }
+                                mmb.Content()
+                            }
                         }
-                        mmb.Content()
                     }
                 }
             }
