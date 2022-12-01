@@ -14,6 +14,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+@Suppress("UserPreferencesInstance used by ios and component")
+object RouteServiceInstance: KoinComponent {
+    val instance: RouteService by inject()
+}
 
 data class Route(val name: String, val title: String, val isModalRoute: Boolean, val goToPreviousAction: () -> Unit, val previous: Route?)
 
