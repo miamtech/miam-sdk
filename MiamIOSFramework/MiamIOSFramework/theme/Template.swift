@@ -287,7 +287,7 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void,
         @escaping () -> Void,
-        @escaping () -> Void
+        @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
 
