@@ -33,7 +33,7 @@ object HttpRoutes {
 }
 
 
-class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
+class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
     SupplierDataSource, PackageDataSource, TagDataSource, KoinComponent {
 
@@ -371,10 +371,12 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
 
 /////////////////////////////// PRICING ///////////////////////////////////////////////////
 
-    override suspend fun getRecipePrice(idRecipe: String, idPos: Int): Pricing {
+    override suspend fun getRecipePrice(idRecipe: String, idPos: Int, serves: Int?): Pricing {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipePrice $idRecipe $idPos")
+        var params = "point_of_sale_id=$idPos"
+        serves?.let { params = "$params&serves=$serves" }
         val returnValue = httpClient.get<Pricing> {
-            url(HttpRoutes.RECIPE_ENDPOINT + "$idRecipe/pricing?point_of_sale_id=$idPos")
+            url(HttpRoutes.RECIPE_ENDPOINT + "$idRecipe/pricing?$params")
         }
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipePrice $idRecipe $idPos $returnValue")
         return returnValue
@@ -474,5 +476,4 @@ class MiamAPIDatasource : RecipeDataSource, GroceriesListDataSource, PointOfSale
         LogHandler.info("[Miam][MiamAPIDatasource] end getTagById ")
         return returnValue as Tag
     }
-    
 }
