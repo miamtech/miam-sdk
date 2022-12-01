@@ -167,25 +167,26 @@ private fun CatalogEmptyPage(
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(primary)
-    ) {
 
-        Column(
-            Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
-            if (isFavorit) {
-                if (Template.CatalogFavoritEmptyTemplate != null) {
-                    Template.CatalogFavoritEmptyTemplate?.let {
-                        it { returnToCategoriesPage() }
-                    }
-                } else {
+    if (isFavorit) {
+        if (Template.CatalogFavoritEmptyTemplate != null) {
+            Template.CatalogFavoritEmptyTemplate?.let {
+                it { returnToCategoriesPage() }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primary)
+            ) {
+
+                Column(
+                    Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(CatalogImage.empty),
                         contentDescription = null,
@@ -232,12 +233,26 @@ private fun CatalogEmptyPage(
                         }
                     }
                 }
-            } else {
-                if (Template.CatalogSearchResultEmptyTemplate != null) {
-                    Template.CatalogSearchResultEmptyTemplate?.let {
-                        it { returnToCategoriesPage() }
-                    }
-                } else {
+            }
+        }
+    } else {
+        if (Template.CatalogSearchResultEmptyTemplate != null) {
+            Template.CatalogSearchResultEmptyTemplate?.let {
+                it { returnToCategoriesPage() }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primary)
+            ) {
+
+                Column(
+                    Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(CatalogImage.empty),
                         contentDescription = null,

@@ -284,10 +284,12 @@ public class Template {
      filtersTapped: () -> Void
      searchTapped: () -> Void
      favoritesTapped: () -> Void
+     preferenceTapped: () -> Void
      */
     public var catalogViewToolbarTemplate: ((
         Bool,
         Bool,
+        @escaping () -> Void,
         @escaping () -> Void,
         @escaping () -> Void,
         @escaping () -> Void,
