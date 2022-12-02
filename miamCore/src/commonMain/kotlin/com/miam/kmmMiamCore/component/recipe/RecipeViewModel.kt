@@ -39,10 +39,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
-
-
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
-
 
     private val recipe: Recipe?
         get() = this.currentState.recipe
@@ -153,8 +150,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         if (uiState.value.activeStep == newActiveStep) return
         setState { copy(activeStep = newActiveStep) }
     }
-
-
+    
     fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {

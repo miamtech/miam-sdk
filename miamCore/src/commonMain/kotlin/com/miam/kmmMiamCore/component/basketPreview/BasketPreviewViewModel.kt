@@ -83,7 +83,6 @@ open class BasketPreviewViewModel(val recipeId: String?):
                 val newBpl = updateBplEntries(entries)
                 lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
                 setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
-
                 // create a copy of the list so you can clear it here
                 basketStore.dispatch(
                     BasketAction.UpdateBasketEntries(

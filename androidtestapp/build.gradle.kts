@@ -72,8 +72,6 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:1.6.7")
     implementation("org.slf4j:slf4j-nop:1.7.25")
     implementation("androidx.navigation:navigation-runtime-ktx:2.5.3")
-    implementation(project(mapOf("path" to ":miamCore")))
-
 }
 repositories {
     mavenCentral()
