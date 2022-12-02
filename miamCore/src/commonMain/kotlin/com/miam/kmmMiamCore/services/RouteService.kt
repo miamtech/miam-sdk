@@ -1,3 +1,5 @@
+package com.miam.kmmMiamCore.services
+
 import com.miam.kmmMiamCore.base.mvi.Action
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
@@ -99,9 +101,8 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         return state.value.route
     }
 
-    fun clearModalHistory(route: Route?) {
+    private fun clearModalHistory(route: Route?) {
         if (route == null || !route.isModalRoute) {
-            state.value = state.value.copy(route = route)
             return
         }
         clearModalHistory(route.previous)

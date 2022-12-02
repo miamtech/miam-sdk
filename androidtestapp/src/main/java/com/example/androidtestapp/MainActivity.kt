@@ -1,6 +1,5 @@
 package com.example.androidtestapp
 
-import RouteService
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -59,6 +58,7 @@ import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
@@ -80,7 +80,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.random.Random
 
-
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -91,7 +90,6 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in main activity $exception ${exception.stackTraceToString()}")
     }
-
 
     val userPreferences: UserPreferences by inject()
     val routeService: RouteService by inject()
@@ -278,18 +276,9 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
     }
 
-
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
-//        val onBackPressedCallback = object: OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                routeService.previous()
-//            }
-//        }
-//        this@MainActivity.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initMiam()
         initFakeBasket()
         setContent {

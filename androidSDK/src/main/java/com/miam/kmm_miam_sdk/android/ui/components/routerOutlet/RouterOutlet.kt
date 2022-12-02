@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 
-import RouteService
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -13,6 +12,7 @@ import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterContent
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
@@ -82,7 +82,7 @@ class RouterOutlet: KoinComponent {
 
             Dialog(
                 onDismissRequest = { routeService.previous() },
-                properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = true)
+                properties = DialogProperties(usePlatformDefaultWidth = false)
             ) {
                 FullScreenContent({ close() }, { goToReplaceItem() }, { goToDetail(it) }, state, vmRouter)
             }

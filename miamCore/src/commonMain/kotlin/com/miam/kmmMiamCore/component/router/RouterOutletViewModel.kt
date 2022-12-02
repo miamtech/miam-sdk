@@ -1,11 +1,11 @@
 package com.miam.kmmMiamCore.component.router
 
-import Route
-import RouteService
-import RouteServiceAction
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.services.Route
+import com.miam.kmmMiamCore.services.RouteService
+import com.miam.kmmMiamCore.services.RouteServiceAction
 import org.koin.core.component.inject
 
 open class RouterOutletViewModel:
@@ -102,22 +102,21 @@ open class RouterOutletViewModel:
         }
     }
 
-    fun onClose() {
+    private fun onClose() {
         setState { copy(isOpen = false) }
         routeService.popRoute()
     }
 
-    fun onPrevious() {
+    private fun onPrevious() {
         val route = routeService.getCurrentRoute()
         route?.let {
-            if (route.previous != null) {
+            if (route.previous != null && route.previous.isModalRoute) {
                 setState { copy(content = RouterContent.valueOf(route.previous.name)) }
                 return
             }
         }
         onClose()
     }
-
 
     private fun navigateTo(destination: RouterContent) {
         setState { copy(content = destination) }

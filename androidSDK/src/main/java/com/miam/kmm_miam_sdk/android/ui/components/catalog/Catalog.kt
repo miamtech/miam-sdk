@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import RouteService
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.foundation.layout.Box
@@ -11,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

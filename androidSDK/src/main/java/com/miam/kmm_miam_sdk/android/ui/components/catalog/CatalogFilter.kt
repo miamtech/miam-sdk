@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import RouteService
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +33,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -78,7 +78,7 @@ class CatalogFilter(
 
         Dialog(
             onDismissRequest = { routeService.previous() },
-            properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = true)
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             if (Template.CatalogFilterTemplate != null) {
                 Template.CatalogFilterTemplate?.let {

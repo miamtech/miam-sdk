@@ -1,6 +1,5 @@
 package com.miam.kmmMiamCore.di
 
-import RouteService
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
 import com.miam.kmmMiamCore.base.mvi.LikeStore
@@ -15,6 +14,7 @@ import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.data.repository.*
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin

@@ -1,9 +1,5 @@
 package com.miam.kmmMiamCore.component.basketPreview
 
-import Route
-import RouteService
-import RouteServiceAction
-import RouteServiceEffect
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketAction
 import com.miam.kmmMiamCore.base.mvi.BasketEffect
@@ -39,7 +35,6 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private val groceriesListStore: GroceriesListStore by inject()
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
     private val miamContext: ContextHandler by inject()
-    private val routeService: RouteService by inject()
     private val lineEntriesSubject = MutableSharedFlow<List<BasketEntry>>()
 
     data class LineUpdateState(val lineUpdates: List<BasketEntry>): State
@@ -70,13 +65,6 @@ open class BasketPreviewViewModel(val recipeId: String?):
                 }
                 setState { copy(job = job) }
                 listenEntriesChanges()
-            }
-            launch(coroutineHandler) {
-                routeService.observeSideEffect()
-                    .filter { it is RouteServiceEffect.CloseModal }
-                    .collect { _ ->
-
-                    }
             }
         } else {
             setState { copy(line = BasicUiState.Error("Miam is not well configure check if miam is ready")) }
@@ -212,14 +200,6 @@ open class BasketPreviewViewModel(val recipeId: String?):
         launch(Dispatchers.Default) {
             lineEntriesSubject.emit(newLineUpdates)
         }
-    }
-
-    fun onClose() {
-        routeService.popRoute()
-    }
-
-    fun onNavigateToDetail() {
-        routeService.dispatch(RouteServiceAction.SetRoute(Route("detail", "", true, {}, routeService.getCurrentRoute())))
     }
 
     private fun replaceItem(entry: BasketEntry) {
