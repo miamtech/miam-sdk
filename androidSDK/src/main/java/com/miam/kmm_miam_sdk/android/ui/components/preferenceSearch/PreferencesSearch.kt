@@ -35,6 +35,7 @@ import com.miam.kmmMiamCore.component.preferencesSearch.PreferencesSearchViewMod
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -46,7 +47,7 @@ class PreferencesSearch @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var back: () -> Unit = {
         throw IllegalArgumentException("[Miam][Error] you must bind back function")
@@ -69,39 +70,42 @@ class PreferencesSearch @JvmOverloads constructor(
     override fun Content() {
 
         var text by remember { mutableStateOf(TextFieldValue("")) }
-        // TODO ALEX creation du template
+
         Column(
             Modifier
                 .fillMaxSize()
                 .background(white)
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                BackButton(back)
-                SearchContainer {
-                    TextField(
-                        value = text,
-                        onValueChange = {
-                            text = it
-                            preferencesSearchVM.search(it.text)
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            disabledTextColor = Color.Transparent,
-                            backgroundColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = {
-                            Text(searchPreferencePlaceholder)
-                        }
-                    )
+            if (Template.SearchPreferencesTemplate != null) {
+                Template.SearchPreferencesTemplate?.let { it(back, text) }
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    BackButton(back)
+                    SearchContainer {
+                        TextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                                preferencesSearchVM.search(it.text)
+                            },
+                            colors = TextFieldDefaults.textFieldColors(
+                                disabledTextColor = Color.Transparent,
+                                backgroundColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            placeholder = {
+                                Text(searchPreferencePlaceholder)
+                            }
+                        )
+                    }
                 }
             }
             StateManager(preferencesSearchVM)
         }
     }
-
 
     @Composable
     fun StateManager(preferencesSearchVM: PreferencesSearchViewModel) {
@@ -111,28 +115,46 @@ class PreferencesSearch @JvmOverloads constructor(
             successView = { tags ->
                 requireNotNull(tags)
                 Column {
-                    tags.forEach {
-                        Clickable(onClick = {
-                            preferencesSearchVM.resetState()
-                            addTag(it)
-                        }) {
-                            Row(Modifier.fillMaxWidth()) {
-                                Text(
-                                    text = it.attributes!!.name,
-                                    style = body,
-                                    modifier = Modifier.padding(vertical = 16.dp)
-                                )
+                    tags.forEach { tag ->
+                        if (Template.SearchResultRowPreferencesTemplate != null) {
+                            Template.SearchResultRowPreferencesTemplate?.let {
+                                it({
+                                    preferencesSearchVM.resetState()
+                                    addTag(tag)
+                                }, tag.attributes!!.name)
+                            }
+                        } else {
+
+                            Clickable(onClick = {
+                                preferencesSearchVM.resetState()
+                                addTag(tag)
+                            }) {
+                                Row(Modifier.fillMaxWidth()) {
+                                    Text(
+                                        text = tag.attributes!!.name,
+                                        style = body,
+                                        modifier = Modifier.padding(vertical = 16.dp)
+                                    )
+                                }
                             }
                         }
                     }
                 }
             },
             loadingView = {
-                Box {
+                if (Template.SearchPreferencesLoadingTemplate != null) {
+                    Template.SearchPreferencesLoadingTemplate?.let { it() }
+                } else {
+                    Box {
+                    }
                 }
             },
             emptyView = {
-                Box {
+                if (Template.SearchPreferencesEmptyTemplate != null) {
+                    Template.SearchPreferencesEmptyTemplate?.let { it() }
+                } else {
+                    Box {
+                    }
                 }
             },
             onTryAgain = { },
@@ -158,10 +180,8 @@ fun SearchContainer(children: @Composable () -> Unit) {
     }
 }
 
-
 @Composable
 fun BackButton(back: () -> Unit) {
-
     Clickable(onClick = { back() }) {
         Image(
             painter = painterResource(CatalogImage.back),
@@ -171,5 +191,4 @@ fun BackButton(back: () -> Unit) {
                 .padding(vertical = 8.dp)
         )
     }
-
 }
