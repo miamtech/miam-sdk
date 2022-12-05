@@ -13,18 +13,18 @@ import com.miam.kmmMiamCore.handler.ContextHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
+import com.miam.kmmMiamCore.utils.LocalDebounce
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
-open class BasketPreviewViewModel(val recipeId: String?) :
+open class BasketPreviewViewModel(val recipeId: String?):
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -36,8 +36,9 @@ open class BasketPreviewViewModel(val recipeId: String?) :
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
     private val miamContext: ContextHandler by inject()
     private val lineEntriesSubject = MutableSharedFlow<List<BasketEntry>>()
+    private val debounce = LocalDebounce(500L) { it -> onEntriesChange(it as List<BasketEntry>) }
 
-    data class LineUpdateState(val lineUpdates: List<BasketEntry>) : State
+    data class LineUpdateState(val lineUpdates: List<BasketEntry>): State
 
     private val lineUpdateState: MutableStateFlow<LineUpdateState> =
         MutableStateFlow(LineUpdateState(listOf()))
@@ -80,19 +81,23 @@ open class BasketPreviewViewModel(val recipeId: String?) :
 
     private fun listenEntriesChanges() {
         launch(Dispatchers.Default) {
-            lineEntriesSubject.debounce(500).collect { entries ->
-                LogHandler.info("launching update $entries")
-                val newBpl = updateBplEntries(entries)
-                lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
-                setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
-                // create a copy of the list so you can clear it here
-                basketStore.dispatch(
-                    BasketAction.UpdateBasketEntries(
-                        mutableListOf(*entries.toTypedArray())
-                    )
-                )
+            lineEntriesSubject.collect { entries ->
+                debounce.next(entries)
             }
         }
+    }
+
+    private fun onEntriesChange(entries: List<BasketEntry>) {
+        LogHandler.info("launching update $entries")
+        val newBpl = updateBplEntries(entries)
+        lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
+        setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
+        // create a copy of the list so you can clear it here
+        basketStore.dispatch(
+            BasketAction.UpdateBasketEntries(
+                mutableListOf(*entries.toTypedArray())
+            )
+        )
     }
 
     override fun handleEvent(event: BasketPreviewContract.Event) {
