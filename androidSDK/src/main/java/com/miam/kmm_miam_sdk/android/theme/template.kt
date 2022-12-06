@@ -2,6 +2,7 @@ package com.miam.kmm_miam_sdk.android.theme
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.TextFieldValue
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
@@ -265,6 +266,18 @@ object Template {
     var EquipmentPreferencesSectionTemplate: (@Composable() (
         equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
+
+    var SearchPreferencesTemplate: (@Composable() (
+        back: () -> Unit, text: TextFieldValue,
+    ) -> Unit)? = null
+
+    var SearchResultRowPreferencesTemplate: (@Composable() (
+        select: () -> Unit, name: String,
+    ) -> Unit)? = null
+
+    var SearchPreferencesEmptyTemplate: (@Composable() () -> Unit)? = null
+
+    var SearchPreferencesLoadingTemplate: (@Composable() () -> Unit)? = null
 
 ////////////////// MY MEAL BUTTON ////////////
 
