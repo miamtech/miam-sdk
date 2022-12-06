@@ -1,4 +1,5 @@
-# 3.2.1
+# 3.3.0
+- [FEA][COR] Clean counter usage
 - [FIX][AND] Add missing templates in like button and preferences search
 - [FIX][IOS] Unwrapp AsyncImage URL and replace placeholder 
 - [FIX][IOS] Add function preferenceTapped to catalogViewToolbarTemplate

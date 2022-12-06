@@ -10,8 +10,6 @@ import miamCore
 
 @available(iOS 14, *)
 struct BasketPreviewRow: View {
-    
-    @SwiftUI.State var count: Int = 1
    
     private let productImageDimensions = CGSize(width: 90, height: 90)
     private let productName: String
@@ -49,22 +47,13 @@ struct BasketPreviewRow: View {
         self.replaceProductAction = replaceProductAction
     }
     
-    
-    
-    
-    func increaseQty(){
-       count+=1
-        viewModel.updateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count))
-   }
-   
-    func decreaseQty(){
-       if(previewLine.count  == 1 ){
-           viewModel.removeBasketEntry(entry:  previewLine.record as! BasketEntry)
-       }else{
-           count-=1
-           viewModel.updateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(count))
-       }
-   }
+    func onQuantityChanged(value: Int){
+        if(value == 0){
+            viewModel.removeBasketEntry(entry:  previewLine.record as! BasketEntry)
+            return
+        }
+        viewModel.updateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(value))
+    }
     
     var body: some View {
         
@@ -151,13 +140,9 @@ struct BasketPreviewRow: View {
                         })
                         
                         // Plus Minus View
-                        CounterView(count: count, lightMode: true) {
-                            increaseQty()
-                        } decrease: {
-                            decreaseQty()
-                        }.onAppear(perform: {
-                            count = Int(previewLine.count)
-                        })
+                        CounterView(count: Int(previewLine.count), lightMode: true) { qty in
+                            onQuantityChanged(value: qty)
+                        }
                     }
                 }
                 

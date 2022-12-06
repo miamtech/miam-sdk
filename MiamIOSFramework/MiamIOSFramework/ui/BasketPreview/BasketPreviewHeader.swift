@@ -34,13 +34,12 @@ struct BasketPreviewHeader: View {
     }
 
 
-    let decreaseGuestsCount: () -> Void
-    let increaseGuestsCount: () -> Void
+    let updateGuest: (Int) -> Void
     let goToDetail: () -> Void
 
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
-            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, price, numberOfGuests, price, decreaseGuestsCount, increaseGuestsCount)
+            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, price, numberOfGuests, price, updateGuest)
         } else {
             VStack(alignment: .leading) {
                 HStack {
@@ -73,10 +72,8 @@ struct BasketPreviewHeader: View {
                     Text(formattedPrice).foregroundColor(Color.miamColor(.primary)).fontWeight(.bold)
                     Spacer()
 
-                    CounterView(count: numberOfGuests) {
-                        increaseGuestsCount()
-                    } decrease: {
-                        decreaseGuestsCount()
+                    CounterView(count: numberOfGuests)  { guestCount in
+                        updateGuest(guestCount)
                     }
                 }
             }.padding([.leading, .trailing], 16.0)

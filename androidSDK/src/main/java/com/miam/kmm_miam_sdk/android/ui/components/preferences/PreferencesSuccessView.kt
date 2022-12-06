@@ -65,10 +65,10 @@ fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
         ) {
             Text(text = PreferencesText.guestLabel, style = bodyBold)
             Counter(
-                count = guests,
+                initialCount = guests,
                 isDisable = false,
-                increase = { guestChanged(guests + 1) },
-                decrease = { guestChanged(guests - 1) })
+                onCounterChanged = { guestChanged(it) }
+            )
         }
     }
 }

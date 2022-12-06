@@ -50,10 +50,12 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
                 color = black
             )
             Counter(
-                vmRecipe.currentState.guest,
-                isDisable = false,
-                { vmRecipe.increaseGuest() },
-                { vmRecipe.decreaseGuest() },
+                initialCount = vmRecipe.currentState.guest,
+                isDisable = state.guestUpdating,
+                isLoading = state.guestUpdating,
+                onCounterChanged = { counterValue -> vmRecipe.updateGuest(counterValue) },
+                minValue = 1,
+                maxValue = 99
             )
         }
 
