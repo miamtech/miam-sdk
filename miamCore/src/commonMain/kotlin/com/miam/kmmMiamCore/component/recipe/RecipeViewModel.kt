@@ -7,11 +7,11 @@ import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.Analytics
-import com.miam.kmmMiamCore.utils.LocalDebounce
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import kotlin.math.max
@@ -34,7 +34,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
     private val likeStore: LikeStore by inject()
-    private val debounce = LocalDebounce(500L) { it -> onGuestChange(it as Int) }
 
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
@@ -71,7 +70,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             }
         }
         launch(coroutineHandler) {
-            listenGuestSubjectChanges()
+            listenguestSubjectChanges()
         }
         setState { copy(likeIsEnable = userStore.state.value.likeIsEnable) }
     }
@@ -106,17 +105,13 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    private suspend fun listenGuestSubjectChanges() {
-        guestSubject.collect { boundedGuests ->
-            debounce.next(boundedGuests)
-        }
-    }
-
-    private fun onGuestChange(boundedGuests: Int) {
-        if (currentState.guest != boundedGuests) {
-            setState { copy(guest = boundedGuests) }
-            if (currentState.isInCart) {
-                addOrAlterRecipe()
+    private suspend fun listenguestSubjectChanges() {
+        guestSubject.debounce(500).collect { boundedGuests ->
+            if (currentState.guest != boundedGuests) {
+                setState { copy(guest = boundedGuests) }
+                if (currentState.isInCart) {
+                    addOrAlterRecipe()
+                }
             }
         }
     }
