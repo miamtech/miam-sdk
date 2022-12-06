@@ -8,6 +8,8 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -69,7 +71,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
                 handleGLChange(it)
             }
         }
-        launch(coroutineHandler) {
+        CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             listenguestSubjectChanges()
         }
         setState { copy(likeIsEnable = userStore.state.value.likeIsEnable) }

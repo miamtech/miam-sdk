@@ -13,21 +13,20 @@ struct RecipeDetailsIngredientsView: View {
     let ingredients: [Ingredient]
     let recipeGuests: Int
     let currentGuests: Int
-    let increaseGuestsAction: () -> Void
-    let decreaseGuestsAction: () -> Void
+    let updateGuestAction: (Int) -> Void
+   
     
     public var counterView: CounterView
-    init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int, increaseGuestsAction: @escaping () -> Void, decreaseGuestsAction: @escaping () -> Void) {
+    init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int, updateGuestsAction: @escaping (Int) -> Void) {
         self.ingredients = ingredients
         self.recipeGuests = recipeGuests
         self.currentGuests = currentGuests
-        self.increaseGuestsAction = increaseGuestsAction
-        self.decreaseGuestsAction = decreaseGuestsAction
+        self.updateGuestAction = updateGuestsAction
+       
         
         self.counterView = CounterView(
-                count: recipeGuests,
-                increase: increaseGuestsAction,
-                decrease: decreaseGuestsAction
+                count: currentGuests,
+                onCounterChanged: { guestNumber in updateGuestsAction(guestNumber)}
             )
     }
     
@@ -38,8 +37,7 @@ struct RecipeDetailsIngredientsView: View {
                 ingredients,
                 recipeGuests,
                 currentGuests,
-                increaseGuestsAction,
-                decreaseGuestsAction
+                updateGuestAction
             )
         } else {
             HStack {
@@ -79,7 +77,6 @@ struct RecipeDetailsIngredientsView: View {
 @available(iOS 14.0, *)
 struct RecipeIngredientsListView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeDetailsIngredientsView(ingredients: [], recipeGuests: 4, currentGuests: 6,
-                                     increaseGuestsAction: {}, decreaseGuestsAction: {})
+        RecipeDetailsIngredientsView(ingredients: [], recipeGuests: 4, currentGuests: 6, updateGuestsAction: {_ in })
     }
 }

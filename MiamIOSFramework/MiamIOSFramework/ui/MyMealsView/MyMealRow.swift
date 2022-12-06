@@ -42,19 +42,9 @@ public struct MyMealRow: View {
         self.recipeViewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
         self.count = meal.basketPreviewLine.numberOfGuests
     }
-
-    func increaseGuestsCount() {
-        if(basketPreviewViewModel.basketPreviewLine != nil && count != 100) {
-            count += 1
-            recipeViewModel.increaseGuest()
-        }
-    }
-
-    func decreaseGuestsCount() {
-        if(basketPreviewViewModel.basketPreviewLine != nil && count != 1) {
-            count -= 1
-            recipeViewModel.decreaseGuest()
-        }
+    
+    func updateGuest(value :Int){
+        recipeViewModel.updateGuest(nbGuest: Int32(value))
     }
 
     func addIngredient(_ entry: BasketEntry) {
@@ -83,11 +73,9 @@ public struct MyMealRow: View {
                                     pricePerGuest: meal.basketPreviewLine.pricePerGuest,
                                     numberOfGuests: count,
                                     price: meal.basketPreviewLine.price,
-                                    pictureURL: meal.basketPreviewLine.pictureURL) {
-                    decreaseGuestsCount()
-                } increaseGuestsCount: {
-                    increaseGuestsCount()
-                } goToDetail: {
+                                    pictureURL: meal.basketPreviewLine.pictureURL) { guestNumber in
+                    updateGuest(value: guestNumber)
+                }  goToDetail: {
                     recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
