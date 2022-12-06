@@ -3,6 +3,7 @@
 - [FIX][IOS] Unwrapp AsyncImage URL and replace placeholder 
 - [FIX][IOS] Add function preferenceTapped to catalogViewToolbarTemplate
 - [FIX][AND] Fix catalog Empty state background color not overridable
+- [FIX][AND] Add a floating template to category list alow to customize container modifier
 
 # 3.2.0
 - [FIX][AND] Add missing templates in myMeal and item selector

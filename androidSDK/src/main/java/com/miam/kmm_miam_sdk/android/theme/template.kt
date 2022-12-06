@@ -195,6 +195,9 @@ object Template {
         goToCategoryPage: (category: Package) -> Unit
     ) -> Unit)? = null
 
+    var CategoryfloatingTemplate: (@Composable() (
+    ) -> Unit)? = null
+
     var CatalogFilterTemplate: (@Composable() (
         difficulties: List<CatalogFilterOptions>,
         costs: List<CatalogFilterOptions>,
