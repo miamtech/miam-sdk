@@ -69,12 +69,8 @@ fun CatalogSuccessView(
                             }
                         }
                     }
-                    if (Template.CategoryfloatingTemplate != null) {
-                        Template.CategoryfloatingTemplate.let {
-                            if (it != null) {
-                                it()
-                            }
-                        }
+                    Template.CategoryfloatingTemplate?.let {
+                        it()
                     }
                 }
 
