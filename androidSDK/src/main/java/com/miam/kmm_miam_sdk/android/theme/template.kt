@@ -128,8 +128,7 @@ object Template {
         pricePerGuest: String,
         guestCount: Int,
         goToRecipeDetail: () -> Unit,
-        increaseGuest: () -> Unit,
-        decreaseGuest: () -> Unit
+        guestUpdate: (guestCount: Int) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewLoadingTemplate: (@Composable() () -> Unit)? = null
@@ -144,8 +143,9 @@ object Template {
         itemsCount: Int,
         delete: () -> Unit,
         replace: () -> Unit,
-        increaseQty: () -> Unit,
-        decreaseQty: () -> Unit
+        onQuantityChanged: (newQuantity: Int) -> Unit,
+        // Compose bug, build crash with exactly 10 parameters
+        composeBugParam: Int?
     ) -> Unit)? = null
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (

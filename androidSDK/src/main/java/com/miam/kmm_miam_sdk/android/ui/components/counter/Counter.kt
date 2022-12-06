@@ -4,9 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -34,12 +39,32 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButt
 
 @Composable
 fun Counter(
-    count: Int,
+    initialCount: Int,
     isDisable: Boolean,
-    increase: () -> Unit,
-    decrease: () -> Unit,
-    lightMode: Boolean = false
+    onCounterChanged: (newValue: Int) -> Unit,
+    lightMode: Boolean = false,
+    minValue: Int? = null,
+    maxValue: Int? = null,
+    isLoading: Boolean = false
 ) {
+    var localCount by remember(initialCount) { mutableStateOf(initialCount) }
+
+    fun newValueBounded(newValue: Int): Boolean {
+        return (minValue == null || newValue >= minValue) && (maxValue == null || newValue <= maxValue)
+    }
+
+    fun increase() {
+        if (!newValueBounded(localCount + 1)) return
+
+        onCounterChanged(++localCount)
+    }
+
+    fun decrease() {
+        if (!newValueBounded(localCount - 1)) return
+
+        onCounterChanged(--localCount)
+    }
+
     Row(
         modifier = mainRowContainer,
         verticalAlignment = Alignment.CenterVertically,
@@ -52,46 +77,62 @@ fun Counter(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(
-                onClick = { decrease() },
-                enabled = !isDisable,
-                modifier = lessButton.background(
-                    if (isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor
-                )
-            ) {
-                Image(
-                    painter = painterResource(less),
-                    contentDescription = "less icon",
-                    colorFilter = ColorFilter.tint(lessIconColor),
-                    modifier = lessButtonIcon
-                )
-            }
-            Row(
-                modifier = countBorder,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = count.toString() + if (lightMode) "" else " pers.",
-                    color = countTextColor,
-                    modifier = countText
-                )
-            }
-            IconButton(
-                modifier = plusButton.background(
-                    if (isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor
-                ),
-                onClick = { increase() },
-                enabled = !isDisable
-            ) {
-                Image(
-                    painter = painterResource(plus),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(plusIconColor),
-                    modifier = plusButtonIcon
-                )
-            }
+            Plus({ decrease() }, isDisable)
+            MiddleText(localCount, lightMode, isLoading)
+            Minus({ increase() }, isDisable)
         }
+    }
+}
+
+@Composable
+fun Plus(decrease: () -> Unit, isDisable: Boolean) {
+    IconButton(
+        onClick = { decrease() },
+        enabled = !isDisable,
+        modifier = lessButton.background(if (isDisable) lessButtonBackgroundDisableColor else lessButtonBackgroundColor)
+    ) {
+        Image(
+            painter = painterResource(less),
+            contentDescription = "less icon",
+            colorFilter = ColorFilter.tint(lessIconColor),
+            modifier = lessButtonIcon
+        )
+    }
+}
+
+@Composable
+fun MiddleText(localCount: Int, lightMode: Boolean, isLoading: Boolean) {
+
+    Row(
+        modifier = countBorder,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(color = countTextColor)
+        } else {
+            Text(
+                text = localCount.toString() + if (lightMode) "" else " pers.",
+                color = countTextColor,
+                modifier = countText
+            )
+        }
+    }
+}
+
+@Composable
+fun Minus(increase: () -> Unit, isDisable: Boolean) {
+    IconButton(
+        onClick = { increase() },
+        enabled = !isDisable,
+        modifier = plusButton.background(if (isDisable) plusButtonBackgroundDisableColor else plusButtonBackgroundColor)
+    ) {
+        Image(
+            painter = painterResource(plus),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(plusIconColor),
+            modifier = plusButtonIcon
+        )
     }
 }
 
@@ -99,11 +140,11 @@ fun Counter(
 @Preview
 @Composable
 fun CounterPreview() {
-    Counter(12, false, {}, {}, false)
+    Counter(12, false, {}, false)
 }
 
 @Preview
 @Composable
 fun lightCounterPreview() {
-    Counter(12, false, {}, {}, true)
+    Counter(12, false, {}, true)
 }

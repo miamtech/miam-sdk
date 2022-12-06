@@ -24,6 +24,7 @@ interface RecipeContract {
         val recipe: Recipe?,
         val headerText: String,
         val guest: Int,
+        val guestUpdating: Boolean = false,
         val isInCart: Boolean,
         val analyticsEventSent: Boolean,
         val isPriceDisplayed: Boolean,

@@ -44,13 +44,14 @@ public class Template {
     /**
      count: Int - the current value of counter
      lightMode: Bool - Show or hide "persons" text
-     decrease: () -> Void
+     updateGuestAction:  (Int) -> Voiddecrease: () -> Void
      increase: () -> Void
      */
     public var counterViewTemplate : ((Int,
                                        Bool,
                                        @escaping () -> Void,
-                                       @escaping () -> Void)  -> AnyView)? = nil
+                                       @escaping () -> Void
+                                      )  -> AnyView)? = nil
     
     /**
      Second parameter Int is de interger part of the price
@@ -108,15 +109,13 @@ public class Template {
      ingredients: [Ingredient]
      recipeGuests: Int
      currentGuests: Int
-     increaseGuestsAction: () -> Void
-     decreaseGuestsAction: () -> Void
+     updateGuest: (Int) -> Void
      */
     public  var recipeDetailsIngredientsViewTemplate : ((
         [Ingredient],
         Int,
         Int,
-        @escaping () -> Void,
-        @escaping () -> Void
+        @escaping (Int) -> Void
     ) -> AnyView )? = nil
     
     
@@ -148,8 +147,7 @@ public class Template {
      pricePerGuest: String,
      numberOfGuests: Int,
      price: String,
-     decreaseGuestsCount: () -> Unit,
-     increaseGuestsCount: () -> Unit
+     updateGuest: (Int) -> Void
      */
     public var basketPreviewHeaderTemplate: ((
         String,
@@ -158,8 +156,7 @@ public class Template {
         String,
         Int,
         String,
-        @escaping () -> Void,
-        @escaping () -> Void
+        @escaping (Int) -> Void
     ) -> AnyView)? = nil
 
     /**
