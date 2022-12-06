@@ -75,8 +75,7 @@ struct BasketPreviewRow: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     if hasPicture {
-                        AsyncImage(url: productPictureURL!,
-                                   placeholder: { ProgressView() }, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
+                        AsyncImage(url: productPictureURL!, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                     }
                     VStack (alignment: .leading) {
                         

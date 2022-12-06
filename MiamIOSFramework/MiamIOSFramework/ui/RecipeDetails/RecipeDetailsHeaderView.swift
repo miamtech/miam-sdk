@@ -31,7 +31,6 @@ struct RecipeDetailsHeaderView: View {
                 url: URL(
                     string: mediaURL ?? ""
                 )! ,
-                placeholder: { Text("loading ...")},
                 height: imageHeight
             ).frame(height: imageHeight)
             
