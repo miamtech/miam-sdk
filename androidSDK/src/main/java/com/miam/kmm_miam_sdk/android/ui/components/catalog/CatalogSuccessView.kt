@@ -69,7 +69,7 @@ fun CatalogSuccessView(
                             }
                         }
                     }
-                    Template.CategoryfloatingTemplate?.let {
+                    Template.CatalogFloatingElementTemplate?.let {
                         it()
                     }
                 }
