@@ -196,7 +196,8 @@ object Template {
         goToCategoryPage: (category: Package) -> Unit
     ) -> Unit)? = null
 
-    var CategoryfloatingTemplate: (@Composable() (
+    // optional template that is floating, you can for exemple set a button to myMeal
+    var CatalogFloatingElementTemplate: (@Composable() (
     ) -> Unit)? = null
 
     var CatalogFilterTemplate: (@Composable() (
