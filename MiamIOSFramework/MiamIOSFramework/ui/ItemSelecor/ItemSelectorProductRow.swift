@@ -30,7 +30,6 @@ struct ItemSelectorProductRow: View {
                         url: URL(
                             string: product.picture
                         )! ,
-                        placeholder: { Text("loading ...")},
                         height: 90
                     ).frame(width: 90, height: 90)
                     VStack(alignment: .leading){

@@ -44,9 +44,7 @@ struct BasketPreviewHeader: View {
             VStack(alignment: .leading) {
                 HStack {
                     if hasPicture {
-                        AsyncImage(url: pictureURL!, placeholder: {
-                                ProgressView()
-                        }, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                        AsyncImage(url: pictureURL!, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
                     }
 
                     VStack (alignment: .leading) {
