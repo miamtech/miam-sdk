@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
-import com.miam.kmmMiamCore.component.pricing.PricingViewModel
+import com.miam.kmmMiamCore.component.pricing.RecipePricingViewModel
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.loaderColor
@@ -65,7 +65,7 @@ fun RecipePrice(
     recipeId: String,
     guestNumber: Int,
 ) {
-    val vmPrice = PricingViewModel()
+    val vmPrice = RecipePricingViewModel()
     vmPrice.bind(recipeId, guestNumber)
     PriceStateManager(vmPrice)
 
@@ -74,7 +74,7 @@ fun RecipePrice(
 }
 
 @Composable
-fun PriceStateManager(vmPrice: PricingViewModel) {
+fun PriceStateManager(vmPrice: RecipePricingViewModel) {
     val state by vmPrice.uiState.collectAsState()
     Box {
         ManagementResourceState(
