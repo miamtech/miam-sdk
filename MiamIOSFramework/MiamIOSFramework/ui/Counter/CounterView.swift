@@ -10,31 +10,63 @@ import SwiftUI
 @available(iOS 14, *)
 public struct CounterView: View {
     
-    public var count: Int
-    public var increase:  () -> Void
-    public var decrease:  () -> Void
+    @State public var count: Int
+    public var onCounterChanged: (Int) -> Void
     public var lightMode: Bool = false
+    public var maxValue: Int? = nil
+    public var minValue: Int? =  nil
+    public var isLoading: Bool = false
     
     public init(
         count: Int,
-        increase: @escaping () -> Void,
-        decrease: @escaping () -> Void
+        onCounterChanged:  @escaping (Int) -> Void
     ) {
-        self.count = count
-        self.increase = increase
-        self.decrease = decrease
+        self.onCounterChanged = onCounterChanged
+        self._count = State(initialValue: count)
     }
     
     public init(
         count: Int,
         lightMode: Bool,
-        increase: @escaping () -> Void,
-        decrease: @escaping () -> Void
+        onCounterChanged:  @escaping (Int) -> Void
     ) {
-        self.count = count
+       
         self.lightMode = lightMode
-        self.increase = increase
-        self.decrease = decrease
+        self.onCounterChanged = onCounterChanged
+        self._count = State(initialValue: count)
+        
+    }
+    
+    public init(
+        count: Int,
+        lightMode: Bool,
+        onCounterChanged:  @escaping (Int) -> Void,
+        minValue: Int? = nil,
+        maxValue: Int? = nil,
+        isLoading: Bool = false
+    ) {
+        self.lightMode = lightMode
+        self.onCounterChanged = onCounterChanged
+        self.minValue = minValue ?? nil
+        self.maxValue = maxValue ?? nil
+        self._count = State(initialValue: count)
+
+    }
+
+    private func newValueBounded(newValue: Int) -> Bool {
+        return (minValue == nil || newValue >= minValue!) && (maxValue == nil || newValue <= maxValue!)
+    }
+
+    private func increase(){
+        if (!newValueBounded(newValue: count + 1)){ return }
+        count += 1
+        onCounterChanged(count)
+    }
+
+    private  func decrease(){
+        if (!newValueBounded(newValue: count - 1)){ return }
+        count -= 1
+        onCounterChanged(count)
     }
     
     public var body: some View {
@@ -53,12 +85,12 @@ public struct CounterView: View {
                 }.padding(.leading, Dimension.sharedInstance.lPadding)
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
-                Text(String(count) + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
+                Text("\(count)" + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
                     .foregroundColor(Color.miamColor(.white))
                     .font(.system(size: 13, weight: .bold, design: .default))
                     Spacer()
                 Button(action: {
-                    increase()
+                   increase()
                 }) {
                     Image.miamImage(icon: .plus)
                         .resizable()
@@ -78,8 +110,7 @@ public struct CounterView: View {
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         CounterView(count: 12 ,
-                    increase: {() -> () in  print("ok")},
-                    decrease: {() -> () in  print("not ok")}
+                    onCounterChanged: {_ in  print("ok")}
             )
     }
 }

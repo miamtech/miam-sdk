@@ -1,6 +1,9 @@
 # 3.3.0
-- [FIX][AND] Add missing templates in like button
 - [FEA][COR] Clean counter usage
+- [FIX][AND] Add missing templates in like button and preferences search
+- [FIX][IOS] Unwrapp AsyncImage URL and replace placeholder 
+- [FIX][IOS] Add function preferenceTapped to catalogViewToolbarTemplate
+- [FIX][AND] Fix catalog Empty state background color not overridable
 
 # 3.2.0
 - [FIX][AND] Add missing templates in myMeal and item selector

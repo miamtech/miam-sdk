@@ -79,13 +79,12 @@ public struct RecipeDetailsView: View {
                                                restingTime: viewModel.recipe!.restingTimeIos)
                             }
                             
-                            
                             if let ingredients = viewModel.recipe?.relationships?.ingredients?.data {
                                 RecipeDetailsIngredientsView(ingredients: ingredients,
                                                              recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
-                                                             currentGuests: Int(viewModel.currentState.guest),
-                                                             increaseGuestsAction: {viewModel.increaseGuest()},
-                                                             decreaseGuestsAction: {viewModel.decreaseGuest()})
+                                                             currentGuests: Int(viewModel.state?.guest ?? 0),
+                                                             updateGuestsAction: { newGuest in viewModel.updateGuest(nbGuest:Int32(newGuest)) }
+                                )
                             }
                             
                             RecipeDetailsStepsView(steps: viewModel.sortedSteps)

@@ -70,14 +70,27 @@ public class MiamManager {
     }
     
     private func pushProductToBasket(products: Array<RetailerProduct>){
-        retailerProductsToYourProducts(products: products).forEach( {
-            if($0.quantity == 0){
-                MyBasket.shared.remove(removedProduct: $0)
-            } else {
-                MyBasket.shared.add(addedProduct: $0)
+        let miamProducts = retailerProductsToYourProducts(products: products)
+        let initialItems = MyBasket.shared.items
+        var finalItems = initialItems.compactMap { retailerProduct in updatedProductOrNil(retailerProduct: retailerProduct, miamProducts: miamProducts) }
+        miamProducts.forEach({ miamProduct in
+            if (!finalItems.contains(where: { retailerProducts in retailerProducts.id == miamProduct.id })) {
+                finalItems.append(miamProduct)
             }
+        })
+        MyBasket.shared.items = finalItems
+    }
+    
+    private func updatedProductOrNil(retailerProduct: MyProduct, miamProducts: Array<MyProduct>) -> MyProduct? {
+        let updatedProduct = miamProducts.first(where: { miamProduct in miamProduct.id.isEqual(retailerProduct.id)})
+        if (updatedProduct == nil) {
+            return retailerProduct
         }
-        )
+        if (updatedProduct!.quantity == 0) {
+            return nil
+        }
+        retailerProduct.quantity = updatedProduct!.quantity
+        return retailerProduct
     }
     
     private func retailerProductsToYourProducts(products: Array<RetailerProduct>) -> Array<MyProduct> {

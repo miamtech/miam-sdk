@@ -256,7 +256,7 @@ internal struct CatalogToolbarView: View {
     
     var body: some View {
         if (Template.sharedInstance.catalogViewToolbarTemplate != nil) {
-            Template.sharedInstance.catalogViewToolbarTemplate!(showBackButton, favoritesFilterActive, backTapped, filtersTapped, searchTapped, favoritesTapped)
+            Template.sharedInstance.catalogViewToolbarTemplate!(showBackButton, favoritesFilterActive, backTapped, filtersTapped, searchTapped, favoritesTapped, preferencesTapped)
         } else {
             HStack(spacing: 16.0) {
                 if (showBackButton) {
