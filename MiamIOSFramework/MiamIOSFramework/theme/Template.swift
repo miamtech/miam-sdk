@@ -57,7 +57,7 @@ public class Template {
      Second parameter Int is de interger part of the price
      First parameter Int is decimal part of the price
      */
-    public var priceViewTemplate : ((_ : Int,_ : Int )  -> AnyView)? = nil
+    public var priceViewTemplate : ((_ : Double,_ : Double )  -> AnyView)? = nil
     
     /// ItemSelector Templates
     
