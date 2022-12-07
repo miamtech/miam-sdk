@@ -66,7 +66,7 @@ fun RecipePrice(
     guestNumber: Int,
 ) {
     val vmPrice = RecipePricingViewModel()
-    vmPrice.bind(recipeId, guestNumber)
+    vmPrice.setRecipe(recipeId, guestNumber)
     PriceStateManager(vmPrice)
 
     LaunchedEffect(Unit) { vmPrice.listenBasketChanges() }
