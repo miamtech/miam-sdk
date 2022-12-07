@@ -1,12 +1,12 @@
 package com.miam.kmmMiamCore.component.router
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
 import org.koin.core.component.inject
 
-open class RouterOutletViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
+open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     private val analyticsService: Analytics by inject()
 
@@ -21,7 +21,7 @@ open class RouterOutletViewModel :
 
     override fun createInitialState(): RouterOutletContract.State {
         return RouterOutletContract.State(
-            content = RouterContent.BASKET_PREVIEW,
+            content = RouterContent.EMPTY,
             rvm = null,
             recipeId = null,
             isOpen = false,
