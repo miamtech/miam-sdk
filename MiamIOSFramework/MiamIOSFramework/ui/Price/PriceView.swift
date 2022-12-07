@@ -13,6 +13,15 @@ struct PriceView: View {
     
     @ObservedObject var viewModel: PriceVM = PriceVM()
     
+    private var formattedPrice: String {
+        if let price = viewModel.price?.pricePerServe {
+            return String(format: "%.2f", price)
+        }
+        
+        return "n/a"
+    }
+    
+    
     public init(
         recipeId: String,
         guestNumber: Int
@@ -29,7 +38,8 @@ struct PriceView: View {
         } else {
             VStack{
                 HStack(alignment: .top, spacing: 2) {
-                    Text(String(viewModel.price?.pricePerServe ?? 0.0)).font(.system(size: 14,weight: .bold));  Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
+                    Text(formattedPrice).font(.system(size: 14,weight: .bold))
+                    Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
                 }
                 Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
             }
