@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.theme.Typography
-import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import com.miam.kmm_miam_sdk.android.ui.components.price.RecipePrice
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsColor
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText
@@ -29,7 +29,6 @@ fun RecipeDetailFooter(
 
     val recipeIdState = remember { recipeId }
 
-
     Row(
         modifier = RecipeDetailsStyle.footerMainContainer,
         horizontalArrangement = Arrangement.End,
@@ -39,10 +38,7 @@ fun RecipeDetailFooter(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Price(
-                recipeId = recipeIdState,
-                guestNumber
-            )
+            RecipePrice(recipeId = recipeIdState, guestNumber)
         }
         if (isInCart) {
 

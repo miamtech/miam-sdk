@@ -11,42 +11,37 @@ import miamCore
 @available(iOS 14, *)
 struct PriceView: View {
     
-    public var recipeId: String?
-    public var guestNumber: Int?
-    public var isTotalPrice: Bool = false
-    
     @ObservedObject var viewModel: PriceVM = PriceVM()
+    
+    private var formattedPrice: String {
+        if let price = viewModel.price?.pricePerServe {
+            return String(format: "%.2f", price)
+        }
+        
+        return "n/a"
+    }
+    
     
     public init(
         recipeId: String,
         guestNumber: Int
     ) {
-        self.recipeId = recipeId
-        self.guestNumber = guestNumber
-        viewModel.setEvent(event: PricingContractEvent.OnSetRecipe(idRecipe: recipeId, guestNumber: Int32(Int(guestNumber))))
-        viewModel.setEvent(event:PricingContractEvent.OnPriceUpdate.shared)
-    }
-    
-    public init(price: Double){
-        self.isTotalPrice = true
-        viewModel.setEvent(event:PricingContractEvent.SetDirectPrice(price:price))
-        viewModel.setEvent(event:PricingContractEvent.OnPriceUpdate.shared)
+        viewModel.setRecipe(recipeId: recipeId, guestNumber: Int32(guestNumber))
     }
     
     var body: some View {
         if let template = Template.sharedInstance.priceViewTemplate {
             template(
-                Int(viewModel.currentState.integerPart)!,
-                Int(viewModel.currentState.decimalPart)!
+                viewModel.price?.price ?? 0,
+                viewModel.price?.pricePerServe ?? 0
             )
         } else {
             VStack{
-                HStack(alignment: .top, spacing: 2){
-                    Text(String(viewModel.price?.price ?? 0.0)).font(.system(size: 14,weight: .bold));  Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
+                HStack(alignment: .top, spacing: 2) {
+                    Text(formattedPrice).font(.system(size: 14,weight: .bold))
+                    Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
                 }
-                if(!isTotalPrice){
-                    Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
-                }
+                Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
             }
         }
     }

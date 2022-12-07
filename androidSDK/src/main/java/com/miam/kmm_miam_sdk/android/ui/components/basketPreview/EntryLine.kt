@@ -33,7 +33,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.subcomponent.MultipleRecipeTag
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import java.util.*
 
 @ExperimentalCoilApi
@@ -209,10 +209,7 @@ fun EntryPriceAndActionRow(
             Modifier.weight(1f)
         )
         Box(modifier = Modifier.padding(end = 16.dp)) {
-            Price(
-                price = price,
-                isTotalPrice = true
-            )
+            SimplePrice(price = price)
         }
         Counter(
             initialCount = currentEntryCount,

@@ -52,7 +52,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.I
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIcon
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorStyle.swapIconContainer
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.customization.ItemsSelectorText.replaceBy
-import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -128,11 +128,7 @@ class ItemsSelector: KoinComponent {
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalArrangement = pricePosition
                                         ) {
-                                            Price(
-                                                price = state.value.selectedItem?.price?.toDouble()
-                                                    ?: 0.0,
-                                                isTotalPrice = true
-                                            )
+                                            SimplePrice(price = state.value.selectedItem?.price?.toDouble() ?: 0.0)
                                         }
                                     }
                                 }
@@ -205,10 +201,7 @@ class ItemsSelector: KoinComponent {
                                                         textAlign = TextAlign.Center,
                                                         style = bodySmallBold
                                                     )
-                                                    Price(
-                                                        price = itemsList[index].price.toDouble(),
-                                                        isTotalPrice = true
-                                                    )
+                                                    SimplePrice(price = itemsList[index].price.toDouble())
                                                 }
                                             }
                                         }

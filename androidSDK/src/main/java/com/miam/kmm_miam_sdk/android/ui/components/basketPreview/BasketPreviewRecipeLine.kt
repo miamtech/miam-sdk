@@ -24,7 +24,7 @@ import com.miam.kmm_miam_sdk.android.theme.Typography.link
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewText.moreDetail
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
-import com.miam.kmm_miam_sdk.android.ui.components.price.Price
+import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import kotlin.math.max
 import kotlin.math.round
 
@@ -128,10 +128,7 @@ fun BasketPreviewRecipeLine(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Box(modifier = Modifier.padding(bottom = 4.dp, start = 16.dp)) {
-                    Price(
-                        price = line.price.toDouble(),
-                        isTotalPrice = true
-                    )
+                    SimplePrice(price = line.price.toDouble())
                 }
                 Counter(
                     initialCount = line.count,
