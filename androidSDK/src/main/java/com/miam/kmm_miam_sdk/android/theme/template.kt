@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
@@ -146,6 +147,21 @@ object Template {
         onQuantityChanged: (newQuantity: Int) -> Unit,
         // Compose bug, build crash with exactly 10 parameters
         composeBugParam: Int?
+    ) -> Unit)? = null
+
+
+    var basketPreviewNotFoundTemplate: (@Composable() (
+        notFoundProducts: List<BasketEntry>,
+    ) -> Unit)? = null
+
+    var basketPreviewOftenDeletedTemplate: (@Composable() (
+        oftenDeletedProducts: List<BasketEntry>,
+        addProduct: (BasketEntry) -> Unit
+    ) -> Unit)? = null
+
+    var basketPreviewRemovedTemplate: (@Composable() (
+        removedProducts: List<BasketEntry>,
+        addProduct: (BasketEntry) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (

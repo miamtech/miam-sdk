@@ -13,6 +13,7 @@ import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
+import com.miam.kmm_miam_sdk.android.theme.Template
 
 @Composable
 fun BasketPreviewItem(
@@ -37,41 +38,71 @@ fun BasketPreviewItem(
                 }
             }
             if (line.entries?.notFound?.isNotEmpty() == true) {
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                expendableEntryLine(
-                    line.entries!!.notFound,
-                    backGroundColor = Color(0xffEDEDED),
-                    fontColor = Color(0xff252525),
-                    title = "Article(s) indisponible(s) (${line.entries!!.notFound.size})"
-                )
+                if (Template.basketPreviewNotFoundTemplate != null) {
+                    Template.basketPreviewNotFoundTemplate?.let { it(line.entries?.notFound ?: emptyList()) }
+                } else {
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    ExpendableEntryLine(
+                        line.entries!!.notFound,
+                        backGroundColor = Color(0xffEDEDED),
+                        fontColor = Color(0xff252525),
+                        title = "Article(s) indisponible(s) (${line.entries!!.notFound.size})"
+                    )
+                }
             }
             if (line.entries?.oftenDeleted?.isNotEmpty() == true) {
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                expendableEntryLine(
-                    line.entries!!.oftenDeleted,
-                    backGroundColor = Color(0xffD9EFF2),
-                    fontColor = Colors.primary,
-                    title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
-                    click = fun(entry: BasketEntry) {
-                        vmBasketPreview.setEvent(
-                            BasketPreviewContract.Event.AddEntry(entry)
+                if (Template.basketPreviewOftenDeletedTemplate != null) {
+                    Template.basketPreviewOftenDeletedTemplate?.let {
+                        it(
+                            line.entries?.oftenDeleted ?: emptyList(),
+                            fun(entry: BasketEntry) {
+                                vmBasketPreview.setEvent(
+                                    BasketPreviewContract.Event.AddEntry(entry)
+                                )
+                            }
                         )
                     }
-                )
+                } else {
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    ExpendableEntryLine(
+                        line.entries!!.oftenDeleted,
+                        backGroundColor = Color(0xffD9EFF2),
+                        fontColor = Colors.primary,
+                        title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
+                        click = fun(entry: BasketEntry) {
+                            vmBasketPreview.setEvent(
+                                BasketPreviewContract.Event.AddEntry(entry)
+                            )
+                        }
+                    )
+                }
+
             }
             if (line.entries?.removed?.isNotEmpty() == true) {
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                expendableEntryLine(
-                    line.entries!!.removed,
-                    backGroundColor = Color(0xffBBBBBB),
-                    fontColor = Color(0xff252525),
-                    title = "Article(s) retiré(s) du panier (${line.entries!!.removed.size})",
-                    click = fun(entry: BasketEntry) {
-                        vmBasketPreview.setEvent(
-                            BasketPreviewContract.Event.AddEntry(entry)
+                if (Template.basketPreviewRemovedTemplate != null) {
+                    Template.basketPreviewRemovedTemplate?.let {
+                        it(line.entries?.removed ?: emptyList(),
+                            fun(entry: BasketEntry) {
+                                vmBasketPreview.setEvent(
+                                    BasketPreviewContract.Event.AddEntry(entry)
+                                )
+                            }
                         )
                     }
-                )
+                } else {
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    ExpendableEntryLine(
+                        line.entries!!.removed,
+                        backGroundColor = Color(0xffBBBBBB),
+                        fontColor = Color(0xff252525),
+                        title = "Article(s) retiré(s) du panier (${line.entries!!.removed.size})",
+                        click = fun(entry: BasketEntry) {
+                            vmBasketPreview.setEvent(
+                                BasketPreviewContract.Event.AddEntry(entry)
+                            )
+                        }
+                    )
+                }
             }
         }
     }

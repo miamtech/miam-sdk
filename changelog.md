@@ -4,6 +4,7 @@
 - [FIX][IOS] Unwrapp AsyncImage URL and replace placeholder 
 - [FIX][IOS] Add function preferenceTapped to catalogViewToolbarTemplate
 - [FIX][AND] Fix catalog Empty state background color not overridable
+- [FEA][AND] add entrie line templates in basket preview 
 - [FIX][AND] Add a floating template to category list alow to customize container modifier
 
 # 3.2.0
