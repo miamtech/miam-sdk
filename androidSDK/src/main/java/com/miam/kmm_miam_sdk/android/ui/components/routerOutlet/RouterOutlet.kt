@@ -7,10 +7,19 @@ import android.graphics.PixelFormat
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
@@ -22,9 +31,12 @@ import com.miam.kmmMiamCore.component.router.RouterContent
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmm_miam_sdk.android.R
+import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -81,7 +93,6 @@ class RouterOutlet: KoinComponent {
 
     @Composable
     fun Content() {
-
         val state by vmRouter.uiState.collectAsState()
 
         if (state.isOpen) {
@@ -108,12 +119,39 @@ class RouterOutlet: KoinComponent {
                                 ).content()
                             }
                             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
+                            RouterContent.EMPTY -> EmptyView(::close)
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun EmptyView(close: () -> Unit) {
+    Scaffold(
+        topBar = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = RecipeDetailsStyle.headerMainContainer,
+            ) {
+                Clickable(
+                    onClick = { close() },
+                ) {
+                    Image(
+                        painter = painterResource(Image.toggleCaret),
+                        contentDescription = null,
+                        modifier = RecipeDetailsStyle.headerCloseIconModifier.rotate(180f)
+                    )
+                }
+            }
+        },
+        content = {
+            Text(text = "Une erreur s'est produite, veuillez réessayer", textAlign = TextAlign.Center)
+        }
+    )
 }
 
 @Composable

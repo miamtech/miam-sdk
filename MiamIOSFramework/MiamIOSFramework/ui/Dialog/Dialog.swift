@@ -56,18 +56,23 @@ struct Dialog: View {
     }
     
     var body: some View {
-        VStack{
+        VStack {
             HStack(alignment: .top){
                 switch viewModel.state?.content {
-                case RouterContent.recipeDetail : RecipeDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close, showFooter: viewModel.state!.showFooter)
-                case RouterContent.basketPreview : BasketPreviewView(recipeId: viewModel.state!.recipeId!,
-                                                                     recipeVm:  (viewModel.state?.rvm!)!,
-                                                                     goToDetail: goToDetail,
-                                                                     close: close,
-                                                                     goToItemSelector: goToReplaceItem
-                )
-               case RouterContent.itemsSelector : ItemSelector()
-                default: HStack{}
+                    case RouterContent.recipeDetail : RecipeDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, close: close, showFooter: viewModel.state!.showFooter)
+                    case RouterContent.basketPreview :
+                        if let recipeId = viewModel.state?.recipeId, let recipeViewModel = viewModel.state?.rvm  {
+                            BasketPreviewView(recipeId: recipeId,
+                                              recipeVm:  recipeViewModel,
+                                              goToDetail: goToDetail,
+                                              close: close,
+                                              goToItemSelector: goToReplaceItem)
+                        } else {
+                            DialogEmptyView(closeAction: close)
+                        }
+                    case RouterContent.itemsSelector : ItemSelector()
+                    case RouterContent.empty: DialogEmptyView(closeAction: close)
+                    default: DialogEmptyView(closeAction: close)
                 }
             }
         }
