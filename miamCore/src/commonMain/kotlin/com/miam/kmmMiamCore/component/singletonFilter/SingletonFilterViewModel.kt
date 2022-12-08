@@ -138,7 +138,7 @@ open class SingletonFilterViewModel:
             filter += "filter[packages]=${currentState.category}&"
         }
         if (currentState.isFavorite) {
-            filter += "filter[liked]=true&"
+            filter += "filter[liked]=true&filter[active]=true,false&"
         }
         return filter
     }

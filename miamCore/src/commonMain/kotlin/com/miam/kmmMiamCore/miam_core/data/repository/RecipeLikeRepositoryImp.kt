@@ -8,9 +8,8 @@ class RecipeLikeRepositoryImp(private val recipeDataSource: MiamAPIDatasource) {
         return recipeDataSource.getRecipeLikes(recipeIds)
     }
 
-    suspend fun createRecipeLike(recipeId: String): RecipeLike {
-        val newLike = RecipeLike.createDefault(recipeId)
-        return recipeDataSource.createRecipeLike(newLike)
+    suspend fun createRecipeLike(recipeLike: RecipeLike): RecipeLike {
+        return recipeDataSource.createRecipeLike(recipeLike)
     }
 
     suspend fun updateRecipeLike(recipeLike: RecipeLike): RecipeLike {
