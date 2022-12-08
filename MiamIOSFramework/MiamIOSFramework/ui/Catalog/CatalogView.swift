@@ -37,7 +37,7 @@ public struct CatalogView: View {
     private var usesPreferences = false
     private var recipesListColumns : Int = 1
     private var recipesListSpacing: CGFloat = 12
-    private var willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)?
+    public var willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)?
     
     public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
