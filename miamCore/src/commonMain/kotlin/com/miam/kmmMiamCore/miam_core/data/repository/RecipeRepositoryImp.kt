@@ -15,6 +15,7 @@ class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): Reci
         val DEFAULT_INCLUDED =
             listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
         const val DEFAULT_PAGESIZE = 20
+        const val FIRST_PAGE = 1
     }
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {
@@ -49,8 +50,7 @@ class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): Reci
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
-        val recipes =
-            recipeDataSource.getRecipesFromStringFilter(filters, included, pageSize, pageNumber)
+        val recipes = recipeDataSource.getRecipesFromStringFilter(filters, included, pageSize, pageNumber)
         return addRecipeLikes(recipes)
     }
 

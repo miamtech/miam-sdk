@@ -2,6 +2,7 @@ package com.miam.kmmMiamCore.component.preferences
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
@@ -12,6 +13,8 @@ import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -19,6 +22,11 @@ import org.koin.core.component.inject
 @Suppress("PreferencesViewModelInstance used by ios and component")
 object PreferencesViewModelInstance: KoinComponent {
     val instance: SingletonPreferencesViewModel by inject()
+}
+
+sealed class PreferencesEffect: Effect {
+    object PreferencesLoaded: PreferencesEffect()
+    object PreferencesChanged: PreferencesEffect()
 }
 
 open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
@@ -30,6 +38,11 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val userPreferences: UserPreferences by inject()
+
+    private val sideEffect = MutableSharedFlow<PreferencesEffect>()
+    fun observeSideEffect(): Flow<PreferencesEffect> = sideEffect
+    val isInit: Boolean
+        get() = currentState.basicState is BasicUiState.Success
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
 
@@ -44,6 +57,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             reloadFromLocal()
             val count = getRecipeCount()
             setState { copy(basicState = BasicUiState.Success(true), recipesFound = count) }
+            sideEffect.emit(PreferencesEffect.PreferencesLoaded)
         }
     }
 
@@ -131,6 +145,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageSerializedTags(currentState.diets))
         userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageSerializedTags(currentState.ingredients))
         userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageSerializedTags(currentState.equipments))
+        launch(coroutineHandler) { sideEffect.emit(PreferencesEffect.PreferencesChanged) }
     }
 
     private fun toSaveInStorageSerializedTags(checkableTagList: List<CheckableTag>): List<String> {

@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.helpers.dualLet
 import com.miam.kmmMiamCore.miam_core.data.repository.PricingRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.Pricing
@@ -13,10 +14,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
-
-inline fun <T1: Any, T2: Any, R: Any> dualLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {
-    return if (p1 != null && p2 != null) block(p1, p2) else null
-}
 
 open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
 
@@ -35,6 +32,7 @@ open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingC
     override fun handleEvent(event: PricingContract.Event) {
         TODO("Not yet implemented")
     }
+
 
     fun setRecipe(recipeId: String, guestNumber: Int) {
         setState { copy(recipeId = recipeId, guestNumber = guestNumber) }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.miam.kmmMiamCore.component.catalog.CatalogContent
@@ -26,6 +27,8 @@ fun CatalogSuccessView(
     horizontalSpacing: Int,
     vmCatalog: CatalogViewModel
 ) {
+    fun goToDefault() = vmCatalog.setEvent(CatalogContract.Event.GoToDefault)
+
     val filter = CatalogFilter(vmCatalog.currentState.catalogFilterVM,
         { vmCatalog.setEvent(CatalogContract.Event.ToggleFilter) },
         { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
@@ -57,31 +60,32 @@ fun CatalogSuccessView(
         when (state.content) {
             CatalogContent.DEFAULT -> {
                 Box(categoryListContainer.fillMaxSize()) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
-                        categories.forEach { cat ->
-                            CatalogCategory(cat, context) {
-                                vmCatalog.setEvent(
-                                    CatalogContract.Event.GoToRecipeListFromCategory(
-                                        it.id,
-                                        it.attributes?.title ?: ""
-                                    )
-                                )
-                            }
-                        }
-                    }
-                    Template.CatalogFloatingElementTemplate?.let {
-                        it()
-                    }
+                    Categories(categories = categories, context = context, vmCatalog = vmCatalog)
+                    Template.CatalogFloatingElementTemplate?.let { it() }
                 }
 
             }
             CatalogContent.RECIPE_LIST -> {
-                CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing) {
+                CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing, ::goToDefault)
+            }
+        }
+    }
+}
+
+@Composable
+fun Categories(categories: List<Package>, context: Context, vmCatalog: CatalogViewModel) {
+    if (categories.isNotEmpty()) {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            categories.forEach { cat ->
+                CatalogCategory(cat, context) {
                     vmCatalog.setEvent(
-                        CatalogContract.Event.GoToDefault
+                        CatalogContract.Event.GoToRecipeListFromCategory(it.id, it.attributes?.title ?: "")
                     )
                 }
             }
         }
+    } else {
+        // TODO
+        Text(text = "Ho now, i'm empty... :(")
     }
 }
