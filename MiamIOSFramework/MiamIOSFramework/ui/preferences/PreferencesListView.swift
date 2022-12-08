@@ -28,8 +28,12 @@ public struct PreferencesListView: View {
             template(title, subtitle, preferences, onToggleTag)
         } else {
             VStack(alignment: .leading) {
-                Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
-                Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
+                Text(title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                    .padding(.top, Dimension.sharedInstance.mPadding)
+                Text(subtitle)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyStyle)
+                    .padding(.bottom, Dimension.sharedInstance.mPadding)
                 
                 VStack(alignment: .leading) {
                     ForEach(preferences, id: \.self) { tag in
@@ -83,6 +87,7 @@ public struct PreferenceListItemView: View {
                     }
                     .foregroundColor(Color.white)
                     Text(tagName)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 }.padding(Dimension.sharedInstance.lPadding)
                 Divider()
             }
