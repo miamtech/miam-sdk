@@ -256,7 +256,8 @@ object Template {
     ) -> Unit)? = null
 
     var CatalogSearchResultEmptyTemplate: (@Composable() (
-        returnToCatalog: () -> Unit
+        returnToCatalog: () -> Unit,
+        pageTitle: String
     ) -> Unit)? = null
 
 

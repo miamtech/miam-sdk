@@ -167,111 +167,117 @@ private fun CatalogEmptyPage(
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-
-
     if (isFavorit) {
         if (Template.CatalogFavoritEmptyTemplate != null) {
             Template.CatalogFavoritEmptyTemplate?.let {
-                it { returnToCategoriesPage() }
+                it(returnToCategoriesPage)
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(primary)
-            ) {
+            FavoriteEmptyPage(returnToCategoriesPage)
+        }
+    } else {
+        if (Template.CatalogSearchResultEmptyTemplate != null) {
+            Template.CatalogSearchResultEmptyTemplate?.let {
+                it(returnToCategoriesPage, recipePageVM.currentState.title)
+            }
+        } else {
+            SearchResultEmptyPage(pageTitle = recipePageVM.currentState.title)
+        }
+    }
+}
 
-                Column(
-                    Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(CatalogImage.empty),
-                        contentDescription = null,
-                        Modifier
-                            .padding(vertical = 16.dp)
+@Composable
+fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primary)
+    ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(CatalogImage.empty),
+                contentDescription = null,
+                Modifier
+                    .padding(vertical = 16.dp)
+            )
+            Clickable(onClick = { returnToCategoriesPage() }) {
+                Column {
+                    Text(
+                        text = "Oups, vous n’avez pas encore d’idée repas",
+                        color = white,
+                        style = Typography.subtitleBold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 8.dp)
                     )
-                    Clickable(onClick = { returnToCategoriesPage() }) {
-                        Column {
-                            Text(
-                                text = "Oups, vous n’avez pas encore d’idée repas",
-                                color = white,
-                                style = Typography.subtitleBold,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
-                            )
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Box(
-                                    Modifier
-                                        .clip(RoundedCornerShape(50))
-                                        .background(white)
-                                ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(
-                                            text = "Parcourir les idées repas",
-                                            color = primary,
-                                            modifier = Modifier.padding(
-                                                horizontal = 16.dp,
-                                                vertical = 8.dp
-                                            ),
-                                        )
-                                        Image(
-                                            painter = painterResource(CatalogImage.back),
-                                            contentDescription = null,
-                                            Modifier.padding(start = 8.dp)
-                                        )
-                                    }
-                                }
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(white)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "Parcourir les idées repas",
+                                    color = primary,
+                                    modifier = Modifier.padding(
+                                        horizontal = 16.dp,
+                                        vertical = 8.dp
+                                    ),
+                                )
+                                Image(
+                                    painter = painterResource(CatalogImage.back),
+                                    contentDescription = null,
+                                    Modifier.padding(start = 8.dp)
+                                )
                             }
                         }
                     }
                 }
             }
         }
-    } else {
-        if (Template.CatalogSearchResultEmptyTemplate != null) {
-            Template.CatalogSearchResultEmptyTemplate?.let {
-                it { returnToCategoriesPage() }
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(primary)
-            ) {
+    }
+}
 
-                Column(
-                    Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(CatalogImage.empty),
-                        contentDescription = null,
-                        Modifier
-                            .padding(vertical = 16.dp)
-                    )
-                    Text(
-                        text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                        color = white,
-                        style = Typography.subtitleBold,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Text(
-                        text = "Essayez une nouvelle recherche.",
-                        color = white
-                    )
-                }
-            }
+@Composable
+fun SearchResultEmptyPage(pageTitle: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primary)
+    ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(CatalogImage.empty),
+                contentDescription = null,
+                Modifier
+                    .padding(vertical = 16.dp)
+            )
+            Text(
+                text = "Oups, aucune recette n’a été trouvée pour '$pageTitle'",
+                color = white,
+                style = Typography.subtitleBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Text(
+                text = "Essayez une nouvelle recherche.",
+                color = white
+            )
         }
     }
 }
