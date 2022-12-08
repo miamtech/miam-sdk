@@ -25,8 +25,9 @@ internal struct CatalogRecipesPageSuccessView: View {
             ScrollView {
                 VStack {
                         HStack {
-                            Text(title).font(Font.system(size: 20.0))
-                                .fontWeight(.heavy).frame(height: 40.0)
+                            Text(title)
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
+                                .frame(height: 40.0)
                             Spacer()
                         }
                         LazyVGrid( columns:  Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing){

@@ -30,7 +30,9 @@ public struct CatalogRecipePageNoResultsView: View {
                     Button {
                         browseCatalogAction()
                     } label: {
-                        Text("\(MiamText.sharedInstance.browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
+                        Text("\(MiamText.sharedInstance.browseRecipesText)")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
+                            .foregroundColor(Color.miamColor(.primary))
                         Image.miamImage(icon: .rightArrow)
                     }
                     .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
@@ -43,7 +45,7 @@ public struct CatalogRecipePageNoResultsView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.miamColor(.white))
                     Text("\(MiamText.sharedInstance.tryAnotherSearchText)")
-                        .font(.system(size: 16.0))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                         .foregroundColor(Color.miamColor(.white))
                 }
             }

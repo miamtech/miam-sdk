@@ -23,9 +23,9 @@ struct RecipeTimeView: View {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
                         .foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .regular, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                     Text(preparationTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .heavy, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
             }
             
@@ -33,9 +33,9 @@ struct RecipeTimeView: View {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
                         .foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .regular, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                     Text(cookingTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .heavy, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
             }
             
@@ -43,9 +43,9 @@ struct RecipeTimeView: View {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.restingTime + " :")
                         .foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .regular, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                     Text(restingTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .font(.system(size: 13.0, weight: .heavy, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
             }
             Spacer()

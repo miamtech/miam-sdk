@@ -37,7 +37,7 @@ struct RecipeDetailsStepRow: View {
             
             Text(step.attributes!.stepDescription ?? "")
                 .foregroundColor(Color.miamColor(.black20))
-                .font(.system(size: 16, weight: .regular, design: .default))
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 .multilineTextAlignment(.leading)
                 .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
             Spacer()

@@ -18,7 +18,9 @@ struct FavoritesEmptyView: View {
             Button {
                 browseCatalogAction()
             } label: {
-                Text("\(MiamText.sharedInstance.browseRecipesText)").foregroundColor(Color.miamColor(.primary)).fontWeight(.semibold)
+                Text("\(MiamText.sharedInstance.browseRecipesText)")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
+                    .foregroundColor(Color.miamColor(.primary))
                 Image.miamImage(icon: .rightArrow)
             }
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))

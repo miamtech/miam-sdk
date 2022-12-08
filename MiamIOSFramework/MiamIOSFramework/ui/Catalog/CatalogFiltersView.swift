@@ -29,7 +29,8 @@ struct CatalogFiltersView: View {
                 VStack() {
                     // Title and close button
                     HStack {
-                        Text(MiamText.sharedInstance.filtersTitle).fontWeight(.bold)
+                        Text(MiamText.sharedInstance.filtersTitle)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                         Spacer()
                         Button {
                             closeFilters()
@@ -84,7 +85,8 @@ internal struct CatalogFilterSection: View {
             Template.sharedInstance.catalogFiltersSectionTemplate!(title, filters, filterSelected)
         } else {
             VStack(alignment: .leading) {
-                Text(title).bold().fontWeight(.bold)
+                Text(title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                 ForEach(filters, id: \.self) { filter in
                     CatalogFilterRow(filter: filter) { option in
                         filterSelected(option)
@@ -117,7 +119,8 @@ internal struct CatalogFilterRow: View {
                     }
                 }.frame(width: 22, height: 22)
                     .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(Color.miamColor(.primary), lineWidth: 1.0))
-                Text(filter.uiLabel).fontWeight(Font.Weight.regular)
+                Text(filter.uiLabel)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 Spacer()
             }
         }

@@ -190,7 +190,9 @@ internal struct CatalogPackageRow: View {
             Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
         } else {
             VStack(alignment: .leading) {
-                Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mlPadding)
+                Text(package.title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle) // TODO: check mockup
+                    .padding(Dimension.sharedInstance.mlPadding)
                 HStack {
                     Spacer()
                     Button {
@@ -227,8 +229,8 @@ internal struct CatalogViewHeader: View {
                 VStack (alignment: .leading) {
                     Spacer()
                     Text(MiamText.sharedInstance.mealIdeas)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                         .foregroundColor(.white)
-                        .font(.system(size: 20)).bold()
                     Image.miamImage(icon: .yellowUnderline)
                         .position(x: 145.0, y: -12.0)
                 }

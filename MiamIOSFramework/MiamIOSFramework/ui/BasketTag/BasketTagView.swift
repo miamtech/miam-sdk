@@ -100,8 +100,8 @@ internal struct BasketTagListModal: View {
                             ForEach(recipes, id: \.self) { recipe in
                                 Text(recipe.attributes?.title ?? "")
                                     .underline()
+                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                                     .foregroundColor(Color.miamColor(.ternary))
-                                    .bold()
                                     .padding(.horizontal,8)
                                     .padding(.vertical,4)
                                     .onTapGesture {
