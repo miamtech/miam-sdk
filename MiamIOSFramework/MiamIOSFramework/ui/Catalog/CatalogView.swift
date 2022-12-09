@@ -182,10 +182,16 @@ internal struct CatalogSuccessView: View {
 }
 
 @available(iOS 14, *)
-internal struct CatalogPackageRow: View {
+public struct CatalogPackageRow: View {
     let package: CatalogPackage
     let showRecipes: (CatalogPackage) -> Void
-    var body: some View {
+    
+    public init(package: CatalogPackage, showRecipes: @escaping (CatalogPackage) -> Void) {
+        self.package = package
+        self.showRecipes = showRecipes
+    }
+    
+    public var body: some View {
         if (Template.sharedInstance.catalogPackageRowTemplate != nil) {
             Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
         } else {
