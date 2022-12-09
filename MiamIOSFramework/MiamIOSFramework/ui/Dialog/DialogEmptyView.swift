@@ -15,11 +15,13 @@ struct DialogEmptyView: View {
         NavigationView {
             VStack {
                 Text("Une erreur s'est produite. Veuillez réessayer")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 Button {
                     closeAction()
                 } label: {
                     HStack(alignment: .center) {
                         Text("Fermer")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     }
                 }.foregroundColor(Color.miamColor(.white))
                     .frame(minHeight: 40.0, maxHeight: 40.0)

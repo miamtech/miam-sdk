@@ -31,6 +31,7 @@ struct RecipeDetailsStepRow: View {
                     .fill(Color.miamColor(.primaryText))
                     .frame(width: 35.0, height: 35.0)
                 Text(String(index+1))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     .foregroundColor(Color.miamColor(.white))
                     .frame( alignment: .center)
             }

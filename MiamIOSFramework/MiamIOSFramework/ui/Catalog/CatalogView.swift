@@ -198,7 +198,11 @@ internal struct CatalogPackageRow: View {
                     Button {
                         showRecipes(package)
                     } label: {
-                        Text(MiamText.sharedInstance.showAll).foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
+                        Text(MiamText.sharedInstance.showAll)
+                            .underline()
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                            .foregroundColor(Color.miamColor(.primaryText))
+                            .padding([.trailing], 16.0).padding([.top], 8)
                     }
                 }
                 ScrollView(.horizontal) {
@@ -319,7 +323,9 @@ internal struct CatalogToolbarView: View {
                             Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
-                            Text(MiamText.sharedInstance.myMealIdeas).foregroundColor(.white)
+                            Text(MiamText.sharedInstance.myMealIdeas)
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                                .foregroundColor(.white)
                         }
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))

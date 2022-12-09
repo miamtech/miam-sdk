@@ -57,7 +57,9 @@ struct CatalogFiltersView: View {
                     Button {
                         catalogFilters.clear()
                     } label: {
-                        Text(MiamText.sharedInstance.removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
+                        Text(MiamText.sharedInstance.removeFiltersButtonTitle)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                            .foregroundColor(Color.miamColor(.primaryText))
                     }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
                     Divider().padding([.bottom, .top], 10)
                     Button {
@@ -65,6 +67,7 @@ struct CatalogFiltersView: View {
                     } label: {
                         Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
                             .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                             .foregroundColor(.white)
                             .background(Color.miamColor(.primary))
                             .clipShape(Capsule())

@@ -22,6 +22,7 @@ struct MyMealLoadingView: View {
                     VStack{
                         ProgressLoader(color: Color.miamColor(.primary))
                         Text(MiamText.sharedInstance.simmering)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     }
                     Spacer()
                     
