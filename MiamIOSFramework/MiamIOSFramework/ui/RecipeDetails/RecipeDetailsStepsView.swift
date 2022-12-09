@@ -19,8 +19,8 @@ struct RecipeDetailsStepsView: View {
         } else {
             HStack {
                 Text(MiamText.sharedInstance.steps)
-                    .foregroundColor(Color.miamColor(.black))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
+                    .foregroundColor(Color.miamColor(.black))
                     .padding(Dimension.sharedInstance.lPadding)
                 Spacer()
             }.frame(height: 60.0, alignment: .topLeading)

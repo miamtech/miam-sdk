@@ -51,8 +51,8 @@ struct RecipeDetailsHeaderView: View {
             
             HStack() {
                 Text(title)
-                    .foregroundColor(Color.miamColor(.black))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
+                    .foregroundColor(Color.miamColor(.black))
                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                     .frame( alignment: .topLeading)
                     .background(GeometryReader {
@@ -78,8 +78,8 @@ struct RecipeDetailsHeaderView: View {
                     VStack(alignment: .center) {
                         Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
                         Text(totalTime)
-                            .foregroundColor(Color.miamColor(.secondaryText))
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodySmallStyle)
+                            .foregroundColor(Color.miamColor(.secondaryText))
                     }
                 }
                 Spacer()

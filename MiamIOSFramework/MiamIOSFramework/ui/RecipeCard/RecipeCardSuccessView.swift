@@ -58,8 +58,8 @@ internal struct RecipeCardSuccessView: View {
                 }.frame(height: 240)
                 Text(recipe?.attributes?.title ?? "")
                     .lineLimit(2)
-                    .foregroundColor(Color.miamColor(.black))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
+                    .foregroundColor(Color.miamColor(.black))
                     .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                         leading: Dimension.sharedInstance.lPadding,
                                         bottom: Dimension.sharedInstance.mlPadding,

@@ -26,23 +26,23 @@ struct RecipeDetailsDifficulty: View {
                    
                 }
                 Text(MiamText.sharedInstance.difficultyEasy)
-                    .foregroundColor(Color.miamColor(.secondaryText))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                    .foregroundColor(Color.miamColor(.secondaryText))
             case 2 :
                 HStack{
                     Image.miamImage(icon: .difficultyMedium).frame( height: 24.0, alignment: .center)
                 }
                 Text(MiamText.sharedInstance.difficultyMid)
-                    .foregroundColor(Color.miamColor(.secondaryText))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                    .foregroundColor(Color.miamColor(.secondaryText))
 
             case 3 :
                 HStack{
                     Image.miamImage(icon: .difficultyHigh).frame(width: 24.0, height: 24.0, alignment: .center)
                 }
                 Text(MiamText.sharedInstance.difficultyHard)
-                    .foregroundColor(Color.miamColor(.secondaryText))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                    .foregroundColor(Color.miamColor(.secondaryText))
 
             default :
                 HStack{
@@ -50,8 +50,8 @@ struct RecipeDetailsDifficulty: View {
                    
                 }
                 Text(MiamText.sharedInstance.difficultyEasy)
-                    .foregroundColor(Color.miamColor(.secondaryText))
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle) // TODO: check font size in mockups
+                    .foregroundColor(Color.miamColor(.secondaryText))
             }
             
         }

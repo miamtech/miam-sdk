@@ -47,8 +47,8 @@ public struct RecipeDetailsView: View {
                         .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
                     if (showTitleInHeader) {
                         Text(viewModel.recipe?.attributes?.title ?? "")
-                            .foregroundColor(Color.miamColor(.black))
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                            .foregroundColor(Color.miamColor(.black))
                             .padding(.horizontal, Dimension.sharedInstance.lPadding)
                             .frame( alignment: .topLeading)
                             .lineLimit(1)

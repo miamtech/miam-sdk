@@ -25,31 +25,31 @@ struct RecipeDetailsMoreInfo: View {
             if (recipe.preparationTimeIos != "0") {
                 HStack{
                     Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                    Text(recipe.preparationTimeIos)
                         .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.preparationTimeIos)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
             if (recipe.cookingTimeIos != "0") {
                 HStack{
                     Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                    Text(recipe.cookingTimeIos)
                         .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.cookingTimeIos)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
             if (recipe.restingTimeIos != "0") {
                 HStack{
                     Text(RecipeDetailsText.sharedInstance.restingTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                    Text(recipe.restingTimeIos)
                         .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.restingTimeIos)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
         }
@@ -64,8 +64,8 @@ struct RecipeDetailsMoreInfo: View {
             }) {
                 HStack {
                     Text(MiamText.sharedInstance.recpeitDetailsInfo)
-                        .foregroundColor(Color.miamColor(.grey))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.grey))
                         .padding(Dimension.sharedInstance.mPadding)
                         .padding(.leading, Dimension.sharedInstance.lPadding)
                     Image.miamImage(icon: .greyChevronDown)

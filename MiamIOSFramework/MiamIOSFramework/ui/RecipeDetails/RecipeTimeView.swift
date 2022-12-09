@@ -22,8 +22,8 @@ struct RecipeTimeView: View {
             if (preparationTime != noPreparationTime) {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                     Text(preparationTime).foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
@@ -32,8 +32,8 @@ struct RecipeTimeView: View {
             if (cookingTime != noCookingTime) {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                     Text(cookingTime).foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
@@ -42,8 +42,8 @@ struct RecipeTimeView: View {
             if (restingTime != noRestingTime) {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.restingTime + " :")
-                        .foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                     Text(restingTime).foregroundColor(Color.miamColor(.secondaryText))
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                 }
