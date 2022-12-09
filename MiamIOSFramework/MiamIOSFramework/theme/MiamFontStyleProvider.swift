@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 @available(iOS 14, *)
-public struct ButtonFontStyle: MiamFontStyle {
-    var font: Font = Font.system(size: 15, weight: .bold, design: .default)
+public struct TitleBigFontStyle: MiamFontStyle {
+    var font: Font = Font.system(size: 24, weight: .bold, design: .default)
     var color: Color? = nil
 }
 
@@ -116,12 +116,12 @@ public struct MiamFontStyleProvider {
     static let sharedInstance = MiamFontStyleProvider()
     
     public var titleStyle = TitleFontStyle()
+    public var titleBigStyle = TitleBigFontStyle()
     public var titleMediumStyle = TitleMediumFontStyle()
     public var titleSmallStyle = TitleSmallFontStyle()
     public var titleExtraSmallStyle = TitleExtraSmallFontStyle()
     public var titleExtraSmallMediumStyle = TitleExtraSmallMediumFontStyle()
     public var subtitleStyle = SubtitleFontStyle()
-    public var buttonStyle = ButtonFontStyle()
     public var bodyStyle = BodyFontStyle()
     public var bodyBigStyle = BodyBigFontStyle()
     public var bodyBigLightStyle = BodyBigLightFontStyle()
