@@ -56,9 +56,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 goToFavorites()
             }
             is CatalogContract.Event.GoToRecipeList -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") {
-                    handleEvent(CatalogContract.Event.GoToDefault)
-                }))
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") { handleEvent(CatalogContract.Event.GoToDefault) }))
                 setState {
                     copy(
                         content = CatalogContent.RECIPE_LIST,
@@ -78,36 +76,22 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                         currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
-                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") {
-                    handleEvent(CatalogContract.Event.GoToDefault)
-                }))
-                setState {
-                    copy(
-                        content = CatalogContent.RECIPE_LIST,
-                        searchOpen = false,
-                    )
-                }
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") { handleEvent(CatalogContract.Event.GoToDefault) }))
+                setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
             is CatalogContract.Event.TogglePreference -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
-                    setState { copy(preferenceOpen = false) }
-                })))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, { setState { copy(preferenceOpen = false) } })))
                 setState { copy(preferenceOpen = !currentState.preferenceOpen) }
             }
             is CatalogContract.Event.ToggleFilter -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
-                    setState { copy(filterOpen = false) }
-                })))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, { setState { copy(filterOpen = false) } })))
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
             is CatalogContract.Event.ToggleSearch -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
-                    setState { copy(searchOpen = false) }
-                })))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, { setState { copy(searchOpen = false) } })))
                 setState { copy(searchOpen = !currentState.searchOpen) }
             }
             is CatalogContract.Event.OnFilterValidation -> {
-
                 routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } }))
                 setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
             }
@@ -117,6 +101,9 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             }
             is CatalogContract.Event.OnCloseModal -> {
                 setState { copy(searchOpen = false, filterOpen = false, preferenceOpen = false) }
+            }
+            is CatalogContract.Event.GoBack -> {
+                routeService.previous()
             }
         }
     }

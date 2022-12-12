@@ -62,7 +62,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
     }
 
     fun goToBack() {
-        catalogVm.setEvent(CatalogContract.Event.GoToDefault)
+        catalogVm.setEvent(CatalogContract.Event.GoBack)
     }
 
     fun getActiveFilterCount(): Int {
