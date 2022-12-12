@@ -24,8 +24,62 @@ object RouteServiceInstance: KoinComponent {
     val instance: RouteService by inject()
 }
 
-data class Route(val name: String, val title: String, val isModalRoute: Boolean, val goToPreviousAction: () -> Unit, val previous: Route?)
+abstract class Route(
+    open val title: String,
+    open val backToRoute: () -> Unit
+) {
+    val previous: Route? = RouteService.getCurrentRoute()
 
+    abstract fun onDialogBack(route: Route?): Boolean
+
+    abstract fun onDialogClose(): Boolean
+
+    abstract fun onPageBack()
+
+    abstract fun onPrevious()
+
+}
+
+data class DialogRoute(override val title: String, override val backToRoute: () -> Unit, val closeDialog: () -> Unit):
+    Route(title, backToRoute) {
+
+    override fun onDialogBack(route: Route?): Boolean {
+        route?.backToRoute?.let { it() }
+        return false
+    }
+
+    override fun onDialogClose(): Boolean {
+        return false
+    }
+
+    override fun onPageBack() {}
+
+    override fun onPrevious() {
+        if (previous == null || previous.onDialogBack(previous)) {
+            this.closeDialog()
+        }
+    }
+}
+
+data class PageRoute(override val title: String, override val backToRoute: () -> Unit):
+    Route(title, backToRoute) {
+
+    override fun onDialogBack(route: Route?): Boolean {
+        return true
+    }
+
+    override fun onDialogClose(): Boolean {
+        return false
+    }
+
+    override fun onPageBack() {
+        this.backToRoute()
+    }
+
+    override fun onPrevious() {
+        previous?.onPageBack()
+    }
+}
 
 data class RouteServiceState(val route: Route?): State
 
@@ -35,7 +89,6 @@ sealed class RouteServiceAction: Action {
 
 sealed class RouteServiceEffect: Effect {
     data class RouteChanged(val newRoute: Route): RouteServiceEffect()
-    object CloseModal: RouteServiceEffect()
 }
 
 open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServiceEffect>, CoroutineScope by CoroutineScope(Dispatchers.Main) {
@@ -49,17 +102,10 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     override fun observeState(): StateFlow<RouteServiceState> = state
     override fun observeSideEffect(): Flow<RouteServiceEffect> = sideEffect
 
-
     override fun dispatch(action: RouteServiceAction): Job {
         return when (action) {
             is RouteServiceAction.SetRoute -> {
                 return launch(coroutineHandler) {
-                    state.value.route?.let {
-                        if (state.value.route!!.isModalRoute && !action.route.isModalRoute) {
-                            sideEffect.emit(RouteServiceEffect.CloseModal)
-                            popRoute()
-                        }
-                    }
                     state.value = state.value.copy(route = action.route)
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
@@ -69,43 +115,31 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     }
 
     fun previous(): Boolean {
-        // no need to use miam previous function
-        if (state.value.route == null) return true
-        state.value.route?.let { route ->
-            // if it was last route of the modal internal routing
-            if (route.isModalRoute && (route.previous == null || !route.previous.isModalRoute)) {
-                launch(coroutineHandler) {
-                    sideEffect.emit(RouteServiceEffect.CloseModal)
-                }
-            }
-        }
-
-        state.value.route?.let {
-            it.goToPreviousAction()
-        }
-
-        state.value = state.value.copy(route = state.value.route?.previous)
+        popRoute()?.onPrevious()
         state.value.route?.let { route ->
             launch {
                 sideEffect.emit(route.let { RouteServiceEffect.RouteChanged(it) })
             }
+            return false
         }
-        return false
+        return true
     }
 
-    fun popRoute() {
-        clearModalHistory(state.value.route?.previous)
-    }
-
-    fun getCurrentRoute(): Route? {
-        return state.value.route
-    }
-
-    private fun clearModalHistory(route: Route?) {
-        if (route == null || !route.isModalRoute) {
-            return
+    fun onCloseDialog() {
+        getCurrentRoute()?.let {
+            if (it.onDialogClose()) {
+                launch {
+                    sideEffect.emit(RouteServiceEffect.RouteChanged(it))
+                }
+            }
         }
-        clearModalHistory(route.previous)
+        popRoute()?.let { onCloseDialog() }
+    }
+
+    private fun popRoute(): Route? {
+        val poppedRoute = state.value.route
+        state.value = state.value.copy(route = poppedRoute?.previous)
+        return poppedRoute
     }
 
     fun onRouteChange(updateRoute: (miamRoute: Route?) -> Unit) {
@@ -118,14 +152,9 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         }
     }
 
-    fun onClose(closeAction: () -> Unit) {
-        launch(coroutineHandler) {
-            observeSideEffect()
-                .filter { it is RouteServiceEffect.CloseModal }
-                .collect { _ ->
-                    popRoute()
-                    closeAction()
-                }
+    companion object {
+        fun getCurrentRoute(): Route? {
+            return RouteServiceInstance.instance.state.value.route
         }
     }
 }

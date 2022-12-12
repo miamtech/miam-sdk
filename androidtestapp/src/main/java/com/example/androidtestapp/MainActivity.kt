@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -114,7 +115,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             toast.show()
         }
         routeService.onRouteChange {
-            val toast = Toast.makeText(this@MainActivity, it?.name ?: "", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(this@MainActivity, it?.title ?: "", Toast.LENGTH_SHORT)
             toast.show()
         }
         ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
@@ -276,11 +277,19 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
     }
 
+
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initMiam()
         initFakeBasket()
+
+        val onBackPressedCallback = object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                routeService.previous()
+            }
+        }
+        this@MainActivity.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         setContent {
             val navController = rememberNavController()
             var isMyMealPage by remember { mutableStateOf(false) }
@@ -290,7 +299,10 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") {
                     BackHandler {
-                        routeService.previous()
+                        val shoudImove = routeService.previous()
+                        if (shoudImove) {
+                            isCatalogPage = false
+                        }
                     }
                     Column {
                         Row {

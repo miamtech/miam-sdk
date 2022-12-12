@@ -1,12 +1,18 @@
 package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
@@ -17,6 +23,7 @@ import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage.toggleCaret
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
@@ -31,26 +38,16 @@ class RouterOutlet: KoinComponent {
     private val itemSelectorViewModel: ItemSelectorViewModel by inject()
     private val routeService: RouteService by inject()
 
-
     fun getViewModel(): RouterOutletViewModel {
         return vmRouter
     }
 
     fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
-        vmRouter.setEvent(
-            RouterOutletContract.Event.GoToDetail(
-                vmRecipe, showDetailsFooter
-            )
-        )
+        vmRouter.setEvent(RouterOutletContract.Event.GoToDetail(vmRecipe, showDetailsFooter))
     }
 
     fun goToPreview(recipeId: String, vmRecipe: RecipeViewModel) {
-        vmRouter.setEvent(
-            RouterOutletContract.Event.GoToPreview(
-                recipeId = recipeId,
-                vm = vmRecipe
-            )
-        )
+        vmRouter.setEvent(RouterOutletContract.Event.GoToPreview(recipeId = recipeId, vm = vmRecipe))
     }
 
     fun goToReplaceItem() {
@@ -58,10 +55,7 @@ class RouterOutlet: KoinComponent {
             ItemSelectorContract.Event.SetReturnToBasketPreview(
                 returnToPreview = {
                     if (vmRouter.currentState.recipeId != null && vmRouter.currentState.rvm != null) {
-                        goToPreview(
-                            vmRouter.currentState.recipeId!!,
-                            vmRouter.currentState.rvm!!
-                        )
+                        goToPreview(vmRouter.currentState.recipeId!!, vmRouter.currentState.rvm!!)
                     } else {
                         close()
                     }
@@ -83,7 +77,6 @@ class RouterOutlet: KoinComponent {
         val state by vmRouter.uiState.collectAsState()
 
         if (state.isOpen) {
-
             Dialog(
                 onDismissRequest = { routeService.previous() },
                 properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -108,7 +101,7 @@ fun EmptyView(close: () -> Unit) {
                     onClick = { close() },
                 ) {
                     Image(
-                        painter = painterResource(Image.toggleCaret),
+                        painter = painterResource(toggleCaret),
                         contentDescription = null,
                         modifier = RecipeDetailsStyle.headerCloseIconModifier.rotate(180f)
                     )
@@ -134,8 +127,8 @@ fun FullScreenContent(
             RouterContent.RECIPE_DETAIL -> state.rvm?.let {
                 RecipeDetails(
                     it,
-                    vmRouter,
-                    fun() { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) })
+                    vmRouter
+                ) { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) }
             }
             RouterContent.BASKET_PREVIEW -> state.rvm?.let {
                 BasketPreview(

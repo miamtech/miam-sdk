@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -83,7 +82,6 @@ fun CatalogPage(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CatalogSuccessPage(
     recipePageVM: RecipeListPageViewModel,
@@ -167,8 +165,6 @@ private fun CatalogEmptyPage(
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-
-
     if (isFavorit) {
         if (Template.CatalogFavoritEmptyTemplate != null) {
             Template.CatalogFavoritEmptyTemplate?.let {
@@ -180,7 +176,6 @@ private fun CatalogEmptyPage(
                     .fillMaxSize()
                     .background(primary)
             ) {
-
                 Column(
                     Modifier
                         .align(Alignment.Center)

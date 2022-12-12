@@ -7,7 +7,8 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
-import com.miam.kmmMiamCore.services.Route
+import com.miam.kmmMiamCore.services.DialogRoute
+import com.miam.kmmMiamCore.services.PageRoute
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -24,6 +25,9 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val routeService: RouteService by inject()
 
+    private val currentFiltersQuery: String
+        get() = currentState.catalogFilterVM.getSelectedFilterAsQueryString()
+
     override fun createInitialState(): CatalogContract.State =
         CatalogContract.State(
             categories = BasicUiState.Loading,
@@ -37,41 +41,24 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             enablePreferences = false
         )
 
+    init {
+        routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Idées repas", ::goToCatalogMain)))
+    }
+
     override fun handleEvent(event: CatalogContract.Event) {
         when (event) {
             is CatalogContract.Event.GoToDefault -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("category", "Idées repas", false, {}, routeService.getCurrentRoute())))
-                setState {
-                    copy(
-                        content = CatalogContent.DEFAULT,
-                        searchOpen = false,
-                        filterOpen = false,
-                        catalogFilterVM = SingletonFilterViewModel()
-                    )
-                }
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Idées repas", ::goToCatalogMain)))
+                goToCatalogMain()
             }
             is CatalogContract.Event.GoToFavorite -> {
-                currentState.catalogFilterVM.setFavorite()
-                currentState.recipePageVM.setEvent(
-                    RecipeListPageContract.Event.InitPage(
-                        "Mes idées repas",
-                        currentState.catalogFilterVM.getSelectedFilterAsQueryString()
-                    )
-                )
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("favorite", "Mes repas favoris", false, {
-                    handleEvent(CatalogContract.Event.GoToDefault)
-                }, routeService.getCurrentRoute())))
-                setState {
-                    copy(
-                        content = CatalogContent.RECIPE_LIST,
-                        searchOpen = false,
-                    )
-                }
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Mes repas favoris", ::goToFavorites)))
+                goToFavorites()
             }
             is CatalogContract.Event.GoToRecipeList -> {
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("recipes", "Une envie de ?", false, {
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") {
                     handleEvent(CatalogContract.Event.GoToDefault)
-                }, routeService.getCurrentRoute())))
+                }))
                 setState {
                     copy(
                         content = CatalogContent.RECIPE_LIST,
@@ -87,13 +74,13 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 currentState.catalogFilterVM.setCat(event.categoryId)
                 currentState.recipePageVM.setEvent(
                     RecipeListPageContract.Event.InitPage(
-                        "${event.title}",
+                        event.title,
                         currentState.catalogFilterVM.getSelectedFilterAsQueryString()
                     )
                 )
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("recipes", "Une envie de ?", false, {
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") {
                     handleEvent(CatalogContract.Event.GoToDefault)
-                }, routeService.getCurrentRoute())))
+                }))
                 setState {
                     copy(
                         content = CatalogContent.RECIPE_LIST,
@@ -102,28 +89,30 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 }
             }
             is CatalogContract.Event.TogglePreference -> {
-                if (currentState.preferenceOpen) routeService.popRoute()
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("preferences", "", true, {}, routeService.getCurrentRoute())))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
+                    setState { copy(preferenceOpen = false) }
+                })))
                 setState { copy(preferenceOpen = !currentState.preferenceOpen) }
             }
             is CatalogContract.Event.ToggleFilter -> {
-                if (currentState.filterOpen) routeService.popRoute()
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("filter", "", true, {}, routeService.getCurrentRoute())))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
+                    setState { copy(filterOpen = false) }
+                })))
                 setState { copy(filterOpen = !currentState.filterOpen) }
             }
             is CatalogContract.Event.ToggleSearch -> {
-                if (currentState.searchOpen) routeService.popRoute()
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("search", "", true, {}, routeService.getCurrentRoute())))
+                routeService.dispatch(RouteServiceAction.SetRoute(DialogRoute("", {}, {
+                    setState { copy(searchOpen = false) }
+                })))
                 setState { copy(searchOpen = !currentState.searchOpen) }
             }
             is CatalogContract.Event.OnFilterValidation -> {
-                routeService.popRoute()
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("recipes", "Une envie de ?", false, {}, routeService.getCurrentRoute())))
+
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } }))
                 setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
             }
             is CatalogContract.Event.OnSearchLaunch -> {
-                routeService.popRoute()
-                routeService.dispatch(RouteServiceAction.SetRoute(Route("recipes", "Une envie de ?", false, {}, routeService.getCurrentRoute())))
+                routeService.dispatch(RouteServiceAction.SetRoute(PageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } }))
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
             is CatalogContract.Event.OnCloseModal -> {
@@ -136,6 +125,16 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         fetchCategories()
     }
 
+    private fun goToCatalogMain() {
+        setState { copy(content = CatalogContent.DEFAULT, searchOpen = false, filterOpen = false, catalogFilterVM = SingletonFilterViewModel()) }
+    }
+
+    private fun goToFavorites() {
+        currentState.catalogFilterVM.setFavorite()
+        currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage("Mes idées repas", currentFiltersQuery))
+        setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
+    }
+
     fun enablePreferences(enable: Boolean = true) {
         setState { copy(enablePreferences = enable) }
     }
@@ -144,7 +143,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         setState { copy(enableFilters = enable) }
     }
 
-    fun fetchRecipes() {
+    private fun fetchRecipes() {
         currentState.recipePageVM.setEvent(
             RecipeListPageContract.Event.InitPage(
                 if ((currentState.catalogFilterVM.currentState.searchString

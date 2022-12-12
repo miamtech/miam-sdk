@@ -38,7 +38,7 @@ class Catalog @JvmOverloads constructor(
         this.catalogPageColumns = catalogPageColumns ?: this.catalogPageColumns
         this.catalogPageVerticalSpacing = catalogPageVerticalSpacing ?: this.catalogPageVerticalSpacing
         this.catalogPageHorizontalSpacing = catalogPageHorizontalSpacing ?: this.catalogPageHorizontalSpacing
-        this.routeService.onClose { vmCatalog.setEvent(CatalogContract.Event.OnCloseModal) }
+        this.routeService.onCloseDialog()
         if (categoryId != null) {
             vmCatalog.setEvent(
                 CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
@@ -60,8 +60,7 @@ class Catalog @JvmOverloads constructor(
     override fun Content() {
 
         val state by vmCatalog.uiState.collectAsState()
-
-
+        
         Box {
             Column {
                 ManagementResourceState(
