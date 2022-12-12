@@ -54,6 +54,12 @@ public struct PreferencesListView: View {
 public struct PreferenceListItemView: View {
     public let tag: CheckableTag
     public let onToggleTag: (CheckableTag) -> Void
+    
+    public init(tag: CheckableTag, onToggleTag: @escaping (CheckableTag) -> Void) {
+        self.tag = tag
+        self.onToggleTag = onToggleTag
+    }
+    
     var tagName: String {
         get {
             if let name = tag.tag.attributes?.name {

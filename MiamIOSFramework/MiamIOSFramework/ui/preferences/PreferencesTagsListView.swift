@@ -102,6 +102,10 @@ public struct PreferencesTagsListView: View {
 @available(iOS 14, *)
 public struct AddTagView: View {
     public let onTapped: () -> Void
+   
+    public init(onTapped: @escaping () -> Void) {
+        self.onTapped = onTapped
+    }
     
     public var body: some View {
         if let template = Template.sharedInstance.addTagViewTemplate {
@@ -155,6 +159,10 @@ public struct PreferenceTagView: View {
         }
     }
     
+    public init(tag: CheckableTag, onToggleTag: @escaping (CheckableTag) -> Void) {
+        self.tag = tag
+        self.onToggleTag = onToggleTag
+    }
     
     public var body: some View {
         if let template = Template.sharedInstance.preferencesTagViewTemplate {
