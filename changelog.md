@@ -1,3 +1,7 @@
+# 3.4.0
+- [FEA][COR] New Route Service
+- [FEA][AND] Backpress supported
+
 # 3.3.0
 - [FEA][COR] Clean counter usage
 - [FEA][COR] Optimize price component
