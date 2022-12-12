@@ -21,7 +21,6 @@ struct PriceView: View {
         return "n/a"
     }
     
-    
     public init(
         recipeId: String,
         guestNumber: Int
@@ -38,10 +37,15 @@ struct PriceView: View {
         } else {
             VStack{
                 HStack(alignment: .top, spacing: 2) {
-                    Text(formattedPrice).font(.system(size: 14,weight: .bold))
-                    Text(MiamText.sharedInstance.currency).font(.system(size: 14,weight: .bold))
+                    Text(formattedPrice)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
+                    Text(MiamText.sharedInstance.currency)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                 }
-                Text(MiamText.sharedInstance.preGuests).foregroundColor(Color.miamColor(.grey)).font(.system(size: 12))
+                
+                Text(MiamText.sharedInstance.preGuests)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodySmallStyle)
+                    .foregroundColor(Color.miamColor(.grey))
             }
         }
     }

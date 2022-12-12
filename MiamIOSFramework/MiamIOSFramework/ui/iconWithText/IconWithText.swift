@@ -15,7 +15,7 @@ struct IconWithText: View {
         VStack(spacing: 6.0) {
             Image.miamImage(icon: icon)
             Text(text)
-                .font(.system(size: 11.0))
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodySmallStyle)
                 .foregroundColor(Color.miamColor(.neutralGrey))
         }
     }

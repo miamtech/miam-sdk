@@ -190,13 +190,19 @@ internal struct CatalogPackageRow: View {
             Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
         } else {
             VStack(alignment: .leading) {
-                Text(package.title).font(.system(size: 18.0, weight: .bold, design: .default)).padding(Dimension.sharedInstance.mlPadding)
+                Text(package.title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle) // TODO: check mockup
+                    .padding(Dimension.sharedInstance.mlPadding)
                 HStack {
                     Spacer()
                     Button {
                         showRecipes(package)
                     } label: {
-                        Text(MiamText.sharedInstance.showAll).foregroundColor(Color.miamColor(.primaryText)).underline().padding([.trailing], 16.0).padding([.top], 8)
+                        Text(MiamText.sharedInstance.showAll)
+                            .underline()
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                            .foregroundColor(Color.miamColor(.primaryText))
+                            .padding([.trailing], 16.0).padding([.top], 8)
                     }
                 }
                 ScrollView(.horizontal) {
@@ -227,8 +233,8 @@ internal struct CatalogViewHeader: View {
                 VStack (alignment: .leading) {
                     Spacer()
                     Text(MiamText.sharedInstance.mealIdeas)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                         .foregroundColor(.white)
-                        .font(.system(size: 20)).bold()
                     Image.miamImage(icon: .yellowUnderline)
                         .position(x: 145.0, y: -12.0)
                 }
@@ -317,7 +323,9 @@ internal struct CatalogToolbarView: View {
                             Image.miamImage(icon: .heart)
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
-                            Text(MiamText.sharedInstance.myMealIdeas).foregroundColor(.white)
+                            Text(MiamText.sharedInstance.myMealIdeas)
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                                .foregroundColor(.white)
                         }
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))

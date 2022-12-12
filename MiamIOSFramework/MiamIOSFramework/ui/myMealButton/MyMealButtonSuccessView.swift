@@ -23,9 +23,11 @@ struct MyMealButtonSuccessView: View {
                     Image.miamImage(icon: .greyChevronDown)
                         .rotationEffect(Angle(degrees: 180.0))
                     if mealsCount > 1 {
-                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAddedPlural)").bold()
+                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAddedPlural)")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                     } else {
-                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAdded)").bold()
+                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAdded)")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                     }
                 }
                 .frame(maxWidth: .infinity)

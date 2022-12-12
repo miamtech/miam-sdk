@@ -43,7 +43,9 @@ struct PreferencesSearchView: View {
                                 PreferencesVM.sharedInstance.addTag(tag)
                                 close()
                             } label: {
-                                Text(name).padding(8.0)
+                                Text(name)
+                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                                    .padding(8)
                             }
                         }
                     }

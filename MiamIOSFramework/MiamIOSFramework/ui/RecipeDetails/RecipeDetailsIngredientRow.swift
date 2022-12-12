@@ -24,15 +24,15 @@ struct RecipeDetailsIngredientRow: View {
     var body: some View {
         HStack {
             Text(ingredientName)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 .foregroundColor(Color.miamColor(.black))
-                .font(.system(size: 16, weight: .regular, design: .default))
                 .padding(Dimension.sharedInstance.mPadding)
             
             Spacer()
             
             Text(quantity)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
                 .foregroundColor(Color.miamColor(.black))
-                .font(.system(size: 16, weight: .bold, design: .default))
                 .padding(Dimension.sharedInstance.mPadding)
         }
     }

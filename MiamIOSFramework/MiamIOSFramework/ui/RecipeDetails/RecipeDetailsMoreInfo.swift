@@ -22,29 +22,41 @@ struct RecipeDetailsMoreInfo: View {
     
     var body: some View {
         HStack {
-            if(recipe.preparationTimeIos != "0") {
+            if (recipe.preparationTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.preparationTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.preparationTimeIos)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
-            if(recipe.cookingTimeIos != "0") {
+            if (recipe.cookingTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.cookingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.cookingTimeIos)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
-            if(recipe.restingTimeIos != "0") {
+            if (recipe.restingTimeIos != "0") {
                 HStack{
-                    Text(RecipeDetailsText.sharedInstance.restingTime + " :").foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .regular, design: .default))
-                    Text(recipe.restingTimeIos).foregroundColor(Color.miamColor(.secondaryText)).font(.system(size: 13.0, weight: .heavy, design: .default))
+                    Text(RecipeDetailsText.sharedInstance.restingTime + " :")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
+                    Text(recipe.restingTimeIos)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                        .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: collapsed ? 0 : .none)
-                    .clipped()
-                    .animation(.easeOut)
-                    .transition(.slide)
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: collapsed ? 0 : .none)
+        .clipped()
+        .animation(.easeOut)
+        .transition(.slide)
        
             
             Button(action: {
@@ -52,8 +64,8 @@ struct RecipeDetailsMoreInfo: View {
             }) {
                 HStack {
                     Text(MiamText.sharedInstance.recpeitDetailsInfo)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                         .foregroundColor(Color.miamColor(.grey))
-                        .font(.system(size: 13, weight: .bold, design: .default))
                         .padding(Dimension.sharedInstance.mPadding)
                         .padding(.leading, Dimension.sharedInstance.lPadding)
                     Image.miamImage(icon: .greyChevronDown)

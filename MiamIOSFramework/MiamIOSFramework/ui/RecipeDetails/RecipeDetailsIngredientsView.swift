@@ -43,8 +43,8 @@ struct RecipeDetailsIngredientsView: View {
             HStack {
                 HStack {
                     Text("\(ingredients.count) \(MiamText.sharedInstance.ingredients)")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                         .foregroundColor(Color.miamColor(.black))
-                        .font(.system(size: 20, weight: .heavy, design: .default))
                         .padding(Dimension.sharedInstance.lPadding)
                     Spacer()
                     counterView

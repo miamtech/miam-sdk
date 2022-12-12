@@ -67,6 +67,8 @@
 		BF7305FB28DDB9B500CC5D6B /* FavoritesSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305FA28DDB9B500CC5D6B /* FavoritesSuccessView.swift */; };
 		BF7305FD28DDD8CB00CC5D6B /* FavoritesEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305FC28DDD8CB00CC5D6B /* FavoritesEmptyView.swift */; };
 		BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */; };
+		BF7B91B82931205E0005B009 /* MiamFontStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B91B72931205E0005B009 /* MiamFontStyle.swift */; };
+		BF848C6629312A240094B7CA /* MiamFontStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF848C6529312A240094B7CA /* MiamFontStyleProvider.swift */; };
 		BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF882083287F0B8600D7353B /* TitleBarView.swift */; };
 		BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */; };
 		BFA507EA287C126B00F274CA /* CatalogFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA507E4287C126B00F274CA /* CatalogFiltersView.swift */; };
@@ -180,6 +182,8 @@
 		BF7305FA28DDB9B500CC5D6B /* FavoritesSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesSuccessView.swift; sourceTree = "<group>"; };
 		BF7305FC28DDD8CB00CC5D6B /* FavoritesEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesEmptyView.swift; sourceTree = "<group>"; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
+		BF7B91B72931205E0005B009 /* MiamFontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamFontStyle.swift; sourceTree = "<group>"; };
+		BF848C6529312A240094B7CA /* MiamFontStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamFontStyleProvider.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
 		BFA507E4287C126B00F274CA /* CatalogFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatalogFiltersView.swift; path = MiamIOSFramework/ui/Catalog/CatalogFiltersView.swift; sourceTree = SOURCE_ROOT; };
@@ -293,6 +297,8 @@
 				0B7C9BF1281A7EF700BFC7F8 /* Dimension.swift */,
 				0B7C9BF6281FCC6800BFC7F8 /* Template.swift */,
 				BFF70573289016C200CB4EC6 /* MiamIcons.swift */,
+				BF7B91B72931205E0005B009 /* MiamFontStyle.swift */,
+				BF848C6529312A240094B7CA /* MiamFontStyleProvider.swift */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -770,6 +776,7 @@
 				0B4B3E80284FA99D00F25E7B /* ItemSelectorText.swift in Sources */,
 				BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */,
 				521D6459283230BF0092AC52 /* BasketPreviewSuccessView.swift in Sources */,
+				BF7B91B82931205E0005B009 /* MiamFontStyle.swift in Sources */,
 				0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */,
 				521D6461283277D00092AC52 /* MyMealRow.swift in Sources */,
 				DCD4E32227BE935B000D3EA6 /* AsyncImage.swift in Sources */,
@@ -799,6 +806,7 @@
 				0BF5C6FC28621AB200C29CB6 /* BasketPreviewLoadingView.swift in Sources */,
 				BFF5B65528534BA500CEC7C5 /* BasketPreviewHeader.swift in Sources */,
 				BFF5B65B2853932C00CEC7C5 /* BasketPreviewLine.swift in Sources */,
+				BF848C6629312A240094B7CA /* MiamFontStyleProvider.swift in Sources */,
 				0B7C9BF0281A7CB400BFC7F8 /* CounterStyle.swift in Sources */,
 				BF6ACB7F28CB9F700005871D /* RecipesView.swift in Sources */,
 				0B9AA666282017C5007D6C8A /* PriceView.swift in Sources */,

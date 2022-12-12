@@ -55,7 +55,7 @@ struct RecipeDetailsFooter: View {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(Color.miamColor(.white))
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                     }.frame(maxWidth: .infinity)
                         .frame(height: 64.0)
                         .background(Color.miamColor(.ternary)).onTapGesture {
@@ -69,7 +69,7 @@ struct RecipeDetailsFooter: View {
                             .foregroundColor(Color.white)
                         Text(RecipeDetailsText.sharedInstance.checkBasketPreview).foregroundColor(Color.miamColor(.white))
                             .padding(.horizontal, Dimension.sharedInstance.sPadding)
-                            .font(.system(size: 16.0, weight: .bold, design: .default))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                     }.frame(maxWidth: .infinity)
                         .frame(height: 64.0)
                         .background(Color.miamColor(.primaryText)).onTapGesture {

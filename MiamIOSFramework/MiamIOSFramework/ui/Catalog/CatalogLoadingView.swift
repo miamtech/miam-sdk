@@ -16,6 +16,7 @@ struct CatalogLoadingView: View {
         } else {
             VStack {
                 Text(loadingText)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 ProgressLoader(color: Color.miamColor(.primary))
             }
         }

@@ -33,13 +33,13 @@ public struct RecipeCardLoadingView: View {
                 }.frame(height: 245)
                 Text( "")
                     .lineLimit(2)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.black))
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(Dimension.sharedInstance.lPadding)
                 Text( "")
                     .lineLimit(2)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.black))
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
                     .padding(Dimension.sharedInstance.sPadding)
                 
                 Rectangle()
@@ -49,7 +49,7 @@ public struct RecipeCardLoadingView: View {
                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                     .background(Color.miamColor(.border))
                     .cornerRadius(25)
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
                 
                 

@@ -53,6 +53,7 @@ internal struct TagView: View {
         } else {
             HStack() {
                 Text(recipes[0].attributes?.title ?? "")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     .lineLimit(1)
                     .padding(.horizontal,8)
                     .padding(.vertical,4)
@@ -69,6 +70,7 @@ internal struct TagView: View {
                             .strokeBorder(Color.miamColor(.primary), lineWidth: 1)
                             .frame(width: 30, height: 30)
                         Text("+" + String(recipes.count - 1))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                             .foregroundColor(Color.miamColor(.primary))
                     }
                 }
@@ -91,7 +93,8 @@ internal struct BasketTagListModal: View {
             HStack {
                 VStack(spacing: 10) {
                     HStack {
-                        Text("Ce produit est utilisé pour 3 recettes :").bold()
+                        Text("Ce produit est utilisé pour 3 recettes :")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         Spacer()
                     }
                     HStack {
@@ -100,8 +103,8 @@ internal struct BasketTagListModal: View {
                             ForEach(recipes, id: \.self) { recipe in
                                 Text(recipe.attributes?.title ?? "")
                                     .underline()
+                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                                     .foregroundColor(Color.miamColor(.ternary))
-                                    .bold()
                                     .padding(.horizontal,8)
                                     .padding(.vertical,4)
                                     .onTapGesture {

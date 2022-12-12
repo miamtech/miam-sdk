@@ -32,8 +32,12 @@ public struct PreferencesTagsListView: View {
             template(title, subtitle, tags, geometry, onToggleTag, onAddTagTapped)
         } else {
             VStack(alignment: .leading) {
-                Text(title).bold().padding(.top, Dimension.sharedInstance.mPadding)
-                Text(subtitle).padding(.bottom, Dimension.sharedInstance.mPadding)
+                Text(title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                    .padding(.top, Dimension.sharedInstance.mPadding)
+                Text(subtitle)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyStyle)
+                    .padding(.bottom, Dimension.sharedInstance.mPadding)
                 
                 displayTags(in: geometry)
             }
@@ -104,15 +108,16 @@ public struct AddTagView: View {
             template(onTapped)
         } else {
             Text(MiamText.sharedInstance.addTag)
-            .padding(14.0)
-            .frame(height: 40.0)
-            .foregroundColor(Color.miamColor(.black))
-            .background(Color.miamColor(.white))
-            .clipShape(Capsule())
-            .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
-            .onTapGesture {
-                onTapped()
-            }
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                .padding(14.0)
+                .frame(height: 40.0)
+                .foregroundColor(Color.miamColor(.black))
+                .background(Color.miamColor(.white))
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
+                .onTapGesture {
+                    onTapped()
+                }
         }
     }
 }
@@ -156,6 +161,7 @@ public struct PreferenceTagView: View {
             template(tag, onToggleTag)
         } else {
             Text(tagName)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 .padding(14.0)
                 .frame(height: 40.0)
                 .foregroundColor(foregroundColor)
