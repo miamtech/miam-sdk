@@ -29,7 +29,7 @@ public struct PreferencesFooterView: View {
                     cancelTapped()
                 } label: {
                     Text(MiamText.sharedInstance.cancel)
-                        .font(Font.system(size: 14.0, weight: .bold))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                         .foregroundColor(Color.miamColor(.black))
                 }
                 .frame(maxWidth: .infinity)
@@ -41,8 +41,8 @@ public struct PreferencesFooterView: View {
                 Button {
                     applyTapped()
                 } label: {
-                    Text("\(MiamText.sharedInstance.see) \(numberOfRecipesFound) \(MiamText.sharedInstance.meals)")
-                        .font(Font.system(size: 14.0, weight: .bold))
+                    Text("\(MiamText.sharedInstance.see) 2340 \(MiamText.sharedInstance.meals)")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                         .foregroundColor(Color.miamColor(.white))
                 }
                 .frame(maxWidth: .infinity)

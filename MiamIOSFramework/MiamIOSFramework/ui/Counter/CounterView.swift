@@ -86,8 +86,8 @@ public struct CounterView: View {
                     .frame(width: 20.0, height: 20.0, alignment: .leading)
                 Spacer()
                 Text("\(count)" + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
                     .foregroundColor(Color.miamColor(.white))
-                    .font(.system(size: 13, weight: .bold, design: .default))
                     Spacer()
                 Button(action: {
                    increase()

@@ -20,7 +20,7 @@ public struct LikeButton: View {
 
     public var body: some View {
         HStack {
-            if let template = Template.sharedInstance.likeButtonTemplate {
+            if let template = Template.sharedInstance.likeButtonTemplate {  
                 template(self.viewModel.isLiked, { self.viewModel.toggleLike() })
             } else {
                 ZStack(){

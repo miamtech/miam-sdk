@@ -17,7 +17,9 @@ struct MyMealEmptyView: View {
                 VStack{
                     HStack{
                         Spacer()
-                        Text(MiamText.sharedInstance.noMealIdeaInBasket).frame(width: metrics.size.width / 2)
+                        Text(MiamText.sharedInstance.noMealIdeaInBasket)
+                            .frame(width: metrics.size.width / 2)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                             .fixedSize(horizontal: false, vertical: true)
                             .multilineTextAlignment(.center)
                         Spacer()

@@ -38,10 +38,8 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
 
     fun observeSideEffect(): Flow<LikeEffect> = sideEffect
 
-    suspend fun emitEffect(le: LikeEffect) {
-        if (le is LikeEffect.Liked) {
-            ToasterHandler.onLikeRecipe()
-        }
+    private suspend fun emitEffect(le: LikeEffect) {
+        if (le is LikeEffect.Liked) ToasterHandler.onLikeRecipe()
         sideEffect.emit(le)
     }
 
@@ -53,8 +51,15 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
 
     private suspend fun fetchRecipeLikes(recipeIds: List<String>) {
         val recipeLikes = recipeLikeRepositoryImp.getRecipeLikes(recipeIds)
+        val unsetLikes = recipeIds.toMutableList()
         updateRecipeLikesState {
-            recipeLikes.forEach { recipeLike -> this[recipeLike.attributes!!.recipeId.toString()] = recipeLike }
+            recipeLikes.forEach { recipeLike ->
+                recipeLike.attributes?.recipeId?.let { recipeId ->
+                    this[recipeId.toString()] = recipeLike
+                    unsetLikes.remove(recipeId.toString())
+                }
+            }
+            unsetLikes.forEach { recipeId -> this[recipeId] = RecipeLike.createDefault(recipeId) }
         }
     }
 
@@ -69,10 +74,12 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
 
     private suspend fun getOrCreateToggledLike(recipeId: String): RecipeLike {
         val existingLike = recipeLikesState.value[recipeId]
-        return if (existingLike != null) {
+        return if (existingLike != null && existingLike.exists) {
             recipeLikeRepositoryImp.updateRecipeLike(existingLike.toggle())
+        } else if (existingLike != null) {
+            recipeLikeRepositoryImp.createRecipeLike(existingLike)
         } else {
-            recipeLikeRepositoryImp.createRecipeLike(recipeId)
+            recipeLikeRepositoryImp.createRecipeLike(RecipeLike.createDefault(recipeId))
         }
     }
 

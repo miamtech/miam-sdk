@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +34,11 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.backToCategories
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noFavoriteYet
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noResultFor
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.recipesListLoading
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.tryAnOtherSearch
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColor
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
@@ -83,7 +87,6 @@ fun CatalogPage(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CatalogSuccessPage(
     recipePageVM: RecipeListPageViewModel,
@@ -154,7 +157,7 @@ private fun CatalogLoadingPage() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Chaud devant !!", style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
+        Text(recipesListLoading, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
         CircularProgressIndicator(color = Colors.primary)
     }
 }
@@ -167,111 +170,117 @@ private fun CatalogEmptyPage(
 
     val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
 
-
-
     if (isFavorit) {
         if (Template.CatalogFavoritEmptyTemplate != null) {
             Template.CatalogFavoritEmptyTemplate?.let {
-                it { returnToCategoriesPage() }
+                it(returnToCategoriesPage)
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(primary)
-            ) {
+            FavoriteEmptyPage(returnToCategoriesPage)
+        }
+    } else {
+        if (Template.CatalogSearchResultEmptyTemplate != null) {
+            Template.CatalogSearchResultEmptyTemplate?.let {
+                it(returnToCategoriesPage, recipePageVM.currentState.title)
+            }
+        } else {
+            SearchResultEmptyPage(pageTitle = recipePageVM.currentState.title)
+        }
+    }
+}
 
-                Column(
-                    Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(CatalogImage.empty),
-                        contentDescription = null,
-                        Modifier
-                            .padding(vertical = 16.dp)
+@Composable
+fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primary)
+    ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(CatalogImage.empty),
+                contentDescription = null,
+                Modifier
+                    .padding(vertical = 16.dp)
+            )
+            Clickable(onClick = { returnToCategoriesPage() }) {
+                Column {
+                    Text(
+                        text = noFavoriteYet,
+                        color = white,
+                        style = Typography.subtitleBold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 8.dp)
                     )
-                    Clickable(onClick = { returnToCategoriesPage() }) {
-                        Column {
-                            Text(
-                                text = "Oups, vous n’avez pas encore d’idée repas",
-                                color = white,
-                                style = Typography.subtitleBold,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
-                            )
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Box(
-                                    Modifier
-                                        .clip(RoundedCornerShape(50))
-                                        .background(white)
-                                ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(
-                                            text = "Parcourir les idées repas",
-                                            color = primary,
-                                            modifier = Modifier.padding(
-                                                horizontal = 16.dp,
-                                                vertical = 8.dp
-                                            ),
-                                        )
-                                        Image(
-                                            painter = painterResource(CatalogImage.back),
-                                            contentDescription = null,
-                                            Modifier.padding(start = 8.dp)
-                                        )
-                                    }
-                                }
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(white)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = backToCategories,
+                                    color = primary,
+                                    modifier = Modifier.padding(
+                                        horizontal = 16.dp,
+                                        vertical = 8.dp
+                                    ),
+                                )
+                                Image(
+                                    painter = painterResource(CatalogImage.back),
+                                    contentDescription = null,
+                                    Modifier.padding(start = 8.dp)
+                                )
                             }
                         }
                     }
                 }
             }
         }
-    } else {
-        if (Template.CatalogSearchResultEmptyTemplate != null) {
-            Template.CatalogSearchResultEmptyTemplate?.let {
-                it { returnToCategoriesPage() }
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(primary)
-            ) {
+    }
+}
 
-                Column(
-                    Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(CatalogImage.empty),
-                        contentDescription = null,
-                        Modifier
-                            .padding(vertical = 16.dp)
-                    )
-                    Text(
-                        text = "Oups, aucune recette n’a été trouvée pour '${recipePageVM.currentState.title}'",
-                        color = white,
-                        style = Typography.subtitleBold,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Text(
-                        text = "Essayez une nouvelle recherche.",
-                        color = white
-                    )
-                }
-            }
+@Composable
+fun SearchResultEmptyPage(pageTitle: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primary)
+    ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(CatalogImage.empty),
+                contentDescription = null,
+                Modifier
+                    .padding(vertical = 16.dp)
+            )
+            Text(
+                text = noResultFor + pageTitle,
+                color = white,
+                style = Typography.subtitleBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Text(
+                text = tryAnOtherSearch,
+                color = white
+            )
         }
     }
 }

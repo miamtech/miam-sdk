@@ -20,7 +20,7 @@ struct IngredientNotInBasketRow: View {
         } else {
             HStack {
                 Text(name.capitalizingFirstLetter())
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.secondaryText))
 
                 Spacer()
@@ -32,7 +32,7 @@ struct IngredientNotInBasketRow: View {
                         .frame(width: 30, height: 30, alignment: .center)
                         .foregroundColor(Color.miamColor(.primary))
                     Text(MiamText.sharedInstance.addIngredientText)
-                        .font(.system(size: 16.0, weight: .bold, design: .default))
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         .foregroundColor(Color.miamColor(.primary))
                 }
                     

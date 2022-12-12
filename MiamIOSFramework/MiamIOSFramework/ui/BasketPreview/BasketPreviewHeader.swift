@@ -49,27 +49,30 @@ struct BasketPreviewHeader: View {
 
                     VStack (alignment: .leading) {
                         Text(basketTitle)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                             .foregroundColor(Color.miamColor(.black))
-                            .font(.system(size: 16, weight: .heavy, design: .default))
 
                         Text(basketDescription)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigLightStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
-                            .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.top, Dimension.sharedInstance.borderWidth)
 
                         Text(pricePerGuest)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigLightStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
-                            .font(.system(size: 16, weight: .light, design: .default))
-
                         Button {
                             goToDetail()
                         } label: {
-                            Text(MiamText.sharedInstance.showDetails).fontWeight(.heavy).foregroundColor(Color.miamColor(.primaryText))
+                            Text(MiamText.sharedInstance.showDetails)
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
+                                .foregroundColor(Color.miamColor(.primaryText))
                         }.padding([.top], Dimension.sharedInstance.sPadding)
                     }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
-                    Text(formattedPrice).foregroundColor(Color.miamColor(.primary)).fontWeight(.bold)
+                    Text(formattedPrice)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
+                        .foregroundColor(Color.miamColor(.primary))
                     Spacer()
 
                     CounterView(count: numberOfGuests)  { guestCount in

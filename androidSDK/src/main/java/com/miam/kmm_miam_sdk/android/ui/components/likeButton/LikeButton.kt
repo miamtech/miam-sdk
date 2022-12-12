@@ -63,12 +63,8 @@ class LikeButton {
 
     @Composable
     fun RecipeLikeSuccessButton(toggleLike: () -> Unit, isLiked: Boolean) {
-        Clickable(
-            onClick = toggleLike
-        ) {
-            Surface(
-                shape = CircleShape
-            ) {
+        Clickable(onClick = toggleLike) {
+            Surface(shape = CircleShape) {
                 Box(
                     Modifier
                         .background(buttonBackgroundColor)

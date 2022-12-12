@@ -444,7 +444,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         val returnValue = httpClient.get<RecordWrapper> {
             url("${HttpRoutes.PACKAGE_ENDPOINT}?$params")
         }.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID $returnValue")
         return returnValue.map { record -> record as Package }
     }
 
