@@ -277,7 +277,6 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
     }
 
-
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -352,7 +351,6 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                                     tag.bind(items[items.size - 1].id)
                                     tag.Content()
                                 }
-
                             }
                         } else if (isCatalogPage) {
                             var catalog = Catalog(this@MainActivity)

@@ -83,7 +83,6 @@ class RouterOutlet: KoinComponent {
             ) {
                 FullScreenContent({ close() }, { goToReplaceItem() }, { goToDetail(it) }, state, vmRouter)
             }
-
         }
     }
 }
