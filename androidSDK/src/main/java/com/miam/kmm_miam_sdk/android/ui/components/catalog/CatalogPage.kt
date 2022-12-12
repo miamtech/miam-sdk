@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +34,11 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.backToCategories
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noFavoriteYet
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noResultFor
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.recipesListLoading
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.tryAnOtherSearch
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColor
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
@@ -83,7 +87,6 @@ fun CatalogPage(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CatalogSuccessPage(
     recipePageVM: RecipeListPageViewModel,
@@ -154,7 +157,7 @@ private fun CatalogLoadingPage() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Chaud devant !!", style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
+        Text(recipesListLoading, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
         CircularProgressIndicator(color = Colors.primary)
     }
 }
@@ -208,7 +211,7 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
             Clickable(onClick = { returnToCategoriesPage() }) {
                 Column {
                     Text(
-                        text = "Oups, vous n’avez pas encore d’idée repas",
+                        text = noFavoriteYet,
                         color = white,
                         style = Typography.subtitleBold,
                         textAlign = TextAlign.Center,
@@ -227,7 +230,7 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    text = "Parcourir les idées repas",
+                                    text = backToCategories,
                                     color = primary,
                                     modifier = Modifier.padding(
                                         horizontal = 16.dp,
@@ -268,14 +271,14 @@ fun SearchResultEmptyPage(pageTitle: String) {
                     .padding(vertical = 16.dp)
             )
             Text(
-                text = "Oups, aucune recette n’a été trouvée pour '$pageTitle'",
+                text = noResultFor + pageTitle,
                 color = white,
                 style = Typography.subtitleBold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Text(
-                text = "Essayez une nouvelle recherche.",
+                text = tryAnOtherSearch,
                 color = white
             )
         }

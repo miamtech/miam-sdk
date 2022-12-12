@@ -38,7 +38,7 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
 
     fun observeSideEffect(): Flow<LikeEffect> = sideEffect
 
-    suspend fun emitEffect(le: LikeEffect) {
+    private suspend fun emitEffect(le: LikeEffect) {
         if (le is LikeEffect.Liked) ToasterHandler.onLikeRecipe()
         sideEffect.emit(le)
     }
