@@ -28,6 +28,9 @@ data class RecipeLike private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
+    val exists: Boolean
+        get() = !id.isNullOrBlank()
+
     fun toggle(): RecipeLike {
         return copy(attributes = attributes!!.copy(isPast = !attributes.isPast))
     }
