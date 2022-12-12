@@ -17,26 +17,26 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class GroceriesListState(val groceriesList: GroceriesList?) : State {
+data class GroceriesListState(val groceriesList: GroceriesList?): State {
     val recipeCount: Int
         get() = groceriesList?.attributes?.recipesInfos?.size ?: 0
 }
 
-sealed class GroceriesListAction : Action {
-    object RefreshGroceriesList : GroceriesListAction()
-    object ResetGroceriesList : GroceriesListAction()
-    data class AlterRecipeList(val recipeId: String, val guests: Int) : GroceriesListAction()
-    data class RemoveRecipe(val recipeId: String) : GroceriesListAction()
+sealed class GroceriesListAction: Action {
+    object RefreshGroceriesList: GroceriesListAction()
+    object ResetGroceriesList: GroceriesListAction()
+    data class AlterRecipeList(val recipeId: String, val guests: Int): GroceriesListAction()
+    data class RemoveRecipe(val recipeId: String): GroceriesListAction()
 }
 
-sealed class GroceriesListEffect : Effect {
-    object GroceriesListLoaded : GroceriesListEffect()
-    data class RecipeCountChanged(val newRecipeCount: Int) : GroceriesListEffect()
-    data class RecipeAdded(val recipeId: String, val guests: Int) : GroceriesListEffect()
-    data class RecipeRemoved(val recipeId: String) : GroceriesListEffect()
+sealed class GroceriesListEffect: Effect {
+    object GroceriesListLoaded: GroceriesListEffect()
+    data class RecipeCountChanged(val newRecipeCount: Int): GroceriesListEffect()
+    data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
+    data class RecipeRemoved(val recipeId: String): GroceriesListEffect()
 }
 
-class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
+class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
     KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
@@ -72,19 +72,13 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             is GroceriesListAction.ResetGroceriesList -> {
                 return launch(coroutineHandler) {
                     // TODO : path
-                    analyticsService.sendEvent(
-                        Analytics.EVENT_RECIPE_RESET,
-                        "",
-                        Analytics.PlausibleProps()
-                    )
+                    analyticsService.sendEvent(Analytics.EVENT_RECIPE_RESET, "", Analytics.PlausibleProps())
                     setGroceriesListAndRefreshBasket(groceriesListRepo.reset())
                 }
             }
             is GroceriesListAction.AlterRecipeList -> {
                 return launch(coroutineHandler) {
-                    val newGl =
-                        appendRecipe(state.value.groceriesList, action.recipeId, action.guests)
-                    if (newGl != null) {
+                    appendRecipe(state.value.groceriesList, action.recipeId, action.guests)?.let { newGl ->
                         // side Effect only to refresh UI of c
                         sideEffect.emit(GroceriesListEffect.RecipeAdded(newGl.id, action.guests))
                         setGroceriesListAndRefreshBasket(newGl)
@@ -94,8 +88,7 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
             is GroceriesListAction.RemoveRecipe -> {
                 basketStore.fastRemoveRecipeFromBpl(action.recipeId)
                 return launch(coroutineHandler) {
-                    val newGl = removeRecipe(state.value.groceriesList, action.recipeId)
-                    if (newGl != null) {
+                    removeRecipe(state.value.groceriesList, action.recipeId)?.let { newGl ->
                         sideEffect.emit(GroceriesListEffect.RecipeRemoved(newGl.id))
                         setGroceriesListAndRefreshBasket(newGl)
                     }
@@ -117,71 +110,40 @@ class GroceriesListStore : Store<GroceriesListState, GroceriesListAction, Grocer
     ): GroceriesList? {
         if (groceriesList == null) return null
 
-        val newRecipesInfos = mutableListOf(*groceriesList.attributes!!.recipesInfos.toTypedArray())
-        if (groceriesList.hasRecipe(recipeId)) {
-            if (groceriesList.guestsForRecipe(recipeId) == guest) return null
+        if (groceriesList.hasRecipe(recipeId) && groceriesList.guestsForRecipe(recipeId) == guest) return null
 
-            // TODO : path
-            analyticsService.sendEvent(
-                Analytics.EVENT_RECIPE_CHANGEGUESTS,
-                "",
-                Analytics.PlausibleProps(recipe_id = recipeId)
-            )
-            newRecipesInfos.find { it.id.toString() == recipeId }?.guests = guest
-        } else {
-            // TODO : path
-            analyticsService.sendEvent(
-                Analytics.EVENT_RECIPE_ADD,
-                "",
-                Analytics.PlausibleProps(recipe_id = recipeId)
-            )
-            newRecipesInfos.add(RecipeInfos(recipeId.toInt(), guest))
-            ToasterHandler.onAddRecipe()
-        }
-        return alterRecipeInfo(groceriesList, newRecipesInfos)
+        // val newRecipesInfos = mutableListOf(*groceriesList.attributes!!.recipesInfos.toTypedArray())
+        groceriesList.attributes?.recipesInfos?.let { recipesInfos ->
+            val newRecipesInfos = if (groceriesList.hasRecipe(recipeId)) {
+                analyticsService.sendEvent(Analytics.EVENT_RECIPE_CHANGEGUESTS, "", Analytics.PlausibleProps(recipe_id = recipeId))
+                recipesInfos.map { ri -> if (ri.id.toString() == recipeId) ri.copy(guests = guest) else ri }.toMutableList()
+            } else {
+                analyticsService.sendEvent(Analytics.EVENT_RECIPE_ADD, "", Analytics.PlausibleProps(recipe_id = recipeId))
+                ToasterHandler.onAddRecipe()
+                mutableListOf(*recipesInfos.toTypedArray(), RecipeInfos(recipeId.toInt(), guest))
+            }
+            return alterRecipeInfo(groceriesList, newRecipesInfos)
+        } ?: return null
     }
 
-    private suspend fun removeRecipe(
-        groceriesList: GroceriesList?,
-        recipeId: String
-    ): GroceriesList? {
+    private suspend fun removeRecipe(groceriesList: GroceriesList?, recipeId: String): GroceriesList? {
         if (groceriesList == null || !groceriesList.hasRecipe(recipeId)) return null
 
-        // TODO : path
-        analyticsService.sendEvent(
-            Analytics.EVENT_RECIPE_REMOVE,
-            "",
-            Analytics.PlausibleProps(recipe_id = recipeId)
-        )
-        val recipesInfo = groceriesList.attributes!!.recipesInfos
-        val newRecipeInfo =
-            recipesInfo.filter { el -> el.id.toString() != recipeId }.toMutableList()
-
-        return alterRecipeInfo(groceriesList, newRecipeInfo)
+        groceriesList.attributes?.recipesInfos?.let { recipesInfos ->
+            val newRecipeInfo = recipesInfos.filter { el -> el.id.toString() != recipeId }.toMutableList()
+            analyticsService.sendEvent(Analytics.EVENT_RECIPE_REMOVE, "", Analytics.PlausibleProps(recipe_id = recipeId))
+            return alterRecipeInfo(groceriesList, newRecipeInfo)
+        } ?: return null
     }
 
-    private suspend fun alterRecipeInfo(
-        groceriesList: GroceriesList,
-        recipesInfo: MutableList<RecipeInfos>
-    ): GroceriesList {
-        val gl = groceriesList.copy(
-            attributes = groceriesList.attributes!!.copy(
-                recipesInfos = recipesInfo,
-                appendRecipes = false
-            )
-        )
+    private suspend fun alterRecipeInfo(groceriesList: GroceriesList, recipesInfo: MutableList<RecipeInfos>): GroceriesList {
+        val gl = groceriesList.copy(attributes = groceriesList.attributes?.copy(recipesInfos = recipesInfo, appendRecipes = false))
         return groceriesListRepo.updateGroceriesList(gl)
     }
 
     override fun updateStateIfChanged(newState: GroceriesListState) {
         if (newState.recipeCount != state.value.recipeCount) {
-            launch(coroutineHandler) {
-                sideEffect.emit(
-                    GroceriesListEffect.RecipeCountChanged(
-                        newState.recipeCount
-                    )
-                )
-            }
+            launch(coroutineHandler) { sideEffect.emit(GroceriesListEffect.RecipeCountChanged(newState.recipeCount)) }
         }
         super.updateStateIfChanged(newState)
     }

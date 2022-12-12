@@ -2,7 +2,9 @@ package com.miam.kmm_miam_sdk.android.theme
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.TextFieldValue
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
+import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
@@ -127,8 +129,7 @@ object Template {
         pricePerGuest: String,
         guestCount: Int,
         goToRecipeDetail: () -> Unit,
-        increaseGuest: () -> Unit,
-        decreaseGuest: () -> Unit
+        guestUpdate: (guestCount: Int) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewLoadingTemplate: (@Composable() () -> Unit)? = null
@@ -143,8 +144,24 @@ object Template {
         itemsCount: Int,
         delete: () -> Unit,
         replace: () -> Unit,
-        increaseQty: () -> Unit,
-        decreaseQty: () -> Unit
+        onQuantityChanged: (newQuantity: Int) -> Unit,
+        // Compose bug, build crash with exactly 10 parameters
+        composeBugParam: Int?
+    ) -> Unit)? = null
+
+
+    var basketPreviewNotFoundTemplate: (@Composable() (
+        notFoundProducts: List<BasketEntry>,
+    ) -> Unit)? = null
+
+    var basketPreviewOftenDeletedTemplate: (@Composable() (
+        oftenDeletedProducts: List<BasketEntry>,
+        addProduct: (BasketEntry) -> Unit
+    ) -> Unit)? = null
+
+    var basketPreviewRemovedTemplate: (@Composable() (
+        removedProducts: List<BasketEntry>,
+        addProduct: (BasketEntry) -> Unit
     ) -> Unit)? = null
 
     var basketPreviewExpendHeaderTemplate: (@Composable() (
@@ -193,6 +210,10 @@ object Template {
         category: Package,
         recipesID: List<String>,
         goToCategoryPage: (category: Package) -> Unit
+    ) -> Unit)? = null
+
+    // optional template that is floating, you can for exemple set a button to myMeal
+    var CatalogFloatingElementTemplate: (@Composable() (
     ) -> Unit)? = null
 
     var CatalogFilterTemplate: (@Composable() (
@@ -262,6 +283,18 @@ object Template {
     var EquipmentPreferencesSectionTemplate: (@Composable() (
         equipmentsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
+
+    var SearchPreferencesTemplate: (@Composable() (
+        back: () -> Unit, text: TextFieldValue,
+    ) -> Unit)? = null
+
+    var SearchResultRowPreferencesTemplate: (@Composable() (
+        select: () -> Unit, name: String,
+    ) -> Unit)? = null
+
+    var SearchPreferencesEmptyTemplate: (@Composable() () -> Unit)? = null
+
+    var SearchPreferencesLoadingTemplate: (@Composable() () -> Unit)? = null
 
 ////////////////// MY MEAL BUTTON ////////////
 

@@ -14,13 +14,13 @@ data class BasketEntry private constructor(
     override val id: String,
     override val attributes: BasketEntryAttributes? = null,
     override val relationships: BasketEntryRelationships? = null
-) : Record(), BasketPreviewEntry {
+): Record(), BasketPreviewEntry {
     constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ) : this(
+    ): this(
         id,
         if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<BasketEntryAttributes>(
             attributes
@@ -40,6 +40,9 @@ data class BasketEntry private constructor(
 
     val selectedItem: Item?
         get() = relationships!!.items!!.data.find { item -> item.id == attributes!!.selectedItemId.toString() }
+
+    val itemsCountOrZero: Int
+        get() = relationships?.items?.data?.size ?: 0
 
     fun updateQuantity(qty: Int): BasketEntry {
         if (qty <= 0) return updateStatus("deleted")
@@ -101,13 +104,13 @@ data class BasketEntryAttributes(
     val groceriesEntryStatus: String? = "active",
     @SerialName("basket-entries-items")
     var basketEntriesItems: List<BasketEntriesItem>? = null,
-) : Attributes()
+): Attributes()
 
 @Serializable
 data class BasketEntryRelationships constructor(
     var items: ItemRelationshipList? = null,
     @SerialName("groceries-entry") var groceriesEntry: GroceriesEntryRelationship? = null,
-) : Relationships() {
+): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         items?.buildFromIncluded(includedRecords)
         groceriesEntry?.buildFromIncluded(includedRecords)
@@ -140,14 +143,14 @@ data class BasketEntriesItem(
  */
 
 @Serializable(with = BasketEntryRelationshipListSerializer::class)
-class BasketEntryRelationshipList(override var data: List<BasketEntry>) : RelationshipList() {
+class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
     fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, BasketEntry::class) as List<BasketEntry>
     }
 }
 
 @Serializer(forClass = BasketEntryRelationshipList::class)
-object BasketEntryRelationshipListSerializer : KSerializer<BasketEntryRelationshipList> {
+object BasketEntryRelationshipListSerializer: KSerializer<BasketEntryRelationshipList> {
     override fun serialize(encoder: Encoder, value: BasketEntryRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)

@@ -2,6 +2,9 @@ package com.miam.kmm_miam_sdk.android.ui.components.routerOutlet
 
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.Dialog
@@ -14,8 +17,10 @@ import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.BasketPreview
+import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -75,7 +80,6 @@ class RouterOutlet: KoinComponent {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Content() {
-
         val state by vmRouter.uiState.collectAsState()
 
         if (state.isOpen) {
@@ -89,6 +93,32 @@ class RouterOutlet: KoinComponent {
 
         }
     }
+}
+
+@Composable
+fun EmptyView(close: () -> Unit) {
+    Scaffold(
+        topBar = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = RecipeDetailsStyle.headerMainContainer,
+            ) {
+                Clickable(
+                    onClick = { close() },
+                ) {
+                    Image(
+                        painter = painterResource(Image.toggleCaret),
+                        contentDescription = null,
+                        modifier = RecipeDetailsStyle.headerCloseIconModifier.rotate(180f)
+                    )
+                }
+            }
+        },
+        content = {
+            Text(text = "Une erreur s'est produite, veuillez réessayer", textAlign = TextAlign.Center)
+        }
+    )
 }
 
 @Composable
@@ -117,9 +147,7 @@ fun FullScreenContent(
                 ).content()
             }
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
+            RouterContent.EMPTY -> EmptyView(close)
         }
     }
 }
-
-
-

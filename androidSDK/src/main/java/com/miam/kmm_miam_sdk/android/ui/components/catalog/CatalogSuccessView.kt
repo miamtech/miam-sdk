@@ -1,7 +1,9 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -10,6 +12,8 @@ import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmm_miam_sdk.android.theme.Template
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier.categoryListContainer
 import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 
 @Composable
@@ -52,18 +56,24 @@ fun CatalogSuccessView(
         CatalogHeader(state, vmCatalog)
         when (state.content) {
             CatalogContent.DEFAULT -> {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    categories.forEach { cat ->
-                        CatalogCategory(cat, context) {
-                            vmCatalog.setEvent(
-                                CatalogContract.Event.GoToRecipeListFromCategory(
-                                    it.id,
-                                    it.attributes?.title ?: ""
+                Box(categoryListContainer.fillMaxSize()) {
+                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                        categories.forEach { cat ->
+                            CatalogCategory(cat, context) {
+                                vmCatalog.setEvent(
+                                    CatalogContract.Event.GoToRecipeListFromCategory(
+                                        it.id,
+                                        it.attributes?.title ?: ""
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
+                    Template.CatalogFloatingElementTemplate?.let {
+                        it()
+                    }
                 }
+
             }
             CatalogContent.RECIPE_LIST -> {
                 CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing) {

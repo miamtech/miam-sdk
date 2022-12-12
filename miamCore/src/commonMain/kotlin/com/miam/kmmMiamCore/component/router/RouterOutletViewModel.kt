@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.router
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
@@ -8,8 +9,7 @@ import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
 import org.koin.core.component.inject
 
-open class RouterOutletViewModel:
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
+open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     private val analyticsService: Analytics by inject()
     private val routeService: RouteService by inject()
@@ -25,15 +25,14 @@ open class RouterOutletViewModel:
 
     override fun createInitialState(): RouterOutletContract.State {
         return RouterOutletContract.State(
-            content = RouterContent.BASKET_PREVIEW,
+            content = RouterContent.EMPTY,
             rvm = null,
             recipeId = null,
             isOpen = false,
             showFooter = true
         )
     }
-
-
+    
     override fun handleEvent(event: RouterOutletContract.Event) {
         when (event) {
             is RouterOutletContract.Event.GoToDetail -> {
@@ -108,11 +107,13 @@ open class RouterOutletViewModel:
     }
 
     private fun onPrevious() {
-        val route = routeService.getCurrentRoute()
+        val route = RouteService.getCurrentRoute()
         route?.let {
-            if (route.previous != null && route.previous.isModalRoute) {
-                setState { copy(content = RouterContent.valueOf(route.previous.name)) }
-                return
+            route.previous?.let { previous ->
+                if (previous.isModalRoute) {
+                    setState { copy(content = RouterContent.valueOf(previous.name)) }
+                    return
+                }
             }
         }
         onClose()
@@ -120,7 +121,7 @@ open class RouterOutletViewModel:
 
     private fun navigateTo(destination: RouterContent) {
         setState { copy(content = destination) }
-        routeService.dispatch(RouteServiceAction.SetRoute(Route(destination.name, "", true, { onPrevious() }, routeService.getCurrentRoute())))
+        routeService.dispatch(RouteServiceAction.SetRoute(Route(destination.name, "", ::onPrevious, true)))
         if (!uiState.value.isOpen) {
             setEvent(RouterOutletContract.Event.OpenDialog)
             LogHandler.info("Miam RouterOutletViewModel dialog should be open ${this.currentState}")

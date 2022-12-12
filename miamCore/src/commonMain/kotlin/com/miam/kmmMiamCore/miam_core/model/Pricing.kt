@@ -8,7 +8,5 @@ data class Pricing(
     val serves: Int,
 ) {
     val pricePerServe: Double
-        get() {
-            return price / serves
-        }
+        get() = if (serves == 0) 0.0 else price / serves
 }

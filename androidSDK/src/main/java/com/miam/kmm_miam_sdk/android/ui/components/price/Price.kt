@@ -12,14 +12,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
-import com.miam.kmmMiamCore.component.pricing.PricingContract
-import com.miam.kmmMiamCore.component.pricing.PricingViewModel
+import com.miam.kmmMiamCore.component.pricing.RecipePricingViewModel
 import com.miam.kmm_miam_sdk.android.theme.Typography.bodySmall
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceColor.loaderColor
@@ -36,47 +37,56 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-@Composable
-fun Price(
-    recipeId: String? = "",
-    guestNumber: Int = -1,
-    price: Double? = null,
-    isTotalPrice: Boolean = false,
-) {
-    val vmPrice =
-        PricingViewModel()
-
-    if (recipeId != "" && guestNumber != -1) {
-        vmPrice.setEvent(
-            PricingContract.Event.OnSetRecipe(recipeId!!, guestNumber)
-        )
-    } else if (price != null) {
-        vmPrice.setEvent(
-            PricingContract.Event.SetDirectPrice(price)
-        )
+val twoDecimalsformat: DecimalFormat
+    get() {
+        val format = DecimalFormat("#.##")
+        format.roundingMode = RoundingMode.DOWN
+        return format
     }
 
-    PriceStateManager(vmPrice, isTotalPrice)
-
+@Composable
+fun SimplePrice(price: Double) {
+    Column(
+        modifier = mainContainer,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(modifier = priceContainer) {
+            Text(
+                "${twoDecimalsformat.format(price)}$currency",
+                color = priceIntegerTotalPriceColor,
+                style = subtitleBold
+            )
+        }
+    }
 }
 
 @Composable
-fun PriceStateManager(vmPrice: PricingViewModel, isTotalPrice: Boolean) {
+fun RecipePrice(
+    recipeId: String,
+    guestNumber: Int,
+) {
+    val vmPrice = RecipePricingViewModel()
+    vmPrice.setRecipe(recipeId, guestNumber)
+    PriceStateManager(vmPrice)
+
+    LaunchedEffect(Unit) { vmPrice.listenBasketChanges() }
+    DisposableEffect(Unit) { onDispose { vmPrice.stopListenBasketChanges() } }
+}
+
+@Composable
+fun PriceStateManager(vmPrice: RecipePricingViewModel) {
     val state by vmPrice.uiState.collectAsState()
     Box {
         ManagementResourceState(
             resourceState = state.price,
             successView = { price ->
                 requireNotNull(price)
-                PriceView(
-                    price.price,
-                    isTotalPrice
-                )
+                RecipePriceView(price.pricePerServe)
             },
             emptyView = { EmptyState() },
             onTryAgain = { /*TODO*/ },
             onCheckAgain = { /*TODO*/ },
-            loadingView = { PriceShimmer(isTotalPrice) }
+            loadingView = { PriceShimmer() }
         )
     }
 }
@@ -87,34 +97,29 @@ fun EmptyState() {
 }
 
 @Composable
-fun PriceView(price: Double, isTotalPrice: Boolean) {
-    val df = DecimalFormat("#.##")
-    df.roundingMode = RoundingMode.DOWN
-
+fun RecipePriceView(price: Double) {
     Column(
         modifier = mainContainer,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = priceContainer) {
             Text(
-                "${df.format(price)}$currency",
-                color = if (isTotalPrice) priceIntegerTotalPriceColor else priceIntegerColor,
+                "${twoDecimalsformat.format(price)}$currency",
+                color = priceIntegerColor,
                 style = subtitleBold
             )
         }
-        if (!isTotalPrice) {
-            Text(
-                preGuests,
-                color = subtitleColor,
-                style = bodySmall
-            )
-        }
+        Text(
+            preGuests,
+            color = subtitleColor,
+            style = bodySmall
+        )
     }
 }
 
 
 @Composable
-fun PriceShimmer(isTotalPrice: Boolean) {
+fun PriceShimmer() {
 
     val shimerColors = listOf(
         loaderColor.copy(alpha = 0.6F),
@@ -143,11 +148,11 @@ fun PriceShimmer(isTotalPrice: Boolean) {
         )
     )
 
-    shimmerPriceItem(brush, isTotalPrice)
+    shimmerPriceItem(brush)
 }
 
 @Composable
-fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean) {
+fun shimmerPriceItem(brush: Brush) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -155,14 +160,11 @@ fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean) {
         Row {
             Spacer(modifier = loaderInteger.background(brush = brush))
         }
-        if (!isTotalPrice) {
-            Text(
-                preGuests,
-                color = subtitleColor,
-                style = bodySmall
-            )
-        }
-
+        Text(
+            preGuests,
+            color = subtitleColor,
+            style = bodySmall
+        )
     }
 }
 
@@ -170,19 +172,13 @@ fun shimmerPriceItem(brush: Brush, isTotalPrice: Boolean) {
 @Preview
 @Composable
 fun PricePreview() {
-    PriceView(10.0, false)
-}
-
-@Preview
-@Composable
-fun TotalPricePreview() {
-    PriceView(10.0, true)
+    RecipePriceView(10.0)
 }
 
 @Preview
 @Composable
 fun PriceLoadingPreview() {
-    PriceShimmer(false)
+    PriceShimmer()
 }
 
 

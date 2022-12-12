@@ -17,8 +17,6 @@ public struct BasketPreviewSuccessView: View {
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
-    @SwiftUI.State private var count: Int = 4
-    
     public init(viewModel: BasketPreviewVM,
                 recipeVm: RecipeViewModel,
                 goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
@@ -34,19 +32,8 @@ public struct BasketPreviewSuccessView: View {
        
     }
     
-    func increaseGuestsCount() {
-        if(viewModel.basketPreviewLine != nil && count != 100){
-            count+=1
-            recipeVm.increaseGuest()
-            
-        }
-    }
-    
-    func decreaseGuestsCount() {
-        if(viewModel.basketPreviewLine != nil && count != 1){
-            count-=1
-            recipeVm.decreaseGuest()
-        }
+    func updateGuests(value:Int){
+        recipeVm.updateGuest(nbGuest: Int32(value))
     }
     
     func addIngredient(_ entry: BasketEntry) {
@@ -78,16 +65,13 @@ public struct BasketPreviewSuccessView: View {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                                     basketDescription: viewModel.basketDescription,
                                     pricePerGuest: viewModel.pricePerGuest,
-                                    numberOfGuests: count,
+                                    numberOfGuests: Int(recipeVm.currentState.guest),
                                     price: viewModel.price,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
-                                    decreaseGuestsCount: decreaseGuestsCount,
-                                    increaseGuestsCount: increaseGuestsCount, goToDetail: {
+                                    updateGuest: { guestNumber in updateGuests(value:guestNumber) }
+                                    , goToDetail: {
                     recipeVm.goToDetail()
-                }).onAppear(
-                                        perform: {
-                                            self.count = Int(recipeVm.currentState.guest)
-                                        })
+                })
                 //List
                 VStack {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
