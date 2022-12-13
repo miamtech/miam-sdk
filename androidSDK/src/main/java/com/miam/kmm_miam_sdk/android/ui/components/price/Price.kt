@@ -39,7 +39,7 @@ import java.text.DecimalFormat
 
 val twoDecimalsformat: DecimalFormat
     get() {
-        val format = DecimalFormat("#.##")
+        val format = DecimalFormat("#.00")
         format.roundingMode = RoundingMode.DOWN
         return format
     }

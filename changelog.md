@@ -1,3 +1,7 @@
+# 3.4.0
+- [FIX][AND] Price format
+- [FIX][AND] Padding ouside of a template in BasketPreviewItem
+
 # 3.3.0
 - [FEA][COR] Clean counter usage
 - [FEA][COR] Optimize price component
