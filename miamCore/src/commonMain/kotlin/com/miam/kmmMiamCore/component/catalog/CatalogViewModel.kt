@@ -112,6 +112,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             pointOfSaleStore.supplierId,
             { supplierId ->
                 launch(coroutineHandler) {
+                    // when using preferences the cta will redirect to the list of recipes that are shown only if catalog is in sucess. do not put it into loading
                     if (currentState.content == CatalogContent.DEFAULT) setState { copy(categories = BasicUiState.Loading) }
                     val categories = getSupplierCategoriesWithRecipes(supplierId)
                     setState { copy(categories = BasicUiState.Success(categories)) }
