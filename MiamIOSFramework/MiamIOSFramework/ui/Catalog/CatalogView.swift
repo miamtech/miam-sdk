@@ -100,16 +100,14 @@ public struct CatalogView: View {
                 showingSearch = false
             }) {
                 showingSearch = false
-                catalog.setEvent(event: CatalogContractEvent.OnSearchLaunch())
-                catalog.fetchRecipes()
+                catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
             catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
         }) {
             CatalogFiltersView() {
                 showingFilters = false
-                self.catalog.setEvent(event: CatalogContractEvent.OnFilterValidation())
-                catalog.fetchRecipes()
+                 catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
             } close: {
                 showingFilters = false
             }
@@ -161,15 +159,19 @@ internal struct CatalogSuccessView: View {
                      $showingFavorites, $headerHeight, searchString, browseCatalogAction, navigateToRecipeAction)
         } else {
             if case .categories = catalogContent {
+                if(packages.isEmpty){
+                    CatalogRecipePageNoResultsView(searchString:"avec vos préférences", browseCatalogAction: {} ).frame(maxHeight: .infinity)
+                }  else {
                 ScrollView {
-                    VStack {
-                        ForEach(packages) { package in
-                            CatalogPackageRow(package: package) { package in
-                                navigateToRecipeAction(package.package)
+                        VStack {
+                            ForEach(packages) { package in
+                                CatalogPackageRow(package: package) { package in
+                                    navigateToRecipeAction(package.package)
+                                }
                             }
-                        }
+                        }.padding([.top], Dimension.sharedInstance.lPadding)
                     }
-                }.padding([.top], Dimension.sharedInstance.lPadding)
+                }
             } else {
                 if let recipeListPageViewModel  = recipeListPageViewModel {
                     RecipesView(recipesListPageModel: recipeListPageViewModel,recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, browseCatalogAction: {
@@ -214,7 +216,7 @@ public struct CatalogPackageRow: View {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(package.recipes, id: \.self) { recipe in
-                            RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
+                                RecipeCardView(recipe: recipe, showMealIdeaTag: false).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
                         }
                     }
                 }

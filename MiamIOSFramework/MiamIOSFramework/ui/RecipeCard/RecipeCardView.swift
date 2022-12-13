@@ -12,6 +12,7 @@ import miamCore
 public struct RecipeCardView: View {
     public var criteria: SuggestionsCriteria?
     public var recipeId: String?
+    public var recipe: Recipe?
     let recipeCardHeight: CGFloat
     private let showMealIdeaTag: Bool
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
@@ -31,8 +32,13 @@ public struct RecipeCardView: View {
         self.recipeCardHeight = recipeCardHeight
     }
     
+    public init(recipe: Recipe, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
+        self.recipe = recipe
+        self.showMealIdeaTag = showMealIdeaTag
+        self.recipeCardHeight = recipeCardHeight
+    }
+    
     public var body: some View {
-        VStack {
             if(viewModel.state != nil ){
                 ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (
                     resourceState: viewModel.state!.recipeState,
@@ -58,16 +64,19 @@ public struct RecipeCardView: View {
                         viewModel.fetchRecipe(recipeId: self.recipeId!)
                     } else if (criteria != nil) {
                         viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
+                    } else if ( recipe != nil){
+                        if let  currentRecipe = recipe {
+                            viewModel.setRecipe(recipe: currentRecipe)
+                        }
                     }
-                })
-            }
-        }.frame(height: recipeCardHeight)
-         .sheet(isPresented: $showingPopup) {
-            Dialog(
-                close: { showingPopup = false },
-                initialRoute : initialDialogScreen,
-                routerVm: viewModel.routerVM
-            )
+                }).frame(height: recipeCardHeight)
+                    .sheet(isPresented: $showingPopup) {
+                       Dialog(
+                           close: { showingPopup = false },
+                           initialRoute : initialDialogScreen,
+                           routerVm: viewModel.routerVM
+                       )
+                   }
         }
     }
     

@@ -59,7 +59,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             is CatalogContract.Event.GoToFavorite -> {
                 filterVm.setFavorite()
                 currentState.recipePageVM.setEvent(
-                    RecipeListPageContract.Event.InitPage("Mes idées repas", filterVm.getSelectedFilterAsQueryString())
+                    RecipeListPageContract.Event.InitPage("Mes idées repas")
                 )
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
@@ -67,18 +67,16 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 val pageTitle = recipePageTitle(filterVm.currentState.searchString)
                 val pageFilters = filterVm.getSelectedFilterAsQueryString()
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filterOpen = false, preferenceOpen = false) }
-                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(pageTitle, pageFilters))
+                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(pageTitle))
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
                 filterVm.setCat(event.categoryId)
-                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(event.title, filterVm.getSelectedFilterAsQueryString()))
+                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(event.title))
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
             is CatalogContract.Event.TogglePreference -> setState { copy(preferenceOpen = !currentState.preferenceOpen) }
             is CatalogContract.Event.ToggleFilter -> setState { copy(filterOpen = !currentState.filterOpen) }
             is CatalogContract.Event.ToggleSearch -> setState { copy(searchOpen = !currentState.searchOpen) }
-            is CatalogContract.Event.OnFilterValidation -> setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
-            is CatalogContract.Event.OnSearchLaunch -> setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
         }
     }
 
