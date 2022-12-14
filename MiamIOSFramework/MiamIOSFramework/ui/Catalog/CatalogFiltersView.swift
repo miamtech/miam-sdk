@@ -29,7 +29,8 @@ struct CatalogFiltersView: View {
                 VStack() {
                     // Title and close button
                     HStack {
-                        Text(MiamText.sharedInstance.filtersTitle).fontWeight(.bold)
+                        Text(MiamText.sharedInstance.filtersTitle)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                         Spacer()
                         Button {
                             closeFilters()
@@ -56,7 +57,9 @@ struct CatalogFiltersView: View {
                     Button {
                         catalogFilters.clear()
                     } label: {
-                        Text(MiamText.sharedInstance.removeFiltersButtonTitle).foregroundColor(Color.miamColor(.primaryText))
+                        Text(MiamText.sharedInstance.removeFiltersButtonTitle)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                            .foregroundColor(Color.miamColor(.primaryText))
                     }.padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
                     Divider().padding([.bottom, .top], 10)
                     Button {
@@ -64,6 +67,7 @@ struct CatalogFiltersView: View {
                     } label: {
                         Text("Voir les \(catalogFilters.numberOfRecipes) idées repas")
                             .padding(EdgeInsets(top: 9, leading: 20, bottom: 9, trailing: 20))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                             .foregroundColor(.white)
                             .background(Color.miamColor(.primary))
                             .clipShape(Capsule())
@@ -84,7 +88,8 @@ internal struct CatalogFilterSection: View {
             Template.sharedInstance.catalogFiltersSectionTemplate!(title, filters, filterSelected)
         } else {
             VStack(alignment: .leading) {
-                Text(title).bold().fontWeight(.bold)
+                Text(title)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                 ForEach(filters, id: \.self) { filter in
                     CatalogFilterRow(filter: filter) { option in
                         filterSelected(option)
@@ -117,7 +122,8 @@ internal struct CatalogFilterRow: View {
                     }
                 }.frame(width: 22, height: 22)
                     .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(Color.miamColor(.primary), lineWidth: 1.0))
-                Text(filter.uiLabel).fontWeight(Font.Weight.regular)
+                Text(filter.uiLabel)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 Spacer()
             }
         }

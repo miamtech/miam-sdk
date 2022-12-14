@@ -42,9 +42,9 @@ internal struct RecipeCardSuccessView: View {
                                 Image.miamImage(icon: .ideeRepas)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width:24, height:24)
+                                    .frame(width: 24, height: 24)
                                 Text(RecipeCardText.sharedInstance.recipeFlag)
-                                    .font(.system(size: 14.0, design: .default))
+                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                             }.padding(.horizontal,16)
                                 .padding(.vertical,4)
                                 .background(Color.miamColor(.musterd))
@@ -54,12 +54,12 @@ internal struct RecipeCardSuccessView: View {
                         if (isLikeEnabled) {
                             LikeButton(recipeId: recipe!.id)
                         }
-                    }.padding([.leading,.trailing],8).padding(.top,16)
+                    }.padding([.leading,.trailing], 8).padding(.top, 16)
                 }.frame(height: 240)
                 Text(recipe?.attributes?.title ?? "")
                     .lineLimit(2)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
                     .foregroundColor(Color.miamColor(.black))
-                    .font(.system(size: 13.0, weight: .bold, design: .default))
                     .padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                         leading: Dimension.sharedInstance.lPadding,
                                         bottom: Dimension.sharedInstance.mlPadding,
@@ -96,7 +96,7 @@ internal struct RecipeCardSuccessView: View {
                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                     .background(!isRecipeInCart ? Color.miamColor(.primaryText) : Color.miamColor(.white))
                     .cornerRadius(25)
-                    .font(.system(size: 15.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBoldStyle)
                     .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
             }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()

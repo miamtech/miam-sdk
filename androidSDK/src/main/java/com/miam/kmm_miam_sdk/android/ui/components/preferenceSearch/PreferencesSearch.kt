@@ -78,7 +78,12 @@ class PreferencesSearch @JvmOverloads constructor(
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
             if (Template.SearchPreferencesTemplate != null) {
-                Template.SearchPreferencesTemplate?.let { it(back, text) }
+                Template.SearchPreferencesTemplate?.let {
+                    it(back, text) {
+                        text = it
+                        preferencesSearchVM.search(it.text)
+                    }
+                }
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     BackButton(back)

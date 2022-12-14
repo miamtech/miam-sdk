@@ -31,13 +31,14 @@ struct RecipeDetailsStepRow: View {
                     .fill(Color.miamColor(.primaryText))
                     .frame(width: 35.0, height: 35.0)
                 Text(String(index+1))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     .foregroundColor(Color.miamColor(.white))
                     .frame( alignment: .center)
             }
             
             Text(step.attributes!.stepDescription ?? "")
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 .foregroundColor(Color.miamColor(.black20))
-                .font(.system(size: 16, weight: .regular, design: .default))
                 .multilineTextAlignment(.leading)
                 .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
             Spacer()

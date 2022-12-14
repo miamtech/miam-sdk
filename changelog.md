@@ -1,6 +1,9 @@
 # 3.4.0
 - [FEA][COR] New Route Service
 - [FEA][AND] Backpress supported
+- [FIX][AND] Price format
+- [FIX][AND] Padding ouside of a template in BasketPreviewItem
+- [BRK][AND] SearchPreferencesTemplate template signature changed 
 
 # 3.3.0
 - [FEA][COR] Clean counter usage

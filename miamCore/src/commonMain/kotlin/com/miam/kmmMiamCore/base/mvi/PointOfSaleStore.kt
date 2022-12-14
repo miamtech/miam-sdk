@@ -1,12 +1,17 @@
 package com.miam.kmmMiamCore.base.mvi
 
 
+import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.miam_core.data.repository.PointOfSaleRepositoryImp
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,16 +21,16 @@ data class PointOfSaleState(
     val idPointOfSale: Int?,
     val origin: String?,
     val currentJob: Job? = null
-) : State
+): State
 
-sealed class PointOfSaleAction : Action {
-    data class SetExtId(val extId: String?) : PointOfSaleAction()
-    data class SetSupplierId(val supplierId: Int) : PointOfSaleAction()
+sealed class PointOfSaleAction: Action {
+    data class SetExtId(val extId: String?): PointOfSaleAction()
+    data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
 }
 
-sealed class PointOfSaleEffect : Effect
+sealed class PointOfSaleEffect: Effect
 
-class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
+class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
     KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
@@ -76,9 +81,8 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
         return state.value.idPointOfSale
     }
 
-    fun getProviderId(): Int {
-        return state.value.idSupplier ?: -1
-    }
+    val supplierId: Int?
+        get() = state.value.idSupplier
 
     fun getProviderOrigin(): String {
         return state.value.origin ?: ""
@@ -89,7 +93,7 @@ class PointOfSaleStore : Store<PointOfSaleState, PointOfSaleAction, PointOfSaleE
     }
 
     private fun launchNewPosRefresh(): Job {
-        com.miam.kmmMiamCore.base.executor.ExecutorHelper.cancelRunningJob(state.value.currentJob)
+        ExecutorHelper.cancelRunningJob(state.value.currentJob)
         val currentJob = launch(coroutineHandler) {
             val pos = pointOfSaleRepository.getPosFormExtId(
                 state.value.extIdPointOfSale!!,

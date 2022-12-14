@@ -15,18 +15,20 @@ struct DialogEmptyView: View {
         NavigationView {
             VStack {
                 Text("Une erreur s'est produite. Veuillez réessayer")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                 Button {
                     closeAction()
                 } label: {
                     HStack(alignment: .center) {
                         Text("Fermer")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     }
                 }.foregroundColor(Color.miamColor(.white))
                     .frame(minHeight: 40.0, maxHeight: 40.0)
                     .padding(.horizontal, Dimension.sharedInstance.lPadding)
                     .background(Color.miamColor(.primaryText))
                     .cornerRadius(25)
-                    .font(.system(size: 15.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBoldStyle)
                     .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
             }.toolbar {

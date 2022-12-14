@@ -257,7 +257,8 @@ object Template {
     ) -> Unit)? = null
 
     var CatalogSearchResultEmptyTemplate: (@Composable() (
-        returnToCatalog: () -> Unit
+        returnToCatalog: () -> Unit,
+        pageTitle: String
     ) -> Unit)? = null
 
 
@@ -286,7 +287,7 @@ object Template {
     ) -> Unit)? = null
 
     var SearchPreferencesTemplate: (@Composable() (
-        back: () -> Unit, text: TextFieldValue,
+        back: () -> Unit, text: TextFieldValue, (value: TextFieldValue) -> Unit
     ) -> Unit)? = null
 
     var SearchResultRowPreferencesTemplate: (@Composable() (

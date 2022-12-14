@@ -81,17 +81,19 @@ fun EntryLine(
             )
         }
     } else {
-        BasketPreviewProductLine(
-            productName,
-            description,
-            entry.picture,
-            entry.count,
-            sharingCount.toString(),
-            entry.price,
-            (entry.record as BasketEntry).itemsCountOrZero,
-            { delete() },
-            { replace() }
-        ) { newQuantity -> onQuantityChanged(newQuantity) }
+        Row(Modifier.padding(horizontal = 16.dp)) {
+            BasketPreviewProductLine(
+                productName,
+                description,
+                entry.picture,
+                entry.count,
+                sharingCount.toString(),
+                entry.price,
+                (entry.record as BasketEntry).itemsCountOrZero,
+                { delete() },
+                { replace() }
+            ) { newQuantity -> onQuantityChanged(newQuantity) }
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.miam.kmmMiamCore.handler
 
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleAction
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.helpers.letElse
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -19,7 +20,7 @@ open class CatalogCategory(
 )
 
 @ThreadLocal
-object PointOfSaleHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+object PointOfSaleHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
@@ -49,10 +50,19 @@ object PointOfSaleHandler : KoinComponent, CoroutineScope by CoroutineScope(Disp
     }
 
     fun getCatalogCategories(setLocalCategories: (catalog: List<CatalogCategory>) -> Unit) {
-        launch(coroutineHandler) {
-            setLocalCategories(packageRepositoryImp.getActivePackageForRetailer(
-                store.getProviderId().toString()
-            ).map { CatalogCategory(it.id, it.attributes?.title ?: "") })
-        }
+        letElse(
+            store.supplierId,
+            { supplierId ->
+                launch(coroutineHandler) {
+                    val categories = packageRepositoryImp.getActivePackageForRetailer(supplierId.toString())
+                        .map { CatalogCategory(it.id, it.attributes?.title ?: "") }
+                    setLocalCategories(categories)
+                }
+            },
+            {
+                LogHandler.error("PointOfSaleHandler.getCatalogCategories with null supplier id")
+                setLocalCategories(listOf())
+            }
+        )
     }
 }

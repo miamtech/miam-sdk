@@ -12,10 +12,22 @@ import miamCore
 @available(iOS 14, *)
 struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View, EmptyView : View>: View {
     
-    private let resourceState: BasicUiState<T>
+    private let resourceState: BasicUiState<T>?
     private let successView:  SuccessView
     private let loadingView: LoadingView
     private let emptyView: EmptyView
+    
+    init(
+        resourceState: BasicUiState<T>?,
+        successView:  SuccessView,
+        loadingView:  LoadingView,
+        emptyView: EmptyView
+    ) {
+        self.resourceState = resourceState
+        self.successView = successView
+        self.loadingView = loadingView
+        self.emptyView = emptyView
+    }
     
     init(
         resourceState: BasicUiState<T>,
@@ -40,7 +52,7 @@ struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : 
         case is BasicUiStateLoading:
             loadingView
         default:
-            Text("You shouldn't be seeing this message")
+            loadingView
         }
     }
 }

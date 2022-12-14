@@ -28,9 +28,9 @@ struct BasketPreviewRow: View {
     }
     
     public init(viewModel : BasketPreviewVM,
-         previewLine: BasketPreviewLine,
-         removeProductAction: @escaping() -> Void,
-         replaceProductAction: @escaping() -> Void){
+        previewLine: BasketPreviewLine,
+        removeProductAction: @escaping() -> Void,
+        replaceProductAction: @escaping() -> Void){
         
         self.viewModel = viewModel
         self.previewLine = previewLine
@@ -67,21 +67,20 @@ struct BasketPreviewRow: View {
                         AsyncImage(url: productPictureURL!, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
                     }
                     VStack (alignment: .leading) {
-                        
                         Text(productName.capitalizingFirstLetter())
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                             .foregroundColor(Color.miamColor(.black))
-                            .font(.system(size: 16, weight: .bold, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                         
                         Text(productBrandName)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallMediumStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
-                            .font(.system(size: 13, weight: .medium, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
                         
                         Text(productDescription)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigLightStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
-                            .font(.system(size: 16, weight: .light, design: .default))
                             .padding(.leading, Dimension.sharedInstance.sPadding)
                             .padding(.top, Dimension.sharedInstance.borderWidth)
                         HStack {
@@ -90,7 +89,7 @@ struct BasketPreviewRow: View {
                                 if(previewLine.inlineTag != nil ){
                                     HStack(){
                                         Text(previewLine.inlineTag!)
-                                            .font(.system(size: 14.0, design: .default))
+                                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                                         Image.miamImage(icon: .look)
                                             .resizable()
                                             .scaledToFill()
@@ -115,8 +114,8 @@ struct BasketPreviewRow: View {
                 //Price
                 VStack {
                     Text("\(productPrice)€")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                         .foregroundColor(Color.miamColor(.primaryText))
-                        .font(.system(size: 20, weight: .heavy, design: .default))
                 }.frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.top, Dimension.sharedInstance.borderWidth)
                 
@@ -132,7 +131,8 @@ struct BasketPreviewRow: View {
                                     .renderingMode(.original)
                                     .frame(width: 18, height: 18, alignment: .topTrailing)
                                 Text(MiamText.sharedInstance.replaceIngredient)
-                                    .foregroundColor(Color.miamColor(.primaryText)).font(.system(size: 14, weight: .semibold, design: .default))
+                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
+                                    .foregroundColor(Color.miamColor(.primaryText))
                             }.frame(width: 100, height: 18, alignment: .topTrailing)
                         }
                         Spacer().onAppear(perform: {

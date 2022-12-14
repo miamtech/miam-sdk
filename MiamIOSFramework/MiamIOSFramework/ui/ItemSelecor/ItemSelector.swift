@@ -27,8 +27,8 @@ public struct ItemSelector: View  {
                         HStack{
                             Spacer()
                             Text(ItemSelectorText.sharedInstance.swapProduct)
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                                 .foregroundColor(Color.miamColor(.black))
-                                .font(.system(size: 16, weight: .heavy, design: .default))
                             Spacer()
                         }
                     )

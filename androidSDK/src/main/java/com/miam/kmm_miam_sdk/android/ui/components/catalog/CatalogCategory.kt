@@ -83,7 +83,7 @@ fun CatalogCategory(
                             .height(380.dp)
                     ) {
                         val recipe = RecipeView(context)
-                        recipe.bind(recipeId = recipeModel.id)
+                        recipe.bind(recipe = recipeModel)
                         recipe.isNotInShelf()
                         recipe.Content()
                     }

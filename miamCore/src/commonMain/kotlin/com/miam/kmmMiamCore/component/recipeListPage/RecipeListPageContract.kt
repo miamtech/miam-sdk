@@ -12,7 +12,7 @@ interface RecipeListPageContract {
 
     sealed class Event : UiEvent {
         object LoadPage : RecipeListPageContract.Event()
-        data class InitPage(val title: String, val filter: String) : RecipeListPageContract.Event()
+        data class InitPage(val title: String) : RecipeListPageContract.Event()
     }
 
     data class State(

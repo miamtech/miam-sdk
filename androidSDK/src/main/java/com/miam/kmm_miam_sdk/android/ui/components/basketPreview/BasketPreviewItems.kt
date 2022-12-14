@@ -29,7 +29,6 @@ fun BasketPreviewItem(
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
                 ) {
                     line.entries!!.found.map { entry -> BasketPreviewLine.fromBasketEntry(entry) }
                         .forEach { bpl ->

@@ -56,7 +56,7 @@ public struct BasketPreviewSuccessView: View {
             },
              titleView: AnyView(
                 Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .padding(.leading, Dimension.sharedInstance.lPadding)))
 
             
@@ -137,7 +137,7 @@ internal struct IngredientsHeader: View {
         } else {
             HStack {
                 Text(title)
-                    .font(.system(size: 16.0, weight: .bold, design: .default))
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.secondaryText))
 
                 Spacer()

@@ -14,6 +14,7 @@ import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,7 +78,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun listenEntriesChanges() {
-        launch(Dispatchers.Default) {
+        CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             lineEntriesSubject.debounce(500).collect { entries ->
                 LogHandler.info("launching update $entries")
                 val newBpl = updateBplEntries(entries)
