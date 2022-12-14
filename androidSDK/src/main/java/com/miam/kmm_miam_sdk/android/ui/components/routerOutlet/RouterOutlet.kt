@@ -57,7 +57,7 @@ class RouterOutlet: KoinComponent {
                     if (vmRouter.currentState.recipeId != null && vmRouter.currentState.rvm != null) {
                         goToPreview(vmRouter.currentState.recipeId!!, vmRouter.currentState.rvm!!)
                     } else {
-                        close()
+                        routeService.onCloseDialog()
                     }
                 }
             )
@@ -65,15 +65,6 @@ class RouterOutlet: KoinComponent {
         vmRouter.setEvent(
             RouterOutletContract.Event.GoToItemSelector
         )
-    }
-
-    fun previous() {
-        vmRouter.setEvent(RouterOutletContract.Event.Previous)
-    }
-
-    private fun close() {
-        vmRouter.setEvent(RouterOutletContract.Event.CloseDialogFromPreview)
-        this.routeService.onCloseDialog()
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
@@ -86,7 +77,14 @@ class RouterOutlet: KoinComponent {
                 onDismissRequest = { routeService.previous() },
                 properties = DialogProperties(usePlatformDefaultWidth = false)
             ) {
-                FullScreenContent({ close() }, { goToReplaceItem() }, { goToDetail(it) }, state, vmRouter)
+                FullScreenContent(
+                    { routeService.onCloseDialog() },
+                    { routeService.previous() },
+                    { goToReplaceItem() },
+                    { goToDetail(it) },
+                    state,
+                    vmRouter
+                )
             }
         }
     }
@@ -121,6 +119,7 @@ fun EmptyView(close: () -> Unit) {
 @Composable
 fun FullScreenContent(
     close: () -> Unit,
+    previous: () -> Unit,
     goToReplaceItem: () -> Unit,
     goToDetail: (RecipeViewModel) -> Unit,
     state: RouterOutletContract.State,
@@ -129,13 +128,14 @@ fun FullScreenContent(
     Box {
         when (state.content) {
             RouterContent.RECIPE_DETAIL -> state.rvm?.let {
-                RecipeDetails(it, vmRouter) { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) }
+                RecipeDetails(it, vmRouter, close, previous)
             }
             RouterContent.BASKET_PREVIEW -> state.rvm?.let { rvm ->
                 BasketPreview(
                     recipeId = state.recipeId!!,
                     recipeVm = rvm,
                     goToDetail = { goToDetail(rvm) },
+                    previous = previous,
                     close = close,
                     goToItemSelector = goToReplaceItem
                 ).content()

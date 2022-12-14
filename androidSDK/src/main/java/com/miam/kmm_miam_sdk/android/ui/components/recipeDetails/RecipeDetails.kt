@@ -52,7 +52,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 fun RecipeDetails(
     vmRecipeCard: RecipeViewModel,
     vmRouter: RouterOutletViewModel,
-    closeDialogue: () -> Unit
+    closeDialogue: () -> Unit,
+    previous: () -> Unit, // TODO : To be used in v4
 ) {
 
     val state by vmRecipeCard.uiState.collectAsState()

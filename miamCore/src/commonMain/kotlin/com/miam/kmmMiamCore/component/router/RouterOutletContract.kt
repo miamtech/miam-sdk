@@ -15,10 +15,8 @@ interface RouterOutletContract {
         object GoToHelper: Event()
         object GoToSponsor: Event()
         object OpenDialog: Event()
-        object CloseDialog: Event()
-        object CloseDialogFromPreview: Event()
         object GoToItemSelector: Event()
-        data class GoToPreview(val recipeId: String, val vm: RecipeViewModel, val pushDetailNavigationStep: Boolean = false): Event()
+        data class GoToPreview(val recipeId: String, val vm: RecipeViewModel): Event()
         data class GoToDetail(val vm: RecipeViewModel, val withFooter: Boolean = true): Event()
         object Previous: Event()
     }

@@ -30,6 +30,7 @@ class BasketPreview(
     recipeId: String,
     private val recipeVm: RecipeViewModel,
     val goToDetail: () -> Unit,
+    val previous: () -> Unit,
     val close: () -> Unit,
     private val goToItemSelector: () -> Unit,
 ) {
@@ -40,11 +41,7 @@ class BasketPreview(
     @Composable
     fun content() {
         fun removeRecipeAndClose() {
-            vmBasketPreview.setEvent(
-                BasketPreviewContract.Event.RemoveRecipe(
-                    recipeVm.recipeId ?: ""
-                )
-            )
+            vmBasketPreview.setEvent(BasketPreviewContract.Event.RemoveRecipe(recipeVm.recipeId ?: ""))
             close()
         }
 
@@ -52,12 +49,10 @@ class BasketPreview(
             topBar = {
                 if (Template.basketPreviewHeaderTemplate != null) {
                     Template.basketPreviewHeaderTemplate?.let {
-                        it(recipeVm) { goToDetail() }
+                        it(recipeVm, goToDetail, previous)
                     }
                 } else {
-                    BasketPreviewHeader {
-                        goToDetail()
-                    }
+                    BasketPreviewHeader(goToDetail, previous)
                 }
             },
             content = {

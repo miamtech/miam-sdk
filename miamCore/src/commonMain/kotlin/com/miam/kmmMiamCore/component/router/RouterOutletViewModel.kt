@@ -49,9 +49,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
                 // TODO : path
                 analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/basket-preview", Analytics.PlausibleProps(recipe_id = event.recipeId))
                 setState { copy(recipeId = event.recipeId, rvm = event.vm) }
-                if (event.pushDetailNavigationStep) {
-                    routeService.dispatch(RouteServiceAction.SetDialogRoute("Detail", { navigateTo(RouterContent.RECIPE_DETAIL) }, ::onClose))
-                }
                 routeService.dispatch(RouteServiceAction.SetDialogRoute("Preview", { navigateTo(RouterContent.BASKET_PREVIEW) }, ::onClose))
                 navigateTo(RouterContent.BASKET_PREVIEW)
             }
@@ -61,9 +58,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
                 routeService.dispatch(RouteServiceAction.SetDialogRoute("Item Selector", { navigateTo(RouterContent.ITEMS_SELECTOR) }, ::onClose))
                 navigateTo(RouterContent.ITEMS_SELECTOR)
             }
-            is RouterOutletContract.Event.CloseDialogFromPreview -> {
-                setEvent(RouterOutletContract.Event.CloseDialog)
-            }
             is RouterOutletContract.Event.Previous -> routeService.previous()
             RouterOutletContract.Event.GoToHelper -> navigateTo(RouterContent.RECIPE_HELPER)
             RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
@@ -72,7 +66,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
                 setState { copy(isOpen = true) }
                 LogHandler.info("Miam RouterOutletViewModel will OpenDialog ${this.currentState}")
             }
-            RouterOutletContract.Event.CloseDialog -> onClose()
         }
     }
 

@@ -23,7 +23,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 
 
 @Composable
-fun BasketPreviewHeader(goToDetail: () -> Unit) {
+fun BasketPreviewHeader(goToDetail: () -> Unit, previous: () -> Unit) {
     Row(
         modifier = headerRowModifier,
         verticalAlignment = headerRowVerticalAlignment
@@ -31,7 +31,7 @@ fun BasketPreviewHeader(goToDetail: () -> Unit) {
     {
         IconButton(
             modifier = BasketPreviewStyle.headerPreviousButton,
-            onClick = { goToDetail() }
+            onClick = { previous() }
         ) {
             Image(
                 painter = painterResource(BasketPreviewImage.toggleCaret),
@@ -54,6 +54,6 @@ fun BasketPreviewHeader(goToDetail: () -> Unit) {
 @Preview
 @Composable
 fun BasketPreviewHeaderPreview() {
-    BasketPreviewHeader {}
+    BasketPreviewHeader({}, {})
 }
 
