@@ -5,6 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -39,6 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.di.initKoin
@@ -54,6 +59,7 @@ import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
@@ -69,7 +75,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
@@ -88,6 +93,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     val userPreferences: UserPreferences by inject()
+    val routeService: RouteService by inject()
 
     private val retailerBasketSubject: MutableStateFlow<ExampleState> =
         MutableStateFlow(ExampleState())
@@ -106,6 +112,10 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
 
         ToasterHandler.setOnSuccess { message ->
             val toast = Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+        routeService.onRouteChange {
+            val toast = Toast.makeText(this@MainActivity, it?.title ?: "", Toast.LENGTH_SHORT)
             toast.show()
         }
         ToasterHandler.setOnAddRecipeText("Les produits de votre repas ont été ajoutés à votre panier.")
@@ -272,89 +282,106 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         super.onCreate(savedInstanceState)
         initMiam()
         initFakeBasket()
+
+        val onBackPressedCallback = object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                routeService.previous()
+            }
+        }
+        this@MainActivity.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         setContent {
+            val navController = rememberNavController()
             var isMyMealPage by remember { mutableStateOf(false) }
             var isFavoritePage by remember { mutableStateOf(false) }
             var isTagPage by remember { mutableStateOf(false) }
             var isCatalogPage by remember { mutableStateOf(false) }
-            Column {
-                Row {
-                    Button(onClick = {
-                        isMyMealPage = !isMyMealPage
-                        isFavoritePage = false
-                        isTagPage = false
-                        isCatalogPage = false
-                    }) {
-                        Text("my meal")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isFavoritePage = !isFavoritePage
-                        isTagPage = false
-                        isCatalogPage = false
-                    }) {
-                        Text("favorite")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isTagPage = !isTagPage
-                        isCatalogPage = false
-                        isFavoritePage = false
-                    }) {
-                        Text("tags")
-                    }
-                    Button(onClick = {
-                        isMyMealPage = false
-                        isCatalogPage = !isCatalogPage
-                        isTagPage = false
-                        isFavoritePage = false
-                    }) {
-                        Text("Catalog")
-                    }
-                }
-
-                if (isMyMealPage) {
-                    MyMeal(this@MainActivity).Content()
-                } else if (isFavoritePage) {
-                    FavoritePage(this@MainActivity).Content()
-                } else if (isTagPage) {
-                    if (ContextHandlerInstance.instance.isReady()) {
-                        val tag = BasketTag(this@MainActivity)
-                        val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
-                        if (items.size > 0) {
-                            tag.bind(items[items.size - 1].id)
-                            tag.Content()
-                        }
-
-                    }
-                } else if (isCatalogPage) {
-                    var catalog = Catalog(this@MainActivity)
-                    catalog.bind(
-                        catalogPageColumns = 2
-                    )
-                    catalog.enablePreference()
-                    catalog.Content()
-                } else {
-                    Column(
-                        Modifier
-                            .fillMaxWidth(),
-                        //.verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        content(retailerBasketSubject)
-                        Divider()
-                        Carousel(context = this@MainActivity)
-                        Divider()
-                        recipes(this@MainActivity)
-
-                        val mmb = MyMealButton(this@MainActivity)
-                        mmb.bind {
-                            isMyMealPage = !isMyMealPage
-                            isFavoritePage = false
-                            isTagPage = false
+            NavHost(navController = navController, startDestination = "home") {
+                composable("home") {
+                    BackHandler {
+                        val previousRoute = routeService.previous()
+                        if (previousRoute == null) {
                             isCatalogPage = false
                         }
-                        mmb.Content()
+                    }
+                    Column {
+                        Row {
+                            Button(onClick = {
+                                isMyMealPage = !isMyMealPage
+                                isFavoritePage = false
+                                isTagPage = false
+                                isCatalogPage = false
+                            }) {
+                                Text("my meal")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isFavoritePage = !isFavoritePage
+                                isTagPage = false
+                                isCatalogPage = false
+                            }) {
+                                Text("favorite")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isTagPage = !isTagPage
+                                isCatalogPage = false
+                                isFavoritePage = false
+                            }) {
+                                Text("tags")
+                            }
+                            Button(onClick = {
+                                isMyMealPage = false
+                                isCatalogPage = !isCatalogPage
+                                isTagPage = false
+                                isFavoritePage = false
+                            }) {
+                                Text("Catalog")
+                            }
+                        }
+
+                        if (isMyMealPage) {
+                            MyMeal(this@MainActivity).Content()
+                        } else if (isFavoritePage) {
+                            FavoritePage(this@MainActivity).Content()
+                        } else if (isTagPage) {
+                            if (ContextHandlerInstance.instance.isReady()) {
+                                val tag = BasketTag(this@MainActivity)
+                                val items = retailerBasketSubject.asStateFlow().collectAsState().value.items
+                                if (items.size > 0) {
+                                    tag.bind(items[items.size - 1].id)
+                                    tag.Content()
+                                }
+                            }
+                        } else if (isCatalogPage) {
+                            var catalog = Catalog(this@MainActivity)
+                            catalog.bind(
+                                catalogPageColumns = 2
+                            )
+                            catalog.enablePreference()
+                            catalog.Content()
+                        } else {
+                            Column(
+                                Modifier
+                                    .fillMaxWidth(),
+                                //.verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                content(retailerBasketSubject)
+                                Divider()
+                                Carousel(context = this@MainActivity)
+                                Divider()
+                                recipes(this@MainActivity)
+
+                                val mmb = MyMealButton(this@MainActivity)
+                                mmb.bind {
+                                    isMyMealPage = !isMyMealPage
+                                    isFavoritePage = false
+                                    isTagPage = false
+                                    isCatalogPage = false
+                                }
+                                mmb.Content()
+                            }
+                        }
                     }
                 }
             }

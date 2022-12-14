@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.AbstractComposeView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
-import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.FullScreen
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -33,6 +36,7 @@ class Preferences @JvmOverloads constructor(
     }
 
     private val preferencesVM: SingletonPreferencesViewModel by inject()
+    private val routeService: RouteService by inject()
 
     private fun resetAndClose() {
         preferencesVM.resetPreferences()
@@ -44,10 +48,14 @@ class Preferences @JvmOverloads constructor(
         onApply()
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     override fun Content() {
         val state by preferencesVM.uiState.collectAsState()
-        FullScreen {
+        Dialog(
+            onDismissRequest = { routeService.previous() },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
             ManagementResourceState(
                 resourceState = state.basicState,
                 successView = { _ ->

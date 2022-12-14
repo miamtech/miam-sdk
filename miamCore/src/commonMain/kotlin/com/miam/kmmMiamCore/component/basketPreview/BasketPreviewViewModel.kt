@@ -54,10 +54,8 @@ open class BasketPreviewViewModel(val recipeId: String?):
         )
 
     init {
-
         if (miamContext.isReady()) {
             if (recipeId != null) {
-
                 basketChange()
                 val job = launch(coroutineHandler) {
                     basketStore.observeSideEffect()

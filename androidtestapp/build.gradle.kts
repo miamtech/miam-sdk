@@ -39,8 +39,8 @@ android {
 
 val composeVersion: String by project
 
-dependencies {
 
+dependencies {
     // as an aar extern file
     // if use you have to put manually aar file in libs folder
     implementation(files("$projectDir/libs/androidSDK-debug.aar"))
@@ -48,12 +48,11 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.2.2")
     implementation("io.insert-koin:koin-core:3.2.2")
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:1.6.1")
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation("androidx.compose.compiler:compiler:1.3.2")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
@@ -64,6 +63,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("io.coil-kt:coil-compose:1.3.1")
     implementation("io.coil-kt:coil-svg:1.3.1")
     implementation("io.ktor:ktor-client-android:1.6.7")
@@ -71,7 +71,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:1.6.7")
     implementation("io.ktor:ktor-client-logging:1.6.7")
     implementation("org.slf4j:slf4j-nop:1.7.25")
-
+    implementation("androidx.navigation:navigation-runtime-ktx:2.5.3")
 }
 repositories {
     mavenCentral()

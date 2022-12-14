@@ -110,7 +110,8 @@ object Template {
 
     var basketPreviewHeaderTemplate: (@Composable() (
         recipeVm: RecipeViewModel,
-        goBackToRecipeDetails: () -> Unit
+        goBackToRecipeDetails: () -> Unit,
+        previous: () -> Unit
     ) -> Unit)? = null
 
 

@@ -52,7 +52,8 @@ import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceStat
 fun RecipeDetails(
     vmRecipeCard: RecipeViewModel,
     vmRouter: RouterOutletViewModel,
-    closeDialogue: () -> Unit
+    closeDialogue: () -> Unit,
+    previous: () -> Unit, // TODO : To be used in v4
 ) {
 
     val state by vmRecipeCard.uiState.collectAsState()
@@ -109,9 +110,7 @@ private fun recipeDetailContent(
             if (Template.recipeDetailHeaderTemplate != null) {
                 Template.recipeDetailHeaderTemplate?.let { it({ closeDialogue() }, recipe) }
             } else {
-                RecipeDetailsHeader(recipe.attributes!!.title, scrollState.value) {
-                    closeDialogue()
-                }
+                RecipeDetailsHeader(recipe.attributes!!.title, scrollState.value) { closeDialogue() }
             }
         },
         content =

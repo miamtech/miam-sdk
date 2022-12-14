@@ -14,14 +14,18 @@ enum class CatalogContent {
 
 interface CatalogContract {
 
-    sealed class Event : UiEvent {
-        object GoToDefault : CatalogContract.Event()
-        object GoToFavorite : CatalogContract.Event()
-        object GoToRecipeList : CatalogContract.Event()
-        object ToggleFilter : CatalogContract.Event()
-        object ToggleSearch : CatalogContract.Event()
-        object TogglePreference : CatalogContract.Event()
-        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") : CatalogContract.Event()
+    sealed class Event: UiEvent {
+        object GoToDefault: Event()
+        object GoToFavorite: Event()
+        object GoToRecipeList: Event()
+        object ToggleFilter: Event()
+        object ToggleSearch: Event()
+        object TogglePreference: Event()
+        object OnFilterValidation: Event()
+        object OnSearchLaunch: Event()
+        object GoBack: Event()
+        object OnCloseModal: Event()
+        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = ""): Event()
     }
 
     data class State(
@@ -34,7 +38,7 @@ interface CatalogContract {
         val preferenceOpen: Boolean,
         val enableFilters: Boolean,
         val enablePreferences: Boolean
-    ) : UiState
+    ): UiState
 
-    sealed class Effect : UiEffect
+    sealed class Effect: UiEffect
 }

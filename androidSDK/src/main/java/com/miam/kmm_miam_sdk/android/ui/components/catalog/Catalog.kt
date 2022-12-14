@@ -55,8 +55,6 @@ class Catalog @JvmOverloads constructor(
     override fun Content() {
 
         val state by vmCatalog.uiState.collectAsState()
-
-
         Box {
             Column {
                 ManagementResourceState(

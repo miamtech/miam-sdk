@@ -13,6 +13,8 @@ import com.miam.kmmMiamCore.helpers.letElse
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmmMiamCore.services.RouteService
+import com.miam.kmmMiamCore.services.RouteServiceAction
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -30,8 +32,13 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
 
     private val packageRepositoryImp: PackageRepositoryImp by inject()
     private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val routeService: RouteService by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val preference: SingletonPreferencesViewModel by inject()
+
+    private val currentFiltersQuery: String
+        get() = currentState.catalogFilterVM.getSelectedFilterAsQueryString()
+
 
     private val filterVm: SingletonFilterViewModel
         get() = currentState.catalogFilterVM
@@ -49,34 +56,61 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             enablePreferences = false
         )
 
+    init {
+        routeService.dispatch(RouteServiceAction.SetPageRoute("Idées repas", ::goToCatalogMain))
+    }
+
     override fun handleEvent(event: CatalogContract.Event) {
         when (event) {
             is CatalogContract.Event.GoToDefault -> {
-                setState {
-                    copy(content = CatalogContent.DEFAULT, searchOpen = false, filterOpen = false, catalogFilterVM = SingletonFilterViewModel())
-                }
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Idées repas", ::goToCatalogMain))
+                goToCatalogMain()
             }
             is CatalogContract.Event.GoToFavorite -> {
-                filterVm.setFavorite()
-                currentState.recipePageVM.setEvent(
-                    RecipeListPageContract.Event.InitPage("Mes idées repas")
-                )
-                setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Mes repas favoris", ::goToFavorites))
+                goToFavorites()
             }
             is CatalogContract.Event.GoToRecipeList -> {
-                val pageTitle = recipePageTitle(filterVm.currentState.searchString)
-                val pageFilters = filterVm.getSelectedFilterAsQueryString()
+                // PB ICI
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filterOpen = false, preferenceOpen = false) }
-                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(pageTitle))
+                fetchRecipes()
+
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
-                filterVm.setCat(event.categoryId)
-                currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(event.title))
+                currentState.catalogFilterVM.setCat(event.categoryId)
+                currentState.recipePageVM.setEvent(
+                    RecipeListPageContract.Event.InitPage(event.title)
+                )
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
-            is CatalogContract.Event.TogglePreference -> setState { copy(preferenceOpen = !currentState.preferenceOpen) }
-            is CatalogContract.Event.ToggleFilter -> setState { copy(filterOpen = !currentState.filterOpen) }
-            is CatalogContract.Event.ToggleSearch -> setState { copy(searchOpen = !currentState.searchOpen) }
+            is CatalogContract.Event.TogglePreference -> {
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(preferenceOpen = false) } }))
+                setState { copy(preferenceOpen = !currentState.preferenceOpen) }
+            }
+            is CatalogContract.Event.ToggleFilter -> {
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(filterOpen = false) } }))
+                setState { copy(filterOpen = !currentState.filterOpen) }
+            }
+            is CatalogContract.Event.ToggleSearch -> {
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(searchOpen = false) } }))
+                setState { copy(searchOpen = !currentState.searchOpen) }
+            }
+            is CatalogContract.Event.OnFilterValidation -> {
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
+                setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
+            }
+            is CatalogContract.Event.OnSearchLaunch -> {
+                routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
+                setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
+            }
+            is CatalogContract.Event.OnCloseModal -> {
+                setState { copy(searchOpen = false, filterOpen = false, preferenceOpen = false) }
+            }
+            is CatalogContract.Event.GoBack -> {
+                routeService.previous()
+            }
         }
     }
 
@@ -85,12 +119,32 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         if (preference.isInit) fetchCategories()
     }
 
+    private fun goToCatalogMain() {
+        setState { copy(content = CatalogContent.DEFAULT, searchOpen = false, filterOpen = false, catalogFilterVM = SingletonFilterViewModel()) }
+    }
+
+    private fun goToFavorites() {
+        currentState.catalogFilterVM.setFavorite()
+        currentState.recipePageVM.setEvent(RecipeListPageContract.Event.InitPage("Mes idées repas"))
+        setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
+    }
+
     fun enablePreferences(enable: Boolean = true) {
         setState { copy(enablePreferences = enable) }
     }
 
     fun enableFilters(enable: Boolean = true) {
         setState { copy(enableFilters = enable) }
+    }
+
+    private fun fetchRecipes() {
+        currentState.recipePageVM.setEvent(
+            RecipeListPageContract.Event.InitPage(
+                if ((currentState.catalogFilterVM.currentState.searchString
+                        ?: "").isEmpty()
+                ) "Votre sélection" else "Votre recherche : \"${currentState.catalogFilterVM.currentState.searchString}\""
+            )
+        )
     }
 
     private fun listenPreferencesChanges() {

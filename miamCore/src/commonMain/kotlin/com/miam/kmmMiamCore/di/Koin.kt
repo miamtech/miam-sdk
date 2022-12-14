@@ -14,6 +14,7 @@ import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.data.repository.*
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
@@ -68,6 +69,7 @@ val storeModule = module {
 
 val servicesModule = module {
     single { Analytics() }
+    single { RouteService() }
     single { UserPreferences() }
     single { SingletonPreferencesViewModel() }
     single { SingletonFilterViewModel() }
