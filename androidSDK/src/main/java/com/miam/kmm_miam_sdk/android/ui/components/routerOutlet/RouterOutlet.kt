@@ -67,8 +67,13 @@ class RouterOutlet: KoinComponent {
         )
     }
 
+    fun previous() {
+        vmRouter.setEvent(RouterOutletContract.Event.Previous)
+    }
+
     private fun close() {
         vmRouter.setEvent(RouterOutletContract.Event.CloseDialogFromPreview)
+        this.routeService.onCloseDialog()
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
@@ -124,18 +129,15 @@ fun FullScreenContent(
     Box {
         when (state.content) {
             RouterContent.RECIPE_DETAIL -> state.rvm?.let {
-                RecipeDetails(
-                    it,
-                    vmRouter
-                ) { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) }
+                RecipeDetails(it, vmRouter) { vmRouter.setEvent(RouterOutletContract.Event.CloseDialog) }
             }
-            RouterContent.BASKET_PREVIEW -> state.rvm?.let {
+            RouterContent.BASKET_PREVIEW -> state.rvm?.let { rvm ->
                 BasketPreview(
                     recipeId = state.recipeId!!,
-                    it,
-                    { goToDetail(it) },
-                    close,
-                    goToReplaceItem
+                    recipeVm = rvm,
+                    goToDetail = { goToDetail(rvm) },
+                    close = close,
+                    goToItemSelector = goToReplaceItem
                 ).content()
             }
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()

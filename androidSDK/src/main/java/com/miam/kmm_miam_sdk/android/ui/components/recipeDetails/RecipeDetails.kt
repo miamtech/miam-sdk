@@ -109,9 +109,7 @@ private fun recipeDetailContent(
             if (Template.recipeDetailHeaderTemplate != null) {
                 Template.recipeDetailHeaderTemplate?.let { it({ closeDialogue() }, recipe) }
             } else {
-                RecipeDetailsHeader(recipe.attributes!!.title, scrollState.value) {
-                    closeDialogue()
-                }
+                RecipeDetailsHeader(recipe.attributes!!.title, scrollState.value) { closeDialogue() }
             }
         },
         content =

@@ -4,7 +4,6 @@ import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
-import com.miam.kmmMiamCore.services.DialogRoute
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
 import org.koin.core.component.inject
@@ -42,33 +41,30 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
                 analyticsService.sendEvent(Analytics.EVENT_RECIPE_DISPLAY, "", Analytics.PlausibleProps(recipe_id = event.vm.recipeId))
                 setState { copy(rvm = event.vm, showFooter = event.withFooter) }
                 LogHandler.info("Miam RouterOutletViewModel will navigate")
-                navigateToDetail()
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("Detail", { navigateTo(RouterContent.RECIPE_DETAIL) }, ::onClose))
+                navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterOutletContract.Event.GoToPreview -> {
                 LogHandler.info("Miam RouterOutletViewModel GoToPreview event $event")
                 // TODO : path
                 analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/basket-preview", Analytics.PlausibleProps(recipe_id = event.recipeId))
                 setState { copy(recipeId = event.recipeId, rvm = event.vm) }
-                navigateToPreview()
+                if (event.pushDetailNavigationStep) {
+                    routeService.dispatch(RouteServiceAction.SetDialogRoute("Detail", { navigateTo(RouterContent.RECIPE_DETAIL) }, ::onClose))
+                }
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("Preview", { navigateTo(RouterContent.BASKET_PREVIEW) }, ::onClose))
+                navigateTo(RouterContent.BASKET_PREVIEW)
             }
             is RouterOutletContract.Event.GoToItemSelector -> {
                 // TODO : path
                 analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/replace-item", Analytics.PlausibleProps(recipe_id = currentState.recipeId))
-                navigateToItemSelector()
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("Item Selector", { navigateTo(RouterContent.ITEMS_SELECTOR) }, ::onClose))
+                navigateTo(RouterContent.ITEMS_SELECTOR)
             }
             is RouterOutletContract.Event.CloseDialogFromPreview -> {
                 setEvent(RouterOutletContract.Event.CloseDialog)
             }
-            is RouterOutletContract.Event.GoToDetailFromPreview -> {
-                setEvent(RouterOutletContract.Event.GoToDetail(event.vm))
-            }
-            is RouterOutletContract.Event.SetRouterContent -> {
-                setState {
-                    copy(
-                        content = event.routerContent
-                    )
-                }
-            }
+            is RouterOutletContract.Event.Previous -> routeService.previous()
             RouterOutletContract.Event.GoToHelper -> navigateTo(RouterContent.RECIPE_HELPER)
             RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterOutletContract.Event.OpenDialog -> {
@@ -84,33 +80,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
         setState { copy(isOpen = false) }
     }
 
-    private fun navigateToDetail() {
-        navigateTo(RouterContent.RECIPE_DETAIL)
-        routeService.dispatch(
-            RouteServiceAction.SetRoute(
-                DialogRoute("Detail", ::navigateToDetail, ::onClose)
-            )
-        )
-    }
-
-    private fun navigateToPreview() {
-        navigateTo(RouterContent.BASKET_PREVIEW)
-        routeService.dispatch(
-            RouteServiceAction.SetRoute(
-                DialogRoute("Preview", ::navigateToPreview, ::onClose)
-            )
-        )
-    }
-
-    private fun navigateToItemSelector() {
-        navigateTo(RouterContent.ITEMS_SELECTOR)
-        routeService.dispatch(
-            RouteServiceAction.SetRoute(
-                DialogRoute("Item Selector", ::navigateToItemSelector, ::onClose)
-            )
-        )
-    }
-    
     private fun navigateTo(destination: RouterContent) {
         setState { copy(content = destination) }
         if (!uiState.value.isOpen) {

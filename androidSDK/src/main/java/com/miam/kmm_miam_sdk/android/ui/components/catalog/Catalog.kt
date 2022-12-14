@@ -10,20 +10,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
-import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
-    private val routeService: RouteService by inject()
     var catalogPageColumns = 1
     var catalogPageVerticalSpacing = 12
     var catalogPageHorizontalSpacing = 12
@@ -38,7 +34,6 @@ class Catalog @JvmOverloads constructor(
         this.catalogPageColumns = catalogPageColumns ?: this.catalogPageColumns
         this.catalogPageVerticalSpacing = catalogPageVerticalSpacing ?: this.catalogPageVerticalSpacing
         this.catalogPageHorizontalSpacing = catalogPageHorizontalSpacing ?: this.catalogPageHorizontalSpacing
-        this.routeService.onCloseDialog()
         if (categoryId != null) {
             vmCatalog.setEvent(
                 CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
@@ -60,7 +55,6 @@ class Catalog @JvmOverloads constructor(
     override fun Content() {
 
         val state by vmCatalog.uiState.collectAsState()
-        
         Box {
             Column {
                 ManagementResourceState(

@@ -298,8 +298,8 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") {
                     BackHandler {
-                        val shoudImove = routeService.previous()
-                        if (shoudImove) {
+                        val previousRoute = routeService.previous()
+                        if (previousRoute == null) {
                             isCatalogPage = false
                         }
                     }

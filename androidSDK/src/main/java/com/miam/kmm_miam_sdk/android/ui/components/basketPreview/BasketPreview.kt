@@ -39,7 +39,6 @@ class BasketPreview(
     @ExperimentalCoilApi
     @Composable
     fun content() {
-
         fun removeRecipeAndClose() {
             vmBasketPreview.setEvent(
                 BasketPreviewContract.Event.RemoveRecipe(
