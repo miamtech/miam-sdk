@@ -286,7 +286,7 @@ object Template {
     ) -> Unit)? = null
 
     var SearchPreferencesTemplate: (@Composable() (
-        back: () -> Unit, text: TextFieldValue,
+        back: () -> Unit, text: TextFieldValue, (value: TextFieldValue) -> Unit
     ) -> Unit)? = null
 
     var SearchResultRowPreferencesTemplate: (@Composable() (
