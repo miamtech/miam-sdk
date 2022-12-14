@@ -1,11 +1,15 @@
 package com.miam.kmmMiamCore.component.recipeListPage
 
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.component.preferences.PreferencesEffect
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
@@ -18,6 +22,11 @@ class RecipeListPageViewModel:
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val preference: SingletonPreferencesViewModel by inject()
+    private val recipeFilter: SingletonFilterViewModel by inject()
+
+    init {
+        listenPreferencesChanges()
+    }
 
     override fun createInitialState(): RecipeListPageContract.State =
         RecipeListPageContract.State(
@@ -32,7 +41,17 @@ class RecipeListPageViewModel:
     override fun handleEvent(event: RecipeListPageContract.Event) {
         when (event) {
             is RecipeListPageContract.Event.LoadPage -> loadPage()
-            is RecipeListPageContract.Event.InitPage -> initPage(event.title, event.filter)
+            is RecipeListPageContract.Event.InitPage -> initPage(event.title)
+        }
+    }
+
+    private fun listenPreferencesChanges() {
+        launch(coroutineHandler) {
+            preference.observeSideEffect().filter { effect ->
+                effect is PreferencesEffect.PreferencesLoaded || effect is PreferencesEffect.PreferencesChanged
+            }.collect {
+                initPage(currentState.title)
+            }
         }
     }
 
@@ -75,11 +94,11 @@ class RecipeListPageViewModel:
         }
     }
 
-    private fun initPage(title: String, filter: String) {
+    private fun initPage(title: String) {
         setState {
             copy(
                 title = title,
-                filter = filter,
+                filter = recipeFilter.getSelectedFilterAsQueryString() + preference.getPreferencesAsQueryString(),
                 recipes = BasicUiState.Loading,
                 noMoreData = false,
                 currentPage = 1

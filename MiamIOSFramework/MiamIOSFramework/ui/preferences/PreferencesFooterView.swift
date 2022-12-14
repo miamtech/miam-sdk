@@ -41,7 +41,7 @@ public struct PreferencesFooterView: View {
                 Button {
                     applyTapped()
                 } label: {
-                    Text("\(MiamText.sharedInstance.see) 2340 \(MiamText.sharedInstance.meals)")
+                    Text("\(MiamText.sharedInstance.see) \(numberOfRecipesFound) \(MiamText.sharedInstance.meals)")
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                         .foregroundColor(Color.miamColor(.white))
                 }

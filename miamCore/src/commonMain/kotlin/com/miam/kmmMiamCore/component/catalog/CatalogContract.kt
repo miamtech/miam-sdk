@@ -21,8 +21,6 @@ interface CatalogContract {
         object ToggleFilter : CatalogContract.Event()
         object ToggleSearch : CatalogContract.Event()
         object TogglePreference : CatalogContract.Event()
-        object OnFilterValidation : CatalogContract.Event()
-        object OnSearchLaunch : CatalogContract.Event()
         data class GoToRecipeListFromCategory(val categoryId: String, val title: String = "") : CatalogContract.Event()
     }
 

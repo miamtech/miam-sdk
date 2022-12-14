@@ -71,7 +71,11 @@ fun CatalogPage(
             )
         },
         emptyView = {
-            CatalogEmptyPage(recipePageVM, returnToCategoriesPage)
+            CatalogEmptyPage(
+                recipePageVM.currentState.title,
+                recipePageVM.currentState.filter.contains("filter[liked]=true&"),
+                returnToCategoriesPage
+            )
         },
         loadingView = {
             if (Template.CatalogResultPageLoadingTemplate != null) {
@@ -163,14 +167,12 @@ private fun CatalogLoadingPage() {
 }
 
 @Composable
-private fun CatalogEmptyPage(
-    recipePageVM: RecipeListPageViewModel,
+fun CatalogEmptyPage(
+    title: String,
+    isFavorite: Boolean,
     returnToCategoriesPage: () -> Unit
 ) {
-
-    val isFavorit = recipePageVM.currentState.filter.contains("filter[liked]=true&")
-
-    if (isFavorit) {
+    if (isFavorite) {
         if (Template.CatalogFavoritEmptyTemplate != null) {
             Template.CatalogFavoritEmptyTemplate?.let {
                 it(returnToCategoriesPage)
@@ -181,10 +183,10 @@ private fun CatalogEmptyPage(
     } else {
         if (Template.CatalogSearchResultEmptyTemplate != null) {
             Template.CatalogSearchResultEmptyTemplate?.let {
-                it(returnToCategoriesPage, recipePageVM.currentState.title)
+                it(returnToCategoriesPage, title)
             }
         } else {
-            SearchResultEmptyPage(pageTitle = recipePageVM.currentState.title)
+            SearchResultEmptyPage(pageTitle = title)
         }
     }
 }

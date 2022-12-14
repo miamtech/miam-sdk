@@ -438,11 +438,11 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
     ///////////////////////////////////// PACKAGE /////////////////////////////////////////////////
 
-    override suspend fun getActivePackagesFromSupplierID(supplierId: String): List<Package> {
+    override suspend fun getActivePackagesFromSupplierID(supplierId: String, included: List<String>): List<Package> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getActivePackagesFromSupplierID $supplierId")
-        // TODO Alex handle status and user pref
+        val params = "filter[category_for]=$supplierId&[status]=4&[user_preferences]=true&sort=catalog_position&${includedToString(included)}"
         val returnValue = httpClient.get<RecordWrapper> {
-            url(HttpRoutes.PACKAGE_ENDPOINT + "?filter[category_for]=$supplierId&[status]=4&[user_preferences]=true&sort=catalog_position&include=recipes")
+            url("${HttpRoutes.PACKAGE_ENDPOINT}?$params")
         }.toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID $returnValue")
         return returnValue.map { record -> record as Package }

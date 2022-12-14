@@ -12,13 +12,13 @@ data class Package private constructor(
     override val id: String,
     override var attributes: PackageAttributes? = null,
     override val relationships: PackageRelationships? = null
-) : Record() {
+): Record() {
     constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ) : this(
+    ): this(
         id,
         if (attributes == null) null else jsonFormat.decodeFromJsonElement<PackageAttributes>(
             attributes
@@ -28,6 +28,11 @@ data class Package private constructor(
         )
     ) {
         relationships?.buildFromIncluded(includedRecords)
+    }
+
+    fun buildRecipes(recipes: List<Recipe>): Package {
+        val newRel = PackageRelationships(RecipeRelationshipList(recipes))
+        return copy(relationships = newRel)
     }
 }
 
@@ -45,12 +50,12 @@ data class PackageAttributes(
     @SerialName("recipes-count")
     val recipesCount: Int,
     val settings: PackageSettings
-) : Attributes()
+): Attributes()
 
 @Serializable
 data class PackageRelationships constructor(
     var recipes: RecipeRelationshipList? = null,
-) : Relationships() {
+): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         // println("Miam will build package recipes")
         recipes?.buildFromIncluded(includedRecords)
