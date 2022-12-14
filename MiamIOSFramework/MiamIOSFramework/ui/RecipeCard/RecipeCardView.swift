@@ -39,45 +39,43 @@ public struct RecipeCardView: View {
     }
     
     public var body: some View {
-            if(viewModel.state != nil ){
-                ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (
-                    resourceState: viewModel.state!.recipeState,
-                    successView:  RecipeCardSuccessView(recipe: viewModel.recipe,
-                                                        isRecipeInCart: viewModel.currentState.isInCart,
-                                                        isLikeEnabled: viewModel.isLikeEnabled,
-                                                        showMealIdeaTag: showMealIdeaTag,
-                                                        goToDetailsAction: {
-                                                            viewModel.goToDetail()
-                                                            showingPopup = true
-                                                        }, showOrAddRecipeAction: {
-                                                            if viewModel.isInCart {
-                                                                viewModel.goToDetail()
-                                                            } else {
-                                                                addToCart()
-                                                            }
-                                                            showingPopup = true
-                                                        }),
-                    loadingView: RecipeCardLoadingView(),
-                    emptyView: RecipeCardEmptyView()
-                ).onAppear(perform: {
-                    if(recipeId != nil){
-                        viewModel.fetchRecipe(recipeId: self.recipeId!)
-                    } else if (criteria != nil) {
-                        viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
-                    } else if ( recipe != nil){
-                        if let  currentRecipe = recipe {
-                            viewModel.setRecipe(recipe: currentRecipe)
-                        }
-                    }
-                }).frame(height: recipeCardHeight)
-                    .sheet(isPresented: $showingPopup) {
-                       Dialog(
-                           close: { showingPopup = false },
-                           initialRoute : initialDialogScreen,
-                           routerVm: viewModel.routerVM
-                       )
-                   }
-        }
+        ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (
+            resourceState: viewModel.state?.recipeState ,
+            successView:  RecipeCardSuccessView(recipe: viewModel.recipe,
+                                                isRecipeInCart: viewModel.currentState.isInCart,
+                                                isLikeEnabled: viewModel.isLikeEnabled,
+                                                showMealIdeaTag: showMealIdeaTag,
+                                                goToDetailsAction: {
+                                                    viewModel.goToDetail()
+                                                    showingPopup = true
+                                                }, showOrAddRecipeAction: {
+                                                    if viewModel.isInCart {
+                                                        viewModel.goToDetail()
+                                                    } else {
+                                                        addToCart()
+                                                    }
+                                                    showingPopup = true
+                                                }),
+            loadingView: RecipeCardLoadingView(),
+            emptyView: RecipeCardEmptyView()
+        ).onAppear(perform: {
+            if(recipeId != nil){
+                viewModel.fetchRecipe(recipeId: self.recipeId!)
+            } else if (criteria != nil) {
+                viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
+            } else if ( recipe != nil){
+                if let  currentRecipe = recipe {
+                    viewModel.setRecipe(recipe: currentRecipe)
+                }
+            }
+        }).frame(height: recipeCardHeight)
+            .sheet(isPresented: $showingPopup) {
+                Dialog(
+                    close: { showingPopup = false },
+                    initialRoute : initialDialogScreen,
+                    routerVm: viewModel.routerVM
+                )
+            }   
     }
     
     private func addToCart() {
