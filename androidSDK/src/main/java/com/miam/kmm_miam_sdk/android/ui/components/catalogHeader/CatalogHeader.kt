@@ -302,7 +302,7 @@ fun CatalogHeader(
         }
         if (Template.CatalogHeader != null) {
             Template.CatalogHeader?.let {
-                it(::openFilter, ::openSearch, ::openPreferences, goToFavorite, goToBack, ::getActiveFilterCount, isMainPage)
+                it(::openFilter, ::openSearch, ::openPreferences, goToFavorite, goToBack, ::getActiveFilterCount, isMainPage, isFavorite)
             }
         } else {
             Column(Modifier.background(color = primary)) {

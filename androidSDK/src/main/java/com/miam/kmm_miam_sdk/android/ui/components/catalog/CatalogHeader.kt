@@ -71,8 +71,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
     if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-
-            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount, showFullHeader)
+            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount, showFullHeader, isFavorit)
         }
     } else {
         Column(Modifier.background(color = primary)) {

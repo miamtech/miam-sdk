@@ -203,7 +203,8 @@ object Template {
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
         getActiveFilterCount: () -> Int,
-        isMainPage: Boolean
+        isMainPage: Boolean,
+        isFavorite: Boolean
     ) -> Unit)? = null
 
     var CatalogCategoryTemplate: (@Composable() (
@@ -287,7 +288,7 @@ object Template {
     ) -> Unit)? = null
 
     var SearchPreferencesTemplate: (@Composable() (
-        back: () -> Unit, text: TextFieldValue, (value: TextFieldValue) -> Unit
+        back: () -> Unit, text: TextFieldValue, onChange: (value: TextFieldValue) -> Unit
     ) -> Unit)? = null
 
     var SearchResultRowPreferencesTemplate: (@Composable() (
