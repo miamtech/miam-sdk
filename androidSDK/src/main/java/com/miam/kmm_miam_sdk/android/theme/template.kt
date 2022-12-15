@@ -203,7 +203,8 @@ object Template {
         goToFavorite: () -> Unit,
         goBackTOCatalog: () -> Unit,
         getActiveFilterCount: () -> Int,
-        isMainPage: Boolean
+        isMainPage: Boolean,
+        isFavorite: Boolean
     ) -> Unit)? = null
 
     var CatalogCategoryTemplate: (@Composable() (
