@@ -35,36 +35,41 @@ public struct CatalogView: View {
     
     let closeCatalogAction: (() -> Void)?
     private var usesPreferences = false
-    private var recipesListColumns : Int = 1
-    private var recipesListSpacing: CGFloat = 12
+    private let recipesListColumns : Int
+    private let recipesListSpacing: CGFloat
+    private let recipeCardHeight: CGFloat
     public var willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)?
     
     public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
-                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM()
         self.usesPreferences = usesPreferences
         self.closeCatalogAction = closeCatalogAction
-        self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
-        self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
+        self.recipesListColumns = recipesListColumns
+        self.recipesListSpacing = recipesListSpacing
+        self.recipeCardHeight = recipeCardHeight
+
         self.willNavigateTo = willNavigateTo
     }
     
     public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
-                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
         self.closeCatalogAction = closeCatalogAction
-        self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
-        self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
+        self.recipesListColumns = recipesListColumns
+        self.recipesListSpacing = recipesListSpacing
+        self.recipeCardHeight = recipeCardHeight
+
         self.willNavigateTo = willNavigateTo
     }
     
     public init(catalogViewModel: CatalogVM,
                 usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil,
-                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
-        self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, willNavigateTo: willNavigateTo)
+        self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, willNavigateTo: willNavigateTo)
         catalog = catalogViewModel
     }
 
@@ -100,6 +105,7 @@ public struct CatalogView: View {
                         recipeListPageViewModel: catalog.recipePageViewModel,
                         recipesListColumns: recipesListColumns,
                         recipesListSpacing: recipesListSpacing,
+                        recipeCardHeight: recipeCardHeight,
                         packages: catalog.packages,
                         content: catalog.content,
                         showingPackageRecipes: $showingPackageRecipes,
@@ -162,8 +168,9 @@ internal struct CatalogSuccessView: View {
     let navigateToRecipeAction: (Package) -> Void
     let recipesListColumns : Int
     let recipesListSpacing: CGFloat
+    let recipeCardHeight: CGFloat
     
-    init(recipeListPageViewModel: RecipeListPageViewModel?,recipesListColumns: Int, recipesListSpacing: CGFloat ,packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+    init(recipeListPageViewModel: RecipeListPageViewModel?,recipesListColumns: Int, recipesListSpacing: CGFloat, recipeCardHeight: CGFloat, packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
          headerHeight: Binding<Double>, searchString: String,
          browseCatalogAction: @escaping () -> Void,
          navigateToRecipeAction: @escaping (Package) -> Void) {
@@ -178,6 +185,7 @@ internal struct CatalogSuccessView: View {
         self.navigateToRecipeAction = navigateToRecipeAction
         self.recipesListColumns = recipesListColumns
         self.recipesListSpacing = recipesListSpacing
+        self.recipeCardHeight = recipeCardHeight
     }
 
     var body: some View {
@@ -192,7 +200,7 @@ internal struct CatalogSuccessView: View {
                 ScrollView {
                         VStack {
                             ForEach(packages) { package in
-                                CatalogPackageRow(package: package) { package in
+                                CatalogPackageRow(package: package, recipeCardHeight: recipeCardHeight) { package in
                                     navigateToRecipeAction(package.package)
                                 }
                             }
@@ -201,7 +209,7 @@ internal struct CatalogSuccessView: View {
                 }
             } else {
                 if let recipeListPageViewModel  = recipeListPageViewModel {
-                    RecipesView(recipesListPageModel: recipeListPageViewModel,recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, browseCatalogAction: {
+                    RecipesView(recipesListPageModel: recipeListPageViewModel, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                         browseCatalogAction()
                     }, searchString: searchString, showingFavorites: showingFavorites)
                 }
@@ -213,10 +221,12 @@ internal struct CatalogSuccessView: View {
 @available(iOS 14, *)
 public struct CatalogPackageRow: View {
     let package: CatalogPackage
+    let recipeCardHeight: CGFloat
     let showRecipes: (CatalogPackage) -> Void
     
-    public init(package: CatalogPackage, showRecipes: @escaping (CatalogPackage) -> Void) {
+    public init(package: CatalogPackage, recipeCardHeight: CGFloat, showRecipes: @escaping (CatalogPackage) -> Void) {
         self.package = package
+        self.recipeCardHeight = recipeCardHeight
         self.showRecipes = showRecipes
     }
     
@@ -243,7 +253,7 @@ public struct CatalogPackageRow: View {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(package.recipes, id: \.self) { recipe in
-                                RecipeCardView(recipe: recipe, showMealIdeaTag: false).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
+                                RecipeCardView(recipe: recipe, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).frame(width: 300).padding(Dimension.sharedInstance.mlPadding)
                         }
                     }
                 }

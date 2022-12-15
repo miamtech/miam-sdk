@@ -17,14 +17,16 @@ internal struct RecipesView: View {
     let showingFavorites: Bool
     let columns:Int
     let spacing: CGFloat
+    let recipeCardHeight: CGFloat
     
-    init(recipesListPageModel: RecipeListPageViewModel,recipesListColumns:Int, recipeListSpacing:CGFloat, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
+    init(recipesListPageModel: RecipeListPageViewModel,recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
         self.recipesListPageModel = RecipeListPageVM(model: recipesListPageModel)
         self.browseCatalogAction = browseCatalogAction
         self.searchString = searchString
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
         self.spacing = recipeListSpacing
+        self.recipeCardHeight = recipeCardHeight
     }
     
     var body: some View {
@@ -38,6 +40,7 @@ internal struct RecipesView: View {
                     searchString: searchString,
                     columns:columns,
                     spacing:spacing,
+                    recipeCardHeight: recipeCardHeight,
                     loadMoreContentAction: { recipe in
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     },
