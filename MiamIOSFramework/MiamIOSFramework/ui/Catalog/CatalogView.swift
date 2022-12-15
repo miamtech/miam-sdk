@@ -9,6 +9,12 @@ import Foundation
 import miamCore
 import SwiftUI
 
+public enum CatalogViewDestination {
+    case categories
+    case recipesList
+    case favorites
+}
+
 @available(iOS 14, *)
 public struct CatalogEmptyView: View {
     public var body: some View {
@@ -18,7 +24,7 @@ public struct CatalogEmptyView: View {
 
 @available(iOS 14, *)
 public struct CatalogView: View {
-    @ObservedObject var catalog: CatalogVM
+    @ObservedObject public var catalog: CatalogVM
     @SwiftUI.State private var showingFilters = false
     @SwiftUI.State private var showingSearch = false
     @SwiftUI.State private var showingFavorites = false
@@ -31,22 +37,35 @@ public struct CatalogView: View {
     private var usesPreferences = false
     private var recipesListColumns : Int = 1
     private var recipesListSpacing: CGFloat = 12
+    public var willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)?
     
-    
-    public init(usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil, recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil) {
+    public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
+                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM()
         self.usesPreferences = usesPreferences
         self.closeCatalogAction = closeCatalogAction
         self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
         self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
+        self.willNavigateTo = willNavigateTo
     }
     
-    public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil, recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil) {
+    public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
+                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
         self.closeCatalogAction = closeCatalogAction
         self.recipesListColumns = recipesListColumns ?? self.recipesListColumns
         self.recipesListSpacing = recipesListSpacing ?? self.recipesListSpacing
-        
+        self.willNavigateTo = willNavigateTo
+    }
+    
+    public init(catalogViewModel: CatalogVM,
+                usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil,
+                recipesListColumns: Int? = nil, recipesListSpacing: CGFloat? = nil,
+                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
+        self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, willNavigateTo: willNavigateTo)
+        catalog = catalogViewModel
     }
 
     public var body: some View {
@@ -66,6 +85,9 @@ public struct CatalogView: View {
                 catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
                 showingSearch = true
             } favoritesTapped: {
+                if let willNavigateTo {
+                    willNavigateTo(.favorites, "Favoris", catalog)
+                }
                 catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
                 showingFavorites = true
             } preferencesTapped: {
@@ -85,8 +107,14 @@ public struct CatalogView: View {
                         headerHeight: $headerHeight,
                         searchString: catalog.searchString,
                         browseCatalogAction: {
+                            if let willNavigateTo {
+                                willNavigateTo(.categories, MiamText.sharedInstance.mealIdeas, catalog)
+                            }
                             catalog.setEvent(event: CatalogContractEvent.GoToDefault())
                         }, navigateToRecipeAction: { package in
+                            if let willNavigateTo {
+                                willNavigateTo(.recipesList, package.attributes?.title ?? "", catalog)
+                            }
                             catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
                         }),
                     loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
@@ -150,7 +178,6 @@ internal struct CatalogSuccessView: View {
         self.navigateToRecipeAction = navigateToRecipeAction
         self.recipesListColumns = recipesListColumns
         self.recipesListSpacing = recipesListSpacing
-        
     }
 
     var body: some View {
