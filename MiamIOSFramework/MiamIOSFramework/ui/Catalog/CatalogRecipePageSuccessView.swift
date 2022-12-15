@@ -17,9 +17,10 @@ internal struct CatalogRecipesPageSuccessView: View {
     let searchString: String
     let columns: Int 
     let spacing: CGFloat
+    let recipeCardHeight: CGFloat
     let loadMoreContentAction: (Recipe) -> Void
     let browseCatalogAction: () -> Void
-      
+    
     var body: some View {
         if !hasNoResults {
             ScrollView {
@@ -32,7 +33,7 @@ internal struct CatalogRecipesPageSuccessView: View {
                         }
                         LazyVGrid( columns:  Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing){
                             ForEach(recipes, id: \.self) { recipe in
-                                RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false).onAppear {
+                                RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).onAppear {
                                     loadMoreContentAction(recipe)
                                     //
                                 }.padding(.top,Dimension.sharedInstance.lPadding)
