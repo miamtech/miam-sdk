@@ -52,7 +52,7 @@ struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : 
         case is BasicUiStateLoading:
             loadingView
         default:
-            loadingView
+            emptyView
         }
     }
 }

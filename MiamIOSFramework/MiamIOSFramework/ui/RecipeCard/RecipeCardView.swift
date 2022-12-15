@@ -87,6 +87,35 @@ public struct RecipeCardView: View {
 @available(iOS 14, *)
 public struct RecipeCardEmptyView: View {
     public var body: some View {
-        HStack{}
+        VStack() {
+            ZStack(alignment: .topLeading) {
+                Rectangle()
+                    .fill(Color.miamColor(.border))
+                    .frame(height: 245)
+                
+            }.frame(height: 245)
+            Text( "")
+                .lineLimit(2)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                .foregroundColor(Color.miamColor(.black))
+                .padding(Dimension.sharedInstance.lPadding)
+            Text( "")
+                .lineLimit(2)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                .foregroundColor(Color.miamColor(.black))
+                .padding(Dimension.sharedInstance.sPadding)
+            
+            Rectangle()
+                .fill(Color.miamColor(.border)).opacity(0.1)
+                .frame(minHeight: 50.0, maxHeight: 50.0)
+                .frame(width: 180)
+                .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                .background(Color.miamColor(.border))
+                .cornerRadius(25)
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                .padding(.bottom, Dimension.sharedInstance.lPadding)
+            
+            
+        }
     }
 }
