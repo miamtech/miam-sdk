@@ -93,7 +93,7 @@ internal struct BasketTagListModal: View {
             HStack {
                 VStack(spacing: 10) {
                     HStack {
-                        Text("Ce produit est utilisé pour 3 recettes :")
+                        Text("Ce produit est utilisé pour \(recipeList.count) recettes :")
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         Spacer()
                     }
