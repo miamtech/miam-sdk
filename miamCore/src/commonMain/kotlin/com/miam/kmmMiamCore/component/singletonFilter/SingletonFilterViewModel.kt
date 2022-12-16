@@ -105,9 +105,8 @@ open class SingletonFilterViewModel:
     }
 
     fun clear() {
-        setState {
-            initialState
-        }
+        setState { initialState }
+        getRecipeCount()
     }
 
     fun getSelectedFilterAsQueryString(): String {

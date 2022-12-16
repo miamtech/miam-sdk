@@ -59,7 +59,6 @@ class CatalogFilter(
 
     private fun clearFilter() {
         catalogFilterVM.clear()
-        catalogFilterVM.getRecipeCount()
     }
 
     @Composable
