@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -12,7 +13,8 @@ object FilterViewModelInstance: KoinComponent {
     val instance: SingletonFilterViewModel by inject()
 }
 
-open class SingletonFilterViewModel: BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
+open class SingletonFilterViewModel:
+    BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -20,7 +22,10 @@ open class SingletonFilterViewModel: BaseViewModel<SingletonFilterContract.Event
     }
 
     init {
-        getRecipeCount()
+        launch(coroutineHandler) {
+            uiState.first { it != null }
+            getRecipeCount()
+        }
     }
 
     override fun createInitialState(): SingletonFilterContract.State = initialState
@@ -38,7 +43,14 @@ open class SingletonFilterViewModel: BaseViewModel<SingletonFilterContract.Event
                 getRecipeCount()
             }
             is SingletonFilterContract.Event.OnDifficultyChanged -> {
-                setState { copy(difficulty = multipleChoiceGroupUpdate(currentState.difficulty, event.difficulty)) }
+                setState {
+                    copy(
+                        difficulty = multipleChoiceGroupUpdate(
+                            currentState.difficulty,
+                            event.difficulty
+                        )
+                    )
+                }
                 setEffect { SingletonFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
@@ -52,16 +64,23 @@ open class SingletonFilterViewModel: BaseViewModel<SingletonFilterContract.Event
         }
     }
 
-    private fun singleChoiceGroupUpdate(group: List<CatalogFilterOptions>, option: CatalogFilterOptions): List<CatalogFilterOptions> {
+    private fun singleChoiceGroupUpdate(
+        group: List<CatalogFilterOptions>,
+        option: CatalogFilterOptions
+    ): List<CatalogFilterOptions> {
         return group.map { currentOption ->
             if (currentOption.name == option.name) currentOption.toogle() else currentOption.off()
         }
     }
 
-    private fun multipleChoiceGroupUpdate(group: List<CatalogFilterOptions>, option: CatalogFilterOptions): List<CatalogFilterOptions> {
-        return group.map { currentOption ->
-            if (currentOption.name == option.name) currentOption.toogle() else currentOption
-        }
+    private fun multipleChoiceGroupUpdate(
+        group: List<CatalogFilterOptions>,
+        option: CatalogFilterOptions
+    ): List<CatalogFilterOptions> {
+        return group
+            .map { currentOption ->
+                if (currentOption.name == option.name) currentOption.toogle() else currentOption
+            }
     }
 
     fun setCat(catId: String) {
@@ -85,7 +104,11 @@ open class SingletonFilterViewModel: BaseViewModel<SingletonFilterContract.Event
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
-    fun clear() = setState { initialState }
+    fun clear() {
+        setState {
+            initialState
+        }
+    }
 
     fun getSelectedFilterAsQueryString(): String {
         var filter = ""

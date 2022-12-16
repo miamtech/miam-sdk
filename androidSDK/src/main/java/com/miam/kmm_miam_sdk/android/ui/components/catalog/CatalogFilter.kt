@@ -62,11 +62,6 @@ class CatalogFilter(
         catalogFilterVM.getRecipeCount()
     }
 
-    private fun clearAndClose() {
-        clearFilter()
-        closeDialog()
-    }
-
     @Composable
     fun Content() {
 
@@ -108,7 +103,7 @@ class CatalogFilter(
                                 style = Typography.subtitleBold
                             )
                             Clickable(
-                                onClick = { clearAndClose() },
+                                onClick = { closeDialog() },
                                 children = {
                                     Image(
                                         painter = painterResource(close),
