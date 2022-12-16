@@ -1,3 +1,6 @@
+# 3.3.1
+- [FIX][COR] Problème d'application des filtres
+
 # 3.3.0
 - [FEA][COR] Clean counter usage
 - [FEA][COR] Optimize price component
