@@ -30,7 +30,6 @@ open class SingletonFilterViewModel:
 
     override fun createInitialState(): SingletonFilterContract.State = initialState
 
-
     override fun handleEvent(event: SingletonFilterContract.Event) {
         when (event) {
             is SingletonFilterContract.Event.OnTimeFilterChanged -> {
@@ -70,7 +69,7 @@ open class SingletonFilterViewModel:
         option: CatalogFilterOptions
     ): List<CatalogFilterOptions> {
         return group.map { currentOption ->
-            if (currentOption.name == option.name) currentOption.on() else currentOption.off()
+            if (currentOption.name == option.name) currentOption.toogle() else currentOption.off()
         }
     }
 
@@ -106,9 +105,8 @@ open class SingletonFilterViewModel:
     }
 
     fun clear() {
-        setState {
-            initialState
-        }
+        setState { initialState }
+        getRecipeCount()
     }
 
     fun getSelectedFilterAsQueryString(): String {

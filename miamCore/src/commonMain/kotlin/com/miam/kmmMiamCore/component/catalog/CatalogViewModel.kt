@@ -5,7 +5,7 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         CatalogContract.State(
             categories = BasicUiState.Loading,
             content = CatalogContent.DEFAULT,
-            catalogFilterVM = SingletonFilterViewModel(),
+            catalogFilterVM = FilterViewModelInstance.instance,
             recipePageVM = RecipeListPageViewModel(),
             filterOpen = false,
             searchOpen = false,
@@ -40,10 +40,10 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                     copy(
                         content = CatalogContent.DEFAULT,
                         searchOpen = false,
-                        filterOpen = false,
-                        catalogFilterVM = SingletonFilterViewModel()
+                        filterOpen = false
                     )
                 }
+                currentState.catalogFilterVM.clear()
             }
             is CatalogContract.Event.GoToFavorite -> {
                 currentState.catalogFilterVM.setFavorite()
@@ -91,6 +91,9 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             }
             is CatalogContract.Event.ToggleFilter -> {
                 setState { copy(filterOpen = !currentState.filterOpen) }
+                if (!currentState.filterOpen && currentState.content == CatalogContent.DEFAULT) {
+                    currentState.catalogFilterVM.clear()
+                }
             }
             is CatalogContract.Event.ToggleSearch -> {
                 setState { copy(searchOpen = !currentState.searchOpen) }
