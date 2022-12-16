@@ -2,6 +2,7 @@ package com.miam.kmmMiamCore.component.preferencesSearch
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ open class PreferencesSearchViewModel:
 
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][PreferencesSearchViewModel] $exception")
+        LogHandler.error(" [ERROR][Miam][PreferencesSearchViewModel] $exception")
     }
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()

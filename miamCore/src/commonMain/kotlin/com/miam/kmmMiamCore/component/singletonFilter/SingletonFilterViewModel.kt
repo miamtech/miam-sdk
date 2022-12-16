@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -18,7 +19,7 @@ open class SingletonFilterViewModel:
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in catalog view $exception")
+        LogHandler.error("Miam error in catalog view $exception")
     }
 
     init {

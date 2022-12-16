@@ -19,7 +19,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
     private val recipeLikeStore: LikeStore = LikeStoreInstance.instance
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][RecipeLikeViewModel] $exception  ${exception.stackTraceToString()}")
+        LogHandler.error(" [ERROR][Miam][RecipeLikeViewModel] $exception  ${exception.stackTraceToString()}")
     }
     private val viewModelScope = CoroutineScope(coroutineContext)
 
