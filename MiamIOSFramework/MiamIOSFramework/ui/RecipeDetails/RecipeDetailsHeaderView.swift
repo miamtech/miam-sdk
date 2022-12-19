@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct RecipeDetailsHeaderView: View {
+public struct RecipeDetailsHeaderView: View {
     let mediaURL: String?
     let title: String
     let difficulty: Int
@@ -18,7 +18,17 @@ struct RecipeDetailsHeaderView: View {
     let recipeId: String?
     let imageHeight = 280.0
     
-    var body: some View {
+    public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Bool, isLikeEnabled: Bool, recipeId: String?) {
+        self.mediaURL = mediaURL
+        self.title = title
+        self.difficulty = difficulty
+        self.totalTime = totalTime
+        self.showTitleInHeader = showTitleInHeader
+        self.isLikeEnabled = isLikeEnabled
+        self.recipeId = recipeId
+    }
+    
+    public var body: some View {
         if let template = Template.sharedInstance.recipeDetailsHeaderTemplate {
             template(mediaURL,
                      title,
