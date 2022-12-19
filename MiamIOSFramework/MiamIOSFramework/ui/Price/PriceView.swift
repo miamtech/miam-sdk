@@ -9,7 +9,7 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct PriceView: View {
+public struct PriceView: View {
     
     @ObservedObject var viewModel: PriceVM = PriceVM()
     
