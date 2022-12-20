@@ -82,7 +82,60 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         }
     }
 
+    private suspend inline fun <reified T> get(url: String): T? {
+        return try {
+            httpClient.get<T> {
+                headers {
+                    append(HttpHeaders.ContentType, "application/vnd.api+json")
+                    append(HttpHeaders.Accept, "*/*")
+                }
+                url(url)
+            }
+        } catch (e: RedirectResponseException) {
+            // 3XX
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            // 4xx
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            // 5xx
+            println("Error: ${e.response.status.description}")
+            throw e
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            throw e
+        }
+    }
 
+    private suspend inline fun <reified T> post(url: String, data: Any): T? {
+        return try {
+            httpClient.post<T> {
+                headers {
+                    append(HttpHeaders.ContentType, "application/vnd.api+json")
+                    append(HttpHeaders.Accept, "*/*")
+                }
+                url(url)
+                body = data
+            }
+        } catch (e: RedirectResponseException) {
+            // 3XX
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            // 4xx
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            // 5xx
+            println("Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
 
     override suspend fun getRecipeById(id: String, included: List<String>): Recipe {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $id")
