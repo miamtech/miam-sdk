@@ -58,10 +58,8 @@ public struct RecipeDetailsView: View {
             
             ScrollView {
                 if let recipe = viewModel.recipe {
-                    if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
-                        Template.sharedInstance.recipeDetailInfosTemplate!(
-                            recipe
-                        )
+                    if let template = Template.sharedInstance.recipeDetailInfosTemplate {
+                        template(recipe)
                     } else {
                         VStack {
                             VStack {

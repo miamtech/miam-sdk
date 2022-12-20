@@ -34,16 +34,12 @@ public struct RecipeDetailsFooter: View {
     }
     
     public var body: some View {
-        if(Template.sharedInstance.recipeDetailFooterTemplate != nil) {
-            Template.sharedInstance.recipeDetailFooterTemplate!(
-                recipeVM,
-                {goToPreview()},
-                {buy()}
-            )
+        if let template = Template.sharedInstance.recipeDetailFooterTemplate {
+            template(recipeVM, {goToPreview()}, {buy()})
         } else {
             
             HStack {
-                if(recipeVM.recipe != nil){
+                if (recipeVM.recipe != nil) {
                     PriceView(recipeId: recipeVM.recipe!.id, guestNumber: Int(recipeVM.currentState.guest)).padding(.horizontal,16)
                 }
                 
