@@ -14,8 +14,8 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -87,6 +87,9 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty) }
+            else -> {
+                setState { copy(recipeState = BasicUiState.Error("Event not found")) }
+            }
         }
     }
 
@@ -106,6 +109,9 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             is GroceriesListEffect.RecipeRemoved -> {
                 if (gl.recipeId != recipeId) return
                 setState { copy(isInCart = false) }
+            }
+            else -> {
+                setState { copy(recipeState = BasicUiState.Error("Event not found")) }
             }
         }
     }
@@ -145,7 +151,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         if (uiState.value.activeStep == newActiveStep) return
         setState { copy(activeStep = newActiveStep) }
     }
-    
+
     fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {

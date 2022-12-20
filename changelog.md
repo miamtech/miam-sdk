@@ -1,3 +1,6 @@
+# 3.5.0
+- [FEA][COR] Router service previous now return new current route
+
 # 3.4.0
 - [FEA][COR] New Route Service
 - [FEA][IOS] Native navigation in Catalog

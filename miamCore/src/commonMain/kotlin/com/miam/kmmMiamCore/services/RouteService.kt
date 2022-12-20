@@ -120,7 +120,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         popRoute()?.let { poppedRoute ->
             poppedRoute.onPrevious()
             launch { poppedRoute.previous?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) } }
-            return poppedRoute
+            return poppedRoute.previous
         }
         return null
     }

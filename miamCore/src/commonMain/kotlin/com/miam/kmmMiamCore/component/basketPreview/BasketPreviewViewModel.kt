@@ -106,6 +106,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
             is BasketPreviewContract.Event.RemoveRecipe -> {
                 groceriesListStore.dispatch(GroceriesListAction.RemoveRecipe(recipeId = event.recipeId))
             }
+            else -> {
+                setState { copy(line = BasicUiState.Error("Event not found")) }
+            }
         }
     }
 
