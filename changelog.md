@@ -1,4 +1,5 @@
-# 3.5.0
+# 3.4.1
+- [FIX][COR] report 3.3.1 fix on filter to 3.4
 - [FEA][COR] Router service previous now return new current route
 
 # 3.4.0
@@ -10,6 +11,10 @@
 - [FIX][AND] Padding ouside of a template in BasketPreviewItem
 - [BRK][AND] SearchPreferencesTemplate template signature changed
 - [BRK][AND] CatalogHeader template signature changed
+
+
+# 3.3.1
+- [FIX][COR] Problème d'application des filtres
 
 # 3.3.0
 - [FEA][COR] Clean counter usage
