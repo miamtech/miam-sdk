@@ -57,10 +57,10 @@ public struct RecipeDetailsView: View {
             ))
             
             ScrollView {
-                if (viewModel.recipe != nil) {
+                if let recipe = viewModel.recipe {
                     if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
                         Template.sharedInstance.recipeDetailInfosTemplate!(
-                            viewModel.recipe!
+                            recipe
                         )
                     } else {
                         VStack {
@@ -72,7 +72,7 @@ public struct RecipeDetailsView: View {
                                                             totalTime: viewModel.recipe?.totalTime ?? "10 min",
                                                             showTitleInHeader: $showTitleInHeader,
                                                             isLikeEnabled: viewModel.isLikeEnabled,
-                                                            recipeId: recipeId ?? viewModel.recipe?.id)
+                                                            recipeId: recipeId ?? recipe.id)
                                 }
                                 
                                 RecipeTimeView(preparationTime: viewModel.recipe!.preparationTimeIos,

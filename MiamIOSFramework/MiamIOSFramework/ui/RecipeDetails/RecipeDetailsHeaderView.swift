@@ -15,7 +15,7 @@ public struct RecipeDetailsHeaderView: View {
     let totalTime: String
     @Binding var showTitleInHeader: Bool
     let isLikeEnabled: Bool
-    let recipeId: String?
+    let recipeId: String
     let imageHeight = 280.0
     
     public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Bool, isLikeEnabled: Bool, recipeId: String?) {
@@ -35,7 +35,8 @@ public struct RecipeDetailsHeaderView: View {
                      difficulty,
                      totalTime,
                      $showTitleInHeader,
-                     isLikeEnabled)
+                     isLikeEnabled,
+                     recipeId)
         } else {
             AsyncImage(
                 url: URL(
@@ -46,7 +47,7 @@ public struct RecipeDetailsHeaderView: View {
             
             if (isLikeEnabled) {
                 HStack {
-                    LikeButton(recipeId: recipeId!)
+                    LikeButton(recipeId: recipeId)
                     
                     Spacer()
                     

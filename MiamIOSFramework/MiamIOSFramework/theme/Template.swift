@@ -88,6 +88,7 @@ public class Template {
      totalTime: String
      showTitleInHeader: Bool
      isLikeEnabled: Bool
+     recipeId: String
      */
     public var recipeDetailsHeaderTemplate : ((
             String?,
@@ -95,7 +96,8 @@ public class Template {
             Int,
             String,
             Binding<Bool>,
-            Bool
+            Bool,
+            String
     ) -> AnyView)? = nil
     
     /**
