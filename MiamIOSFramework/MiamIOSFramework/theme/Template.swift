@@ -120,7 +120,6 @@ public class Template {
         @escaping (Int) -> Void
     ) -> AnyView )? = nil
     
-    
     /**
      steps : [RecipeStep],
      */
@@ -135,12 +134,22 @@ public class Template {
      buy : () -> Unit
      */
     public var recipeDetailFooterTemplate : ((
-           // _: Recipe,
-            _ : RecipeViewModel,
-            _ : @escaping () -> Void,
-            _ : @escaping () -> Void
-                ) -> AnyView )? =  nil
+       // _: Recipe,
+        _ : RecipeViewModel,
+        _ : @escaping () -> Void,
+        _ : @escaping () -> Void
+    ) -> AnyView )? =  nil
 
+    /**
+     preparationTime: String
+     cookingTime: String
+     restingTime: String
+     */
+    public var recipeTimeViewTemplate: ((
+        String,
+        String,
+        String
+    ) -> AnyView)? = nil
 
     /**
      basketTitle: String
