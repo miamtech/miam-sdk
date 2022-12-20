@@ -10,6 +10,7 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.helpers.letElse
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Package
@@ -47,7 +48,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         CatalogContract.State(
             categories = BasicUiState.Loading,
             content = CatalogContent.DEFAULT,
-            catalogFilterVM = SingletonFilterViewModel(),
+            catalogFilterVM = FilterViewModelInstance.instance,
             recipePageVM = RecipeListPageViewModel(),
             filterOpen = false,
             searchOpen = false,
@@ -92,6 +93,9 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
             is CatalogContract.Event.ToggleFilter -> {
                 routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(filterOpen = false) } }))
                 setState { copy(filterOpen = !currentState.filterOpen) }
+                if (!currentState.filterOpen && currentState.content == CatalogContent.DEFAULT) {
+                    currentState.catalogFilterVM.clear()
+                }
             }
             is CatalogContract.Event.ToggleSearch -> {
                 routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(searchOpen = false) } }))
@@ -120,7 +124,8 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
     }
 
     private fun goToCatalogMain() {
-        setState { copy(content = CatalogContent.DEFAULT, searchOpen = false, filterOpen = false, catalogFilterVM = SingletonFilterViewModel()) }
+        setState { copy(content = CatalogContent.DEFAULT, searchOpen = false, filterOpen = false) }
+        currentState.catalogFilterVM.clear()
     }
 
     private fun goToFavorites() {

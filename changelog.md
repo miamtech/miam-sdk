@@ -1,3 +1,6 @@
+# 3.4.1
+- [FIX][COR] report 3.3.1 fix on filter to 3.4
+
 # 3.4.0
 - [FEA][COR] New Route Service
 - [FEA][IOS] Native navigation in Catalog
@@ -7,6 +10,10 @@
 - [FIX][AND] Padding ouside of a template in BasketPreviewItem
 - [BRK][AND] SearchPreferencesTemplate template signature changed
 - [BRK][AND] CatalogHeader template signature changed
+
+
+# 3.3.1
+- [FIX][COR] Problème d'application des filtres
 
 # 3.3.0
 - [FEA][COR] Clean counter usage

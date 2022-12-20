@@ -65,7 +65,6 @@ class CatalogFilter(
 
     private fun clearFilter() {
         catalogFilterVM.clear()
-        catalogFilterVM.getRecipeCount()
     }
 
     private val routeService: RouteService by inject()
