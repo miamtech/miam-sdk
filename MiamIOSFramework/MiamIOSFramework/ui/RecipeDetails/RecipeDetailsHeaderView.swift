@@ -18,14 +18,14 @@ public struct RecipeDetailsHeaderView: View {
     let recipeId: String
     let imageHeight = 280.0
     
-    public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Bool, isLikeEnabled: Bool, recipeId: String?) {
+    public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Binding<Bool>, isLikeEnabled: Bool, recipeId: String) {
         self.mediaURL = mediaURL
         self.title = title
         self.difficulty = difficulty
         self.totalTime = totalTime
-        self.showTitleInHeader = showTitleInHeader
         self.isLikeEnabled = isLikeEnabled
         self.recipeId = recipeId
+        self._showTitleInHeader = showTitleInHeader
     }
     
     public var body: some View {
