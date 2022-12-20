@@ -1,4 +1,4 @@
-/*
+
 package com.example.androidtestapp
 
 import android.annotation.SuppressLint
@@ -730,4 +730,4 @@ class ExampleState(
     var recipeCount: Int = 0
 )
 
-*/
+
