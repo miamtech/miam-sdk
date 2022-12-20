@@ -31,7 +31,7 @@ public struct RecipeDetailsView: View {
     }
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
                 HStack {
                     HStack(){
@@ -90,7 +90,6 @@ public struct RecipeDetailsView: View {
                         }
                     }
                 }
-                
             }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
