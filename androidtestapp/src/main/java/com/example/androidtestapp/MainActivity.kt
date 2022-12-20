@@ -1,3 +1,4 @@
+
 package com.example.androidtestapp
 
 import android.annotation.SuppressLint
@@ -728,4 +729,5 @@ class ExampleState(
     val items: MutableList<CoursesUProduct> = mutableListOf(),
     var recipeCount: Int = 0
 )
+
 

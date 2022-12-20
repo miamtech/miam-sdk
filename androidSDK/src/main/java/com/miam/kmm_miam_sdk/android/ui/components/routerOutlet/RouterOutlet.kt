@@ -142,6 +142,9 @@ fun FullScreenContent(
             }
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
             RouterContent.EMPTY -> EmptyView(close)
+            else -> {
+                EmptyView(close)
+            }
         }
     }
 }
