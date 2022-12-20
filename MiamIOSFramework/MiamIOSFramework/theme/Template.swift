@@ -520,4 +520,15 @@ public class Template {
         PreferencesSearchVM,
         @escaping () -> Void
     ) -> AnyView)? = nil
+    
+    /**
+     showBackButton: Bool
+     backAction: (() -> Void)?
+     titleView: AnyView
+     */
+     public var titleBarViewTemplate: ((
+        Bool,
+        (() -> Void)?,
+        AnyView
+    ) ->AnyView)? = nil
 }
