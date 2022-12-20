@@ -1,5 +1,8 @@
+# 3.5.0
+- [FEA][COR] Preference dependence on supplier 
+
 # 3.4.1
-- [FIX][COR] report 3.3.1 fix on filter to 3.4
+- [FIX][COR] Report 3.3.1 fix on filter to 3.4
 
 # 3.4.0
 - [FEA][COR] New Route Service
