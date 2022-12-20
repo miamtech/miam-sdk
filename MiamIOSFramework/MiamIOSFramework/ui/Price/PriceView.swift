@@ -28,7 +28,7 @@ public struct PriceView: View {
         viewModel.setRecipe(recipeId: recipeId, guestNumber: Int32(guestNumber))
     }
     
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.priceViewTemplate {
             template(
                 viewModel.price?.price ?? 0,

@@ -33,7 +33,7 @@ public struct RecipeDetailsFooter: View {
         self.recipeVM = recipeVM
     }
     
-    var body: some View {
+    public var body: some View {
         if(Template.sharedInstance.recipeDetailFooterTemplate != nil) {
             Template.sharedInstance.recipeDetailFooterTemplate!(
                 recipeVM,
