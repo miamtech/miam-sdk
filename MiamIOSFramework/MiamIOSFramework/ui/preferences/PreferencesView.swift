@@ -16,6 +16,8 @@ public struct PreferencesView: View {
     let onAddTagTapped: () -> Void
     let closeTapped: () -> Void
     let applyPreferencesTapped: () -> Void
+   
+    let defaultNumberOfGuests = KotlinInt(int: 4)
     
     public init(onAddTagTapped: @escaping () -> Void, closeTapped: @escaping () -> Void,
                 applyPreferencesTapped: @escaping () -> Void) {
@@ -29,7 +31,7 @@ public struct PreferencesView: View {
             VStack {
                 ManagementResourceState<KotlinBoolean, PreferencesSuccessView, PreferencesLoadingView, EmptyView>(
                     resourceState: currentState.basicState,
-                    successView: PreferencesSuccessView(numberOfPersons: Int(currentState.guests),
+                    successView: PreferencesSuccessView(numberOfPersons: Int(truncating: currentState.guests ?? defaultNumberOfGuests),
                                                         ingredients: currentState.ingredients,
                                                         equipments: currentState.equipments,
                                                         diets: currentState.diets,

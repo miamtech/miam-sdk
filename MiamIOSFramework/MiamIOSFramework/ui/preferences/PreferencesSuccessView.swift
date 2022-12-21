@@ -32,19 +32,25 @@ struct PreferencesSuccessView: View {
                 VStack {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            //                        HStack {
-                            //                            Text(MiamText.sharedInstance.numberOfPersons)
-                            //                            Spacer()
-                            //                            CounterView(count: numberOfPersons, isDisable: false) {
-                            //                                onNumberOfGuestsChanged(numberOfPersons + 1)
-                            //                            } decrease: {
-                            //                                guard numberOfPersons > 1 else {
-                            //                                    return
-                            //                                }
-                            //                                onNumberOfGuestsChanged(numberOfPersons - 1)
-                            //                            }
-                            //
-                            //                        }.background(Color.miamColor(.greyLighter))
+                            HStack {
+                                Text(MiamText.sharedInstance.numberOfPersons)
+                                Spacer()
+                                
+                                CounterView(count: numberOfPersons) { count in
+                                    onNumberOfGuestsChanged(count)
+                                }
+                                
+//                                CounterView(count: numberOfPersons, isDisable: false) {
+//                                    onNumberOfGuestsChanged(numberOfPersons + 1)
+//                                } decrease: {
+//                                    guard numberOfPersons > 1 else {
+//                                        return
+//                                    }
+//                                    onNumberOfGuestsChanged(numberOfPersons - 1)
+//                                }
+    
+                            }.background(Color.miamColor(.greyLighter))
+                            
                             PreferencesListView(title: MiamText.sharedInstance.dietTitle,
                                                 subtitle: MiamText.sharedInstance.dietSubtitle,
                                                 preferences: diets) { tag in
