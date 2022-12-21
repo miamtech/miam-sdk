@@ -3,16 +3,20 @@ package com.miam.kmmMiamCore.handler
 import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
 import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object GroceriesListHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    private val groceriesListStore: GroceriesListStore by inject()
+object GroceriesListHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    val groceriesListStore: GroceriesListStore by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in GroceriesListHandler $exception ${exception.stackTraceToString()}")

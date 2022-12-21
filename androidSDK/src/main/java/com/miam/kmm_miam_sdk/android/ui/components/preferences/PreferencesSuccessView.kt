@@ -325,8 +325,8 @@ fun PreferencesSuccessView(
                         .padding(horizontal = 16.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
-//                    GuestPreferencesSection(guests, guestChanged)
-//                    Spacer(modifier = Modifier.height(24.dp))
+                    GuestPreferencesSection(guests, guestChanged)
+                    Spacer(modifier = Modifier.height(24.dp))
                     DietPreferencesSection(dietsTag, togglePreference)
                     Spacer(modifier = Modifier.height(24.dp))
                     IngredientPreferencesSection(ingredientsTag, togglePreference) { showSearch = !showSearch }

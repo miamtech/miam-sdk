@@ -75,7 +75,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             }
         }
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
-            listenguestSubjectChanges()
+            listenGuestSubjectChanges()
         }
         setState { copy(likeIsEnable = userStore.state.value.likeIsEnable) }
     }
@@ -116,7 +116,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    private suspend fun listenguestSubjectChanges() {
+    private suspend fun listenGuestSubjectChanges() {
         guestSubject.debounce(500).collect { boundedGuests ->
             if (currentState.guest != boundedGuests) {
                 setState { copy(guest = boundedGuests) }

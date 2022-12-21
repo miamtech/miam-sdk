@@ -61,7 +61,7 @@ class Preferences @JvmOverloads constructor(
                 successView = { _ ->
                     PreferencesSuccessView(
                         context,
-                        state.guests,
+                        state.guests ?: 4,
                         state.recipesFound,
                         state.ingredients,
                         state.diets,
@@ -69,7 +69,7 @@ class Preferences @JvmOverloads constructor(
                         { preferencesVM.togglePreference(it) },
                         { resetAndClose() },
                         { applyAndClose() },
-                        { preferencesVM.changeGlobaleGuest(it) },
+                        { preferencesVM.changeGlobalGuest(it) },
                         { preferencesVM.addIngredientPreference(it) }
                     )
                 },
