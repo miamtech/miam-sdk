@@ -87,9 +87,6 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty) }
-            else -> {
-                setState { copy(recipeState = BasicUiState.Error("Event not found")) }
-            }
         }
     }
 
@@ -99,20 +96,10 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
 
     private fun handleGLChange(gl: GroceriesListEffect) {
         when (gl) {
-            is GroceriesListEffect.GroceriesListLoaded -> {
-                setState { currentState.refreshFromGl(groceriesListStore) }
-            }
-            is GroceriesListEffect.RecipeAdded -> {
-                if (gl.recipeId != recipeId) return
-                setState { copy(isInCart = true, guest = gl.guests) }
-            }
-            is GroceriesListEffect.RecipeRemoved -> {
-                if (gl.recipeId != recipeId) return
-                setState { copy(isInCart = false) }
-            }
-            else -> {
-                setState { copy(recipeState = BasicUiState.Error("Event not found")) }
-            }
+            is GroceriesListEffect.GroceriesListLoaded -> setState { currentState.refreshFromGl(groceriesListStore) }
+            is GroceriesListEffect.RecipeAdded -> if (gl.recipeId == recipeId) setState { copy(isInCart = true, guest = gl.guests) }
+            is GroceriesListEffect.RecipeRemoved -> if (gl.recipeId == recipeId) setState { copy(isInCart = false) }
+            is GroceriesListEffect.RecipeCountChanged -> {}
         }
     }
 
