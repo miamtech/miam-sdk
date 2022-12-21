@@ -28,6 +28,9 @@ data class RecipeLike private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
+    val isLiked: Boolean
+        get() = exists && attributes?.isPast == false
+
     val exists: Boolean
         get() = !id.isNullOrBlank()
 
@@ -37,7 +40,7 @@ data class RecipeLike private constructor(
 
     companion object {
         fun createDefault(recipeId: String): RecipeLike {
-            val attributes = RecipeLikeAttributes(isPast = false, recipeId = recipeId.toInt())
+            val attributes = RecipeLikeAttributes(isPast = true, recipeId = recipeId.toInt())
             val rel = RecipeLikeRelationships()
             return RecipeLike(null, attributes, rel)
         }
