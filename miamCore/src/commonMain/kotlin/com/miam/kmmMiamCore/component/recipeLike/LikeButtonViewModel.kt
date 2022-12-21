@@ -5,7 +5,6 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.LikeEffect
 import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
-import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -29,7 +28,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
 
     fun setRecipe(recipeId: String) {
         viewModelScope.launch(coroutineHandler) {
-            val isLiked = recipeLikeStore.fetchAndGetRecipeLikes(listOf(recipeId)).any { recipeLike -> !recipeLike.attributes!!.isPast }
+            val isLiked = recipeLikeStore.fetchAndGetRecipeLikes(listOf(recipeId)).any { recipeLike -> recipeLike.isLiked }
             setState { copy(recipeId = recipeId, isLiked = BasicUiState.Success(isLiked)) }
         }
     }

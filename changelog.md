@@ -1,3 +1,6 @@
+# 3.4.2
+- [FIX][COR] Like initial state
+
 # 3.4.1
 - [FIX][COR] report 3.3.1 fix on filter to 3.4
 - [FEA][COR] Router service previous now return new current route
