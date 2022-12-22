@@ -79,7 +79,7 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
         return if (existingLike != null && existingLike.exists) {
             recipeLikeRepositoryImp.updateRecipeLike(existingLike.toggle())
         } else if (existingLike != null) {
-            recipeLikeRepositoryImp.createRecipeLike(existingLike)
+            recipeLikeRepositoryImp.createRecipeLike(existingLike.toggle())
         } else {
             val newLike = RecipeLike.createDefault(recipeId).toggle()
             recipeLikeRepositoryImp.createRecipeLike(newLike)
