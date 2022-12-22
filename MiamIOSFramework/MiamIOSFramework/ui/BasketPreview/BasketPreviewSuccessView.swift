@@ -73,7 +73,7 @@ public struct BasketPreviewSuccessView: View {
                     recipeVm.goToDetail()
                 })
                 //List
-                VStack {
+                VStack(spacing: 0) {
                     ForEach(viewModel.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
                         
@@ -170,11 +170,13 @@ internal struct IngredientsFoldableView: View {
         IngredientsHeader(title: title, folded: $folded)
         
         if (!folded) {
-            ForEach(products, id: \.self) { entry in
-                let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
-                IngredientNotInBasketRow(name: productName, addIngredientAction: {
-                    addIngredientAction(entry)
-                }, isAddable: isAddable)
+            VStack(spacing: 0) {
+                ForEach(products, id: \.self) { entry in
+                    let productName = entry.relationships?.groceriesEntry?.data.attributes?.name ?? ""
+                    IngredientNotInBasketRow(name: productName, addIngredientAction: {
+                        addIngredientAction(entry)
+                    }, isAddable: isAddable)
+                }
             }
         }
     }
