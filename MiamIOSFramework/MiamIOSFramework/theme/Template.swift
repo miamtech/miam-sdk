@@ -151,6 +151,10 @@ public class Template {
         String
     ) -> AnyView)? = nil
 
+    
+    public var basketPreviewLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+    
     /**
      basketTitle: String
      basketPictureURL: URL?,
