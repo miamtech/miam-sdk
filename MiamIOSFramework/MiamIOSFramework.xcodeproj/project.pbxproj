@@ -621,6 +621,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DCD4E31427BE914A000D3EA6 /* Build configuration list for PBXNativeTarget "MiamIOSFramework" */;
 			buildPhases = (
+				BFA89BA029545FAA002BA58D /* Lint */,
 				BF2691B52892E5F600BF9D5A /* ShellScript */,
 				DCD4E2FB27BE914A000D3EA6 /* Headers */,
 				DCD4E2FC27BE914A000D3EA6 /* Sources */,
@@ -746,6 +747,24 @@
 			shellPath = /bin/sh;
 			shellScript = "rm -rf \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n";
 		};
+		BFA89BA029545FAA002BA58D /* Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Lint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -787,7 +806,6 @@
 				0B4B3E80284FA99D00F25E7B /* ItemSelectorText.swift in Sources */,
 				BF7CB92A296EC8040041EB3E /* RecipeModal.swift in Sources */,
 				BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */,
-				521D6459283230BF0092AC52 /* BasketPreviewSuccessView.swift in Sources */,
 				BF7B91B82931205E0005B009 /* MiamFontStyle.swift in Sources */,
 				0B7C9BF7281FCC6800BFC7F8 /* Template.swift in Sources */,
 				521D6461283277D00092AC52 /* MyMealRow.swift in Sources */,
@@ -813,7 +831,6 @@
 				0BFD391D2860C14900A7FCED /* ManagementResourceState.swift in Sources */,
 				521D644A282E30A00092AC52 /* RecipeDetailsIngredientRow.swift in Sources */,
 				BF08EA6929265EE5000FB243 /* LikeButtonVM.swift in Sources */,
-				BF1429B6284E11D600395C4B /* BasketPreviewViewModel.swift in Sources */,
 				BF1429B6284E11D600395C4B /* BasketPreviewViewModel.swift in Sources */,
 				0BF5C6FC28621AB200C29CB6 /* BasketPreviewLoadingView.swift in Sources */,
 				BFF5B65528534BA500CEC7C5 /* BasketPreviewHeader.swift in Sources */,
@@ -855,7 +872,6 @@
 				BF3FAEBA28DB4C15009555A9 /* RecipeDetailsStepsView.swift in Sources */,
 				0BB5CA6628489B60007AC86D /* RecipeDetailsDifficulty.swift in Sources */,
 				BF7305FB28DDB9B500CC5D6B /* FavoritesSuccessView.swift in Sources */,
-				BF1429B8284E4F0B00395C4B /* BasketPreviewFooter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
