@@ -1,6 +1,8 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.ToasterHandler
+import com.miam.kmmMiamCore.helpers.letElse
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeLikeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
@@ -77,19 +79,26 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
         return if (existingLike != null && existingLike.exists) {
             recipeLikeRepositoryImp.updateRecipeLike(existingLike.toggle())
         } else if (existingLike != null) {
-            recipeLikeRepositoryImp.createRecipeLike(existingLike)
+            recipeLikeRepositoryImp.createRecipeLike(existingLike.toggle())
         } else {
-            recipeLikeRepositoryImp.createRecipeLike(RecipeLike.createDefault(recipeId))
+            val newLike = RecipeLike.createDefault(recipeId).toggle()
+            recipeLikeRepositoryImp.createRecipeLike(newLike)
         }
     }
 
     private suspend fun emitLike(recipeLike: RecipeLike) {
-        if (recipeLike.attributes!!.isPast) {
-            emitEffect(LikeEffect.Disliked(recipeLike.attributes.recipeId.toString()))
+        letElse(
+            recipeLike.attributes?.recipeId,
+            { recipeId -> emitLike(recipeId.toString(), recipeLike.isLiked) },
+            { LogHandler.error("Tring to emit like with no recipe id") }
+        )
+    }
+
+    private suspend fun emitLike(recipeId: String, isLike: Boolean) {
+        if (isLike) {
+            emitEffect(LikeEffect.Liked(recipeRepositoryImp.getRecipeById(recipeId)))
         } else {
-            // TODO fetch outside
-            val recipe = recipeRepositoryImp.getRecipeById(recipeLike.attributes.recipeId.toString())
-            emitEffect(LikeEffect.Liked(recipe))
+            emitEffect(LikeEffect.Disliked(recipeId))
         }
     }
 }

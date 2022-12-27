@@ -1,5 +1,8 @@
 # 3.5.0
 - [FEA][COR] Preference dependence on supplier 
+# 3.4.2
+- [FIX][COR] Like initial state
+- [FIX][COR] Recipe card, do not set on error on unknow state
 
 # 3.4.1
 - [FIX][COR] Report 3.3.1 fix on filter to 3.4
