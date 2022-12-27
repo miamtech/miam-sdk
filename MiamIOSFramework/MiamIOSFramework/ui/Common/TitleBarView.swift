@@ -8,38 +8,40 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct TitleBarView: View {
+public struct TitleBarView: View {
     let barHeight = 55.0
     
     let showBackButton: Bool
     let backAction: (() -> Void)?
     let titleView: AnyView
-    var body: some View {
-        VStack {
-            HStack {
-                
-                if showBackButton {
-                    Button {
-                        if let backAction = backAction {
-                            backAction()
+    public var body: some View {
+        if let template = Template.sharedInstance.titleBarViewTemplate {
+           template(showBackButton, backAction, titleView)
+        } else {
+            VStack {
+                HStack {
+                    if showBackButton {
+                        Button {
+                            if let backAction = backAction {
+                                backAction()
+                            }
+                        } label: {
+                            Image.miamImage(icon: .back)
+                                .renderingMode(.template)
+                                .foregroundColor(Color.miamColor(.primary))
+                                .padding([.leading, .trailing], Dimension.sharedInstance.lPadding)
                         }
-                    } label: {
-                        Image.miamImage(icon: .back)
-                            .renderingMode(.template)
-                            .foregroundColor(Color.miamColor(.primary))
-                            .padding([.leading, .trailing], Dimension.sharedInstance.lPadding)
+                        
                     }
-                    
+                    titleView
+                    Spacer()
                 }
-                titleView
+                .frame(maxWidth: .infinity)
+                .frame(height: barHeight)
                 Spacer()
-                
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: barHeight)
-            Spacer()
-            Divider().padding(0)
-        }.frame(height: barHeight)
+                Divider().padding(0)
+            }.frame(height: barHeight)
+        }
     }
 }
 

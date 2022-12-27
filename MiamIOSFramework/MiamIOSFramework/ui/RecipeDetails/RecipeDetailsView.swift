@@ -31,7 +31,7 @@ public struct RecipeDetailsView: View {
     }
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
                 HStack {
                     HStack(){
@@ -57,11 +57,9 @@ public struct RecipeDetailsView: View {
             ))
             
             ScrollView {
-                if (viewModel.recipe != nil) {
-                    if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
-                        Template.sharedInstance.recipeDetailInfosTemplate!(
-                            viewModel.recipe!
-                        )
+                if let recipe = viewModel.recipe {
+                    if let template = Template.sharedInstance.recipeDetailInfosTemplate {
+                        template(recipe)
                     } else {
                         VStack {
                             VStack {
@@ -72,7 +70,7 @@ public struct RecipeDetailsView: View {
                                                             totalTime: viewModel.recipe?.totalTime ?? "10 min",
                                                             showTitleInHeader: $showTitleInHeader,
                                                             isLikeEnabled: viewModel.isLikeEnabled,
-                                                            recipeId: recipeId ?? viewModel.recipe?.id)
+                                                            recipeId: recipeId ?? recipe.id)
                                 }
                                 
                                 RecipeTimeView(preparationTime: viewModel.recipe!.preparationTimeIos,
@@ -92,7 +90,6 @@ public struct RecipeDetailsView: View {
                         }
                     }
                 }
-                
             }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
