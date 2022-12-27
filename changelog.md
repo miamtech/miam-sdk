@@ -1,5 +1,9 @@
-# 3.4.2
+# 3.5.0
 - [FEA][COR] Enable guests preferences
+
+# 3.4.2
+- [FIX][COR] Like initial state
+- [FIX][COR] Recipe card, do not set on error on unknow state
 
 # 3.4.1
 - [FIX][COR] report 3.3.1 fix on filter to 3.4

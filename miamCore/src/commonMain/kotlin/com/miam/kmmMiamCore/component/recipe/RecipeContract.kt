@@ -12,7 +12,6 @@ enum class TabEnum {
 interface RecipeContract {
 
     sealed class Event: UiEvent {
-        data class SetHeader(val header: String): Event()
         data class SetActiveStep(val stepIndex: Int): Event()
         object OnAddRecipe: Event()
         object ShowIngredient: Event()
