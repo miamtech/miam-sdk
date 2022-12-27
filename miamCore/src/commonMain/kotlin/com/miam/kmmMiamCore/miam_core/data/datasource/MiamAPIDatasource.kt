@@ -180,7 +180,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters")
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters $included")
         val pageFilter = "page[size]=$pageSize&page[number]=$pageNumber"
         val includedStr = if (included.isEmpty()) "" else "&${includedToString(included)}"
         val filtersStr = if (filters.isEmpty()) "" else "&${filtersToString(filters)}"
@@ -197,14 +197,14 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters")
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipes $filters $included")
         val pageFilter = "page[size]=$pageSize&page[number]=$pageNumber"
         val includedStr = if (included.isEmpty()) "" else "&${includedToString(included)}"
         val filtersStr = if (filters.isEmpty()) "" else "&${filters}"
         val returnValue =
             this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$pageFilter$includedStr$filtersStr")!!
                 .toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes $returnValue")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes ${returnValue.map { record -> "${record.id} / ${(record as Recipe).attributes?.title} --"}}")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -217,7 +217,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
         val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&page[size]=${size}&${includedToString(included)}"
         val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria ${returnValue.map { record -> { "${record.id}/ ${(record as Recipe).attributes?.title}--"}}}")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -242,7 +242,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         val returnValue =
             this.get<RecordWrapper>(HttpRoutes.RECIPE_LIKE_ENDPOINT + "?$pageFilter&$idFilters")!!
                 .toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds ${returnValue.map { record -> "${(record as RecipeLike).attributes?.recipeId} / ${record.attributes?.isPast}--"}}")
         return returnValue.map { record -> record as RecipeLike }
     }
 
@@ -252,7 +252,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
             returnValue.addAll(getRecipeLikesByRecipeIds(recipesIdsChunck, pageSize))
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes $recipesIds")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes ${returnValue.map { record -> "${record.attributes?.recipeId} / ${record.attributes?.isPast}--"}}")
         return returnValue
     }
 
@@ -331,7 +331,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.POINTOFSALE_ENDPOINT + "?filter[ext-id]=$extId&filter[supplier-id]=$supplierId")
         }
         if (posList.data.isEmpty()) throw Exception("Point of sale not found or incorrect")
-        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId ${posList.data.map { pos -> "${pos.id}--" }}")
         return posList.data[0]
     }
 
@@ -406,7 +406,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
             url(HttpRoutes.GROCERIES_ENTRY_ENDPOINT + "/${ge.id}")
             body = RecordWrapper.fromRecord((ge))
         }.toRecord() as GroceriesEntry
-        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesEntry $ge $returnValue")
+        LogHandler.info("[Miam][MiamAPIDatasource] end updateGroceriesEntry ${ge.attributes?.name}/ ${returnValue.attributes?.status}/  ${returnValue.attributes?.recipeIds}")
         return returnValue
     }
 
@@ -443,7 +443,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         val returnValue = httpClient.get<RecordWrapper> {
             url("${HttpRoutes.PACKAGE_ENDPOINT}?$params")
         }.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID $returnValue")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getActivePackagesFromSupplierID ${(returnValue as Package).attributes?.title}")
         return returnValue.map { record -> record as Package }
     }
 

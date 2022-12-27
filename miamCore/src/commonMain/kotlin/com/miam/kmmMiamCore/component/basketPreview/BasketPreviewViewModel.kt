@@ -80,7 +80,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             lineEntriesSubject.debounce(500).collect { entries ->
-                LogHandler.info("launching update of entries")
+                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--"}}]")
                 val newBpl = updateBplEntries(entries)
                 lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
                 setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
@@ -145,7 +145,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun addEntry(entry: BasketEntry) {
-        LogHandler.debug("[Miam] add entry ${entry}")
+        LogHandler.debug("[Miam] add entry ${entry.selectedItem?.attributes?.name} / ${entry.attributes?.quantity}")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
             return
@@ -168,7 +168,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     fun removeBasketEntry(entry: BasketEntry) {
-        LogHandler.debug("[Miam] remove entry")
+        LogHandler.debug("[Miam] remove ${entry.selectedItem?.attributes?.name}")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
             return
