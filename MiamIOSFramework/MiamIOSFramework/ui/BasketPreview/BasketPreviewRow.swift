@@ -59,7 +59,7 @@ struct BasketPreviewRow: View {
         
          
         if (Template.sharedInstance.basketPreviewRowTemplate != nil) {
-            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, removeProductAction, replaceProductAction)
+            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, removeProductAction, replaceProductAction, onQuantityChanged)
         } else {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {

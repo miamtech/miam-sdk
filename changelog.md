@@ -1,3 +1,6 @@
+# 3.5.0
+- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
+
 # 3.4.2
 - [FIX][COR] Like initial state
 - [FIX][COR] Recipe card, do not set on error on unknow state
