@@ -16,7 +16,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object GroceriesListHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    val groceriesListStore: GroceriesListStore by inject()
+    private val groceriesListStore: GroceriesListStore by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in GroceriesListHandler $exception ${exception.stackTraceToString()}")

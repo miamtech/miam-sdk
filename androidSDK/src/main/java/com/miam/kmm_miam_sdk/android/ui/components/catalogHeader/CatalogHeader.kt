@@ -77,8 +77,7 @@ fun CatalogHeader(
     val filter = CatalogFilter(catalogFilterVm, ::closeModal, goToRecipeList)
     // TODO Refact with filter service
     val search = CatalogSearch(catalogFilterVm, ::closeModal, goToRecipeList)
-
-
+    
     fun getActiveFilterCount(): Int {
         // (TODO) use filter service
         return -1

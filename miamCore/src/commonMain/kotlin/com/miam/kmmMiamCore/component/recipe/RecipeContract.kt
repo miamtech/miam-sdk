@@ -1,7 +1,6 @@
 package com.miam.kmmMiamCore.component.recipe
 
 import com.miam.kmmMiamCore.base.mvi.*
-import com.miam.kmmMiamCore.handler.GroceriesListHandler.groceriesListStore
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.services.UserPreferencesInstance
 
@@ -51,7 +50,7 @@ interface RecipeContract {
                 ?: false
         }
 
-        private fun retrieveGuest(isInCart: Boolean, groceriesListSingletonPreferencesViewModelStore: GroceriesListStore): Int {
+        private fun retrieveGuest(isInCart: Boolean, groceriesListStore: GroceriesListStore): Int {
             if (isInCart) {
                 val currentGl = groceriesListStore.observeState().value.groceriesList
                 return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id.toString() == recipe?.id })?.guests
