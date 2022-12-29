@@ -7,10 +7,10 @@ import com.miam.kmmMiamCore.component.preferences.PreferencesEffect
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.helpers.letElse
-import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Package
@@ -39,7 +39,6 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
 
     private val currentFiltersQuery: String
         get() = currentState.catalogFilterVM.getSelectedFilterAsQueryString()
-
 
     private val filterVm: SingletonFilterViewModel
         get() = currentState.catalogFilterVM
@@ -72,11 +71,10 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 goToFavorites()
             }
             is CatalogContract.Event.GoToRecipeList -> {
-                // PB ICI
+                routeService.onCloseDialog()
                 routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false, filterOpen = false, preferenceOpen = false) }
                 fetchRecipes()
-
             }
             is CatalogContract.Event.GoToRecipeListFromCategory -> {
                 currentState.catalogFilterVM.setCat(event.categoryId)
@@ -87,25 +85,32 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
             is CatalogContract.Event.TogglePreference -> {
-                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(preferenceOpen = false) } }))
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, {setState { copy(preferenceOpen = false) }}))
                 setState { copy(preferenceOpen = !currentState.preferenceOpen) }
             }
             is CatalogContract.Event.ToggleFilter -> {
-                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(filterOpen = false) } }))
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, {
+                    routeService.onCloseDialog()
+                    setState { copy(filterOpen = false) }
+                }))
                 setState { copy(filterOpen = !currentState.filterOpen) }
                 if (!currentState.filterOpen && currentState.content == CatalogContent.DEFAULT) {
                     currentState.catalogFilterVM.clear()
                 }
             }
             is CatalogContract.Event.ToggleSearch -> {
-                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, { setState { copy(searchOpen = false) } }))
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("", {}, {
+                    setState { copy(searchOpen = false) }
+                }))
                 setState { copy(searchOpen = !currentState.searchOpen) }
             }
             is CatalogContract.Event.OnFilterValidation -> {
+                routeService.onCloseDialog()
                 routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
                 setState { copy(content = CatalogContent.RECIPE_LIST, filterOpen = false) }
             }
             is CatalogContract.Event.OnSearchLaunch -> {
+                routeService.onCloseDialog()
                 routeService.dispatch(RouteServiceAction.SetPageRoute("Une envie de ?") { setState { copy(content = CatalogContent.RECIPE_LIST) } })
                 setState { copy(content = CatalogContent.RECIPE_LIST, searchOpen = false) }
             }
