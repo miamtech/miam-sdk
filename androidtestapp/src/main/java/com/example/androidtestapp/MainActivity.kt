@@ -1,4 +1,3 @@
-
 package com.example.androidtestapp
 
 import android.annotation.SuppressLint
@@ -138,8 +137,8 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.updateStoreId("35290")
-        PointOfSaleHandler.setSupplier(7)
+        PointOfSaleHandler.updateStoreId("miam_test")
+        PointOfSaleHandler.setSupplier(14)
         PointOfSaleHandler.setSupplierOrigin("miam.test")
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
