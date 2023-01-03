@@ -1,20 +1,19 @@
 package com.miam.kmmMiamCore.component.itemSelector
 
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasketAction
 import com.miam.kmmMiamCore.base.mvi.BasketStore
-import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-object ItemSelectorInstance : KoinComponent {
+object ItemSelectorInstance: KoinComponent {
     val instance: ItemSelectorViewModel by inject()
 }
 
-open class ItemSelectorViewModel :
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>(),
+open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>(),
     KoinComponent {
 
     private val basketStore: BasketStore by inject()
@@ -50,9 +49,8 @@ open class ItemSelectorViewModel :
     }
 
     private fun fillItem(basketEntry: BasketPreviewLine): MutableList<BasketPreviewLine> {
-        LogHandler.debug("" + (basketEntry.record as BasketEntry).relationships?.items?.data?.size)
         val itemList = mutableListOf<BasketPreviewLine>()
-        basketEntry.record.relationships?.items?.data?.forEach { item ->
+        (basketEntry.record as BasketEntry).relationships?.items?.data?.forEach { item ->
             if (item.id != basketEntry.record.selectedItem?.id) {
                 itemList.add(BasketPreviewLine.fromBasketEntryItem(basketEntry.record, item))
             }

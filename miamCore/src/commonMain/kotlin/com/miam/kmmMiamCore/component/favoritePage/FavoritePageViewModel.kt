@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class FavoritePageViewModel :
+open class FavoritePageViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<FavoritePageContract.Event, FavoritePageContract.State, FavoritePageContract.Effect>() {
 
     companion object {
@@ -19,7 +19,7 @@ open class FavoritePageViewModel :
     }
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in favorite view $exception")
+        LogHandler.error("Miam error in favorite view $exception")
     }
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
@@ -59,7 +59,7 @@ open class FavoritePageViewModel :
                 currentPage
             )
             newRecipes.addAll(fetchedRecipes)
-            val uiState = if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success( newRecipes )
+            val uiState = if (newRecipes.isEmpty()) BasicUiState.Empty else BasicUiState.Success(newRecipes)
             setState {
                 copy(
                     favoritesRecipes = uiState,
