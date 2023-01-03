@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
-import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
@@ -35,9 +34,7 @@ class Catalog @JvmOverloads constructor(
         this.catalogPageVerticalSpacing = catalogPageVerticalSpacing ?: this.catalogPageVerticalSpacing
         this.catalogPageHorizontalSpacing = catalogPageHorizontalSpacing ?: this.catalogPageHorizontalSpacing
         if (categoryId != null) {
-            vmCatalog.setEvent(
-                CatalogContract.Event.GoToRecipeListFromCategory(categoryId, title ?: "")
-            )
+            vmCatalog.goToCategory(categoryId, title ?: "")
         }
     }
 

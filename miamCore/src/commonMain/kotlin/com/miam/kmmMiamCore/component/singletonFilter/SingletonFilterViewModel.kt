@@ -86,21 +86,19 @@ open class SingletonFilterViewModel:
     fun setCat(catId: String) {
         setState { copy(category = catId) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
-        setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setFavorite() {
         setState { copy(isFavorite = true) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
-        setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setSearchString(searchString: String) {
         setState { copy(searchString = searchString) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
+    }
+
+    fun applyFilter() {
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 

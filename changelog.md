@@ -1,6 +1,8 @@
 # 3.5.0
 - [FIX][COR] Fix navigation when a dialog was between two pages
 - [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result
+- [FEA][AND] CatalogSearch is now a stand alone component 
+
 
 # 3.4.2
 - [FIX][COR] Like initial state

@@ -98,7 +98,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     override fun observeSideEffect(): Flow<RouteServiceEffect> = sideEffect
 
     override fun dispatch(action: RouteServiceAction): Job {
-        return when (action) {
+         when (action) {
             is RouteServiceAction.SetDialogRoute -> {
                 return launch(coroutineHandler) {
                     state.value = state.value.copy(route = DialogRoute(action.title, action.backToRoute, getCurrentRoute(), action.closeDialog))
@@ -110,8 +110,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
                     state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, getCurrentRoute()))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
-            }
-            else -> ExecutorHelper.emptyJob()
+            }   
         }
     }
 
@@ -124,7 +123,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         return null
     }
 
-    fun popRoute(): Route? {
+    private fun popRoute(): Route? {
         val poppedRoute = state.value.route
         state.value = state.value.copy(route = poppedRoute?.previous)
         return poppedRoute

@@ -1,6 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
 import android.content.Context
+import android.util.AttributeSet
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,148 +47,154 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyl
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
-@Composable
-fun CatalogPage(
-    recipePageVM: RecipeListPageViewModel,
+class CatalogPage @JvmOverloads constructor(
     context: Context,
-    columns: Int,
-    verticalSpacing: Int,
-    horizontalSpacing: Int,
-    returnToCategoriesPage: () -> Unit
-) {
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
-    val state = recipePageVM.uiState.collectAsState()
 
-    ManagementResourceState(
-        resourceState = state.value.recipes,
-        successView = { recipes ->
-            requireNotNull(recipes)
-            CatalogSuccessPage(
-                recipePageVM,
-                recipes,
-                columns,
-                verticalSpacing,
-                horizontalSpacing,
-                context
-            )
-        },
-        emptyView = {
-            CatalogEmptyPage(
-                recipePageVM.currentState.title,
-                recipePageVM.currentState.filter.contains("filter[liked]=true&"),
-                returnToCategoriesPage
-            )
-        },
-        loadingView = {
-            if (Template.CatalogResultPageLoadingTemplate != null) {
-                Template.CatalogResultPageLoadingTemplate?.let {
-                    it()
-                }
-            } else {
-                CatalogLoadingPage()
-            }
-        },
-        onTryAgain = { /**TODO*/ },
-        onCheckAgain = { /**TODO*/ },
-    )
-}
+    private val recipePageVM = RecipeListPageViewModel()
+    private var catalogPageTitle = ""
+    private var catalogPageColumns = 1
+    private var catalogPageVerticalSpacing = 12
+    private var catalogPageHorizontalSpacing = 12
+    private var catalogPageBack: () -> Unit = { throw IllegalArgumentException("[Miam][Error] you must bind back function") }
 
-@Composable
-private fun CatalogSuccessPage(
-    recipePageVM: RecipeListPageViewModel,
-    recipes: List<Recipe>,
-    columns: Int,
-    verticalSpacing: Int,
-    horizontalSpacing: Int,
-    context: Context
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
-            modifier = FavoritePageStyle.favoriteMainContainer,
-            columns = GridCells.Fixed(columns),
-            verticalArrangement = Arrangement.spacedBy(verticalSpacing.dp, Alignment.Top),
-            horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
-        ) {
-            item(span = { GridItemSpan(columns) }) {
-                if (Template.CatalogPageTitleTemplate != null) {
-                    Template.CatalogPageTitleTemplate?.let {
-                        it(recipePageVM.currentState.title)
-                    }
-                } else {
-                    Row {
-                        Text(
-                            text = recipePageVM.currentState.title,
-                            color = Colors.black,
-                            style = Typography.subtitleBold
-                        )
-                    }
-                }
-            }
-            itemsIndexed(recipes) { index, item ->
-                val recipe = RecipeView(context = context)
-                recipe.bind(recipe = item)
-                recipe.isNotInShelf()
-                recipe.Content()
-                if (index == recipes.lastIndex) {
+    fun bind(
+        title: String,
+        back: () -> Unit,
+        columns: Int? = null,
+        verticalSpacing: Int? = null,
+        horizontalSpacing: Int? = null
+    ) {
+        catalogPageTitle = title
+        columns?.let { catalogPageColumns = it }
+        verticalSpacing?.let { catalogPageVerticalSpacing = it }
+        horizontalSpacing?.let { catalogPageHorizontalSpacing = it }
+        recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(title))
+        catalogPageBack = back
+    }
+
+    @Composable
+    override fun Content(
+
+    ) {
+
+        val state = recipePageVM.uiState.collectAsState()
+
+        ManagementResourceState(
+            resourceState = state.value.recipes,
+            successView = { recipes ->
+                requireNotNull(recipes)
+                CatalogSuccessPage(
+                    context,
+                    catalogPageTitle,
+                    recipes,
+                    catalogPageColumns,
+                    catalogPageVerticalSpacing,
+                    catalogPageHorizontalSpacing,
+                    recipePageVM.currentState.isFetchingNewPage,
+                ) {
                     recipePageVM.setEvent(RecipeListPageContract.Event.LoadPage)
                 }
-            }
-            item(span = { GridItemSpan(columns) }) {
-                if (recipePageVM.currentState.isFetchingNewPage) {
-                    if (Template.CatalogResultPageLazyLoaderTemplate != null) {
-                        Template.CatalogResultPageLazyLoaderTemplate?.let {
-                            it()
+            },
+            emptyView = {
+                CatalogEmptyPage(
+                    recipePageVM.currentState.title,
+                    recipePageVM.currentState.filter.contains("filter[liked]=true&"),
+                    catalogPageBack
+                )
+            },
+            loadingView = {
+                if (Template.CatalogResultPageLoadingTemplate != null) {
+                    Template.CatalogResultPageLoadingTemplate?.let {
+                        it()
+                    }
+                } else {
+                    CatalogLoadingPage()
+                }
+            },
+            onTryAgain = { /**TODO*/ },
+            onCheckAgain = { /**TODO*/ },
+        )
+    }
+
+    @Composable
+    private fun CatalogSuccessPage(
+        context: Context,
+        title: String,
+        recipes: List<Recipe>,
+        columns: Int,
+        verticalSpacing: Int,
+        horizontalSpacing: Int,
+        isFetching: Boolean,
+        loadPage: () -> Unit
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            LazyVerticalGrid(
+                modifier = FavoritePageStyle.favoriteMainContainer,
+                columns = GridCells.Fixed(columns),
+                verticalArrangement = Arrangement.spacedBy(verticalSpacing.dp, Alignment.Top),
+                horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
+            ) {
+                item(span = { GridItemSpan(columns) }) {
+                    if (Template.CatalogPageTitleTemplate != null) {
+                        Template.CatalogPageTitleTemplate?.let {
+                            it(title)
                         }
                     } else {
-                        Row(
-                            modifier = FavoritePageStyle.loadMoreContainer,
-                            Arrangement.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = FavoritePageColor.loaderColor,
-                                modifier = FavoritePageStyle.loadMoreModifier
+                        Row {
+                            Text(
+                                text = title,
+                                color = Colors.black,
+                                style = Typography.subtitleBold
                             )
                         }
                     }
                 }
+                itemsIndexed(recipes) { index, item ->
+                    val recipe = RecipeView(context = context)
+                    recipe.bind(recipe = item)
+                    recipe.isNotInShelf()
+                    recipe.Content()
+                    if (index == recipes.lastIndex) {
+                        loadPage()
+                    }
+                }
+                item(span = { GridItemSpan(columns) }) {
+                    if (isFetching) {
+                        if (Template.CatalogResultPageLazyLoaderTemplate != null) {
+                            Template.CatalogResultPageLazyLoaderTemplate?.let {
+                                it()
+                            }
+                        } else {
+                            Row(
+                                modifier = FavoritePageStyle.loadMoreContainer,
+                                Arrangement.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = FavoritePageColor.loaderColor,
+                                    modifier = FavoritePageStyle.loadMoreModifier
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-}
 
-@Composable
-private fun CatalogLoadingPage() {
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(recipesListLoading, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
-        CircularProgressIndicator(color = Colors.primary)
-    }
-}
-
-@Composable
-fun CatalogEmptyPage(
-    title: String,
-    isFavorite: Boolean,
-    returnToCategoriesPage: () -> Unit
-) {
-    if (isFavorite) {
-        if (Template.CatalogFavoritEmptyTemplate != null) {
-            Template.CatalogFavoritEmptyTemplate?.let {
-                it(returnToCategoriesPage)
-            }
-        } else {
-            FavoriteEmptyPage(returnToCategoriesPage)
-        }
-    } else {
-        if (Template.CatalogSearchResultEmptyTemplate != null) {
-            Template.CatalogSearchResultEmptyTemplate?.let {
-                it(returnToCategoriesPage, title)
-            }
-        } else {
-            SearchResultEmptyPage(pageTitle = title)
+    @Composable
+    private fun CatalogLoadingPage() {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(recipesListLoading, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
+            CircularProgressIndicator(color = Colors.primary)
         }
     }
 }
@@ -286,3 +294,30 @@ fun SearchResultEmptyPage(pageTitle: String) {
         }
     }
 }
+
+
+@Composable
+fun CatalogEmptyPage(
+    title: String,
+    isFavorite: Boolean,
+    returnToCategoriesPage: () -> Unit
+) {
+    if (isFavorite) {
+        if (Template.CatalogFavoritEmptyTemplate != null) {
+            Template.CatalogFavoritEmptyTemplate?.let {
+                it(returnToCategoriesPage)
+            }
+        } else {
+            FavoriteEmptyPage(returnToCategoriesPage)
+        }
+    } else {
+        if (Template.CatalogSearchResultEmptyTemplate != null) {
+            Template.CatalogSearchResultEmptyTemplate?.let {
+                it(returnToCategoriesPage, title)
+            }
+        } else {
+            SearchResultEmptyPage(pageTitle = title)
+        }
+    }
+}
+
