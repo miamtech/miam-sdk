@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
-import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -34,7 +33,6 @@ class Preferences @JvmOverloads constructor(
     }
 
     private val preferencesVM: SingletonPreferencesViewModel by inject()
-    private val routeService: RouteService by inject()
 
     private fun resetAndClose() {
         preferencesVM.resetPreferences()

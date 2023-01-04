@@ -98,19 +98,19 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     override fun observeSideEffect(): Flow<RouteServiceEffect> = sideEffect
 
     override fun dispatch(action: RouteServiceAction): Job {
-         when (action) {
+        return when (action) {
             is RouteServiceAction.SetDialogRoute -> {
-                return launch(coroutineHandler) {
+                launch(coroutineHandler) {
                     state.value = state.value.copy(route = DialogRoute(action.title, action.backToRoute, getCurrentRoute(), action.closeDialog))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
             is RouteServiceAction.SetPageRoute -> {
-                return launch(coroutineHandler) {
+                launch(coroutineHandler) {
                     state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, getCurrentRoute()))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
-            }   
+            }
         }
     }
 
