@@ -31,11 +31,8 @@ class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource): KoinCompo
 
     private suspend fun fetchTagsForSupplier(filters: Map<String, String>): List<Tag> {
         pointOfSaleStore.supplierId?.toString()?.let {
-            val mutableFilters = filters.toMutableMap()
-            mutableFilters["for_supplier"] = it
-            return tagDataSource.getTags(mutableFilters)
+            return tagDataSource.getTags(filters + mapOf(Pair("for_supplier", it)))
         }
-
         return tagDataSource.getTags(filters)
     }
 
