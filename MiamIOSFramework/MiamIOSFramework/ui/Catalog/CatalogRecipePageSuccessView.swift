@@ -14,7 +14,6 @@ internal struct CatalogRecipesPageSuccessView: View {
     let title: String
     let recipes: [Recipe]
     let hasNoResults: Bool
-    let searchString: String
     let columns: Int 
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
@@ -42,7 +41,7 @@ internal struct CatalogRecipesPageSuccessView: View {
                     }
             }.padding(.horizontal, Dimension.sharedInstance.mlPadding)
         } else {
-            CatalogRecipePageNoResultsView(searchString: searchString, browseCatalogAction: {
+            CatalogRecipePageNoResultsView(browseCatalogAction: {
                 browseCatalogAction()
             }, showingFavorites: false)
         }

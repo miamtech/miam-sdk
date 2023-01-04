@@ -13,20 +13,27 @@ import miamCore
 internal struct RecipesView: View {
     @ObservedObject private var recipesListPageModel: RecipeListPageVM
     let browseCatalogAction: () -> Void
-    let searchString: String
     let showingFavorites: Bool
     let columns:Int
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
     
-    init(recipesListPageModel: RecipeListPageViewModel,recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
-        self.recipesListPageModel = RecipeListPageVM(model: recipesListPageModel)
+    init(recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
-        self.searchString = searchString
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
         self.spacing = recipeListSpacing
         self.recipeCardHeight = recipeCardHeight
+        self.recipesListPageModel = RecipeListPageVM()
+    }
+    
+    init(categoryId:String, categoryTitle :String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+        self.browseCatalogAction = browseCatalogAction
+        self.showingFavorites = showingFavorites
+        self.columns = recipesListColumns
+        self.spacing = recipeListSpacing
+        self.recipeCardHeight = recipeCardHeight
+        self.recipesListPageModel = RecipeListPageVM(categoriesId: categoryId, title:categoryTitle)
     }
     
     var body: some View {
@@ -37,7 +44,6 @@ internal struct RecipesView: View {
                     title: recipesListPageModel.title,
                     recipes: recipesListPageModel.recipes,
                     hasNoResults: recipesListPageModel.hasNoResults,
-                    searchString: searchString,
                     columns:columns,
                     spacing:spacing,
                     recipeCardHeight: recipeCardHeight,
@@ -48,7 +54,7 @@ internal struct RecipesView: View {
                         browseCatalogAction()
                     }),
                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                emptyView: CatalogRecipePageNoResultsView(searchString: searchString, browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))
+                emptyView: CatalogRecipePageNoResultsView( browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))
         }
     }
 }

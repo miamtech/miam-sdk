@@ -10,7 +10,7 @@ import miamCore
 
 @available(iOS 14, *)
 public struct CatalogRecipePageNoResultsView: View {
-    let searchString: String
+    let searchString: String = FilterViewModelInstance.shared.instance.currentState.searchString ?? ""
     let browseCatalogAction: () -> Void
     var showingFavorites = false
 
