@@ -214,29 +214,6 @@ public class Template {
     ) -> AnyView)? = nil
     
     /**
-     recipeListPageViewModel: RecipeListPageViewModel?
-     packages: [CatalogPackage]
-     catalogContent: CatalogModelContent
-     Binding var showingPackageRecipes: Bool
-     Binding var showingFavorites: Bool
-     Binding var headerHeight: Double
-     searchString: String
-     browseCatalogAction: () -> Void
-     navigateToRecipeAction: (Package) -> Void
-     */
-    public var catalogSuccessViewTemplate: ((
-        RecipeListPageViewModel?,
-        [CatalogPackage],
-        CatalogModelContent,
-        Binding<Bool>,
-        Binding<Bool>,
-        Binding<Double>,
-        String,
-        @escaping () -> Void,
-        @escaping (Package) -> Void
-    ) -> AnyView)? = nil
-    
-    /**
      catalog: CatalogVM
      close: () -> Void
      search: () -> Void
