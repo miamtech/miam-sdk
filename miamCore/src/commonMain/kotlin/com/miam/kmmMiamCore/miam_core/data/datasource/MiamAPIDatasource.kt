@@ -431,8 +431,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
     }
 
     private fun filtersToString(filters: Map<String, String>): String {
-        return filters.toList()
-            .fold("") { res, filter -> res + "filter[${filter.first}]=${filter.second}" }
+        return filters.toList().joinToString("&") { filter -> "filter[${filter.first}]=${filter.second}" }
     }
 
     ///////////////////////////////////// PACKAGE /////////////////////////////////////////////////
@@ -458,15 +457,6 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         return returnValue.map { record -> record as Tag }
     }
 
-    override suspend fun getTagsByTagType(tagType: String): List<Tag> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getTagsByTagType $tagType")
-        val returnValue = httpClient.get<RecordWrapper> {
-            url(HttpRoutes.TAGS_ENDPOINT + "?filter[tag_type]=$tagType")
-        }.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getTagsByTagType ")
-        return returnValue.map { record -> record as Tag }
-    }
-
     override suspend fun getTagById(id: String): Tag {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getTagById $id")
         val returnValue = httpClient.get<RecordWrapper> {
@@ -474,5 +464,14 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
         }.toRecord()
         LogHandler.info("[Miam][MiamAPIDatasource] end getTagById ")
         return returnValue as Tag
+    }
+
+    override suspend fun getTags(filters: Map<String, String>): List<Tag> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getTags")
+        val returnValue = httpClient.get<RecordWrapper> {
+            url(HttpRoutes.TAGS_ENDPOINT + "?${filtersToString(filters)}")
+        }.toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end ${returnValue.map { record -> "${(record as Tag).attributes?.name}--" }}")
+        return returnValue.map { record -> record as Tag }
     }
 }
