@@ -7,7 +7,7 @@ import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Package
 
 enum class CatalogContent {
-    RECIPE_LIST, CATEGORIES_LIST, CATEGORY, FAVORITE
+    WORD_SEARCH, FILTER_SEARCH, CATEGORIES_LIST, CATEGORY, FAVORITE
 }
 
 enum class DialogContent {

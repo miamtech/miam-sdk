@@ -67,13 +67,15 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         }
     }
 
-    fun onSimpleSearch() {
+    private fun setSearchState(content: CatalogContent) {
+        setState { copy(content = content) }
+    }
+
+    fun onSimpleSearch(content: CatalogContent) {
         routeService.onCloseDialog()
         if (currentState.content == CatalogContent.CATEGORIES_LIST) {
-            routeService.dispatch(RouteServiceAction.SetPageRoute(RECIPE_LIST_TITLE) { setState { copy(content = CatalogContent.RECIPE_LIST) } })
-            setState { copy(content = CatalogContent.RECIPE_LIST, dialogIsOpen = false) }
-        } else {
-            setState { copy(dialogIsOpen = false) }
+            routeService.dispatch(RouteServiceAction.SetPageRoute(RECIPE_LIST_TITLE) { setSearchState(content) })
+            setSearchState(content)
         }
     }
 

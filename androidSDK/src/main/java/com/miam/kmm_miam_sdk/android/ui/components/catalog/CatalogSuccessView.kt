@@ -12,7 +12,7 @@ import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
 import com.miam.kmmMiamCore.component.catalog.DialogContent
-import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -36,14 +36,15 @@ fun CatalogSuccessView(
 
     val filter = CatalogFilter(
         { routeService.onCloseDialog() },
-        { vmCatalog.onSimpleSearch() }
+        { vmCatalog.onSimpleSearch(CatalogContent.FILTER_SEARCH) }
     )
     val search = CatalogSearch(
         { routeService.onCloseDialog() },
-        { vmCatalog.onSimpleSearch() }
+        { vmCatalog.onSimpleSearch(CatalogContent.WORD_SEARCH) }
     )
 
     val preference = Preferences(context).apply { bind({ routeService.onCloseDialog() }, { routeService.onCloseDialog() }) }
+    val filterVM = FilterViewModelInstance.instance
 
     Column {
         if (state.dialogIsOpen) {
@@ -66,8 +67,16 @@ fun CatalogSuccessView(
                     Template.CatalogFloatingElementTemplate?.let { it() }
                 }
             }
-            CatalogContent.RECIPE_LIST -> {
-                CatalogPage(context).apply { bind("", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing) }.Content()
+            CatalogContent.FILTER_SEARCH -> {
+                CatalogPage(context).apply {
+                    bind("Votre Séléction", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
+            }
+            CatalogContent.WORD_SEARCH -> {
+                val title = "Votre recherche : \"${filterVM.currentState.searchString}\""
+                CatalogPage(context).apply {
+                    bind(title, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
             }
             CatalogContent.CATEGORY -> {
                 CategoryRecipesPage(context).apply {
@@ -82,7 +91,9 @@ fun CatalogSuccessView(
             }
             CatalogContent.FAVORITE -> {
                 // TODO use stand alone favorite
-                CatalogPage(context).apply { bind("", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing) }.Content()
+                CatalogPage(context).apply {
+                    bind("Mes idées repas", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
             }
         }
     }

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
@@ -47,19 +48,18 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyl
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
-class CatalogPage @JvmOverloads constructor(
+open class CatalogPage @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ): AbstractComposeView(context, attrs, defStyleAttr) {
-
 
     private val recipePageVM = RecipeListPageViewModel()
     private var catalogPageTitle = ""
     private var catalogPageColumns = 1
     private var catalogPageVerticalSpacing = 12
     private var catalogPageHorizontalSpacing = 12
-    private var catalogPageBack: () -> Unit = { throw IllegalArgumentException("[Miam][Error] you must bind back function") }
+    private var catalogPageBack: () -> Unit = { LogHandler.error("[Miam][Error] you must bind back function") }
 
     fun bind(
         title: String,
@@ -69,18 +69,15 @@ class CatalogPage @JvmOverloads constructor(
         horizontalSpacing: Int? = null
     ) {
         catalogPageTitle = title
+        catalogPageBack = back
         columns?.let { catalogPageColumns = it }
         verticalSpacing?.let { catalogPageVerticalSpacing = it }
         horizontalSpacing?.let { catalogPageHorizontalSpacing = it }
         recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(title))
-        catalogPageBack = back
     }
 
     @Composable
-    override fun Content(
-
-    ) {
-
+    override fun Content() {
         val state = recipePageVM.uiState.collectAsState()
 
         ManagementResourceState(
@@ -108,9 +105,7 @@ class CatalogPage @JvmOverloads constructor(
             },
             loadingView = {
                 if (Template.CatalogResultPageLoadingTemplate != null) {
-                    Template.CatalogResultPageLoadingTemplate?.let {
-                        it()
-                    }
+                    Template.CatalogResultPageLoadingTemplate?.let { it() }
                 } else {
                     CatalogLoadingPage()
                 }
@@ -132,7 +127,6 @@ class CatalogPage @JvmOverloads constructor(
         loadPage: () -> Unit
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-
             LazyVerticalGrid(
                 modifier = FavoritePageStyle.favoriteMainContainer,
                 columns = GridCells.Fixed(columns),
@@ -140,19 +134,7 @@ class CatalogPage @JvmOverloads constructor(
                 horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
             ) {
                 item(span = { GridItemSpan(columns) }) {
-                    if (Template.CatalogPageTitleTemplate != null) {
-                        Template.CatalogPageTitleTemplate?.let {
-                            it(title)
-                        }
-                    } else {
-                        Row {
-                            Text(
-                                text = title,
-                                color = Colors.black,
-                                style = Typography.subtitleBold
-                            )
-                        }
-                    }
+                    HeaderTitle(title = title)
                 }
                 itemsIndexed(recipes) { index, item ->
                     val recipe = RecipeView(context = context)
@@ -163,24 +145,33 @@ class CatalogPage @JvmOverloads constructor(
                         loadPage()
                     }
                 }
-                item(span = { GridItemSpan(columns) }) {
-                    if (isFetching) {
-                        if (Template.CatalogResultPageLazyLoaderTemplate != null) {
-                            Template.CatalogResultPageLazyLoaderTemplate?.let {
-                                it()
-                            }
-                        } else {
-                            Row(
-                                modifier = FavoritePageStyle.loadMoreContainer,
-                                Arrangement.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    color = FavoritePageColor.loaderColor,
-                                    modifier = FavoritePageStyle.loadMoreModifier
-                                )
-                            }
-                        }
-                    }
+                item(span = { GridItemSpan(columns) }) { FooterLoader(isFetching) }
+            }
+        }
+    }
+
+    @Composable
+    private fun HeaderTitle(title: String) {
+        val templateToUse = specificTemplate() ?: Template.CatalogPageTitleTemplate
+        if (templateToUse != null) {
+            templateToUse(title)
+        } else {
+            Row { Text(text = title, color = Colors.black, style = Typography.subtitleBold) }
+        }
+    }
+
+    protected open fun specificTemplate(): @Composable() ((String) -> Unit)? {
+        return null
+    }
+
+    @Composable
+    private fun FooterLoader(isFetching: Boolean) {
+        if (isFetching) {
+            if (Template.CatalogResultPageLazyLoaderTemplate != null) {
+                Template.CatalogResultPageLazyLoaderTemplate?.let { it() }
+            } else {
+                Row(modifier = FavoritePageStyle.loadMoreContainer, Arrangement.Center) {
+                    CircularProgressIndicator(color = FavoritePageColor.loaderColor, modifier = FavoritePageStyle.loadMoreModifier)
                 }
             }
         }
@@ -188,11 +179,7 @@ class CatalogPage @JvmOverloads constructor(
 
     @Composable
     private fun CatalogLoadingPage() {
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+        Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Text(recipesListLoading, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
             CircularProgressIndicator(color = Colors.primary)
         }
@@ -212,13 +199,8 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(CatalogImage.empty),
-                contentDescription = null,
-                Modifier
-                    .padding(vertical = 16.dp)
-            )
-            Clickable(onClick = { returnToCategoriesPage() }) {
+            Image(painter = painterResource(CatalogImage.empty), contentDescription = null, Modifier.padding(vertical = 16.dp))
+            Clickable(onClick = returnToCategoriesPage) {
                 Column {
                     Text(
                         text = noFavoriteYet,
@@ -229,10 +211,7 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
                             .padding(horizontal = 16.dp)
                             .padding(bottom = 8.dp)
                     )
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                         Box(
                             Modifier
                                 .clip(RoundedCornerShape(50))
@@ -242,10 +221,7 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
                                 Text(
                                     text = backToCategories,
                                     color = primary,
-                                    modifier = Modifier.padding(
-                                        horizontal = 16.dp,
-                                        vertical = 8.dp
-                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                 )
                                 Image(
                                     painter = painterResource(CatalogImage.back),
@@ -274,12 +250,7 @@ fun SearchResultEmptyPage(pageTitle: String) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(CatalogImage.empty),
-                contentDescription = null,
-                Modifier
-                    .padding(vertical = 16.dp)
-            )
+            Image(painter = painterResource(CatalogImage.empty), contentDescription = null, Modifier.padding(vertical = 16.dp))
             Text(
                 text = noResultFor + pageTitle,
                 color = white,
@@ -287,10 +258,7 @@ fun SearchResultEmptyPage(pageTitle: String) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-            Text(
-                text = tryAnOtherSearch,
-                color = white
-            )
+            Text(text = tryAnOtherSearch, color = white)
         }
     }
 }
@@ -304,17 +272,13 @@ fun CatalogEmptyPage(
 ) {
     if (isFavorite) {
         if (Template.CatalogFavoritEmptyTemplate != null) {
-            Template.CatalogFavoritEmptyTemplate?.let {
-                it(returnToCategoriesPage)
-            }
+            Template.CatalogFavoritEmptyTemplate?.let { it(returnToCategoriesPage) }
         } else {
             FavoriteEmptyPage(returnToCategoriesPage)
         }
     } else {
         if (Template.CatalogSearchResultEmptyTemplate != null) {
-            Template.CatalogSearchResultEmptyTemplate?.let {
-                it(returnToCategoriesPage, title)
-            }
+            Template.CatalogSearchResultEmptyTemplate?.let { it(returnToCategoriesPage, title) }
         } else {
             SearchResultEmptyPage(pageTitle = title)
         }

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object BasketHandlerInstance : KoinComponent {
+object BasketHandlerInstance: KoinComponent {
     val instance: BasketHandler by inject()
 }
 
@@ -24,14 +24,14 @@ data class BasketHandlerState(
     val firstMiamActiveBasket: List<BasketEntry>? = null,
     val firstRetailerBasket: List<RetailerProduct>? = null,
     val pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
-        throw Error("pushProductsToBasket not implemented")
+        LogHandler.error("pushProductsToBasket not implemented")
     },
     val listenToRetailerBasket: () -> Unit = fun() {
-        throw Error("listenToRetailerBasket not implemented")
+        LogHandler.error("listenToRetailerBasket not implemented")
     }
-) : State
+): State
 
-class BasketHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val basketStore: BasketStore by inject()
 
     val state = MutableStateFlow(BasketHandlerState())

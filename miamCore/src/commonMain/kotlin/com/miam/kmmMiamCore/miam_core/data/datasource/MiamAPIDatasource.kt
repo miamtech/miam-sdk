@@ -325,35 +325,31 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
 
-    override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale {
+    override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale? {
         // this filter is suppose to return a single result or nothing
         LogHandler.info("[Miam][MiamAPIDatasource] starting getPosFormExtId $extId $supplierId")
         val posList = httpClient.get<PointOfSales> {
             url(HttpRoutes.POINTOFSALE_ENDPOINT + "?filter[ext-id]=$extId&filter[supplier-id]=$supplierId")
         }
-        if (posList.data.isEmpty()) throw Exception("Point of sale not found or incorrect")
+        if (posList.data.isEmpty()) {
+            LogHandler.error("Point of sale not found or incorrect")
+            return null
+        }
         LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId $posList")
         return posList.data[0]
     }
 
 /////////////////////// BASKET ////////////////////////////////////////////////
 
-    override suspend fun getFromListAndPos(
-        listId: String,
-        posId: Int,
-        included: List<String>
-    ): Basket {
+    override suspend fun getFromListAndPos(listId: String, posId: Int, included: List<String>): Basket? {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getFromListAndPos $listId $posId")
         val baskets = httpClient.get<RecordWrapper> {
-            url(
-                HttpRoutes.GROCERIESLIST_ENDPOINT + "$listId/baskets?filter[point_of_sale_id]=$posId&${
-                    includedToString(
-                        included
-                    )
-                }"
-            )
+            url(HttpRoutes.GROCERIESLIST_ENDPOINT + "$listId/baskets?filter[point_of_sale_id]=$posId&${includedToString(included)}")
         }.toRecords() as List<Basket>
-        if (baskets.isEmpty()) throw Exception("basket not found or incorrect")
+        if (baskets.isEmpty()) {
+            LogHandler.error("basket not found or incorrect")
+            return null
+        }
         LogHandler.info("[Miam][MiamAPIDatasource] end getFromListAndPos $listId $posId $baskets")
         return baskets[0]
     }

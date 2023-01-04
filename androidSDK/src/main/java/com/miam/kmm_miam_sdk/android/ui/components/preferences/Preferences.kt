@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 import org.koin.core.component.KoinComponent
@@ -20,11 +21,11 @@ class Preferences @JvmOverloads constructor(
 ): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var close: () -> Unit = {
-        throw IllegalArgumentException("[Miam][Error] you must bind close function")
+        LogHandler.error("[Miam][Error] you must bind close function")
     }
 
     private var onApply: () -> Unit = {
-        throw IllegalArgumentException("[Miam][Error] you must bind close function")
+        LogHandler.error("[Miam][Error] you must bind close function")
     }
 
     fun bind(close: () -> Unit, onApply: () -> Unit) {
