@@ -10,10 +10,14 @@ import SwiftUI
 @available(iOS 14, *)
 struct BasketPreviewLoadingView: View {
     var body: some View {
-        VStack {
-            Text("Préparation du repas ...")
-                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
-            ProgressLoader(color: Color.miamColor(.primaryText))
+        if let template = Template.sharedInstance.basketPreviewLoadingViewTemplate {
+            template()
+        } else {
+            VStack {
+                Text("Préparation du repas ...")
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                ProgressLoader(color: Color.miamColor(.primaryText))
+            }
         }
     }
 }

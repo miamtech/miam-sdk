@@ -12,7 +12,13 @@ import miamCore
 @available(iOS 14, *)
 public struct MyMealButtonView: View {
     @ObservedObject private var myMealButtonViewModel = MyMealButtonVM()
-    public init() {}
+    
+    let onButtonTapped: () -> Void
+    
+    public init(_ onButtonTapped: @escaping () -> Void) {
+        self.onButtonTapped = onButtonTapped
+    }
+    
     public var body: some View {
         if let currentState = myMealButtonViewModel.state {
             ManagementResourceState<KotlinInt, MyMealButtonSuccessView, EmptyView, MyMealButtonEmptyView>(

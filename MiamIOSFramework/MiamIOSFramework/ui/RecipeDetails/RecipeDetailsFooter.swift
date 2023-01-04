@@ -8,10 +8,8 @@
 import SwiftUI
 import miamCore
 
-
 @available(iOS 14, *)
-struct RecipeDetailsFooter: View {
-    
+public struct RecipeDetailsFooter: View {
     private var recipeVM : RecipeCardVM
     
     private func buy() {
@@ -19,7 +17,6 @@ struct RecipeDetailsFooter: View {
         goToPreview()
         
     }
-    
     
     private func goToPreview(){
         if(recipeVM.recipe != nil ){
@@ -32,22 +29,17 @@ struct RecipeDetailsFooter: View {
         }
     }
     
-    init(recipeVM : RecipeCardVM){
+    public init(recipeVM : RecipeCardVM){
         self.recipeVM = recipeVM
     }
     
-    
-    var body: some View {
-        if(Template.sharedInstance.recipeDetailFooterTemplate != nil) {
-            Template.sharedInstance.recipeDetailFooterTemplate!(
-                recipeVM,
-                {goToPreview()},
-                {buy()}
-            )
+    public var body: some View {
+        if let template = Template.sharedInstance.recipeDetailFooterTemplate {
+            template(recipeVM, {goToPreview()}, {buy()})
         } else {
             
             HStack {
-                if(recipeVM.recipe != nil){
+                if (recipeVM.recipe != nil) {
                     PriceView(recipeId: recipeVM.recipe!.id, guestNumber: Int(recipeVM.currentState.guest)).padding(.horizontal,16)
                 }
                 

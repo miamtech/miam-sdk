@@ -9,11 +9,11 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct RecipeDetailsStepsView: View {
+public struct RecipeDetailsStepsView: View {
     let steps: [RecipeStep]
     @SwiftUI.State private var activeStep = -1
     
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.recipeDetailStepsViewTemplate {
             template(steps)
         } else {

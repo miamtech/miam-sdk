@@ -39,7 +39,7 @@ struct BasketPreviewHeader: View {
 
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
-            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, price, numberOfGuests, price, updateGuest)
+            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, updateGuest)
         } else {
             VStack(alignment: .leading) {
                 HStack {

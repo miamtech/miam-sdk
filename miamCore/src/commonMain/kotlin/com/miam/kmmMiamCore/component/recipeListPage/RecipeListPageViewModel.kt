@@ -17,7 +17,7 @@ class RecipeListPageViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<RecipeListPageContract.Event, RecipeListPageContract.State, RecipeListPageContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in recipe list view $exception")
+        LogHandler.error("Miam error in recipe list view $exception")
     }
 
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()

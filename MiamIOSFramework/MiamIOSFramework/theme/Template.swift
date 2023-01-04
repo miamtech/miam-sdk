@@ -88,6 +88,7 @@ public class Template {
      totalTime: String
      showTitleInHeader: Bool
      isLikeEnabled: Bool
+     recipeId: String
      */
     public var recipeDetailsHeaderTemplate : ((
             String?,
@@ -95,7 +96,8 @@ public class Template {
             Int,
             String,
             Binding<Bool>,
-            Bool
+            Bool,
+            String
     ) -> AnyView)? = nil
     
     /**
@@ -118,7 +120,6 @@ public class Template {
         @escaping (Int) -> Void
     ) -> AnyView )? = nil
     
-    
     /**
      steps : [RecipeStep],
      */
@@ -133,13 +134,27 @@ public class Template {
      buy : () -> Unit
      */
     public var recipeDetailFooterTemplate : ((
-           // _: Recipe,
-            _ : RecipeViewModel,
-            _ : @escaping () -> Void,
-            _ : @escaping () -> Void
-                ) -> AnyView )? =  nil
+       // _: Recipe,
+        _ : RecipeViewModel,
+        _ : @escaping () -> Void,
+        _ : @escaping () -> Void
+    ) -> AnyView )? =  nil
 
+    /**
+     preparationTime: String
+     cookingTime: String
+     restingTime: String
+     */
+    public var recipeTimeViewTemplate: ((
+        String,
+        String,
+        String
+    ) -> AnyView)? = nil
 
+    
+    public var basketPreviewLoadingViewTemplate: ((
+    ) -> AnyView)? = nil
+    
     /**
      basketTitle: String
      basketPictureURL: URL?,
@@ -174,6 +189,7 @@ public class Template {
      productBrandName: String,
      productDescription: String,
      productPrice: String,
+     quantity: Int,
      removeProduct: () -> Unit,
      replaceProduct: () -> Unit
      onQuantityChanged: (Int) -> Void
@@ -184,6 +200,7 @@ public class Template {
         String,
         String,
         String,
+        Int,
         @escaping () -> Void,
         @escaping () -> Void
         @escaping (Int) -> Void
@@ -511,4 +528,15 @@ public class Template {
         PreferencesSearchVM,
         @escaping () -> Void
     ) -> AnyView)? = nil
+    
+    /**
+     showBackButton: Bool
+     backAction: (() -> Void)?
+     titleView: AnyView
+     */
+     public var titleBarViewTemplate: ((
+        Bool,
+        (() -> Void)?,
+        AnyView
+    ) ->AnyView)? = nil
 }

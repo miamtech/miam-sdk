@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.helpers.dualLet
 import com.miam.kmmMiamCore.miam_core.data.repository.PricingRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
@@ -18,7 +19,7 @@ import org.koin.core.component.inject
 open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
+        LogHandler.error("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
     }
 
     private val basketStore: BasketStore by inject()

@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.BasketEntryRepositoryImp
@@ -38,30 +39,30 @@ data class BasketState(
     val entriesCount: Int? = 0,
     val recipeCount: Int? = 0,
     val totalPrice: Double? = 0.0
-) : State
+): State
 
-sealed class BasketAction : Action {
-    object RefreshBasket : BasketAction()
-    data class AddBasketEntry(val entry: BasketEntry) : BasketAction()
-    data class RemoveEntry(val entry: BasketEntry) : BasketAction()
+sealed class BasketAction: Action {
+    object RefreshBasket: BasketAction()
+    data class AddBasketEntry(val entry: BasketEntry): BasketAction()
+    data class RemoveEntry(val entry: BasketEntry): BasketAction()
     data class UpdateBasketEntries(
         val basketEntries: List<BasketEntry>
-    ) : BasketAction()
+    ): BasketAction()
 
     data class UpdateBasketEntriesDiff(
         val basketEntriesDiff: List<AlterQuantityBasketEntry>
-    ) : BasketAction()
+    ): BasketAction()
 
-    data class ReplaceSelectedItem(val basketEntry: BasketEntry, val itemId: Int) : BasketAction()
-    data class ConfirmBasket(val price: String) : BasketAction()
+    data class ReplaceSelectedItem(val basketEntry: BasketEntry, val itemId: Int): BasketAction()
+    data class ConfirmBasket(val price: String): BasketAction()
 }
 
-sealed class BasketEffect : Effect {
-    object BasketPreviewChange : BasketEffect()
-    object BasketConfirmed : BasketEffect()
+sealed class BasketEffect: Effect {
+    object BasketPreviewChange: BasketEffect()
+    object BasketConfirmed: BasketEffect()
 }
 
-class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
+class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -92,8 +93,8 @@ class BasketStore : Store<BasketState, BasketAction, BasketEffect>, KoinComponen
             is BasketAction.RefreshBasket -> {
                 val gl = groceriesListStore.getGroceriesList()
                 val posId = pointOfSaleStore.getPosId()
-                LogHandler.debug("[Miam] RefreshBasket $gl $posId")
-                if (gl == null || posId == null) return com.miam.kmmMiamCore.base.executor.ExecutorHelper.emptyJob()
+                LogHandler.info("[Miam] RefreshBasket  [glId : ${gl?.id}]  [posId : $posId]")
+                if (gl == null || posId == null) return ExecutorHelper.emptyJob()
 
                 return launch(coroutineHandler) {
                     val basket = basketRepo.getFromListAndPos(gl.id, posId)

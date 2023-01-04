@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object BasketHandlerInstance : KoinComponent {
+object BasketHandlerInstance: KoinComponent {
     val instance: BasketHandler by inject()
 }
 
@@ -29,9 +29,9 @@ data class BasketHandlerState(
     val listenToRetailerBasket: () -> Unit = fun() {
         throw Error("listenToRetailerBasket not implemented")
     }
-) : State
+): State
 
-class BasketHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val basketStore: BasketStore by inject()
 
     val state = MutableStateFlow(BasketHandlerState())
@@ -75,7 +75,7 @@ class BasketHandler : KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
         val newComparator = state.value.comparator!!.updateReceivedFromMiam(miamActiveBasket)
         val updateToSend = state.value.comparator!!.resolveFromMiam(newComparator)
         state.value = state.value.copy(comparator = newComparator)
-        LogHandler.info("Miam basket changed finished ${state.value.comparator} $miamActiveBasket")
+        LogHandler.info("Miam basket changed finished ${state.value.comparator} ")
         sendUpdateToRetailer(updateToSend)
     }
 

@@ -1,12 +1,13 @@
 # 3.5.0
 - [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
+- [FEA][COR] Preference dependence on supplier 
 
 # 3.4.2
 - [FIX][COR] Like initial state
 - [FIX][COR] Recipe card, do not set on error on unknow state
 
 # 3.4.1
-- [FIX][COR] report 3.3.1 fix on filter to 3.4
+- [FIX][COR] Report 3.3.1 fix on filter to 3.4
 - [FEA][COR] Router service previous now return new current route
 
 # 3.4.0

@@ -28,7 +28,7 @@ import org.koin.core.component.inject
 open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in catalog view $exception")
+        LogHandler.error("Miam error in catalog view $exception")
     }
 
     private val packageRepositoryImp: PackageRepositoryImp by inject()
