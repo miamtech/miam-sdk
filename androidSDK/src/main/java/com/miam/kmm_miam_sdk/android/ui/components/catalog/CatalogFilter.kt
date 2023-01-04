@@ -63,6 +63,11 @@ class CatalogFilter(
         filterVM.clear()
     }
 
+    private fun applyAndGo() {
+        filterVM.applyFilter()
+        goToFilterResult()
+    }
+
     @Composable
     fun Content() {
 
@@ -78,119 +83,84 @@ class CatalogFilter(
                     ::onTimeFilterChanged,
                     ::onDifficultyChanged,
                     ::clearFilter,
-                    {
-                        filterVM.applyFilter()
-                        goToFilterResult()
-                    },
-                    { closeDialog() }
+                    ::applyAndGo,
+                    closeDialog
                 )
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(white)
-            ) {
-                Column(
-                    Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            "Affiner ma sélection",
-                            color = Colors.black,
-                            style = Typography.subtitleBold
-                        )
-                        Clickable(
-                            onClick = { closeDialog() },
-                            children = {
-                                Image(
-                                    painter = painterResource(close),
-                                    contentDescription = null,
-                                )
-                            }
-                        )
-                    }
-                    Column(
-                        Modifier
-                            .weight(weight = 1f, fill = false)
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Text(text = "Difficulté", style = Typography.bodyBold)
-                        state.value.difficulty.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onDifficultyChanged
-                            )
-                        }
-                        Divider(Modifier.padding(vertical = 16.dp))
-                        Text(text = "Coût par personne", style = Typography.bodyBold)
-                        state.value.cost.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onCostFilterChanged
-                            )
-                        }
-                        Divider(Modifier.padding(vertical = 16.dp))
-                        Text(text = "Temps de préparation", style = Typography.bodyBold)
-                        state.value.time.forEach { catOption ->
-                            CheckboxRow(
-                                catOption,
-                                mutableStateOf(catOption.isSelected),
-                                ::onTimeFilterChanged
-                            )
-                        }
-                    }
-                    Clickable(onClick = {
-                        clearFilter()
-                    }) {
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    border = BorderStroke(1.dp, primary),
-                                    shape = RoundedCornerShape(50)
-                                )
-                        ) {
-                            Text(
-                                text = "Retirer les filtres",
-                                color = primary,
-                                modifier = Modifier.padding(
-                                    horizontal = 16.dp,
-                                    vertical = 8.dp
-                                ),
-                            )
-                        }
-                    }
-
-                    Divider(Modifier.padding(vertical = 8.dp))
-                    Clickable(onClick = {
-                        filterVM.applyFilter()
-                        goToFilterResult()
-                    }) {
-                        Box(
-                            Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(primary)
-                        ) {
-                            Text(
-                                text = "Voir les ${state.value.numberOfResult} idées repas",
-                                color = white,
-                                modifier = Modifier.padding(
-                                    horizontal = 16.dp,
-                                    vertical = 8.dp
-                                ),
-                            )
-                        }
-                    }
-                }
-            }
+            MiamCatalogFilter(
+                difficulties = state.value.difficulty,
+                costs = state.value.cost,
+                times = state.value.time,
+                onCostFilterChanged = ::onCostFilterChanged,
+                onTimeFilterChanged = ::onTimeFilterChanged,
+                onDifficultyChanged = ::onDifficultyChanged,
+                clearFilter = ::clearFilter,
+                applyAndGo = ::applyAndGo,
+                closeDialog = closeDialog,
+                state.value.numberOfResult
+            )
         }
+    }
+}
+
+@Composable
+fun MiamCatalogFilter(
+    difficulties: List<CatalogFilterOptions>,
+    costs: List<CatalogFilterOptions>,
+    times: List<CatalogFilterOptions>,
+    onCostFilterChanged: (CatalogFilterOptions) -> Unit,
+    onTimeFilterChanged: (CatalogFilterOptions) -> Unit,
+    onDifficultyChanged: (CatalogFilterOptions) -> Unit,
+    clearFilter: () -> Unit,
+    applyAndGo: () -> Unit,
+    closeDialog: () -> Unit,
+    numberOfResult: Int
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(white)
+    ) {
+        Column(
+            Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FilterHeader(closeDialog = closeDialog)
+            Column(
+                Modifier
+                    .weight(weight = 1f, fill = false)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                FilterSection(text = "Difficulté", catalogFilterOptions = difficulties, onDifficultyChanged)
+                Divider(Modifier.padding(vertical = 16.dp))
+                FilterSection(text = "Coût par personne", catalogFilterOptions = costs, onCostFilterChanged)
+                Divider(Modifier.padding(vertical = 16.dp))
+                FilterSection(text = "Temps de préparation", catalogFilterOptions = times, onTimeFilterChanged)
+            }
+            ClearButton(clearFilter)
+            Divider(Modifier.padding(vertical = 8.dp))
+            ApplyAndGoButton(applyAndGo, numberOfResult)
+        }
+    }
+}
+
+@Composable
+fun FilterHeader(closeDialog: () -> Unit) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text("Affiner ma sélection", color = Colors.black, style = Typography.subtitleBold)
+        Clickable(
+            onClick = closeDialog,
+            children = { Image(painter = painterResource(close), contentDescription = null) }
+        )
+    }
+}
+
+@Composable
+fun FilterSection(text: String, catalogFilterOptions: List<CatalogFilterOptions>, onCheckedCallback: (CatalogFilterOptions) -> Unit) {
+    Text(text = text, style = Typography.bodyBold)
+    catalogFilterOptions.forEach { catOption ->
+        CheckboxRow(catOption, mutableStateOf(catOption.isSelected)) { onCheckedCallback(catOption) }
     }
 }
 
@@ -210,5 +180,37 @@ fun CheckboxRow(
             colors = CheckboxDefaults.colors(primary)
         )
         Text(text = catOption.uiLabel)
+    }
+}
+
+@Composable
+fun ClearButton(clearFilter: () -> Unit) {
+    Clickable(onClick = { clearFilter() }) {
+        Box(
+            modifier = Modifier.border(border = BorderStroke(1.dp, primary), shape = RoundedCornerShape(50))
+        ) {
+            Text(
+                text = "Retirer les filtres",
+                color = primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ApplyAndGoButton(applyAndGo: () -> Unit, numberOfResult: Int) {
+    Clickable(onClick = applyAndGo) {
+        Box(
+            Modifier
+                .clip(RoundedCornerShape(50))
+                .background(primary)
+        ) {
+            Text(
+                text = "Voir les ${numberOfResult} idées repas",
+                color = white,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        }
     }
 }
