@@ -189,8 +189,10 @@ public class Template {
      productBrandName: String,
      productDescription: String,
      productPrice: String,
+     quantity: Int,
      removeProduct: () -> Unit,
      replaceProduct: () -> Unit
+     onQuantityChanged: (Int) -> Void
      */
     public var basketPreviewRowTemplate: ((
         String,
@@ -198,8 +200,10 @@ public class Template {
         String,
         String,
         String,
+        Int,
         @escaping () -> Void,
         @escaping () -> Void
+        @escaping (Int) -> Void
     ) -> AnyView)? = nil
 
     /**
