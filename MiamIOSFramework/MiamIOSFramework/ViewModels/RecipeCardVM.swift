@@ -13,6 +13,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
     @Published var recipe: Recipe?
     @Published var state: RecipeContractState?
     @Published var isInCart: Bool = false
+    @Published var guest: Int = 4
 
     var sortedSteps: [RecipeStep] {
         guard let recipe = recipe else {
@@ -27,6 +28,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
             let state = data as! RecipeContractState
             self.state = state
             self.isInCart = state.isInCart
+            self.guest = Int(state.guest)
             switch state.recipeState {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!

@@ -23,14 +23,14 @@ public class Template {
     public var asyncImageLoadingTemplate :  ((CGFloat, CGFloat) -> AnyView )? =  nil
     
     /**
-    recipe: Recipe?
-    isRecipeInCart: Bool
-    isLikeEnabled: Bool
-    isLiked: Bool
-    showMealIdeaTag: Bool
-    goToDetailsAction: () -> Void
-    showOrAddRecipeAction: () -> Void
-    toggleLikeAction: () -> Void
+     recipe: Recipe?
+     isRecipeInCart: Bool
+     isLikeEnabled: Bool
+     isLiked: Bool
+     showMealIdeaTag: Bool
+     goToDetailsAction: () -> Void
+     showOrAddRecipeAction: () -> Void
+     toggleLikeAction: () -> Void
      */
     public var recipeCardTemplate : ((Recipe?,
                                       Bool,
@@ -79,7 +79,15 @@ public class Template {
     
     
     /// RecipeDetail Templates
-
+    
+    /**
+     showTitleInHeader: Bool
+     recipeTitle: String
+     */
+    public var recipeDetailsTitleBarTemplate : ((
+        Bool,
+        String
+    ) -> AnyView)? = nil
     
     /**
      mediaURL: String?
@@ -91,22 +99,22 @@ public class Template {
      recipeId: String
      */
     public var recipeDetailsHeaderTemplate : ((
-            String?,
-            String,
-            Int,
-            String,
-            Binding<Bool>,
-            Bool,
-            String
+        String?,
+        String,
+        Int,
+        String,
+        Binding<Bool>,
+        Bool,
+        String
     ) -> AnyView)? = nil
     
     /**
      _: Recipe
      */
     public var recipeDetailInfosTemplate : (
-         (_: Recipe) -> AnyView
-        )? = nil
-        
+        (_: Recipe) -> AnyView
+    )? = nil
+    
     /**
      ingredients: [Ingredient]
      recipeGuests: Int
@@ -129,17 +137,19 @@ public class Template {
     
     /**
      recipe: Recipe,
-     vmRecipe : RecipeViewModel,
+     guest: Int,
+     isInCart: Bool,
      look : () -> Unit,
      buy : () -> Unit
      */
     public var recipeDetailFooterTemplate : ((
-       // _: Recipe,
-        _ : RecipeViewModel,
+        _: Recipe,
+        _ : Int,
+        _ : Bool,
         _ : @escaping () -> Void,
         _ : @escaping () -> Void
     ) -> AnyView )? =  nil
-
+    
     /**
      preparationTime: String
      cookingTime: String
@@ -150,7 +160,7 @@ public class Template {
         String,
         String
     ) -> AnyView)? = nil
-
+    
     
     public var basketPreviewLoadingViewTemplate: ((
     ) -> AnyView)? = nil
@@ -173,7 +183,7 @@ public class Template {
         String,
         @escaping (Int) -> Void
     ) -> AnyView)? = nil
-
+    
     /**
      removeFromBasketAction: () -> Void
      continueShoppingAction: () -> Void
@@ -182,7 +192,7 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-
+    
     /**
      productName: String,
      productPictureURL: URL?,
@@ -201,7 +211,7 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-
+    
     /**
      foldableSectionTitle: String,
      foldedState: Bool
@@ -210,7 +220,7 @@ public class Template {
         String,
         Binding<Bool>
     ) -> AnyView)? = nil
-
+    
     /**
      ingredientName: String
      addToBasketAction: () -> Void
@@ -219,8 +229,8 @@ public class Template {
         String,
         (() -> Void)?
     )-> AnyView)? = nil
-
-
+    
+    
     /**
      loadingText: String
      */
@@ -261,7 +271,7 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-   
+    
     /**
      searchString: String
      browseCatalogAction: () -> Void
@@ -281,14 +291,14 @@ public class Template {
         CatalogPackage,
         @escaping (CatalogPackage) -> Void
     ) -> AnyView)? = nil
-
+    
     /**
      closeCatalogAction: (() -> Void)?
      */
     public var catalogViewHeaderTemplate: ((
         (() -> Void)?
     ) -> AnyView)? = nil
-
+    
     /**
      showBackButton: Bool
      favoritesFilterActive: Bool
@@ -307,12 +317,12 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-
-
-
+    
+    
+    
     public var catalogFiltersViewTemplate: AnyView? = nil
-
-
+    
+    
     /**
      title: String
      filters: Array<CatalogFilterOptions>
@@ -323,7 +333,7 @@ public class Template {
         Array<CatalogFilterOptions>,
         @escaping (CatalogFilterOptions) -> Void
     ) -> AnyView)? = nil
-
+    
     /**
      filter: CatalogFilterOptions
      filterSelected: (CatalogFilterOptions) -> Void
@@ -347,7 +357,7 @@ public class Template {
      browseCatalogAction: () -> Void
      */
     public var favoritesEmptyViewTemplate: ((
-       @escaping () -> Void
+        @escaping () -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -370,7 +380,7 @@ public class Template {
         Bool,
         @escaping () -> Void
     ) -> AnyView)? = nil
-   
+    
     /**
      recipes: [Recipe]
      tagTappedAction: () -> Void
@@ -392,7 +402,7 @@ public class Template {
         NSArray,
         BasketTagVM
     ) -> AnyView)? = nil
-   
+    
     /**
      product : BasketPreviewLine
      isSelected : Bool
@@ -422,7 +432,7 @@ public class Template {
      */
     public var preferencesLoadingViewTemplate: ((
     ) -> AnyView)? = nil
-   
+    
     /**
      numberOfPersons: Int
      ingredients: [CheckableTag]
@@ -469,7 +479,7 @@ public class Template {
         [CheckableTag],
         @escaping (CheckableTag) -> Void
     ) -> AnyView)? = nil
-   
+    
     /**
      title: String
      subtitle: String
@@ -487,7 +497,7 @@ public class Template {
         @escaping () -> Void
     ) -> AnyView)? = nil
     
-   
+    
     /**
      onTapped: () -> Void
      */
@@ -530,7 +540,7 @@ public class Template {
      backAction: (() -> Void)?
      titleView: AnyView
      */
-     public var titleBarViewTemplate: ((
+    public var titleBarViewTemplate: ((
         Bool,
         (() -> Void)?,
         AnyView
