@@ -17,6 +17,7 @@ internal struct CatalogRecipesPageSuccessView: View {
     let columns: Int 
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
+    let templateFunc: ((String) -> AnyView)?
     let loadMoreContentAction: (Recipe) -> Void
     let browseCatalogAction: () -> Void
     
@@ -24,12 +25,17 @@ internal struct CatalogRecipesPageSuccessView: View {
         if !hasNoResults {
             ScrollView {
                 VStack {
+                    
+                    if let template = templateFunc {
+                        template(title)
+                    } else {
                         HStack {
                             Text(title)
                                 .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                                 .frame(height: 40.0)
                             Spacer()
                         }
+                    }
                         LazyVGrid( columns:  Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing){
                             ForEach(recipes, id: \.self) { recipe in
                                 RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).onAppear {

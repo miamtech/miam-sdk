@@ -11,7 +11,7 @@ import miamCore
 @available(iOS 14, *)
 struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
-    var catalog: CatalogVM
+    var catalog: CatalogVM // useless ?
     let close: () -> Void
     let search: () -> Void
     let filterVM = FilterViewModelInstance.shared.instance

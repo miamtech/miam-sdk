@@ -17,6 +17,9 @@ import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier.categoryListContainer
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.prefixWordSearchTitle
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.filterSearchTitle
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteTitle
 import com.miam.kmm_miam_sdk.android.ui.components.categoryRecipesPage.CategoryRecipesPage
 import com.miam.kmm_miam_sdk.android.ui.components.common.RoutableDialog
 import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
@@ -69,11 +72,11 @@ fun CatalogSuccessView(
             }
             CatalogContent.FILTER_SEARCH -> {
                 CatalogPage(context).apply {
-                    bind("Votre Séléction", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                    bind(filterSearchTitle, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
                 }.Content()
             }
             CatalogContent.WORD_SEARCH -> {
-                val title = "Votre recherche : \"${filterVM.currentState.searchString}\""
+                val title = "$prefixWordSearchTitle \"${filterVM.currentState.searchString}\""
                 CatalogPage(context).apply {
                     bind(title, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
                 }.Content()
@@ -92,7 +95,7 @@ fun CatalogSuccessView(
             CatalogContent.FAVORITE -> {
                 // TODO use stand alone favorite
                 CatalogPage(context).apply {
-                    bind("Mes idées repas", { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                    bind(favoriteTitle, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
                 }.Content()
             }
         }

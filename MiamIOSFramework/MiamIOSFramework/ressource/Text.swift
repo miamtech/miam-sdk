@@ -87,5 +87,9 @@ public class MiamText {
     public var tastesTitle = "Goûts"
     public var tastesSubtitle = "Y a-t-il des ingrédients que vous n'aimez pas ?"
     
+    public var prefixWordSearchTitle = "Votre recherche :"
+    public var filterSearchTitle = "Votre Sélection"
+    public var favoriteTitle = "Mes idées repas"
+    
     private init(){}
 }

@@ -202,7 +202,7 @@ public class Template {
         String,
         Int,
         @escaping () -> Void,
-        @escaping () -> Void
+        @escaping () -> Void,
         @escaping (Int) -> Void
     ) -> AnyView)? = nil
 
@@ -516,4 +516,23 @@ public class Template {
         (() -> Void)?,
         AnyView
     ) ->AnyView)? = nil
+    
+    //RecipesList
+    
+    /**
+     title:  String
+     */
+    public var recipesListTitleTemplate: ((
+       String
+   ) ->AnyView)? = nil
+    
+    /**
+     title:  String
+     */
+    public var recipesListCategoryTitleTemplate: ((
+       String
+   ) ->AnyView)? = nil
 }
+
+
+

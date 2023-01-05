@@ -33,6 +33,7 @@ public struct CatalogView: View {
     private let recipesListColumns : Int
     private let recipesListSpacing: CGFloat
     private let recipeCardHeight: CGFloat
+    private let routeService = RouteServiceInstance.shared.instance
     public var willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)?
     
     public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
@@ -126,27 +127,33 @@ public struct CatalogView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            catalog.onSimpleSearch()
+            routeService.onCloseDialog()
+            showingSearch = false
         }) {
             CatalogSearchView(catalog: catalog, close: {
+                routeService.onCloseDialog()
                 showingSearch = false
             }) {
                 showingSearch = false
-                catalog.onSimpleSearch()
+                catalog.onSimpleSearch(content: CatalogContent.wordSearch)
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
-           
+            routeService.onCloseDialog()
+            showingFilters = false
         }) {
             CatalogFiltersView() {
                 showingFilters = false
-                 catalog.onSimpleSearch()
+                catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
+                routeService.onCloseDialog()
                 showingFilters = false
             }
         }.sheet(isPresented: $showingPreferences, onDismiss: {
+            routeService.onCloseDialog()
             showingPreferences = false
         }) {
             CatalogPreferencesView {
+                routeService.onCloseDialog()
                 showingPreferences = false
             }
         }
@@ -204,12 +211,16 @@ internal struct CatalogSuccessView: View {
                         }.padding([.top], Dimension.sharedInstance.lPadding)
                     }
                 }
-            case .recipeList:
-                RecipesView( recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+            case .wordSearch:
+            let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
+            RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                        browseCatalogAction()},  showingFavorites: showingFavorites)
+            case .filterSearch:
+                RecipesView(title: MiamText.sharedInstance.filterSearchTitle , recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                         browseCatalogAction()},  showingFavorites: showingFavorites)
             case .category: RecipesView(categoryId :categoryId,categoryTitle: categoryTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                 browseCatalogAction()},  showingFavorites: showingFavorites)
-            case .favorite: RecipesView( recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+            case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                     browseCatalogAction()},  showingFavorites: showingFavorites)
             default:  HStack{}
         }
@@ -347,19 +358,7 @@ internal struct CatalogToolbarView: View {
                     }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
                 }
                 
-                if (!favoritesFilterActive) {
-                    if (showBackButton) {
-                        Button {
-                            favoritesTapped()
-                        } label: {
-                            Image.miamImage(icon: .heart)
-                                .renderingMode(.template)
-                                .foregroundColor(Color.miamColor(.primary))
-                        }
-                        .frame(width: 40, height: 40)
-                        .background(Color.white)
-                        .clipShape(Circle())
-                    } else {
+                if (!showBackButton) {
                         Button {
                             favoritesTapped()
                         } label: {
@@ -373,7 +372,6 @@ internal struct CatalogToolbarView: View {
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))
                     }
-                }
             }.padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                  leading: Dimension.sharedInstance.mlPadding, bottom: 16,
                                  trailing: Dimension.sharedInstance.mlPadding))
