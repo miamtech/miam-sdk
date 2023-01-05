@@ -19,7 +19,7 @@ open class SingletonFilterViewModel:
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        LogHandler.error("Miam error in catalog view $exception")
+        LogHandler.error("Miam error in singleton filter VM view $exception")
     }
 
     init {
