@@ -1,5 +1,5 @@
 # 3.5.0
-- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
+- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate and change item link avaibility
 - [FEA][COR] Preference dependence on supplier 
 
 # 3.4.2

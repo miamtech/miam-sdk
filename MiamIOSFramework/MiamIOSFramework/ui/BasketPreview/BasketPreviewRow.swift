@@ -19,6 +19,7 @@ struct BasketPreviewRow: View {
     private let productPrice: String
     private var viewModel : BasketPreviewVM
     private let previewLine: BasketPreviewLine
+    private let showChangeProductLink : Bool
     
     private var removeProductAction: () -> Void = {}
     private var replaceProductAction: () -> Void = {}
@@ -45,6 +46,8 @@ struct BasketPreviewRow: View {
         }
         self.removeProductAction = removeProductAction
         self.replaceProductAction = replaceProductAction
+        self.showChangeProductLink = !((previewLine.record as! BasketEntry).relationships?.items?.data.isEmpty ?? true ||
+                                       (previewLine.record as! BasketEntry).relationships!.items!.data.count == 1 )
     }
     
     func onQuantityChanged(value: Int){
@@ -59,7 +62,7 @@ struct BasketPreviewRow: View {
         
          
         if (Template.sharedInstance.basketPreviewRowTemplate != nil) {
-            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, Int(previewLine.count), removeProductAction, replaceProductAction, onQuantityChanged)
+            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, Int(previewLine.count),showChangeProductLink, removeProductAction, replaceProductAction, onQuantityChanged)
         } else {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
@@ -122,8 +125,7 @@ struct BasketPreviewRow: View {
                 //Ingredeient View
                 HStack {
                     HStack {
-                        if(!((previewLine.record as! BasketEntry).relationships?.items?.data.isEmpty ?? true ||
-                             (previewLine.record as! BasketEntry).relationships!.items!.data.count == 1 ) ){
+                        if(showChangeProductLink){
                             Button(action: {
                                 replaceProductAction()
                             }) {
