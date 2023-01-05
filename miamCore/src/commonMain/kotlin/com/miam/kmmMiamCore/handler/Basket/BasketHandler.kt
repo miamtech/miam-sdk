@@ -75,7 +75,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         val newComparator = state.value.comparator!!.updateReceivedFromMiam(miamActiveBasket)
         val updateToSend = state.value.comparator!!.resolveFromMiam(newComparator)
         state.value = state.value.copy(comparator = newComparator)
-        LogHandler.info("Miam basket changed finished ${state.value.comparator} $miamActiveBasket")
+        LogHandler.info("Miam basket changed finished ${state.value.comparator} ")
         sendUpdateToRetailer(updateToSend)
     }
 

@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.BasketEntryRepositoryImp
@@ -92,8 +93,8 @@ class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent
             is BasketAction.RefreshBasket -> {
                 val gl = groceriesListStore.getGroceriesList()
                 val posId = pointOfSaleStore.getPosId()
-                LogHandler.debug("[Miam] RefreshBasket $gl $posId")
-                if (gl == null || posId == null) return com.miam.kmmMiamCore.base.executor.ExecutorHelper.emptyJob()
+                LogHandler.info("[Miam] RefreshBasket  [glId : ${gl?.id}]  [posId : $posId]")
+                if (gl == null || posId == null) return ExecutorHelper.emptyJob()
 
                 return launch(coroutineHandler) {
                     val fetchedBasket = basketRepo.getFromListAndPos(gl.id, posId)
