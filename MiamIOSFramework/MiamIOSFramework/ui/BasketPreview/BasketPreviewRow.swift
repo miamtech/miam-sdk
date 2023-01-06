@@ -10,7 +10,7 @@ import miamCore
 
 @available(iOS 14, *)
 struct BasketPreviewRow: View {
-   
+    
     private let productImageDimensions = CGSize(width: 90, height: 90)
     private let productName: String
     private let productPictureURL: URL?
@@ -28,9 +28,9 @@ struct BasketPreviewRow: View {
     }
     
     public init(viewModel : BasketPreviewVM,
-        previewLine: BasketPreviewLine,
-        removeProductAction: @escaping() -> Void,
-        replaceProductAction: @escaping() -> Void){
+                previewLine: BasketPreviewLine,
+                removeProductAction: @escaping() -> Void,
+                replaceProductAction: @escaping() -> Void){
         
         self.viewModel = viewModel
         self.previewLine = previewLine
@@ -57,9 +57,20 @@ struct BasketPreviewRow: View {
     
     var body: some View {
         
-         
+        
         if (Template.sharedInstance.basketPreviewRowTemplate != nil) {
-            Template.sharedInstance.basketPreviewRowTemplate!(productName, productPictureURL, productBrandName, productName, productPrice, Int(previewLine.count), removeProductAction, replaceProductAction, onQuantityChanged)
+            Template.sharedInstance.basketPreviewRowTemplate!(
+                productName,
+                productPictureURL,
+                productBrandName,
+                productName,
+                productPrice,
+                Int(previewLine.count),
+                Int((previewLine.record as! BasketEntry).itemsCountOrZero),
+                removeProductAction,
+                replaceProductAction,
+                onQuantityChanged
+            )
         } else {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
@@ -122,8 +133,7 @@ struct BasketPreviewRow: View {
                 //Ingredeient View
                 HStack {
                     HStack {
-                        if(!((previewLine.record as! BasketEntry).relationships?.items?.data.isEmpty ?? true ||
-                             (previewLine.record as! BasketEntry).relationships!.items!.data.count == 1 ) ){
+                        if((previewLine.record as! BasketEntry).itemsCountOrZero > 1){
                             Button(action: {
                                 replaceProductAction()
                             }) {
