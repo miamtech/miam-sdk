@@ -44,7 +44,7 @@ public class MiamManager {
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
         basketHandler.pushProductsToMiamBasket(retailerBasket: [])
         PointOfSaleHandler.shared.updateStoreId(storeId: "miam_test")
-        PointOfSaleHandler.shared.setSupplierOrigin(origin:"miam-test")
+        PointOfSaleHandler.shared.setSupplierOrigin(origin:"miam.test")
         PointOfSaleHandler.shared.setSupplier(supplierId: 14)
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
         PointOfSaleHandler.shared.getCatalogCategories { categories in

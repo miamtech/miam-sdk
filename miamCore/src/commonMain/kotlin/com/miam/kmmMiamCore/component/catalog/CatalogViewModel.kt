@@ -166,7 +166,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
 
     private suspend fun getSupplierCategoriesWithRecipes(supplierId: Int): List<Package> {
         // TODO le multi page n'est pas encore supporté
-        val fetchedPackages = packageRepositoryImp.getActivePackageForRetailer(supplierId.toString(), listOf())
+        val fetchedPackages = packageRepositoryImp.getActivePackageForRetailer(supplierId.toString())
         val fetchedPackagesWithRecipes = fetchPackagesRecipes(fetchedPackages).awaitAll()
         return fetchedPackagesWithRecipes.filter { p -> !p.relationships?.recipes?.data.isNullOrEmpty() }
     }
