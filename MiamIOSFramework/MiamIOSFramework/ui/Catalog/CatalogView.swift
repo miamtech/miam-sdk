@@ -247,9 +247,9 @@ public struct CatalogPackageRow: View {
                 Text(package.title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle) // TODO: check mockup
                     .padding(Dimension.sharedInstance.mlPadding)
-                if package.subtitle {
-                    Text(package.subtitle)
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.TitleSmallFontStyle)
+                if let subtitle = package.subtitle {
+                    Text(subtitle)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
                         .padding(Dimension.sharedInstance.mlPadding)
                 }
                 HStack {
