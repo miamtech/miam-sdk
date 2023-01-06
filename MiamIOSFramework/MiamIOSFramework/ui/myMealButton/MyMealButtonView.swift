@@ -24,7 +24,7 @@ public struct MyMealButtonView: View {
             ManagementResourceState<KotlinInt, MyMealButtonSuccessView, EmptyView, MyMealButtonEmptyView>(
                 resourceState: currentState.recipeCount,
                 successView: MyMealButtonSuccessView(mealsCount: myMealButtonViewModel.mealsCount,
-                                                     onButtonTapped: {}),
+                                                     onButtonTapped: { onButtonTapped() }),
                 loadingView: EmptyView(),
                 emptyView: MyMealButtonEmptyView()
             )

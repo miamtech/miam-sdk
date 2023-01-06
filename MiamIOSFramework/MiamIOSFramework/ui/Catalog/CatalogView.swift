@@ -238,6 +238,11 @@ public struct CatalogPackageRow: View {
                 Text(package.title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle) // TODO: check mockup
                     .padding(Dimension.sharedInstance.mlPadding)
+                if package.subtitle {
+                    Text(package.subtitle)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.TitleSmallFontStyle)
+                        .padding(Dimension.sharedInstance.mlPadding)
+                }
                 HStack {
                     Spacer()
                     Button {

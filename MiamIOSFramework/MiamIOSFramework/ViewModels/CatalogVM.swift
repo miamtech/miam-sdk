@@ -19,6 +19,10 @@ public struct CatalogPackage: Identifiable {
         return package.attributes?.title ?? ""
     }
 
+    public var subtitle: String? {
+        return package.subtitle
+    }
+
     public var recipes: [Recipe] {
         guard let recipes = package.relationships?.recipes?.data else {
             return []
