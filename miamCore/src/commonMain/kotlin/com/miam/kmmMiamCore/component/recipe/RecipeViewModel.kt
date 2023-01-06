@@ -7,6 +7,8 @@ import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
+import com.miam.kmmMiamCore.component.preferences.PreferencesEffect
+import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
@@ -20,6 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import kotlin.math.max
@@ -41,6 +44,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val pointOfSaleStore: PointOfSaleStore by inject()
     private val userStore: UserStore by inject()
     private val analyticsService: Analytics by inject()
+    private val preference: SingletonPreferencesViewModel by inject()
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val recipe: Recipe?
@@ -77,6 +81,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             listenGuestSubjectChanges()
         }
+        listenPreferencesChanges()
         setState { copy(likeIsEnable = userStore.state.value.likeIsEnable) }
     }
 
@@ -87,6 +92,18 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
             RecipeContract.Event.ShowIngredient -> setTab(TabEnum.INGREDIENT)
             RecipeContract.Event.ShowSteps -> setTab(TabEnum.STEP)
             RecipeContract.Event.Error -> setState { copy(recipeState = BasicUiState.Empty) }
+        }
+    }
+
+    private fun listenPreferencesChanges() {
+        launch(coroutineHandler) {
+            preference.observeSideEffect().filter { effect -> effect is PreferencesEffect.PreferencesChanged }.collect {
+                preference.currentState.guests?.let { newGuestPreference ->
+                    if (!currentState.isInCart && newGuestPreference != currentState.guest) {
+                        setState { copy(guest = newGuestPreference) }
+                    }
+                }
+            }
         }
     }
 

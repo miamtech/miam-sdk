@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
+open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel):
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketTagContract.Event, BasketTagContract.State, BasketTagContract.Effect>() {
 
     private val basketStore: BasketStore by inject()
@@ -23,9 +23,7 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
 
     open fun goToDetail(recipe: Recipe) {
         val vmRecipe = RecipeViewModel(vmRouter)
-        LogHandler.info("goToDetail vmRecipe : $vmRecipe")
         vmRecipe.setRecipe(recipe)
-        LogHandler.info("goToDetail setEvent :")
         vmRouter.goToDetail(vmRecipe, false)
     }
 
@@ -43,7 +41,6 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel) :
 
     private fun setItemExtId(itemExtId: String) {
         LogHandler.info("getting belonging recipes for $itemExtId")
-        LogHandler.info("getting belonging recipes : ${basketStore.getBasket()?.relationships?.basketEntries?.data} ")
         val recipeIds = basketStore.getBasket()?.relationships?.basketEntries?.data?.filter { be ->
             be.selectedItem?.attributes?.extId == itemExtId && be.attributes?.groceriesEntryStatus == "active"
         }?.flatMap { be ->

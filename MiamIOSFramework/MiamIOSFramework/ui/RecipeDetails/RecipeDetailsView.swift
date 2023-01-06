@@ -31,37 +31,16 @@ public struct RecipeDetailsView: View {
     }
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
-                HStack {
-                    HStack(){
-                        Image.miamImage(icon: .ideeRepas)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width:24, height:24)
-                        Text(RecipeCardText.sharedInstance.recipeFlag)
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                    }.padding(.horizontal,16)
-                        .padding(.vertical,4)
-                        .background(Color.miamColor(.musterd))
-                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
-                    if (showTitleInHeader) {
-                        Text(viewModel.recipe?.attributes?.title ?? "")
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                            .foregroundColor(Color.miamColor(.black))
-                            .padding(.horizontal, Dimension.sharedInstance.lPadding)
-                            .frame( alignment: .topLeading)
-                            .lineLimit(1)
-                    }
-                }
-            ))
+                RecipeDetailTitleBar(showTitleInHeader: showTitleInHeader, title: viewModel.recipe?.attributes?.title ?? "")
+            )
+            )
             
             ScrollView {
-                if (viewModel.recipe != nil) {
-                    if (Template.sharedInstance.recipeDetailInfosTemplate != nil) {
-                        Template.sharedInstance.recipeDetailInfosTemplate!(
-                            viewModel.recipe!
-                        )
+                if let recipe = viewModel.recipe {
+                    if let template = Template.sharedInstance.recipeDetailInfosTemplate {
+                        template(recipe)
                     } else {
                         VStack {
                             VStack {
@@ -72,7 +51,7 @@ public struct RecipeDetailsView: View {
                                                             totalTime: viewModel.recipe?.totalTime ?? "10 min",
                                                             showTitleInHeader: $showTitleInHeader,
                                                             isLikeEnabled: viewModel.isLikeEnabled,
-                                                            recipeId: recipeId ?? viewModel.recipe?.id)
+                                                            recipeId: recipeId ?? recipe.id)
                                 }
                                 
                                 RecipeTimeView(preparationTime: viewModel.recipe!.preparationTimeIos,
@@ -92,7 +71,6 @@ public struct RecipeDetailsView: View {
                         }
                     }
                 }
-                
             }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
@@ -112,5 +90,41 @@ struct ViewOffsetKey: PreferenceKey {
     static var defaultValue = CGFloat.zero
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value += nextValue()
+    }
+}
+
+
+@available(iOS 14, *)
+public struct RecipeDetailTitleBar : View {
+    
+    let showTitleInHeader: Bool
+    let title: String
+    
+    public var body: some View {
+        if let templateTitle = Template.sharedInstance.recipeDetailsTitleBarTemplate  {
+                templateTitle(showTitleInHeader, title)
+        } else {
+            HStack {
+                HStack{
+                    Image.miamImage(icon: .ideeRepas)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:24, height:24)
+                    Text(RecipeCardText.sharedInstance.recipeFlag)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                }.padding(.horizontal,16)
+                    .padding(.vertical,4)
+                    .background(Color.miamColor(.musterd))
+                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                if (showTitleInHeader) {
+                    Text(title)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                        .foregroundColor(Color.miamColor(.black))
+                        .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                        .frame( alignment: .topLeading)
+                        .lineLimit(1)
+                }
+            }
+        }
     }
 }

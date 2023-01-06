@@ -95,12 +95,14 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
     private fun launchNewPosRefresh(): Job {
         ExecutorHelper.cancelRunningJob(state.value.currentJob)
         val currentJob = launch(coroutineHandler) {
-            val pos = pointOfSaleRepository.getPosFormExtId(
+            val fetchedPos = pointOfSaleRepository.getPosFormExtId(
                 state.value.extIdPointOfSale!!,
                 state.value.idSupplier!!
             )
-            updateStateIfChanged(state.value.copy(idPointOfSale = pos.id))
-            basketStore.dispatch(BasketAction.RefreshBasket)
+            fetchedPos?.let { pos ->
+                updateStateIfChanged(state.value.copy(idPointOfSale = pos.id))
+                basketStore.dispatch(BasketAction.RefreshBasket)
+            }
         }
         updateStateIfChanged(state.value.copy(currentJob = currentJob))
         return currentJob

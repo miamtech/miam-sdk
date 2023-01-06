@@ -14,7 +14,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
     private val routeService: RouteService by inject()
 
     fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
-        LogHandler.info("Miam RouterOutletViewModel goToDetail $vmRecipe")
         setEvent(
             RouterOutletContract.Event.GoToDetail(
                 vmRecipe, showDetailsFooter
@@ -45,7 +44,6 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
                 navigateTo(RouterContent.RECIPE_DETAIL)
             }
             is RouterOutletContract.Event.GoToPreview -> {
-                LogHandler.info("Miam RouterOutletViewModel GoToPreview event $event")
                 // TODO : path
                 analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/basket-preview", Analytics.PlausibleProps(recipe_id = event.recipeId))
                 setState { copy(recipeId = event.recipeId, rvm = event.vm) }
@@ -62,9 +60,7 @@ open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, Rout
             RouterOutletContract.Event.GoToHelper -> navigateTo(RouterContent.RECIPE_HELPER)
             RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterOutletContract.Event.OpenDialog -> {
-                LogHandler.info("Miam RouterOutletViewModel will OpenDialog ${this.currentState}")
                 setState { copy(isOpen = true) }
-                LogHandler.info("Miam RouterOutletViewModel will OpenDialog ${this.currentState}")
             }
         }
     }

@@ -8,24 +8,35 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct RecipeDetailsHeaderView: View {
+public struct RecipeDetailsHeaderView: View {
     let mediaURL: String?
     let title: String
     let difficulty: Int
     let totalTime: String
     @Binding var showTitleInHeader: Bool
     let isLikeEnabled: Bool
-    let recipeId: String?
+    let recipeId: String
     let imageHeight = 280.0
     
-    var body: some View {
+    public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Binding<Bool>, isLikeEnabled: Bool, recipeId: String) {
+        self.mediaURL = mediaURL
+        self.title = title
+        self.difficulty = difficulty
+        self.totalTime = totalTime
+        self.isLikeEnabled = isLikeEnabled
+        self.recipeId = recipeId
+        self._showTitleInHeader = showTitleInHeader
+    }
+    
+    public var body: some View {
         if let template = Template.sharedInstance.recipeDetailsHeaderTemplate {
             template(mediaURL,
                      title,
                      difficulty,
                      totalTime,
                      $showTitleInHeader,
-                     isLikeEnabled)
+                     isLikeEnabled,
+                     recipeId)
         } else {
             AsyncImage(
                 url: URL(
@@ -36,7 +47,7 @@ struct RecipeDetailsHeaderView: View {
             
             if (isLikeEnabled) {
                 HStack {
-                    LikeButton(recipeId: recipeId!)
+                    LikeButton(recipeId: recipeId)
                     
                     Spacer()
                     

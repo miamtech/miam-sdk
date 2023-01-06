@@ -5,6 +5,7 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.LikeEffect
 import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
+import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -18,7 +19,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
     private val recipeLikeStore: LikeStore = LikeStoreInstance.instance
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][RecipeLikeViewModel] $exception  ${exception.stackTraceToString()}")
+        LogHandler.error(" [ERROR][Miam][RecipeLikeViewModel] $exception  ${exception.stackTraceToString()}")
     }
     private val viewModelScope = CoroutineScope(coroutineContext)
 

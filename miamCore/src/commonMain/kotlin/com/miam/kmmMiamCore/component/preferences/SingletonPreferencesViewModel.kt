@@ -3,6 +3,7 @@ package com.miam.kmmMiamCore.component.preferences
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.Effect
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
@@ -32,7 +33,7 @@ sealed class PreferencesEffect: Effect {
 open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][Preference] $exception")
+        LogHandler.error(" [ERROR][Miam][Preference] $exception")
     }
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()

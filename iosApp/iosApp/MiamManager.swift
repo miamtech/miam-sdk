@@ -43,15 +43,15 @@ public class MiamManager {
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
         basketHandler.pushProductsToMiamBasket(retailerBasket: [])
-        PointOfSaleHandler.shared.updateStoreId(storeId: "35290")
-        PointOfSaleHandler.shared.setSupplierOrigin(origin:"app.coursesu.com")
-        PointOfSaleHandler.shared.setSupplier(supplierId: 7)
+        PointOfSaleHandler.shared.updateStoreId(storeId: "miam_test")
+        PointOfSaleHandler.shared.setSupplierOrigin(origin:"miam.test")
+        PointOfSaleHandler.shared.setSupplier(supplierId: 14)
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
         PointOfSaleHandler.shared.getCatalogCategories { categories in
             self.categories.categoriesList = categories
             
         }
-        UserHandler.shared.updateUserId(userId: "ed0a471a4bdc755664db84068119144b3a1772d8a6911057a0d6be6a3e075120")
+        UserHandler.shared.updateUserId(userId: "test_user")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
         //initTemplate()

@@ -27,7 +27,15 @@ struct CatalogPreferencesView: View {
                     // TODO: Show search view
                     PreferencesSearchView(close: {
                         self.showSearch = false
-                    }).navigationTitle(MiamText.sharedInstance.preferencesSearchTitle)
+                    }).navigationBarTitle(MiamText.sharedInstance.preferencesSearchTitle,displayMode: .inline)
+                        .navigationBarBackButtonHidden(true)
+                        .navigationBarItems(leading: Button {
+                            showSearch = false
+                        } label: {
+                            Image.miamImage(icon: .back)
+                                .renderingMode(.template)
+                                .foregroundColor(.black)
+                        })
                 }.hidden()
             }.navigationTitle(MiamText.sharedInstance.preferencesTitle)
                 .navigationBarTitleDisplayMode(.inline)

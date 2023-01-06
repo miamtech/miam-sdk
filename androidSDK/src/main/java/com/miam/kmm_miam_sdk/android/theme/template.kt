@@ -253,6 +253,10 @@ object Template {
         title: String
     ) -> Unit)? = null
 
+    var CatalogCategoryTitleTemplate: (@Composable() (
+        title: String
+    ) -> Unit)? = null
+
     var CatalogFavoritEmptyTemplate: (@Composable() (
         returnToCatalog: () -> Unit
     ) -> Unit)? = null

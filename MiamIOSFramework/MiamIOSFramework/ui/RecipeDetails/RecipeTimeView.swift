@@ -18,37 +18,42 @@ struct RecipeTimeView: View {
     let noRestingTime = "0m"
     
     var body: some View {
-        HStack {
-            if (preparationTime != noPreparationTime) {
-                HStack {
-                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                        .foregroundColor(Color.miamColor(.secondaryText))
-                    Text(preparationTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+        if let template = Template.sharedInstance.recipeTimeViewTemplate {
+            template(preparationTime, cookingTime, restingTime)
+        } else {
+            HStack {
+                if (preparationTime != noPreparationTime) {
+                    HStack {
+                        Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                            .foregroundColor(Color.miamColor(.secondaryText))
+                        Text(preparationTime).foregroundColor(Color.miamColor(.secondaryText))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                    }
                 }
-            }
-            
-            if (cookingTime != noCookingTime) {
-                HStack {
-                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                        .foregroundColor(Color.miamColor(.secondaryText))
-                    Text(cookingTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                
+                if (cookingTime != noCookingTime) {
+                    HStack {
+                        Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                            .foregroundColor(Color.miamColor(.secondaryText))
+                        Text(cookingTime).foregroundColor(Color.miamColor(.secondaryText))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                    }
                 }
-            }
-            
-            if (restingTime != noRestingTime) {
-                HStack {
-                    Text(RecipeDetailsText.sharedInstance.restingTime + " :")
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                        .foregroundColor(Color.miamColor(.secondaryText))
-                    Text(restingTime).foregroundColor(Color.miamColor(.secondaryText))
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                
+                if (restingTime != noRestingTime) {
+                    HStack {
+                        Text(RecipeDetailsText.sharedInstance.restingTime + " :")
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                            .foregroundColor(Color.miamColor(.secondaryText))
+                        Text(restingTime).foregroundColor(Color.miamColor(.secondaryText))
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
+                    }
                 }
-            }
-            Spacer()
-        }.padding(.horizontal, Dimension.sharedInstance.lPadding)
+                Spacer()
+            }.padding(.horizontal, Dimension.sharedInstance.lPadding)
+        }
+        
     }
 }

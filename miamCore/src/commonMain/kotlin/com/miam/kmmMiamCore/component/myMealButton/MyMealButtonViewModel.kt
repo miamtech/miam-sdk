@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -15,7 +16,7 @@ import org.koin.core.component.inject
 open class MyMealButtonViewModel : BaseViewModel<MyMealButtonContract.Event, MyMealButtonContract.State, MyMealButtonContract.Effect>(), KoinComponent {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][MyMeal] $exception")
+        LogHandler.error(" [ERROR][Miam][MyMeal] $exception")
     }
 
     private val grocerieListStore: GroceriesListStore by inject()
