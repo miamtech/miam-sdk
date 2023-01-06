@@ -204,7 +204,7 @@ public class Template {
         Int,
         Bool,
         @escaping () -> Void,
-        @escaping () -> Void
+        @escaping () -> Void,
         @escaping (Int) -> Void
     ) -> AnyView)? = nil
 
