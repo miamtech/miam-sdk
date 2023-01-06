@@ -200,6 +200,7 @@ public class Template {
      productDescription: String,
      productPrice: String,
      quantity: Int,
+     itemsCount: Int,
      removeProduct: () -> Unit,
      replaceProduct: () -> Unit
      onQuantityChanged: (Int) -> Void
@@ -210,6 +211,7 @@ public class Template {
         String,
         String,
         String,
+        Int,
         Int,
         @escaping () -> Void,
         @escaping () -> Void,

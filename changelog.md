@@ -1,9 +1,9 @@
 # 3.5.0
+- [FIX][COR] Fix navigation when a dialog was between two pages
 - [FEA][COR] Preference dependence on supplier
 - [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result
 - [FEA][AND] CatalogSearch is now a stand alone component 
-- [FIX][COR] Fix navigation when a dialog was between two pages
-- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
+- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate and change item link avaibility 
 - [FIX][IOS] package subtitle exposed
 - [FIX][IOS] MyMealButton onTapped closure used
 
