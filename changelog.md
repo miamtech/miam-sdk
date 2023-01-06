@@ -6,6 +6,7 @@
 - [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate and change item link avaibility 
 - [FIX][IOS] package subtitle exposed
 - [FIX][IOS] MyMealButton onTapped closure used
+- [FIX][COR] Ingredient search
 
 
 # 3.4.2

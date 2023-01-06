@@ -18,7 +18,7 @@ open class PreferencesSearchViewModel:
     }
 
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
-    private val searchTmp = MutableStateFlow("")
+    private val rememberedLastSearch = MutableStateFlow("")
 
 
     override fun createInitialState(): PreferencesSearchContract.State = PreferencesSearchContract.State(searchProposal = BasicUiState.Empty)
@@ -32,21 +32,17 @@ open class PreferencesSearchViewModel:
     }
 
     fun search(search: String) {
-        searchTmp.value = search
+        rememberedLastSearch.value = search
         if (currentState.searchProposal is BasicUiState.Loading) return
+
+        if (search.isBlank()) return setState { copy(searchProposal = BasicUiState.Empty) }
+
         setState { copy(searchProposal = BasicUiState.Loading) }
         launch(coroutineHandler) {
             val tags = tagsRepositoryImp.autocomplete(search)
             setState { copy(searchProposal = BasicUiState.Success(tags.toList())) }
-            if (searchTmp.value != search) {
-                if (searchTmp.value.isBlank()) {
-                    setState { copy(searchProposal = BasicUiState.Empty) }
-                } else {
-                    val newSearch = searchTmp.value
-                    searchTmp.value = ""
-                    search(newSearch)
-                }
-            }
+            // user kept typing
+            if (rememberedLastSearch.value != search) search(rememberedLastSearch.value)
         }
     }
 }
