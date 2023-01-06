@@ -1,8 +1,8 @@
 package com.miam.kmmMiamCore.component.recipe
 
 import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
 import com.miam.kmmMiamCore.miam_core.model.Recipe
-import com.miam.kmmMiamCore.services.UserPreferencesInstance
 
 
 enum class TabEnum {
@@ -55,7 +55,7 @@ interface RecipeContract {
                 return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id.toString() == recipe?.id })?.guests
                     ?: 4
             }
-            return UserPreferencesInstance.instance.getIntOrNull("MIAM_GUEST") ?: recipe?.attributes?.numberOfGuests ?: 4
+            return PreferencesViewModelInstance.instance.globalGuestCountOrDefault()
         }
     }
 

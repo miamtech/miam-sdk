@@ -277,7 +277,7 @@ object Template {
         closePref: () -> Unit, applyPref: () -> Unit, recipesFound: Int
     ) -> Unit)? = null
 
-    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int, guestChanged: (count: Int) -> Unit) -> Unit)? = null
+    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int?, guestChanged: (count: Int) -> Unit) -> Unit)? = null
 
     var DietPreferencesSectionTemplate: (@Composable() (
         dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit

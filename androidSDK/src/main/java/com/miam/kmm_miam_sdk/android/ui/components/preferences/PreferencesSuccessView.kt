@@ -54,7 +54,7 @@ import com.miam.kmm_miam_sdk.android.utils.FlowLayout
 
 
 @Composable
-fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
+fun GuestPreferencesSection(guests: Int?, guestChanged: (count: Int) -> Unit) {
     if (GuestPreferencesSectionTemplate != null) {
         GuestPreferencesSectionTemplate?.let { it(guests, guestChanged) }
     } else {
@@ -67,7 +67,9 @@ fun GuestPreferencesSection(guests: Int, guestChanged: (count: Int) -> Unit) {
             Counter(
                 initialCount = guests,
                 isDisable = false,
-                onCounterChanged = { guestChanged(it) }
+                onCounterChanged = { guestChanged(it) },
+                minValue = 1,
+                maxValue = 99
             )
         }
     }
@@ -294,7 +296,7 @@ fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound
 @Composable
 fun PreferencesSuccessView(
     context: Context,
-    guests: Int,
+    guests: Int?,
     recipesFound: Int,
     ingredientsTag: List<CheckableTag>,
     dietsTag: List<CheckableTag>,

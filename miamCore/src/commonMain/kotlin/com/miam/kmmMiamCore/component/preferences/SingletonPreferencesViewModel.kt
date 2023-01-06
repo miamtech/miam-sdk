@@ -111,7 +111,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     }
 
     fun guestOrNullFromLocal(): Int? {
-        return userPreferences.getIntOrNull(LOCAL_GUEST_KEY) 
+        return userPreferences.getIntOrNull(LOCAL_GUEST_KEY)
     }
 
     private fun tagsFromLocal(preferenceKey: String): List<Tag> {
@@ -185,6 +185,10 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         val includedStr = if (toInclude.isNotEmpty()) "&filter[include-tags]=${toInclude.joinToString(",")}" else ""
         val excludedStr = if (toExclude.isNotEmpty()) "&filter[exclude-tags]=${toExclude.joinToString(",")}" else ""
         return includedStr + excludedStr
+    }
+
+    fun globalGuestCountOrDefault(defaultValue: Int = 4): Int {
+        return currentState.guests ?: defaultValue
     }
 
     companion object {
