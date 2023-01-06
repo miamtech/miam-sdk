@@ -1,6 +1,9 @@
 # 3.5.0
+- [FIX][COR] Fix navigation when a dialog was between two pages
+- [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result
+- [FEA][AND] CatalogSearch is now a stand alone component 
 - [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
-- [FEA][COR] Preference dependence on supplier 
+- [FEA][COR] Preference dependence on supplier
 
 # 3.4.2
 - [FIX][COR] Like initial state

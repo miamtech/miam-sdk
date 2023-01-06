@@ -24,10 +24,10 @@ data class BasketHandlerState(
     val firstMiamActiveBasket: List<BasketEntry>? = null,
     val firstRetailerBasket: List<RetailerProduct>? = null,
     val pushProductsToRetailerBasket: (products: List<RetailerProduct>) -> Unit = fun(_: List<Any>) {
-        throw Error("pushProductsToBasket not implemented")
+        LogHandler.error("pushProductsToBasket not implemented")
     },
     val listenToRetailerBasket: () -> Unit = fun() {
-        throw Error("listenToRetailerBasket not implemented")
+        LogHandler.error("listenToRetailerBasket not implemented")
     }
 ): State
 

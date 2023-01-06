@@ -8,4 +8,7 @@ object CatalogText {
     var backToCategories = "Parcourir les idées repas"
     var noResultFor = "Oups, aucune recette n’a été trouvée pour "
     var tryAnOtherSearch = "Essayez une nouvelle recherche."
+    var prefixWordSearchTitle = "Votre recherche : "
+    var filterSearchTitle = "Votre Sélection"
+    var favoriteTitle = "Mes idées repas"
 }

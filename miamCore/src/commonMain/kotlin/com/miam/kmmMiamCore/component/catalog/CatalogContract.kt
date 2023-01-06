@@ -4,40 +4,32 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.UiEffect
 import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
-import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.miam_core.model.Package
 
 enum class CatalogContent {
-    RECIPE_LIST, DEFAULT
+    WORD_SEARCH, FILTER_SEARCH, CATEGORIES_LIST, CATEGORY, FAVORITE
+}
+
+enum class DialogContent {
+    FILTER, PREFERENCES, SEARCH
 }
 
 interface CatalogContract {
 
     sealed class Event: UiEvent {
-        object GoToDefault: Event()
         object GoToFavorite: Event()
-        object GoToRecipeList: Event()
-        object ToggleFilter: Event()
-        object ToggleSearch: Event()
-        object TogglePreference: Event()
-        object OnFilterValidation: Event()
-        object OnSearchLaunch: Event()
         object GoBack: Event()
-        object OnCloseModal: Event()
-        data class GoToRecipeListFromCategory(val categoryId: String, val title: String = ""): Event()
     }
 
     data class State(
         val categories: BasicUiState<List<Package>>,
         val content: CatalogContent,
-        val catalogFilterVM: SingletonFilterViewModel,
-        val recipePageVM: RecipeListPageViewModel,
-        val filterOpen: Boolean,
-        val searchOpen: Boolean,
-        val preferenceOpen: Boolean,
+        val dialogIsOpen: Boolean,
+        val dialogContent: DialogContent,
         val enableFilters: Boolean,
-        val enablePreferences: Boolean
+        val enablePreferences: Boolean,
+        val openedCategoryId: String,
+        val openedCategoryTitle: String
     ): UiState
 
     sealed class Effect: UiEffect
