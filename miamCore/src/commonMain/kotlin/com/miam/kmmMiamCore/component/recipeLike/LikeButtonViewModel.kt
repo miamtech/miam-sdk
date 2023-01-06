@@ -8,7 +8,6 @@ import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
 import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -32,20 +31,22 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
             val isLiked = recipeLikeStore.fetchAndGetRecipeLikes(listOf(recipeId)).any { recipeLike -> recipeLike.isLiked }
             setState { copy(recipeId = recipeId, isLiked = BasicUiState.Success(isLiked)) }
         }
+        listenRecipeLikeChanges()
     }
 
     fun listenRecipeLikeChanges() {
-        viewModelScope.launch(coroutineHandler) {
+        val listenerJob = viewModelScope.launch(coroutineHandler) {
             recipeLikeStore.observeSideEffect().filter { likeEffect ->
                 likeEffect.recipeId == currentState.recipeId
             }.collect { likeEffect ->
                 setState { copy(isLiked = BasicUiState.Success(likeEffect is LikeEffect.Liked)) }
             }
         }
+        setState { copy(likeListenerJob = listenerJob) }
     }
 
     fun stopListenRecipeLikeChanges() {
-        viewModelScope.cancel()
+        currentState.likeListenerJob?.cancel()
     }
 
     fun toggleLike() {
