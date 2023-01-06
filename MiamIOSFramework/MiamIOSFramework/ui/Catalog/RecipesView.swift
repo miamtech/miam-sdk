@@ -54,7 +54,7 @@ internal struct RecipesView: View {
                     columns:columns,
                     spacing:spacing,
                     recipeCardHeight: recipeCardHeight,
-                    templateFunc: specialTitleTemplate ?? defaultTitleTemplate,
+                    titleTemplate: specialTitleTemplate ?? defaultTitleTemplate,
                     loadMoreContentAction: { recipe in
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     },

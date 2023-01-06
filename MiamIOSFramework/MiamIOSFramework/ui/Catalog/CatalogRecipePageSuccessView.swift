@@ -17,7 +17,7 @@ internal struct CatalogRecipesPageSuccessView: View {
     let columns: Int 
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
-    let templateFunc: ((String) -> AnyView)?
+    let titleTemplate: ((String) -> AnyView)?
     let loadMoreContentAction: (Recipe) -> Void
     let browseCatalogAction: () -> Void
     
@@ -26,7 +26,7 @@ internal struct CatalogRecipesPageSuccessView: View {
             ScrollView {
                 VStack {
                     
-                    if let template = templateFunc {
+                    if let template = titleTemplate {
                         template(title)
                     } else {
                         HStack {
