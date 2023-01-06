@@ -20,9 +20,7 @@ data class Package private constructor(
         includedRecords: List<Record>
     ): this(
         id,
-        if (attributes == null) null else jsonFormat.decodeFromJsonElement<PackageAttributes>(
-            attributes
-        ),
+        if (attributes == null) null else jsonFormat.decodeFromJsonElement<PackageAttributes>(attributes),
         if (json_relationships == null) null else jsonFormat.decodeFromJsonElement<PackageRelationships>(
             Relationships.filterEmptyRelationships(json_relationships)
         )
@@ -34,6 +32,9 @@ data class Package private constructor(
         val newRel = PackageRelationships(RecipeRelationshipList(recipes))
         return copy(relationships = newRel)
     }
+
+    val subtitle: String?
+        get() = attributes?.settings?.subtitle
 }
 
 @Serializable

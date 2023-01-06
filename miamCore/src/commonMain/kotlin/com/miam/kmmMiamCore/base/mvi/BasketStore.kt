@@ -97,8 +97,8 @@ class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent
                 if (gl == null || posId == null) return ExecutorHelper.emptyJob()
 
                 return launch(coroutineHandler) {
-                    val basket = basketRepo.getFromListAndPos(gl.id, posId)
-                    setBasket(gl, basket)
+                    val fetchedBasket = basketRepo.getFromListAndPos(gl.id, posId)
+                    fetchedBasket?.let { basket -> setBasket(gl, basket) }
                 }
             }
             is BasketAction.AddBasketEntry -> {

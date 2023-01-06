@@ -190,7 +190,7 @@ public class Template {
      productDescription: String,
      productPrice: String,
      quantity: Int,
-     showChangeProductLink: Bool,
+     itemsCount: Int,
      removeProduct: () -> Unit,
      replaceProduct: () -> Unit
      onQuantityChanged: (Int) -> Void
@@ -202,7 +202,7 @@ public class Template {
         String,
         String,
         Int,
-        Bool,
+        Int,
         @escaping () -> Void,
         @escaping () -> Void,
         @escaping (Int) -> Void
@@ -232,29 +232,6 @@ public class Template {
      */
     public var catalogLoadingViewTemplate: ((
         String
-    ) -> AnyView)? = nil
-    
-    /**
-     recipeListPageViewModel: RecipeListPageViewModel?
-     packages: [CatalogPackage]
-     catalogContent: CatalogModelContent
-     Binding var showingPackageRecipes: Bool
-     Binding var showingFavorites: Bool
-     Binding var headerHeight: Double
-     searchString: String
-     browseCatalogAction: () -> Void
-     navigateToRecipeAction: (Package) -> Void
-     */
-    public var catalogSuccessViewTemplate: ((
-        RecipeListPageViewModel?,
-        [CatalogPackage],
-        CatalogModelContent,
-        Binding<Bool>,
-        Binding<Bool>,
-        Binding<Double>,
-        String,
-        @escaping () -> Void,
-        @escaping (Package) -> Void
     ) -> AnyView)? = nil
     
     /**
@@ -541,4 +518,23 @@ public class Template {
         (() -> Void)?,
         AnyView
     ) ->AnyView)? = nil
+    
+    //RecipesList
+    
+    /**
+     title:  String
+     */
+    public var recipesListTitleTemplate: ((
+       String
+   ) ->AnyView)? = nil
+    
+    /**
+     title:  String
+     */
+    public var recipesListCategoryTitleTemplate: ((
+       String
+   ) ->AnyView)? = nil
 }
+
+
+

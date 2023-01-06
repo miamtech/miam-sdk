@@ -11,9 +11,17 @@ import androidx.compose.ui.Modifier
 import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.catalog.DialogContent
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier.categoryListContainer
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.prefixWordSearchTitle
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.filterSearchTitle
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteTitle
+import com.miam.kmm_miam_sdk.android.ui.components.categoryRecipesPage.CategoryRecipesPage
+import com.miam.kmm_miam_sdk.android.ui.components.common.RoutableDialog
 import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 
 @Composable
@@ -24,48 +32,71 @@ fun CatalogSuccessView(
     columns: Int,
     verticalSpacing: Int,
     horizontalSpacing: Int,
-    vmCatalog: CatalogViewModel
+    vmCatalog: CatalogViewModel,
 ) {
-    fun goToDefault() = vmCatalog.setEvent(CatalogContract.Event.GoToDefault)
 
-    val filter = CatalogFilter(vmCatalog.currentState.catalogFilterVM,
-        { vmCatalog.setEvent(CatalogContract.Event.ToggleFilter) },
-        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
+    val routeService = RouteServiceInstance.instance
+
+    val filter = CatalogFilter(
+        { routeService.onCloseDialog() },
+        { vmCatalog.onSimpleSearch(CatalogContent.FILTER_SEARCH) }
     )
     val search = CatalogSearch(
-        vmCatalog.currentState.catalogFilterVM,
-        { vmCatalog.setEvent(CatalogContract.Event.ToggleSearch) },
-        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
+        { routeService.onCloseDialog() },
+        { vmCatalog.onSimpleSearch(CatalogContent.WORD_SEARCH) }
     )
 
-    val preference = Preferences(context)
-    preference.bind(
-        { vmCatalog.setEvent(CatalogContract.Event.TogglePreference) },
-        { vmCatalog.setEvent(CatalogContract.Event.GoToRecipeList) }
-    )
+    val preference = Preferences(context).apply { bind({ routeService.onCloseDialog() }, { routeService.onCloseDialog() }) }
+    val filterVM = FilterViewModelInstance.instance
 
     Column {
-        if (state.filterOpen && state.enableFilters) {
-            filter.Content()
-        }
-        if (state.searchOpen) {
-            search.Content()
-        }
-        if (state.preferenceOpen && state.enablePreferences) {
-            preference.Content()
+        if (state.dialogIsOpen) {
+            RoutableDialog(onDismissRequest = {
+                routeService.previous()
+            }) {
+                when (state.dialogContent) {
+                    DialogContent.FILTER -> filter.Content()
+                    DialogContent.SEARCH -> search.Content()
+                    DialogContent.PREFERENCES -> preference.Content()
+                }
+            }
         }
 
         CatalogHeader(state, vmCatalog)
         when (state.content) {
-            CatalogContent.DEFAULT -> {
+            CatalogContent.CATEGORIES_LIST -> {
                 Box(categoryListContainer.fillMaxSize()) {
                     Categories(categories = categories, context = context, vmCatalog = vmCatalog)
                     Template.CatalogFloatingElementTemplate?.let { it() }
                 }
-
             }
-            CatalogContent.RECIPE_LIST -> {
-                CatalogPage(vmCatalog.currentState.recipePageVM, context, columns, verticalSpacing, horizontalSpacing, ::goToDefault)
+            CatalogContent.FILTER_SEARCH -> {
+                CatalogPage(context).apply {
+                    bind(filterSearchTitle, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
+            }
+            CatalogContent.WORD_SEARCH -> {
+                val title = "$prefixWordSearchTitle \"${filterVM.currentState.searchString}\""
+                CatalogPage(context).apply {
+                    bind(title, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
+            }
+            CatalogContent.CATEGORY -> {
+                CategoryRecipesPage(context).apply {
+                    bind(
+                        categoryId = vmCatalog.currentState.openedCategoryId,
+                        categoryTitle = vmCatalog.currentState.openedCategoryTitle,
+                        columns,
+                        verticalSpacing,
+                        horizontalSpacing
+                    )
+                }.Content()
+            }
+            CatalogContent.FAVORITE -> {
+                // TODO use stand alone favorite
+                CatalogPage(context).apply {
+                    bind(favoriteTitle, { routeService.previous() }, columns, verticalSpacing, horizontalSpacing)
+                }.Content()
             }
         }
     }
@@ -77,9 +108,7 @@ fun Categories(categories: List<Package>, context: Context, vmCatalog: CatalogVi
         Column(Modifier.verticalScroll(rememberScrollState())) {
             categories.forEach { cat ->
                 CatalogCategory(cat, context) {
-                    vmCatalog.setEvent(
-                        CatalogContract.Event.GoToRecipeListFromCategory(it.id, it.attributes?.title ?: "")
-                    )
+                    vmCatalog.goToCategory(it.id, it.attributes?.title ?: "")
                 }
             }
         }

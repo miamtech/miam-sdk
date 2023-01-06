@@ -19,12 +19,10 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
@@ -33,80 +31,63 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
-import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
-import com.miam.kmmMiamCore.services.RouteService
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 // TODO Refact with filter service
 class CatalogSearch(
-    private val catalogFilterVM: SingletonFilterViewModel,
-    private val closeDialog: () -> Unit,
-    private val goToSearchResult: () -> Unit,
-): KoinComponent {
+    private val close: () -> Unit,
+    private val apply: () -> Unit,
+) {
+
+    private val catalogFilterVM = FilterViewModelInstance.instance
 
     private fun updateResearch(searchString: String) {
         catalogFilterVM.setSearchString(searchString)
     }
 
-    private val routeService: RouteService by inject()
-
-    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Content() {
 
         val state = catalogFilterVM.uiState.collectAsState()
         val textState = remember { mutableStateOf(state.value.searchString ?: "") }
 
-        Dialog(
-            onDismissRequest = { routeService.previous() },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+
+        if (Template.CatalogSearchTemplate != null) {
+            Template.CatalogSearchTemplate?.let {
+                it(state.value.searchString ?: "", ::updateResearch, close, apply)
+            }
+        } else {
+            MiamCatalogSearch(textState, ::updateResearch, close, apply)
+        }
+    }
+
+    @Composable
+    fun MiamCatalogSearch(textState: MutableState<String>, updateResearch: (String) -> Unit, close: () -> Unit, apply: () -> Unit) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(white)
         ) {
-            if (Template.CatalogSearchTemplate != null) {
-                TemplateView(state)
-            } else {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(white)
-                ) {
-                    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                        BackButton()
-                        SearchContainer {
-                            SearchTextField(textState, Modifier.weight(1f, false))
-                            SearchButton(textState)
-                        }
-                    }
+            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                BackButton(close)
+                SearchContainer {
+                    SearchTextField(textState, Modifier.weight(1f, false))
+                    SearchButton(textState, updateResearch, apply)
                 }
             }
         }
     }
 
     @Composable
-    fun TemplateView(state: State<SingletonFilterContract.State>) {
-        Template.CatalogSearchTemplate?.let {
-            it(
-                state.value.searchString ?: "",
-                ::updateResearch,
-                { closeDialog() },
-                { goToSearchResult() },
-            )
-        }
-    }
-
-    @Composable
-    fun BackButton() {
+    fun BackButton(close: () -> Unit) {
         Row(Modifier.fillMaxWidth()) {
-            Clickable(onClick = { closeDialog() }) {
+            Clickable(onClick = close) {
                 Image(
                     painter = painterResource(CatalogImage.back),
                     contentDescription = null,
@@ -123,10 +104,7 @@ class CatalogSearch(
         Row(
             Modifier
                 .fillMaxWidth()
-                .border(
-                    border = BorderStroke(1.dp, Colors.primary),
-                    shape = RoundedCornerShape(50)
-                ),
+                .border(border = BorderStroke(1.dp, Colors.primary), shape = RoundedCornerShape(50)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -140,9 +118,7 @@ class CatalogSearch(
         TextField(
             modifier = modifier.focusRequester(focusRequester),
             value = textState.value,
-            onValueChange = {
-                textState.value = it
-            },
+            onValueChange = { textState.value = it },
             colors = TextFieldDefaults.textFieldColors(
                 disabledTextColor = Color.Transparent,
                 backgroundColor = Color.White,
@@ -155,27 +131,19 @@ class CatalogSearch(
     }
 
     @Composable
-    fun SearchButton(textState: MutableState<String>) {
+    fun SearchButton(textState: MutableState<String>, updateResearch: (String) -> Unit, apply: () -> Unit) {
         Clickable(onClick = {
             updateResearch(textState.value)
-            goToSearchResult()
+            apply()
         }) {
-            Surface(
-                shape = CircleShape,
-                elevation = 8.dp,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            ) {
+            Surface(shape = CircleShape, elevation = 8.dp, modifier = Modifier.padding(horizontal = 10.dp)) {
                 Box(
                     Modifier
                         .background(Colors.primary)
                         .padding(8.dp)
                 )
                 {
-                    Image(
-                        painter = painterResource(search),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(white),
-                    )
+                    Image(painter = painterResource(search), contentDescription = null, colorFilter = ColorFilter.tint(white))
                 }
             }
         }

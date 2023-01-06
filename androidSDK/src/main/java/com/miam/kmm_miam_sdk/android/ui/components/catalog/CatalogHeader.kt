@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogContract
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.ressource.Image.guests
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -41,16 +42,16 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 @Composable
 fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
 
-    val showFullHeader = state.content == CatalogContent.DEFAULT
-    val isFavorit = catalogVm.currentState.catalogFilterVM.currentState.isFavorite
-
+    val filterVM = FilterViewModelInstance.instance
+    val showFullHeader = state.content == CatalogContent.CATEGORIES_LIST
+    val isFavorite = filterVM.currentState.isFavorite
 
     fun openFilter() {
-        catalogVm.setEvent(CatalogContract.Event.ToggleFilter)
+        catalogVm.openFilter()
     }
 
     fun openSearch() {
-        catalogVm.setEvent(CatalogContract.Event.ToggleSearch)
+        catalogVm.openSearch()
     }
 
     fun goToFavorite() {
@@ -58,7 +59,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
     }
 
     fun openPreferences() {
-        catalogVm.setEvent(CatalogContract.Event.TogglePreference)
+        catalogVm.openPreferences()
     }
 
     fun goToBack() {
@@ -66,12 +67,12 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
     }
 
     fun getActiveFilterCount(): Int {
-        return catalogVm.currentState.catalogFilterVM.getActiveFilterCount()
+        return filterVM.getActiveFilterCount()
     }
 
     if (Template.CatalogHeader != null) {
         Template.CatalogHeader?.let {
-            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount, showFullHeader, isFavorit)
+            it(::openFilter, ::openSearch, ::openPreferences, ::goToFavorite, ::goToBack, ::getActiveFilterCount, showFullHeader, isFavorite)
         }
     } else {
         Column(Modifier.background(color = primary)) {
@@ -212,8 +213,6 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                                 }
                             }
                         })
-                    }
-                    if (!isFavorit) {
                         if (showFullHeader) {
                             Box(modifier = Modifier
                                 .padding(horizontal = 10.dp)
@@ -241,28 +240,6 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                                     )
                                 }
                             }
-                        } else {
-                            Clickable(onClick = { goToFavorite() }, children = {
-                                Surface(
-                                    shape = CircleShape,
-                                    elevation = 8.dp,
-                                    modifier = Modifier.padding(horizontal = 10.dp)
-                                ) {
-                                    Box(
-                                        Modifier
-                                            .background(white)
-                                            .padding(8.dp)
-                                    )
-                                    {
-                                        Image(
-                                            painter = painterResource(favorite),
-                                            contentDescription = null,
-                                            colorFilter = ColorFilter.tint(primary),
-                                        )
-                                    }
-                                }
-                            }
-                            )
                         }
 
                     }

@@ -8,16 +8,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
 import com.miam.kmmMiamCore.component.myMealButton.MyMealButtonViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 class MyMealButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private var onclick: () -> Unit = {
-        throw IllegalArgumentException("[Miam][Error] You must init onclick on My meal button")
+        LogHandler.error("[Miam][Error] You must init onclick on My meal button")
     }
 
     fun bind(onclick: () -> Unit) {

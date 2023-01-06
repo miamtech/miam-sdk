@@ -15,9 +15,22 @@ class RecipeListPageVM: ObservableObject {
     @Published var state: RecipeListPageContractState?
 
     let model: RecipeListPageViewModel
+    let filterVM = FilterViewModelInstance.shared.instance
 
-    init(model: RecipeListPageViewModel) {
-        self.model = model
+    init() {
+        self.model = RecipeListPageViewModel()
+        self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
+        initStateManagment()
+    }
+    
+    init(categoriesId :String, title: String){
+        self.model = RecipeListPageViewModel()
+        filterVM.setCat(catId: categoriesId)
+        self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
+        initStateManagment()
+    }
+    
+    private func initStateManagment(){
         self.model.collect(flow: model.uiState) { data in
             let state = data as! RecipeListPageContractState
             self.state = state

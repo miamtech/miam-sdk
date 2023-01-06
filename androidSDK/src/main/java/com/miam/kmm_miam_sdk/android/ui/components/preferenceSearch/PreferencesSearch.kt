@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.miam.kmmMiamCore.component.preferencesSearch.PreferencesSearchViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -50,10 +51,10 @@ class PreferencesSearch @JvmOverloads constructor(
 ): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
 
     private var back: () -> Unit = {
-        throw IllegalArgumentException("[Miam][Error] you must bind back function")
+        LogHandler.error("[Miam][Error] you must bind back function")
     }
     private var addTag: (tag: Tag) -> Unit = {
-        throw IllegalArgumentException("[Miam][Error] you must bind addTag function")
+        LogHandler.error("[Miam][Error] you must bind addTag function")
     }
 
     fun bind(
