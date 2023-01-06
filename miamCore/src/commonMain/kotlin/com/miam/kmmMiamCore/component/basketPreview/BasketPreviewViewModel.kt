@@ -29,7 +29,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println(" [ERROR][Miam][Basket preview] $exception ${exception.stackTraceToString()}")
+        LogHandler.error(" [ERROR][Miam][Basket preview] $exception ${exception.stackTraceToString()}")
     }
 
     private val basketStore: BasketStore by inject()
@@ -80,7 +80,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             lineEntriesSubject.debounce(500).collect { entries ->
-                LogHandler.info("launching update $entries")
+                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--"}}]")
                 val newBpl = updateBplEntries(entries)
                 lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
                 setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
@@ -126,7 +126,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
      * TODO : if we have include request working the get of relationships can be done in basket store directly
      */
     private fun setLines(newline: BasketPreviewLine) {
-        LogHandler.debug("[Miam] newline $newline")
+        LogHandler.debug("[Miam] newline ${newline.title}")
         setState { copy(line = BasicUiState.Success(newline), bpl = newline, isReloading = false) }
     }
 
@@ -148,7 +148,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun addEntry(entry: BasketEntry) {
-        LogHandler.debug("[Miam] add entry $entry")
+        LogHandler.debug("[Miam] add entry ${entry.selectedItem?.attributes?.name} / ${entry.attributes?.quantity}")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
             return
@@ -171,7 +171,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     fun removeBasketEntry(entry: BasketEntry) {
-        LogHandler.debug("[Miam] remove entry $entry")
+        LogHandler.debug("[Miam] remove ${entry.selectedItem?.attributes?.name}")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
             return

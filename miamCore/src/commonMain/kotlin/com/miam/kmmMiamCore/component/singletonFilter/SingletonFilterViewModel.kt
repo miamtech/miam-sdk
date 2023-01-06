@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -18,7 +19,7 @@ open class SingletonFilterViewModel:
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
-        println("Miam error in catalog view $exception")
+        LogHandler.error("Miam error in singleton filter VM view $exception")
     }
 
     init {
@@ -86,21 +87,19 @@ open class SingletonFilterViewModel:
     fun setCat(catId: String) {
         setState { copy(category = catId) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
-        setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setFavorite() {
         setState { copy(isFavorite = true) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
-        setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 
     fun setSearchString(searchString: String) {
         setState { copy(searchString = searchString) }
         getRecipeCount()
-        @Suppress("unused until 3.0.0")
+    }
+
+    fun applyFilter() {
         setEffect { SingletonFilterContract.Effect.OnUpdate }
     }
 

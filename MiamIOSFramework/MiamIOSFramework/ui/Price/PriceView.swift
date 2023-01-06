@@ -9,7 +9,7 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct PriceView: View {
+public struct PriceView: View {
     
     @ObservedObject var viewModel: PriceVM = PriceVM()
     
@@ -28,7 +28,7 @@ struct PriceView: View {
         viewModel.setRecipe(recipeId: recipeId, guestNumber: Int32(guestNumber))
     }
     
-    var body: some View {
+    public var body: some View {
         if let template = Template.sharedInstance.priceViewTemplate {
             template(
                 viewModel.price?.price ?? 0,

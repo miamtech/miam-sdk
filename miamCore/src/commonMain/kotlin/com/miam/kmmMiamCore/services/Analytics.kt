@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.encodeToJsonElement
 import org.koin.core.component.KoinComponent
 
 class Analytics: KoinComponent {
@@ -58,9 +57,6 @@ class Analytics: KoinComponent {
         val domain = this.domain.value!!
         val url = this.httpOrigin.value!! + path
         val event = PlausibleEvent(eventType, url, domain, props)
-
-        LogHandler.debug("Sending event $event")
-        LogHandler.debug("Sending event ${kotlinx.serialization.json.Json.encodeToJsonElement(event)}")
         coroutineScope.launch(coroutineHandler) {
             httpClient.postEvent(event)
         }

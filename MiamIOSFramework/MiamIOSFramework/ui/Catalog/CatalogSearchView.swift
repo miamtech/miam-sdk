@@ -11,9 +11,10 @@ import miamCore
 @available(iOS 14, *)
 struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
-    var catalog: CatalogVM
+    var catalog: CatalogVM // useless ?
     let close: () -> Void
     let search: () -> Void
+    let filterVM = FilterViewModelInstance.shared.instance
     var body: some View {
         if let template = Template.sharedInstance.catalogSearchViewTemplate {
             template(catalog, close, search)
@@ -32,9 +33,7 @@ struct CatalogSearchView: View {
                         TextField(MiamText.sharedInstance.search, text: $searchString).frame(height: 45.0)
                             .disableAutocorrection(true)
                             .onChange(of: searchString) { value in
-                                if let filtersViewModel = catalog.filtersViewModel {
-                                    filtersViewModel.setSearchString(searchString: value)
-                                }
+                                filterVM.setSearchString(searchString: value)
                             }
                         Button {
                             search()

@@ -49,9 +49,9 @@ fun CatalogCategory(
                             style = Typography.subtitleBold
                         )
                     }
-                    category.attributes?.settings?.subtitle.let {
+                    category.subtitle?.let {
                         Text(
-                            text = it ?: "",
+                            text = it,
                             color = Colors.black,
                             modifier = Modifier.padding(top = 4.dp)
                         )

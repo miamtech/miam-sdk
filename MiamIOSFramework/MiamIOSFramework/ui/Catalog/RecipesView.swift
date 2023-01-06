@@ -13,20 +13,34 @@ import miamCore
 internal struct RecipesView: View {
     @ObservedObject private var recipesListPageModel: RecipeListPageVM
     let browseCatalogAction: () -> Void
-    let searchString: String
     let showingFavorites: Bool
     let columns:Int
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
+    let title: String
+    let defaultTitleTemplate : ((String) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
+    let specialTitleTemplate: ((String) -> AnyView)?
     
-    init(recipesListPageModel: RecipeListPageViewModel,recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void, searchString: String, showingFavorites: Bool) {
-        self.recipesListPageModel = RecipeListPageVM(model: recipesListPageModel)
+    init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
-        self.searchString = searchString
+        self.showingFavorites = showingFavorites
+        self.columns = recipesListColumns
+        self.spacing = recipeListSpacing
+        self.recipesListPageModel = RecipeListPageVM()
+        self.recipeCardHeight = recipeCardHeight
+        self.title = title
+        self.specialTitleTemplate = nil
+    }
+    
+    init(categoryId:String, categoryTitle :String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+        self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
         self.spacing = recipeListSpacing
         self.recipeCardHeight = recipeCardHeight
+        self.title = categoryTitle
+        self.recipesListPageModel = RecipeListPageVM(categoriesId: categoryId, title:categoryTitle)
+        self.specialTitleTemplate = Template.sharedInstance.recipesListCategoryTitleTemplate
     }
     
     var body: some View {
@@ -34,13 +48,13 @@ internal struct RecipesView: View {
             ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(
                 resourceState: state.recipes,
                 successView: CatalogRecipesPageSuccessView(
-                    title: recipesListPageModel.title,
+                    title: title,
                     recipes: recipesListPageModel.recipes,
                     hasNoResults: recipesListPageModel.hasNoResults,
-                    searchString: searchString,
                     columns:columns,
                     spacing:spacing,
                     recipeCardHeight: recipeCardHeight,
+                    titleTemplate: specialTitleTemplate ?? defaultTitleTemplate,
                     loadMoreContentAction: { recipe in
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     },
@@ -48,7 +62,7 @@ internal struct RecipesView: View {
                         browseCatalogAction()
                     }),
                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
-                emptyView: CatalogRecipePageNoResultsView(searchString: searchString, browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))
+                emptyView: CatalogRecipePageNoResultsView( browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))
         }
     }
 }

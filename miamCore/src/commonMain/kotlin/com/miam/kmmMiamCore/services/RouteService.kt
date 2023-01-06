@@ -1,6 +1,5 @@
 package com.miam.kmmMiamCore.services
 
-import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.base.mvi.Action
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
@@ -101,18 +100,17 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     override fun dispatch(action: RouteServiceAction): Job {
         return when (action) {
             is RouteServiceAction.SetDialogRoute -> {
-                return launch(coroutineHandler) {
+                launch(coroutineHandler) {
                     state.value = state.value.copy(route = DialogRoute(action.title, action.backToRoute, getCurrentRoute(), action.closeDialog))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
             is RouteServiceAction.SetPageRoute -> {
-                return launch(coroutineHandler) {
+                launch(coroutineHandler) {
                     state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, getCurrentRoute()))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
-            else -> ExecutorHelper.emptyJob()
         }
     }
 
@@ -125,7 +123,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         return null
     }
 
-    fun popRoute(): Route? {
+    private fun popRoute(): Route? {
         val poppedRoute = state.value.route
         state.value = state.value.copy(route = poppedRoute?.previous)
         return poppedRoute

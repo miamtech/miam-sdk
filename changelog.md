@@ -1,12 +1,20 @@
 # 3.5.0
 - [FEA][COR] Enable guests preferences
+- [FEA][COR] Preference dependence on supplier
+- [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result
+- [FEA][AND] CatalogSearch is now a stand alone component 
+- [FIX][COR] Fix navigation when a dialog was between two pages
+- [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate 
+- [FIX][IOS] package subtitle exposed
+- [FIX][IOS] MyMealButton onTapped closure used
+
 
 # 3.4.2
 - [FIX][COR] Like initial state
 - [FIX][COR] Recipe card, do not set on error on unknow state
 
 # 3.4.1
-- [FIX][COR] report 3.3.1 fix on filter to 3.4
+- [FIX][COR] Report 3.3.1 fix on filter to 3.4
 - [FEA][COR] Router service previous now return new current route
 
 # 3.4.0

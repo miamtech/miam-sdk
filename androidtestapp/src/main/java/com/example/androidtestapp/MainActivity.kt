@@ -62,6 +62,7 @@ import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
+import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
@@ -137,9 +138,9 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
+        PointOfSaleHandler.setSupplierOrigin("miam.test")
         PointOfSaleHandler.updateStoreId("miam_test")
         PointOfSaleHandler.setSupplier(14)
-        PointOfSaleHandler.setSupplierOrigin("miam.test")
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
