@@ -9,11 +9,6 @@ import Foundation
 import miamCore
 import SwiftUI
 
-public enum CatalogViewDestination {
-    case categories
-    case recipesList
-    case favorites
-}
 
 @available(iOS 14, *)
 public struct CatalogEmptyView: View {
@@ -38,11 +33,12 @@ public struct CatalogView: View {
     private let recipesListColumns : Int
     private let recipesListSpacing: CGFloat
     private let recipeCardHeight: CGFloat
-    public var willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)?
+    private let routeService = RouteServiceInstance.shared.instance
+    public var willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)?
     
     public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
-                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
+                willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM()
         self.usesPreferences = usesPreferences
         self.closeCatalogAction = closeCatalogAction
@@ -55,7 +51,7 @@ public struct CatalogView: View {
     
     public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
-                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
+                willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
         self.catalog = CatalogVM(categoryID: categoryId, title: title)
         self.closeCatalogAction = closeCatalogAction
         self.recipesListColumns = recipesListColumns
@@ -68,7 +64,7 @@ public struct CatalogView: View {
     public init(catalogViewModel: CatalogVM,
                 usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
-                willNavigateTo: ((CatalogViewDestination, String, CatalogVM) -> Void)? = nil) {
+                willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
         self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, willNavigateTo: willNavigateTo)
         catalog = catalogViewModel
     }
@@ -76,22 +72,25 @@ public struct CatalogView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 0.0) {
             CatalogViewHeader(closeCatalogAction: closeCatalogAction)
-                .frame(height: catalog.content == .categories ? 60.0 : 0.0)
+                .frame(height: catalog.content == .categoriesList ? 60.0 : 0.0)
 
-            CatalogToolbarView(showBackButton: (catalog.content != .categories),
+            CatalogToolbarView(showBackButton: (catalog.content != .categoriesList),
                                favoritesFilterActive: showingFavorites, useFilters: true, usePreferences: usesPreferences) {
-                catalog.setEvent(event: CatalogContractEvent.GoToDefault())
+                if let willNavigateTo {
+                    willNavigateTo(.categoriesList, "Idées repas", catalog)
+                }
+                catalog.goToCategoriesList()
                 showingFavorites = false
                 headerHeight = 50.0
             } filtersTapped: {
-                catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+                catalog.openFilter()
                 showingFilters = true
             } searchTapped: {
-                catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+                catalog.openSearch()
                 showingSearch = true
             } favoritesTapped: {
                 if let willNavigateTo {
-                    willNavigateTo(.favorites, "Favoris", catalog)
+                    willNavigateTo(.favorite, "Favoris", catalog)
                 }
                 catalog.setEvent(event: CatalogContractEvent.GoToFavorite())
                 showingFavorites = true
@@ -102,7 +101,6 @@ public struct CatalogView: View {
                 ManagementResourceState<NSArray, CatalogSuccessView, CatalogLoadingView, CatalogEmptyView>(
                     resourceState: catalogState.categories,
                     successView: CatalogSuccessView(
-                        recipeListPageViewModel: catalog.recipePageViewModel,
                         recipesListColumns: recipesListColumns,
                         recipesListSpacing: recipesListSpacing,
                         recipeCardHeight: recipeCardHeight,
@@ -111,44 +109,51 @@ public struct CatalogView: View {
                         showingPackageRecipes: $showingPackageRecipes,
                         showingFavorites: $showingFavorites,
                         headerHeight: $headerHeight,
-                        searchString: catalog.searchString,
                         browseCatalogAction: {
                             if let willNavigateTo {
-                                willNavigateTo(.categories, MiamText.sharedInstance.mealIdeas, catalog)
+                                willNavigateTo(.categoriesList, MiamText.sharedInstance.mealIdeas, catalog)
                             }
-                            catalog.setEvent(event: CatalogContractEvent.GoToDefault())
-                        }, navigateToRecipeAction: { package in
+                            catalog.goToCategoriesList()
+                        }, navigateToRecipeAction: { package in	
                             if let willNavigateTo {
-                                willNavigateTo(.recipesList, package.attributes?.title ?? "", catalog)
+                                willNavigateTo(.categoriesList, package.attributes?.title ?? "", catalog)
                             }
-                            catalog.setEvent(event: CatalogContractEvent.GoToRecipeListFromCategory(categoryId: package.id,title: package.attributes?.title ?? ""))
-                        }),
+                            catalog.goToCategory(categoryId: package.id, categoryTitle: package.attributes?.title ?? "")
+                        },
+                        categoryId: catalog.currentState.openedCategoryId,
+                        categoryTitle: catalog.currentState.openedCategoryTitle),
                     loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                     emptyView: CatalogEmptyView())
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            catalog.setEvent(event: CatalogContractEvent.ToggleSearch())
+            routeService.onCloseDialog()
+            showingSearch = false
         }) {
             CatalogSearchView(catalog: catalog, close: {
+                routeService.onCloseDialog()
                 showingSearch = false
             }) {
                 showingSearch = false
-                catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
+                catalog.onSimpleSearch(content: CatalogContent.wordSearch)
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
-            catalog.setEvent(event: CatalogContractEvent.ToggleFilter())
+            routeService.onCloseDialog()
+            showingFilters = false
         }) {
             CatalogFiltersView() {
                 showingFilters = false
-                 catalog.setEvent(event: CatalogContractEvent.GoToRecipeList())
+                catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
+                routeService.onCloseDialog()
                 showingFilters = false
             }
         }.sheet(isPresented: $showingPreferences, onDismiss: {
-            catalog.setEvent(event: CatalogContractEvent.TogglePreference())
+            routeService.onCloseDialog()
+            showingPreferences = false
         }) {
             CatalogPreferencesView {
+                routeService.onCloseDialog()
                 showingPreferences = false
             }
         }
@@ -157,45 +162,44 @@ public struct CatalogView: View {
 
 @available(iOS 14, *)
 internal struct CatalogSuccessView: View {
-    let recipeListPageViewModel: RecipeListPageViewModel?
     let packages: [CatalogPackage]
-    let catalogContent: CatalogModelContent
+    let catalogContent: CatalogContent
+    let categoryId:String
+    let categoryTitle :String
     @Binding var showingPackageRecipes: Bool
     @Binding var showingFavorites: Bool
     @Binding var headerHeight: Double
-    let searchString: String
     let browseCatalogAction: () -> Void
     let navigateToRecipeAction: (Package) -> Void
     let recipesListColumns : Int
     let recipesListSpacing: CGFloat
     let recipeCardHeight: CGFloat
     
-    init(recipeListPageViewModel: RecipeListPageViewModel?,recipesListColumns: Int, recipesListSpacing: CGFloat, recipeCardHeight: CGFloat, packages: [CatalogPackage], content: CatalogModelContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
-         headerHeight: Binding<Double>, searchString: String,
+    init(recipesListColumns: Int, recipesListSpacing: CGFloat, recipeCardHeight: CGFloat, packages: [CatalogPackage], content: CatalogContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+         headerHeight: Binding<Double>,
          browseCatalogAction: @escaping () -> Void,
-         navigateToRecipeAction: @escaping (Package) -> Void) {
-        self.recipeListPageViewModel = recipeListPageViewModel
+         navigateToRecipeAction: @escaping (Package) -> Void,
+         categoryId: String,
+         categoryTitle : String) {
         self.packages = packages
         self.catalogContent = content
         _showingPackageRecipes = showingPackageRecipes
         _showingFavorites = showingFavorites
         _headerHeight = headerHeight
-        self.searchString = searchString
         self.browseCatalogAction = browseCatalogAction
         self.navigateToRecipeAction = navigateToRecipeAction
         self.recipesListColumns = recipesListColumns
         self.recipesListSpacing = recipesListSpacing
         self.recipeCardHeight = recipeCardHeight
+        self.categoryId = categoryId
+        self.categoryTitle = categoryTitle
     }
 
     var body: some View {
-        if let template = Template.sharedInstance.catalogSuccessViewTemplate {
-            template(recipeListPageViewModel, packages, catalogContent, $showingPackageRecipes,
-                     $showingFavorites, $headerHeight, searchString, browseCatalogAction, navigateToRecipeAction)
-        } else {
-            if case .categories = catalogContent {
+        switch catalogContent {
+            case .categoriesList:
                 if(packages.isEmpty){
-                    CatalogRecipePageNoResultsView(searchString:"avec vos préférences", browseCatalogAction: {} ).frame(maxHeight: .infinity)
+                    CatalogRecipePageNoResultsView( browseCatalogAction: {} ).frame(maxHeight: .infinity)
                 }  else {
                 ScrollView {
                         VStack {
@@ -207,13 +211,18 @@ internal struct CatalogSuccessView: View {
                         }.padding([.top], Dimension.sharedInstance.lPadding)
                     }
                 }
-            } else {
-                if let recipeListPageViewModel  = recipeListPageViewModel {
-                    RecipesView(recipesListPageModel: recipeListPageViewModel, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                        browseCatalogAction()
-                    }, searchString: searchString, showingFavorites: showingFavorites)
-                }
-            }
+            case .wordSearch:
+            let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
+            RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                        browseCatalogAction()},  showingFavorites: showingFavorites)
+            case .filterSearch:
+                RecipesView(title: MiamText.sharedInstance.filterSearchTitle , recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                        browseCatalogAction()},  showingFavorites: showingFavorites)
+            case .category: RecipesView(categoryId :categoryId,categoryTitle: categoryTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                browseCatalogAction()},  showingFavorites: showingFavorites)
+            case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                    browseCatalogAction()},  showingFavorites: showingFavorites)
+            default:  HStack{}
         }
     }
 }
@@ -349,19 +358,7 @@ internal struct CatalogToolbarView: View {
                     }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
                 }
                 
-                if (!favoritesFilterActive) {
-                    if (showBackButton) {
-                        Button {
-                            favoritesTapped()
-                        } label: {
-                            Image.miamImage(icon: .heart)
-                                .renderingMode(.template)
-                                .foregroundColor(Color.miamColor(.primary))
-                        }
-                        .frame(width: 40, height: 40)
-                        .background(Color.white)
-                        .clipShape(Circle())
-                    } else {
+                if (!showBackButton) {
                         Button {
                             favoritesTapped()
                         } label: {
@@ -375,7 +372,6 @@ internal struct CatalogToolbarView: View {
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                         .overlay(Capsule().stroke(.white, lineWidth: 1.0))
                     }
-                }
             }.padding(EdgeInsets(top: Dimension.sharedInstance.mlPadding,
                                  leading: Dimension.sharedInstance.mlPadding, bottom: 16,
                                  trailing: Dimension.sharedInstance.mlPadding))

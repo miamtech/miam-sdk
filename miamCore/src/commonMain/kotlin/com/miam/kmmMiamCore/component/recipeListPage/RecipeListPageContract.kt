@@ -10,9 +10,9 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 interface RecipeListPageContract {
 
-    sealed class Event : UiEvent {
-        object LoadPage : RecipeListPageContract.Event()
-        data class InitPage(val title: String) : RecipeListPageContract.Event()
+    sealed class Event: UiEvent {
+        object LoadPage: Event()
+        data class InitPage(val title: String): Event()
     }
 
     data class State(
@@ -22,7 +22,7 @@ interface RecipeListPageContract {
         val currentPage: Int,
         val isFetchingNewPage: Boolean,
         val noMoreData: Boolean
-    ) : UiState
+    ): UiState
 
-    sealed class Effect : UiEffect
+    sealed class Effect: UiEffect
 }
