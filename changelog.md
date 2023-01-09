@@ -7,6 +7,9 @@
 - [FIX][IOS] Add onQuantityChanged closure to basketPreviewRowTemplate and change item link avaibility 
 - [FIX][IOS] package subtitle exposed
 - [FIX][IOS] MyMealButton onTapped closure used
+- [FIX][COR] Ingredient search
+- [FIX][COR] Better like listenning
+- [FIX][AND] fix navigation loop between absket preview and item selector
 
 
 # 3.4.2

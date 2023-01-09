@@ -1,7 +1,6 @@
 package com.miam.kmm_miam_sdk.android.ui.components.itemsSelector
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
+import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.theme.Dimension.lPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.mPadding
 import com.miam.kmm_miam_sdk.android.theme.Dimension.sSpacerHeight
@@ -59,9 +59,9 @@ import org.koin.core.component.inject
 class ItemsSelector: KoinComponent {
 
     private val vmItemSelector: ItemSelectorViewModel by inject()
+    private val routeService = RouteServiceInstance.instance
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun Content() {
 
@@ -69,16 +69,12 @@ class ItemsSelector: KoinComponent {
         Scaffold(
             topBar = {
                 if (Template.productSelectorHeaderTemplate != null) {
-                    Template.productSelectorHeaderTemplate?.let {
-                        it { vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview) }
-                    }
+                    Template.productSelectorHeaderTemplate?.let { it { routeService.previous() } }
                 } else {
                     Row(modifier = previousButtonContainer) {
                         IconButton(
                             modifier = previousButton,
-                            onClick = {
-                                vmItemSelector.setEvent(ItemSelectorContract.Event.ReturnToBasketPreview)
-                            }
+                            onClick = { routeService.previous() }
                         ) {
                             Image(
                                 colorFilter = ColorFilter.tint(previousIconColor),
