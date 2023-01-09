@@ -7,6 +7,7 @@
 - [FIX][IOS] package subtitle exposed
 - [FIX][IOS] MyMealButton onTapped closure used
 - [FIX][COR] Ingredient search
+- [FIX][COR] Better like listenning
 - [FIX][AND] fix navigation loop between absket preview and item selector
 
 
