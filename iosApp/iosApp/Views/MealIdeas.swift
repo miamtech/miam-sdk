@@ -8,6 +8,7 @@ struct MealIdeas: View {
     @SwiftUI.State private var showTag: Bool = false
     @SwiftUI.State private var showRecipeCount: Bool = false
     
+    @StateObject private var miamManager = MiamManager.sharedInstance
     var criteria = SuggestionsCriteria(
         shelfIngredientsIds: ["5319173", "970417", "1088020"],
         currentIngredientsIds:nil,
@@ -20,24 +21,26 @@ struct MealIdeas: View {
             Color.white.edgesIgnoringSafeArea(.all)
             NavigationView {
                 VStack {
-                    ScrollView {             
-                        Button("toggle tag", action: { showTag = !showTag})
-                        CategoriesMenu(categorie: MiamManager.sharedInstance.categories)                                  
-                        VStack(spacing: 24.0) {
-                            if(showTag){
-                                BasketTagView(itemId: "1088020")
-                            }
-
-                            RecipeCardView(recipeId: "9422")
-
-                            ForEach(0..<5) { _ in
-                                if let product = MyProductsRepository().getRandomProduct() {
-                                    RecipeCardView(criteria: SuggestionsCriteria(
-                                        shelfIngredientsIds: [product.id],
-                                        currentIngredientsIds:nil,
-                                        basketIngredientsIds: nil,
-                                        groupId: nil
-                                    ))
+                    ScrollView {
+                        if miamManager.isReady {
+                            Button("toggle tag", action: { showTag = !showTag})
+                            CategoriesMenu(categorie: MiamManager.sharedInstance.categories)
+                            VStack(spacing: 24.0) {
+                                if(showTag){
+                                    BasketTagView(itemId: "1088020")
+                                }
+                                
+                                RecipeCardView(recipeId: "9422")
+                                
+                                ForEach(0..<5) { _ in
+                                    if let product = MyProductsRepository().getRandomProduct() {
+                                        RecipeCardView(criteria: SuggestionsCriteria(
+                                            shelfIngredientsIds: [product.id],
+                                            currentIngredientsIds:nil,
+                                            basketIngredientsIds: nil,
+                                            groupId: nil
+                                        ))
+                                    }
                                 }
                             }
                         }

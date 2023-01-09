@@ -3,6 +3,7 @@ package com.miam.kmmMiamCore.component.preferences
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.Effect
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
@@ -59,6 +60,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             val count = getRecipeCount()
             setState { copy(basicState = BasicUiState.Success(true), recipesFound = count) }
             sideEffect.emit(PreferencesEffect.PreferencesLoaded)
+            ContextHandlerInstance.instance.emitReadiness()
         }
     }
 
