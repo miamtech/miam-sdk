@@ -17,13 +17,14 @@ public class Categories : ObservableObject {
     @Published var categoriesList:[CatalogCategory]  = []
 }
 
-public class MiamManager {
-    
+public class MiamManager: ObservableObject {
     public static let sharedInstance = MiamManager()
     private let availableStoreIdLists = ["454", "652"]
     private let basketHandler: BasketHandler
     private var cancelable : AnyCancellable?
     public let categories = Categories()
+    
+    @Published var isReady: Bool = false
     
     func isActiveOnStore() -> KotlinBoolean {
         return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
@@ -33,7 +34,7 @@ public class MiamManager {
     private init() {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
-        ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
+        
         ContextHandlerInstance.shared.instance.setContext(context: NSObject())
         UserPreferencesInstance.shared.instance.putInt(key: "testInt", value: 42)
         UserPreferencesInstance.shared.instance.putList(key: "testString", value: ["1","2","3"])
@@ -55,6 +56,11 @@ public class MiamManager {
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
         //initTemplate()
+        
+        ContextHandlerInstance.shared.instance.onReadyEvent(callback: { event in
+            print("Miam event recived \(event)")
+            self.isReady = event is ReadyEvent.isReady
+        })
     }
 
     

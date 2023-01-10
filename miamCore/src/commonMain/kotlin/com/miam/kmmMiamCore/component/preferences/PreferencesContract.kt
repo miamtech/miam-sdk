@@ -16,7 +16,7 @@ interface PreferencesContract {
         val ingredients: List<CheckableTag>,
         val equipments: List<CheckableTag>,
         val recipesFound: Int,
-        val guests: Int
+        val guests: Int?
     ) : UiState
 
     sealed class Effect : UiEffect

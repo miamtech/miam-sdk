@@ -1,4 +1,5 @@
 # 3.5.0
+- [FEA][COR] Enable guests preferences
 - [FIX][COR] Fix navigation when a dialog was between two pages
 - [FEA][COR] Preference dependence on supplier
 - [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result

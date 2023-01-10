@@ -43,7 +43,7 @@ class PreferencesVM: ObservableObject {
     }
     
     func updateGuestsNumber(_ numberOfGuests: Int) {
-        preferencesViewModelInstance.changeGlobaleGuest(numberOfGuest: Int32(numberOfGuests))
+        preferencesViewModelInstance.changeGlobalGuest(numberOfGuest: Int32(numberOfGuests))
     }
     
     func togglePreference(_ preference: CheckableTag) {
