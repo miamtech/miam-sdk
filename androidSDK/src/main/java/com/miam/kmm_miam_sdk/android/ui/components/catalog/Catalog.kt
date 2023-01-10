@@ -25,17 +25,17 @@ class Catalog @JvmOverloads constructor(
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
-    val routeService = RouteServiceInstance.instance
+    private val routeService = RouteServiceInstance.instance
 
-    val filter = CatalogFilter(
+    private val filter = CatalogFilter(
         { routeService.onCloseDialog() },
         { vmCatalog.onSimpleSearch(CatalogContent.FILTER_SEARCH) }
     )
-    val search = CatalogSearch(
+    private val search = CatalogSearch(
         { routeService.onCloseDialog() },
         { vmCatalog.onSimpleSearch(CatalogContent.WORD_SEARCH) }
     )
-    val preference = Preferences(context).apply { bind({ routeService.onCloseDialog() }, { routeService.onCloseDialog() }) }
+    private val preference = Preferences(context).apply { bind({ routeService.onCloseDialog() }, { routeService.onCloseDialog() }) }
 
     var catalogPageColumns = 1
     var catalogPageVerticalSpacing = 12
@@ -87,7 +87,6 @@ class Catalog @JvmOverloads constructor(
                             state.content,
                             enableFilters = state.enableFilters,
                             enablePreferences = state.enablePreferences,
-                            context,
                             catalogPageColumns,
                             catalogPageVerticalSpacing,
                             catalogPageHorizontalSpacing,

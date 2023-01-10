@@ -31,6 +31,7 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateDescriptor
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -56,6 +57,7 @@ open class CatalogPage @JvmOverloads constructor(
 
     private val recipePageVM = RecipeListPageViewModel()
     private var catalogPageTitle = ""
+    private var catalogPageSubtitle = ""
     private var catalogPageColumns = 1
     private var catalogPageVerticalSpacing = 12
     private var catalogPageHorizontalSpacing = 12
@@ -66,13 +68,16 @@ open class CatalogPage @JvmOverloads constructor(
         back: () -> Unit,
         columns: Int? = null,
         verticalSpacing: Int? = null,
-        horizontalSpacing: Int? = null
+        horizontalSpacing: Int? = null,
+        subtitle: String? = null,
     ) {
         catalogPageTitle = title
         catalogPageBack = back
+
         columns?.let { catalogPageColumns = it }
         verticalSpacing?.let { catalogPageVerticalSpacing = it }
         horizontalSpacing?.let { catalogPageHorizontalSpacing = it }
+        subtitle?.let { catalogPageSubtitle = it }
         recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(title))
     }
 
@@ -87,6 +92,7 @@ open class CatalogPage @JvmOverloads constructor(
                 CatalogSuccessPage(
                     context,
                     catalogPageTitle,
+                    catalogPageSubtitle,
                     recipes,
                     catalogPageColumns,
                     catalogPageVerticalSpacing,
@@ -119,6 +125,7 @@ open class CatalogPage @JvmOverloads constructor(
     private fun CatalogSuccessPage(
         context: Context,
         title: String,
+        subtitle: String,
         recipes: List<Recipe>,
         columns: Int,
         verticalSpacing: Int,
@@ -134,7 +141,7 @@ open class CatalogPage @JvmOverloads constructor(
                 horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
             ) {
                 item(span = { GridItemSpan(columns) }) {
-                    HeaderTitle(title = title)
+                    HeaderTitle(title = title, subtitle)
                 }
                 itemsIndexed(recipes) { index, item ->
                     val recipe = RecipeView(context = context)
@@ -151,16 +158,16 @@ open class CatalogPage @JvmOverloads constructor(
     }
 
     @Composable
-    private fun HeaderTitle(title: String) {
+    private fun HeaderTitle(title: String, subtitle: String) {
         val templateToUse = specificTemplate() ?: Template.CatalogPageTitleTemplate
         if (templateToUse != null) {
-            templateToUse(title)
+            templateToUse(CatalogPageTitleTemplateDescriptor(title, subtitle))
         } else {
             Row { Text(text = title, color = Colors.black, style = Typography.subtitleBold) }
         }
     }
 
-    protected open fun specificTemplate(): @Composable() ((String) -> Unit)? {
+    protected open fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateDescriptor) -> Unit)? {
         return null
     }
 

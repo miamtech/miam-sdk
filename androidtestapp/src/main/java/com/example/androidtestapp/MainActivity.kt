@@ -243,6 +243,12 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
             }
         }
 
+    private val searchRecipesTitleTemplate: @Composable (title: String, subtitle: String?) -> Unit = { title: String, subtitle: String? ->
+        Column {
+            Text(text = "$title <-Super")
+        }
+    }
+
     private val basketPreviewProductLineTemplateVariable: @Composable (
         productName: String,
         description: String,
@@ -474,6 +480,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     private fun initTemplate() {
+        Template.CatalogSearchTitleTemplate = searchRecipesTitleTemplate
 //        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader
