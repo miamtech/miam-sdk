@@ -63,6 +63,7 @@ public struct RecipeDetailsView: View {
                                 RecipeDetailsIngredientsView(ingredients: ingredients,
                                                              recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
                                                              currentGuests: Int(viewModel.state?.guest ?? 0),
+                                                             guestUpdating: viewModel.guestUpdating,
                                                              updateGuestsAction: { newGuest in viewModel.updateGuest(nbGuest:Int32(newGuest)) }
                                 )
                             }
