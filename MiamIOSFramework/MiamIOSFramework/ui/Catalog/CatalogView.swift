@@ -128,25 +128,21 @@ public struct CatalogView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            routeService.onCloseDialog()
             showingSearch = false
         }) {
             CatalogSearchView(catalog: catalog, close: {
-                routeService.onCloseDialog()
                 showingSearch = false
             }) {
                 showingSearch = false
                 catalog.onSimpleSearch(content: CatalogContent.wordSearch)
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
-            routeService.onCloseDialog()
             showingFilters = false
         }) {
             CatalogFiltersView() {
                 showingFilters = false
                 catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
-                routeService.onCloseDialog()
                 showingFilters = false
             }
         }.sheet(isPresented: $showingPreferences, onDismiss: {
