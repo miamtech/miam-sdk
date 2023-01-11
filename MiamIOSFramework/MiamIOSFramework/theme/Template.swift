@@ -164,6 +164,15 @@ public class Template {
     
     public var basketPreviewLoadingViewTemplate: ((
     ) -> AnyView)? = nil
+
+     /**
+         basketTitle: Int
+
+         */
+        public var basketPreviewTitleTemplate: ((
+            Int
+        ) -> AnyView)? = nil
+
     
     /**
      basketTitle: String
@@ -300,12 +309,9 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-    
-    
-    
+
     public var catalogFiltersViewTemplate: AnyView? = nil
-    
-    
+
     /**
      title: String
      filters: Array<CatalogFilterOptions>

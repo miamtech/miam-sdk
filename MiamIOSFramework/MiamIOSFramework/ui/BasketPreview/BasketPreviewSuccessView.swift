@@ -54,13 +54,7 @@ public struct BasketPreviewSuccessView: View {
             TitleBarView(showBackButton: true, backAction: {
                 goToDetail(recipeVm, true)
             },
-             titleView: AnyView(
-                Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
-                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                    .padding(.leading, Dimension.sharedInstance.lPadding)))
-
-            
-            
+            titleView: AnyView(BasketPreviewTitleBar(viewModel.numberOfproductsInBasket))
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                                     basketDescription: viewModel.basketDescription,
@@ -178,6 +172,24 @@ internal struct IngredientsFoldableView: View {
                     }, isAddable: isAddable)
                 }
             }
+        }
+    }
+}
+
+@available(iOS 14, *)
+public struct BasketPreviewTitleBar : View {
+
+    let numberOfProductsInBasket: Int
+
+
+
+    public var body: some View {
+        if let templateTitle = Template.sharedInstance.basketPreviewTitleTemplate  {
+                basketPreviewTitleTemplate(numberOfProductsInBasket)
+        } else {
+             Text("\(numberOfProductsInBasket) produits ajoutés à votre panier")
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                                .padding(.leading, Dimension.sharedInstance.lPadding))
         }
     }
 }
