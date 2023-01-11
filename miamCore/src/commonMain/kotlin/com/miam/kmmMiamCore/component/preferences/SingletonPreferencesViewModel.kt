@@ -3,6 +3,7 @@ package com.miam.kmmMiamCore.component.preferences
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.Effect
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
@@ -59,6 +60,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             val count = getRecipeCount()
             setState { copy(basicState = BasicUiState.Success(true), recipesFound = count) }
             sideEffect.emit(PreferencesEffect.PreferencesLoaded)
+            ContextHandlerInstance.instance.emitReadiness()
         }
     }
 
@@ -83,7 +85,8 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             copy(
                 ingredients = reloadedIngredients,
                 diets = diets.map { it.resetWith(dietsOrEmptyFromLocal().map { tag -> tag.id }) },
-                equipments = equipments.map { it.resetWith(equipmentsOrEmptyFromLocal().map { tag -> tag.id }) }
+                equipments = equipments.map { it.resetWith(equipmentsOrEmptyFromLocal().map { tag -> tag.id }) },
+                guests = guestOrNullFromLocal()
             )
         }
     }
@@ -107,6 +110,10 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
 
     private fun equipmentsOrEmptyFromLocal(): List<Tag> {
         return tagsFromLocal(LOCAL_EQUIPMENT_KEY)
+    }
+
+    fun guestOrNullFromLocal(): Int? {
+        return userPreferences.getIntOrNull(LOCAL_GUEST_KEY)
     }
 
     private fun tagsFromLocal(preferenceKey: String): List<Tag> {
@@ -146,6 +153,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageSerializedTags(currentState.diets))
         userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageSerializedTags(currentState.ingredients))
         userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageSerializedTags(currentState.equipments))
+        currentState.guests?.let { userPreferences.putInt(LOCAL_GUEST_KEY, it) }
         launch(coroutineHandler) { sideEffect.emit(PreferencesEffect.PreferencesChanged) }
     }
 
@@ -164,7 +172,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
     }
 
-    fun changeGlobaleGuest(numberOfGuest: Int) {
+    fun changeGlobalGuest(numberOfGuest: Int) {
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
         }
@@ -181,10 +189,15 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         return includedStr + excludedStr
     }
 
+    fun globalGuestCountOrDefault(defaultValue: Int = 4): Int {
+        return currentState.guests ?: defaultValue
+    }
+
     companion object {
         val LOCAL_DIET_KEY = "MIAM_${TagTypes.DIET.name}"
         val LOCAL_INGREDIENT_KEY = "MIAM_${TagTypes.INGREDIENT.name}"
         val LOCAL_EQUIPMENT_KEY = "MIAM_${TagTypes.EQUIPMENT.name}"
+        val LOCAL_GUEST_KEY = "MIAM_GUEST"
 
         val defaultIngredientTagIds = listOf(
             "ingredient_category_lgumes",
@@ -202,7 +215,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
                 ingredients = emptyList(),
                 equipments = emptyList(),
                 recipesFound = 0,
-                guests = 4
+                guests = null
             )
         }
     }

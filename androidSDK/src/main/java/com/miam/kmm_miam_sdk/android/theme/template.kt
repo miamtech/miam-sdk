@@ -255,11 +255,11 @@ object Template {
     ) -> Unit)? = null
 
     var CatalogCategoryTitleTemplate: (@Composable() (
-        descriptor: CatalogPageTitleTemplateParameters,
+        parameters: CatalogPageTitleTemplateParameters,
     ) -> Unit)? = null
 
     var CatalogSearchTitleTemplate: (@Composable() (
-        descriptor: CatalogPageTitleTemplateParameters,
+        parameters: CatalogPageTitleTemplateParameters,
     ) -> Unit)? = null
 
     var CatalogFavoritEmptyTemplate: (@Composable() (
@@ -282,7 +282,7 @@ object Template {
         closePref: () -> Unit, applyPref: () -> Unit, recipesFound: Int
     ) -> Unit)? = null
 
-    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int, guestChanged: (count: Int) -> Unit) -> Unit)? = null
+    var GuestPreferencesSectionTemplate: (@Composable() (guests: Int?, guestChanged: (count: Int) -> Unit) -> Unit)? = null
 
     var DietPreferencesSectionTemplate: (@Composable() (
         dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit

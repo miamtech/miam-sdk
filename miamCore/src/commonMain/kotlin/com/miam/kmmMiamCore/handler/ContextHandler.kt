@@ -3,6 +3,8 @@ package com.miam.kmmMiamCore.handler
 import com.miam.kmmMiamCore.KMMContext
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
+import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
+import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +39,7 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
     }
 
     private val basketHandler: BasketHandler by inject()
-
+    private val preference: SingletonPreferencesViewModel by inject()
 
     val state = MutableStateFlow(ContextHandlerState())
     private val readyEvent = MutableSharedFlow<ReadyEvent>()
@@ -60,7 +62,7 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
      */
 
     fun isReady(): Boolean {
-        return basketHandler.isReady() && !state.value.isInError
+        return basketHandler.isReady() && !state.value.isInError && preference.isInit
     }
 
     fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent

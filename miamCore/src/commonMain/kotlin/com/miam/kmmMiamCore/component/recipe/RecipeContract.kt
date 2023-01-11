@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.recipe
 
 import com.miam.kmmMiamCore.base.mvi.*
+import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
@@ -54,7 +55,7 @@ interface RecipeContract {
                 return (currentGl?.attributes?.recipesInfos?.find { ri -> ri.id.toString() == recipe?.id })?.guests
                     ?: 4
             }
-            return recipe?.attributes?.numberOfGuests ?: 4
+            return PreferencesViewModelInstance.instance.globalGuestCountOrDefault()
         }
     }
 
