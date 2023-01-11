@@ -164,15 +164,14 @@ public class Template {
     
     public var basketPreviewLoadingViewTemplate: ((
     ) -> AnyView)? = nil
-
-     /**
-         basketTitle: Int
-
-         */
-        public var basketPreviewTitleTemplate: ((
-            Int
-        ) -> AnyView)? = nil
-
+    
+    /**
+     numberOf ProductAdded: Int
+     */
+    public var basketPreviewTitleTemplate: ((
+        Int
+    ) -> AnyView)? = nil
+    
     
     /**
      basketTitle: String
@@ -309,9 +308,9 @@ public class Template {
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
-
+    
     public var catalogFiltersViewTemplate: AnyView? = nil
-
+    
     /**
      title: String
      filters: Array<CatalogFilterOptions>
@@ -544,25 +543,25 @@ public class Template {
     //RecipesList
     
     /**
-      CatalogPageTitleTemplateParameters
+     CatalogPageTitleTemplateParameters
      */
     public var recipesListTitleTemplate: ((
         CatalogPageTitleTemplateParameters
-   ) ->AnyView)? = nil
+    ) ->AnyView)? = nil
     
     /**
-      CatalogPageTitleTemplateParameters
+     CatalogPageTitleTemplateParameters
      */
     public var recipesListCategoryTitleTemplate: ((
         CatalogPageTitleTemplateParameters
-   ) ->AnyView)? = nil
+    ) ->AnyView)? = nil
     
     /**
-       CatalogPageTitleTemplateParameters
+     CatalogPageTitleTemplateParameters
      */
     public var recipesListSearchTitleTemplate: ((
         CatalogPageTitleTemplateParameters
-   ) ->AnyView)? = nil
+    ) ->AnyView)? = nil
 }
 
 
