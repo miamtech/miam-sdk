@@ -5,7 +5,7 @@
  -[FEA][AND] New template for recipe search page 
  -[FEA][IOS] Guest prefrences avalaible
  -[FIX][IOS] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
- -[FIX][IOS] New template basket preview title
+ -[FIX][IOS] New template basket preview title and MyMeals action column
 
 # 3.5.0
 - [FEA][COR] Enable guests preferences

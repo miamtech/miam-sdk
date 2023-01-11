@@ -350,6 +350,12 @@ public class Template {
     ) -> AnyView)? = nil
     
     /**
+     parameter MyMealsActionColumnTemplateParameters
+     */
+    public var myMealsActionColumnTemplate: ((
+        MyMealsActionColumnTemplateParameters
+    ) -> AnyView)? = nil
+    /**
      
      */
     public var myMealsLoadingViewTemplate: ((

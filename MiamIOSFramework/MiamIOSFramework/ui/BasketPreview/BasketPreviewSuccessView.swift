@@ -29,7 +29,6 @@ public struct BasketPreviewSuccessView: View {
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
-       
     }
     
     func updateGuests(value:Int){
@@ -54,7 +53,7 @@ public struct BasketPreviewSuccessView: View {
             TitleBarView(showBackButton: true, backAction: {
                 goToDetail(recipeVm, true)
             },
-            titleView: AnyView(BasketPreviewTitleBar(viewModel.numberOfproductsInBasket))
+                         titleView: AnyView(BasketPreviewTitleBar(numberOfProductsInBasket:viewModel.numberOfproductsInBasket)))
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                                     basketDescription: viewModel.basketDescription,
@@ -75,10 +74,10 @@ public struct BasketPreviewSuccessView: View {
                             viewModel:viewModel,
                             previewLine: previewLine,
                             removeProductAction: {
-                            removeProduct(entry)
-                        }, replaceProductAction: {
-                            replaceProduct(previewLine)
-                        })
+                                removeProduct(entry)
+                            }, replaceProductAction: {
+                                replaceProduct(previewLine)
+                            })
                     }
                 }
                 
@@ -133,9 +132,9 @@ internal struct IngredientsHeader: View {
                 Text(title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.secondaryText))
-
+                
                 Spacer()
-
+                
                 Image.miamImage(icon: .caret)
                     .resizable()
                     .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
@@ -178,18 +177,16 @@ internal struct IngredientsFoldableView: View {
 
 @available(iOS 14, *)
 public struct BasketPreviewTitleBar : View {
-
+    
     let numberOfProductsInBasket: Int
-
-
-
+    
     public var body: some View {
         if let templateTitle = Template.sharedInstance.basketPreviewTitleTemplate  {
-                basketPreviewTitleTemplate(numberOfProductsInBasket)
+            templateTitle(numberOfProductsInBasket)
         } else {
-             Text("\(numberOfProductsInBasket) produits ajoutés à votre panier")
-                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                                .padding(.leading, Dimension.sharedInstance.lPadding))
+            Text("\(numberOfProductsInBasket) produits ajoutés à votre panier")
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                .padding(.leading, Dimension.sharedInstance.lPadding)
         }
     }
 }
