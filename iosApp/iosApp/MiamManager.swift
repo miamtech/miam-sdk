@@ -52,7 +52,7 @@ public class MiamManager: ObservableObject {
             self.categories.categoriesList = categories
             
         }
-        UserHandler.shared.updateUserId(userId: "test_user")
+        UserHandler.shared.updateUserId(userId: "test_user-tib02")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
         //initTemplate()
