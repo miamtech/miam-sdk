@@ -12,22 +12,31 @@ import miamCore
 @available(iOS 14, *)
 public struct RecipeDetailsView: View {
     public var recipeId: String?
-    public var close: () -> ()
+    
     public var showFooter = true
+    public var close: () -> Void
+    public var navigateToPreview: () -> Void
+    public var buy: () -> Void
     @SwiftUI.State var showTitleInHeader = false
     @ObservedObject var viewModel: RecipeCardVM
     
-    public init(recipeId: String, close: @escaping () -> (), showFooter: Bool = true) {
+    public init(recipeId: String, showFooter: Bool = true, close: @escaping () -> (),
+                navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.recipeId = recipeId
         self.close = close
+        self.navigateToPreview = navigateToPreview
+        self.buy = buy
         viewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
         self.showFooter = showFooter
     }
     
-    public init(vmRecipe: RecipeCardVM, close: @escaping () -> (), showFooter: Bool = true) {
-        self.close = close
+    public init(vmRecipe: RecipeCardVM, showFooter: Bool = true, close: @escaping () -> (),
+                navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.viewModel = vmRecipe
         self.showFooter = showFooter
+        self.close = close
+        self.navigateToPreview = navigateToPreview
+        self.buy = buy
     }
     
     public var body: some View {
@@ -75,9 +84,11 @@ public struct RecipeDetailsView: View {
             }.coordinateSpace(name: "scroll")
             
             if (showFooter) {
-                RecipeDetailsFooter(recipeVM: viewModel)
+                RecipeDetailsFooter(recipeVM: viewModel, buy: buy, goToPreview: navigateToPreview)
             }
-        }.onAppear(perform: {
+        }
+        .frame(maxHeight: .infinity)
+        .onAppear(perform: {
             if (recipeId != nil) {
                 viewModel.fetchRecipe(recipeId: self.recipeId!)
             }

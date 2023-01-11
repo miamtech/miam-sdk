@@ -68,6 +68,7 @@
 		BF7305FD28DDD8CB00CC5D6B /* FavoritesEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305FC28DDD8CB00CC5D6B /* FavoritesEmptyView.swift */; };
 		BF7B82CF2876DD1000DAC4F3 /* IconWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */; };
 		BF7B91B82931205E0005B009 /* MiamFontStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7B91B72931205E0005B009 /* MiamFontStyle.swift */; };
+		BF7CB92A296EC8040041EB3E /* RecipeModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7CB929296EC8040041EB3E /* RecipeModal.swift */; };
 		BF848C6629312A240094B7CA /* MiamFontStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF848C6529312A240094B7CA /* MiamFontStyleProvider.swift */; };
 		BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF882083287F0B8600D7353B /* TitleBarView.swift */; };
 		BF9335E6286ED80A002405EE /* CatalogFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */; };
@@ -183,6 +184,7 @@
 		BF7305FC28DDD8CB00CC5D6B /* FavoritesEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesEmptyView.swift; sourceTree = "<group>"; };
 		BF7B82CE2876DD1000DAC4F3 /* IconWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithText.swift; sourceTree = "<group>"; };
 		BF7B91B72931205E0005B009 /* MiamFontStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamFontStyle.swift; sourceTree = "<group>"; };
+		BF7CB929296EC8040041EB3E /* RecipeModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeModal.swift; sourceTree = "<group>"; };
 		BF848C6529312A240094B7CA /* MiamFontStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamFontStyleProvider.swift; sourceTree = "<group>"; };
 		BF882083287F0B8600D7353B /* TitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarView.swift; sourceTree = "<group>"; };
 		BF9335E5286ED80A002405EE /* CatalogFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFilterVM.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */,
 				0BFD39192860BB0500A7FCED /* RecipeCardLoadingView.swift */,
 				0BFD39202860C70600A7FCED /* RecipeCardSuccessView.swift */,
+				BF7CB929296EC8040041EB3E /* RecipeModal.swift */,
 			);
 			path = RecipeCard;
 			sourceTree = "<group>";
@@ -774,6 +777,7 @@
 				BFF4640929151D55008CF9E5 /* PreferencesFooterView.swift in Sources */,
 				BFA507ED287C126B00F274CA /* CatalogRecipePageSuccessView.swift in Sources */,
 				0B4B3E80284FA99D00F25E7B /* ItemSelectorText.swift in Sources */,
+				BF7CB92A296EC8040041EB3E /* RecipeModal.swift in Sources */,
 				BF882084287F0B8600D7353B /* TitleBarView.swift in Sources */,
 				521D6459283230BF0092AC52 /* BasketPreviewSuccessView.swift in Sources */,
 				BF7B91B82931205E0005B009 /* MiamFontStyle.swift in Sources */,

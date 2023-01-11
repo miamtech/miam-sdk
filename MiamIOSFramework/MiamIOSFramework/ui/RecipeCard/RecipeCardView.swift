@@ -19,6 +19,7 @@ public struct RecipeCardView: View {
     
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
+    @SwiftUI.State private var showBasketPreview = false
     
     public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.criteria = criteria
@@ -51,10 +52,13 @@ public struct RecipeCardView: View {
                                                 }, showOrAddRecipeAction: {
                                                     if viewModel.isInCart {
                                                         viewModel.goToDetail()
+                                                        showBasketPreview = false
                                                     } else {
                                                         addToCart()
+                                                        showBasketPreview = true
                                                     }
                                                     showingPopup = true
+                                                    
                                                 }),
             loadingView: RecipeCardLoadingView(),
             emptyView: RecipeCardEmptyView()
@@ -63,24 +67,25 @@ public struct RecipeCardView: View {
                 viewModel.fetchRecipe(recipeId: self.recipeId!)
             } else if (criteria != nil) {
                 viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
-            } else if ( recipe != nil){
+            } else if ( recipe != nil) {
                 if let  currentRecipe = recipe {
                     viewModel.setRecipe(recipe: currentRecipe)
                 }
             }
         }).frame(height: recipeCardHeight)
             .sheet(isPresented: $showingPopup) {
-                Dialog(
-                    close: { showingPopup = false },
-                    initialRoute : initialDialogScreen,
-                    routerVm: viewModel.routerVM
-                )
-            }   
+                if let recipeId = viewModel.recipeId {
+                    RecipeModal(recipeId: recipeId, showBasketPreview: showBasketPreview) {
+                        showingPopup = false
+                        showBasketPreview = false
+                    }
+                }
+            }
     }
     
     private func addToCart() {
         viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
-        viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
+//        viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
     }
 }
 

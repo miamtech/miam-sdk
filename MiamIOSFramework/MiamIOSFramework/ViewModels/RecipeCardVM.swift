@@ -24,7 +24,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
     }
 
     override init(routerVM: RouterOutletViewModel) {
-        super.init(routerVM:routerVM)
+        super.init(routerVM: routerVM)
         collect(flow: uiState, collect: { data in
             let state = data as! RecipeContractState
             self.state = state

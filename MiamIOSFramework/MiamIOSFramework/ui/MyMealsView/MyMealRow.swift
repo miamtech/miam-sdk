@@ -76,7 +76,7 @@ public struct MyMealRow: View {
                                     pictureURL: meal.basketPreviewLine.pictureURL) { guestNumber in
                     updateGuest(value: guestNumber)
                 }  goToDetail: {
-                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
+//                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
                 VStack {
@@ -129,11 +129,9 @@ public struct MyMealRow: View {
                 }
             }
         }.sheet(isPresented: $showingPopup) {
-            Dialog(
-                close: { showingPopup = false },
-                initialRoute : initialDialogScreen,
-                routerVm: recipeViewModel.routerVM
-            )
+            RecipeModal(recipeId: "") {
+                showingPopup = false
+            }
         }.sheet(isPresented: $showingItemSelector) {
             
             ItemSelector()
