@@ -45,9 +45,10 @@ fun Counter(
     lightMode: Boolean = false,
     minValue: Int? = null,
     maxValue: Int? = null,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    key: Any? = null
 ) {
-    var localCount by remember(initialCount) { mutableStateOf(initialCount) }
+    var localCount by remember(key ?: initialCount) { mutableStateOf(initialCount) }
 
     fun newValueBounded(newValue: Int): Boolean {
         return (minValue == null || newValue >= minValue) && (maxValue == null || newValue <= maxValue)

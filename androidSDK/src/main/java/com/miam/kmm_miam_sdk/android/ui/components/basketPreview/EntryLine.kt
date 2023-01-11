@@ -83,6 +83,7 @@ fun EntryLine(
     } else {
         Row(Modifier.padding(horizontal = 16.dp)) {
             BasketPreviewProductLine(
+                entry.id,
                 productName,
                 description,
                 entry.picture,
@@ -99,6 +100,7 @@ fun EntryLine(
 
 @Composable
 fun BasketPreviewProductLine(
+    entryId: String?,
     productName: String,
     description: String,
     picture: String,
@@ -156,6 +158,7 @@ fun BasketPreviewProductLine(
         Column(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
             EntryPriceAndActionRow(
+                entryId,
                 itemsCount,
                 price.toDouble(),
                 quantity,
@@ -171,6 +174,7 @@ fun BasketPreviewProductLine(
 
 @Composable
 fun EntryPriceAndActionRow(
+    entryId: String?,
     itemsCount: Int,
     price: Double,
     currentEntryCount: Int,
@@ -219,7 +223,8 @@ fun EntryPriceAndActionRow(
             lightMode = true,
             isDisable = false,
             minValue = 0,
-            maxValue = 99
+            maxValue = 99,
+            key = entryId
         )
     }
 }
@@ -227,5 +232,5 @@ fun EntryPriceAndActionRow(
 @Preview
 @Composable
 fun EntryPriceAndActionRowPreview() {
-    EntryPriceAndActionRow(2, 14.90, 4, {}, {})
+    EntryPriceAndActionRow("test", 2, 14.90, 4, {}, {})
 }

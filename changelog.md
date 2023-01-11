@@ -1,11 +1,12 @@
 # 3.6.0
- -[FIX][AND] Recipes page no long reloading after closing a dialog
- -[FIX][AND] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
- -[FEA][AND] Guest prefrences avalaible
- -[FEA][AND] New template for recipe search page 
- -[FEA][IOS] Guest prefrences avalaible
- -[FIX][IOS] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
- -[FIX][IOS] New template basket preview title and MyMeals action column
+- [FIX][AND] Recipes page no long reloading after closing a dialog
+- [FIX][AND] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
+- [FEA][AND] Guest prefrences avalaible
+- [FEA][AND] New template for recipe search page 
+- [FEA][IOS] Guest prefrences avalaible
+- [FIX][IOS] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
+- [FIX][IOS] New template basket preview title and MyMeals action column
+- [FIX][AND] Counter local state falsly remembered
 
 # 3.5.0
 - [FEA][COR] Enable guests preferences
