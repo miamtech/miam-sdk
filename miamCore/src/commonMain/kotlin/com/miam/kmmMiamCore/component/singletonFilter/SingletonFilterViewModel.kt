@@ -1,10 +1,13 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -14,9 +17,16 @@ object FilterViewModelInstance: KoinComponent {
     val instance: SingletonFilterViewModel by inject()
 }
 
+sealed class FilterEffect: Effect {
+    object OnUpdate: FilterEffect()
+}
+
 open class SingletonFilterViewModel:
     BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+
+    private val sideEffect = MutableSharedFlow<FilterEffect>()
+    fun observeSideEffect(): Flow<FilterEffect> = sideEffect
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in singleton filter VM view $exception")
@@ -35,12 +45,10 @@ open class SingletonFilterViewModel:
         when (event) {
             is SingletonFilterContract.Event.OnTimeFilterChanged -> {
                 setState { copy(time = singleChoiceGroupUpdate(currentState.time, event.timeFilter)) }
-                setEffect { SingletonFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
             is SingletonFilterContract.Event.OnCostFilterChanged -> {
                 setState { copy(cost = singleChoiceGroupUpdate(currentState.cost, event.costFilter)) }
-                setEffect { SingletonFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
             is SingletonFilterContract.Event.OnDifficultyChanged -> {
@@ -52,7 +60,6 @@ open class SingletonFilterViewModel:
                         )
                     )
                 }
-                setEffect { SingletonFilterContract.Effect.OnUpdate }
                 getRecipeCount()
             }
         }
@@ -100,7 +107,7 @@ open class SingletonFilterViewModel:
     }
 
     fun applyFilter() {
-        setEffect { SingletonFilterContract.Effect.OnUpdate }
+        launch { sideEffect.emit(FilterEffect.OnUpdate) }
     }
 
     fun clear() {
