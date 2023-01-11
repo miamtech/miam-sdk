@@ -3877,14 +3877,16 @@ __attribute__((swift_name("UiState")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("RecipeLikeContractState")))
 @interface MiamCoreRecipeLikeContractState : MiamCoreBase <MiamCoreUiState>
-- (instancetype)initWithRecipeId:(NSString * _Nullable)recipeId isLiked:(MiamCoreBasicUiState<MiamCoreBoolean *> *)isLiked __attribute__((swift_name("init(recipeId:isLiked:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithRecipeId:(NSString * _Nullable)recipeId isLiked:(MiamCoreBasicUiState<MiamCoreBoolean *> *)isLiked likeListenerJob:(id<MiamCoreKotlinx_coroutines_coreJob> _Nullable)likeListenerJob __attribute__((swift_name("init(recipeId:isLiked:likeListenerJob:)"))) __attribute__((objc_designated_initializer));
 - (NSString * _Nullable)component1 __attribute__((swift_name("component1()")));
 - (MiamCoreBasicUiState<MiamCoreBoolean *> *)component2 __attribute__((swift_name("component2()")));
-- (MiamCoreRecipeLikeContractState *)doCopyRecipeId:(NSString * _Nullable)recipeId isLiked:(MiamCoreBasicUiState<MiamCoreBoolean *> *)isLiked __attribute__((swift_name("doCopy(recipeId:isLiked:)")));
+- (id<MiamCoreKotlinx_coroutines_coreJob> _Nullable)component3 __attribute__((swift_name("component3()")));
+- (MiamCoreRecipeLikeContractState *)doCopyRecipeId:(NSString * _Nullable)recipeId isLiked:(MiamCoreBasicUiState<MiamCoreBoolean *> *)isLiked likeListenerJob:(id<MiamCoreKotlinx_coroutines_coreJob> _Nullable)likeListenerJob __attribute__((swift_name("doCopy(recipeId:isLiked:likeListenerJob:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
 @property (readonly) MiamCoreBasicUiState<MiamCoreBoolean *> *isLiked __attribute__((swift_name("isLiked")));
+@property (readonly) id<MiamCoreKotlinx_coroutines_coreJob> _Nullable likeListenerJob __attribute__((swift_name("likeListenerJob")));
 @property (readonly) NSString * _Nullable recipeId __attribute__((swift_name("recipeId")));
 @end;
 
@@ -4525,21 +4527,21 @@ __attribute__((swift_name("PreferencesContractEvent")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("PreferencesContractState")))
 @interface MiamCorePreferencesContractState : MiamCoreBase <MiamCoreUiState>
-- (instancetype)initWithBasicState:(MiamCoreBasicUiState<MiamCoreBoolean *> *)basicState diets:(NSArray<MiamCoreCheckableTag *> *)diets ingredients:(NSArray<MiamCoreCheckableTag *> *)ingredients equipments:(NSArray<MiamCoreCheckableTag *> *)equipments recipesFound:(int32_t)recipesFound guests:(int32_t)guests __attribute__((swift_name("init(basicState:diets:ingredients:equipments:recipesFound:guests:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithBasicState:(MiamCoreBasicUiState<MiamCoreBoolean *> *)basicState diets:(NSArray<MiamCoreCheckableTag *> *)diets ingredients:(NSArray<MiamCoreCheckableTag *> *)ingredients equipments:(NSArray<MiamCoreCheckableTag *> *)equipments recipesFound:(int32_t)recipesFound guests:(MiamCoreInt * _Nullable)guests __attribute__((swift_name("init(basicState:diets:ingredients:equipments:recipesFound:guests:)"))) __attribute__((objc_designated_initializer));
 - (MiamCoreBasicUiState<MiamCoreBoolean *> *)component1 __attribute__((swift_name("component1()")));
 - (NSArray<MiamCoreCheckableTag *> *)component2 __attribute__((swift_name("component2()")));
 - (NSArray<MiamCoreCheckableTag *> *)component3 __attribute__((swift_name("component3()")));
 - (NSArray<MiamCoreCheckableTag *> *)component4 __attribute__((swift_name("component4()")));
 - (int32_t)component5 __attribute__((swift_name("component5()")));
-- (int32_t)component6 __attribute__((swift_name("component6()")));
-- (MiamCorePreferencesContractState *)doCopyBasicState:(MiamCoreBasicUiState<MiamCoreBoolean *> *)basicState diets:(NSArray<MiamCoreCheckableTag *> *)diets ingredients:(NSArray<MiamCoreCheckableTag *> *)ingredients equipments:(NSArray<MiamCoreCheckableTag *> *)equipments recipesFound:(int32_t)recipesFound guests:(int32_t)guests __attribute__((swift_name("doCopy(basicState:diets:ingredients:equipments:recipesFound:guests:)")));
+- (MiamCoreInt * _Nullable)component6 __attribute__((swift_name("component6()")));
+- (MiamCorePreferencesContractState *)doCopyBasicState:(MiamCoreBasicUiState<MiamCoreBoolean *> *)basicState diets:(NSArray<MiamCoreCheckableTag *> *)diets ingredients:(NSArray<MiamCoreCheckableTag *> *)ingredients equipments:(NSArray<MiamCoreCheckableTag *> *)equipments recipesFound:(int32_t)recipesFound guests:(MiamCoreInt * _Nullable)guests __attribute__((swift_name("doCopy(basicState:diets:ingredients:equipments:recipesFound:guests:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
 @property (readonly) MiamCoreBasicUiState<MiamCoreBoolean *> *basicState __attribute__((swift_name("basicState")));
 @property (readonly) NSArray<MiamCoreCheckableTag *> *diets __attribute__((swift_name("diets")));
 @property (readonly) NSArray<MiamCoreCheckableTag *> *equipments __attribute__((swift_name("equipments")));
-@property (readonly) int32_t guests __attribute__((swift_name("guests")));
+@property (readonly) MiamCoreInt * _Nullable guests __attribute__((swift_name("guests")));
 @property (readonly) NSArray<MiamCoreCheckableTag *> *ingredients __attribute__((swift_name("ingredients")));
 @property (readonly) int32_t recipesFound __attribute__((swift_name("recipesFound")));
 @end;
@@ -4589,9 +4591,11 @@ __attribute__((swift_name("SingletonPreferencesViewModel")))
 @property (class, readonly, getter=companion) MiamCoreSingletonPreferencesViewModelCompanion *companion __attribute__((swift_name("companion")));
 - (void)addIngredientPreferenceTag:(MiamCoreTag *)tag __attribute__((swift_name("addIngredientPreference(tag:)")));
 - (void)applyPreferences __attribute__((swift_name("applyPreferences()")));
-- (void)changeGlobaleGuestNumberOfGuest:(int32_t)numberOfGuest __attribute__((swift_name("changeGlobaleGuest(numberOfGuest:)")));
+- (void)changeGlobalGuestNumberOfGuest:(int32_t)numberOfGuest __attribute__((swift_name("changeGlobalGuest(numberOfGuest:)")));
 - (MiamCorePreferencesContractState *)createInitialState __attribute__((swift_name("createInitialState()")));
 - (NSString *)getPreferencesAsQueryString __attribute__((swift_name("getPreferencesAsQueryString()")));
+- (int32_t)globalGuestCountOrDefaultDefaultValue:(int32_t)defaultValue __attribute__((swift_name("globalGuestCountOrDefault(defaultValue:)")));
+- (MiamCoreInt * _Nullable)guestOrNullFromLocal __attribute__((swift_name("guestOrNullFromLocal()")));
 - (void)handleEventEvent:(MiamCorePreferencesContractEvent *)event __attribute__((swift_name("handleEvent(event:)")));
 - (id<MiamCoreKotlinx_coroutines_coreFlow>)observeSideEffect __attribute__((swift_name("observeSideEffect()")));
 - (void)resetPreferences __attribute__((swift_name("resetPreferences()")));
@@ -4610,6 +4614,7 @@ __attribute__((swift_name("SingletonPreferencesViewModel.Companion")))
 - (MiamCorePreferencesContractState *)getInitialPref __attribute__((swift_name("getInitialPref()")));
 @property (readonly) NSString *LOCAL_DIET_KEY __attribute__((swift_name("LOCAL_DIET_KEY")));
 @property (readonly) NSString *LOCAL_EQUIPMENT_KEY __attribute__((swift_name("LOCAL_EQUIPMENT_KEY")));
+@property (readonly) NSString *LOCAL_GUEST_KEY __attribute__((swift_name("LOCAL_GUEST_KEY")));
 @property (readonly) NSString *LOCAL_INGREDIENT_KEY __attribute__((swift_name("LOCAL_INGREDIENT_KEY")));
 @property (readonly) NSArray<NSString *> *defaultIngredientTagIds __attribute__((swift_name("defaultIngredientTagIds")));
 @end;
@@ -5274,7 +5279,7 @@ __attribute__((swift_name("CatalogContractEvent.GoToFavorite")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("CatalogContractState")))
 @interface MiamCoreCatalogContractState : MiamCoreBase <MiamCoreUiState>
-- (instancetype)initWithCategories:(MiamCoreBasicUiState<NSArray<MiamCorePackage *> *> *)categories content:(MiamCoreCatalogContent *)content dialogIsOpen:(BOOL)dialogIsOpen dialogContent:(MiamCoreDialogContent *)dialogContent enableFilters:(BOOL)enableFilters enablePreferences:(BOOL)enablePreferences openedCategoryId:(NSString *)openedCategoryId openedCategoryTitle:(NSString *)openedCategoryTitle __attribute__((swift_name("init(categories:content:dialogIsOpen:dialogContent:enableFilters:enablePreferences:openedCategoryId:openedCategoryTitle:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCategories:(MiamCoreBasicUiState<NSArray<MiamCorePackage *> *> *)categories content:(MiamCoreCatalogContent *)content dialogIsOpen:(BOOL)dialogIsOpen dialogContent:(MiamCoreDialogContent *)dialogContent enableFilters:(BOOL)enableFilters enablePreferences:(BOOL)enablePreferences openedCategoryId:(NSString *)openedCategoryId openedCategoryTitle:(NSString *)openedCategoryTitle subtitle:(NSString * _Nullable)subtitle __attribute__((swift_name("init(categories:content:dialogIsOpen:dialogContent:enableFilters:enablePreferences:openedCategoryId:openedCategoryTitle:subtitle:)"))) __attribute__((objc_designated_initializer));
 - (MiamCoreBasicUiState<NSArray<MiamCorePackage *> *> *)component1 __attribute__((swift_name("component1()")));
 - (MiamCoreCatalogContent *)component2 __attribute__((swift_name("component2()")));
 - (BOOL)component3 __attribute__((swift_name("component3()")));
@@ -5283,7 +5288,8 @@ __attribute__((swift_name("CatalogContractState")))
 - (BOOL)component6 __attribute__((swift_name("component6()")));
 - (NSString *)component7 __attribute__((swift_name("component7()")));
 - (NSString *)component8 __attribute__((swift_name("component8()")));
-- (MiamCoreCatalogContractState *)doCopyCategories:(MiamCoreBasicUiState<NSArray<MiamCorePackage *> *> *)categories content:(MiamCoreCatalogContent *)content dialogIsOpen:(BOOL)dialogIsOpen dialogContent:(MiamCoreDialogContent *)dialogContent enableFilters:(BOOL)enableFilters enablePreferences:(BOOL)enablePreferences openedCategoryId:(NSString *)openedCategoryId openedCategoryTitle:(NSString *)openedCategoryTitle __attribute__((swift_name("doCopy(categories:content:dialogIsOpen:dialogContent:enableFilters:enablePreferences:openedCategoryId:openedCategoryTitle:)")));
+- (NSString * _Nullable)component9 __attribute__((swift_name("component9()")));
+- (MiamCoreCatalogContractState *)doCopyCategories:(MiamCoreBasicUiState<NSArray<MiamCorePackage *> *> *)categories content:(MiamCoreCatalogContent *)content dialogIsOpen:(BOOL)dialogIsOpen dialogContent:(MiamCoreDialogContent *)dialogContent enableFilters:(BOOL)enableFilters enablePreferences:(BOOL)enablePreferences openedCategoryId:(NSString *)openedCategoryId openedCategoryTitle:(NSString *)openedCategoryTitle subtitle:(NSString * _Nullable)subtitle __attribute__((swift_name("doCopy(categories:content:dialogIsOpen:dialogContent:enableFilters:enablePreferences:openedCategoryId:openedCategoryTitle:subtitle:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
@@ -5295,6 +5301,7 @@ __attribute__((swift_name("CatalogContractState")))
 @property (readonly) BOOL enablePreferences __attribute__((swift_name("enablePreferences")));
 @property (readonly) NSString *openedCategoryId __attribute__((swift_name("openedCategoryId")));
 @property (readonly) NSString *openedCategoryTitle __attribute__((swift_name("openedCategoryTitle")));
+@property (readonly) NSString * _Nullable subtitle __attribute__((swift_name("subtitle")));
 @end;
 
 __attribute__((swift_name("CatalogViewModel")))
@@ -5307,7 +5314,7 @@ __attribute__((swift_name("CatalogViewModel")))
 - (void)enableFiltersEnable:(BOOL)enable __attribute__((swift_name("enableFilters(enable:)")));
 - (void)enablePreferencesEnable:(BOOL)enable __attribute__((swift_name("enablePreferences(enable:)")));
 - (void)goToCategoriesList __attribute__((swift_name("goToCategoriesList()")));
-- (void)goToCategoryCategoryId:(NSString *)categoryId categoryTitle:(NSString *)categoryTitle __attribute__((swift_name("goToCategory(categoryId:categoryTitle:)")));
+- (void)goToCategoryCategoryId:(NSString *)categoryId categoryTitle:(NSString *)categoryTitle subtitle:(NSString * _Nullable)subtitle __attribute__((swift_name("goToCategory(categoryId:categoryTitle:subtitle:)")));
 - (void)handleEventEvent:(MiamCoreCatalogContractEvent *)event __attribute__((swift_name("handleEvent(event:)")));
 - (void)onSimpleSearchContent:(MiamCoreCatalogContent *)content __attribute__((swift_name("onSimpleSearch(content:)")));
 - (void)openFilter __attribute__((swift_name("openFilter()")));
