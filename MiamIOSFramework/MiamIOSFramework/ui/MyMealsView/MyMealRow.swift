@@ -66,7 +66,16 @@ public struct MyMealRow: View {
     }
     
     private var content: some View {
-        VStack(alignment: .leading) {
+        
+        let parameters =  MyMealsActionColumnTemplateParameters(
+            delete:  { myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))},
+            expand: { withAnimation(.default) {
+                isExpanded.toggle()
+                chevronAngle = isExpanded ? 0.0 : -90.0
+            }}
+        )
+        
+       return VStack(alignment: .leading) {
             HStack {
                 BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
                                     basketDescription: meal.basketPreviewLine.basketDescription,
@@ -81,15 +90,7 @@ public struct MyMealRow: View {
                 }
                 
                 if let actionColumnTemplate = Template.sharedInstance.myMealsActionColumnTemplate {
-                    actionColumnTemplate(
-                        MyMealsActionColumnTemplateParameters(
-                            delete:  { myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))},
-                            expand: { withAnimation(.default) {
-                                isExpanded.toggle()
-                                chevronAngle = isExpanded ? 0.0 : -90.0
-                            }}
-                        )
-                    )
+                    actionColumnTemplate(parameters)
                 } else {
                     VStack {
                         Button {
