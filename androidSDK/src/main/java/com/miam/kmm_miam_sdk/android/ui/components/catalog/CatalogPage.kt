@@ -31,7 +31,7 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateParameters
+import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white

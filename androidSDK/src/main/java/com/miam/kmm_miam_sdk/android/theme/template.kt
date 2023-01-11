@@ -11,7 +11,7 @@ import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
-import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateParameters
+import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 
 object Template {
 
