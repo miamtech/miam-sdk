@@ -49,6 +49,7 @@ class CatalogSearch(
 
     private fun updateResearch(searchString: String) {
         catalogFilterVM.setSearchString(searchString)
+        catalogFilterVM.applyFilter()
     }
 
     @Composable

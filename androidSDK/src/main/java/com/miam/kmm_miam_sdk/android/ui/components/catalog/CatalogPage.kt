@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +49,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColo
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import kotlinx.coroutines.cancel
 
 open class CatalogPage @JvmOverloads constructor(
     context: Context,
@@ -84,6 +86,8 @@ open class CatalogPage @JvmOverloads constructor(
     @Composable
     override fun Content() {
         val state = recipePageVM.uiState.collectAsState()
+
+        DisposableEffect(Unit) { onDispose { recipePageVM.cancel() } }
 
         ManagementResourceState(
             resourceState = state.value.recipes,

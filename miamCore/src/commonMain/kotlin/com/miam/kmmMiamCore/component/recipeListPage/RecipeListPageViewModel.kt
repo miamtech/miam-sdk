@@ -58,7 +58,7 @@ class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event, Recip
 
     private fun listenFilterChanges() {
         launch(coroutineHandler) {
-            recipeFilter.effect.collect {
+            recipeFilter.observeSideEffect().collect {
                 initPage(currentState.title)
             }
         }
