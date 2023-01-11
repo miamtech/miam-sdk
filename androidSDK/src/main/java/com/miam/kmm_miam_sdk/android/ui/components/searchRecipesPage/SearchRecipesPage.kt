@@ -1,43 +1,38 @@
-package com.miam.kmm_miam_sdk.android.ui.components.categoryRecipesPage
+package com.miam.kmm_miam_sdk.android.ui.components.searchRecipesPage
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.compose.runtime.Composable
-import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.CatalogPage
 
-class CategoryRecipesPage @JvmOverloads constructor(
+class SearchRecipesPage @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ): CatalogPage(context, attrs, defStyleAttr) {
 
     private val routeService = RouteServiceInstance.instance
-    private val recipeFilters = FilterViewModelInstance.instance
 
     fun bind(
-        categoryId: String,
-        categoryTitle: String,
-        subtitle: String,
+        title: String,
         columns: Int? = null,
         verticalSpacing: Int? = null,
-        horizontalSpacing: Int? = null
+        horizontalSpacing: Int? = null,
     ) {
-        recipeFilters.setCat(categoryId)
         super.bind(
-            title = categoryTitle,
+            title = title,
             back = { routeService.previous() },
-            subtitle = subtitle,
             columns = columns,
             verticalSpacing = verticalSpacing,
-            horizontalSpacing = horizontalSpacing
+            horizontalSpacing = horizontalSpacing,
+            subtitle = null
         )
     }
 
     override fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateParameters) -> Unit)? {
-        return Template.CatalogCategoryTitleTemplate
+        return Template.CatalogSearchTitleTemplate
     }
 }

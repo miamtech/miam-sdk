@@ -62,6 +62,7 @@ import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import com.miam.kmm_miam_sdk.android.di.KoinInitializer
+import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.basketTag.BasketTag
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
@@ -242,6 +243,19 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                 }
             }
         }
+
+    private val searchRecipesTitleTemplate: @Composable (parameters: CatalogPageTitleTemplateParameters) -> Unit = { parameters ->
+        Column {
+            Text(text = "${parameters.title} <-Super")
+        }
+    }
+
+    private val categoryRecipesTitleTemplate: @Composable (parameters: CatalogPageTitleTemplateParameters) -> Unit = { parameters ->
+        Column {
+            Text(text = "${parameters.title} <-Super")
+            Text(text = "${parameters.subtitle} <-Super")
+        }
+    }
 
     private val basketPreviewProductLineTemplateVariable: @Composable (
         productName: String,
@@ -474,6 +488,8 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
     }
 
     private fun initTemplate() {
+        Template.CatalogSearchTitleTemplate = searchRecipesTitleTemplate
+        Template.CatalogCategoryTitleTemplate = categoryRecipesTitleTemplate
 //        Template.recipeCardTemplate = recipeFunctionTemplateVariable
 //        Template.basketPreviewProductLine = basketPreviewProductLineTemplateVariable
 //        Template.recipeLoaderTemplate = recipeloader

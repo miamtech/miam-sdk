@@ -126,18 +126,13 @@ public class MiamManager: ObservableObject {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.ingredientNotInBasketRowTemplate =
-        {(name: String,
-          action: (() -> Void)?) -> AnyView in
+        Template.sharedInstance.recipesListCategoryTitleTemplate =
+        {(coco: CatalogPageTitleTemplateParameters
+          ) -> AnyView in
             AnyView(
-                HStack{
-                    Button(action: {
-                        if(action != nil){
-                            action!()
-                        }
-                    }) {
-                        Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                    }
+                VStack{
+                    Text(coco.title)
+                    Text(coco.subtitle ?? "niooooo")
                 }
             )}
     }

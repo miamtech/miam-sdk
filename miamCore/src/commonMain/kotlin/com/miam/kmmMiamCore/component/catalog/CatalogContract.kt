@@ -29,7 +29,8 @@ interface CatalogContract {
         val enableFilters: Boolean,
         val enablePreferences: Boolean,
         val openedCategoryId: String,
-        val openedCategoryTitle: String
+        val openedCategoryTitle: String,
+        val subtitle: String? = null
     ): UiState
 
     sealed class Effect: UiEffect

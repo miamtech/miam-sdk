@@ -1,6 +1,5 @@
 package com.miam.kmm_miam_sdk.android.ui.components.catalog
 
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +19,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.filterSearchTitle
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.prefixWordSearchTitle
 import com.miam.kmm_miam_sdk.android.ui.components.categoryRecipesPage.CategoryRecipesPage
+import com.miam.kmm_miam_sdk.android.ui.components.searchRecipesPage.SearchRecipesPage
 
 @Composable
 fun CatalogSuccessView(
@@ -27,7 +27,6 @@ fun CatalogSuccessView(
     content: CatalogContent,
     enableFilters: Boolean,
     enablePreferences: Boolean,
-    context: Context,
     columns: Int,
     vSpacing: Int,
     hSpacing: Int,
@@ -40,6 +39,7 @@ fun CatalogSuccessView(
     fun back() = routeService.previous()
     val catId = vmCatalog.currentState.openedCategoryId
     val catTitle = vmCatalog.currentState.openedCategoryTitle
+    val catSubtitle = vmCatalog.currentState.subtitle
 
 
     Column {
@@ -47,8 +47,8 @@ fun CatalogSuccessView(
         when (content) {
             CatalogContent.CATEGORIES_LIST -> CatalogBodyCategories(categories = categories, vmCatalog = vmCatalog)
             CatalogContent.FILTER_SEARCH -> CatalogBodyFilterSearch(::back, columns, vSpacing, hSpacing)
-            CatalogContent.WORD_SEARCH -> CatalogBodyWordSearch(filterVM.currentState.searchString, ::back, columns, vSpacing, hSpacing)
-            CatalogContent.CATEGORY -> CatalogBodyCategory(catId, catTitle, columns, vSpacing, hSpacing)
+            CatalogContent.WORD_SEARCH -> CatalogBodyWordSearch(filterVM.currentState.searchString, columns, vSpacing, hSpacing)
+            CatalogContent.CATEGORY -> CatalogBodyCategory(catId, catTitle, catSubtitle ?: "", columns, vSpacing, hSpacing)
             CatalogContent.FAVORITE -> CatalogBodyFavorite(::back, columns, vSpacing, hSpacing)
         }
     }
@@ -60,7 +60,13 @@ fun CatalogBodyCategories(categories: List<Package>, vmCatalog: CatalogViewModel
         if (categories.isNotEmpty()) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 categories.forEach { cat ->
-                    CatalogCategory(cat, LocalContext.current) { vmCatalog.goToCategory(it.id, it.attributes?.title ?: "") }
+                    CatalogCategory(cat, LocalContext.current) {
+                        vmCatalog.goToCategory(
+                            it.id,
+                            it.attributes?.title ?: "",
+                            it.attributes?.settings?.subtitle
+                        )
+                    }
                 }
             }
         } else {
@@ -76,14 +82,14 @@ fun CatalogBodyFilterSearch(back: () -> Unit, columns: Int, vSpacing: Int, hSpac
 }
 
 @Composable
-fun CatalogBodyWordSearch(searchStr: String?, back: () -> Unit, columns: Int, vSpacing: Int, hSpacing: Int) {
+fun CatalogBodyWordSearch(searchStr: String?, columns: Int, vSpacing: Int, hSpacing: Int) {
     val title = "$prefixWordSearchTitle \"$searchStr\""
-    CatalogPage(LocalContext.current).apply { bind(title, back, columns, vSpacing, hSpacing) }.Content()
+    SearchRecipesPage(LocalContext.current).apply { bind(title, columns, vSpacing, hSpacing) }.Content()
 }
 
 @Composable
-fun CatalogBodyCategory(openedCategoryId: String, openedCategoryTitle: String, columns: Int, vSpacing: Int, hSpacing: Int) {
-    CategoryRecipesPage(LocalContext.current).apply { bind(openedCategoryId, openedCategoryTitle, columns, vSpacing, hSpacing) }.Content()
+fun CatalogBodyCategory(openedCategoryId: String, openedCategoryTitle: String, subtitle: String, columns: Int, vSpacing: Int, hSpacing: Int) {
+    CategoryRecipesPage(LocalContext.current).apply { bind(openedCategoryId, openedCategoryTitle, subtitle, columns, vSpacing, hSpacing) }.Content()
 }
 
 @Composable
