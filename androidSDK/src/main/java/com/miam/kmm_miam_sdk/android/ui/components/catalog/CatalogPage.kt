@@ -31,7 +31,7 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
-import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateDescriptor
+import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -161,13 +161,13 @@ open class CatalogPage @JvmOverloads constructor(
     private fun HeaderTitle(title: String, subtitle: String) {
         val templateToUse = specificTemplate() ?: Template.CatalogPageTitleTemplate
         if (templateToUse != null) {
-            templateToUse(CatalogPageTitleTemplateDescriptor(title, subtitle))
+            templateToUse(CatalogPageTitleTemplateParameters(title, subtitle))
         } else {
             Row { Text(text = title, color = Colors.black, style = Typography.subtitleBold) }
         }
     }
 
-    protected open fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateDescriptor) -> Unit)? {
+    protected open fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateParameters) -> Unit)? {
         return null
     }
 

@@ -54,7 +54,7 @@ public class MiamManager {
         UserHandler.shared.updateUserId(userId: "test_user")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
-        //initTemplate()
+        initTemplate()
     }
 
     
@@ -120,18 +120,13 @@ public class MiamManager {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.ingredientNotInBasketRowTemplate =
-        {(name: String,
-          action: (() -> Void)?) -> AnyView in
+        Template.sharedInstance.recipesListCategoryTitleTemplate =
+        {(coco: CatalogPageTitleTemplateParameters
+          ) -> AnyView in
             AnyView(
-                HStack{
-                    Button(action: {
-                        if(action != nil){
-                            action!()
-                        }
-                    }) {
-                        Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                    }
+                VStack{
+                    Text(coco.title)
+                    Text(coco.subtitle ?? "niooooo")
                 }
             )}
     }

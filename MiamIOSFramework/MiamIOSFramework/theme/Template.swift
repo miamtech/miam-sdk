@@ -532,17 +532,24 @@ public class Template {
     //RecipesList
     
     /**
-     title:  String
+      CatalogPageTitleTemplateParameters
      */
     public var recipesListTitleTemplate: ((
-       String
+        CatalogPageTitleTemplateParameters
    ) ->AnyView)? = nil
     
     /**
-     title:  String
+      CatalogPageTitleTemplateParameters
      */
     public var recipesListCategoryTitleTemplate: ((
-       String
+        CatalogPageTitleTemplateParameters
+   ) ->AnyView)? = nil
+    
+    /**
+       CatalogPageTitleTemplateParameters
+     */
+    public var recipesListSearchTitleTemplate: ((
+        CatalogPageTitleTemplateParameters
    ) ->AnyView)? = nil
 }
 

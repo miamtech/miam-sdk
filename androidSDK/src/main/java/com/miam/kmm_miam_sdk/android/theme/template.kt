@@ -11,7 +11,7 @@ import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
-import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateDescriptor
+import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateParameters
 
 object Template {
 
@@ -251,15 +251,15 @@ object Template {
     var CatalogResultPageLazyLoaderTemplate: (@Composable() () -> Unit)? = null
 
     var CatalogPageTitleTemplate: (@Composable() (
-        descriptor: CatalogPageTitleTemplateDescriptor,
+        parameters: CatalogPageTitleTemplateParameters,
     ) -> Unit)? = null
 
     var CatalogCategoryTitleTemplate: (@Composable() (
-        descriptor: CatalogPageTitleTemplateDescriptor,
+        descriptor: CatalogPageTitleTemplateParameters,
     ) -> Unit)? = null
 
     var CatalogSearchTitleTemplate: (@Composable() (
-        descriptor: CatalogPageTitleTemplateDescriptor,
+        descriptor: CatalogPageTitleTemplateParameters,
     ) -> Unit)? = null
 
     var CatalogFavoritEmptyTemplate: (@Composable() (

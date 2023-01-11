@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import androidx.compose.runtime.Composable
 import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.services.RouteServiceInstance
-import com.miam.kmm_miam_sdk.android.templatesDescriptors.CatalogPageTitleTemplateDescriptor
+import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.CatalogPage
 
@@ -37,7 +37,7 @@ class CategoryRecipesPage @JvmOverloads constructor(
         )
     }
 
-    override fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateDescriptor) -> Unit)? {
+    override fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateParameters) -> Unit)? {
         return Template.CatalogCategoryTitleTemplate
     }
 }
