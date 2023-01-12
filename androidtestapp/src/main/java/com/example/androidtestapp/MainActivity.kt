@@ -129,7 +129,7 @@ class MainActivity: ComponentActivity(), KoinComponent, CoroutineScope by Corout
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
-        ContextHandlerInstance.instance.setContext(this@MainActivity)
+        ContextHandlerInstance.instance.setContext(applicationContext)
         userPreferences.putInt("testInt", 42)
         userPreferences.putList("testList", listOf("1", "2", "3"))
         LogHandler.info("user pref list is working ${userPreferences.getListOrNull("testList")}")
