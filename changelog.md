@@ -1,3 +1,6 @@
+# 3.7.0
+- [FEA][AND] Add price template 
+
 # 3.6.0
 - [FIX][AND] Recipes page no long reloading after closing a dialog
 - [FIX][AND] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
