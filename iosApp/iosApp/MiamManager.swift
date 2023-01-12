@@ -35,7 +35,7 @@ public class MiamManager: ObservableObject {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
         
-        ContextHandlerInstance.shared.instance.setContext(context: NSObject())
+        ContextHandlerInstance.shared.instance.setContext(context: MiamPreferencesContext())
         UserPreferencesInstance.shared.instance.putInt(key: "testInt", value: 42)
         UserPreferencesInstance.shared.instance.putList(key: "testString", value: ["1","2","3"])
         print("IntPref success \( UserPreferencesInstance.shared.instance.getIntOrNull(key: "testInt"))")
