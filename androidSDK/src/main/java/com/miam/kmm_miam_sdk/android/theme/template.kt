@@ -12,6 +12,7 @@ import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeStep
 import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
+import com.miam.kmm_miam_sdk.android.templatesParameters.PriceParameters
 
 object Template {
 
@@ -323,4 +324,34 @@ object Template {
         isLiked: Boolean, likeAction: () -> Unit
     ) -> Unit)? = null
 
+
+///////////// PRICE //////////////////////////////////
+
+    /***
+     * Available 3.7.0
+     * PriceParameters(price: double)
+     */
+    var simplePriceTemplate: (@Composable() (
+        pp: PriceParameters
+    ) -> Unit)? = null
+
+    /***
+     * Available 3.7.0
+     * PriceParameters(price: double)
+     */
+    var recipePriceTemplate: (@Composable() (
+        pp: PriceParameters
+    ) -> Unit)? = null
+
+    /***
+     * Available 3.7.0
+     */
+    var priceLoadingTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+    /***
+     * Available 3.7.0
+     */
+    var priceEmptyTemplate: (@Composable() (
+    ) -> Unit)? = null
 }

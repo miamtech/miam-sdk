@@ -1,4 +1,5 @@
 # 3.7.0
+- [FEA][AND] Add price template 
 - [Fix][AND] Use android app context
 
 # 3.6.0
