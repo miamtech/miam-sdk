@@ -38,15 +38,18 @@ android {
 }
 
 val composeVersion: String by project
-
+val navVersion: String by project
+val ktorVersion: String by project
+val coilVersion: String by project
+val koinVersion: String by project
 
 dependencies {
     // as an aar extern file
     // if use you have to put manually aar file in libs folder
     implementation(files("$projectDir/libs/androidSDK-debug.aar"))
 
-    implementation("io.insert-koin:koin-android:3.2.2")
-    implementation("io.insert-koin:koin-core:3.2.2")
+    implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation("io.insert-koin:koin-core:$koinVersion")
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.6.1")
     // Integration with ViewModels
@@ -63,16 +66,17 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("io.coil-kt:coil-compose:1.3.1")
-    implementation("io.coil-kt:coil-svg:1.3.1")
-    implementation("io.ktor:ktor-client-android:1.6.7")
-    implementation("io.ktor:ktor-client-serialization:1.6.7")
-    implementation("io.ktor:ktor-client-core:1.6.7")
-    implementation("io.ktor:ktor-client-logging:1.6.7")
-    implementation("org.slf4j:slf4j-nop:1.7.25")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-runtime-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation("io.coil-kt:coil-svg:$coilVersion")
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 }
 repositories {
     mavenCentral()
 }
+
+
