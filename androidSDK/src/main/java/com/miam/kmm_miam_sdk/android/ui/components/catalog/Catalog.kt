@@ -24,10 +24,9 @@ class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    pushInitialRoute: Boolean = true
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
-    private val vmCatalog: CatalogViewModel = CatalogViewModel(pushInitialRoute)
+    private val vmCatalog: CatalogViewModel = CatalogViewModel()
     private val routeService = RouteServiceInstance.instance
 
     private val filter = CatalogFilter(
