@@ -5,17 +5,25 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FoodBank
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -25,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.androidtestapp.di.myServicesModule
 import com.example.androidtestapp.models.Route
+import com.example.androidtestapp.views.Basket
 import com.example.androidtestapp.views.DeepLinkDropDownMenu
 import com.example.androidtestapp.views.Home
 import com.miam.kmmMiamCore.di.initKoin
@@ -39,22 +48,20 @@ import org.koin.android.ext.koin.androidContext
 
 class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
+    val koinModuleList = KoinInitializer.miamModuleList.toMutableList().apply { add(myServicesModule) }
+
     private val routes = listOf(
         Route("home", "home", Icons.Filled.Home),
         Route("Favorite", "favorite", Icons.Filled.Favorite),
         Route("Catalogue", "catalogCategories", Icons.Filled.Book),
-        Route("Mes Repas", "myMeal", Icons.Filled.FoodBank),
+        Route("Mes Repas", "myMeal", Icons.Filled.FoodBank)
     )
 
     private fun initMiam() {
-        val koinModuleList = KoinInitializer.miamModuleList.toMutableList()
-        koinModuleList.add(myServicesModule)
-
         initKoin {
             androidContext(this@MainActivity)
             modules(koinModuleList.toList())
         }
-
         MiamManager()
     }
 
@@ -63,76 +70,121 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
         initMiam()
         setContent {
             val navController = rememberNavController()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            Column {
 
-            Scaffold(
-                bottomBar = {
-                    BottomNavigation {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-                        routes.forEach { route ->
-                            BottomNavigationItem(
-                                icon = { Icon(route.icon, contentDescription = null) },
-                                label = { Text(route.label) },
-                                selected = currentDestination?.hierarchy?.any { it.route == route.value } == true,
-                                onClick = {
-                                    navController.navigate(route.value) {
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = "Miam  demo") },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    val previousRoute = RouteServiceInstance.instance.previous()
+                                    if (previousRoute == null && navController.backQueue.isNotEmpty()) {
+                                        (navController.backQueue[0].destination as NavGraph).startDestinationRoute?.let { it1 ->
+                                            navController.navigate(
+                                                it1
+                                            )
+                                        }
+                                    }
+                                }) {
+                                    Icon(Icons.Filled.ArrowBack, null)
+                                }
+                            }, actions = {
+                                IconButton(onClick = {
+                                    navController.navigate("basket") {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
                                         launchSingleTop = true
                                         restoreState = true
                                     }
+                                }) {
+                                    Icon(Icons.Filled.ShoppingCart, null)
                                 }
-                            )
-                        }
-                    }
-                }
-            ) { _ ->
-                NavHost(navController = navController, startDestination = "home") {
-                    composable("home") {
-                        Box {
-                            DeepLinkDropDownMenu {
-                                navController.navigate("catalog/$it") {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                                DeepLinkDropDownMenu {
+                                    navController.navigate("catalog/$it") {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }.Content()
-                            Home(this@MainActivity).Content()
-                        }
-                    }
-                    composable("myMeal") { MyMeal(this@MainActivity).Content() }
-                    composable("favorite") { FavoritePage(this@MainActivity).Content() }
-                    composable("catalog/{Id}") {
-                        Catalog(this@MainActivity).apply { bind(it.arguments?.getString("Id") ?: "", "") }.Content()
-                        BackHandler {
-                            val previousRoute = RouteServiceInstance.instance.previous()
-                            if (previousRoute == null && navController.backQueue.isNotEmpty()) {
-                                (navController.backQueue[0].destination as NavGraph).startDestinationRoute?.let { it1 ->
-                                    navController.navigate(
-                                        it1
-                                    )
-                                }
+                                }.Content()
+                            }
+                        )
+                    },
+                    bottomBar = {
+                        BottomNavigation {
+                            routes.forEach { route ->
+                                BottomNavigationItem(
+                                    icon = { Icon(route.icon, contentDescription = null) },
+                                    label = { Text(route.label) },
+                                    selected = currentDestination?.hierarchy?.any { it.route == route.value } == true,
+                                    onClick = {
+                                        navController.navigate(route.value) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                )
                             }
                         }
                     }
-                    composable("catalogCategories") {
-                        Catalog(this@MainActivity).Content()
-                        BackHandler {
-                            val previousRoute = RouteServiceInstance.instance.previous()
-                            if (previousRoute == null && navController.backQueue.isNotEmpty()) {
-                                (navController.backQueue[0].destination as NavGraph).startDestinationRoute?.let { it1 ->
-                                    navController.navigate(
-                                        it1
-                                    )
+                ) { _ ->
+                    NavHost(navController = navController, startDestination = "home") {
+                        composable("home") {
+                            Box {
+                                Home(this@MainActivity).Content()
+                            }
+                        }
+                        composable("myMeal") {
+                            Column(Modifier.verticalScroll(rememberScrollState())) {
+                                MyMeal(this@MainActivity).Content()
+                            }
+                        }
+                        composable("favorite") { FavoritePage(this@MainActivity).Content() }
+                        composable("catalog/{Id}") {
+                            Catalog(this@MainActivity, pushInitialRoute = false).apply { bind(it.arguments?.getString("Id") ?: "", "") }.Content()
+                            BackHandler {
+                                val previousRoute = RouteServiceInstance.instance.previous()
+                                if (previousRoute == null && navController.backQueue.isNotEmpty()) {
+                                    (navController.backQueue[0].destination as NavGraph).startDestinationRoute?.let { it1 ->
+                                        navController.navigate(
+                                            it1
+                                        )
+                                    }
                                 }
+                            }
+                        }
+                        composable("catalogCategories") {
+
+                            Catalog(this@MainActivity).Content()
+                            BackHandler {
+                                val previousRoute = RouteServiceInstance.instance.previous()
+                                if (previousRoute == null && navController.backQueue.isNotEmpty()) {
+                                    (navController.backQueue[0].destination as NavGraph).startDestinationRoute?.let { it1 ->
+                                        navController.navigate(
+                                            it1
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        composable("basket") {
+                            Box {
+                                Basket().Content()
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }
+

@@ -55,7 +55,7 @@ dependencies {
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.6.0")
+    implementation("com.google.android.material:material:1.7.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation("androidx.compose.compiler:compiler:1.3.2")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")

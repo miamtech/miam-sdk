@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel(pushInitialRoute: Boolean): BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in catalog view $exception")
@@ -49,10 +49,14 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         )
 
     init {
-        // push initial route
-        routeService.dispatch(RouteServiceAction.SetPageRoute(CATEGORIES_LIST_TITLE, ::setCategoriesListState))
+        if (pushInitialRoute) pushInitialRoute()
         listenPreferencesChanges()
         if (preference.isInit) fetchCategories()
+    }
+
+    fun pushInitialRoute() {
+        LogHandler.info("Route push init")
+        routeService.dispatch(RouteServiceAction.SetInitialPageRoute(CATEGORIES_LIST_TITLE, ::setCategoriesListState))
     }
 
     override fun handleEvent(event: CatalogContract.Event) {

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
@@ -16,15 +17,17 @@ import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.ui.components.common.RoutableDialog
 import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import kotlinx.coroutines.cancel
 
 
 class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
+    pushInitialRoute: Boolean = true
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
-    private val vmCatalog: CatalogViewModel = CatalogViewModel()
+    private val vmCatalog: CatalogViewModel = CatalogViewModel(pushInitialRoute)
     private val routeService = RouteServiceInstance.instance
 
     private val filter = CatalogFilter(
@@ -74,6 +77,7 @@ class Catalog @JvmOverloads constructor(
     override fun Content() {
         val state by vmCatalog.uiState.collectAsState()
 
+        DisposableEffect(Unit) { onDispose { vmCatalog.cancel() } }
         ModaleComponent(state.dialogIsOpen, state.dialogContent, routeService, filter, search, preference)
 
         Box {

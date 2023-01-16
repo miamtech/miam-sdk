@@ -4,6 +4,7 @@ import com.miam.kmmMiamCore.base.mvi.Action
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.base.mvi.Store
+import com.miam.kmmMiamCore.handler.LogHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +81,7 @@ data class RouteServiceState(val route: Route?): State
 sealed class RouteServiceAction: Action {
     data class SetDialogRoute(val title: String, val backToRoute: () -> Unit, val closeDialog: () -> Unit): RouteServiceAction()
     data class SetPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
+    data class SetInitialPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
 }
 
 sealed class RouteServiceEffect: Effect {
@@ -100,14 +102,24 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
     override fun dispatch(action: RouteServiceAction): Job {
         return when (action) {
             is RouteServiceAction.SetDialogRoute -> {
+                LogHandler.info("Route dialog ${action.title}")
                 launch(coroutineHandler) {
                     state.value = state.value.copy(route = DialogRoute(action.title, action.backToRoute, getCurrentRoute(), action.closeDialog))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
             is RouteServiceAction.SetPageRoute -> {
+                LogHandler.info("Route page ${action.title}")
                 launch(coroutineHandler) {
                     state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, getCurrentRoute()))
+                    state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
+                }
+            }
+            is RouteServiceAction.SetInitialPageRoute -> {
+                LogHandler.info("Route page ${action.title}")
+                if (getCurrentRoute() != null) return Job()
+                launch(coroutineHandler) {
+                    state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, null))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
                 }
             }
@@ -118,6 +130,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         popRoute()?.let { poppedRoute ->
             poppedRoute.onPrevious()
             launch { poppedRoute.previous?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) } }
+            LogHandler.info("Route ${poppedRoute.previous}")
             return poppedRoute.previous
         }
         return null

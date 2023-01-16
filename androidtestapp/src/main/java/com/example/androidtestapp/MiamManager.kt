@@ -14,13 +14,11 @@ import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
-class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main), KoinComponent {
+class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val basketService: MyBasketService by inject()
+    private val basketService = MyBasketService()
     private val retailerBasketSubject = basketService.getBasket()
     private var basketHandler: BasketHandler = BasketHandlerInstance.instance
 
