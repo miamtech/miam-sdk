@@ -149,7 +149,7 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                         }
                         composable("favorite") { FavoritePage(this@MainActivity).Content() }
                         composable("catalog/{Id}") {
-                            Catalog(this@MainActivity, pushInitialRoute = false).apply { bind(it.arguments?.getString("Id") ?: "", "") }.Content()
+                            Catalog(this@MainActivity).apply { bind(it.arguments?.getString("Id") ?: "", "") }.Content()
                             BackHandler {
                                 val previousRoute = RouteServiceInstance.instance.previous()
                                 if (previousRoute == null && navController.backQueue.isNotEmpty()) {

@@ -1,5 +1,8 @@
 package com.example.androidtestapp
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.androidtestapp.models.MyProduct
 import com.example.androidtestapp.services.ExampleState
 import com.example.androidtestapp.services.MyBasketService
@@ -11,6 +14,7 @@ import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +44,8 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
+        CatalogModifier.categoryListContainer = Modifier.padding(bottom = 100.dp)
+
         launch {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {
                 println("recipes count by flow : ${retailerBasketSubject.value.recipeCount} ")
