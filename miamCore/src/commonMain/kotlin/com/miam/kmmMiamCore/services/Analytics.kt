@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
 data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
@@ -28,6 +29,11 @@ data class AnalyticState(
 
 sealed class AnalyticEffect: Effect {
     data class EventEmitted(val event: AnalyticEvent): AnalyticEffect()
+}
+
+@Suppress("UserPreferencesInstance used by ios and component")
+object AnalyticsInstance: KoinComponent {
+    val instance: Analytics by inject()
 }
 
 class Analytics: KoinComponent {
