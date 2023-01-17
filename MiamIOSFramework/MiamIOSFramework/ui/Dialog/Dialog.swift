@@ -71,7 +71,9 @@ struct Dialog: View {
                         } else {
                             DialogEmptyView(closeAction: close)
                         }
-                    case RouterContent.itemsSelector : ItemSelector()
+                    case RouterContent.itemsSelector : ItemSelector {
+                        ()
+                    }
                     case RouterContent.empty: DialogEmptyView(closeAction: close)
                     default: DialogEmptyView(closeAction: close)
                 }

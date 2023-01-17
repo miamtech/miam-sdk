@@ -10,11 +10,10 @@ import miamCore
 
 @available(iOS 14, *)
 public struct ItemSelector: View  {
-    
-    @ObservedObject var viewModel : ItemSelectorVM
-    
-    public init() {
-        viewModel = ItemSelectorVM()
+    @ObservedObject var viewModel : ItemSelectorVM = ItemSelectorVM()
+    private let onItemSelected: () -> Void
+    public init(onItemSelected: @escaping () -> Void) {
+        self.onItemSelected = onItemSelected
     }
     
     public var body: some View {
@@ -58,6 +57,7 @@ public struct ItemSelector: View  {
                                 }.onTapGesture {
                                     if let index = viewModel.state?.itemList?.firstIndex(of: item) {
                                         viewModel.chooseItem(index: index)
+                                        onItemSelected()
                                     }
                                 }
                             }

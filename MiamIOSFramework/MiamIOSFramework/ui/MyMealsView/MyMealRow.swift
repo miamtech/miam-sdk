@@ -133,8 +133,9 @@ public struct MyMealRow: View {
                 showingPopup = false
             }
         }.sheet(isPresented: $showingItemSelector) {
-            
-            ItemSelector()
+            ItemSelector {
+                ()
+            }
         }.onAppear(perform: {
             recipeViewModel.fetchRecipe(recipeId: meal.id)
         })

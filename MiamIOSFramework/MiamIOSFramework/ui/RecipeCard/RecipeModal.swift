@@ -46,7 +46,9 @@ struct RecipeModal: View {
                         }
                         
                         NavigationLink("Item Selector", isActive: $showItemSelector) {
-                            ItemSelector()
+                            ItemSelector {
+                                self.showItemSelector = false
+                            }
                         }.hidden()
                     }.frame(maxHeight: .infinity)
                 }.hidden()
