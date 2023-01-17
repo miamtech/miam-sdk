@@ -89,7 +89,8 @@ public struct CounterView: View {
                 
                 Spacer()
                 if isLoading {
-                    ProgressLoader(color: Color.miamColor(.primary))
+                    ProgressLoader(color: Color.miamColor(.white))
+                        .scaleEffect(0.5)
                 } else {
                     Text("\(count)" + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
