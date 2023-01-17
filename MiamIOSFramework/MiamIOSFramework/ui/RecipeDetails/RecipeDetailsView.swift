@@ -94,6 +94,21 @@ public struct RecipeDetailsView: View {
         }
         .frame(maxHeight: .infinity)
         .navigationTitle(recipeTitle)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack{
+                    Image.miamImage(icon: .ideeRepas)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:24, height:24)
+                    Text(RecipeCardText.sharedInstance.recipeFlag)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                }.padding(.horizontal,16)
+                    .padding(.vertical,4)
+                    .background(Color.miamColor(.musterd))
+                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+            }
+        }
         .onAppear(perform: {
             if (recipeId != nil) {
                 viewModel.fetchRecipe(recipeId: self.recipeId!)
