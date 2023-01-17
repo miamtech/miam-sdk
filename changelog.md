@@ -1,3 +1,6 @@
+# 3.8.0
+- [FEA][COR] Expose analytic events and closure
+
 # 3.7.0
 - [FEA][AND] Add price template 
 - [Fix][AND] Use android app context
