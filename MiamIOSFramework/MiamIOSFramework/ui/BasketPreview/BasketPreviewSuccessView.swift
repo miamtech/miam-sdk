@@ -51,16 +51,6 @@ public struct BasketPreviewSuccessView: View {
     
     public var body: some View {
         VStack {
-            TitleBarView(showBackButton: true, backAction: {
-                goToDetail(recipeVm, true)
-            },
-             titleView: AnyView(
-                Text("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
-                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                    .padding(.leading, Dimension.sharedInstance.lPadding)))
-
-            
-            
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                                     basketDescription: viewModel.basketDescription,
@@ -117,6 +107,7 @@ public struct BasketPreviewSuccessView: View {
                 }
             )
         }
+        .navigationTitle("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
     }
 }
 

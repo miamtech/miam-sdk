@@ -41,11 +41,6 @@ public struct RecipeDetailsView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(showBackButton: true, backAction: close, titleView: AnyView(
-                RecipeDetailTitleBar(showTitleInHeader: showTitleInHeader, title: viewModel.recipe?.attributes?.title ?? "")
-            )
-            )
-            
             ScrollView {
                 if let recipe = viewModel.recipe {
                     if let template = Template.sharedInstance.recipeDetailInfosTemplate {

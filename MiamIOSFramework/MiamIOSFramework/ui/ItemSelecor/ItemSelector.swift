@@ -19,19 +19,6 @@ public struct ItemSelector: View  {
     public var body: some View {
         if(viewModel.state != nil ) {
             VStack {
-                TitleBarView(
-                    showBackButton: true, backAction: {
-                        viewModel.returnToPreview()
-                    }, titleView: AnyView(
-                        HStack{
-                            Spacer()
-                            Text(ItemSelectorText.sharedInstance.swapProduct)
-                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                                .foregroundColor(Color.miamColor(.black))
-                            Spacer()
-                        }
-                    )
-                )
                 ScrollView{
                     VStack(alignment: .leading){
                         if let selectedItem = viewModel.state?.selectedItem {
@@ -64,7 +51,7 @@ public struct ItemSelector: View  {
                         }
                     }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
                 }
-            }
+            }.navigationTitle(ItemSelectorText.sharedInstance.swapProduct)
         }
     }
 }
