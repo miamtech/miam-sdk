@@ -17,16 +17,6 @@ struct RecipeModal: View {
     let recipeId: String
     let close: () -> Void
     
-    private var recipeTitle: String {
-        var recipeTitle = ""
-        
-        if let title = recipeViewModel.recipe?.attributes?.title {
-            recipeTitle = title
-        }
-        
-        return recipeTitle
-    }
-    
     init(recipeId: String, showBasketPreview: Bool = false, close: @escaping () -> Void) {
         self.showBasketPreview = showBasketPreview
         self.recipeId = recipeId
@@ -35,7 +25,6 @@ struct RecipeModal: View {
     
     var body: some View {
         NavigationView {
-            
             VStack {
                 RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: true, close: {
                     close()
@@ -67,7 +56,6 @@ struct RecipeModal: View {
                 
             }
             .frame(maxHeight: .infinity)
-            .navigationBarTitle(recipeTitle, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -79,6 +67,7 @@ struct RecipeModal: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
         }.onAppear {
             recipeViewModel.fetchRecipe(recipeId: recipeId)
         }

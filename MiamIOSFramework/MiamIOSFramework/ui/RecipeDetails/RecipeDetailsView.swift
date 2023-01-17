@@ -20,6 +20,16 @@ public struct RecipeDetailsView: View {
     @SwiftUI.State var showTitleInHeader = false
     @ObservedObject var viewModel: RecipeCardVM
     
+    private var recipeTitle: String {
+        var recipeTitle = ""
+        
+        if let title = viewModel.recipe?.attributes?.title, showTitleInHeader {
+            recipeTitle = title
+        }
+        
+        return recipeTitle
+    }
+    
     public init(recipeId: String, showFooter: Bool = true, close: @escaping () -> (),
                 navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.recipeId = recipeId
@@ -83,6 +93,7 @@ public struct RecipeDetailsView: View {
             }
         }
         .frame(maxHeight: .infinity)
+        .navigationTitle(recipeTitle)
         .onAppear(perform: {
             if (recipeId != nil) {
                 viewModel.fetchRecipe(recipeId: self.recipeId!)
