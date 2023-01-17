@@ -56,7 +56,11 @@ fun CatalogSuccessView(
 
 @Composable
 fun CatalogBodyCategories(categories: List<Package>, vmCatalog: CatalogViewModel) {
-    Box(categoryListContainer.fillMaxSize()) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .then(categoryListContainer)
+    ) {
         if (categories.isNotEmpty()) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 categories.forEach { cat ->
