@@ -68,6 +68,17 @@ struct RecipeModal: View {
             }
             .frame(maxHeight: .infinity)
             .navigationBarTitle(recipeTitle, displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        close()
+                    } label: {
+                        Image.miamImage(icon: MiamIcon.back)
+                            .renderingMode(.template)
+                            .foregroundColor(Color.miamColor(.primary))
+                    }
+                }
+            }
         }.onAppear {
             recipeViewModel.fetchRecipe(recipeId: recipeId)
         }
