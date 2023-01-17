@@ -1,5 +1,7 @@
 package com.miam.kmmMiamCore.services
 
+import com.miam.kmmMiamCore.base.mvi.Effect
+import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.LogHandler
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -10,17 +12,35 @@ import io.ktor.http.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+
+data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
+
+data class AnalyticState(
+    val onEventEmitted: (event: AnalyticEvent) -> Unit = {},
+): State
+
+sealed class AnalyticEffect: Effect {
+    data class EventEmitted(val event: AnalyticEvent): AnalyticEffect()
+}
+
+@Suppress("UserPreferencesInstance used by ios and component")
+object AnalyticsInstance: KoinComponent {
+    val instance: Analytics by inject()
+}
 
 class Analytics: KoinComponent {
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in Analytics $exception ${exception.stackTraceToString()}")
     }
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-
     private val originToDomain: Map<String, String> = mapOf(
         "app.coursesu.com" to "miam.coursesu.app",
         "app.coursesu" to "miam.coursesu.app",
@@ -28,6 +48,13 @@ class Analytics: KoinComponent {
     )
     val domain: MutableStateFlow<String?> = MutableStateFlow(null)
     private val httpOrigin: MutableStateFlow<String?> = MutableStateFlow(null)
+    private val analyticsState: MutableStateFlow<AnalyticState> = MutableStateFlow(AnalyticState())
+    private val sideEffect = MutableSharedFlow<AnalyticEffect>()
+    fun observeSideEffect(): Flow<AnalyticEffect> = sideEffect
+
+    fun setOnEventEmitted(onEventEmittedCallBack: (event: AnalyticEvent) -> Unit) {
+        analyticsState.value = analyticsState.value.copy(onEventEmitted = onEventEmittedCallBack)
+    }
 
     private val httpClient = HttpClient {
         install(JsonFeature) { serializer = KotlinxSerializer(kotlinx.serialization.json.Json) }
@@ -49,11 +76,19 @@ class Analytics: KoinComponent {
         LogHandler.info("Analytics init for $domain")
     }
 
+    private fun emitEvent(event: AnalyticEvent) {
+        analyticsState.value.onEventEmitted(event)
+        coroutineScope.launch(coroutineHandler) {
+            sideEffect.emit(AnalyticEffect.EventEmitted(event))
+        }
+    }
+
     fun sendEvent(eventType: String, path: String, props: PlausibleProps) {
         if (this.domain.value == null || this.httpOrigin.value == null) {
             LogHandler.error("Sending event without initialisation ${domain.value}")
             return
         }
+        emitEvent(AnalyticEvent(eventType, path, props))
         val domain = this.domain.value!!
         val url = this.httpOrigin.value!! + path
         val event = PlausibleEvent(eventType, url, domain, props)
