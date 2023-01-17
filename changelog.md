@@ -1,7 +1,9 @@
-# 3.7.1
- - [FIX][IOS] Remove more info buton on recipe detail
- - [FIX][IOS] Hide recipe times when equal to 0 on recipe detail
- - [FIX][COR] Round ingrédients quantity in recipe detail
+# 3.8.0
+- [FEA][COR] Expose analytic events and closure
+
+- [FIX][IOS] Remove more info buton on recipe detail
+- [FIX][IOS] Hide recipe times when equal to 0 on recipe detail
+- [FIX][COR] Round ingrédients quantity in recipe detail
 
 # 3.7.0
 - [FEA][AND] Add price template 
