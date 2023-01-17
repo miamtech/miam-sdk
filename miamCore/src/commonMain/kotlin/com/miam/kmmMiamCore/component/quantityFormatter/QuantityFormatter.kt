@@ -1,5 +1,7 @@
 package com.miam.kmmMiamCore.component.quantityFormatter
 
+import kotlin.math.ceil
+
 class QuantityFormatter {
     companion object default {
         fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
@@ -27,7 +29,8 @@ class QuantityFormatter {
                 return valueToNumber.toInt().toString().plus(" ").plus(unitToDisplay)
             }
 
-            return valueToNumber.toString().plus(" ").plus(unitToDisplay)
+
+            return ceil(valueToNumber).toString().plus(" ").plus(unitToDisplay)
         }
 
         fun frac(value: Float, maxdenominator: Int = 10): String {

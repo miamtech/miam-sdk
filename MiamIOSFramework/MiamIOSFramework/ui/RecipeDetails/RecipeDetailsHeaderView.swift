@@ -51,15 +51,14 @@ public struct RecipeDetailsHeaderView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        
-                    }) {
-                        Image.miamImage(icon: .help).renderingMode(.original)
-                    }
-                    .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
+//                    Button(action: {
+//                        
+//                    }) {
+//                        Image.miamImage(icon: .help).renderingMode(.original)
+//                    }
+//                    .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
                 }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
             }
-            
             HStack() {
                 Text(title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
