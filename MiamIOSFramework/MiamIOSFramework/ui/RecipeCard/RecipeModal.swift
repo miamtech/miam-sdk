@@ -52,10 +52,8 @@ struct RecipeModal: View {
                         }.hidden()
                     }.frame(maxHeight: .infinity)
                 }.hidden()
-                
-                
             }
-            .frame(maxHeight: .infinity)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -67,8 +65,11 @@ struct RecipeModal: View {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
-        }.onAppear {
+            .frame(maxHeight: .infinity)
+        }
+        .accentColor(Color.miamColor(.primary))
+        .frame(maxHeight: .infinity)
+        .onAppear {
             recipeViewModel.fetchRecipe(recipeId: recipeId)
         }
     }
