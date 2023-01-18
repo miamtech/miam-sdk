@@ -26,10 +26,16 @@ public struct BasketTagView: View {
             TagView(recipes: recipes, tagTappedAction: { showingListModal.toggle() })
             .sheet(isPresented: $showingListModal)
             {
-                BasketTagListModal(showingListModal: $showingListModal,
-                          showingPopup: $showingRecipeDetails,
-                          recipeList: basketTagVm.recipeList ??  NSArray(),
-                          basketTagVm: basketTagVm)
+                NavigationView {
+                    VStack {
+                        BasketTagListModal(showingListModal: $showingListModal,
+                                           showingPopup: $showingRecipeDetails,
+                                           recipeList: basketTagVm.recipeList ??  NSArray(),
+                                           basketTagVm: basketTagVm)
+                        
+                    }
+                }
+                
             }
             .sheet(isPresented: $showingRecipeDetails) {
                 Dialog(
@@ -84,60 +90,69 @@ internal struct TagView: View {
 internal struct BasketTagListModal: View {
     @Binding var showingListModal:Bool
     @Binding var showingPopup:Bool
+    
+    @SwiftUI.State var showingRecipeDetails = false
     var recipeList : NSArray
     var basketTagVm : BasketTagVM
     
     var body: some View {
-        if let template = Template.sharedInstance.basketTagListModal {
-            template($showingListModal, $showingPopup, recipeList, basketTagVm)
-        } else {
-            HStack {
-                VStack(spacing: 10) {
-                    HStack {
-                        Text("Ce produit est utilisé pour \(recipeList.count) recettes :")
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
-                        Spacer()
-                    }
-                    HStack {
-                        VStack{
-                            let recipes: [Recipe] = recipeList.compactMap({$0 as? Recipe})
-                            ForEach(recipes, id: \.self) { recipe in
-                                Text(recipe.attributes?.title ?? "")
-                                    .underline()
-                                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
-                                    .foregroundColor(Color.miamColor(.ternary))
-                                    .padding(.horizontal,8)
-                                    .padding(.vertical,4)
-                                    .onTapGesture {
-                                        basketTagVm.goToDetail(recipe: recipe)
-                                        showingPopup = true
-                                        showingListModal = false
-                                    }
+        NavigationView {
+            if let template = Template.sharedInstance.basketTagListModal {
+                template($showingListModal, $showingPopup, recipeList, basketTagVm)
+            } else {
+                HStack {
+                    VStack(spacing: 10) {
+                        HStack {
+                            
+                            Spacer()
+                        }
+                        HStack {
+                            VStack{
+                                let recipes: [Recipe] = recipeList.compactMap({$0 as? Recipe})
+                                ForEach(recipes, id: \.self) { recipe in
+                                    Text(recipe.attributes?.title ?? "")
+                                        .underline()
+                                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
+                                        .foregroundColor(Color.miamColor(.ternary))
+                                        .padding(.horizontal,8)
+                                        .padding(.vertical,4)
+                                        .onTapGesture {
+                                            basketTagVm.goToDetail(recipe: recipe)
+                                            showingRecipeDetails = true
+                                        }
+                                    NavigationLink("Détails de la recette", isActive: $showingRecipeDetails) {
+                                        RecipeDetailsView(recipeId: recipe.id, showFooter: false, close: {}, navigateToPreview: {}, buy: {})
+                                    }.hidden().frame(height: 1.0)
+                                }
                             }
+                            Spacer()
                         }
                         Spacer()
+                        Divider()
+                        HStack{
+                            Spacer()
+                            Image.miamImage(icon: .cross)
+                                .renderingMode(.original)
+                                .frame(
+                                    width: 24,
+                                    height: 24,
+                                    alignment: .center
+                                )
+                            Spacer()
+                        }.onTapGesture {
+                            showingListModal = false
+                        }
                     }
                     Spacer()
-                    Divider()
-                    HStack{
-                        Spacer()
-                        Image.miamImage(icon: .cross)
-                            .renderingMode(.original)
-                            .frame(
-                                width: 24,
-                                height: 24,
-                                alignment: .center
-                            )
-                        Spacer()
-                    }.onTapGesture {
-                        showingListModal = false
-                    }
                 }
-                Spacer()
-            }.padding([.horizontal,.vertical],8)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Ce produit est utilisé pour \(recipeList.count) recettes")
+                .padding([.horizontal,.vertical],8)
                 .frame( alignment: .top)
                 .background(RoundedRectangle(cornerRadius: 27).fill(Color.white.opacity(1)))
+            }
         }
+        .accentColor(Color.miamColor(.primary))
     }
 }
 
