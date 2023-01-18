@@ -34,7 +34,6 @@ public struct CounterView: View {
         self.lightMode = lightMode
         self.onCounterChanged = onCounterChanged
         self._count = State(initialValue: count)
-        
     }
     
     public init(

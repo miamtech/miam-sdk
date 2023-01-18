@@ -29,7 +29,6 @@ public struct BasketPreviewSuccessView: View {
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
-       
     }
     
     func updateGuests(value:Int){
@@ -71,10 +70,10 @@ public struct BasketPreviewSuccessView: View {
                             viewModel:viewModel,
                             previewLine: previewLine,
                             removeProductAction: {
-                            removeProduct(entry)
-                        }, replaceProductAction: {
-                            replaceProduct(previewLine)
-                        })
+                                removeProduct(entry)
+                            }, replaceProductAction: {
+                                replaceProduct(previewLine)
+                            })
                     }
                 }
                 
@@ -130,9 +129,9 @@ internal struct IngredientsHeader: View {
                 Text(title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.secondaryText))
-
+                
                 Spacer()
-
+                
                 Image.miamImage(icon: .caret)
                     .resizable()
                     .aspectRatio( contentMode: .fit).rotationEffect(Angle(degrees: caretAngle))
@@ -169,6 +168,22 @@ internal struct IngredientsFoldableView: View {
                     }, isAddable: isAddable)
                 }
             }
+        }
+    }
+}
+
+@available(iOS 14, *)
+public struct BasketPreviewTitleBar : View {
+    
+    let numberOfProductsInBasket: Int
+    
+    public var body: some View {
+        if let templateTitle = Template.sharedInstance.basketPreviewTitleTemplate  {
+            templateTitle(numberOfProductsInBasket)
+        } else {
+            Text("\(numberOfProductsInBasket) produits ajoutés à votre panier")
+                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                .padding(.leading, Dimension.sharedInstance.lPadding)
         }
     }
 }

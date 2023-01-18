@@ -5,23 +5,47 @@ import android.util.AttributeSet
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
+import com.miam.kmmMiamCore.component.catalog.CatalogContent
 import com.miam.kmmMiamCore.component.catalog.CatalogViewModel
+import com.miam.kmmMiamCore.component.catalog.DialogContent
+import com.miam.kmmMiamCore.services.RouteService
+import com.miam.kmmMiamCore.services.RouteServiceInstance
+import com.miam.kmm_miam_sdk.android.ui.components.common.RoutableDialog
+import com.miam.kmm_miam_sdk.android.ui.components.preferences.Preferences
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import kotlinx.coroutines.cancel
 
 
 class Catalog @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private val vmCatalog: CatalogViewModel = CatalogViewModel()
+    private val routeService = RouteServiceInstance.instance
+
+    private val filter = CatalogFilter(
+        { routeService.onCloseDialog() },
+        { vmCatalog.onSimpleSearch(CatalogContent.FILTER_SEARCH) }
+    )
+    private val search = CatalogSearch(
+        { routeService.onCloseDialog() },
+        { vmCatalog.onSimpleSearch(CatalogContent.WORD_SEARCH) }
+    )
+    private val preference = Preferences(context).apply { bind({ routeService.onCloseDialog() }, { routeService.onCloseDialog() }) }
+
     var catalogPageColumns = 1
     var catalogPageVerticalSpacing = 12
     var catalogPageHorizontalSpacing = 12
+
+    fun goToCategory(categoryId: String, categoryTitle: String) {
+        vmCatalog.goToCategory(categoryId, categoryTitle)
+    }
 
     fun bind(
         categoryId: String? = null,
@@ -50,8 +74,11 @@ class Catalog @JvmOverloads constructor(
 
     @Composable
     override fun Content() {
-
         val state by vmCatalog.uiState.collectAsState()
+
+        DisposableEffect(Unit) { onDispose { vmCatalog.cancel() } }
+        ModaleComponent(state.dialogIsOpen, state.dialogContent, routeService, filter, search, preference)
+
         Box {
             Column {
                 ManagementResourceState(
@@ -60,8 +87,9 @@ class Catalog @JvmOverloads constructor(
                         requireNotNull(categories)
                         CatalogSuccessView(
                             categories,
-                            state,
-                            context,
+                            state.content,
+                            enableFilters = state.enableFilters,
+                            enablePreferences = state.enablePreferences,
                             catalogPageColumns,
                             catalogPageVerticalSpacing,
                             catalogPageHorizontalSpacing,
@@ -77,6 +105,28 @@ class Catalog @JvmOverloads constructor(
                     onTryAgain = {},
                     onCheckAgain = {},
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun ModaleComponent(
+        dialogIsOpen: Boolean,
+        content: DialogContent,
+        routeService: RouteService,
+        filter: CatalogFilter,
+        search: CatalogSearch,
+        preference: Preferences
+    ) {
+        if (dialogIsOpen) {
+            RoutableDialog(onDismissRequest = {
+                routeService.previous()
+            }) {
+                when (content) {
+                    DialogContent.FILTER -> filter.Content()
+                    DialogContent.SEARCH -> search.Content()
+                    DialogContent.PREFERENCES -> preference.Content()
+                }
             }
         }
     }

@@ -17,13 +17,14 @@ public class Categories : ObservableObject {
     @Published var categoriesList:[CatalogCategory]  = []
 }
 
-public class MiamManager {
-    
+public class MiamManager: ObservableObject {
     public static let sharedInstance = MiamManager()
     private let availableStoreIdLists = ["454", "652"]
     private let basketHandler: BasketHandler
     private var cancelable : AnyCancellable?
     public let categories = Categories()
+    
+    @Published var isReady: Bool = false
     
     func isActiveOnStore() -> KotlinBoolean {
         return  KotlinBoolean(value: availableStoreIdLists.contains("35290"))
@@ -33,8 +34,8 @@ public class MiamManager {
     private init() {
         KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
-        ContextHandlerInstance.shared.instance.onReadyEvent(callback: {isReady in print("Miam event recived \(isReady)")})
-        ContextHandlerInstance.shared.instance.setContext(context: NSObject())
+        
+        ContextHandlerInstance.shared.instance.setContext(context: MiamPreferencesContext())
         UserPreferencesInstance.shared.instance.putInt(key: "testInt", value: 42)
         UserPreferencesInstance.shared.instance.putList(key: "testString", value: ["1","2","3"])
         print("IntPref success \( UserPreferencesInstance.shared.instance.getIntOrNull(key: "testInt"))")
@@ -51,10 +52,18 @@ public class MiamManager {
             self.categories.categoriesList = categories
             
         }
-        UserHandler.shared.updateUserId(userId: "test_user")
+        UserHandler.shared.updateUserId(userId: "test_user-tib02")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
+      
+        AnalyticsInstance.shared.instance.setOnEventEmitted( onEventEmittedCallBack: {event in  print("event Miam \(event.eventType)")})
+    
         //initTemplate()
+        
+        ContextHandlerInstance.shared.instance.onReadyEvent(callback: { event in
+            print("Miam event recived \(event)")
+            self.isReady = event is ReadyEvent.isReady
+        })
     }
 
     
@@ -120,18 +129,13 @@ public class MiamManager {
     }
     
     private func initTemplate(){
-        Template.sharedInstance.ingredientNotInBasketRowTemplate =
-        {(name: String,
-          action: (() -> Void)?) -> AnyView in
+        Template.sharedInstance.recipesListCategoryTitleTemplate =
+        {(coco: CatalogPageTitleTemplateParameters
+          ) -> AnyView in
             AnyView(
-                HStack{
-                    Button(action: {
-                        if(action != nil){
-                            action!()
-                        }
-                    }) {
-                        Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                    }
+                VStack{
+                    Text(coco.title)
+                    Text(coco.subtitle ?? "niooooo")
                 }
             )}
     }

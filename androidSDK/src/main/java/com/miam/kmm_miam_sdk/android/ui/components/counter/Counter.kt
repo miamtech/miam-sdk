@@ -39,30 +39,42 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterStyle.plusButt
 
 @Composable
 fun Counter(
-    initialCount: Int,
+    initialCount: Int?,
     isDisable: Boolean,
     onCounterChanged: (newValue: Int) -> Unit,
     lightMode: Boolean = false,
     minValue: Int? = null,
     maxValue: Int? = null,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    key: Any? = null
 ) {
-    var localCount by remember(initialCount) { mutableStateOf(initialCount) }
+    var localCount by remember(key ?: initialCount) { mutableStateOf(initialCount) }
 
     fun newValueBounded(newValue: Int): Boolean {
         return (minValue == null || newValue >= minValue) && (maxValue == null || newValue <= maxValue)
     }
 
-    fun increase() {
-        if (!newValueBounded(localCount + 1)) return
+    fun changedValue(localCount: Int?, delta: Int): Int? {
+        // if min value is not defined 1 is surely bounded
+        if (localCount == null) return minValue ?: 1
 
-        onCounterChanged(++localCount)
+        if (!newValueBounded(localCount + delta)) return null
+
+        return localCount + delta
+    }
+
+    fun increase() {
+        changedValue(localCount, 1)?.let { newCount ->
+            localCount = newCount
+            onCounterChanged(newCount)
+        }
     }
 
     fun decrease() {
-        if (!newValueBounded(localCount - 1)) return
-
-        onCounterChanged(--localCount)
+        changedValue(localCount, -1)?.let { newCount ->
+            localCount = newCount
+            onCounterChanged(newCount)
+        }
     }
 
     Row(
@@ -101,7 +113,11 @@ fun Plus(decrease: () -> Unit, isDisable: Boolean) {
 }
 
 @Composable
-fun MiddleText(localCount: Int, lightMode: Boolean, isLoading: Boolean) {
+fun MiddleText(localCount: Int?, lightMode: Boolean, isLoading: Boolean) {
+    fun counterText(countValue: Int?, lightMode: Boolean): String {
+        if (countValue == null) return "-"
+        return localCount.toString() + if (lightMode) "" else " pers."
+    }
 
     Row(
         modifier = countBorder,
@@ -112,7 +128,7 @@ fun MiddleText(localCount: Int, lightMode: Boolean, isLoading: Boolean) {
             CircularProgressIndicator(color = countTextColor)
         } else {
             Text(
-                text = localCount.toString() + if (lightMode) "" else " pers.",
+                text = counterText(localCount, lightMode),
                 color = countTextColor,
                 modifier = countText
             )

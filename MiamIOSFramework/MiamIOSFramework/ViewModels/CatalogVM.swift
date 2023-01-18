@@ -60,6 +60,6 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
     
     public convenience init(categoryID: String, title: String) {
         self.init()
-        self.goToCategory(categoryId: categoryID, categoryTitle: title)
+        self.goToCategory(categoryId: categoryID, categoryTitle: title, subtitle: nil)
     }
 }

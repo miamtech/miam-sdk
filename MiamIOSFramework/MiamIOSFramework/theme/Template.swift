@@ -166,6 +166,14 @@ public class Template {
     ) -> AnyView)? = nil
     
     /**
+     numberOf ProductAdded: Int
+     */
+    public var basketPreviewTitleTemplate: ((
+        Int
+    ) -> AnyView)? = nil
+    
+    
+    /**
      basketTitle: String
      basketPictureURL: URL?,
      basketDescription: String,
@@ -301,10 +309,7 @@ public class Template {
         @escaping () -> Void
     ) -> AnyView)? = nil
     
-    
-    
     public var catalogFiltersViewTemplate: AnyView? = nil
-    
     
     /**
      title: String
@@ -343,6 +348,12 @@ public class Template {
         @escaping () -> Void
     ) -> AnyView)? = nil
     
+    /**
+     parameter MyMealsActionColumnTemplateParameters
+     */
+    public var myMealsActionColumnTemplate: ((
+        MyMealsActionColumnTemplateParameters
+    ) -> AnyView)? = nil
     /**
      
      */
@@ -532,18 +543,25 @@ public class Template {
     //RecipesList
     
     /**
-     title:  String
+     CatalogPageTitleTemplateParameters
      */
     public var recipesListTitleTemplate: ((
-       String
-   ) ->AnyView)? = nil
+        CatalogPageTitleTemplateParameters
+    ) ->AnyView)? = nil
     
     /**
-     title:  String
+     CatalogPageTitleTemplateParameters
      */
     public var recipesListCategoryTitleTemplate: ((
-       String
-   ) ->AnyView)? = nil
+        CatalogPageTitleTemplateParameters
+    ) ->AnyView)? = nil
+    
+    /**
+     CatalogPageTitleTemplateParameters
+     */
+    public var recipesListSearchTitleTemplate: ((
+        CatalogPageTitleTemplateParameters
+    ) ->AnyView)? = nil
 }
 
 

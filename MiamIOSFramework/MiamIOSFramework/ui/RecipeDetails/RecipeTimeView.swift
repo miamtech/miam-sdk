@@ -14,8 +14,8 @@ struct RecipeTimeView: View {
     let restingTime: String
     
     let noPreparationTime = "0s"
-    let noCookingTime = "0m"
-    let noRestingTime = "0m"
+    let noCookingTime = "0s"
+    let noRestingTime = "0s"
     
     var body: some View {
         if let template = Template.sharedInstance.recipeTimeViewTemplate {

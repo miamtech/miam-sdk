@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel(): BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in catalog view $exception")
@@ -49,10 +49,14 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         )
 
     init {
-        // push initial route
-        routeService.dispatch(RouteServiceAction.SetPageRoute(CATEGORIES_LIST_TITLE, ::setCategoriesListState))
+        pushInitialRoute()
         listenPreferencesChanges()
         if (preference.isInit) fetchCategories()
+    }
+
+    fun pushInitialRoute() {
+        LogHandler.info("Route push init")
+        routeService.dispatch(RouteServiceAction.SetInitialPageRoute(CATEGORIES_LIST_TITLE, ::setCategoriesListState))
     }
 
     override fun handleEvent(event: CatalogContract.Event) {
@@ -89,13 +93,13 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
         filterVm.clear()
     }
 
-    fun goToCategory(categoryId: String, categoryTitle: String) {
-        routeService.dispatch(RouteServiceAction.SetPageRoute(RECIPE_LIST_TITLE) { setCategoryState(categoryId, categoryTitle) })
-        setCategoryState(categoryId, categoryTitle)
+    fun goToCategory(categoryId: String, categoryTitle: String, subtitle: String? = null) {
+        routeService.dispatch(RouteServiceAction.SetPageRoute(RECIPE_LIST_TITLE) { setCategoryState(categoryId, categoryTitle, subtitle) })
+        setCategoryState(categoryId, categoryTitle, subtitle)
     }
 
-    private fun setCategoryState(categoryId: String, categoryTitle: String) {
-        setState { copy(content = CatalogContent.CATEGORY, openedCategoryId = categoryId, openedCategoryTitle = categoryTitle) }
+    private fun setCategoryState(categoryId: String, categoryTitle: String, subtitle: String?) {
+        setState { copy(content = CatalogContent.CATEGORY, openedCategoryId = categoryId, openedCategoryTitle = categoryTitle, subtitle = subtitle) }
     }
 
     private fun goToFavorites() {

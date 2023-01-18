@@ -57,8 +57,6 @@ struct RecipeDetailsMoreInfo: View {
         .clipped()
         .animation(.easeOut)
         .transition(.slide)
-       
-            
             Button(action: {
                 self.collapsed.toggle()
             }) {

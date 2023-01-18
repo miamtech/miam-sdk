@@ -52,17 +52,17 @@ class Preferences @JvmOverloads constructor(
             resourceState = state.basicState,
             successView = { _ ->
                 PreferencesSuccessView(
-                    context,
-                    state.guests,
-                    state.recipesFound,
-                    state.ingredients,
-                    state.diets,
-                    state.equipments,
-                    { preferencesVM.togglePreference(it) },
-                    { resetAndClose() },
-                    { applyAndClose() },
-                    { preferencesVM.changeGlobaleGuest(it) },
-                    { preferencesVM.addIngredientPreference(it) }
+                    context = context,
+                    guests = state.guests,
+                    recipesFound = state.recipesFound,
+                    ingredientsTag = state.ingredients,
+                    dietsTag = state.diets,
+                    equipmentTag = state.equipments,
+                    togglePreference = { preferencesVM.togglePreference(it) },
+                    closePreferences = { resetAndClose() },
+                    applyPreferences = { applyAndClose() },
+                    guestChanged = { preferencesVM.changeGlobalGuest(it) },
+                    addIngredientPreferences = { preferencesVM.addIngredientPreference(it) }
                 )
             },
             loadingView = {

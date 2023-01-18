@@ -1,4 +1,26 @@
+# 3.8.0
+- [FEA][COR] Expose analytic events and closure
+
+- [FIX][IOS] Remove more info buton on recipe detail
+- [FIX][IOS] Hide recipe times when equal to 0 on recipe detail
+- [FIX][COR] Round ingrédients quantity in recipe detail
+
+# 3.7.0
+- [FEA][AND] Add price template 
+- [FIX][AND] Use android app context
+
+# 3.6.0
+- [FIX][AND] Recipes page no long reloading after closing a dialog
+- [FIX][AND] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
+- [FEA][AND] Guest prefrences avalaible
+- [FEA][AND] New template for recipe search page 
+- [FEA][IOS] Guest prefrences avalaible
+- [FIX][IOS] Template for categories page now expose a CatalogPageTitleTemplateParameters that contains subtitle 
+- [FIX][IOS] New template basket preview title and MyMeals action column
+- [FIX][AND] Counter local state falsly remembered
+
 # 3.5.0
+- [FEA][COR] Enable guests preferences
 - [FIX][COR] Fix navigation when a dialog was between two pages
 - [FEA][COR] Preference dependence on supplier
 - [FEA][AND] Comfirme prefrerences now close dialog instead of redirecting to a search result

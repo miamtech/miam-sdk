@@ -18,10 +18,11 @@ internal struct RecipesView: View {
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
     let title: String
-    let defaultTitleTemplate : ((String) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
-    let specialTitleTemplate: ((String) -> AnyView)?
+    let subtitle : String?
+    let defaultTitleTemplate : ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
+    let specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
     
-    init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+    init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool,specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -29,16 +30,18 @@ internal struct RecipesView: View {
         self.recipesListPageModel = RecipeListPageVM()
         self.recipeCardHeight = recipeCardHeight
         self.title = title
-        self.specialTitleTemplate = nil
+        self.subtitle = nil
+        self.specialTitleTemplate = specialTitleTemplate
     }
     
-    init(categoryId:String, categoryTitle :String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+    init(categoryId:String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
         self.spacing = recipeListSpacing
         self.recipeCardHeight = recipeCardHeight
         self.title = categoryTitle
+        self.subtitle = categorySubtitle
         self.recipesListPageModel = RecipeListPageVM(categoriesId: categoryId, title:categoryTitle)
         self.specialTitleTemplate = Template.sharedInstance.recipesListCategoryTitleTemplate
     }
@@ -60,7 +63,7 @@ internal struct RecipesView: View {
                     },
                     browseCatalogAction: {
                         browseCatalogAction()
-                    }),
+                    }, subtitle: subtitle),
                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                 emptyView: CatalogRecipePageNoResultsView( browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))
         }

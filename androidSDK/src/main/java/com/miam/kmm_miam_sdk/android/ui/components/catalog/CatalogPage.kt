@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageContract
 import com.miam.kmmMiamCore.component.recipeListPage.RecipeListPageViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -47,6 +49,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageColo
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePageStyle
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
+import kotlinx.coroutines.cancel
 
 open class CatalogPage @JvmOverloads constructor(
     context: Context,
@@ -56,6 +59,7 @@ open class CatalogPage @JvmOverloads constructor(
 
     private val recipePageVM = RecipeListPageViewModel()
     private var catalogPageTitle = ""
+    private var catalogPageSubtitle = ""
     private var catalogPageColumns = 1
     private var catalogPageVerticalSpacing = 12
     private var catalogPageHorizontalSpacing = 12
@@ -66,19 +70,24 @@ open class CatalogPage @JvmOverloads constructor(
         back: () -> Unit,
         columns: Int? = null,
         verticalSpacing: Int? = null,
-        horizontalSpacing: Int? = null
+        horizontalSpacing: Int? = null,
+        subtitle: String? = null,
     ) {
         catalogPageTitle = title
         catalogPageBack = back
+
         columns?.let { catalogPageColumns = it }
         verticalSpacing?.let { catalogPageVerticalSpacing = it }
         horizontalSpacing?.let { catalogPageHorizontalSpacing = it }
+        subtitle?.let { catalogPageSubtitle = it }
         recipePageVM.setEvent(RecipeListPageContract.Event.InitPage(title))
     }
 
     @Composable
     override fun Content() {
         val state = recipePageVM.uiState.collectAsState()
+
+        DisposableEffect(Unit) { onDispose { recipePageVM.cancel() } }
 
         ManagementResourceState(
             resourceState = state.value.recipes,
@@ -87,6 +96,7 @@ open class CatalogPage @JvmOverloads constructor(
                 CatalogSuccessPage(
                     context,
                     catalogPageTitle,
+                    catalogPageSubtitle,
                     recipes,
                     catalogPageColumns,
                     catalogPageVerticalSpacing,
@@ -119,6 +129,7 @@ open class CatalogPage @JvmOverloads constructor(
     private fun CatalogSuccessPage(
         context: Context,
         title: String,
+        subtitle: String,
         recipes: List<Recipe>,
         columns: Int,
         verticalSpacing: Int,
@@ -134,7 +145,7 @@ open class CatalogPage @JvmOverloads constructor(
                 horizontalArrangement = Arrangement.spacedBy(horizontalSpacing.dp, Alignment.Start)
             ) {
                 item(span = { GridItemSpan(columns) }) {
-                    HeaderTitle(title = title)
+                    HeaderTitle(title = title, subtitle)
                 }
                 itemsIndexed(recipes) { index, item ->
                     val recipe = RecipeView(context = context)
@@ -151,16 +162,16 @@ open class CatalogPage @JvmOverloads constructor(
     }
 
     @Composable
-    private fun HeaderTitle(title: String) {
+    private fun HeaderTitle(title: String, subtitle: String) {
         val templateToUse = specificTemplate() ?: Template.CatalogPageTitleTemplate
         if (templateToUse != null) {
-            templateToUse(title)
+            templateToUse(CatalogPageTitleTemplateParameters(title, subtitle))
         } else {
             Row { Text(text = title, color = Colors.black, style = Typography.subtitleBold) }
         }
     }
 
-    protected open fun specificTemplate(): @Composable() ((String) -> Unit)? {
+    protected open fun specificTemplate(): @Composable() ((CatalogPageTitleTemplateParameters) -> Unit)? {
         return null
     }
 

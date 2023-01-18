@@ -40,10 +40,10 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
 @Composable
-fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
+fun CatalogHeader(content: CatalogContent, enableFilters: Boolean, enablePreferences: Boolean, catalogVm: CatalogViewModel) {
 
     val filterVM = FilterViewModelInstance.instance
-    val showFullHeader = state.content == CatalogContent.CATEGORIES_LIST
+    val showFullHeader = content == CatalogContent.CATEGORIES_LIST
     val isFavorite = filterVM.currentState.isFavorite
 
     fun openFilter() {
@@ -151,7 +151,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                         }
                     }
                     )
-                    if (state.enablePreferences) {
+                    if (enablePreferences) {
                         Clickable(onClick = { openPreferences() }) {
                             Surface(
                                 shape = CircleShape,
@@ -173,7 +173,7 @@ fun CatalogHeader(state: CatalogContract.State, catalogVm: CatalogViewModel) {
                             }
                         }
                     }
-                    if (state.enableFilters) {
+                    if (enableFilters) {
                         Clickable(onClick = { openFilter() }, children = {
                             Box {
                                 Surface(

@@ -66,7 +66,16 @@ public struct MyMealRow: View {
     }
     
     private var content: some View {
-        VStack(alignment: .leading) {
+        
+        let parameters =  MyMealsActionColumnTemplateParameters(
+            delete:  { myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))},
+            expand: { withAnimation(.default) {
+                isExpanded.toggle()
+                chevronAngle = isExpanded ? 0.0 : -90.0
+            }}
+        )
+        
+       return VStack(alignment: .leading) {
             HStack {
                 BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
                                     basketDescription: meal.basketPreviewLine.basketDescription,
@@ -79,23 +88,28 @@ public struct MyMealRow: View {
 //                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
-                VStack {
-                    Button {
-                        myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))
-                    } label: {
-                        Image.miamImage(icon: .bin)
-                    }
-                    Spacer()
-                    Button {
-                        withAnimation(.default) {
-                            isExpanded.toggle()
-                            chevronAngle = isExpanded ? 0.0 : -90.0
+                
+                if let actionColumnTemplate = Template.sharedInstance.myMealsActionColumnTemplate {
+                    actionColumnTemplate(parameters)
+                } else {
+                    VStack {
+                        Button {
+                            myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))
+                        } label: {
+                            Image.miamImage(icon: .bin)
                         }
-                    } label: {
-                        Image.miamImage(icon: .chevronDown).rotationEffect(Angle.degrees(chevronAngle))
-                    }.padding([.trailing], Dimension.sharedInstance.lPadding)
-                }.frame(width: 30.0, height: 30, alignment: .trailing)
-            }.padding(Dimension.sharedInstance.mlPadding)
+                        Spacer()
+                        Button {
+                            withAnimation(.default) {
+                                isExpanded.toggle()
+                                chevronAngle = isExpanded ? 0.0 : -90.0
+                            }
+                        } label: {
+                            Image.miamImage(icon: .chevronDown).rotationEffect(Angle.degrees(chevronAngle))
+                        }.padding([.trailing], Dimension.sharedInstance.lPadding)
+                    }.frame(width: 30.0, height: 30, alignment: .trailing)
+                }
+            }
             if isExpanded {
                 VStack {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in

@@ -118,34 +118,31 @@ public struct CatalogView: View {
                             if let willNavigateTo {
                                 willNavigateTo(.categoriesList, package.attributes?.title ?? "", catalog)
                             }
-                            catalog.goToCategory(categoryId: package.id, categoryTitle: package.attributes?.title ?? "")
+                            catalog.goToCategory(categoryId: package.id, categoryTitle: package.attributes?.title ?? "", subtitle: package.subtitle)
                         },
                         categoryId: catalog.currentState.openedCategoryId,
-                        categoryTitle: catalog.currentState.openedCategoryTitle),
+                        categoryTitle: catalog.currentState.openedCategoryTitle,
+                        subtitle: catalog.currentState.subtitle ?? ""),
                     loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                     emptyView: CatalogEmptyView())
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }.sheet(isPresented: $showingSearch, onDismiss: {
-            routeService.onCloseDialog()
             showingSearch = false
         }) {
             CatalogSearchView(catalog: catalog, close: {
-                routeService.onCloseDialog()
                 showingSearch = false
             }) {
                 showingSearch = false
                 catalog.onSimpleSearch(content: CatalogContent.wordSearch)
             }
         }.sheet(isPresented: $showingFilters, onDismiss: {
-            routeService.onCloseDialog()
             showingFilters = false
         }) {
             CatalogFiltersView() {
                 showingFilters = false
                 catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
-                routeService.onCloseDialog()
                 showingFilters = false
             }
         }.sheet(isPresented: $showingPreferences, onDismiss: {
@@ -166,6 +163,7 @@ internal struct CatalogSuccessView: View {
     let catalogContent: CatalogContent
     let categoryId:String
     let categoryTitle :String
+    var categorySubtitle :String? = nil
     @Binding var showingPackageRecipes: Bool
     @Binding var showingFavorites: Bool
     @Binding var headerHeight: Double
@@ -180,7 +178,8 @@ internal struct CatalogSuccessView: View {
          browseCatalogAction: @escaping () -> Void,
          navigateToRecipeAction: @escaping (Package) -> Void,
          categoryId: String,
-         categoryTitle : String) {
+         categoryTitle : String,
+         subtitle: String? = nil) {
         self.packages = packages
         self.catalogContent = content
         _showingPackageRecipes = showingPackageRecipes
@@ -193,6 +192,7 @@ internal struct CatalogSuccessView: View {
         self.recipeCardHeight = recipeCardHeight
         self.categoryId = categoryId
         self.categoryTitle = categoryTitle
+        if let catSubtitle = subtitle { self.categorySubtitle = catSubtitle }
     }
 
     var body: some View {
@@ -214,11 +214,11 @@ internal struct CatalogSuccessView: View {
             case .wordSearch:
             let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
             RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                        browseCatalogAction()},  showingFavorites: showingFavorites)
+                browseCatalogAction()},  showingFavorites: showingFavorites,specialTitleTemplate:  Template.sharedInstance.recipesListSearchTitleTemplate)
             case .filterSearch:
                 RecipesView(title: MiamText.sharedInstance.filterSearchTitle , recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                         browseCatalogAction()},  showingFavorites: showingFavorites)
-            case .category: RecipesView(categoryId :categoryId,categoryTitle: categoryTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+        case .category: RecipesView(categoryId :categoryId,categoryTitle: categoryTitle,categorySubtitle: categorySubtitle,recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                 browseCatalogAction()},  showingFavorites: showingFavorites)
             case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                     browseCatalogAction()},  showingFavorites: showingFavorites)
