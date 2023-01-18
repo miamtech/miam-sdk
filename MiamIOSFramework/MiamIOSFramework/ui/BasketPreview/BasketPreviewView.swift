@@ -18,17 +18,19 @@ struct BasketPreviewEmptyView: View {
 
 
 @available(iOS 14, *)
-struct BasketPreviewView: View {
+public struct BasketPreviewView: View {
     
     @ObservedObject private var viewModel: BasketPreviewVM
 
     private var recipeVm : RecipeViewModel
+    private let title: String?
     private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
+                title: String? = nil,
                 goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
                 goToItemSelector: @escaping () -> Void
@@ -37,16 +39,18 @@ struct BasketPreviewView: View {
         viewModel = BasketPreviewVM(recipeId: recipeId)
         self.recipeVm = recipeVm
         self.goToDetail = goToDetail
+        self.title = title
         self.close = close
         self.goToItemSelector = goToItemSelector
     }
     
-    var body: some View {
+    public var body: some View {
         if(viewModel.state != nil) {
             ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView,BasketPreviewLoadingView,BasketPreviewEmptyView> (
                 resourceState: viewModel.state!.line,
                 successView:  BasketPreviewSuccessView(
                     viewModel: viewModel,
+                    title: title,
                     recipeVm: recipeVm,
                     goToDetail: goToDetail,
                     close: close,
