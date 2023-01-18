@@ -49,7 +49,7 @@ struct RecipeModal: View {
                             }
                             
                             NavigationLink(ItemSelectorText.sharedInstance.swapProduct, isActive: $showItemSelector) {
-                                ItemSelector {
+                                ItemSelector(recipeId: recipeId) {
                                     self.showItemSelector = false
                                 }
                             }.hidden()

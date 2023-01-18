@@ -11,8 +11,12 @@ import miamCore
 @available(iOS 14, *)
 public struct ItemSelector: View  {
     @ObservedObject var viewModel : ItemSelectorVM = ItemSelectorVM()
+    private let recipeId :String
     private let onItemSelected: () -> Void
-    public init(onItemSelected: @escaping () -> Void) {
+    private let analytics = AnalyticsInstance.shared.instance
+   
+    public init(recipeId :String,onItemSelected: @escaping () -> Void) {
+        self.recipeId = recipeId
         self.onItemSelected = onItemSelected
     }
     
@@ -51,7 +55,12 @@ public struct ItemSelector: View  {
                         }
                     }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
                 }
-            }.navigationTitle(ItemSelectorText.sharedInstance.swapProduct)
+            }.navigationTitle(ItemSelectorText.sharedInstance.swapProduct).onAppear(perform: {
+            analytics.sendEvent(
+                eventType: Analytics.companion.EVENT_PAGEVIEW,
+                path: "/replace-item",
+                props: Analytics.PlausibleProps(recipe_id: recipeId, category_id: nil, entry_name: nil, basket_id: nil, miam_amount:nil, total_amount: nil, pos_id: nil, pos_total_amount: nil, pos_name: nil, search_term: nil)
+            )})
         }
     }
 }

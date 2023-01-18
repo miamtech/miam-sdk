@@ -73,7 +73,7 @@ struct Dialog: View {
                         } else {
                             DialogEmptyView(closeAction: close)
                         }
-                    case RouterContent.itemsSelector : ItemSelector {
+                    case RouterContent.itemsSelector : ItemSelector(recipeId: recipeId) {
                         ()
                     }
                     case RouterContent.empty: DialogEmptyView(closeAction: close)

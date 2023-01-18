@@ -17,6 +17,7 @@ public struct BasketPreviewSuccessView: View {
     private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
+    private let analytics = AnalyticsInstance.shared.instance
     
     public init(viewModel: BasketPreviewVM,
                 title: String?,
@@ -120,7 +121,12 @@ public struct BasketPreviewSuccessView: View {
                 }
             )
         }
-        .navigationTitle(navigationTitle)
+        .navigationTitle(navigationTitle).onAppear(perform: {
+            analytics.sendEvent(
+                eventType: Analytics.companion.EVENT_PAGEVIEW,
+                path: "/basket-preview",
+                props: Analytics.PlausibleProps(recipe_id: recipeVm.recipeId, category_id: nil, entry_name: nil, basket_id: nil, miam_amount:nil, total_amount: nil, pos_id: nil, pos_total_amount: nil, pos_name: nil, search_term: nil)
+            )})
     }
 }
 

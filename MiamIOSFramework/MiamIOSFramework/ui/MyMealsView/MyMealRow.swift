@@ -143,11 +143,11 @@ public struct MyMealRow: View {
                 }
             }
         }.sheet(isPresented: $showingPopup) {
-            RecipeModal(recipeId: "") {
+            RecipeModal(recipeId:  meal.id) {
                 showingPopup = false
             }
         }.sheet(isPresented: $showingItemSelector) {
-            ItemSelector {
+            ItemSelector(recipeId:  meal.id) {
                 ()
             }
         }.onAppear(perform: {
