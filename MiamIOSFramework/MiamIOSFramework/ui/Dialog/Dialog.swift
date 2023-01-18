@@ -52,8 +52,7 @@ struct Dialog: View {
                     }
                 )
         )
-        viewModel.getKotlinVm().setEvent(event:
-                                            RouterOutletContractEvent.GoToItemSelector()
+        viewModel.getKotlinVm().setEvent(event: RouterOutletContractEvent.GoToItemSelector()
         )
     }
     
@@ -62,7 +61,7 @@ struct Dialog: View {
             HStack(alignment: .top){
                 switch viewModel.state?.content {
                     case RouterContent.recipeDetail :
-                        RecipeDetailsView(recipeId: recipeId, showFooter: viewModel.state!.showFooter, close: close, navigateToPreview: {}, buy:  {})
+                        RecipeDetailsView(vmRecipe: viewModel.state?.rvm! as! RecipeCardVM, showFooter: viewModel.state!.showFooter, close: close, navigateToPreview: {}, buy: {})
                     case RouterContent.basketPreview :
                         if let recipeId = viewModel.state?.recipeId, let recipeViewModel = viewModel.state?.rvm  {
                             BasketPreviewView(recipeId: recipeId,
