@@ -38,12 +38,15 @@ public struct RecipeDetailsHeaderView: View {
                      isLikeEnabled,
                      recipeId)
         } else {
-            AsyncImage(
-                url: URL(
-                    string: mediaURL ?? ""
-                )! ,
-                height: imageHeight
-            ).frame(height: imageHeight)
+            if let picture =  URL(string: mediaURL ?? "") {
+                AsyncImage(
+                    url:picture ,
+                    height: imageHeight
+                ).frame(height: imageHeight)
+            } else {
+                Image.miamImage(icon: .empty).frame( height: imageHeight)
+            }
+            
             
             if (isLikeEnabled) {
                 HStack {
@@ -51,12 +54,12 @@ public struct RecipeDetailsHeaderView: View {
                     
                     Spacer()
                     
-//                    Button(action: {
-//                        
-//                    }) {
-//                        Image.miamImage(icon: .help).renderingMode(.original)
-//                    }
-//                    .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
+                    //                    Button(action: {
+                    //                        
+                    //                    }) {
+                    //                        Image.miamImage(icon: .help).renderingMode(.original)
+                    //                    }
+                    //                    .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
                 }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
             }
             HStack() {

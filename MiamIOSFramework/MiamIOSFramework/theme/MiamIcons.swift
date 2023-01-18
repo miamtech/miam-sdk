@@ -46,5 +46,6 @@ public enum MiamIcon: String {
     case yellowUnderline = "miamYellowUnderline"
     case look = "miamLook"
     case preferences = "miamPreferences"
+    case empty = "miamEmpty"
 }
 

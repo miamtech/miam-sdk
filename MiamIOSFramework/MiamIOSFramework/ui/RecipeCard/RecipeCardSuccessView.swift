@@ -15,7 +15,7 @@ internal struct RecipeCardSuccessView: View {
     public let isRecipeInCart: Bool
     public let isLikeEnabled: Bool
     public let showMealIdeaTag: Bool
-
+    
     public let goToDetailsAction: () -> Void
     public let showOrAddRecipeAction: () -> Void
     
@@ -26,16 +26,21 @@ internal struct RecipeCardSuccessView: View {
         } else {
             VStack() {
                 ZStack(alignment: .topLeading) {
-                    AsyncImage(
-                        url: URL(
-                            string: recipe?.attributes?.mediaUrl ?? ""
-                        )! ,
-                        height : 240
-                    ).frame(height: 240)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            goToDetailsAction()
-                        }
+                    if let picture = URL(string: recipe?.attributes?.mediaUrl ?? "") {
+                        AsyncImage(
+                            url: picture  ,
+                            height : 240
+                        ).frame(height: 240)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                goToDetailsAction()
+                            }
+                    } else {
+                        Image.miamImage(icon: .empty).frame(width: 240, height: 240).contentShape(Rectangle())
+                            .onTapGesture {
+                                goToDetailsAction()
+                            }
+                    }
                     HStack(alignment: .center) {
                         if (showMealIdeaTag) {
                             HStack(){
@@ -100,10 +105,10 @@ internal struct RecipeCardSuccessView: View {
                     .overlay(Capsule().stroke(Color.miamColor(.primary), lineWidth: 1.0))
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
             }.cornerRadius(!showMealIdeaTag ? 15 : 0).clipped()
-             .overlay(!showMealIdeaTag ? RoundedRectangle(cornerRadius: 15)
-             .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
-             .overlay(showMealIdeaTag ?  Rectangle()
-             .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
+                .overlay(!showMealIdeaTag ? RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
+                .overlay(showMealIdeaTag ?  Rectangle()
+                    .stroke(Color.miamColor(.border), lineWidth: 1) : nil)
         }
     }
 }

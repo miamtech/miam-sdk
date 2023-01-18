@@ -18,7 +18,7 @@ public struct PriceView: View {
             return String(format: "%.2f", price)
         }
         
-        return "n/a"
+        return ""
     }
     
     public init(

@@ -12,7 +12,7 @@ import miamCore
 @available(iOS 14, *)
 struct BasketPreviewHeader: View {
     private let headerHeight = 150.0
-
+    
     let basketTitle: String
     let basketDescription: String
     let pricePerGuest: String
@@ -23,40 +23,37 @@ struct BasketPreviewHeader: View {
         guard let priceDouble = Double(price) else {
             return ""
         }
-
+        
         return String(format: "%.2f€", priceDouble)
     }
     
     
     let pictureURL: URL?
-    private var hasPicture: Bool {
-        return pictureURL != nil
-    }
-
-
+    
     let updateGuest: (Int) -> Void
     let goToDetail: () -> Void
-
+    
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
             Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, updateGuest)
         } else {
             VStack(alignment: .leading) {
                 HStack {
-                    if hasPicture {
-                        AsyncImage(url: pictureURL!, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                    if let picture = pictureURL {
+                        AsyncImage(url: picture, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                    } else {
+                        Image.miamImage(icon: .empty).frame(width: 120, height: 120)
                     }
-
                     VStack (alignment: .leading) {
                         Text(basketTitle)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                             .foregroundColor(Color.miamColor(.black))
-
+                        
                         Text(basketDescription)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigLightStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
                             .padding(.top, Dimension.sharedInstance.borderWidth)
-
+                        
                         Text(pricePerGuest)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigLightStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))
@@ -74,7 +71,7 @@ struct BasketPreviewHeader: View {
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         .foregroundColor(Color.miamColor(.primary))
                     Spacer()
-
+                    
                     CounterView(count: numberOfGuests)  { guestCount in
                         updateGuest(guestCount)
                     }

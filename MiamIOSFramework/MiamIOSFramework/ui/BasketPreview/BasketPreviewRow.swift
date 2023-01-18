@@ -41,7 +41,7 @@ struct BasketPreviewRow: View {
         if let price = Double(previewLine.price) {
             productPrice = String(format: "%.2f", price)
         } else {
-            productPrice = "N/A"
+            productPrice = ""
         }
         self.removeProductAction = removeProductAction
         self.replaceProductAction = replaceProductAction
@@ -74,9 +74,13 @@ struct BasketPreviewRow: View {
         } else {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    if hasPicture {
-                        AsyncImage(url: productPictureURL!, height: productImageDimensions.height).frame(width: productImageDimensions.width, height: productImageDimensions.height, alignment: .topLeading)
-                    }
+                    
+                    if let picture = productPictureURL {
+                        AsyncImage(url: picture, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)
+                    } else {
+                        Image.miamImage(icon: .empty).frame(width: 120, height: 120)
+                    }                    
+                    
                     VStack (alignment: .leading) {
                         Text(productName.capitalizingFirstLetter())
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)

@@ -22,16 +22,18 @@ struct ItemSelectorProductRow: View {
     
     var body: some View {
         if let template = Template.sharedInstance.itemSelectorProductRowTemplate {
-           template(product, isSelected)
+            template(product, isSelected)
         } else {
             VStack{
                 HStack{
-                    AsyncImage(
-                        url: URL(
-                            string: product.picture
-                        )! ,
-                        height: 90
-                    ).frame(width: 90, height: 90)
+                    if let picture = URL(string : product.picture){
+                        AsyncImage(
+                            url: picture,
+                            height: 90
+                        ).frame(width: 90, height: 90)
+                    } else {
+                        Image.miamImage(icon: .empty).frame(width: 90, height: 90)
+                    }
                     VStack(alignment: .leading){
                         Text(product.productBrand )
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodySmallBoldStyle)
