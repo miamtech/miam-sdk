@@ -1,5 +1,6 @@
 # 3.8.0
 - [FEA][COR] Expose analytic events and closure
+- [FEA][IOS] Use native navigation for recipe details, basket preview, basket tags list and item selector
 
 - [FIX][IOS] Remove more info buton on recipe detail
 - [FIX][IOS] Hide recipe times when equal to 0 on recipe detail
