@@ -15,11 +15,13 @@ struct RecipeModal: View {
     @SwiftUI.State private var showBasketPreview: Bool = false
     @SwiftUI.State private var showItemSelector: Bool = false
     let recipeId: String
+    let showFooter: Bool
     let close: () -> Void
     
-    init(recipeId: String, showBasketPreview: Bool = false, close: @escaping () -> Void) {
+    init(recipeId: String, showBasketPreview: Bool = false, showFooter: Bool = false, close: @escaping () -> Void) {
         self.showBasketPreview = showBasketPreview
         self.recipeId = recipeId
+        self.showFooter = showFooter
         self.close = close
     }
     
@@ -29,7 +31,7 @@ struct RecipeModal: View {
         } else {
             NavigationView {
                 VStack {
-                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: true, close: {
+                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, close: {
                         close()
                     }, navigateToPreview: {
                         self.showBasketPreview = true

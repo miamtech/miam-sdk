@@ -143,13 +143,28 @@ public struct MyMealRow: View {
                 }
             }
         }.sheet(isPresented: $showingPopup) {
-            RecipeModal(recipeId:  meal.id) {
+            RecipeModal(recipeId:  meal.id, showFooter: false) {
                 showingPopup = false
             }
         }.sheet(isPresented: $showingItemSelector) {
-            ItemSelector(recipeId:  meal.id) {
-                ()
+            NavigationView {
+                ItemSelector(recipeId:  meal.id) {
+                    ()
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            showingItemSelector = false
+                        } label: {
+                            Image.miamImage(icon: MiamIcon.back)
+                                .renderingMode(.template)
+                                .foregroundColor(Color.miamColor(.primary))
+                        }
+                    }
+                }
             }
+            .accentColor(Color.miamColor(.primary))
         }.onAppear(perform: {
             recipeViewModel.fetchRecipe(recipeId: meal.id)
         })
