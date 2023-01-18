@@ -15,11 +15,13 @@ struct Dialog: View {
     private var close: () -> Void
     private var itemSelectorVM = ItemSelectorVM()
 
+    private let recipeId: String
     @ObservedObject var viewModel: DialogVM
     
     
-    public init(close: @escaping () -> Void, initialRoute: RouterContent, routerVm : RouterOutletViewModel) {
+    public init(recipeId: String, close: @escaping () -> Void, initialRoute: RouterContent, routerVm : RouterOutletViewModel) {
         self.close = close
+        self.recipeId = recipeId
         self.viewModel = DialogVM(routerVm: routerVm)
     }
     
