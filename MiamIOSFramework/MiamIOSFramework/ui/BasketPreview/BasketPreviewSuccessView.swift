@@ -73,7 +73,7 @@ public struct BasketPreviewSuccessView: View {
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     updateGuest: { guestNumber in updateGuests(value:guestNumber) }
                                     , goToDetail: {
-                    recipeVm.goToDetail()
+                    goToDetail(recipeVm, true)
                 })
                 //List
                 VStack(spacing: 0) {
