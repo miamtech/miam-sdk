@@ -93,7 +93,6 @@ public struct RecipeDetailsView: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .navigationTitle(recipeTitle)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack{
@@ -107,6 +106,14 @@ public struct RecipeDetailsView: View {
                     .padding(.vertical,4)
                     .background(Color.miamColor(.musterd))
                     .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+            }
+            ToolbarItem(placement: .principal) {
+                Text(recipeTitle)
+                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
+                    .foregroundColor(Color.miamColor(.black))
+                    .padding(.horizontal, Dimension.sharedInstance.lPadding)
+                    .frame( alignment: .topLeading)
+                    .lineLimit(1)
             }
         }
         .onAppear(perform: {

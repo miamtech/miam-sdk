@@ -33,7 +33,7 @@ struct RecipeModal: View {
                 }, buy: {
                     recipeViewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                 })
-                .frame(maxHeight: .infinity)
+                .navigationTitle(recipeViewModel.recipe?.attributes?.title ?? "")
                 
                 NavigationLink("Basket Preview", isActive: $showBasketPreview) {
                     VStack  {
