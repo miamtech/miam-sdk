@@ -37,14 +37,6 @@ public struct BasketTagView: View {
                 }
                 
             }
-            .sheet(isPresented: $showingRecipeDetails) {
-                Dialog(
-                    recipeId: "",
-                    close: { showingRecipeDetails = false },
-                    initialRoute : initialDialogScreen,
-                    routerVm: basketTagVm.vMRouter
-                )
-            }
         }
     }
 }
