@@ -13,11 +13,13 @@ public struct BasketPreviewSuccessView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
     private var recipeVm : RecipeViewModel
+    private var title: String?
     private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     
     public init(viewModel: BasketPreviewVM,
+                title: String?,
                 recipeVm: RecipeViewModel,
                 goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
@@ -25,10 +27,22 @@ public struct BasketPreviewSuccessView: View {
     )
     {
         self.viewModel = viewModel
+        self.title = title
         self.recipeVm = recipeVm
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
+    }
+    
+    var navigationTitle: String {
+        var navigationTitle = ""
+        
+        if let title {
+            navigationTitle = title
+        } else {
+            navigationTitle = "\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier"
+        }
+        return navigationTitle
     }
     
     func updateGuests(value:Int){
@@ -106,7 +120,7 @@ public struct BasketPreviewSuccessView: View {
                 }
             )
         }
-        .navigationTitle("\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier")
+        .navigationTitle(navigationTitle)
     }
 }
 
