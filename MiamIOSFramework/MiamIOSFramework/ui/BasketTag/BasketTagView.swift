@@ -10,9 +10,7 @@ import miamCore
 
 @available(iOS 14, *)
 public struct BasketTagView: View {
-    
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
-    @SwiftUI.State var showingRecipeDetails = false
     @SwiftUI.State var showingListModal = false
     
     @ObservedObject var basketTagVm : BasketTagVM
@@ -29,7 +27,6 @@ public struct BasketTagView: View {
                 NavigationView {
                     VStack {
                         BasketTagListModal(showingListModal: $showingListModal,
-                                           showingPopup: $showingRecipeDetails,
                                            recipeList: basketTagVm.recipeList ??  NSArray(),
                                            basketTagVm: basketTagVm)
                         
@@ -81,7 +78,6 @@ internal struct TagView: View {
 @available(iOS 14, *)
 internal struct BasketTagListModal: View {
     @Binding var showingListModal:Bool
-    @Binding var showingPopup:Bool
     
     @SwiftUI.State var showingRecipeDetails = false
     var recipeList : NSArray
@@ -90,7 +86,7 @@ internal struct BasketTagListModal: View {
     var body: some View {
         NavigationView {
             if let template = Template.sharedInstance.basketTagListModal {
-                template($showingListModal, $showingPopup, recipeList, basketTagVm)
+                template($showingListModal, recipeList, basketTagVm)
             } else {
                 HStack {
                     VStack(spacing: 10) {

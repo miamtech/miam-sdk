@@ -386,12 +386,10 @@ public class Template {
     
     /**
      showingListModal: Binding<Bool>
-     showingPopup: Binding<Bool>
      recipeList : NSArray
      basketTagVm : BasketTagVM
      */
     public var basketTagListModal: ((
-        Binding<Bool>,
         Binding<Bool>,
         NSArray,
         BasketTagVM
