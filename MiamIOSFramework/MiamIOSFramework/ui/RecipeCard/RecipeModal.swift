@@ -18,7 +18,7 @@ struct RecipeModal: View {
     let showFooter: Bool
     let close: () -> Void
     
-    init(recipeId: String, showBasketPreview: Bool = false, showFooter: Bool = false, close: @escaping () -> Void) {
+    init(recipeId: String, showBasketPreview: Bool = false, showFooter: Bool = true, close: @escaping () -> Void) {
         self.showBasketPreview = showBasketPreview
         self.recipeId = recipeId
         self.showFooter = showFooter
@@ -54,9 +54,13 @@ struct RecipeModal: View {
                                 ItemSelector(recipeId: recipeId) {
                                     self.showItemSelector = false
                                 }
-                            }.hidden()
+                            }
+                            .frame(height: 0.1)
+                            .hidden()
                         }.frame(maxHeight: .infinity)
-                    }.hidden()
+                    }
+                    .frame(height: 0.1)
+                    .hidden()
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
