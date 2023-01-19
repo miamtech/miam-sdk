@@ -162,8 +162,7 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                             }
                         }
                         composable("catalogCategories") {
-
-                            Catalog(this@MainActivity).Content()
+                            Catalog(this@MainActivity).apply { enablePreference(true) }.Content()
                             BackHandler {
                                 val previousRoute = RouteServiceInstance.instance.previous()
                                 if (previousRoute == null && navController.backQueue.isNotEmpty()) {
@@ -183,7 +182,6 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                     }
                 }
             }
-
         }
     }
 }

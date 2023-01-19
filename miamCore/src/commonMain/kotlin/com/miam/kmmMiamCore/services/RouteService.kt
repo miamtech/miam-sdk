@@ -117,7 +117,6 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
             }
             is RouteServiceAction.SetInitialPageRoute -> {
                 LogHandler.info("Route page ${action.title}")
-                if (getCurrentRoute() != null) return Job()
                 launch(coroutineHandler) {
                     state.value = state.value.copy(route = PageRoute(action.title, action.backToRoute, null))
                     state.value.route?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) }
