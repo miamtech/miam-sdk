@@ -10,35 +10,24 @@ import miamCore
 
 @available(iOS 14, *)
 public struct RecipeDetailsFooter: View {
-    private var recipeVM : RecipeCardVM
+    @ObservedObject private var recipeVM : RecipeCardVM
     
-    private func buy() {
-        recipeVM.setEvent(event: RecipeContractEvent.OnAddRecipe())
-        goToPreview()
-        
-    }
+    let buy: () -> Void
+    let goToPreview: () -> Void
     
-    private func goToPreview(){
-        if(recipeVM.recipe != nil ){
-            recipeVM.routerVM.setEvent( event:
-                                            RouterOutletContractEvent.GoToPreview(
-                                                recipeId : recipeVM.recipe!.id,
-                                                vm : recipeVM
-                                            )
-            )
-        }
-    }
-    
-    public init(recipeVM : RecipeCardVM){
+    public init(recipeVM : RecipeCardVM, buy: @escaping () -> Void, goToPreview: @escaping () -> Void) {
         self.recipeVM = recipeVM
+        self.buy = buy
+        self.goToPreview = goToPreview
     }
     
     public var body: some View {
-        if let recipe = recipeVM.recipe {
+        if let recipeId = recipeVM.recipe?.id {
             if let template = Template.sharedInstance.recipeDetailFooterTemplate {
-                template(recipe, recipeVM.guest, recipeVM.isInCart, goToPreview, buy)
+                template(recipeVM.recipe!, recipeVM.guest, recipeVM.isInCart, goToPreview, buy)
             } else {
-                defaultRecipeDetailFooterView(recipe: recipe, guest: recipeVM.guest, isInCart: recipeVM.isInCart, goToPreview: goToPreview, buy: buy)
+                defaultRecipeDetailFooterView(recipeId: recipeId, guest: recipeVM.guest,
+                                              isInCart: recipeVM.isInCart, goToPreview: goToPreview, buy: buy)
             }
         }
     }
@@ -46,8 +35,7 @@ public struct RecipeDetailsFooter: View {
 
 @available(iOS 14, *)
 public struct defaultRecipeDetailFooterView: View {
-    
-    let recipe : Recipe
+    let recipeId: String
     let guest : Int
     let isInCart: Bool
     let goToPreview: () -> Void
@@ -55,7 +43,7 @@ public struct defaultRecipeDetailFooterView: View {
     
     public var body: some View {
         HStack {
-            PriceView(recipeId: recipe.id, guestNumber: guest).padding(.horizontal,16)
+            PriceView(recipeId: recipeId, guestNumber: guest).padding(.horizontal,16)
             if(isInCart){
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(Color.miamColor(.white))

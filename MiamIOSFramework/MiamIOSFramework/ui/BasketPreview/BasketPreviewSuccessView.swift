@@ -13,11 +13,14 @@ public struct BasketPreviewSuccessView: View {
     @ObservedObject private var viewModel: BasketPreviewVM
     
     private var recipeVm : RecipeViewModel
+    private var title: String?
     private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
+    private let analytics = AnalyticsInstance.shared.instance
     
     public init(viewModel: BasketPreviewVM,
+                title: String?,
                 recipeVm: RecipeViewModel,
                 goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
@@ -25,10 +28,22 @@ public struct BasketPreviewSuccessView: View {
     )
     {
         self.viewModel = viewModel
+        self.title = title
         self.recipeVm = recipeVm
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
+    }
+    
+    var navigationTitle: String {
+        var navigationTitle = ""
+        
+        if let title {
+            navigationTitle = title
+        } else {
+            navigationTitle = "\(viewModel.numberOfproductsInBasket) produits ajoutés à votre panier"
+        }
+        return navigationTitle
     }
     
     func updateGuests(value:Int){
@@ -50,10 +65,6 @@ public struct BasketPreviewSuccessView: View {
     
     public var body: some View {
         VStack {
-            TitleBarView(showBackButton: true, backAction: {
-                goToDetail(recipeVm, true)
-            },
-                         titleView: AnyView(BasketPreviewTitleBar(numberOfProductsInBasket:viewModel.numberOfproductsInBasket)))
             ScrollView {
                 BasketPreviewHeader(basketTitle: viewModel.basketTitle,
                                     basketDescription: viewModel.basketDescription,
@@ -63,7 +74,7 @@ public struct BasketPreviewSuccessView: View {
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     updateGuest: { guestNumber in updateGuests(value:guestNumber) }
                                     , goToDetail: {
-                    recipeVm.goToDetail()
+                    goToDetail(recipeVm, true)
                 })
                 //List
                 VStack(spacing: 0) {
@@ -110,6 +121,12 @@ public struct BasketPreviewSuccessView: View {
                 }
             )
         }
+        .navigationTitle(navigationTitle).onAppear(perform: {
+            analytics.sendEvent(
+                eventType: Analytics.companion.EVENT_PAGEVIEW,
+                path: "/basket-preview",
+                props: Analytics.PlausibleProps(recipe_id: recipeVm.recipeId, category_id: nil, entry_name: nil, basket_id: nil, miam_amount:nil, total_amount: nil, pos_id: nil, pos_total_amount: nil, pos_name: nil, search_term: nil)
+            )})
     }
 }
 

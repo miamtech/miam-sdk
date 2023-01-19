@@ -386,12 +386,10 @@ public class Template {
     
     /**
      showingListModal: Binding<Bool>
-     showingPopup: Binding<Bool>
      recipeList : NSArray
      basketTagVm : BasketTagVM
      */
     public var basketTagListModal: ((
-        Binding<Bool>,
         Binding<Bool>,
         NSArray,
         BasketTagVM
@@ -562,7 +560,14 @@ public class Template {
     public var recipesListSearchTitleTemplate: ((
         CatalogPageTitleTemplateParameters
     ) ->AnyView)? = nil
+    
+    /**
+     recipeId: String
+     close: () -> Void
+     */
+    public var recipeModalTemplate: ((
+        String,
+        RecipeCardVM,
+        @escaping () -> Void
+    ) -> AnyView)? = nil
 }
-
-
-

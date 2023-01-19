@@ -85,7 +85,7 @@ public struct MyMealRow: View {
                                     pictureURL: meal.basketPreviewLine.pictureURL) { guestNumber in
                     updateGuest(value: guestNumber)
                 }  goToDetail: {
-                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
+//                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
                 
@@ -143,14 +143,28 @@ public struct MyMealRow: View {
                 }
             }
         }.sheet(isPresented: $showingPopup) {
-            Dialog(
-                close: { showingPopup = false },
-                initialRoute : initialDialogScreen,
-                routerVm: recipeViewModel.routerVM
-            )
+            RecipeModal(recipeId:  meal.id, showFooter: false) {
+                showingPopup = false
+            }
         }.sheet(isPresented: $showingItemSelector) {
-            
-            ItemSelector()
+            NavigationView {
+                ItemSelector(recipeId:  meal.id) {
+                    ()
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            showingItemSelector = false
+                        } label: {
+                            Image.miamImage(icon: MiamIcon.back)
+                                .renderingMode(.template)
+                                .foregroundColor(Color.miamColor(.primary))
+                        }
+                    }
+                }
+            }
+            .accentColor(Color.miamColor(.primary))
         }.onAppear(perform: {
             recipeViewModel.fetchRecipe(recipeId: meal.id)
         })

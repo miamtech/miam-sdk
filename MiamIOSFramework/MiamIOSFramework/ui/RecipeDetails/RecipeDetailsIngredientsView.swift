@@ -13,23 +13,17 @@ struct RecipeDetailsIngredientsView: View {
     let ingredients: [Ingredient]
     let recipeGuests: Int
     let currentGuests: Int
-    let updateGuestAction: (Int) -> Void
-   
+    let guestUpdating: Bool
+    let updateGuestsAction: (Int) -> Void
     
-    public var counterView: CounterView
-    init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int, updateGuestsAction: @escaping (Int) -> Void) {
+    init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int,
+         guestUpdating: Bool, updateGuestsAction: @escaping (Int) -> Void) {
         self.ingredients = ingredients
         self.recipeGuests = recipeGuests
         self.currentGuests = currentGuests
-        self.updateGuestAction = updateGuestsAction
-       
-        
-        self.counterView = CounterView(
-                count: currentGuests,
-                onCounterChanged: { guestNumber in updateGuestsAction(guestNumber)}
-            )
+        self.guestUpdating = guestUpdating
+        self.updateGuestsAction = updateGuestsAction
     }
-    
     
     var body: some View {
         if let template = Template.sharedInstance.recipeDetailsIngredientsViewTemplate {
@@ -37,7 +31,7 @@ struct RecipeDetailsIngredientsView: View {
                 ingredients,
                 recipeGuests,
                 currentGuests,
-                updateGuestAction
+                updateGuestsAction
             )
         } else {
             HStack {
@@ -47,7 +41,12 @@ struct RecipeDetailsIngredientsView: View {
                         .foregroundColor(Color.miamColor(.black))
                         .padding(Dimension.sharedInstance.lPadding)
                     Spacer()
-                    counterView
+                    CounterView(
+                        count: currentGuests,
+                        lightMode: false,
+                        onCounterChanged: { guestNumber in updateGuestsAction(guestNumber) },
+                        isLoading: guestUpdating
+                    )
                 }
             }.frame(height: 60.0, alignment: .topLeading)
             Divider()
@@ -77,6 +76,6 @@ struct RecipeDetailsIngredientsView: View {
 @available(iOS 14.0, *)
 struct RecipeIngredientsListView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeDetailsIngredientsView(ingredients: [], recipeGuests: 4, currentGuests: 6, updateGuestsAction: {_ in })
+        RecipeDetailsIngredientsView(ingredients: [], recipeGuests: 4, currentGuests: 6, guestUpdating: false, updateGuestsAction: {_ in })
     }
 }

@@ -16,7 +16,7 @@ public class BasketTagVM : BasketTagViewModel, ObservableObject {
     
     init(productExtId: String) {
         self.vMRouter = RouterOutletViewModel()
-         super.init(vmRouter:self.vMRouter)
+        super.init(vmRouter: vMRouter)
         // TODO handle other states
         collect(flow: uiState, collect: { data in
             let state = data as! BasketTagContractState
@@ -33,7 +33,7 @@ public class BasketTagVM : BasketTagViewModel, ObservableObject {
     
     
     public override  func goToDetail(recipe: Recipe) {
-        let vmRecipe = RecipeCardVM(routerVM: vMRouter)
+        let vmRecipe = RecipeCardVM(routerVM: RouterOutletViewModel())
         vmRecipe.setRecipe(recipe: recipe)
         vMRouter.goToDetail(vmRecipe: vmRecipe,showDetailsFooter: false)
     }

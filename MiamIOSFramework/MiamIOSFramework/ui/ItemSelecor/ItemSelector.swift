@@ -10,29 +10,19 @@ import miamCore
 
 @available(iOS 14, *)
 public struct ItemSelector: View  {
-    
-    @ObservedObject var viewModel : ItemSelectorVM
-    
-    public init() {
-        viewModel = ItemSelectorVM()
+    @ObservedObject var viewModel : ItemSelectorVM = ItemSelectorVM()
+    private let recipeId :String
+    private let onItemSelected: () -> Void
+    private let analytics = AnalyticsInstance.shared.instance
+   
+    public init(recipeId :String,onItemSelected: @escaping () -> Void) {
+        self.recipeId = recipeId
+        self.onItemSelected = onItemSelected
     }
     
     public var body: some View {
         if(viewModel.state != nil ) {
             VStack {
-                TitleBarView(
-                    showBackButton: true, backAction: {
-                        viewModel.returnToPreview()
-                    }, titleView: AnyView(
-                        HStack{
-                            Spacer()
-                            Text(ItemSelectorText.sharedInstance.swapProduct)
-                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
-                                .foregroundColor(Color.miamColor(.black))
-                            Spacer()
-                        }
-                    )
-                )
                 ScrollView{
                     VStack(alignment: .leading){
                         if let selectedItem = viewModel.state?.selectedItem {
@@ -58,12 +48,21 @@ public struct ItemSelector: View  {
                                 }.onTapGesture {
                                     if let index = viewModel.state?.itemList?.firstIndex(of: item) {
                                         viewModel.chooseItem(index: index)
+                                        onItemSelected()
                                     }
                                 }
                             }
                         }
                     }.padding([.leading, .trailing], Dimension.sharedInstance.mlPadding)
                 }
+            }
+            .navigationTitle(ItemSelectorText.sharedInstance.swapProduct)
+            .onAppear {
+                analytics.sendEvent(
+                    eventType: Analytics.companion.EVENT_PAGEVIEW,
+                    path: "/replace-item",
+                    props: Analytics.PlausibleProps(recipe_id: recipeId, category_id: nil, entry_name: nil, basket_id: nil, miam_amount:nil, total_amount: nil, pos_id: nil, pos_total_amount: nil, pos_name: nil, search_term: nil)
+                )
             }
         }
     }

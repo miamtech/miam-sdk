@@ -48,8 +48,8 @@ public struct CounterView: View {
         self.onCounterChanged = onCounterChanged
         self.minValue = minValue ?? nil
         self.maxValue = maxValue ?? nil
+        self.isLoading = isLoading
         self._count = State(initialValue: count)
-
     }
 
     private func newValueBounded(newValue: Int) -> Bool {
@@ -81,13 +81,21 @@ public struct CounterView: View {
                         .scaledToFill()
                         .frame(width:18, height:18)
                         .foregroundColor(Color.miamColor(.white))
-                }.padding(.leading, Dimension.sharedInstance.lPadding)
-                    .frame(width: 20.0, height: 20.0, alignment: .leading)
+                }
+                .padding(.leading, Dimension.sharedInstance.lPadding)
+                .frame(width: 20.0, height: 20.0, alignment: .leading)
+                .disabled(self.isLoading)
+                
                 Spacer()
-                Text("\(count)" + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
-                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
-                    .foregroundColor(Color.miamColor(.white))
+                if isLoading {
+                    ProgressLoader(color: Color.miamColor(.white))
+                        .scaleEffect(0.5)
+                } else {
+                    Text("\(count)" + " \( lightMode ? "" : MiamText.sharedInstance.persons)")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleSmallStyle)
+                        .foregroundColor(Color.miamColor(.white))
                     Spacer()
+                }
                 Button(action: {
                    increase()
                 }) {
@@ -96,8 +104,11 @@ public struct CounterView: View {
                         .scaledToFill()
                         .frame(width: 18, height:18)
                         .foregroundColor(Color.miamColor(.white))
-                }.padding(.trailing, Dimension.sharedInstance.lPadding)
-                    .frame(width: 20.0, height: 20.0, alignment: .trailing)
+                }
+                .padding(.trailing, Dimension.sharedInstance.lPadding)
+                .frame(width: 20.0, height: 20.0, alignment: .trailing)
+                .disabled(self.isLoading)
+                
             }.frame(width: lightMode ? 90 : 130.0, height: 40.0, alignment: .center)
                 .background(Color.miamColor(.primaryText))
                 .cornerRadius(25.0).padding(.trailing, Dimension.sharedInstance.mPadding)
