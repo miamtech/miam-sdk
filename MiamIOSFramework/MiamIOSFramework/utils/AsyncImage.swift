@@ -26,7 +26,7 @@ class ImageLoader : ObservableObject {
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.image = $0  }
-            }
+    }
     
     func cancel() {
         cancellable?.cancel()
@@ -36,7 +36,7 @@ class ImageLoader : ObservableObject {
 @available(iOS 14, *)
 public struct AsyncImage : View {
     @StateObject private var loader: ImageLoader
-
+    
     private let height: CGFloat
     
     public init(url:URL, height: CGFloat ){
@@ -49,12 +49,12 @@ public struct AsyncImage : View {
     public var body: some View {
         HStack {
             GeometryReader { geo in
-               if let imageUrl = loader.image {
-                   Image(uiImage: imageUrl)
-                       .resizable()
-                       .scaledToFill()
-                       .frame(width: geo.size.width * 1, height: height)
-                       .clipped()
+                if let imageUrl = loader.image {
+                    Image(uiImage: imageUrl)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geo.size.width * 1, height: height)
+                        .clipped()
                 } else {
                     if let template = Template.sharedInstance.asyncImageLoadingTemplate {
                         template(geo.size.width * 1,height)

@@ -18,7 +18,7 @@ public struct TitleBarView: View {
         if let template = Template.sharedInstance.titleBarViewTemplate {
            template(showBackButton, backAction, titleView)
         } else {
-            VStack {
+            VStack(spacing: 0){
                 HStack {
                     if showBackButton {
                         Button {
@@ -31,14 +31,12 @@ public struct TitleBarView: View {
                                 .foregroundColor(Color.miamColor(.primary))
                                 .padding([.leading, .trailing], Dimension.sharedInstance.lPadding)
                         }
-                        
                     }
                     titleView
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: barHeight)
-                Spacer()
                 Divider().padding(0)
             }.frame(height: barHeight)
         }
