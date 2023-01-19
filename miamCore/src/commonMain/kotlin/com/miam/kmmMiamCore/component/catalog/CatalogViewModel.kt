@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class CatalogViewModel(): BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
+open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in catalog view $exception")
@@ -33,7 +33,6 @@ open class CatalogViewModel(): BaseViewModel<CatalogContract.Event, CatalogContr
     private val routeService: RouteService by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val preference: SingletonPreferencesViewModel by inject()
-
     private val filterVm = FilterViewModelInstance.instance
 
     override fun createInitialState(): CatalogContract.State =

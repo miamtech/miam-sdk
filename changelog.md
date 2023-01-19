@@ -6,7 +6,9 @@
 - [FIX][IOS] Hide recipe times when equal to 0 on recipe detail
 - [FIX][IOS] Remove n/a when price is reloading
 - [FIX][IOS] Remove force unwrapp on picture URL add a default picture fall back
-- [FIX][IOS] Fix recipe detail header overloap by body 
+- [FIX][IOS] Fix recipe detail header overloap by body
+- [FIX][AND] Remove padding around SearchPreferencesTemplate
+- [FIX][AND] Navigation on catalog was perturb by mutliple instance its controleur 
 - [FIX][COR] Round ingrédients quantity in recipe detail
 
 # 3.7.0

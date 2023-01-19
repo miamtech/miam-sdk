@@ -162,7 +162,6 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                             }
                         }
                         composable("catalogCategories") {
-
                             Catalog(this@MainActivity).Content()
                             BackHandler {
                                 val previousRoute = RouteServiceInstance.instance.previous()
@@ -183,7 +182,6 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                     }
                 }
             }
-
         }
     }
 }
