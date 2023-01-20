@@ -145,11 +145,10 @@ object Template {
         sharingCount: String, // ex : partager avec x recette
         price: String,
         itemsCount: Int,
+        updatingBasketEntryId: String?, // async call you should put loading state to counter of entrie that match id, block others
         delete: () -> Unit,
         replace: () -> Unit,
         onQuantityChanged: (newQuantity: Int) -> Unit,
-        // Compose bug, build crash with exactly 10 parameters
-        composeBugParam: Int?
     ) -> Unit)? = null
 
 
@@ -270,6 +269,10 @@ object Template {
     var CatalogSearchResultEmptyTemplate: (@Composable() (
         returnToCatalog: () -> Unit,
         pageTitle: String
+    ) -> Unit)? = null
+
+    var CatalogCategoriesEmptyTemplate: (@Composable() (
+        action: () -> Unit,
     ) -> Unit)? = null
 
 

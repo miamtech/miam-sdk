@@ -11,4 +11,6 @@ object CatalogText {
     var prefixWordSearchTitle = "Votre recherche : "
     var filterSearchTitle = "Votre Sélection"
     var favoriteTitle = "Mes idées repas"
+    var noResultWithYourPref = "Pas de résultat sur cette page avec vos préférences"
+    var changeYourPref = "Modifiez les pour avoir plus de résultats"
 }
