@@ -45,7 +45,10 @@ struct RecipeDetailsIngredientsView: View {
                         count: currentGuests,
                         lightMode: false,
                         onCounterChanged: { guestNumber in updateGuestsAction(guestNumber) },
-                        isLoading: guestUpdating
+                        isLoading: guestUpdating,
+                        isDisable: guestUpdating,
+                        minValue: 1,
+                        maxValue: 99
                     )
                 }
             }.frame(height: 60.0, alignment: .topLeading)

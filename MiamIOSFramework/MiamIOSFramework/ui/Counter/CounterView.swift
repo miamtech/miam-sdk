@@ -16,6 +16,7 @@ public struct CounterView: View {
     public var maxValue: Int? = nil
     public var minValue: Int? =  nil
     public var isLoading: Bool = false
+    public var isDisable: Bool = false
     
     public init(
         count: Int,
@@ -40,15 +41,17 @@ public struct CounterView: View {
         count: Int,
         lightMode: Bool,
         onCounterChanged:  @escaping (Int) -> Void,
+        isLoading: Bool = false,
+        isDisable: Bool = false,
         minValue: Int? = nil,
-        maxValue: Int? = nil,
-        isLoading: Bool = false
+        maxValue: Int? = nil
     ) {
         self.lightMode = lightMode
         self.onCounterChanged = onCounterChanged
         self.minValue = minValue ?? nil
         self.maxValue = maxValue ?? nil
         self.isLoading = isLoading
+        self.isDisable = isDisable
         self._count = State(initialValue: count)
     }
 
@@ -84,7 +87,7 @@ public struct CounterView: View {
                 }
                 .padding(.leading, Dimension.sharedInstance.lPadding)
                 .frame(width: 20.0, height: 20.0, alignment: .leading)
-                .disabled(self.isLoading)
+                .disabled(self.isDisable)
                 
                 Spacer()
                 if isLoading {
@@ -107,7 +110,7 @@ public struct CounterView: View {
                 }
                 .padding(.trailing, Dimension.sharedInstance.lPadding)
                 .frame(width: 20.0, height: 20.0, alignment: .trailing)
-                .disabled(self.isLoading)
+                .disabled(self.isDisable)
                 
             }.frame(width: lightMode ? 90 : 130.0, height: 40.0, alignment: .center)
                 .background(Color.miamColor(.primaryText))
