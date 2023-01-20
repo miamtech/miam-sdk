@@ -123,7 +123,8 @@ fun BasketPreviewSuccessView(
         BasketPreviewRecipeLine(
             line = line,
             { guestCount -> vmBasketPreview.updateGuest(updateGuest, guestCount) },
-            goToDetail
+            goToDetail,
+            vmBasketPreview.uiState.value.isReloading
         )
         BasketPreviewItem(
             line = line,

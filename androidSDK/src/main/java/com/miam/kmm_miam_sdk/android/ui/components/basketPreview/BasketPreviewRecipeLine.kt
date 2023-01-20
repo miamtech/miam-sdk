@@ -34,7 +34,8 @@ import kotlin.math.round
 fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,
     guestUpdate: (guestCount: Int) -> Unit,
-    goToDetail: () -> Unit
+    goToDetail: () -> Unit,
+    isLoading: Boolean
 ) {
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
@@ -132,9 +133,10 @@ fun BasketPreviewRecipeLine(
                 }
                 Counter(
                     initialCount = line.count,
+                    isLoading = isLoading,
+                    isDisable = isLoading,
                     onCounterChanged = guestUpdate,
                     lightMode = false,
-                    isDisable = false,
                     minValue = 1,
                     maxValue = 99
                 )

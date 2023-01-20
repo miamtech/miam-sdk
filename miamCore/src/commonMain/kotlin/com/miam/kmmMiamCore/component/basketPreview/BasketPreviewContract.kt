@@ -30,6 +30,7 @@ interface BasketPreviewContract {
         val line: BasicUiState<BasketPreviewLine>, // ui state
         val bpl: BasketPreviewLine?, //service state
         val isReloading: Boolean,
+        val updatingBasketEntryId: String? = null,
         val job: Job?
     ): UiState
 

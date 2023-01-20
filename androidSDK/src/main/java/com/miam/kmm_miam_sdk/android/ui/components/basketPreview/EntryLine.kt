@@ -41,7 +41,8 @@ import java.util.*
 fun EntryLine(
     entry: BasketPreviewLine,
     vmBasketPreview: BasketPreviewViewModel,
-    goToItemSelector: () -> Unit
+    goToItemSelector: () -> Unit,
+    updatingBasketEntryId: String?
 ) {
     val productName = entry.title.substring(0, 1).uppercase(Locale.getDefault()) + entry.title.substring(1).lowercase(Locale.getDefault())
     val description = entry.bplDescription[0]
@@ -74,10 +75,11 @@ fun EntryLine(
                 sharingCount.toString(),
                 entry.price,
                 (entry.record as BasketEntry).itemsCountOrZero,
+                updatingBasketEntryId,
                 { delete() },
                 { replace() },
-                { newQuantity -> onQuantityChanged(newQuantity) },
-                null
+                { newQuantity -> onQuantityChanged(newQuantity) }
+
             )
         }
     } else {
@@ -91,6 +93,7 @@ fun EntryLine(
                 sharingCount.toString(),
                 entry.price,
                 (entry.record as BasketEntry).itemsCountOrZero,
+                updatingBasketEntryId,
                 { delete() },
                 { replace() }
             ) { newQuantity -> onQuantityChanged(newQuantity) }
@@ -108,6 +111,7 @@ fun BasketPreviewProductLine(
     sharingCount: String,
     price: String,
     itemsCount: Int,
+    updatingBasketEntryId: String?,
     delete: () -> Unit,
     replace: () -> Unit,
     onQuantityChanged: (Int) -> Unit
@@ -162,6 +166,7 @@ fun BasketPreviewProductLine(
                 itemsCount,
                 price.toDouble(),
                 quantity,
+                updatingBasketEntryId,
                 { onQuantityChanged(it) },
                 { replace() },
             )
@@ -178,6 +183,7 @@ fun EntryPriceAndActionRow(
     itemsCount: Int,
     price: Double,
     currentEntryCount: Int,
+    updatingBasketEntryId: String?,
     onCounterChanged: (counterValue: Int) -> Unit,
     replace: () -> Unit
 ) {
@@ -221,7 +227,8 @@ fun EntryPriceAndActionRow(
             initialCount = currentEntryCount,
             onCounterChanged = onCounterChanged,
             lightMode = true,
-            isDisable = false,
+            isDisable = updatingBasketEntryId != null,
+            isLoading = updatingBasketEntryId == entryId,
             minValue = 0,
             maxValue = 99,
             key = entryId
@@ -232,5 +239,5 @@ fun EntryPriceAndActionRow(
 @Preview
 @Composable
 fun EntryPriceAndActionRowPreview() {
-    EntryPriceAndActionRow("test", 2, 14.90, 4, {}, {})
+    EntryPriceAndActionRow("test", 2, 14.90, 4, null, {}, {})
 }
