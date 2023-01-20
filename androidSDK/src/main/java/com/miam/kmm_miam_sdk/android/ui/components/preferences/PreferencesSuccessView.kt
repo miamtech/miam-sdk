@@ -14,10 +14,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +22,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.miam.kmmMiamCore.component.preferences.PreferencesContent
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmm_miam_sdk.android.ressource.Image
@@ -111,10 +108,11 @@ fun DietPreferencesSection(dietsTag: List<CheckableTag>, togglePreference: (tagI
 fun IngredientPreferencesSection(
     ingredientsTag: List<CheckableTag>,
     togglePreference: (tagIdToToogle: String) -> Unit,
-    toggleSearch: () -> Unit
+    back: () -> Unit,
+    goToSearch: () -> Unit
 ) {
     if (IngredientPreferencesSectionTemplate != null) {
-        IngredientPreferencesSectionTemplate?.let { it(ingredientsTag, togglePreference, toggleSearch) }
+        IngredientPreferencesSectionTemplate?.let { it(ingredientsTag, togglePreference, back, goToSearch) }
     } else {
         Column(Modifier.fillMaxWidth()) {
             Text(
@@ -154,7 +152,7 @@ fun IngredientPreferencesSection(
                         }
                     }
                 }
-                Clickable(onClick = { toggleSearch() }) {
+                Clickable(onClick = goToSearch) {
                     Box(
                         Modifier
                             .border(BorderStroke(1.dp, Color.Gray), RoundedCornerShape(50))
@@ -295,6 +293,7 @@ fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound
 
 @Composable
 fun PreferencesSuccessView(
+    content: PreferencesContent,
     context: Context,
     guests: Int?,
     recipesFound: Int,
@@ -305,38 +304,45 @@ fun PreferencesSuccessView(
     closePreferences: () -> Unit,
     applyPreferences: () -> Unit,
     guestChanged: (count: Int) -> Unit,
-    addIngredientPreferences: (tag: Tag) -> Unit
+    addIngredientPreferences: (tag: Tag) -> Unit,
+    goToSearch: () -> Unit,
+    back: () -> Unit
 ) {
-    var showSearch by remember { mutableStateOf(false) }
-
-    if (showSearch) {
-        val prefSearch = PreferencesSearch(context)
-        prefSearch.bind({ showSearch = !showSearch }, {
-            addIngredientPreferences(it)
-            showSearch = !showSearch
-        })
-        prefSearch.Content()
-    } else {
-        Scaffold(
-            topBar = { PreferencesHeader(closePreferences) },
-            content = {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .background(color = backgroundGrey)
-                        .padding(horizontal = 16.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    GuestPreferencesSection(guests, guestChanged)
-                    Spacer(modifier = Modifier.height(24.dp))
-                    DietPreferencesSection(dietsTag, togglePreference)
-                    Spacer(modifier = Modifier.height(24.dp))
-                    IngredientPreferencesSection(ingredientsTag, togglePreference) { showSearch = !showSearch }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    EquipmentPreferencesSection(equipmentTag, togglePreference)
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
-            },
-            bottomBar = { PreferencesFooter(closePreferences, applyPreferences, recipesFound) })
+    when (content) {
+        PreferencesContent.SEARCH_PREFRERENCES -> {
+            val prefSearch = PreferencesSearch(context)
+            prefSearch.bind(back) {
+                addIngredientPreferences(it)
+                back()
+            }
+            prefSearch.Content()
+        }
+        PreferencesContent.ALL_PREFRENCES -> {
+            Scaffold(
+                topBar = { PreferencesHeader(closePreferences) },
+                content = {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .background(color = backgroundGrey)
+                            .padding(horizontal = 16.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        GuestPreferencesSection(guests, guestChanged)
+                        Spacer(modifier = Modifier.height(24.dp))
+                        DietPreferencesSection(dietsTag, togglePreference)
+                        Spacer(modifier = Modifier.height(24.dp))
+                        IngredientPreferencesSection(ingredientsTag, togglePreference, back) { goToSearch() }
+                        Spacer(modifier = Modifier.height(24.dp))
+                        EquipmentPreferencesSection(equipmentTag, togglePreference)
+                        Spacer(modifier = Modifier.height(100.dp))
+                    }
+                },
+                bottomBar = { PreferencesFooter(closePreferences, applyPreferences, recipesFound) })
+        }
     }
 }
+
+
+
+

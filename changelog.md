@@ -1,3 +1,5 @@
+# 3.9.0
+- [FIX][AND] Prefrence search modal now handle back press correctly
 # 3.8.0
 - [FEA][COR] Expose analytic events and closure
 - [FEA][IOS] Use native navigation for recipe details, basket preview, basket tags list and item selector
