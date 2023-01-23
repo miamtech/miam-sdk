@@ -18,13 +18,17 @@ public struct BasketPreviewSuccessView: View {
     private var close : ()-> Void
     private var goToItemSelector: () -> Void
     private let analytics = AnalyticsInstance.shared.instance
+    private var isReloading: Bool
+    private var updatingBasketEntryId: String?
     
     public init(viewModel: BasketPreviewVM,
                 title: String?,
                 recipeVm: RecipeViewModel,
                 goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
                 close: @escaping ()-> Void,
-                goToItemSelector: @escaping () -> Void
+                goToItemSelector: @escaping () -> Void,
+                isReloading: Bool,
+                updatingBasketEntryId: String?
     )
     {
         self.viewModel = viewModel
@@ -33,6 +37,8 @@ public struct BasketPreviewSuccessView: View {
         self.goToDetail = goToDetail
         self.close = close
         self.goToItemSelector = goToItemSelector
+        self.isReloading = isReloading
+        self.updatingBasketEntryId = updatingBasketEntryId
     }
     
     var navigationTitle: String {
@@ -47,7 +53,10 @@ public struct BasketPreviewSuccessView: View {
     }
     
     func updateGuests(value:Int){
-        recipeVm.updateGuest(nbGuest: Int32(value))
+        viewModel.updateGuest(
+            onUpdateGuest:{ guestNumber in recipeVm.updateGuest(nbGuest: Int32(guestNumber)) },
+            guestCount: Int32(value)
+        )
     }
     
     func addIngredient(_ entry: BasketEntry) {
@@ -71,6 +80,7 @@ public struct BasketPreviewSuccessView: View {
                                     pricePerGuest: viewModel.pricePerGuest,
                                     numberOfGuests: Int(recipeVm.currentState.guest),
                                     price: viewModel.price,
+                                    isReloading: isReloading,
                                     pictureURL: viewModel.pictureURL ??  URL(string:""),
                                     updateGuest: { guestNumber in updateGuests(value:guestNumber) }
                                     , goToDetail: {
@@ -84,6 +94,7 @@ public struct BasketPreviewSuccessView: View {
                         BasketPreviewRow(
                             viewModel:viewModel,
                             previewLine: previewLine,
+                            updatingBasketEntryId:updatingBasketEntryId,
                             removeProductAction: {
                                 removeProduct(entry)
                             }, replaceProductAction: {

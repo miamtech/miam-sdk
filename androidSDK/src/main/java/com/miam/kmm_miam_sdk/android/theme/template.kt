@@ -124,6 +124,9 @@ object Template {
 
 /////////////// Basket Preview //////////////////////
 
+    /**
+     * Update on 3.8.1  add isLoading
+     */
     var basketPreviewRecipeLineTemplate: (@Composable() (
         recipeName: String,
         picture: String,
@@ -131,6 +134,7 @@ object Template {
         price: String,
         pricePerGuest: String,
         guestCount: Int,
+        isLoading: Boolean, // true when guest quantity is changing
         goToRecipeDetail: () -> Unit,
         guestUpdate: (guestCount: Int) -> Unit
     ) -> Unit)? = null
@@ -145,11 +149,10 @@ object Template {
         sharingCount: String, // ex : partager avec x recette
         price: String,
         itemsCount: Int,
+        updatingBasketEntryId: String?, // async call you should put loading state to counter of entrie that match id, block others
         delete: () -> Unit,
         replace: () -> Unit,
         onQuantityChanged: (newQuantity: Int) -> Unit,
-        // Compose bug, build crash with exactly 10 parameters
-        composeBugParam: Int?
     ) -> Unit)? = null
 
 

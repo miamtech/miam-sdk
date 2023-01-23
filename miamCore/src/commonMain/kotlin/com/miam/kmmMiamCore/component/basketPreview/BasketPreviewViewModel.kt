@@ -80,8 +80,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             lineEntriesSubject.debounce(500).collect { entries ->
-                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--"}}]")
+                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--" }}]")
                 val newBpl = updateBplEntries(entries)
+                setState { copy(updatingBasketEntryId = entries[0].id) }
                 lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
                 setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
                 // create a copy of the list so you can clear it here
@@ -89,7 +90,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
                     BasketAction.UpdateBasketEntries(
                         mutableListOf(*entries.toTypedArray())
                     )
-                )
+                ).invokeOnCompletion {
+                    setState { copy(updatingBasketEntryId = null) }
+                }
             }
         }
     }
@@ -134,9 +137,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
         setState { copy(showLines = !uiState.value.showLines) }
     }
 
-    fun updateGuest(updateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
+    fun updateGuest(onUpdateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
         reloadState()
-        updateGuest(guestCount)
+        onUpdateGuest(guestCount)
     }
 
     private fun updateBplEntries(basketEntries: List<BasketEntry>): BasketPreviewLine {
@@ -194,6 +197,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     fun updateBasketEntry(entry: BasketEntry, finalQty: Int) {
+
         val newEntry = entry.updateQuantity(finalQty)
 
         val newLineUpdates =

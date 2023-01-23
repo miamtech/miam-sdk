@@ -19,6 +19,7 @@ struct BasketPreviewRow: View {
     private let productPrice: String
     private var viewModel : BasketPreviewVM
     private let previewLine: BasketPreviewLine
+    private var updatingBasketEntryId: String?
     
     private var removeProductAction: () -> Void = {}
     private var replaceProductAction: () -> Void = {}
@@ -29,6 +30,7 @@ struct BasketPreviewRow: View {
     
     public init(viewModel : BasketPreviewVM,
                 previewLine: BasketPreviewLine,
+                updatingBasketEntryId: String?,
                 removeProductAction: @escaping() -> Void,
                 replaceProductAction: @escaping() -> Void){
         
@@ -38,6 +40,7 @@ struct BasketPreviewRow: View {
         self.productPictureURL = URL(string: previewLine.picture)
         self.productBrandName =  previewLine.productBrand
         self.productDescription = previewLine.productDescription
+        self.updatingBasketEntryId = updatingBasketEntryId
         if let price = Double(previewLine.price) {
             productPrice = String(format: "%.2f", price)
         } else {
@@ -67,6 +70,7 @@ struct BasketPreviewRow: View {
                 productPrice,
                 Int(previewLine.count),
                 Int((previewLine.record as! BasketEntry).itemsCountOrZero),
+                updatingBasketEntryId,
                 removeProductAction,
                 replaceProductAction,
                 onQuantityChanged
@@ -154,9 +158,13 @@ struct BasketPreviewRow: View {
                         })
                         
                         // Plus Minus View
-                        CounterView(count: Int(previewLine.count), lightMode: true) { qty in
+                        CounterView(
+                            count: Int(previewLine.count),
+                            lightMode: true,
+                            onCounterChanged: { qty in
                             onQuantityChanged(value: qty)
-                        }
+                        }, isLoading: updatingBasketEntryId == previewLine.id,
+                           isDisable: updatingBasketEntryId != nil)
                     }
                 }
                 

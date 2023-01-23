@@ -1,5 +1,9 @@
-# 3.9.0
+# 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly
+- [FIX][AND] Add a loader on guest counter in basket preview
+- [FIX][IOS] Add a loader on guest counter in basket preview and on items row
+- [FIX][IOS] Counter in recipe detail can't go under 1 add a isReloading parameter to template
+
 # 3.8.0
 - [FEA][COR] Expose analytic events and closure
 - [FEA][IOS] Use native navigation for recipe details, basket preview, basket tags list and item selector
