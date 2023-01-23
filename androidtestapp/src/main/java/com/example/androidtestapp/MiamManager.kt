@@ -35,15 +35,12 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
-        launch {
-
-            AnalyticsInstance.instance.observeSideEffect().collect { LogHandler.info("Analitic $it") }
-        }
+        launch { AnalyticsInstance.instance.observeSideEffect().collect { LogHandler.info("Analytics $it") }}
 
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.setSupplierOrigin("miam.auchan.app")
+        PointOfSaleHandler.setSupplierOrigin("miam.test")
         PointOfSaleHandler.updateStoreId("miam_test")
         PointOfSaleHandler.setSupplier(14)
         UserHandler.updateUserId("test_user")

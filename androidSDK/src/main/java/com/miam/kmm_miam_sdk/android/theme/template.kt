@@ -124,6 +124,9 @@ object Template {
 
 /////////////// Basket Preview //////////////////////
 
+    /**
+     * Update on 3.9.0  add isLoading
+     */
     var basketPreviewRecipeLineTemplate: (@Composable() (
         recipeName: String,
         picture: String,
@@ -131,6 +134,7 @@ object Template {
         price: String,
         pricePerGuest: String,
         guestCount: Int,
+        isLoading: Boolean, // true when guest quantity is changing
         goToRecipeDetail: () -> Unit,
         guestUpdate: (guestCount: Int) -> Unit
     ) -> Unit)? = null
