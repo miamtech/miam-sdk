@@ -44,14 +44,20 @@ class Preferences @JvmOverloads constructor(
         onApply()
     }
 
+    private fun back() {
+        preferencesVM.back()
+    }
+
     @Composable
     override fun Content() {
         val state by preferencesVM.uiState.collectAsState()
 
         ManagementResourceState(
             resourceState = state.basicState,
-            successView = { _ ->
+            successView = { content ->
+                requireNotNull(content)
                 PreferencesSuccessView(
+                    content = content,
                     context = context,
                     guests = state.guests,
                     recipesFound = state.recipesFound,
@@ -62,7 +68,9 @@ class Preferences @JvmOverloads constructor(
                     closePreferences = { resetAndClose() },
                     applyPreferences = { applyAndClose() },
                     guestChanged = { preferencesVM.changeGlobalGuest(it) },
-                    addIngredientPreferences = { preferencesVM.addIngredientPreference(it) }
+                    addIngredientPreferences = { preferencesVM.addIngredientPreference(it) },
+                    back = ::back,
+                    goToSearch = { preferencesVM.goToSearchPrefAndPushRoute() }
                 )
             },
             loadingView = {

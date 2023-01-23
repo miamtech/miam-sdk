@@ -35,6 +35,7 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
     private val preference: SingletonPreferencesViewModel by inject()
     private val filterVm = FilterViewModelInstance.instance
 
+
     override fun createInitialState(): CatalogContract.State =
         CatalogContract.State(
             categories = BasicUiState.Loading,
@@ -107,7 +108,13 @@ open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContrac
     }
 
     fun openPreferences() {
-        routeService.dispatch(RouteServiceAction.SetDialogRoute("", {/* back not needed */ }, ::close))
+        routeService.dispatch(
+            RouteServiceAction.SetDialogRoute(
+                "",
+                { preference.goToAllPref() },
+                ::close
+            )
+        )
         setState { copy(dialogIsOpen = true, dialogContent = DialogContent.PREFERENCES) }
     }
 
