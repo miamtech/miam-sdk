@@ -224,7 +224,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun openItemSelector(bpl: BasketPreviewLine) {
-        itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetSelectedItem(bpl))
+        itemSelectorViewModel.setSelectedItem(bpl)
         itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetReplaceItemInPreview(replace = fun(
             be: BasketEntry
         ) {

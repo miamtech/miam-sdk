@@ -29,7 +29,7 @@ public struct PreferencesView: View {
     public var body: some View {
         if let currentState = preferencesViewModel.state {
             VStack {
-                ManagementResourceState<KotlinBoolean, PreferencesSuccessView, PreferencesLoadingView, EmptyView>(
+                ManagementResourceState<PreferencesContent, PreferencesSuccessView, PreferencesLoadingView, EmptyView>(
                     resourceState: currentState.basicState,
                     successView: PreferencesSuccessView(numberOfPersons: Int(truncating: currentState.guests ?? defaultNumberOfGuests),
                                                         ingredients: currentState.ingredients,

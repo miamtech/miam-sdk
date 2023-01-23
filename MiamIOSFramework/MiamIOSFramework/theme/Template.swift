@@ -70,13 +70,16 @@ public class Template {
     
     /**
      options: List<BasketPreviewLine>,
-     choose:(index :Int) -> Void
+     choose:( oldItem :BasketPreviewLine, index :Int) -> Void
      */
     public var  productOptionListTemplate :  ( (
         _: [BasketPreviewLine],
-        _: @escaping (_ : Int) -> Void
+        (BasketPreviewLine, Int) -> Void
     ) -> AnyView )? =  nil
     
+    
+    public var itemSelectorLoadingViewTemplate :( (
+    ) -> AnyView )? =  nil
     
     /// RecipeDetail Templates
     

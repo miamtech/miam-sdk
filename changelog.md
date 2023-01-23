@@ -1,5 +1,6 @@
 # 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly
+- [FIX][AND] Fix crash on itemSelector openning
 - [FIX][AND] Add a loader on guest counter in basket preview
 - [FIX][IOS] Add a loader on guest counter in basket preview and on items row
 - [FIX][IOS] Counter in recipe detail can't go under 1 add a isReloading parameter to template
