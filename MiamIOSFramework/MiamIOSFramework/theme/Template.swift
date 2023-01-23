@@ -122,12 +122,14 @@ public class Template {
      ingredients: [Ingredient]
      recipeGuests: Int
      currentGuests: Int
+     guestUpdating : bool
      updateGuest: (Int) -> Void
      */
     public  var recipeDetailsIngredientsViewTemplate : ((
         [Ingredient],
         Int,
         Int,
+        Bool,
         @escaping (Int) -> Void
     ) -> AnyView )? = nil
     
@@ -183,6 +185,7 @@ public class Template {
      pricePerGuest: String,
      numberOfGuests: Int,
      price: String,
+     isReloading : Bool
      updateGuest: (Int) -> Void
      */
     public var basketPreviewHeaderTemplate: ((
@@ -192,6 +195,7 @@ public class Template {
         String,
         Int,
         String,
+        Bool,
         @escaping (Int) -> Void
     ) -> AnyView)? = nil
     
@@ -212,6 +216,7 @@ public class Template {
      productPrice: String,
      quantity: Int,
      itemsCount: Int,
+     updatingBasketEntryId: String,
      removeProduct: () -> Unit,
      replaceProduct: () -> Unit
      onQuantityChanged: (Int) -> Void
@@ -224,6 +229,7 @@ public class Template {
         String,
         Int,
         Int,
+        String?,
         @escaping () -> Void,
         @escaping () -> Void,
         @escaping (Int) -> Void

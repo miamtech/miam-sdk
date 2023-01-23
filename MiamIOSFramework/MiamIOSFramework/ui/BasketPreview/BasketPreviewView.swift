@@ -54,7 +54,9 @@ public struct BasketPreviewView: View {
                     recipeVm: recipeVm,
                     goToDetail: goToDetail,
                     close: close,
-                    goToItemSelector: goToItemSelector
+                    goToItemSelector: goToItemSelector,
+                    isReloading: viewModel.state?.isReloading ?? false,
+                    updatingBasketEntryId: viewModel.state?.updatingBasketEntryId ??  nil
                 ) ,
                 loadingView: BasketPreviewLoadingView(),
                 emptyView: BasketPreviewEmptyView()

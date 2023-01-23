@@ -19,6 +19,8 @@ struct BasketPreviewHeader: View {
     let numberOfGuests: Int
     let price: String
     let showDetailsButton = false
+    let isReloading: Bool
+    
     private var formattedPrice: String {
         guard let priceDouble = Double(price) else {
             return ""
@@ -35,7 +37,7 @@ struct BasketPreviewHeader: View {
     
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
-            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, updateGuest)
+            Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, isReloading, updateGuest)
         } else {
             VStack(alignment: .leading) {
                 HStack {
@@ -72,9 +74,16 @@ struct BasketPreviewHeader: View {
                         .foregroundColor(Color.miamColor(.primary))
                     Spacer()
                     
-                    CounterView(count: numberOfGuests)  { guestCount in
+                    CounterView(
+                        count: numberOfGuests,
+                        lightMode:false,
+                        onCounterChanged:{ guestCount in
                         updateGuest(guestCount)
-                    }
+                    },
+                        isLoading: isReloading,
+                        isDisable: isReloading,
+                        minValue: 1,
+                        maxValue: 99)
                 }
             }.padding([.leading, .trailing], 16.0)
             Divider().background(Color.miamColor(.borderLight)).frame(height: 1.0, alignment: .leading)

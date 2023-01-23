@@ -32,7 +32,7 @@ fun BasketPreviewItem(
                 ) {
                     line.entries!!.found.map { entry -> BasketPreviewLine.fromBasketEntry(entry) }
                         .forEach { bpl ->
-                            EntryLine(bpl, vmBasketPreview, goToItemSelector)
+                            EntryLine(bpl, vmBasketPreview, goToItemSelector, vmBasketPreview.currentState.updatingBasketEntryId)
                         }
                 }
             }

@@ -14,6 +14,7 @@ import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
+import com.miam.kmmMiamCore.services.AnalyticsInstance
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,7 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
+        launch { AnalyticsInstance.instance.observeSideEffect().collect { LogHandler.info("Analytics $it") } }
 
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
@@ -44,7 +46,8 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
-        CatalogModifier.categoryListContainer = Modifier.padding(bottom = 100.dp)
+        CatalogModifier.categoryListContainer = Modifier.padding(bottom = 500.dp)
+
 
         launch {
             GroceriesListHandler.getRecipeCountChangeFlow().collect {

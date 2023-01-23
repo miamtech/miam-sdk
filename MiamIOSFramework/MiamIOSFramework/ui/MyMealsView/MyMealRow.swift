@@ -82,6 +82,7 @@ public struct MyMealRow: View {
                                     pricePerGuest: meal.basketPreviewLine.pricePerGuest,
                                     numberOfGuests: count,
                                     price: meal.basketPreviewLine.price,
+                                    isReloading: basketPreviewViewModel.state?.isReloading ?? false,
                                     pictureURL: meal.basketPreviewLine.pictureURL) { guestNumber in
                     updateGuest(value: guestNumber)
                 }  goToDetail: {
@@ -115,7 +116,7 @@ public struct MyMealRow: View {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
                         
-                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine) {
+                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine, updatingBasketEntryId:basketPreviewViewModel.state?.updatingBasketEntryId ) {
                             removeProduct(entry)
                         } replaceProductAction: {
                             replaceProduct(previewLine)
