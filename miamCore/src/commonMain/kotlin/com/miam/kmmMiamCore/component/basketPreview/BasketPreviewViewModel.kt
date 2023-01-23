@@ -137,9 +137,9 @@ open class BasketPreviewViewModel(val recipeId: String?):
         setState { copy(showLines = !uiState.value.showLines) }
     }
 
-    fun updateGuest(updateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
+    fun updateGuest(onUpdateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
         reloadState()
-        updateGuest(guestCount)
+        onUpdateGuest(guestCount)
     }
 
     private fun updateBplEntries(basketEntries: List<BasketEntry>): BasketPreviewLine {

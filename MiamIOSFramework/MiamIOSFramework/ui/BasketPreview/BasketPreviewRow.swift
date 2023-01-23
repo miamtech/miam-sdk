@@ -70,6 +70,7 @@ struct BasketPreviewRow: View {
                 productPrice,
                 Int(previewLine.count),
                 Int((previewLine.record as! BasketEntry).itemsCountOrZero),
+                updatingBasketEntryId,
                 removeProductAction,
                 replaceProductAction,
                 onQuantityChanged
@@ -162,8 +163,8 @@ struct BasketPreviewRow: View {
                             lightMode: true,
                             onCounterChanged: { qty in
                             onQuantityChanged(value: qty)
-                        }, isLoading :updatingBasketEntryId == previewLine.id,
-                           isDisable:updatingBasketEntryId != nil)
+                        }, isLoading: updatingBasketEntryId == previewLine.id,
+                           isDisable: updatingBasketEntryId != nil)
                     }
                 }
                 

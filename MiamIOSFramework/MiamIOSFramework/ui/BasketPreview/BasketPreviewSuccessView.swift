@@ -53,7 +53,10 @@ public struct BasketPreviewSuccessView: View {
     }
     
     func updateGuests(value:Int){
-        recipeVm.updateGuest(nbGuest: Int32(value))
+        viewModel.updateGuest(
+            onUpdateGuest:{ guestNumber in recipeVm.updateGuest(nbGuest: Int32(guestNumber)) },
+            guestCount: Int32(value)
+        )
     }
     
     func addIngredient(_ entry: BasketEntry) {

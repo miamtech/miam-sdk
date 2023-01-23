@@ -31,6 +31,7 @@ struct RecipeDetailsIngredientsView: View {
                 ingredients,
                 recipeGuests,
                 currentGuests,
+                guestUpdating,
                 updateGuestsAction
             )
         } else {
