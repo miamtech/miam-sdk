@@ -108,6 +108,17 @@ object Template {
         choose: (index: Int) -> Unit
     ) -> Unit)? = null
 
+
+    /** since 3.8.1 */
+    var itemSelectorLoadingTemplate: (@Composable() (
+        back: () -> Unit
+    ) -> Unit)? = null
+
+    /** since 3.8.1 */
+    var itemSelectorEmptyTemplate: (@Composable() (
+        back: () -> Unit
+    ) -> Unit)? = null
+
 ////////////////// Product Selector //////////////////
 
     var basketPreviewHeaderTemplate: (@Composable() (

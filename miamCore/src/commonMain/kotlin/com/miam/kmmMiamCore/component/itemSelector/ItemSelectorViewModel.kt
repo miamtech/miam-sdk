@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.itemSelector
 
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
+import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketAction
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
@@ -19,8 +20,8 @@ open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, Item
     private val basketStore: BasketStore by inject()
 
     override fun createInitialState(): ItemSelectorContract.State = ItemSelectorContract.State(
-        selectedItem = null,
-        itemList = mutableListOf(),
+        selectedItem = BasicUiState.Loading,
+        items = mutableListOf(),
         replaceItemInPreview = fun(_: BasketEntry) {},
         returnToPreview = fun() {}
     )
@@ -33,19 +34,19 @@ open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, Item
                 )
             }
             is ItemSelectorContract.Event.ReturnToBasketPreview -> uiState.value.returnToPreview()
-            is ItemSelectorContract.Event.SelectNewItem -> choose(event.index)
             is ItemSelectorContract.Event.SetReplaceItemInPreview -> setState {
                 copy(
                     replaceItemInPreview = event.replace
                 )
             }
-            is ItemSelectorContract.Event.SetSelectedItem -> {
-                setState { copy(selectedItem = event.item, itemList = fillItem(event.item)) }
-            }
             is ItemSelectorContract.Event.SetItemList -> {
-                setState { copy(itemList = event.items) }
+                setState { copy(items = event.items) }
             }
         }
+    }
+
+    fun setSelectedItem(item: BasketPreviewLine) {
+        setState { copy(selectedItem = BasicUiState.Success(item), items = fillItem(item)) }
     }
 
     private fun fillItem(basketEntry: BasketPreviewLine): MutableList<BasketPreviewLine> {
@@ -58,17 +59,20 @@ open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, Item
         return itemList
     }
 
-    fun choose(index: Int) {
-        val be = (currentState.selectedItem!!.record as BasketEntry)
-        val newBe = be.updateSelectedItem(currentState.itemList!![index].id!!.toInt())
+    fun choose(selectedItem: BasketPreviewLine, index: Int) {
+
+        if (index >= currentState.items.size) return
+
+        val be = (selectedItem.record as BasketEntry)
+        val newBe = be.updateSelectedItem(currentState.items[index].id!!.toInt())
         basketStore.dispatch(
             BasketAction.ReplaceSelectedItem(
                 be,
-                currentState.itemList!![index].id!!.toInt()
+                currentState.items[index].id!!.toInt()
             )
         )
 
-        currentState.itemList!![index].id!!
+        currentState.items[index].id!!
         currentState.replaceItemInPreview(newBe)
     }
 

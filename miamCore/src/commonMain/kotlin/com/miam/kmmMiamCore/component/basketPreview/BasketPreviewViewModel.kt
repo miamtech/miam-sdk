@@ -80,7 +80,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private fun listenEntriesChanges() {
         CoroutineScope(Dispatchers.Default).launch(coroutineHandler) {
             lineEntriesSubject.debounce(500).collect { entries ->
-                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--"}}]")
+                LogHandler.info("launching update of [ ${entries.map { entrie -> "${entrie.selectedItem?.attributes?.name}/ ${entrie.attributes?.quantity}--" }}]")
                 val newBpl = updateBplEntries(entries)
                 lineUpdateState.value = lineUpdateState.value.copy(lineUpdates = listOf())
                 setState { copy(line = BasicUiState.Success(newBpl), bpl = newBpl) }
@@ -220,7 +220,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     }
 
     private fun openItemSelector(bpl: BasketPreviewLine) {
-        itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetSelectedItem(bpl))
+        itemSelectorViewModel.setSelectedItem(bpl)
         itemSelectorViewModel.setEvent(ItemSelectorContract.Event.SetReplaceItemInPreview(replace = fun(
             be: BasketEntry
         ) {
