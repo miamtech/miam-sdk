@@ -172,7 +172,6 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         }
     }
 
-
     private suspend fun getRecipeCount(): Int {
         return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
     }
