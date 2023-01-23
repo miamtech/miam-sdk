@@ -77,7 +77,7 @@ fun CatalogBodyCategories(categories: List<Package>, vmCatalog: CatalogViewModel
                 }
             }
         } else {
-            CatalogEmptyPage("avec vos préférences", false) {}
+            CatalogCategoriesEmptyView {}
         }
         Template.CatalogFloatingElementTemplate?.let { it() }
     }

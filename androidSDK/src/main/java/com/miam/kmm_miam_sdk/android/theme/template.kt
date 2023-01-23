@@ -275,6 +275,10 @@ object Template {
         pageTitle: String
     ) -> Unit)? = null
 
+    var CatalogCategoriesEmptyTemplate: (@Composable() (
+        action: () -> Unit,
+    ) -> Unit)? = null
+
 
     //////////////// Preferences /////////////////////////
 
@@ -292,8 +296,12 @@ object Template {
         dietsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit
     ) -> Unit)? = null
 
+    /**
+     * Change signature on 3.9.0 replace toggle by back and goToSearch
+     */
     var IngredientPreferencesSectionTemplate: (@Composable() (
-        ingredientsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit, toggleSearch: () -> Unit
+        ingredientsTag: List<CheckableTag>, togglePreference: (tagIdToToogle: String) -> Unit,
+        back: () -> Unit, goToSearch: () -> Unit
     ) -> Unit)? = null
 
     var EquipmentPreferencesSectionTemplate: (@Composable() (

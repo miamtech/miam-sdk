@@ -11,6 +11,9 @@ import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Record
 import com.miam.kmmMiamCore.miam_core.model.Tag
 import com.miam.kmmMiamCore.miam_core.model.TagTypes
+import com.miam.kmmMiamCore.services.DialogRoute
+import com.miam.kmmMiamCore.services.RouteService
+import com.miam.kmmMiamCore.services.RouteServiceAction
 import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
@@ -40,6 +43,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     private val tagsRepositoryImp: TagsRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
     private val userPreferences: UserPreferences by inject()
+    private val routeService: RouteService by inject()
 
     private val sideEffect = MutableSharedFlow<PreferencesEffect>()
     fun observeSideEffect(): Flow<PreferencesEffect> = sideEffect
@@ -58,7 +62,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             ).awaitAll()
             reloadFromLocal()
             val count = getRecipeCount()
-            setState { copy(basicState = BasicUiState.Success(true), recipesFound = count) }
+            setState { copy(basicState = BasicUiState.Success(PreferencesContent.ALL_PREFRENCES), recipesFound = count) }
             sideEffect.emit(PreferencesEffect.PreferencesLoaded)
             ContextHandlerInstance.instance.emitReadiness()
         }
@@ -170,6 +174,25 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
 
     private suspend fun getRecipeCount(): Int {
         return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
+    }
+
+    fun back() {
+        routeService.previous()
+    }
+
+    fun goToSearchPrefAndPushRoute() {
+        setState { copy(basicState = BasicUiState.Success(PreferencesContent.SEARCH_PREFRERENCES)) }
+        routeService.dispatch(
+            RouteServiceAction.SetDialogRoute(
+                "",
+                { setState { copy(basicState = BasicUiState.Success(PreferencesContent.SEARCH_PREFRERENCES)) } },
+                (routeService.getCurrentRoute() as DialogRoute).closeDialog
+            )
+        )
+    }
+
+    fun goToAllPref() {
+        setState { copy(basicState = BasicUiState.Success(PreferencesContent.ALL_PREFRENCES)) }
     }
 
     fun changeGlobalGuest(numberOfGuest: Int) {
