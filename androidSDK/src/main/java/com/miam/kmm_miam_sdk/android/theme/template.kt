@@ -272,6 +272,10 @@ object Template {
         pageTitle: String
     ) -> Unit)? = null
 
+    var CatalogCategoriesEmptyTemplate: (@Composable() (
+        action: () -> Unit,
+    ) -> Unit)? = null
+
 
     //////////////// Preferences /////////////////////////
 
