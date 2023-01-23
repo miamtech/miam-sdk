@@ -125,7 +125,7 @@ object Template {
 /////////////// Basket Preview //////////////////////
 
     /**
-     * Update on 3.9.0  add isLoading
+     * Update on 3.8.1  add isLoading
      */
     var basketPreviewRecipeLineTemplate: (@Composable() (
         recipeName: String,

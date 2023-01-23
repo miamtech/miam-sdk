@@ -59,10 +59,13 @@ fun CatalogBodyCategories(categories: List<Package>, vmCatalog: CatalogViewModel
     Box(
         Modifier
             .fillMaxSize()
-            .then(categoryListContainer)
     ) {
         if (categories.isNotEmpty()) {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .then(categoryListContainer)
+            ) {
                 categories.forEach { cat ->
                     CatalogCategory(cat, LocalContext.current) {
                         vmCatalog.goToCategory(

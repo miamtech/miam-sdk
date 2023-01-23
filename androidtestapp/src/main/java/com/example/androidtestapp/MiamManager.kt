@@ -35,7 +35,7 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
                 LogHandler.info("I know you are readdy !!! $it")
             }
         }
-        launch { AnalyticsInstance.instance.observeSideEffect().collect { LogHandler.info("Analytics $it") }}
+        launch { AnalyticsInstance.instance.observeSideEffect().collect { LogHandler.info("Analytics $it") } }
 
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
@@ -46,7 +46,7 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
-        CatalogModifier.categoryListContainer = Modifier.padding(bottom = 100.dp)
+        CatalogModifier.categoryListContainer = Modifier.padding(bottom = 500.dp)
 
 
         launch {

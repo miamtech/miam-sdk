@@ -28,7 +28,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import kotlin.math.max
 import kotlin.math.round
 
-
 @ExperimentalCoilApi
 @Composable
 fun BasketPreviewRecipeLine(
@@ -55,6 +54,7 @@ fun BasketPreviewRecipeLine(
                 line.price,
                 pricePerGuest,
                 line.count,
+                isLoading,
                 { goToRecipeDetail() },
                 guestUpdate,
             )
