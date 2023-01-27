@@ -75,8 +75,8 @@ public struct MyMealRow: View {
             }}
         )
         
-       return VStack(alignment: .leading) {
-            HStack {
+        return VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0) {
                 BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
                                     basketDescription: meal.basketPreviewLine.basketDescription,
                                     pricePerGuest: meal.basketPreviewLine.pricePerGuest,
@@ -93,7 +93,7 @@ public struct MyMealRow: View {
                 if let actionColumnTemplate = Template.sharedInstance.myMealsActionColumnTemplate {
                     actionColumnTemplate(parameters)
                 } else {
-                    VStack {
+                    VStack(spacing: 0) {
                         Button {
                             myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))
                         } label: {
@@ -108,11 +108,12 @@ public struct MyMealRow: View {
                         } label: {
                             Image.miamImage(icon: .chevronDown).rotationEffect(Angle.degrees(chevronAngle))
                         }.padding([.trailing], Dimension.sharedInstance.lPadding)
-                    }.frame(width: 30.0, height: 30, alignment: .trailing)
+                    }
+                    .frame(width: 30.0, height: 30, alignment: .trailing)
                 }
             }
             if isExpanded {
-                VStack {
+                VStack(spacing: 0) {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
                         
@@ -143,7 +144,8 @@ public struct MyMealRow: View {
                     })
                 }
             }
-        }.sheet(isPresented: $showingPopup) {
+        }
+       .sheet(isPresented: $showingPopup) {
             RecipeModal(recipeId:  meal.id, showFooter: false) {
                 showingPopup = false
             }

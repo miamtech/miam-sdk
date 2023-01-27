@@ -39,7 +39,7 @@ struct BasketPreviewHeader: View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
             Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, isReloading, updateGuest)
         } else {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     if let picture = pictureURL {
                         AsyncImage(url: picture, height: 120.0).frame(width:120, height: 120, alignment: .topLeading).cornerRadius(12.0)

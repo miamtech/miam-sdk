@@ -1,4 +1,5 @@
 # 3.9.0
+- [FIX][IOS] Fix extra padding in my meal view
 - [FIX][IOS] Add flag to show/hide "meal ideas" image in navigation bar
 
 # 3.8.1
