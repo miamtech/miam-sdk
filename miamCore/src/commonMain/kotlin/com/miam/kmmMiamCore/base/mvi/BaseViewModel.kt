@@ -1,11 +1,11 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.kmmMiamCore.base.executor.MainExecutor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-public abstract class BaseViewModel<Event : UiEvent, State : UiState, Effect : UiEffect> :
-    com.miam.kmmMiamCore.base.executor.MainIoExecutor() {
+public abstract class BaseViewModel<Event : UiEvent, State : UiState, Effect : UiEffect> : MainExecutor() {
 
     private val initialState: State by lazy { createInitialState() }
     public abstract fun createInitialState(): State
