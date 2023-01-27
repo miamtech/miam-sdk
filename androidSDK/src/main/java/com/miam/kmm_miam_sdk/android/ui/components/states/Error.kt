@@ -11,31 +11,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.miam.kmm_miam_sdk.android.theme.Template
 
 @Composable
 fun Error(
     msg: String = "An error has ocurred",
     onTryAgain: () -> Unit = {}
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        //modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+    Template.errorTemplate?.let {
+    } ?: run {
+        Box(
+            contentAlignment = Alignment.Center,
+            //modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = msg,
-                style = MaterialTheme.typography.h5
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            OutlinedButton(
-                onClick = onTryAgain
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Try Again",
-                    style = MaterialTheme.typography.h6
+                    text = msg,
+                    style = MaterialTheme.typography.h5
                 )
+                Spacer(modifier = Modifier.size(10.dp))
+                OutlinedButton(
+                    onClick = onTryAgain
+                ) {
+                    Text(
+                        text = "Try Again",
+                        style = MaterialTheme.typography.h6
+                    )
+                }
             }
         }
     }

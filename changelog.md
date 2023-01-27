@@ -1,3 +1,6 @@
+# 3.9.0
+- [FEA][AND] Add generic error template 
+
 # 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly
 - [FIX][AND] Fix crash on itemSelector openning
