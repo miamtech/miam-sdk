@@ -541,6 +541,7 @@ public class Template {
      backAction: (() -> Void)?
      titleView: AnyView
      */
+    @available(*, deprecated, message: "Not used anymore, views use native navigation bar.")
     public var titleBarViewTemplate: ((
         Bool,
         (() -> Void)?,

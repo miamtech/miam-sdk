@@ -14,6 +14,7 @@ public struct RecipeDetailsView: View {
     public var recipeId: String?
     
     public var showFooter = true
+    public let showMealIdeaImage: Bool
     public var close: () -> Void
     public var navigateToPreview: () -> Void
     public var buy: () -> Void
@@ -30,7 +31,7 @@ public struct RecipeDetailsView: View {
         return recipeTitle
     }
     
-    public init(recipeId: String, showFooter: Bool = true, close: @escaping () -> (),
+    public init(recipeId: String, showFooter: Bool = true, showMealIdeaImage: Bool = true, close: @escaping () -> (),
                 navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.recipeId = recipeId
         self.close = close
@@ -38,15 +39,17 @@ public struct RecipeDetailsView: View {
         self.buy = buy
         viewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
         self.showFooter = showFooter
+        self.showMealIdeaImage = showMealIdeaImage
     }
     
-    public init(vmRecipe: RecipeCardVM, showFooter: Bool = true, close: @escaping () -> (),
+    public init(vmRecipe: RecipeCardVM, showFooter: Bool = true, showMealIdeaImage: Bool = true, close: @escaping () -> (),
                 navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.viewModel = vmRecipe
         self.showFooter = showFooter
         self.close = close
         self.navigateToPreview = navigateToPreview
         self.buy = buy
+        self.showMealIdeaImage = showMealIdeaImage
     }
     
     public var body: some View {
@@ -95,17 +98,19 @@ public struct RecipeDetailsView: View {
         .frame(maxHeight: .infinity)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack{
-                    Image.miamImage(icon: .ideeRepas)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:24, height:24)
-                    Text(RecipeCardText.sharedInstance.recipeFlag)
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                }.padding(.horizontal,16)
-                    .padding(.vertical,4)
-                    .background(Color.miamColor(.musterd))
-                    .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                if showMealIdeaImage {
+                    HStack{
+                        Image.miamImage(icon: .ideeRepas)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:24, height:24)
+                        Text(RecipeCardText.sharedInstance.recipeFlag)
+                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
+                    }.padding(.horizontal,16)
+                        .padding(.vertical,4)
+                        .background(Color.miamColor(.musterd))
+                        .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
+                }
             }
             ToolbarItem(placement: .principal) {
                 Text(recipeTitle)
