@@ -13,9 +13,9 @@ public struct CatalogCategoriesView: View {
     @StateObject var catalog: CatalogVM = CatalogVM()
 
     let recipeCardHeight: Double
-    let goToCategory: (CatalogPackage) -> Void
+    public var goToCategory: ((CatalogPackage) -> Void)?
     
-    public init(recipeCardHeight: Double = 400.0, goToCategory: @escaping (CatalogPackage) -> Void) {
+    public init(recipeCardHeight: Double = 400.0, goToCategory: ((CatalogPackage) -> Void)? = nil) {
         self.recipeCardHeight = recipeCardHeight
         self.goToCategory = goToCategory
     }
@@ -25,7 +25,9 @@ public struct CatalogCategoriesView: View {
             ManagementResourceState<NSArray, CatalogCategoriesSuccessView, CatalogLoadingView, CatalogEmptyView>(
                 resourceState: catalogState.categories,
                 successView: CatalogCategoriesSuccessView(packages: catalog.packages, navigateToCategory: { category in
-                    goToCategory(category)
+                    if let goToCategory {
+                        goToCategory(category)
+                    }
                 }, recipeCardHeight: 400.0),
                 
                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
