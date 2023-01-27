@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <plural name="items">
+        <item quantity="one">un élément</item>
+        <item quantity="other">plusieurs éléments</item>
+    </plural>
+    <plural name="formatted.items">
+        <item quantity="one">%d élément</item>
+        <item quantity="other">%d éléments</item>
+    </plural>
+</resources>

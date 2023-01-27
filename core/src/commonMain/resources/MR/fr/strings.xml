@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- Single -->
+    <string name="single.amount">Montant</string>
+    <string name="single.cancel">Annuler</string>
+    <string name="single.continue">Continuer</string>
+    <string name="single.vat">TVA</string>
+    <!-- Single Formatted -->
+    <string name="formatted.string">Bonjour, %s</string>
+    <string name="formatted.string.in.between">Bonjour %s, rencontrons-nous!</string>
+    <string name="formatted.int">Cela fait %d €</string>
+</resources>

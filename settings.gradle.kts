@@ -20,3 +20,8 @@ rootProject.name = "kmmMiamSdk"
 include(":androidSDK")
 include(":miamCore")
 include(":androidtestapp")
+
+include(":core")
+//include(":miam-sdk")
+
+include(":test-utils")
