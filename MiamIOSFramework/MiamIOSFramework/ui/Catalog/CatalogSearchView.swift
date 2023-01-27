@@ -9,15 +9,21 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct CatalogSearchView: View {
+public struct CatalogSearchView: View {
     @SwiftUI.State var searchString: String = ""
-    var catalog: CatalogVM // useless ?
     let close: () -> Void
     let search: () -> Void
     let filterVM = FilterViewModelInstance.shared.instance
-    var body: some View {
+    
+    public init(close: @escaping () -> Void, search: @escaping () -> Void) {
+        self.close = close
+        self.search = search
+    }
+    
+    public var body: some View {
         if let template = Template.sharedInstance.catalogSearchViewTemplate {
-            template(catalog, close, search)
+//            template(close, search)
+            EmptyView()
         } else {
             VStack(spacing: 10.0) {
                 HStack {
@@ -28,6 +34,7 @@ struct CatalogSearchView: View {
                     }
                     Spacer()
                 }.frame(height: 44).padding(Dimension.sharedInstance.mlPadding)
+                
                 HStack(spacing: 10.0) {
                     HStack(spacing: 10.0) {
                         TextField(MiamText.sharedInstance.search, text: $searchString).frame(height: 45.0)
@@ -55,7 +62,7 @@ struct CatalogSearchView: View {
 struct CatalogSearchView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            CatalogSearchView(catalog: CatalogVM(), close: {}, search: {})
+            CatalogSearchView(close: {}, search: {})
         }
     }
 }
