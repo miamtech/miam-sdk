@@ -7,13 +7,13 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-likes")
-data class RecipeLike private constructor(
+public data class RecipeLike private constructor(
     override val id: String? = null,
     override val attributes: RecipeLikeAttributes? = null,
     override val relationships: RecipeLikeRelationships? = null
 ): Record(), BasketPreviewEntry {
 
-    constructor(
+    public constructor(
         id: String?,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,12 +34,12 @@ data class RecipeLike private constructor(
     val exists: Boolean
         get() = !id.isNullOrBlank()
 
-    fun toggle(): RecipeLike {
+    public fun toggle(): RecipeLike {
         return copy(attributes = attributes!!.copy(isPast = !attributes.isPast))
     }
 
-    companion object {
-        fun createDefault(recipeId: String): RecipeLike {
+    public companion object {
+        public fun createDefault(recipeId: String): RecipeLike {
             val attributes = RecipeLikeAttributes(isPast = true, recipeId = recipeId.toInt())
             val rel = RecipeLikeRelationships()
             return RecipeLike(null, attributes, rel)
@@ -48,7 +48,7 @@ data class RecipeLike private constructor(
 }
 
 @Serializable
-data class RecipeLikeAttributes constructor(
+public data class RecipeLikeAttributes constructor(
     @SerialName("is-past")
     val isPast: Boolean,
     @SerialName("recipe-id")
@@ -56,7 +56,7 @@ data class RecipeLikeAttributes constructor(
 ): Attributes()
 
 @Serializable
-class RecipeLikeRelationships: Relationships() {
+public class RecipeLikeRelationships: Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }

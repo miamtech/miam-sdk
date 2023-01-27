@@ -1,6 +1,6 @@
 package com.miam.kmmMiamCore.base.executor
 
-interface IExecutorScope {
-    fun attach()
-    fun detach()
+public interface IExecutorScope {
+    public fun attach()
+    public fun detach()
 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-open class MyMealButtonViewModel : BaseViewModel<MyMealButtonContract.Event, MyMealButtonContract.State, MyMealButtonContract.Effect>(), KoinComponent {
+public open class MyMealButtonViewModel : BaseViewModel<MyMealButtonContract.Event, MyMealButtonContract.State, MyMealButtonContract.Effect>(), KoinComponent {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error(" [ERROR][Miam][MyMeal] $exception")

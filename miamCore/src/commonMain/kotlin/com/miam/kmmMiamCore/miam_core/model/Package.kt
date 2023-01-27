@@ -8,12 +8,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("packages")
-data class Package private constructor(
+public data class Package private constructor(
     override val id: String,
     override var attributes: PackageAttributes? = null,
     override val relationships: PackageRelationships? = null
 ): Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -28,7 +28,7 @@ data class Package private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
-    fun buildRecipes(recipes: List<Recipe>): Package {
+    public fun buildRecipes(recipes: List<Recipe>): Package {
         val newRel = PackageRelationships(RecipeRelationshipList(recipes))
         return copy(relationships = newRel)
     }
@@ -38,7 +38,7 @@ data class Package private constructor(
 }
 
 @Serializable
-data class PackageAttributes(
+public data class PackageAttributes(
     val title: String,
     @SerialName("author-id")
     val authorId: String?,
@@ -54,7 +54,7 @@ data class PackageAttributes(
 ): Attributes()
 
 @Serializable
-data class PackageRelationships constructor(
+public data class PackageRelationships constructor(
     var recipes: RecipeRelationshipList? = null,
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
@@ -64,6 +64,6 @@ data class PackageRelationships constructor(
 }
 
 @Serializable
-data class PackageSettings(
+public data class PackageSettings(
     var subtitle: String? = null,
 )

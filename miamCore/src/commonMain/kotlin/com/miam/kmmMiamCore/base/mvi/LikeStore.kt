@@ -15,16 +15,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-sealed class LikeEffect(open val recipeId: String): Effect {
-    data class Disliked(override val recipeId: String): LikeEffect(recipeId)
-    data class Liked(val recipe: Recipe): LikeEffect(recipe.id)
+public sealed class LikeEffect(public open val recipeId: String): Effect {
+    public data class Disliked(override val recipeId: String): LikeEffect(recipeId)
+    public data class Liked(val recipe: Recipe): LikeEffect(recipe.id)
 }
 
-object LikeStoreInstance: KoinComponent {
-    val instance: LikeStore by inject()
+public object LikeStoreInstance: KoinComponent {
+    public val instance: LikeStore by inject()
 }
 
-class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val recipeLikeRepositoryImp: RecipeLikeRepositoryImp by inject()
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
@@ -38,14 +38,14 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
         recipeLikesState.value = newState
     }
 
-    fun observeSideEffect(): Flow<LikeEffect> = sideEffect
+    public fun observeSideEffect(): Flow<LikeEffect> = sideEffect
 
     private suspend fun emitEffect(le: LikeEffect) {
         if (le is LikeEffect.Liked) ToasterHandler.onLikeRecipe()
         sideEffect.emit(le)
     }
 
-    suspend fun fetchAndGetRecipeLikes(recipeIds: List<String>): List<RecipeLike> {
+    public suspend fun fetchAndGetRecipeLikes(recipeIds: List<String>): List<RecipeLike> {
         val toFetchLikes = recipeIds.filter { recipeId -> !recipeLikesState.value.containsKey(recipeId) }
         if (toFetchLikes.isNotEmpty()) fetchRecipeLikes(toFetchLikes)
         return recipeIds.mapNotNull { recipeId -> recipeLikesState.value[recipeId] }
@@ -65,7 +65,7 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
         }
     }
 
-    suspend fun toggleLike(recipeId: String): RecipeLike {
+    public suspend fun toggleLike(recipeId: String): RecipeLike {
         if (!recipeLikesState.value.containsKey(recipeId)) fetchRecipeLikes(listOf(recipeId))
 
         val recipeLikeToReturn = getOrCreateToggledLike(recipeId)
@@ -90,7 +90,7 @@ class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Mai
         letElse(
             recipeLike.attributes?.recipeId,
             { recipeId -> emitLike(recipeId.toString(), recipeLike.isLiked) },
-            { LogHandler.error("Tring to emit like with no recipe id") }
+            { LogHandler.error("Trying to emit like with no recipe id") }
         )
     }
 

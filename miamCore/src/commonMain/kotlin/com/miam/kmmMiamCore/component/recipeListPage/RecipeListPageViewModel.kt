@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event, RecipeListPageContract.State, RecipeListPageContract.Effect>() {
+public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event, RecipeListPageContract.State, RecipeListPageContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in recipe list view $exception")
@@ -64,7 +64,7 @@ class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event, Recip
         }
     }
 
-    fun canLoad(): Boolean {
+    public fun canLoad(): Boolean {
         return !currentState.isFetchingNewPage && !currentState.noMoreData
     }
 

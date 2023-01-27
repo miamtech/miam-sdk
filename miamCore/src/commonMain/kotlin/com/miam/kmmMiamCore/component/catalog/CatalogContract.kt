@@ -6,22 +6,22 @@ import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Package
 
-enum class CatalogContent {
+public enum class CatalogContent {
     WORD_SEARCH, FILTER_SEARCH, CATEGORIES_LIST, CATEGORY, FAVORITE
 }
 
-enum class DialogContent {
+public enum class DialogContent {
     FILTER, PREFERENCES, SEARCH
 }
 
-interface CatalogContract {
+public interface CatalogContract {
 
-    sealed class Event: UiEvent {
-        object GoToFavorite: Event()
-        object GoBack: Event()
+    public sealed class Event: UiEvent {
+        public object GoToFavorite: Event()
+        public object GoBack: Event()
     }
 
-    data class State(
+    public data class State(
         val categories: BasicUiState<List<Package>>,
         val content: CatalogContent,
         val dialogIsOpen: Boolean,
@@ -33,5 +33,5 @@ interface CatalogContract {
         val subtitle: String? = null
     ): UiState
 
-    sealed class Effect: UiEffect
+    public sealed class Effect: UiEffect
 }

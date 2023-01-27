@@ -1,13 +1,13 @@
 package com.miam.kmmMiamCore.base.mvi
 
-interface UiEffect
-interface UiEvent
-interface UiState
+public interface UiEffect
+public interface UiEvent
+public interface UiState
 
-sealed class BasicUiState<out T> {
-    data class Success<T>(val data: T) : BasicUiState<T>()
-    data class Error(val message: String? = null) : BasicUiState<Nothing>()
-    object Loading : BasicUiState<Nothing>()
-    object Empty : BasicUiState<Nothing>()
-    object Idle : BasicUiState<Nothing>()
+public sealed class BasicUiState<out T> {
+    public data class Success<T>(val data: T) : BasicUiState<T>()
+    public data class Error(val message: String? = null) : BasicUiState<Nothing>()
+    public object Loading : BasicUiState<Nothing>()
+    public object Empty : BasicUiState<Nothing>()
+    public object Idle : BasicUiState<Nothing>()
 }

@@ -7,16 +7,16 @@ import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import kotlinx.coroutines.Job
 
-interface MyMealContract {
-    sealed class Event : UiEvent {
-        data class RemoveRecipe(val recipeId: String) : Event()
+public interface MyMealContract {
+    public sealed class Event : UiEvent {
+        public data class RemoveRecipe(val recipeId: String) : Event()
     }
 
-    data class State(
+    public data class State(
         val lines: BasicUiState<List<BasketPreviewLine>>, // ui state
         val bpls: List<BasketPreviewLine>?, //service state
         val job: Job?
     ) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 }

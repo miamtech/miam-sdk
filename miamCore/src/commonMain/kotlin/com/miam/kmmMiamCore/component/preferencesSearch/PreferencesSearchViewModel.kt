@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class PreferencesSearchViewModel:
+public open class PreferencesSearchViewModel:
     BaseViewModel<PreferencesSearchContract.Event, PreferencesSearchContract.State, PreferencesSearchContract.Effect>() {
 
 
@@ -27,11 +27,11 @@ open class PreferencesSearchViewModel:
         TODO("Not yet implemented")
     }
 
-    fun resetState() {
+    public fun resetState() {
         setState { copy(searchProposal = BasicUiState.Empty) }
     }
 
-    fun search(search: String) {
+    public fun search(search: String) {
         rememberedLastSearch.value = search
         if (currentState.searchProposal is BasicUiState.Loading) return
 

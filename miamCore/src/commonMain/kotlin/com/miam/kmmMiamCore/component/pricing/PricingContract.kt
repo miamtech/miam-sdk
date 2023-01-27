@@ -7,15 +7,15 @@ import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Pricing
 
 
-interface PricingContract {
+public interface PricingContract {
 
-    sealed class Event: UiEvent
+    public sealed class Event: UiEvent
 
-    data class State(
+    public data class State(
         val price: BasicUiState<Pricing>,
         val recipeId: String? = null,
         val guestNumber: Int? = null
     ): UiState
 
-    sealed class Effect: UiEffect
+    public sealed class Effect: UiEffect
 }

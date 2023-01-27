@@ -8,24 +8,24 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource): KoinComponent {
+public class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource): KoinComponent {
 
 
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    suspend fun getTagById(id: String): Tag {
+    public suspend fun getTagById(id: String): Tag {
         return tagDataSource.getTagById(id)
     }
 
-    suspend fun autocomplete(searchStr: String): List<Tag> {
+    public suspend fun autocomplete(searchStr: String): List<Tag> {
         return tagDataSource.autocompleteTag(searchStr)
     }
 
-    suspend fun fetchDietTags(): List<Tag> {
+    public suspend fun fetchDietTags(): List<Tag> {
         return fetchTagsForSupplier(mapOf(Pair(TAGTYPE, "diet")))
     }
 
-    suspend fun fetchEquipmentTags(): List<Tag> {
+    public suspend fun fetchEquipmentTags(): List<Tag> {
         return fetchTagsForSupplier(mapOf(Pair(TAGTYPE, "equipment")))
     }
 
@@ -36,7 +36,7 @@ class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource): KoinCompo
         return tagDataSource.getTags(filters)
     }
 
-    companion object {
-        const val TAGTYPE = "tag_type"
+    public companion object {
+        public const val TAGTYPE: String = "tag_type"
     }
 }

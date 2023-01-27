@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 
-open class BasketPreviewViewModel(val recipeId: String?):
+public open class BasketPreviewViewModel(public val recipeId: String?):
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -38,7 +38,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
     private val miamContext: ContextHandler by inject()
     private val lineEntriesSubject = MutableSharedFlow<List<BasketEntry>>()
 
-    data class LineUpdateState(val lineUpdates: List<BasketEntry>): State
+    public data class LineUpdateState(val lineUpdates: List<BasketEntry>): State
 
     private val lineUpdateState: MutableStateFlow<LineUpdateState> =
         MutableStateFlow(LineUpdateState(listOf()))
@@ -73,7 +73,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
 
     }
 
-    fun dispose() {
+    public fun dispose() {
         currentState.job?.cancel()
     }
 
@@ -137,7 +137,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
         setState { copy(showLines = !uiState.value.showLines) }
     }
 
-    fun updateGuest(onUpdateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
+    public fun updateGuest(onUpdateGuest: (guestCount: Int) -> Unit, guestCount: Int) {
         reloadState()
         onUpdateGuest(guestCount)
     }
@@ -173,7 +173,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
         basketStore.dispatch(BasketAction.AddBasketEntry(entry))
     }
 
-    fun removeBasketEntry(entry: BasketEntry) {
+    public fun removeBasketEntry(entry: BasketEntry) {
         LogHandler.debug("[Miam] remove ${entry.selectedItem?.attributes?.name}")
         if (currentState.bpl == null || currentState.bpl!!.entries == null) {
             LogHandler.error("Trying to add entry with null bpl")
@@ -196,8 +196,7 @@ open class BasketPreviewViewModel(val recipeId: String?):
         basketStore.dispatch(BasketAction.RemoveEntry(entry))
     }
 
-    fun updateBasketEntry(entry: BasketEntry, finalQty: Int) {
-
+    public fun updateBasketEntry(entry: BasketEntry, finalQty: Int) {
         val newEntry = entry.updateQuantity(finalQty)
 
         val newLineUpdates =

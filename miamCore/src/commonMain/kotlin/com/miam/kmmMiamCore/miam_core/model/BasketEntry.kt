@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("basket-entries")
-data class BasketEntry private constructor(
+public data class BasketEntry private constructor(
     override val id: String,
     override val attributes: BasketEntryAttributes? = null,
     override val relationships: BasketEntryRelationships? = null
 ): Record(), BasketPreviewEntry {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -44,7 +44,7 @@ data class BasketEntry private constructor(
     val itemsCountOrZero: Int
         get() = relationships?.items?.data?.size ?: 0
 
-    fun updateQuantity(qty: Int): BasketEntry {
+    public fun updateQuantity(qty: Int): BasketEntry {
         if (qty <= 0) return updateStatus("deleted")
 
         var newRecord = this.copy(
@@ -59,7 +59,7 @@ data class BasketEntry private constructor(
         return newRecord
     }
 
-    fun updateStatus(status: String): BasketEntry {
+    public fun updateStatus(status: String): BasketEntry {
         var newRecord = this.copy(
             attributes = this.attributes!!.copy(
                 groceriesEntryStatus = status
@@ -80,7 +80,7 @@ data class BasketEntry private constructor(
         return newRecord
     }
 
-    fun updateSelectedItem(selectedItemId: Int): BasketEntry {
+    public fun updateSelectedItem(selectedItemId: Int): BasketEntry {
         val newRecord = this.copy(
             attributes = this.attributes!!.copy(
                 selectedItemId = selectedItemId
@@ -92,7 +92,7 @@ data class BasketEntry private constructor(
 }
 
 @Serializable
-data class BasketEntryAttributes(
+public data class BasketEntryAttributes(
     @SerialName("selected-item-id")
     val selectedItemId: Int? = null,
     @SerialName("learning-factor")
@@ -107,7 +107,7 @@ data class BasketEntryAttributes(
 ): Attributes()
 
 @Serializable
-data class BasketEntryRelationships constructor(
+public data class BasketEntryRelationships constructor(
     var items: ItemRelationshipList? = null,
     @SerialName("groceries-entry") var groceriesEntry: GroceriesEntryRelationship? = null,
 ): Relationships() {
@@ -118,7 +118,7 @@ data class BasketEntryRelationships constructor(
 }
 
 @Serializable
-data class BasketEntriesItem(
+public data class BasketEntriesItem(
     val id: Int? = null,
     @SerialName("item_id")
     val itemId: Int? = null,
@@ -142,15 +142,16 @@ data class BasketEntriesItem(
  * Used from others relations
  */
 
+@Suppress("unchecked_cast")
 @Serializable(with = BasketEntryRelationshipListSerializer::class)
-class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, BasketEntry::class) as List<BasketEntry>
     }
 }
 
 @Serializer(forClass = BasketEntryRelationshipList::class)
-object BasketEntryRelationshipListSerializer: KSerializer<BasketEntryRelationshipList> {
+public object BasketEntryRelationshipListSerializer: KSerializer<BasketEntryRelationshipList> {
     override fun serialize(encoder: Encoder, value: BasketEntryRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)

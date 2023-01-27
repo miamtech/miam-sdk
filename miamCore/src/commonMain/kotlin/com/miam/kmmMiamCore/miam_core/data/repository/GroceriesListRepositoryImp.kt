@@ -6,7 +6,7 @@ import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
-class GroceriesListRepositoryImp(
+public class GroceriesListRepositoryImp(
     private val groceriesListDataSource: MiamAPIDatasource
 ) : GroceriesListRepository {
 

@@ -2,11 +2,11 @@ package com.miam.kmmMiamCore.handler
 
 import kotlin.native.concurrent.ThreadLocal
 
-class LogHandler {
+public class LogHandler {
 
     @ThreadLocal
-    companion object {
-        fun init(
+    public companion object {
+        public fun init(
             debug: (String) -> Unit = this.debug,
             info: (String) -> Unit = this.info,
             warn: (String) -> Unit = this.warn,
@@ -18,19 +18,19 @@ class LogHandler {
             this.error = error
         }
 
-        var debug = fun(msg: String) {
+        public var debug: (String) -> Unit = fun(msg: String) {
             println("[Miam][DEBUG] $msg")
         }
 
-        var info = fun(msg: String) {
+        public var info: (String) -> Unit = fun(msg: String) {
             println("[Miam][INFO] $msg")
         }
 
-        var warn = fun(msg: String) {
+        public var warn: (String) -> Unit = fun(msg: String) {
             println("[Miam][WARN] $msg")
         }
 
-        var error = fun(msg: String) {
+        public var error: (String) -> Unit = fun(msg: String) {
             println("[Miam][ERROR] $msg")
         }
     }

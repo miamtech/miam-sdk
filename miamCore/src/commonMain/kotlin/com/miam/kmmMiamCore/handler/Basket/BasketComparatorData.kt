@@ -3,9 +3,9 @@ package com.miam.kmmMiamCore.handler.Basket
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 
-data class BasketComparatorData(val extIdToComparisonItem: MutableMap<String, BasketComparisonItem> = mutableMapOf()) {
+public data class BasketComparatorData(val extIdToComparisonItem: MutableMap<String, BasketComparisonItem> = mutableMapOf()) {
 
-    fun init(retailerBasket: List<RetailerProduct>, miamActiveBasket: List<BasketEntry>) {
+    public fun init(retailerBasket: List<RetailerProduct>, miamActiveBasket: List<BasketEntry>) {
         addOrUpdateEntryFromRetailer(retailerBasket)
         addOrUpdateEntryFromMiam(miamActiveBasket)
     }
@@ -13,7 +13,7 @@ data class BasketComparatorData(val extIdToComparisonItem: MutableMap<String, Ba
     /**
      *  Update coming from retailer
      */
-    fun updateMapFromRetailer(retailerBasket: List<RetailerProduct>) {
+    public fun updateMapFromRetailer(retailerBasket: List<RetailerProduct>) {
         addOrUpdateEntryFromRetailer(retailerBasket)
         deleteEntryInMapFromRetailer(retailerBasket)
     }
@@ -50,7 +50,7 @@ data class BasketComparatorData(val extIdToComparisonItem: MutableMap<String, Ba
      * Update comming from miam
      */
 
-    fun updateMapFromMiam(miamActiveBasket: List<BasketEntry>) {
+    public fun updateMapFromMiam(miamActiveBasket: List<BasketEntry>) {
         addOrUpdateEntryFromMiam(miamActiveBasket)
         deleteEntryInMapFromMiam(miamActiveBasket)
     }

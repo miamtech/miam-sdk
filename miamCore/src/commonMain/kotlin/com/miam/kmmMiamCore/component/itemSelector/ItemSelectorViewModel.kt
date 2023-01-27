@@ -10,11 +10,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-object ItemSelectorInstance: KoinComponent {
-    val instance: ItemSelectorViewModel by inject()
+public object ItemSelectorInstance: KoinComponent {
+    public val instance: ItemSelectorViewModel by inject()
 }
 
-open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>(),
+public open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>(),
     KoinComponent {
 
     private val basketStore: BasketStore by inject()
@@ -45,7 +45,7 @@ open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, Item
         }
     }
 
-    fun setSelectedItem(item: BasketPreviewLine) {
+    public fun setSelectedItem(item: BasketPreviewLine) {
         setState { copy(selectedItem = BasicUiState.Success(item), items = fillItem(item)) }
     }
 
@@ -59,7 +59,7 @@ open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, Item
         return itemList
     }
 
-    fun choose(selectedItem: BasketPreviewLine, index: Int) {
+    public fun choose(selectedItem: BasketPreviewLine, index: Int) {
 
         if (index >= currentState.items.size) return
 

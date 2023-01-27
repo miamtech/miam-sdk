@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("sponsors")
-data class Sponsor private constructor(
+public data class Sponsor private constructor(
     override val id: String,
     override val attributes: SponsorAttributes? = null,
     override val relationships: SponsorRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,14 +34,14 @@ data class Sponsor private constructor(
 }
 
 @Serializable
-data class SponsorAttributes(
+public data class SponsorAttributes(
     val name: String,
     @SerialName("logo-url")
     val logoUrl: String
 ) : Attributes()
 
 @Serializable
-class SponsorRelationships : Relationships() {
+public class SponsorRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -49,16 +49,16 @@ class SponsorRelationships : Relationships() {
 /**
  * Used from others relations
  */
-
+@Suppress("unchecked_cast")
 @Serializable(with = SponsorListSerializer::class)
-class SponsorListRelationship(override var data: List<Sponsor>) : RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class SponsorListRelationship(override var data: List<Sponsor>) : RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Sponsor::class) as List<Sponsor>
     }
 }
 
 @Serializer(forClass = SponsorListRelationship::class)
-object SponsorListSerializer : KSerializer<SponsorListRelationship> {
+public object SponsorListSerializer : KSerializer<SponsorListRelationship> {
     override fun serialize(encoder: Encoder, value: SponsorListRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

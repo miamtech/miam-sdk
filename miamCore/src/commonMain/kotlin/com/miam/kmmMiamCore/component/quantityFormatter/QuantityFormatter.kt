@@ -2,14 +2,14 @@ package com.miam.kmmMiamCore.component.quantityFormatter
 
 import kotlin.math.ceil
 
-class QuantityFormatter {
-    companion object default {
-        fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
+public class QuantityFormatter {
+    public companion object default {
+        public fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
             return (quantity.toFloat() * currentGuest / recipeGuest).toString()
         }
 
 
-        fun readableFloatNumber(value: String, unit: String?): String {
+        public fun readableFloatNumber(value: String, unit: String?): String {
             if (isUnitCountless(unit)) {
                 return unit.toString()
             }
@@ -33,7 +33,7 @@ class QuantityFormatter {
             return ceil(valueToNumber).toString().plus(" ").plus(unitToDisplay)
         }
 
-        fun frac(value: Float, maxdenominator: Int = 10): String {
+        public fun frac(value: Float, maxdenominator: Int = 10): String {
             var num1 = 0f
             var den1 = 1f
             var num2 = 1f
@@ -63,7 +63,7 @@ class QuantityFormatter {
             }
         }
 
-        fun render_frac(original_value: Float, num: Float, denom: Float): String {
+        public fun render_frac(original_value: Float, num: Float, denom: Float): String {
             if (num == 0f) {
                 return original_value.toString()
 
@@ -71,7 +71,7 @@ class QuantityFormatter {
             return num.toInt().toString().plus('/').plus(denom.toInt())
         }
 
-        fun pluralize(unit: String): String {
+        public fun pluralize(unit: String): String {
             if (unit.isEmpty() || unit.length <= 3) {
                 return unit
             }
@@ -81,7 +81,7 @@ class QuantityFormatter {
             return unitArray.joinToString(" ")
         }
 
-        fun singularize(unit: String): String {
+        public fun singularize(unit: String): String {
             if (unit.isEmpty() || unit.length <= 3) {
                 return unit
             }

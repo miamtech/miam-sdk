@@ -14,13 +14,13 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.native.concurrent.ThreadLocal
 
-open class CatalogCategory(
-    val id: String,
-    val title: String
+public open class CatalogCategory(
+    public val id: String,
+    public val title: String
 )
 
 @ThreadLocal
-object PointOfSaleHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public object PointOfSaleHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
@@ -28,28 +28,28 @@ object PointOfSaleHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispa
 
     private val packageRepositoryImp: PackageRepositoryImp by inject()
 
-    var isAvailable = fun(): Boolean { return true }
+    public var isAvailable: () -> Boolean = fun(): Boolean { return true }
     private val store: PointOfSaleStore by inject()
     private val analytics: Analytics by inject()
 
-    fun updateStoreId(storeId: String?) {
+    public fun updateStoreId(storeId: String?) {
         if (store.samePos(storeId)) return
 
         store.dispatch(PointOfSaleAction.SetExtId(storeId))
     }
 
-    fun setSupplier(supplierId: Int) {
+    public fun setSupplier(supplierId: Int) {
         if (store.sameSupplier(supplierId)) return
 
         store.dispatch(PointOfSaleAction.SetSupplierId(supplierId))
     }
 
-    fun setSupplierOrigin(origin: String) {
+    public fun setSupplierOrigin(origin: String) {
         store.setOrigin(origin)
         analytics.init(origin)
     }
 
-    fun getCatalogCategories(setLocalCategories: (catalog: List<CatalogCategory>) -> Unit) {
+    public fun getCatalogCategories(setLocalCategories: (catalog: List<CatalogCategory>) -> Unit) {
         letElse(
             store.supplierId,
             { supplierId ->

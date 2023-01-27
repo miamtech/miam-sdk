@@ -17,11 +17,13 @@ import com.miam.kmmMiamCore.services.Analytics
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
 import kotlinx.coroutines.Dispatchers
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
+public fun initKoin(appDeclaration: KoinAppDeclaration = {}): KoinApplication =
     startKoin {
         appDeclaration()
         modules(
@@ -34,9 +36,9 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     }
 
 // IOS
-fun initKoin() = initKoin {}
+public fun initKoin(): KoinApplication = initKoin {}
 
-val repositoryModule = module {
+public val repositoryModule: Module = module {
     single { PricingRepositoryImp(get()) }
     single { RecipeRepositoryImp(get()) }
     single { RecipeLikeRepositoryImp(get()) }
@@ -51,11 +53,11 @@ val repositoryModule = module {
     single { TagsRepositoryImp(get()) }
 }
 
-val dispatcherModule = module {
+public val dispatcherModule: Module = module {
     factory { Dispatchers.Default }
 }
 
-val storeModule = module {
+public val storeModule: Module = module {
     single { UserStore() }
     single { GroceriesListStore() }
     single { BasketStore() }
@@ -67,7 +69,7 @@ val storeModule = module {
     single { LikeStore() }
 }
 
-val servicesModule = module {
+public val servicesModule: Module = module {
     single { Analytics() }
     single { RouteService() }
     single { UserPreferences() }

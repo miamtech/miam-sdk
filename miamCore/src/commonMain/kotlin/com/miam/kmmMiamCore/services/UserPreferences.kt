@@ -9,27 +9,27 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("UserPreferencesInstance used by ios and component")
-object UserPreferencesInstance: KoinComponent {
-    val instance: UserPreferences by inject()
+public object UserPreferencesInstance: KoinComponent {
+    public val instance: UserPreferences by inject()
 }
 
-class UserPreferences: KoinComponent {
+public class UserPreferences: KoinComponent {
 
     private val contextHandler: ContextHandler by inject()
 
-    fun putList(key: String, value: List<String>) {
+    public fun putList(key: String, value: List<String>) {
         contextHandler.getContextOrNull()?.putArray(key, value)
     }
 
-    fun getListOrNull(key: String): List<String>? {
+    public fun getListOrNull(key: String): List<String>? {
         return contextHandler.getContextOrNull()?.getArrayOrNull(key)
     }
 
-    fun putInt(key: String, value: Int) {
+    public fun putInt(key: String, value: Int) {
         contextHandler.getContextOrNull()?.putInt(key, value)
     }
 
-    fun getIntOrNull(key: String): Int? {
+    public fun getIntOrNull(key: String): Int? {
         return contextHandler.getContextOrNull()?.getIntOrNull(key)
     }
 }

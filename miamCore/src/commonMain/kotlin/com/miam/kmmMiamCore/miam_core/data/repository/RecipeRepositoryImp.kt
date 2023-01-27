@@ -7,15 +7,15 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
-class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
+public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
 
     private val likeStore: LikeStore = LikeStoreInstance.instance
 
-    companion object {
-        val DEFAULT_INCLUDED =
+    public companion object {
+        public val DEFAULT_INCLUDED: List<String> =
             listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
-        const val DEFAULT_PAGESIZE = 20
-        const val FIRST_PAGE = 1
+        public const val DEFAULT_PAGESIZE: Int = 20
+        public const val FIRST_PAGE: Int = 1
     }
 
     override suspend fun getRecipeNumberOfResult(filter: String): Int {
@@ -34,7 +34,7 @@ class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): Reci
         return addRecipeLikes(recipes)
     }
 
-    suspend fun getRecipes(
+    public suspend fun getRecipes(
         filters: Map<String, String>,
         included: List<String>,
         pageSize: Int,
@@ -44,7 +44,7 @@ class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): Reci
         return addRecipeLikes(recipes)
     }
 
-    suspend fun getRecipesFromStringFilter(
+    public suspend fun getRecipesFromStringFilter(
         filters: String,
         included: List<String>,
         pageSize: Int,

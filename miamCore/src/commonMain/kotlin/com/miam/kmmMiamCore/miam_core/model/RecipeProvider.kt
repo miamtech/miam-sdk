@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-providers")
-data class RecipeProvider private constructor(
+public data class RecipeProvider private constructor(
     override val id: String,
     override val attributes: RecipeProviderAttributes? = null,
     override val relationships: RecipeProviderRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,12 +34,12 @@ data class RecipeProvider private constructor(
 }
 
 @Serializable
-data class RecipeProviderAttributes(
+public data class RecipeProviderAttributes(
     val name: String,
 ) : Attributes()
 
 @Serializable
-class RecipeProviderRelationships : Relationships() {
+public class RecipeProviderRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -49,14 +49,14 @@ class RecipeProviderRelationships : Relationships() {
  */
 
 @Serializable(with = RecipeProviderSerializer::class)
-class RecipeProviderRelationship(override var data: RecipeProvider) : Relationship() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class RecipeProviderRelationship(override var data: RecipeProvider) : Relationship() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeProvider::class) as RecipeProvider
     }
 }
 
 @Serializer(forClass = RecipeProviderRelationship::class)
-object RecipeProviderSerializer : KSerializer<RecipeProviderRelationship> {
+public object RecipeProviderSerializer : KSerializer<RecipeProviderRelationship> {
     override fun serialize(encoder: Encoder, value: RecipeProviderRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

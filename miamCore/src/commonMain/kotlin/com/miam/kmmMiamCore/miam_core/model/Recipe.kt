@@ -14,14 +14,14 @@ import kotlin.time.Duration.Companion.minutes
 
 @Serializable
 @SerialName("recipes")
-data class Recipe private constructor(
+public data class Recipe private constructor(
     override val id: String,
     override val attributes: RecipeAttributes? = null,
     override val relationships: RecipeRelationships? = null,
     val recipeLike: RecipeLike? = null
 ): Record(), BasketPreviewEntry {
 
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -78,7 +78,7 @@ data class Recipe private constructor(
 }
 
 @Serializable
-data class RecipeAttributes constructor(
+public data class RecipeAttributes constructor(
     val title: String,
 
     @SerialName("ext-id")
@@ -142,7 +142,7 @@ data class RecipeAttributes constructor(
 ): Attributes()
 
 @Serializable
-data class RecipeRelationships(
+public data class RecipeRelationships(
     var ingredients: IngredientListRelationship? = null,
     @SerialName("recipe-provider")
     var recipeProvider: RecipeProviderRelationship? = null,
@@ -165,7 +165,7 @@ data class RecipeRelationships(
 }
 
 @Serializable
-data class RecipeInfos(
+public data class RecipeInfos(
     val id: Int,
     var guests: Int,
 )
@@ -173,16 +173,16 @@ data class RecipeInfos(
 /**
  * Used from others relations
  */
-
+@Suppress("unchecked_cast")
 @Serializable(with = RecipeRelationshipListSerializer::class)
-class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Recipe::class) as List<Recipe>
     }
 }
 
 @Serializer(forClass = RecipeRelationshipList::class)
-object RecipeRelationshipListSerializer: KSerializer<RecipeRelationshipList> {
+public object RecipeRelationshipListSerializer: KSerializer<RecipeRelationshipList> {
     override fun serialize(encoder: Encoder, value: RecipeRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)

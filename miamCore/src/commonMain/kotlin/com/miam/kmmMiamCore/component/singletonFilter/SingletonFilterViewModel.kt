@@ -13,20 +13,20 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object FilterViewModelInstance: KoinComponent {
-    val instance: SingletonFilterViewModel by inject()
+public object FilterViewModelInstance: KoinComponent {
+    public val instance: SingletonFilterViewModel by inject()
 }
 
-sealed class FilterEffect: Effect {
-    object OnUpdate: FilterEffect()
+public sealed class FilterEffect: Effect {
+    public object OnUpdate: FilterEffect()
 }
 
-open class SingletonFilterViewModel:
+public open class SingletonFilterViewModel:
     BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
     private val recipeRepositoryImp: RecipeRepositoryImp by inject()
 
     private val sideEffect = MutableSharedFlow<FilterEffect>()
-    fun observeSideEffect(): Flow<FilterEffect> = sideEffect
+    public fun observeSideEffect(): Flow<FilterEffect> = sideEffect
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in singleton filter VM view $exception")
@@ -34,7 +34,7 @@ open class SingletonFilterViewModel:
 
     init {
         launch(coroutineHandler) {
-            uiState.first { it != null }
+            // uiState.first { it != null } // true ¯\_(ツ)_/¯
             getRecipeCount()
         }
     }
@@ -65,7 +65,7 @@ open class SingletonFilterViewModel:
         }
     }
 
-    fun getRecipeCount() {
+    public fun getRecipeCount() {
         launch(coroutineHandler) {
             val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
             setState { copy(numberOfResult = count) }
@@ -91,31 +91,31 @@ open class SingletonFilterViewModel:
             }
     }
 
-    fun setCat(catId: String) {
+    public fun setCat(catId: String) {
         setState { copy(category = catId) }
         getRecipeCount()
     }
 
-    fun setFavorite() {
+    public fun setFavorite() {
         setState { copy(isFavorite = true) }
         getRecipeCount()
     }
 
-    fun setSearchString(searchString: String) {
+    public fun setSearchString(searchString: String) {
         setState { copy(searchString = searchString) }
         getRecipeCount()
     }
 
-    fun applyFilter() {
+    public fun applyFilter() {
         launch { sideEffect.emit(FilterEffect.OnUpdate) }
     }
 
-    fun clear() {
+    public fun clear() {
         setState { initialState }
         getRecipeCount()
     }
 
-    fun getSelectedFilterAsQueryString(): String {
+    public fun getSelectedFilterAsQueryString(): String {
         var filter = ""
         val difficultyOptions = currentState.difficulty.filter { option -> option.isSelected }
         val costOption = currentState.cost.find { option -> option.isSelected }
@@ -147,7 +147,7 @@ open class SingletonFilterViewModel:
         return filter
     }
 
-    fun getActiveFilterCount(): Int {
+    public fun getActiveFilterCount(): Int {
         val temp = listOf(
             currentState.difficulty.filter { it.isSelected },
             currentState.cost.filter { it.isSelected },
@@ -157,8 +157,8 @@ open class SingletonFilterViewModel:
         return temp.size
     }
 
-    companion object {
-        val initialState = SingletonFilterContract.State(
+    public companion object {
+        public val initialState: SingletonFilterContract.State = SingletonFilterContract.State(
             difficulty = listOf(
                 CatalogFilterOptions("1", "Chef débutant"),
                 CatalogFilterOptions("2", "Chef intermédiaire"),
