@@ -12,7 +12,7 @@ import miamCore
 @available(iOS 14, *)
 public struct RecipesListView: View {
     @ObservedObject private var recipesListPageModel: RecipeListPageVM
-    let browseCatalogAction: () -> Void
+    public var browseCatalogAction: (() -> Void)?
     let showingFavorites: Bool
     let columns:Int
     let spacing: CGFloat
@@ -22,7 +22,7 @@ public struct RecipesListView: View {
     let defaultTitleTemplate : ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
     let specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
     
-    public init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool,specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
+    public init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: (() -> Void)? = nil,  showingFavorites: Bool, specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -34,7 +34,7 @@ public struct RecipesListView: View {
         self.specialTitleTemplate = specialTitleTemplate
     }
     
-    public init(categoryId:String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+    public init(categoryId: String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: (() -> Void)? = nil,  showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -62,7 +62,9 @@ public struct RecipesListView: View {
                         recipesListPageModel.loadMoreContent(currentRecipe: recipe)
                     },
                     browseCatalogAction: {
-                        browseCatalogAction()
+                        if let browseCatalogAction {
+                            browseCatalogAction()
+                        }
                     }, subtitle: subtitle),
                 loadingView: CatalogLoadingView(loadingText: MiamText.sharedInstance.simmering),
                 emptyView: CatalogRecipePageNoResultsView( browseCatalogAction: browseCatalogAction, showingFavorites: showingFavorites))

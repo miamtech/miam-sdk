@@ -279,7 +279,7 @@ public class Template {
      */
     public var catalogRecipePageNoResultsViewTemplate: ((
         String,
-        @escaping () -> Void,
+        (() -> Void)?,
         Bool
     ) -> AnyView)? = nil
     
