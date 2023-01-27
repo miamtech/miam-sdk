@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("ingredients")
-public data class Ingredient private constructor(
+public data class Ingredient internal constructor(
     override val id: String,
     override val attributes: IngredientAttributes? = null,
     override val relationships: IngredientRelationships? = null
@@ -37,8 +37,8 @@ public data class Ingredient private constructor(
 @Serializable
 public data class IngredientAttributes(
     val name: String?,
-    val quantity: String?,
-    val unit: String?,
+    val quantity: String?, // TODO Romain: can a quantity be nullable ? String ?
+    val unit: String?, // TODO Romain: handle Unit with a type
     val active: Boolean = true,
     @SerialName("picture-url")
     val pictureUrl: String?,
@@ -56,11 +56,11 @@ public class IngredientRelationships : Relationships() {
 /**
  * Used from others relations
  */
-@Suppress("unchecked_cast")
 @Serializable(with = IngredientListSerializer::class)
 public class IngredientListRelationship(override var data: List<Ingredient>) : RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, Ingredient::class) as List<Ingredient>
+        data = buildedFromIncluded(includedRecords, Ingredient::class)
+            .filterIsInstance<Ingredient>()
     }
 }
 

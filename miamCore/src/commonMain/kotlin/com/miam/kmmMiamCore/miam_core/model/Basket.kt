@@ -9,9 +9,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("baskets")
-public data class Basket private constructor(
+public data class Basket internal constructor(
     override val id: String,
+    // TODO Romain: is var really needed?
+    // TODO Romain: really optional?
     override var attributes: BasketAttributes? = null,
+    // TODO Romain: really optional?
     override val relationships: BasketRelationships? = null,
     @Transient var recipes: List<Recipe> = listOf()
 ) : Record() {
@@ -51,7 +54,7 @@ public data class Basket private constructor(
 @Serializable
 public data class BasketAttributes(
     val name: String?,
-    val confirmed: Boolean? = false,
+    val confirmed: Boolean? = false, // TODO Romain: is it relevant to have a nullable boolean
     val completion: BasketCompletion? = null,
     @SerialName("total-price")
     val totalPrice: Float,

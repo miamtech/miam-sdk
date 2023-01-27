@@ -7,7 +7,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("tags")
-public data class Tag constructor(
+public data class Tag internal constructor(
     override val id: String,
     override val attributes: TagAttributes? = null,
     override val relationships: TagRelationships? = null
@@ -33,7 +33,7 @@ public data class Tag constructor(
 @Serializable
 public data class TagAttributes constructor(
     @SerialName("tag-type-id")
-    val tagTypeId: String,
+    val tagTypeId: String, // TODO Romain: Use enum class?
     val name: String,
     @SerialName("icon-url")
     val iconUrl: String?,

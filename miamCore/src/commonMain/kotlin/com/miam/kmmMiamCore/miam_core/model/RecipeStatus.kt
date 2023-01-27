@@ -11,7 +11,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-statuses")
-public data class RecipeStatus private constructor(
+public data class RecipeStatus internal constructor(
     override val id: String,
     override val attributes: RecipeStatusAttributes? = null,
     override val relationships: RecipeStatusRelationships? = null
