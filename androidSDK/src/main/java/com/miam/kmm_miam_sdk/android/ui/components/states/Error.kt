@@ -19,11 +19,9 @@ fun Error(
     onTryAgain: () -> Unit = {}
 ) {
     Template.errorTemplate?.let {
+        it()
     } ?: run {
-        Box(
-            contentAlignment = Alignment.Center,
-            //modifier = Modifier.fillMaxSize()
-        ) {
+        Box(contentAlignment = Alignment.Center) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -32,9 +30,7 @@ fun Error(
                     style = MaterialTheme.typography.h5
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                OutlinedButton(
-                    onClick = onTryAgain
-                ) {
+                OutlinedButton( onClick = onTryAgain) {
                     Text(
                         text = "Try Again",
                         style = MaterialTheme.typography.h6
