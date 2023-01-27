@@ -6,6 +6,16 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+    }
+    versionCatalogs {
+        create("libs")
+    }
+}
+
 rootProject.name = "kmmMiamSdk"
 include(":androidSDK")
 include(":miamCore")

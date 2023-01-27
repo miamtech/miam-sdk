@@ -1,60 +1,78 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("android")
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.library)
     id("com.kezong.fat-aar")
 }
 
 android {
-    compileSdk = 33
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
+    val minSdkVersion: String by project
+    compileSdk = Integer.parseInt(compileSdkVersion)
+
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
+        minSdk = Integer.parseInt(minSdkVersion)
+        targetSdk = Integer.parseInt(targetSdkVersion)
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompilerPlugin.get()
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += "-Xjvm-default=all"
     }
 }
 
-val composeVersion: String by project
-
 dependencies {
-    embed(project(":miamCore"))
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("io.insert-koin:koin-android:3.2.2")
-    implementation("io.insert-koin:koin-core:3.2.2")
-    implementation("io.ktor:ktor-client-android:1.6.7")
-    implementation("io.ktor:ktor-client-serialization:1.6.7")
-    implementation("io.ktor:ktor-client-core:1.6.7")
-    implementation("com.google.android.material:material:1.6.0")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.foundation:foundation:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.material:material-icons-core:$composeVersion")
-    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1")
-    implementation("androidx.compose.compiler:compiler:1.3.2")
-    implementation("io.coil-kt:coil-compose:1.3.1")
-    implementation("io.coil-kt:coil-svg:1.3.1")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
-    implementation("androidx.core:core-ktx:1.8.0")
+    api(project(":miamCore"))
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.android.material)
+    implementation(libs.android.legacy)
+
+    implementation(libs.compose.compiler)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.core)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material.core)
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.runtime.rxjava2)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+
+    androidTestImplementation(libs.compose.ui.test)
 }
 
 val PUBLISH_GROUP_ID by extra("tech.miam.sdk")
