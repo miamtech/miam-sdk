@@ -28,13 +28,9 @@ public abstract class MainExecutor : IExecutorScope, CoroutineScope, KoinCompone
         job.cancel()
     }
 
-    protected fun <T> launch(flow: Flow<T>, onSuccess: (T) -> Unit, onError: (Throwable) -> Unit) {
+    protected fun <T> collect(flow: Flow<T>, collect: (T) -> Unit) {
         launch {
-            flow.catch {
-                onError(it)
-            }.collect {
-                onSuccess(it)
-            }
+            flow.collect { collect(it) }
         }
     }
 }
