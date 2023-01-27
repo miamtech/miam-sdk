@@ -1,4 +1,5 @@
 # 3.9.0
+- [FEA][AND] Add generic error template 
 - [FIX][IOS] Fix extra padding in my meal view
 - [FIX][IOS] Add flag to show/hide "meal ideas" image in navigation bar
 
