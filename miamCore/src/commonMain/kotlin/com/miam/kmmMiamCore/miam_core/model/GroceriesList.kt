@@ -8,13 +8,13 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("groceries-lists")
-data class GroceriesList private constructor(
+public data class GroceriesList private constructor(
     override val id: String,
     override var attributes: GroceriesListAttributes? = null,
     override val relationships: GroceriesListRelationships? = null,
     @Transient var recipes: List<Recipe> = listOf()
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -31,12 +31,12 @@ data class GroceriesList private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
-    fun hasRecipe(recipeId: String): Boolean {
+    public fun hasRecipe(recipeId: String): Boolean {
         if (attributes?.recipesInfos.isNullOrEmpty()) return false
         return attributes!!.recipesInfos.any { el -> el.id.toString() == recipeId }
     }
 
-    fun guestsForRecipe(recipeId: String): Int {
+    public fun guestsForRecipe(recipeId: String): Int {
         if (attributes?.recipesInfos.isNullOrEmpty()) return -1
         val recipeInfo =
             this.attributes!!.recipesInfos.find { recipeInfos -> recipeInfos.id.toString() == recipeId }
@@ -44,7 +44,7 @@ data class GroceriesList private constructor(
         return recipeInfo.guests
     }
 
-    fun missingRecipesIds(existingRecipes: List<Recipe>): List<String> {
+    public fun missingRecipesIds(existingRecipes: List<Recipe>): List<String> {
         val missingIds = mutableListOf<String>()
         val allIds = this.attributes?.recipesInfos?.map { ri -> ri.id.toString() } ?: emptyList()
         val existingIds = existingRecipes.map { recipe -> recipe.id }
@@ -56,7 +56,7 @@ data class GroceriesList private constructor(
         return missingIds
     }
 
-    fun rebuildRecipesRelationships(missingRecipes: List<Recipe>, existingRecipes: List<Recipe>) {
+    public fun rebuildRecipesRelationships(missingRecipes: List<Recipe>, existingRecipes: List<Recipe>) {
         val newRecipesList = mutableListOf<Recipe>()
         val existingPresentRecipes = existingRecipes.filter { recipe -> this.hasRecipe(recipe.id) }
         newRecipesList.addAll(existingPresentRecipes)
@@ -67,7 +67,7 @@ data class GroceriesList private constructor(
 
 
 @Serializable
-data class GroceriesListAttributes constructor(
+public data class GroceriesListAttributes constructor(
     var name: String,
     @SerialName("created-at")
     val createdAt: String,
@@ -83,7 +83,7 @@ data class GroceriesListAttributes constructor(
 
 
 @Serializable
-data class GroceriesListRelationships constructor(
+public data class GroceriesListRelationships constructor(
     @SerialName("groceries-entries") var groceriesEntries: GroceriesEntryRelationshipList? = null,
 ) : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {

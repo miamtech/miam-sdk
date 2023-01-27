@@ -21,25 +21,25 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("UserPreferencesInstance used by ios and component")
-object RouteServiceInstance: KoinComponent {
-    val instance: RouteService by inject()
+public object RouteServiceInstance: KoinComponent {
+    public val instance: RouteService by inject()
 }
 
-abstract class Route(
-    open val title: String,
-    open val backToRoute: () -> Unit,
-    open val previous: Route?
+public abstract class Route(
+    public open val title: String,
+    public open val backToRoute: () -> Unit,
+    public open val previous: Route?
 ) {
 
-    abstract fun onDialogBack(route: DialogRoute)
+    public abstract fun onDialogBack(route: DialogRoute)
 
-    abstract fun onDialogClose(): PageRoute?
+    public abstract fun onDialogClose(): PageRoute?
 
-    abstract fun onPrevious()
+    public abstract fun onPrevious()
 
 }
 
-data class DialogRoute(override val title: String, override val backToRoute: () -> Unit, override val previous: Route?, val closeDialog: () -> Unit):
+public data class DialogRoute(override val title: String, override val backToRoute: () -> Unit, override val previous: Route?, val closeDialog: () -> Unit):
     Route(title, backToRoute, previous) {
 
     override fun onDialogBack(route: DialogRoute) {
@@ -60,7 +60,7 @@ data class DialogRoute(override val title: String, override val backToRoute: () 
     }
 }
 
-data class PageRoute(override val title: String, override val backToRoute: () -> Unit, override val previous: Route?):
+public data class PageRoute(override val title: String, override val backToRoute: () -> Unit, override val previous: Route?):
     Route(title, backToRoute, previous) {
 
     override fun onDialogBack(route: DialogRoute) {
@@ -76,25 +76,25 @@ data class PageRoute(override val title: String, override val backToRoute: () ->
     }
 }
 
-data class RouteServiceState(val route: Route?): State
+public data class RouteServiceState(val route: Route?): State
 
-sealed class RouteServiceAction: Action {
-    data class SetDialogRoute(val title: String, val backToRoute: () -> Unit, val closeDialog: () -> Unit): RouteServiceAction()
-    data class SetPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
-    data class SetInitialPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
+public sealed class RouteServiceAction: Action {
+    public data class SetDialogRoute(val title: String, val backToRoute: () -> Unit, val closeDialog: () -> Unit): RouteServiceAction()
+    public data class SetPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
+    public data class SetInitialPageRoute(val title: String, val backToRoute: () -> Unit): RouteServiceAction()
 }
 
-sealed class RouteServiceEffect: Effect {
-    data class RouteChanged(val newRoute: Route): RouteServiceEffect()
+public sealed class RouteServiceEffect: Effect {
+    public data class RouteChanged(val newRoute: Route): RouteServiceEffect()
 }
 
-open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServiceEffect>, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServiceEffect>, CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("[ERROR][Miam][RouteService] $exception ${exception.stackTraceToString()}")
     }
 
-    override val state = MutableStateFlow(RouteServiceState(null))
+    override val state: MutableStateFlow<RouteServiceState> = MutableStateFlow(RouteServiceState(null))
     private val sideEffect = MutableSharedFlow<RouteServiceEffect>()
     override fun observeState(): StateFlow<RouteServiceState> = state
     override fun observeSideEffect(): Flow<RouteServiceEffect> = sideEffect
@@ -125,7 +125,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         }
     }
 
-    fun previous(): Route? {
+    public fun previous(): Route? {
         popRoute()?.let { poppedRoute ->
             poppedRoute.onPrevious()
             launch { poppedRoute.previous?.let { sideEffect.emit(RouteServiceEffect.RouteChanged(it)) } }
@@ -141,7 +141,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         return poppedRoute
     }
 
-    fun onCloseDialog() {
+    public fun onCloseDialog() {
         getCurrentRoute()?.let { currentRoute ->
             val lastPageRoute = currentRoute.onDialogClose()
             state.value = state.value.copy(route = lastPageRoute)
@@ -149,7 +149,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         }
     }
 
-    fun onRouteChange(updateRoute: (miamRoute: Route?) -> Unit) {
+    public fun onRouteChange(updateRoute: (miamRoute: Route?) -> Unit) {
         updateRoute(state.value.route)
         launch(coroutineHandler) {
             observeSideEffect()
@@ -159,7 +159,7 @@ open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServi
         }
     }
 
-    fun getCurrentRoute(): Route? {
+    public fun getCurrentRoute(): Route? {
         return RouteServiceInstance.instance.state.value.route
     }
 }

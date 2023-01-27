@@ -6,19 +6,19 @@ import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
-interface FavoritePageContract {
+public interface FavoritePageContract {
 
-    sealed class Event : UiEvent {
-        object LoadPage : FavoritePageContract.Event()
+    public sealed class Event : UiEvent {
+        public object LoadPage : FavoritePageContract.Event()
     }
 
-    data class State(
+    public data class State(
         val favoritesRecipes: BasicUiState<List<Recipe>>,
         val currentPage: Int,
         val isFetchingNewPage: Boolean,
         val noMoreData: Boolean
     ) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 
 }

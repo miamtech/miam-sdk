@@ -7,4 +7,4 @@ import android.content.Context
  * Android implementation
  */
 
-actual typealias KMMContext = Context
+public actual typealias KMMContext = Context

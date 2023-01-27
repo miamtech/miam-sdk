@@ -1,3 +1,6 @@
+# 3.10.0
+- [FEA][COR] Enable explicit API mode and compiler flag warning as error
+
 # 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly
 - [FIX][AND] Fix crash on itemSelector openning

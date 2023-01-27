@@ -5,12 +5,12 @@ import com.miam.kmmMiamCore.base.mvi.UiEffect
 import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 
-interface MyMealButtonContract {
-    sealed class Event : UiEvent
+public interface MyMealButtonContract {
+    public sealed class Event : UiEvent
 
-    data class State(
+    public data class State(
         val recipeCount: BasicUiState<Int>, // ui state
     ) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 }

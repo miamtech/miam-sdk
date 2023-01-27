@@ -15,25 +15,25 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-object HttpRoutes {
+public object HttpRoutes {
     private const val BASE_URL = "https://api.miam.tech/api/v1"
 
     // private const val BASE_URL = "http://127.0.0.1:3000/api/v1"
-    const val RECIPE_ENDPOINT = "$BASE_URL/recipes/"
-    const val RECIPE_LIKE_ENDPOINT = "$BASE_URL/recipe-likes/"
-    const val GROCERIESLIST_ENDPOINT = "$BASE_URL/groceries-lists/"
-    const val GROCERIES_ENTRY_ENDPOINT = "$BASE_URL/groceries-entries"
-    const val POINTOFSALE_ENDPOINT = "$BASE_URL/point-of-sales/"
-    const val BASKET_ENDPOINT = "$BASE_URL/baskets/"
-    const val BASKET_ENTRIES_ENDPOINT = "$BASE_URL/basket-entries/"
-    const val RECIPE_SUGGESTIONS = "$BASE_URL/recipes/suggestions"
-    const val SUPPLIER = "$BASE_URL/suppliers/"
-    const val PACKAGE_ENDPOINT = "$BASE_URL/packages"
-    const val TAGS_ENDPOINT = "$BASE_URL/tags"
+    public const val RECIPE_ENDPOINT: String = "$BASE_URL/recipes/"
+    public const val RECIPE_LIKE_ENDPOINT: String = "$BASE_URL/recipe-likes/"
+    public const val GROCERIESLIST_ENDPOINT: String = "$BASE_URL/groceries-lists/"
+    public const val GROCERIES_ENTRY_ENDPOINT: String = "$BASE_URL/groceries-entries"
+    public const val POINTOFSALE_ENDPOINT: String = "$BASE_URL/point-of-sales/"
+    public const val BASKET_ENDPOINT: String = "$BASE_URL/baskets/"
+    public const val BASKET_ENTRIES_ENDPOINT: String = "$BASE_URL/basket-entries/"
+    public const val RECIPE_SUGGESTIONS: String = "$BASE_URL/recipes/suggestions"
+    public const val SUPPLIER: String = "$BASE_URL/suppliers/"
+    public const val PACKAGE_ENDPOINT: String = "$BASE_URL/packages"
+    public const val TAGS_ENDPOINT: String = "$BASE_URL/tags"
 }
 
 
-class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
+public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
     SupplierDataSource, PackageDataSource, TagDataSource, KoinComponent {
 
@@ -341,6 +341,7 @@ class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleD
 
 /////////////////////// BASKET ////////////////////////////////////////////////
 
+    @Suppress("unchecked_cast")
     override suspend fun getFromListAndPos(listId: String, posId: Int, included: List<String>): Basket? {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getFromListAndPos $listId $posId")
         val baskets = httpClient.get<RecordWrapper> {

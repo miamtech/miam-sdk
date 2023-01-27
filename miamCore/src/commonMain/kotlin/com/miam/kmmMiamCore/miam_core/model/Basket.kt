@@ -9,13 +9,13 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("baskets")
-data class Basket private constructor(
+public data class Basket private constructor(
     override val id: String,
     override var attributes: BasketAttributes? = null,
     override val relationships: BasketRelationships? = null,
     @Transient var recipes: List<Recipe> = listOf()
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -32,7 +32,7 @@ data class Basket private constructor(
         relationships?.buildFromIncluded(includedRecords)
     }
 
-    fun updateBasketEntry(newBe: BasketEntry): Basket {
+    public fun updateBasketEntry(newBe: BasketEntry): Basket {
         var newBasket = this.copy()
         val entryToUpdateIndex =
             newBasket.relationships?.basketEntries?.data?.indexOfFirst { be -> be.id == newBe.id }
@@ -49,7 +49,7 @@ data class Basket private constructor(
 }
 
 @Serializable
-data class BasketAttributes(
+public data class BasketAttributes(
     val name: String?,
     val confirmed: Boolean? = false,
     val completion: BasketCompletion? = null,
@@ -61,7 +61,7 @@ data class BasketAttributes(
 ) : Attributes()
 
 @Serializable
-data class BasketRelationships constructor(
+public data class BasketRelationships constructor(
     @SerialName("basket-entries") var basketEntries: BasketEntryRelationshipList? = null,
 ) : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
@@ -71,7 +71,7 @@ data class BasketRelationships constructor(
 }
 
 @Serializable
-data class BasketCompletion(
+public data class BasketCompletion(
     val total: Int? = 0,
     val found: Int? = 0
 )

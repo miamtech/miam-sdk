@@ -6,12 +6,12 @@ import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Tag
 
-interface PreferencesSearchContract {
-    sealed class Event : UiEvent
+public interface PreferencesSearchContract {
+    public sealed class Event : UiEvent
 
-    data class State(
+    public data class State(
         val searchProposal: BasicUiState<List<Tag>>,
     ) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 }

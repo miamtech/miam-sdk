@@ -8,7 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.time.Duration
 
-object DurationSerializer : KSerializer<Duration> {
+public object DurationSerializer : KSerializer<Duration> {
     override fun deserialize(decoder: Decoder): Duration =
         Duration.parseIsoString(decoder.decodeString())
 

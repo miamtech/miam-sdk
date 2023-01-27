@@ -28,7 +28,7 @@ import org.koin.core.component.inject
 import kotlin.math.max
 import kotlin.math.min
 
-open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
+public open class RecipeViewModel(public val routerVM: RouterOutletViewModel): BaseViewModel<RecipeContract.Event, RecipeContract.State, RecipeContract.Effect>() {
 
     private val MAX_GUESTS = 100
     private val MIN_GUESTS = 1
@@ -50,7 +50,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
     private val recipe: Recipe?
         get() = this.currentState.recipe
 
-    val recipeId: String?
+    public val recipeId: String?
         get() = recipe?.id
 
     override fun createInitialState(): RecipeContract.State = defaultState()
@@ -107,7 +107,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    fun goToDetail() {
+    public fun goToDetail() {
         routerVM.goToDetail(this)
     }
 
@@ -131,7 +131,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    fun updateGuest(nbGuest: Int) {
+    public fun updateGuest(nbGuest: Int) {
         // reduce guest between min and max
         var boundedGuests = max(MIN_GUESTS, nbGuest)
         boundedGuests = min(MAX_GUESTS, boundedGuests)
@@ -156,14 +156,14 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         setState { copy(activeStep = newActiveStep) }
     }
 
-    fun fetchRecipe(recipeId: String) {
+    public fun fetchRecipe(recipeId: String) {
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
             setRecipe(recipeRepositoryImp.getRecipeById(recipeId))
         }
     }
 
-    fun setRecipeFromSuggestion(criteria: SuggestionsCriteria) {
+    public fun setRecipeFromSuggestion(criteria: SuggestionsCriteria) {
         LogHandler.info("[Miam][setRecipeFromSuggestion] ${criteria.shelfIngredientsIds?.toString()}")
         setState { copy(recipeState = BasicUiState.Loading) }
         launch(coroutineHandler) {
@@ -173,7 +173,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         }
     }
 
-    fun setRecipe(recipe: Recipe) {
+    public fun setRecipe(recipe: Recipe) {
         // TODO : path + on view displayed ?
         if (!currentState.show_event_sent) {
             analyticsService.sendEvent(
@@ -194,7 +194,7 @@ open class RecipeViewModel(val routerVM: RouterOutletViewModel): BaseViewModel<R
         displayPrice()
     }
 
-    fun unsetRecipe() {
+    public fun unsetRecipe() {
         val defaultState = defaultState()
         setState {
             copy(

@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object BasketHandlerInstance: KoinComponent {
-    val instance: BasketHandler by inject()
+public object BasketHandlerInstance: KoinComponent {
+    public val instance: BasketHandler by inject()
 }
 
-data class BasketHandlerState(
+public data class BasketHandlerState(
     val comparator: BasketComparator? = null,
     val isProcessingRetailerEvent: Boolean = false,
     val firstMiamActiveBasket: List<BasketEntry>? = null,
@@ -31,12 +31,12 @@ data class BasketHandlerState(
     }
 ): State
 
-class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private val basketStore: BasketStore by inject()
 
-    val state = MutableStateFlow(BasketHandlerState())
+    public val state: MutableStateFlow<BasketHandlerState> = MutableStateFlow(BasketHandlerState())
 
-    fun isReady(): Boolean {
+    public fun isReady(): Boolean {
         return state.value.comparator != null
     }
 
@@ -65,7 +65,7 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
         ContextHandlerInstance.instance.emitReadiness()
     }
 
-    fun basketChange(miamActiveBasket: List<BasketEntry>) {
+    public fun basketChange(miamActiveBasket: List<BasketEntry>) {
         LogHandler.info("Miam basket changed ${state.value.comparator} $miamActiveBasket")
         if (!isReady()) return initFirstMiamBasket(miamActiveBasket)
 
@@ -115,27 +115,27 @@ class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers
      * called from app
      */
 
-    fun setPushProductsToRetailerBasket(func: (products: List<RetailerProduct>) -> Unit) {
+    public fun setPushProductsToRetailerBasket(func: (products: List<RetailerProduct>) -> Unit) {
         state.value = state.value.copy(pushProductsToRetailerBasket = func)
     }
 
-    fun setListenToRetailerBasket(func: () -> Unit) {
+    public fun setListenToRetailerBasket(func: () -> Unit) {
         state.value = state.value.copy(listenToRetailerBasket = func)
     }
 
-    fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
+    public fun pushProductsToMiamBasket(retailerBasket: List<RetailerProduct>) {
         LogHandler.info("Miam Retailer basket changed $retailerBasket")
         if (!isReady()) return initFirstRetailerBasket(retailerBasket)
 
         processRetailerEvent(retailerBasket)
     }
 
-    fun dispose() {
+    public fun dispose() {
         state.value = state.value.copy(comparator = null)
         ContextHandlerInstance.instance.emitReadiness()
     }
 
-    fun handlePayment(totalAmount: Double) {
+    public fun handlePayment(totalAmount: Double) {
         //TODO handle analytic
         LogHandler.info("Miam will handle payment for ${basketStore.getBasket()}")
         if (basketStore.basketIsEmpty()) {

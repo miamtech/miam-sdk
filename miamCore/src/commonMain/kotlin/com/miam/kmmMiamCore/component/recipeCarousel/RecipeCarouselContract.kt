@@ -8,14 +8,14 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 
-interface RecipeCarouselContract {
+public interface RecipeCarouselContract {
 
-    sealed class Event : UiEvent {
-        data class GetRecipeSuggestionsFromId(val productId: String, val numberOfResult: Int = 4) : Event()
-        data class GetRecipeSuggestionsFromCriteria(val criteria: SuggestionsCriteria, val numberOfResult: Int = 4) : Event()
+    public sealed class Event : UiEvent {
+        public data class GetRecipeSuggestionsFromId(val productId: String, val numberOfResult: Int = 4) : Event()
+        public data class GetRecipeSuggestionsFromCriteria(val criteria: SuggestionsCriteria, val numberOfResult: Int = 4) : Event()
     }
 
-    data class State(val suggestions: BasicUiState<List<Recipe>>) : UiState
+    public data class State(val suggestions: BasicUiState<List<Recipe>>) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 }

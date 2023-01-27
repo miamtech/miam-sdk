@@ -9,27 +9,27 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kotlin.reflect.KClass
 
-fun JsonObject.getStringValueOrNull(attribute: String): String? {
+public fun JsonObject.getStringValueOrNull(attribute: String): String? {
     return this[attribute]?.jsonPrimitive?.content
 }
 
-fun JsonObject.getStringValueOrThrow(attribute: String): String {
+public fun JsonObject.getStringValueOrThrow(attribute: String): String {
     return this[attribute]!!.jsonPrimitive.content
 }
 
-fun JsonObject.getIntValueOrThrow(attribute: String): Int {
+public fun JsonObject.getIntValueOrThrow(attribute: String): Int {
     return this[attribute]!!.jsonPrimitive.int
 }
 
-val jsonFormat = Json {
+public val jsonFormat: Json = Json {
     ignoreUnknownKeys = true
 }
 
 @Serializable
-data class RecordCounterWrapper(var links: RecordLink, var data: JsonElement? = null) {
+public data class RecordCounterWrapper(var links: RecordLink, var data: JsonElement? = null) {
 
     /**only work if page size is 1*/
-    fun getCount(): Int {
+    public fun getCount(): Int {
         // if there is no result you have size = 1 and page = 1 (and so size*number = 1) but with an empty list
         // first check the empty list then if not empty just count the page size / number
         if (data!!.jsonArray.isEmpty()) return 0
@@ -42,7 +42,7 @@ data class RecordCounterWrapper(var links: RecordLink, var data: JsonElement? = 
 }
 
 @Serializable
-data class RecordLink(val first: String, val last: String)
+public data class RecordLink(val first: String, val last: String)
 
 
 /**
@@ -51,7 +51,7 @@ data class RecordLink(val first: String, val last: String)
  * for receiving you can receive format "data:{...}, included: {...}"
  */
 @Serializable
-data class RecordWrapper(var data: JsonElement? = null, var included: JsonElement? = null) {
+public data class RecordWrapper(var data: JsonElement? = null, var included: JsonElement? = null) {
 
     private fun includedRecords(): List<Record> {
         if (included == null) return listOf()
@@ -61,14 +61,14 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
         }
     }
 
-    fun toRecords(): List<Record> {
+    public fun toRecords(): List<Record> {
         val dataObject = data!!.jsonArray
         return dataObject.map { jsonElt ->
             createRecord(jsonElt, includedRecords())
         }
     }
 
-    fun toRecord(): Record {
+    public fun toRecord(): Record {
         return createRecord(data!!, includedRecords())
     }
 
@@ -185,12 +185,12 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
         }
     }
 
-    companion object {
-        fun fromRecord(record: Record): RecordWrapper {
+    public companion object {
+        public fun fromRecord(record: Record): RecordWrapper {
             return RecordWrapper(record.toJsonElement())
         }
 
-        fun fromRecords(records: List<Record>): RecordWrapper {
+        public fun fromRecords(records: List<Record>): RecordWrapper {
             return RecordWrapper(JsonArray(records.map { it.toJsonElement() }))
         }
     }
@@ -200,17 +200,17 @@ data class RecordWrapper(var data: JsonElement? = null, var included: JsonElemen
  * Any record should extend this class that describe any records
  */
 @Serializable
-sealed class Record {
-    abstract val id: String?
-    abstract val attributes: Attributes?
-    abstract val relationships: Relationships?
+public sealed class Record {
+    public abstract val id: String?
+    public abstract val attributes: Attributes?
+    public abstract val relationships: Relationships?
 
-    fun toJsonElement(): JsonElement {
+    public fun toJsonElement(): JsonElement {
         return jsonFormat.encodeToJsonElement(serializer(), this)
     }
 
-    companion object {
-        fun fromString(str: String): Record? {
+    public companion object {
+        public fun fromString(str: String): Record? {
             return try {
                 jsonFormat.decodeFromString(str)
             } catch (e: Exception) {
@@ -222,17 +222,17 @@ sealed class Record {
 }
 
 @Serializable
-sealed class Attributes
+public sealed class Attributes
 
 /**
  * got many relations that will be Relationship or RelationshipList
  */
 @Serializable
-sealed class Relationships {
-    abstract fun buildFromIncluded(includedRecords: List<Record>)
+public sealed class Relationships {
+    public abstract fun buildFromIncluded(includedRecords: List<Record>)
 
-    companion object {
-        fun filterEmptyRelationships(relationships: JsonElement): JsonElement {
+    public companion object {
+        public fun filterEmptyRelationships(relationships: JsonElement): JsonElement {
             val filteredMapObject = relationships.jsonObject.filter { entryElement ->
                 entryElement.value.jsonObject["data"] != null
             }
@@ -245,10 +245,10 @@ sealed class Relationships {
  * present in record to wrap the record when coming from a relationship
  */
 @Serializable
-sealed class Relationship {
-    abstract val data: Record
+public sealed class Relationship {
+    public abstract val data: Record
 
-    fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): Record {
+    public fun buildedFromIncluded(includedRecords: List<Record>, subClass: KClass<out Record>): Record {
         // println("Miam Relationship start buildFromIncluded $subClass")
         val existingEntry =
             includedRecords.find { record -> record.instanceOf(subClass) && record.id == data.id }
@@ -260,7 +260,7 @@ sealed class Relationship {
         } else return data
     }
 
-    fun serialize(encoder: Encoder) {
+    public fun serialize(encoder: Encoder) {
         require(encoder is JsonEncoder)
 
 
@@ -272,10 +272,10 @@ sealed class Relationship {
 }
 
 @Serializable
-sealed class RelationshipList {
-    abstract val data: List<Record>
+public sealed class RelationshipList {
+    public abstract val data: List<Record>
 
-    fun buildedFromIncluded(
+    public fun buildedFromIncluded(
         includedRecords: List<Record>,
         subClass: KClass<out Record>
     ): List<Record> {
@@ -292,7 +292,7 @@ sealed class RelationshipList {
         }
     }
 
-    fun serialize(encoder: Encoder) {
+    public fun serialize(encoder: Encoder) {
         require(encoder is JsonEncoder)
 
         val relRecords = data.map { record ->

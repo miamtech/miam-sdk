@@ -18,21 +18,21 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object ContextHandlerInstance: KoinComponent {
-    val instance: ContextHandler by inject()
+public object ContextHandlerInstance: KoinComponent {
+    public val instance: ContextHandler by inject()
 }
 
-data class ContextHandlerState(
+public data class ContextHandlerState(
     val isInError: Boolean = false,
     val applicationContext: KMMContext? = null
 ): State
 
-sealed class ReadyEvent: Effect {
-    object isReady: ReadyEvent()
-    object isNotReady: ReadyEvent()
+public sealed class ReadyEvent: Effect {
+    public object isReady: ReadyEvent()
+    public object isNotReady: ReadyEvent()
 }
 
-class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("[ContextHandler] $exception ${exception.stackTraceToString()}")
@@ -41,17 +41,17 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
     private val basketHandler: BasketHandler by inject()
     private val preference: SingletonPreferencesViewModel by inject()
 
-    val state = MutableStateFlow(ContextHandlerState())
+    public val state: MutableStateFlow<ContextHandlerState> = MutableStateFlow(ContextHandlerState())
     private val readyEvent = MutableSharedFlow<ReadyEvent>()
 
-    fun gotAnError() {
+    public fun gotAnError() {
         state.value = state.value.copy(isInError = true)
         launch(coroutineHandler) {
             readyEvent.emit(ReadyEvent.isNotReady)
         }
     }
 
-    fun emitReadiness() {
+    public fun emitReadiness() {
         launch(coroutineHandler) {
             readyEvent.emit(if (isReady()) ReadyEvent.isReady else ReadyEvent.isNotReady)
         }
@@ -61,23 +61,23 @@ class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatcher
      * called from app
      */
 
-    fun isReady(): Boolean {
+    public fun isReady(): Boolean {
         return basketHandler.isReady() && !state.value.isInError && preference.isInit
     }
 
-    fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
+    public fun observeReadyEvent(): Flow<ReadyEvent> = readyEvent
 
-    fun onReadyEvent(callback: (it: ReadyEvent) -> Unit) {
+    public fun onReadyEvent(callback: (it: ReadyEvent) -> Unit) {
         launch(coroutineHandler) {
             readyEvent.asSharedFlow().collect { callback(it) }
         }
     }
 
-    fun setContext(context: KMMContext) {
+    public fun setContext(context: KMMContext) {
         state.value = state.value.copy(applicationContext = context)
     }
 
-    fun getContextOrNull(): KMMContext? {
+    public fun getContextOrNull(): KMMContext? {
         val context = state.value.applicationContext
         if (context == null) LogHandler.error("[ContextHandler] Application context must be provided")
         return context

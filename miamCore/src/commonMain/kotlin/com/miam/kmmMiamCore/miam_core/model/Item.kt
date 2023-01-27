@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("items")
-data class Item private constructor(
+public data class Item private constructor(
     override val id: String,
     override val attributes: ItemAttributes? = null,
     override val relationships: ItemRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,7 +34,7 @@ data class Item private constructor(
 }
 
 @Serializable
-data class ItemAttributes(
+public data class ItemAttributes(
     @SerialName("ext-id")
     val extId: String? = null,
     val name: String,
@@ -64,7 +64,7 @@ data class ItemAttributes(
 ) : Attributes()
 
 @Serializable
-class ItemRelationships : Relationships() {
+public class ItemRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -72,16 +72,16 @@ class ItemRelationships : Relationships() {
 /**
  * Used from others relations
  */
-
+@Suppress("unchecked_cast")
 @Serializable(with = ItemRelationshipListSerializer::class)
-class ItemRelationshipList(override var data: List<Item>) : RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class ItemRelationshipList(override var data: List<Item>) : RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Item::class) as List<Item>
     }
 }
 
 @Serializer(forClass = ItemRelationshipList::class)
-object ItemRelationshipListSerializer : KSerializer<ItemRelationshipList> {
+public object ItemRelationshipListSerializer : KSerializer<ItemRelationshipList> {
     override fun serialize(encoder: Encoder, value: ItemRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)

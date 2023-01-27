@@ -28,12 +28,12 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class AlterQuantityBasketEntry(
+public data class AlterQuantityBasketEntry(
     val id: String,
     val delatQty: Int,
 )
 
-data class BasketState(
+public data class BasketState(
     val basket: Basket?,
     val basketPreview: List<BasketPreviewLine>?,
     val entriesCount: Int? = 0,
@@ -41,35 +41,35 @@ data class BasketState(
     val totalPrice: Double? = 0.0
 ): State
 
-sealed class BasketAction: Action {
-    object RefreshBasket: BasketAction()
-    data class AddBasketEntry(val entry: BasketEntry): BasketAction()
-    data class RemoveEntry(val entry: BasketEntry): BasketAction()
-    data class UpdateBasketEntries(
+public sealed class BasketAction: Action {
+    public object RefreshBasket: BasketAction()
+    public data class AddBasketEntry(val entry: BasketEntry): BasketAction()
+    public data class RemoveEntry(val entry: BasketEntry): BasketAction()
+    public data class UpdateBasketEntries(
         val basketEntries: List<BasketEntry>
     ): BasketAction()
 
-    data class UpdateBasketEntriesDiff(
+    public data class UpdateBasketEntriesDiff(
         val basketEntriesDiff: List<AlterQuantityBasketEntry>
     ): BasketAction()
 
-    data class ReplaceSelectedItem(val basketEntry: BasketEntry, val itemId: Int): BasketAction()
-    data class ConfirmBasket(val price: String): BasketAction()
+    public data class ReplaceSelectedItem(val basketEntry: BasketEntry, val itemId: Int): BasketAction()
+    public data class ConfirmBasket(val price: String): BasketAction()
 }
 
-sealed class BasketEffect: Effect {
-    object BasketPreviewChange: BasketEffect()
-    object BasketConfirmed: BasketEffect()
+public sealed class BasketEffect: Effect {
+    public object BasketPreviewChange: BasketEffect()
+    public object BasketConfirmed: BasketEffect()
 }
 
-class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
+public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
-    override val state = MutableStateFlow(BasketState(null, emptyList()))
+    override val state: MutableStateFlow<BasketState> = MutableStateFlow(BasketState(null, emptyList()))
     private val sideEffect = MutableSharedFlow<BasketEffect>()
     private val basketRepo: BasketRepositoryImp by inject()
     private val basketEntryRepo: BasketEntryRepositoryImp by inject()
@@ -84,7 +84,7 @@ class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent
 
     override fun observeSideEffect(): Flow<BasketEffect> = sideEffect
 
-    fun getBasket(): Basket? {
+    public fun getBasket(): Basket? {
         return state.value.basket
     }
 
@@ -154,13 +154,13 @@ class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent
         }
     }
 
-    fun fastRemoveRecipeFromBpl(recipeId: String) {
+    public fun fastRemoveRecipeFromBpl(recipeId: String) {
         val newState =
             state.value.copy(basketPreview = state.value.basketPreview?.filter { bpl -> bpl.id != recipeId })
         updateStateIfChanged(newState)
     }
 
-    fun activeEntries(): List<BasketEntry>? {
+    public fun activeEntries(): List<BasketEntry>? {
         return state.value.basket?.relationships?.basketEntries?.data?.filter { e ->
             e.attributes!!.groceriesEntryStatus == "active"
         }
@@ -219,11 +219,11 @@ class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent
         }
     }
 
-    fun basketIsEmpty(): Boolean {
+    public fun basketIsEmpty(): Boolean {
         return (state.value.basket?.relationships?.basketEntries?.data?.isEmpty() == true)
     }
 
-    fun recipeInBasket(recipeId: String): Boolean {
+    public fun recipeInBasket(recipeId: String): Boolean {
         return state.value.basketPreview?.any { it.isRecipe && it.id == recipeId } == true
     }
 

@@ -11,7 +11,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 
-abstract class MainExecutor : IExecutorScope, CoroutineScope, KoinComponent {
+public abstract class MainExecutor : IExecutorScope, CoroutineScope, KoinComponent {
 
     private val mainDispatcher: MainDispatcher by inject()
 

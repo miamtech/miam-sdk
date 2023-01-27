@@ -7,11 +7,11 @@ import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class SupplierRepositoryImp(private val recipeDataSource: MiamAPIDatasource): KoinComponent {
+public class SupplierRepositoryImp(private val recipeDataSource: MiamAPIDatasource): KoinComponent {
 
     private val pointOfSaleStore: PointOfSaleStore by inject()
 
-    suspend fun notifyConfirmBasket(basketToken: String) {
+    public suspend fun notifyConfirmBasket(basketToken: String) {
         letElse(
             pointOfSaleStore.supplierId,
             { supplierId -> recipeDataSource.notifyBasketUpdated(basketToken, supplierId, "CONFIRMED") },
@@ -19,7 +19,7 @@ class SupplierRepositoryImp(private val recipeDataSource: MiamAPIDatasource): Ko
         )
     }
 
-    suspend fun notifyPaidBasket(basketToken: String, price: String) {
+    public suspend fun notifyPaidBasket(basketToken: String, price: String) {
         letElse(
             pointOfSaleStore.supplierId,
             { supplierId -> recipeDataSource.notifyBasketUpdated(basketToken, supplierId, "PAID", price) },

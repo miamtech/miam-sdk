@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SuggestionsCriteria(
+public data class SuggestionsCriteria(
     @SerialName("shelf_ingredients_ids")
     val shelfIngredientsIds: List<String>? = null,
 

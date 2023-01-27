@@ -7,16 +7,16 @@ import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
-interface BasketTagContract {
+public interface BasketTagContract {
 
-    sealed class Event : UiEvent {
-        data class SetRetailerProductId(val productId: String) : Event()
+    public sealed class Event : UiEvent {
+        public data class SetRetailerProductId(val productId: String) : Event()
     }
 
-    data class State(
+    public data class State(
         val recipeList: BasicUiState<List<Recipe>>,
     ) : UiState
 
-    sealed class Effect : UiEffect
+    public sealed class Effect : UiEffect
 }
 

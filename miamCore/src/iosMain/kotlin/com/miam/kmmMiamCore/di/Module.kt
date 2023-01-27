@@ -4,6 +4,6 @@ import com.miam.kmmMiamCore.domain.MainDispatcher
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun platformModule(): Module = module {
+public actual fun platformModule(): Module = module {
     single { MainDispatcher() }
 }

@@ -5,21 +5,21 @@ import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 
 
-enum class TabEnum {
+public enum class TabEnum {
     INGREDIENT, STEP
 }
 
-interface RecipeContract {
+public interface RecipeContract {
 
-    sealed class Event: UiEvent {
-        data class SetActiveStep(val stepIndex: Int): Event()
-        object OnAddRecipe: Event()
-        object ShowIngredient: Event()
-        object ShowSteps: Event()
-        object Error: Event()
+    public sealed class Event: UiEvent {
+        public data class SetActiveStep(val stepIndex: Int): Event()
+        public object OnAddRecipe: Event()
+        public object ShowIngredient: Event()
+        public object ShowSteps: Event()
+        public object Error: Event()
     }
 
-    data class State(
+    public data class State(
         val recipeState: BasicUiState<Recipe>,
         val recipe: Recipe?,
         val headerText: String,
@@ -35,7 +35,7 @@ interface RecipeContract {
         val likeIsEnable: Boolean,
         val show_event_sent: Boolean = false
     ): UiState {
-        fun refreshFromGl(groceriesListStore: GroceriesListStore): State {
+        public fun refreshFromGl(groceriesListStore: GroceriesListStore): State {
             val isInCart = retrieveIsInCart(groceriesListStore)
             return this.copy(
                 isInCart = isInCart,
@@ -59,8 +59,8 @@ interface RecipeContract {
         }
     }
 
-    sealed class Effect: UiEffect {
-        object HideCard: Effect()
-        object Disliked: Effect()
+    public sealed class Effect: UiEffect {
+        public object HideCard: Effect()
+        public object Disliked: Effect()
     }
 }

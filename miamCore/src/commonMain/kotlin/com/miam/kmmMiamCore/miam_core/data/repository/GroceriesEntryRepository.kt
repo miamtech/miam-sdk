@@ -2,7 +2,7 @@ package com.miam.kmmMiamCore.miam_core.data.repository
 
 import com.miam.kmmMiamCore.miam_core.model.GroceriesEntry
 
-interface GroceriesEntryRepository {
+public interface GroceriesEntryRepository {
 
-    suspend fun updateGrocerieEntry(ge: GroceriesEntry): GroceriesEntry
+    public suspend fun updateGrocerieEntry(ge: GroceriesEntry): GroceriesEntry
 }

@@ -10,13 +10,13 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("ingredients")
-data class Ingredient private constructor(
+public data class Ingredient private constructor(
     override val id: String,
     override val attributes: IngredientAttributes? = null,
     override val relationships: IngredientRelationships? = null
 ) : Record() {
 
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -35,7 +35,7 @@ data class Ingredient private constructor(
 }
 
 @Serializable
-data class IngredientAttributes(
+public data class IngredientAttributes(
     val name: String?,
     val quantity: String?,
     val unit: String?,
@@ -48,7 +48,7 @@ data class IngredientAttributes(
 ) : Attributes()
 
 @Serializable
-class IngredientRelationships : Relationships() {
+public class IngredientRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -56,16 +56,16 @@ class IngredientRelationships : Relationships() {
 /**
  * Used from others relations
  */
-
+@Suppress("unchecked_cast")
 @Serializable(with = IngredientListSerializer::class)
-class IngredientListRelationship(override var data: List<Ingredient>) : RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class IngredientListRelationship(override var data: List<Ingredient>) : RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Ingredient::class) as List<Ingredient>
     }
 }
 
 @Serializer(forClass = IngredientListRelationship::class)
-object IngredientListSerializer : KSerializer<IngredientListRelationship> {
+public object IngredientListSerializer : KSerializer<IngredientListRelationship> {
     override fun serialize(encoder: Encoder, value: IngredientListRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

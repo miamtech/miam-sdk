@@ -4,23 +4,23 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PointOfSaleWrapper(
+public data class PointOfSaleWrapper(
     val data: PointOfSale,
 )
 
 @Serializable
-data class PointOfSales(
+public data class PointOfSales(
     val data: List<PointOfSale>,
 )
 
 @Serializable
-data class PointOfSale(
+public data class PointOfSale(
     val id: Int,
     val attributes: PointOfSaleAttributes,
 )
 
 @Serializable
-data class PointOfSaleAttributes(
+public data class PointOfSaleAttributes(
     val name: String?,
 
     val settings: PointOfSaleSettings? = null,
@@ -35,14 +35,14 @@ data class PointOfSaleAttributes(
 )
 
 @Serializable
-data class PointOfSaleSettings(
+public data class PointOfSaleSettings(
     val drive: PointOfSaleOption? = null,
     val delivery: PointOfSaleOption? = null,
     val mobile_warning: Boolean = false
 )
 
 @Serializable
-data class PointOfSaleOption(
+public data class PointOfSaleOption(
     val enabled: Boolean? = true,
     val logo: String = ""
 )

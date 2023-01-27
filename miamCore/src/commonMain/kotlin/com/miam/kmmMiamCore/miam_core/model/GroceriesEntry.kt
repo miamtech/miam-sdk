@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("groceries-entries")
-data class GroceriesEntry private constructor(
+public data class GroceriesEntry private constructor(
     override val id: String,
     override val attributes: GroceriesEntryAttributes? = null,
     override val relationships: GroceriesEntryRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,7 +34,7 @@ data class GroceriesEntry private constructor(
 
     var needPatch: Boolean = false
 
-    fun updateStatus(status: String): GroceriesEntry {
+    public fun updateStatus(status: String): GroceriesEntry {
         val copy = this.copy(
             attributes = this.attributes?.copy(status = status)
         )
@@ -44,7 +44,7 @@ data class GroceriesEntry private constructor(
 }
 
 @Serializable
-data class GroceriesEntryAttributes constructor(
+public data class GroceriesEntryAttributes constructor(
     val name: String?,
     @SerialName("capacity-volume")
     val capacityVolume: String? = null,
@@ -58,7 +58,7 @@ data class GroceriesEntryAttributes constructor(
 ) : Attributes()
 
 @Serializable
-class GroceriesEntryRelationships : Relationships() {
+public class GroceriesEntryRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -67,15 +67,16 @@ class GroceriesEntryRelationships : Relationships() {
  * Used from others relations
  */
 
+@Suppress("unchecked_cast")
 @Serializable(with = GroceriesEntryRelationshipListSerializer::class)
-class GroceriesEntryRelationshipList(override var data: List<GroceriesEntry>) : RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class GroceriesEntryRelationshipList(override var data: List<GroceriesEntry>) : RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, GroceriesEntry::class) as List<GroceriesEntry>
     }
 }
 
 @Serializer(forClass = GroceriesEntryRelationshipList::class)
-object GroceriesEntryRelationshipListSerializer : KSerializer<GroceriesEntryRelationshipList> {
+public object GroceriesEntryRelationshipListSerializer : KSerializer<GroceriesEntryRelationshipList> {
     override fun serialize(encoder: Encoder, value: GroceriesEntryRelationshipList) {
         // super method call to only keep types and id
         value.serialize(encoder)
@@ -83,14 +84,14 @@ object GroceriesEntryRelationshipListSerializer : KSerializer<GroceriesEntryRela
 }
 
 @Serializable(with = GroceriesEntryRelationshipSerializer::class)
-class GroceriesEntryRelationship(override var data: GroceriesEntry) : Relationship() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class GroceriesEntryRelationship(override var data: GroceriesEntry) : Relationship() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, GroceriesEntry::class) as GroceriesEntry
     }
 }
 
 @Serializer(forClass = GroceriesEntryRelationship::class)
-object GroceriesEntryRelationshipSerializer : KSerializer<GroceriesEntryRelationship> {
+public object GroceriesEntryRelationshipSerializer : KSerializer<GroceriesEntryRelationship> {
     override fun serialize(encoder: Encoder, value: GroceriesEntryRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

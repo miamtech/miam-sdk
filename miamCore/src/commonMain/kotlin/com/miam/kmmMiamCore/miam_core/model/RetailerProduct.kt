@@ -1,3 +1,3 @@
 package com.miam.kmmMiamCore.miam_core.model
 
-data class RetailerProduct(val retailerId :String , val quantity: Int, val name: String? = null, val productIdentifier: String? = null)
+public data class RetailerProduct(val retailerId :String , val quantity: Int, val name: String? = null, val productIdentifier: String? = null)

@@ -3,6 +3,6 @@ package com.miam.kmmMiamCore.domain
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-actual class MainDispatcher {
-    actual val dispatcher: CoroutineDispatcher = Dispatchers.Main
+public actual class MainDispatcher {
+    public actual val dispatcher: CoroutineDispatcher = Dispatchers.Main
 }

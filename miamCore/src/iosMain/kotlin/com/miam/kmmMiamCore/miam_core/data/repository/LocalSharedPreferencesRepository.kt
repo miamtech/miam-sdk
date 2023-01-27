@@ -9,19 +9,20 @@ import platform.Foundation.NSUserDefaults
  * KMMContext is an NSObject and can be any reference
  */
 
-actual fun KMMContext.putArray(key: String, value: List<String>) {
+public actual fun KMMContext.putArray(key: String, value: List<String>) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-actual fun KMMContext.getArrayOrNull(key: String): List<String>? {
+@Suppress("unchecked_cast")
+public actual fun KMMContext.getArrayOrNull(key: String): List<String>? {
     return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList() as List<String>?
 }
 
-actual fun KMMContext.putInt(key: String, value: Int) {
+public actual fun KMMContext.putInt(key: String, value: Int) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-actual fun KMMContext.getIntOrNull(key: String): Int? {
+public actual fun KMMContext.getIntOrNull(key: String): Int? {
     if (NSUserDefaults.standardUserDefaults().objectForKey(key) == null) return null
     return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
 }

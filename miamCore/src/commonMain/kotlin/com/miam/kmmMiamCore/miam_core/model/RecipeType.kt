@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-types")
-data class RecipeType private constructor(
+public data class RecipeType private constructor(
     override val id: String,
     override val attributes: RecipeTypeAttributes? = null,
     override val relationships: RecipeTypeRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,12 +34,12 @@ data class RecipeType private constructor(
 }
 
 @Serializable
-data class RecipeTypeAttributes(
+public data class RecipeTypeAttributes(
     val name: String,
 ) : Attributes()
 
 @Serializable
-class RecipeTypeRelationships : Relationships() {
+public class RecipeTypeRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -49,14 +49,14 @@ class RecipeTypeRelationships : Relationships() {
  */
 
 @Serializable(with = RecipeTypeSerializer::class)
-class RecipeTypeRelationship(override var data: RecipeType) : Relationship() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class RecipeTypeRelationship(override var data: RecipeType) : Relationship() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeType::class) as RecipeType
     }
 }
 
 @Serializer(forClass = RecipeTypeRelationship::class)
-object RecipeTypeSerializer : KSerializer<RecipeTypeRelationship> {
+public object RecipeTypeSerializer : KSerializer<RecipeTypeRelationship> {
     override fun serialize(encoder: Encoder, value: RecipeTypeRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

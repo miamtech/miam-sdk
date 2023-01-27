@@ -10,12 +10,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-steps")
-data class RecipeStep(
+public data class RecipeStep(
     override val id: String,
     override val attributes: RecipeStepAttributes? = null,
     override val relationships: RecipeStepRelationships? = null
 ) : Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -34,7 +34,7 @@ data class RecipeStep(
 }
 
 @Serializable
-data class RecipeStepAttributes(
+public data class RecipeStepAttributes(
     @SerialName("step-number")
     val stepNumber: Int,
     val title: String?,
@@ -45,7 +45,7 @@ data class RecipeStepAttributes(
 ) : Attributes()
 
 @Serializable
-class RecipeStepRelationships : Relationships() {
+public class RecipeStepRelationships : Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
@@ -53,16 +53,16 @@ class RecipeStepRelationships : Relationships() {
 /**
  * Used from others relations
  */
-
+@Suppress("unchecked_cast")
 @Serializable(with = RecipeStepListListSerializer::class)
-class RecipeStepListRelationship(override var data: List<RecipeStep>) : RelationshipList() {
-    fun buildFromIncluded(includedRecords: List<Record>) {
+public class RecipeStepListRelationship(override var data: List<RecipeStep>) : RelationshipList() {
+    public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, RecipeStep::class) as List<RecipeStep>
     }
 }
 
 @Serializer(forClass = RecipeStepListRelationship::class)
-object RecipeStepListListSerializer : KSerializer<RecipeStepListRelationship> {
+public object RecipeStepListListSerializer : KSerializer<RecipeStepListRelationship> {
     override fun serialize(encoder: Encoder, value: RecipeStepListRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

@@ -5,17 +5,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface State
-interface Action
-interface Effect
+public interface State
+public interface Action
+public interface Effect
 
-interface Store<S : State, A : Action, E : Effect> {
-    val state: MutableStateFlow<S>
-    fun observeState(): StateFlow<S>
-    fun observeSideEffect(): Flow<E>
-    fun dispatch(action: A): Job
+public interface Store<S : State, A : Action, E : Effect> {
 
-    fun updateStateIfChanged(newState: S) {
+    // TODO This should not be mutable, right?
+    public val state: MutableStateFlow<S>
+    public fun observeState(): StateFlow<S>
+    public fun observeSideEffect(): Flow<E>
+    public fun dispatch(action: A): Job
+
+    public fun updateStateIfChanged(newState: S) {
         if (newState != state.value) {
             state.value = newState
         }

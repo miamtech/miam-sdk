@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
-open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLikeContract.State, RecipeLikeContract.Effect>() {
+public open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLikeContract.State, RecipeLikeContract.Effect>() {
     override fun createInitialState(): RecipeLikeContract.State = RecipeLikeContract.State()
 
     private val recipeLikeStore: LikeStore = LikeStoreInstance.instance
@@ -26,7 +26,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
         TODO("Not yet implemented")
     }
 
-    fun setRecipe(recipeId: String) {
+    public fun setRecipe(recipeId: String) {
         viewModelScope.launch(coroutineHandler) {
             val isLiked = recipeLikeStore.fetchAndGetRecipeLikes(listOf(recipeId)).any { recipeLike -> recipeLike.isLiked }
             setState { copy(recipeId = recipeId, isLiked = BasicUiState.Success(isLiked)) }
@@ -34,7 +34,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
         listenRecipeLikeChanges()
     }
 
-    fun listenRecipeLikeChanges() {
+    public fun listenRecipeLikeChanges() {
         val listenerJob = viewModelScope.launch(coroutineHandler) {
             recipeLikeStore.observeSideEffect().filter { likeEffect ->
                 likeEffect.recipeId == currentState.recipeId
@@ -45,11 +45,11 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
         setState { copy(likeListenerJob = listenerJob) }
     }
 
-    fun stopListenRecipeLikeChanges() {
+    public fun stopListenRecipeLikeChanges() {
         currentState.likeListenerJob?.cancel()
     }
 
-    fun toggleLike() {
+    public fun toggleLike() {
         if (currentState.recipeId == null) return
         viewModelScope.launch(coroutineHandler) {
             recipeLikeStore.toggleLike(currentState.recipeId!!)

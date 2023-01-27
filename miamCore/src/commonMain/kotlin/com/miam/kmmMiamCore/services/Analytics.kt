@@ -21,22 +21,22 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
+public data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
 
-data class AnalyticState(
+public data class AnalyticState(
     val onEventEmitted: (event: AnalyticEvent) -> Unit = {},
 ): State
 
-sealed class AnalyticEffect: Effect {
-    data class EventEmitted(val event: AnalyticEvent): AnalyticEffect()
+public sealed class AnalyticEffect: Effect {
+    public data class EventEmitted(val event: AnalyticEvent): AnalyticEffect()
 }
 
 @Suppress("UserPreferencesInstance used by ios and component")
-object AnalyticsInstance: KoinComponent {
-    val instance: Analytics by inject()
+public object AnalyticsInstance: KoinComponent {
+    public val instance: Analytics by inject()
 }
 
-class Analytics: KoinComponent {
+public class Analytics: KoinComponent {
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in Analytics $exception ${exception.stackTraceToString()}")
     }
@@ -46,13 +46,13 @@ class Analytics: KoinComponent {
         "app.coursesu" to "miam.coursesu.app",
         "app.qualif.coursesu" to "miam.test"
     )
-    val domain: MutableStateFlow<String?> = MutableStateFlow(null)
+    public val domain: MutableStateFlow<String?> = MutableStateFlow(null)
     private val httpOrigin: MutableStateFlow<String?> = MutableStateFlow(null)
     private val analyticsState: MutableStateFlow<AnalyticState> = MutableStateFlow(AnalyticState())
     private val sideEffect = MutableSharedFlow<AnalyticEffect>()
-    fun observeSideEffect(): Flow<AnalyticEffect> = sideEffect
+    public fun observeSideEffect(): Flow<AnalyticEffect> = sideEffect
 
-    fun setOnEventEmitted(onEventEmittedCallBack: (event: AnalyticEvent) -> Unit) {
+    public fun setOnEventEmitted(onEventEmittedCallBack: (event: AnalyticEvent) -> Unit) {
         analyticsState.value = analyticsState.value.copy(onEventEmitted = onEventEmittedCallBack)
     }
 
@@ -69,7 +69,7 @@ class Analytics: KoinComponent {
         }
     }
 
-    fun init(supplierOrigin: String) {
+    public fun init(supplierOrigin: String) {
         domain.apply { value = originToDomain[supplierOrigin] ?: supplierOrigin }
         val isHttp = supplierOrigin.startsWith("https://")
         httpOrigin.apply { value = if (isHttp) supplierOrigin else "https://$supplierOrigin" }
@@ -83,7 +83,7 @@ class Analytics: KoinComponent {
         }
     }
 
-    fun sendEvent(eventType: String, path: String, props: PlausibleProps) {
+    public fun sendEvent(eventType: String, path: String, props: PlausibleProps) {
         if (this.domain.value == null || this.httpOrigin.value == null) {
             LogHandler.error("Sending event without initialisation ${domain.value}")
             return
@@ -98,7 +98,7 @@ class Analytics: KoinComponent {
     }
 
     @Serializable
-    data class PlausibleEvent(
+    public data class PlausibleEvent(
         val name: String,
         val url: String,
         val domain: String,
@@ -106,7 +106,7 @@ class Analytics: KoinComponent {
     )
 
     @Serializable
-    data class PlausibleProps(
+    public data class PlausibleProps(
         val recipe_id: String? = null,
         val category_id: String? = null,
         val entry_name: String? = null,
@@ -119,30 +119,30 @@ class Analytics: KoinComponent {
         val search_term: String? = null,
     )
 
-    companion object {
-        const val PLAUSIBLE_URL = "https://plausible.io/api/event"
+    public companion object {
+        public const val PLAUSIBLE_URL: String = "https://plausible.io/api/event"
 
-        const val EVENT_PAGEVIEW =
+        public const val EVENT_PAGEVIEW: String =
             "pageview" // GA4 is page_view -> use this one on ga to autotrack some fields
-        const val EVENT_SEARCH = "search"
-        const val EVENT_RECIPE_SHOW = "recipe.show"
-        const val EVENT_RECIPE_DISPLAY = "recipe.display"
-        const val EVENT_RECIPE_ADD = "recipe.add"
-        const val EVENT_RECIPE_REMOVE = "recipe.remove"
-        const val EVENT_RECIPE_RESET = "recipe.reset"
-        const val EVENT_RECIPE_CHANGEGUESTS = "recipe.change-guests"
-        const val EVENT_RECIPE_LIKE = "recipe.like"
-        const val EVENT_RECIPE_UNLIKE = "recipe.unlike"
-        const val EVENT_RECIPE_PRINT = "recipe.print"
-        const val EVENT_PERSONAL_RECIPE_CREATE = "recipe.personal.create"
-        const val EVENT_PERSONAL_RECIPE_DELETE = "recipe.personal.delete"
-        const val EVENT_CATEGORY_SHOW = "category.show"
-        const val EVENT_ENTRY_ADD = "entry.add"
-        const val EVENT_ENTRY_DELETE = "entry.delete"
-        const val EVENT_ENTRY_REPLACE = "entry.replace"
-        const val EVENT_ENTRY_CHANGE_QUANTITY = "entry.change-quantity"
-        const val EVENT_PAYMENT_STARTED = "payment.started"
-        const val EVENT_PAYMENT_CONFIRMED = "payment.confirmed"
-        const val EVENT_BASKET_CONFIRMED = "basket.confirmed"
+        public const val EVENT_SEARCH: String = "search"
+        public const val EVENT_RECIPE_SHOW: String = "recipe.show"
+        public const val EVENT_RECIPE_DISPLAY: String = "recipe.display"
+        public const val EVENT_RECIPE_ADD: String = "recipe.add"
+        public const val EVENT_RECIPE_REMOVE: String = "recipe.remove"
+        public const val EVENT_RECIPE_RESET: String = "recipe.reset"
+        public const val EVENT_RECIPE_CHANGEGUESTS: String = "recipe.change-guests"
+        public const val EVENT_RECIPE_LIKE: String = "recipe.like"
+        public const val EVENT_RECIPE_UNLIKE: String = "recipe.unlike"
+        public const val EVENT_RECIPE_PRINT: String = "recipe.print"
+        public const val EVENT_PERSONAL_RECIPE_CREATE: String = "recipe.personal.create"
+        public const val EVENT_PERSONAL_RECIPE_DELETE: String = "recipe.personal.delete"
+        public const val EVENT_CATEGORY_SHOW: String = "category.show"
+        public const val EVENT_ENTRY_ADD: String = "entry.add"
+        public const val EVENT_ENTRY_DELETE: String = "entry.delete"
+        public const val EVENT_ENTRY_REPLACE: String = "entry.replace"
+        public const val EVENT_ENTRY_CHANGE_QUANTITY: String = "entry.change-quantity"
+        public const val EVENT_PAYMENT_STARTED: String = "payment.started"
+        public const val EVENT_PAYMENT_CONFIRMED: String = "payment.confirmed"
+        public const val EVENT_BASKET_CONFIRMED: String = "basket.confirmed"
     }
 }

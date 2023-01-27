@@ -3,15 +3,15 @@ package com.miam.kmmMiamCore.miam_core.model
 import kotlin.math.max
 import kotlin.math.truncate
 
-interface BasketPreviewEntry
+public interface BasketPreviewEntry
 
-data class LineEntries(
+public data class LineEntries(
     val found: List<BasketEntry> = listOf(),
     val notFound: List<BasketEntry> = listOf(),
     val oftenDeleted: List<BasketEntry> = listOf(),
     val removed: List<BasketEntry> = listOf()
 ) {
-    fun updateBasketEntries(basketEntries: List<BasketEntry>): LineEntries {
+    public fun updateBasketEntries(basketEntries: List<BasketEntry>): LineEntries {
         return this.copy(
             found = updateBasketEntryInList(found, basketEntries),
             notFound = updateBasketEntryInList(notFound, basketEntries),
@@ -29,7 +29,7 @@ data class LineEntries(
         }
     }
 
-    fun totalPrice(): Double {
+    public fun totalPrice(): Double {
         return found.sumOf { be ->
             val beItem =
                 be.attributes!!.basketEntriesItems?.find { bei -> bei.itemId == be.attributes.selectedItemId }
@@ -38,7 +38,7 @@ data class LineEntries(
     }
 }
 
-data class BasketPreviewLine(
+public data class BasketPreviewLine(
     val id: String? = null,
     val record: BasketPreviewEntry,
     val isRecipe: Boolean,
@@ -53,7 +53,7 @@ data class BasketPreviewLine(
     val _displayMode: Boolean = false,
 ) {
 
-    fun hasEntries(): Boolean {
+    public fun hasEntries(): Boolean {
         return this.entries != null && (
                 this.entries.found.isNotEmpty() ||
                         this.entries.notFound.isNotEmpty() ||
@@ -61,8 +61,8 @@ data class BasketPreviewLine(
                         this.entries.removed.isNotEmpty())
     }
 
-    companion object {
-        fun fromRecipe(
+    public companion object {
+        public fun fromRecipe(
             recipe: Recipe,
             itemsCount: Int,
             pricePerGuest: Double? = null,
@@ -70,7 +70,7 @@ data class BasketPreviewLine(
             recipePrice: String? = "",
             entries: LineEntries? = null
         ): BasketPreviewLine {
-            var bpl = BasketPreviewLine(
+            val bpl = BasketPreviewLine(
                 id = recipe.id,
                 record = recipe,
                 isRecipe = true,
@@ -89,7 +89,7 @@ data class BasketPreviewLine(
             return bpl
         }
 
-        fun fromBasketEntry(entry: BasketEntry): BasketPreviewLine {
+        public fun fromBasketEntry(entry: BasketEntry): BasketPreviewLine {
             val item = entry.selectedItem
             val beItem =
                 entry.attributes!!.basketEntriesItems?.find { bei -> bei.itemId == entry.attributes.selectedItemId }
@@ -114,7 +114,7 @@ data class BasketPreviewLine(
             )
         }
 
-        fun fromBasketEntryItem(entry: BasketEntry, item: Item): BasketPreviewLine {
+        public fun fromBasketEntryItem(entry: BasketEntry, item: Item): BasketPreviewLine {
             val beItem =
                 entry.attributes!!.basketEntriesItems?.find { bei -> bei.itemId.toString() == item.id }
             val price =
@@ -135,7 +135,7 @@ data class BasketPreviewLine(
             )
         }
 
-        fun recipesAndLineEntriesToBasketPreviewLine(
+        public fun recipesAndLineEntriesToBasketPreviewLine(
             groceriesList: GroceriesList,
             lineEntries: List<LineEntries>
         ): List<BasketPreviewLine> {
@@ -148,7 +148,6 @@ data class BasketPreviewLine(
                 lineEntries[idx].found.forEach { entry ->
                     val selectedItem =
                         entry.attributes!!.basketEntriesItems?.find { item -> item.itemId == entry.attributes.selectedItemId }
-                            ?: null
                     val qty = entry.attributes.quantity ?: 1
                     val unitPrice = selectedItem?.unitPrice ?: 0.0
                     var numberOfRecipesForEntry = entry.attributes.recipeIds?.size ?: 1

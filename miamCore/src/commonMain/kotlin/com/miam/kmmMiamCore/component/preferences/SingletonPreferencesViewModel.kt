@@ -25,16 +25,16 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("PreferencesViewModelInstance used by ios and component")
-object PreferencesViewModelInstance: KoinComponent {
-    val instance: SingletonPreferencesViewModel by inject()
+public object PreferencesViewModelInstance: KoinComponent {
+    public val instance: SingletonPreferencesViewModel by inject()
 }
 
-sealed class PreferencesEffect: Effect {
-    object PreferencesLoaded: PreferencesEffect()
-    object PreferencesChanged: PreferencesEffect()
+public sealed class PreferencesEffect: Effect {
+    public object PreferencesLoaded: PreferencesEffect()
+    public object PreferencesChanged: PreferencesEffect()
 }
 
-open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
+public open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Event, PreferencesContract.State, PreferencesContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error(" [ERROR][Miam][Preference] $exception")
@@ -46,8 +46,8 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
     private val routeService: RouteService by inject()
 
     private val sideEffect = MutableSharedFlow<PreferencesEffect>()
-    fun observeSideEffect(): Flow<PreferencesEffect> = sideEffect
-    val isInit: Boolean
+    public fun observeSideEffect(): Flow<PreferencesEffect> = sideEffect
+    public val isInit: Boolean
         get() = currentState.basicState is BasicUiState.Success
 
     override fun createInitialState(): PreferencesContract.State = getInitialPref()
@@ -116,7 +116,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         return tagsFromLocal(LOCAL_EQUIPMENT_KEY)
     }
 
-    fun guestOrNullFromLocal(): Int? {
+    public fun guestOrNullFromLocal(): Int? {
         return userPreferences.getIntOrNull(LOCAL_GUEST_KEY)
     }
 
@@ -128,7 +128,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         TODO("Not yet implemented")
     }
 
-    fun togglePreference(tagIdToToggle: String) {
+    public fun togglePreference(tagIdToToggle: String) {
         setState {
             copy(
                 diets = diets.map { checkableTag -> checkableTag.toggleIfNeeded(tagIdToToggle) },
@@ -139,13 +139,13 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         updateRecipesCount()
     }
 
-    fun addIngredientPreference(tag: Tag) {
+    public fun addIngredientPreference(tag: Tag) {
         if (currentState.ingredients.any { cTag: CheckableTag -> cTag.tag.id == tag.id }) return
         setState { copy(ingredients = listOf(*currentState.ingredients.toTypedArray(), CheckableTag(TagTypes.INGREDIENT, tag, true))) }
         updateRecipesCount()
     }
 
-    fun resetPreferences() {
+    public fun resetPreferences() {
         // TODO save conf in state not to reload ids ?
         launch(coroutineHandler) {
             reloadFromLocal()
@@ -153,7 +153,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         }
     }
 
-    fun applyPreferences() {
+    public fun applyPreferences() {
         userPreferences.putList(LOCAL_DIET_KEY, toSaveInStorageSerializedTags(currentState.diets))
         userPreferences.putList(LOCAL_INGREDIENT_KEY, toSaveInStorageSerializedTags(currentState.ingredients))
         userPreferences.putList(LOCAL_EQUIPMENT_KEY, toSaveInStorageSerializedTags(currentState.equipments))
@@ -176,11 +176,11 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
     }
 
-    fun back() {
+    public fun back() {
         routeService.previous()
     }
 
-    fun goToSearchPrefAndPushRoute() {
+    public fun goToSearchPrefAndPushRoute() {
         setState { copy(basicState = BasicUiState.Success(PreferencesContent.SEARCH_PREFRERENCES)) }
         routeService.dispatch(
             RouteServiceAction.SetDialogRoute(
@@ -191,20 +191,20 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         )
     }
 
-    fun goToAllPref() {
+    public fun goToAllPref() {
         setState { copy(basicState = BasicUiState.Success(PreferencesContent.ALL_PREFRENCES)) }
     }
 
-    fun changeGlobalGuest(numberOfGuest: Int) {
+    public fun changeGlobalGuest(numberOfGuest: Int) {
         if (numberOfGuest in 1..100) {
             setState { copy(guests = numberOfGuest) }
         }
     }
 
-    val allTags: List<CheckableTag>
+    public val allTags: List<CheckableTag>
         get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
 
-    fun getPreferencesAsQueryString(): String {
+    public fun getPreferencesAsQueryString(): String {
         val toInclude = allTags.filter { tag -> tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
         val toExclude = allTags.filter { tag -> !tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
         val includedStr = if (toInclude.isNotEmpty()) "&filter[include-tags]=${toInclude.joinToString(",")}" else ""
@@ -212,17 +212,17 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
         return includedStr + excludedStr
     }
 
-    fun globalGuestCountOrDefault(defaultValue: Int = 4): Int {
+    public fun globalGuestCountOrDefault(defaultValue: Int = 4): Int {
         return currentState.guests ?: defaultValue
     }
 
-    companion object {
-        val LOCAL_DIET_KEY = "MIAM_${TagTypes.DIET.name}"
-        val LOCAL_INGREDIENT_KEY = "MIAM_${TagTypes.INGREDIENT.name}"
-        val LOCAL_EQUIPMENT_KEY = "MIAM_${TagTypes.EQUIPMENT.name}"
-        val LOCAL_GUEST_KEY = "MIAM_GUEST"
+    public companion object {
+        public val LOCAL_DIET_KEY: String = "MIAM_${TagTypes.DIET.name}"
+        public val LOCAL_INGREDIENT_KEY: String = "MIAM_${TagTypes.INGREDIENT.name}"
+        public val LOCAL_EQUIPMENT_KEY: String = "MIAM_${TagTypes.EQUIPMENT.name}"
+        public val LOCAL_GUEST_KEY: String = "MIAM_GUEST"
 
-        val defaultIngredientTagIds = listOf(
+        public val defaultIngredientTagIds: List<String> = listOf(
             "ingredient_category_lgumes",
             "ingredient_category_viandes-blanches",
             "ingredient_category_fromage",
@@ -231,7 +231,7 @@ open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContract.Even
             "ingredient_category_alcool"
         )
 
-        fun getInitialPref(): PreferencesContract.State {
+        public fun getInitialPref(): PreferencesContract.State {
             return PreferencesContract.State(
                 basicState = BasicUiState.Loading,
                 diets = emptyList(),

@@ -5,4 +5,4 @@ package com.miam.kmmMiamCore
  * Have to be implemented in both platform
  */
 
-expect abstract class KMMContext
+public expect abstract class KMMContext

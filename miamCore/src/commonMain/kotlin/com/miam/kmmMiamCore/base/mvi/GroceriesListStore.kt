@@ -17,26 +17,26 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class GroceriesListState(val groceriesList: GroceriesList?): State {
+public data class GroceriesListState(val groceriesList: GroceriesList?): State {
     val recipeCount: Int
         get() = groceriesList?.attributes?.recipesInfos?.size ?: 0
 }
 
-sealed class GroceriesListAction: Action {
-    object RefreshGroceriesList: GroceriesListAction()
-    object ResetGroceriesList: GroceriesListAction()
-    data class AlterRecipeList(val recipeId: String, val guests: Int): GroceriesListAction()
-    data class RemoveRecipe(val recipeId: String): GroceriesListAction()
+public sealed class GroceriesListAction: Action {
+    public object RefreshGroceriesList: GroceriesListAction()
+    public object ResetGroceriesList: GroceriesListAction()
+    public data class AlterRecipeList(val recipeId: String, val guests: Int): GroceriesListAction()
+    public data class RemoveRecipe(val recipeId: String): GroceriesListAction()
 }
 
-sealed class GroceriesListEffect: Effect {
-    object GroceriesListLoaded: GroceriesListEffect()
-    data class RecipeCountChanged(val newRecipeCount: Int): GroceriesListEffect()
-    data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
-    data class RecipeRemoved(val recipeId: String): GroceriesListEffect()
+public sealed class GroceriesListEffect: Effect {
+    public object GroceriesListLoaded: GroceriesListEffect()
+    public data class RecipeCountChanged(val newRecipeCount: Int): GroceriesListEffect()
+    public data class RecipeAdded(val recipeId: String, val guests: Int): GroceriesListEffect()
+    public data class RecipeRemoved(val recipeId: String): GroceriesListEffect()
 }
 
-class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
+public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
     KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
@@ -44,7 +44,7 @@ class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, Groceri
         println("[ERROR][Miam][GroceriesListStore] $exception ${exception.stackTraceToString()}")
     }
 
-    override val state = MutableStateFlow(GroceriesListState(null))
+    override val state: MutableStateFlow<GroceriesListState> = MutableStateFlow(GroceriesListState(null))
     private val sideEffect = MutableSharedFlow<GroceriesListEffect>()
     private val groceriesListRepo: GroceriesListRepositoryImp by inject()
     private val basketStore: BasketStore by inject()
@@ -54,7 +54,7 @@ class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, Groceri
 
     override fun observeSideEffect(): Flow<GroceriesListEffect> = sideEffect
 
-    fun getGroceriesList(): GroceriesList? {
+    public fun getGroceriesList(): GroceriesList? {
         return state.value.groceriesList
     }
 

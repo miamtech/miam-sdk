@@ -4,8 +4,8 @@ import com.miam.kmmMiamCore.base.mvi.AlterQuantityBasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 
-data class BasketComparator(val extIdToComparisonItem: Map<String, BasketComparisonItem> = mapOf()) {
-    fun init(
+public data class BasketComparator(val extIdToComparisonItem: Map<String, BasketComparisonItem> = mapOf()) {
+    public fun init(
         retailerBasket: List<RetailerProduct>,
         miamActiveBasket: List<BasketEntry>
     ): BasketComparator {
@@ -22,7 +22,7 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
      * updateReceivedFromMiam
      */
 
-    fun updateReceivedFromMiam(miamActiveBasket: List<BasketEntry>): BasketComparator {
+    public fun updateReceivedFromMiam(miamActiveBasket: List<BasketEntry>): BasketComparator {
         val newComparatorData = BasketComparatorData(extIdToComparisonItem.toMutableMap())
         newComparatorData.updateMapFromMiam(miamActiveBasket)
         return this.copy(extIdToComparisonItem = newComparatorData.extIdToComparisonItem)
@@ -31,7 +31,7 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
     /**
      * compare Miam baskets to get products that were added, changed or removed
      */
-    fun resolveFromMiam(newBasketComparator: BasketComparator): MutableList<RetailerProduct> {
+    public fun resolveFromMiam(newBasketComparator: BasketComparator): MutableList<RetailerProduct> {
         val toPushToRetailer = mutableListOf<RetailerProduct>()
         toPushToRetailer.addAll(addedOrUpdatedFromMiam(newBasketComparator))
         toPushToRetailer.addAll(removedFromMiam(newBasketComparator))
@@ -58,7 +58,7 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
      * updateReceivedFromRetailer
      */
 
-    fun updateReceivedFromRetailer(retailerBasket: List<RetailerProduct>): BasketComparator {
+    public fun updateReceivedFromRetailer(retailerBasket: List<RetailerProduct>): BasketComparator {
         val newComparatorData = BasketComparatorData(extIdToComparisonItem.toMutableMap())
         newComparatorData.updateMapFromRetailer(retailerBasket.filter { retailerProduct -> retailerProduct.quantity > 0 })
         return this.copy(extIdToComparisonItem = newComparatorData.extIdToComparisonItem)
@@ -67,7 +67,7 @@ data class BasketComparator(val extIdToComparisonItem: Map<String, BasketCompari
     /**
      *
      */
-    fun resolveFromRetailer(newComparator: BasketComparator): List<AlterQuantityBasketEntry> {
+    public fun resolveFromRetailer(newComparator: BasketComparator): List<AlterQuantityBasketEntry> {
         return extIdToComparisonItem.entries.flatMap { entry ->
             val previousCompItem = entry.value
             val newCompItem = newComparator.extIdToComparisonItem[entry.key]

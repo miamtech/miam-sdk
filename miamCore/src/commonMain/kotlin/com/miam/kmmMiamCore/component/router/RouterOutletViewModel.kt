@@ -8,12 +8,12 @@ import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
 import org.koin.core.component.inject
 
-open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
+public open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
     private val analyticsService: Analytics by inject()
     private val routeService: RouteService by inject()
 
-    fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
+    public fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
         setEvent(
             RouterOutletContract.Event.GoToDetail(
                 vmRecipe, showDetailsFooter

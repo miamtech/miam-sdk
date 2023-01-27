@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class PointOfSaleState(
+public data class PointOfSaleState(
     val idSupplier: Int?,
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
@@ -23,14 +23,14 @@ data class PointOfSaleState(
     val currentJob: Job? = null
 ): State
 
-sealed class PointOfSaleAction: Action {
-    data class SetExtId(val extId: String?): PointOfSaleAction()
-    data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
+public sealed class PointOfSaleAction: Action {
+    public data class SetExtId(val extId: String?): PointOfSaleAction()
+    public data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
 }
 
-sealed class PointOfSaleEffect: Effect
+public sealed class PointOfSaleEffect: Effect
 
-class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
+public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
     KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
@@ -38,7 +38,7 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
-    override val state = MutableStateFlow(PointOfSaleState(null, null, null, null))
+    override val state: MutableStateFlow<PointOfSaleState> = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
     private val basketStore: BasketStore by inject()
@@ -52,39 +52,39 @@ class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEf
         when (action) {
             is PointOfSaleAction.SetExtId -> {
                 updateStateIfChanged(state.value.copy(extIdPointOfSale = action.extId))
-                if (!canFetch()) return com.miam.kmmMiamCore.base.executor.ExecutorHelper.emptyJob()
+                if (!canFetch()) return ExecutorHelper.emptyJob()
 
                 return launchNewPosRefresh()
             }
             is PointOfSaleAction.SetSupplierId -> {
                 updateStateIfChanged(state.value.copy(idSupplier = action.supplierId))
-                if (!canFetch()) return com.miam.kmmMiamCore.base.executor.ExecutorHelper.emptyJob()
+                if (!canFetch()) return ExecutorHelper.emptyJob()
 
                 return launchNewPosRefresh()
             }
         }
     }
 
-    fun samePos(extId: String?): Boolean {
+    public fun samePos(extId: String?): Boolean {
         return extId == state.value.extIdPointOfSale
     }
 
-    fun sameSupplier(supplierId: Int): Boolean {
+    public fun sameSupplier(supplierId: Int): Boolean {
         return supplierId == state.value.idSupplier
     }
 
-    fun setOrigin(origin: String) {
+    public fun setOrigin(origin: String) {
         updateStateIfChanged(state.value.copy(origin = origin))
     }
 
-    fun getPosId(): Int? {
+    public fun getPosId(): Int? {
         return state.value.idPointOfSale
     }
 
-    val supplierId: Int?
+    public val supplierId: Int?
         get() = state.value.idSupplier
 
-    fun getProviderOrigin(): String {
+    public fun getProviderOrigin(): String {
         return state.value.origin ?: ""
     }
 

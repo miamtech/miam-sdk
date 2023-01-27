@@ -5,15 +5,15 @@ import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 
-interface SingletonFilterContract {
+public interface SingletonFilterContract {
 
-    sealed class Event : UiEvent {
-        data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions) : Event()
-        data class OnCostFilterChanged(val costFilter: CatalogFilterOptions) : Event()
-        data class OnDifficultyChanged(val difficulty: CatalogFilterOptions) : Event()
+    public sealed class Event : UiEvent {
+        public data class OnTimeFilterChanged(val timeFilter: CatalogFilterOptions) : Event()
+        public data class OnCostFilterChanged(val costFilter: CatalogFilterOptions) : Event()
+        public data class OnDifficultyChanged(val difficulty: CatalogFilterOptions) : Event()
     }
 
-    data class State(
+    public data class State(
         val numberOfResult: Int,
         val difficulty: List<CatalogFilterOptions>,
         val cost: List<CatalogFilterOptions>,
@@ -23,5 +23,5 @@ interface SingletonFilterContract {
         val category: String? = null
     ) : UiState
 
-    sealed class Effect : UiEffect { object OnUpdate : Effect() }
+    public sealed class Effect : UiEffect { public object OnUpdate : Effect() }
 }

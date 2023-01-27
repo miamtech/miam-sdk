@@ -1,7 +1,7 @@
 package com.miam.kmmMiamCore.miam_core.data.datasource
 
-interface SupplierDataSource {
-    suspend fun notifyBasketUpdated(
+public interface SupplierDataSource {
+    public suspend fun notifyBasketUpdated(
         basketToken: String,
         supplierId: Int,
         status: String,

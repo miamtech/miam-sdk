@@ -12,23 +12,23 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class UserState(
+public data class UserState(
     val userId: String?,
     val sessionId: String?,
     val profilingAllowed: Boolean = true,
     val likeIsEnable: Boolean = true
 ) : State
 
-sealed class UserAction : Action {
-    data class RefreshUser(val idUser: String?) : UserAction()
+public sealed class UserAction : Action {
+    public data class RefreshUser(val idUser: String?) : UserAction()
 }
 
-sealed class UserEffect : Effect
+public sealed class UserEffect : Effect
 
-class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
+public class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    override val state = MutableStateFlow(UserState(null, null))
+    override val state: MutableStateFlow<UserState> = MutableStateFlow(UserState(null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()
     private val groceriesListStore: GroceriesListStore by inject()
 
@@ -50,31 +50,31 @@ class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
         }
     }
 
-    fun getSessionId(): String? {
+    public fun getSessionId(): String? {
         return state.value.sessionId
     }
 
-    fun setSessionId(sessionId: String) {
+    public fun setSessionId(sessionId: String) {
         updateStateIfChanged(state.value.copy(sessionId = sessionId))
     }
 
-    fun sameSession(sessionId: String): Boolean {
+    public fun sameSession(sessionId: String): Boolean {
         return sessionId == state.value.sessionId
     }
 
-    fun sameUser(userId: String?): Boolean {
+    public fun sameUser(userId: String?): Boolean {
         return userId == state.value.userId
     }
 
-    fun setProfilingAllowed(allowance: Boolean) {
+    public fun setProfilingAllowed(allowance: Boolean) {
         updateStateIfChanged(state.value.copy(profilingAllowed = allowance))
     }
 
-    fun ProfilingForbiden(): Boolean {
+    public fun ProfilingForbiden(): Boolean {
         return !state.value.profilingAllowed
     }
 
-    fun setEnableLike(isEnable: Boolean) {
+    public fun setEnableLike(isEnable: Boolean) {
         updateStateIfChanged(state.value.copy(likeIsEnable = isEnable))
     }
 }

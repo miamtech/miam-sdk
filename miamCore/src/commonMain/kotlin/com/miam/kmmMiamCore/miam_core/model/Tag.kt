@@ -7,12 +7,12 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("tags")
-data class Tag constructor(
+public data class Tag constructor(
     override val id: String,
     override val attributes: TagAttributes? = null,
     override val relationships: TagRelationships? = null
 ): Record() {
-    constructor(
+    public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
@@ -31,7 +31,7 @@ data class Tag constructor(
 }
 
 @Serializable
-data class TagAttributes constructor(
+public data class TagAttributes constructor(
     @SerialName("tag-type-id")
     val tagTypeId: String,
     val name: String,
@@ -42,29 +42,29 @@ data class TagAttributes constructor(
 ): Attributes()
 
 @Serializable
-class TagRelationships: Relationships() {
+public class TagRelationships: Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
     }
 }
 
-enum class TagTypes {
+public enum class TagTypes {
     DIET, INGREDIENT, EQUIPMENT
 }
 
-data class CheckableTag constructor(
+public data class CheckableTag constructor(
     val tagType: TagTypes,
     val tag: Tag,
     val isChecked: Boolean
 ) {
-    constructor(tagType: TagTypes, tag: Tag): this(tagType, tag, checkedByDefault(tagType))
+    public constructor(tagType: TagTypes, tag: Tag): this(tagType, tag, checkedByDefault(tagType))
 
-    fun toggleIfNeeded(tagIdToToggle: String): CheckableTag {
+    public fun toggleIfNeeded(tagIdToToggle: String): CheckableTag {
         if (tag.id != tagIdToToggle) return this
 
         return this.copy(isChecked = !isChecked)
     }
 
-    fun resetWith(storageTagIds: List<String>): CheckableTag {
+    public fun resetWith(storageTagIds: List<String>): CheckableTag {
         val savedInStorage = savedInStorage(storageTagIds)
         if (this.isChecked == savedInStorage) return this
 
@@ -88,8 +88,8 @@ data class CheckableTag constructor(
     val isIncludedInQuery: Boolean
         get() = tagType == TagTypes.DIET
 
-    companion object {
-        fun checkedByDefault(tagType: TagTypes): Boolean {
+    public companion object {
+        public fun checkedByDefault(tagType: TagTypes): Boolean {
             return tagType == TagTypes.EQUIPMENT
         }
     }

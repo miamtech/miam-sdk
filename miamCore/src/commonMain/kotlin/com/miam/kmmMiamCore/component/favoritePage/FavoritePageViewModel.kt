@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class FavoritePageViewModel:
+public open class FavoritePageViewModel:
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<FavoritePageContract.Event, FavoritePageContract.State, FavoritePageContract.Effect>() {
 
-    companion object {
-        val FILTERS = mapOf("liked" to "true", "active" to "true,false")
+    public companion object {
+        public val FILTERS: Map<String, String> = mapOf("liked" to "true", "active" to "true,false")
     }
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->

@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel):
+public open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel):
     com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketTagContract.Event, BasketTagContract.State, BasketTagContract.Effect>() {
 
     private val basketStore: BasketStore by inject()
@@ -21,7 +21,7 @@ open class BasketTagViewModel(private val vmRouter: RouterOutletViewModel):
         LogHandler.error("Miam error in Tag view $exception ${exception.stackTraceToString()}")
     }
 
-    open fun goToDetail(recipe: Recipe) {
+    public open fun goToDetail(recipe: Recipe) {
         val vmRecipe = RecipeViewModel(vmRouter)
         vmRecipe.setRecipe(recipe)
         vmRouter.goToDetail(vmRecipe, false)

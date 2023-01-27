@@ -5,8 +5,8 @@ package com.miam.kmmMiamCore
  * Ios implementation
  */
 
-open abstract class PreferencesContext
+public abstract class PreferencesContext
 
-class MiamPreferencesContext() : PreferencesContext()
+public class MiamPreferencesContext() : PreferencesContext()
 
-actual typealias  KMMContext = PreferencesContext
+public actual typealias  KMMContext = PreferencesContext

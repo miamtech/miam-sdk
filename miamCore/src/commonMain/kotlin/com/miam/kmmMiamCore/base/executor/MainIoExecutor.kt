@@ -13,11 +13,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 
-abstract class MainIoExecutor : com.miam.kmmMiamCore.base.executor.IExecutorScope, CoroutineScope,
+public abstract class MainIoExecutor : IExecutorScope, CoroutineScope,
     KoinComponent {
 
     private val mainDispatcher: MainDispatcher by inject()
-    val ioDispatcher: CoroutineDispatcher by inject()
+    private val ioDispatcher: CoroutineDispatcher by inject()
 
     private var job = SupervisorJob()
 

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
-open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
+public open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
@@ -35,12 +35,12 @@ open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingC
     }
 
 
-    fun setRecipe(recipeId: String, guestNumber: Int) {
+    public fun setRecipe(recipeId: String, guestNumber: Int) {
         setState { copy(recipeId = recipeId, guestNumber = guestNumber) }
         getPrice(recipeId, guestNumber)
     }
 
-    fun listenBasketChanges() {
+    public fun listenBasketChanges() {
         viewModelScope.launch(coroutineHandler) {
             launch(coroutineHandler) {
                 basketStore.observeSideEffect().collect {
@@ -55,7 +55,7 @@ open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingC
         }
     }
 
-    fun stopListenBasketChanges() {
+    public fun stopListenBasketChanges() {
         viewModelScope.cancel()
     }
 

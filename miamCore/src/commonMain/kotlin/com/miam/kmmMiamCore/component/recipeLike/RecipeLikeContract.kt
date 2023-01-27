@@ -6,14 +6,14 @@ import com.miam.kmmMiamCore.base.mvi.UiEvent
 import com.miam.kmmMiamCore.base.mvi.UiState
 import kotlinx.coroutines.Job
 
-interface RecipeLikeContract {
-    sealed class Event: UiEvent
+public interface RecipeLikeContract {
+    public sealed class Event: UiEvent
 
-    data class State(
+    public data class State(
         val recipeId: String? = null,
         val isLiked: BasicUiState<Boolean> = BasicUiState.Loading,
         val likeListenerJob: Job? = null
     ): UiState
 
-    sealed class Effect: UiEffect
+    public sealed class Effect: UiEffect
 }
