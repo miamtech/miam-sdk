@@ -10,7 +10,7 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-internal struct RecipesView: View {
+public struct RecipesListView: View {
     @ObservedObject private var recipesListPageModel: RecipeListPageVM
     let browseCatalogAction: () -> Void
     let showingFavorites: Bool
@@ -22,7 +22,7 @@ internal struct RecipesView: View {
     let defaultTitleTemplate : ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
     let specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
     
-    init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool,specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
+    public init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool,specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -34,7 +34,7 @@ internal struct RecipesView: View {
         self.specialTitleTemplate = specialTitleTemplate
     }
     
-    init(categoryId:String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+    public init(categoryId:String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -46,11 +46,11 @@ internal struct RecipesView: View {
         self.specialTitleTemplate = Template.sharedInstance.recipesListCategoryTitleTemplate
     }
     
-    var body: some View {
+    public var body: some View {
         if let state = recipesListPageModel.state {
-            ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(
+            ManagementResourceState<NSArray, RecipesListSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(
                 resourceState: state.recipes,
-                successView: CatalogRecipesPageSuccessView(
+                successView: RecipesListSuccessView(
                     title: title,
                     recipes: recipesListPageModel.recipes,
                     hasNoResults: recipesListPageModel.hasNoResults,
