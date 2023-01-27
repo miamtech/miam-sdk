@@ -3,6 +3,8 @@ package com.miam.kmmMiamCore.miam_core.model
 import kotlin.math.max
 import kotlin.math.truncate
 
+// TODO Romain: what is the differences between
+//  BasketEntry / BasketPreviewEntry / LineEntries / BasketPreviewLine
 public interface BasketPreviewEntry
 
 public data class LineEntries(

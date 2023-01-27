@@ -13,9 +13,9 @@ public actual fun KMMContext.putArray(key: String, value: List<String>) {
     NSUserDefaults.standardUserDefaults.setObject(value, key)
 }
 
-@Suppress("unchecked_cast")
 public actual fun KMMContext.getArrayOrNull(key: String): List<String>? {
-    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)?.toList() as List<String>?
+    return NSUserDefaults.standardUserDefaults.stringArrayForKey(key)
+        ?.filterIsInstance<String>()
 }
 
 public actual fun KMMContext.putInt(key: String, value: Int) {

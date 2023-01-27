@@ -1,5 +1,6 @@
 # 3.10.0
 - [FEA][COR] Enable explicit API mode and compiler flag warning as error
+- [FEA][COR] Draft factories to help creating fakes in previews and tests
 - [FEA][COR] Adapt BaseViewModel to work with only one dispatcher
 - [FEA][COR] Introduce Gradle Version Catalog + Improve configuration
 

@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.minutes
 
 @Serializable
 @SerialName("recipes")
-public data class Recipe private constructor(
+public data class Recipe internal constructor(
     override val id: String,
     override val attributes: RecipeAttributes? = null,
     override val relationships: RecipeRelationships? = null,
@@ -52,19 +52,19 @@ public data class Recipe private constructor(
 
     val preparationTimeIos: String
         get() {
-            var duration = this.attributes!!.preparationTime ?: 0.minutes
+            val duration = this.attributes?.preparationTime ?: 0.minutes
             return duration.toString()
         }
 
     val cookingTimeIos: String
         get() {
-            var duration = this.attributes!!.cookingTime ?: 0.minutes
+            val duration = this.attributes?.cookingTime ?: 0.minutes
             return duration.toString()
         }
 
     val restingTimeIos: String
         get() {
-            var duration = this.attributes!!.cookingTime ?: 0.minutes
+            val duration = this.attributes?.cookingTime ?: 0.minutes
             return duration.toString()
         }
 
@@ -173,11 +173,11 @@ public data class RecipeInfos(
 /**
  * Used from others relations
  */
-@Suppress("unchecked_cast")
 @Serializable(with = RecipeRelationshipListSerializer::class)
 public class RecipeRelationshipList(override var data: List<Recipe>): RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, Recipe::class) as List<Recipe>
+        data = buildedFromIncluded(includedRecords, Recipe::class)
+            .filterIsInstance<Recipe>()
     }
 }
 

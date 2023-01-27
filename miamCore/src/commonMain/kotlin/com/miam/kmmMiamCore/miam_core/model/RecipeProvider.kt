@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-providers")
-public data class RecipeProvider private constructor(
+public data class RecipeProvider internal constructor(
     override val id: String,
     override val attributes: RecipeProviderAttributes? = null,
     override val relationships: RecipeProviderRelationships? = null

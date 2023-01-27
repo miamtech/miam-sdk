@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("basket-entries")
-public data class BasketEntry private constructor(
+public data class BasketEntry internal constructor(
     override val id: String,
     override val attributes: BasketEntryAttributes? = null,
     override val relationships: BasketEntryRelationships? = null
@@ -36,6 +36,7 @@ public data class BasketEntry private constructor(
         return "$id - ${relationships?.groceriesEntry?.data?.attributes?.name} - ${attributes?.quantity} - ${attributes?.groceriesEntryStatus}"
     }
 
+    // TODO Romain: val in constructor and use copy() function
     var needPatch: Boolean = false
 
     val selectedItem: Item?
@@ -97,11 +98,11 @@ public data class BasketEntryAttributes(
     val selectedItemId: Int? = null,
     @SerialName("learning-factor")
     val learningFactor: Int?,
-    val quantity: Int?,
+    val quantity: Int?, // TODO Romain: can a quantity be null??
     @SerialName("recipe-ids")
     val recipeIds: List<Int>?,
     @SerialName("groceries-entry-status")
-    val groceriesEntryStatus: String? = "active",
+    val groceriesEntryStatus: String? = "active", // TODO Romain: enum class??
     @SerialName("basket-entries-items")
     var basketEntriesItems: List<BasketEntriesItem>? = null,
 ): Attributes()
@@ -146,7 +147,8 @@ public data class BasketEntriesItem(
 @Serializable(with = BasketEntryRelationshipListSerializer::class)
 public class BasketEntryRelationshipList(override var data: List<BasketEntry>): RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, BasketEntry::class) as List<BasketEntry>
+        data = buildedFromIncluded(includedRecords, BasketEntry::class)
+            .filterIsInstance<BasketEntry>()
     }
 }
 

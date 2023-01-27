@@ -8,7 +8,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("packages")
-public data class Package private constructor(
+public data class Package internal constructor(
     override val id: String,
     override var attributes: PackageAttributes? = null,
     override val relationships: PackageRelationships? = null

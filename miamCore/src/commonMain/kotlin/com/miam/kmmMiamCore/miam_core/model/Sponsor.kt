@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("sponsors")
-public data class Sponsor private constructor(
+public data class Sponsor internal constructor(
     override val id: String,
     override val attributes: SponsorAttributes? = null,
     override val relationships: SponsorRelationships? = null
@@ -49,11 +49,11 @@ public class SponsorRelationships : Relationships() {
 /**
  * Used from others relations
  */
-@Suppress("unchecked_cast")
 @Serializable(with = SponsorListSerializer::class)
 public class SponsorListRelationship(override var data: List<Sponsor>) : RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, Sponsor::class) as List<Sponsor>
+        data = buildedFromIncluded(includedRecords, Sponsor::class)
+            .filterIsInstance<Sponsor>()
     }
 }
 

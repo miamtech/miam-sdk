@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("recipe-steps")
-public data class RecipeStep(
+public data class RecipeStep internal constructor(
     override val id: String,
     override val attributes: RecipeStepAttributes? = null,
     override val relationships: RecipeStepRelationships? = null
@@ -53,11 +53,11 @@ public class RecipeStepRelationships : Relationships() {
 /**
  * Used from others relations
  */
-@Suppress("unchecked_cast")
 @Serializable(with = RecipeStepListListSerializer::class)
 public class RecipeStepListRelationship(override var data: List<RecipeStep>) : RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, RecipeStep::class) as List<RecipeStep>
+        data = buildedFromIncluded(includedRecords, RecipeStep::class)
+            .filterIsInstance<RecipeStep>()
     }
 }
 

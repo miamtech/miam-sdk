@@ -8,7 +8,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("groceries-lists")
-public data class GroceriesList private constructor(
+public data class GroceriesList internal constructor(
     override val id: String,
     override var attributes: GroceriesListAttributes? = null,
     override val relationships: GroceriesListRelationships? = null,
@@ -70,11 +70,11 @@ public data class GroceriesList private constructor(
 public data class GroceriesListAttributes constructor(
     var name: String,
     @SerialName("created-at")
-    val createdAt: String,
+    val createdAt: String, // TODO Romain: use Instant
     @SerialName("updated-at")
-    val updatedAt: String,
+    val updatedAt: String, // TODO Romain: use Instant
     @SerialName("recipes-infos")
-    val recipesInfos: MutableList<RecipeInfos>,
+    val recipesInfos: MutableList<RecipeInfos>, // TODO Romain: Mutable is necessary?
     @SerialName("user-id")
     val userId: String? = null,
     @SerialName("append-recipes")

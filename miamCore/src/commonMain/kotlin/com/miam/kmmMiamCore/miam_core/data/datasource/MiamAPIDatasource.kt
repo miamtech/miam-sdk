@@ -346,7 +346,8 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         LogHandler.info("[Miam][MiamAPIDatasource] starting getFromListAndPos $listId $posId")
         val baskets = httpClient.get<RecordWrapper> {
             url(HttpRoutes.GROCERIESLIST_ENDPOINT + "$listId/baskets?filter[point_of_sale_id]=$posId&${includedToString(included)}")
-        }.toRecords() as List<Basket>
+        }.toRecords()
+            .filterIsInstance<Basket>()
         if (baskets.isEmpty()) {
             LogHandler.error("basket not found or incorrect")
             return null

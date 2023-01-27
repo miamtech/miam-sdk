@@ -10,10 +10,10 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("groceries-entries")
-public data class GroceriesEntry private constructor(
+public data class GroceriesEntry internal constructor(
     override val id: String,
     override val attributes: GroceriesEntryAttributes? = null,
-    override val relationships: GroceriesEntryRelationships? = null
+    override val relationships: GroceriesEntryRelationships? = null // TODO Romain: this class is empty, why keeping it?
 ) : Record() {
     public constructor(
         id: String,
@@ -71,7 +71,8 @@ public class GroceriesEntryRelationships : Relationships() {
 @Serializable(with = GroceriesEntryRelationshipListSerializer::class)
 public class GroceriesEntryRelationshipList(override var data: List<GroceriesEntry>) : RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, GroceriesEntry::class) as List<GroceriesEntry>
+        data = buildedFromIncluded(includedRecords, GroceriesEntry::class)
+            .filterIsInstance<GroceriesEntry>()
     }
 }
 

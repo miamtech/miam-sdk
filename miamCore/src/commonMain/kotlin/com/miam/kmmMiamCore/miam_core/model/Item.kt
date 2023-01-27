@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 @Serializable
 @SerialName("items")
-public data class Item private constructor(
+public data class Item internal constructor(
     override val id: String,
     override val attributes: ItemAttributes? = null,
     override val relationships: ItemRelationships? = null
@@ -38,7 +38,7 @@ public data class ItemAttributes(
     @SerialName("ext-id")
     val extId: String? = null,
     val name: String,
-    val status: String? = null,
+    val status: String? = null, // TODO Romain: enum class ?
     // description is a key word in swift
     @SerialName("description")
     val itemDescription: String? = null,
@@ -47,17 +47,17 @@ public data class ItemAttributes(
     val productPage: String? = null,
     val image: String? = null,
     @SerialName("unit-price")
-    val unitPrice: String,
+    val unitPrice: String, // TODO Romain: handle Unit with a type?
     @SerialName("capacity-unit")
-    val capacityUnit: String? = null,
+    val capacityUnit: String? = null, // TODO Romain: handle Unit with a type?
     @SerialName("capacity-volume")
     val capacityVolume: String? = null,
     @SerialName("capacity-factor")
     val capacityFactor: Int? = 1,
     @SerialName("created-at")
-    val createdAt: String,
+    val createdAt: String, // TODO Romain: use Instant
     @SerialName("updated-at")
-    val updatedAt: String,
+    val updatedAt: String, // TODO Romain: use Instant, nullable if not updated?
     val promoted: Boolean = false,
     @SerialName("variable-capacity")
     val variableCapacity: Boolean
@@ -72,11 +72,11 @@ public class ItemRelationships : Relationships() {
 /**
  * Used from others relations
  */
-@Suppress("unchecked_cast")
 @Serializable(with = ItemRelationshipListSerializer::class)
 public class ItemRelationshipList(override var data: List<Item>) : RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
-        data = buildedFromIncluded(includedRecords, Item::class) as List<Item>
+        data = buildedFromIncluded(includedRecords, Item::class)
+            .filterIsInstance<Item>()
     }
 }
 
