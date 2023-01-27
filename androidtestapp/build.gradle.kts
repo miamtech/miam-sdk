@@ -29,7 +29,11 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+        freeCompilerArgs += listOf(
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xopt-in=kotlinx.coroutines.FlowPreview",
+            "-Xjvm-default=all"
+        )
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
