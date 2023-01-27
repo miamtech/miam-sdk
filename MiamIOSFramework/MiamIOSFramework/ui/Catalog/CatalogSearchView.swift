@@ -22,7 +22,7 @@ public struct CatalogSearchView: View {
     
     public var body: some View {
         if let template = Template.sharedInstance.catalogSearchViewTemplate {
-//            template(close, search)
+            template(close, search)
             EmptyView()
         } else {
             VStack(spacing: 10.0) {
