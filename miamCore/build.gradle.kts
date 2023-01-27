@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
-plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -26,37 +27,35 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:1.6.7")
-                implementation("io.ktor:ktor-client-serialization:1.6.7")
-                implementation("io.ktor:ktor-client-logging:1.6.7")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
-                implementation("io.insert-koin:koin-core:3.2.2")
+                implementation(libs.kotlinx.coroutines.core.mt)
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.koin.core)
             }
         }
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(libs.kotlin.test.common)
+                implementation(libs.kotlin.test.annotation.common)
             }
         }
 
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:1.6.7")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+                implementation(libs.ktor.client.android)
             }
         }
         val androidTest by getting {
             dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.kotlin.test.junit)
+                implementation(libs.test.junit)
             }
         }
 
         val iosSimulatorArm64Main by getting
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-ios:1.6.7")
+                implementation(libs.ktor.client.darwin)
             }
             iosSimulatorArm64Main.dependsOn(this)
         }
@@ -86,10 +85,15 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
+    val minSdkVersion: String by project
+    compileSdk = Integer.parseInt(compileSdkVersion)
+
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
+        minSdk = Integer.parseInt(minSdkVersion)
+        targetSdk = Integer.parseInt(targetSdkVersion)
     }
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }

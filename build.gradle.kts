@@ -1,18 +1,19 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-    `kotlin-dsl`
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.moko.resources) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.nexus.publish)
 }
 
 buildscript {
     repositories {
-        gradlePluginPortal()
-        google()
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
-        classpath("com.android.tools.build:gradle:7.1.3")
-        classpath("com.github.kezong:fat-aar:1.3.6")
+        classpath("com.github.kezong:fat-aar:1.3.8")
     }
 }
 
@@ -22,7 +23,6 @@ allprojects {
         mavenCentral()
     }
 }
-
 
 /**
  * Maven central deploy script

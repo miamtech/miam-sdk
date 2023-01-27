@@ -24,7 +24,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompilerPlugin.get()
     }
 
     kotlinOptions {
@@ -37,43 +37,41 @@ android {
     }
 }
 
-val composeVersion: String by project
-val navVersion: String by project
-val ktorVersion: String by project
-val coilVersion: String by project
-val koinVersion: String by project
-
 dependencies {
-    // as an aar extern file
-    // if use you have to put manually aar file in libs folder
-    implementation(files("$projectDir/libs/androidSDK-debug.aar"))
+    implementation(project(":androidSDK"))
 
-    implementation("io.insert-koin:koin-android:$koinVersion")
-    implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging)
+
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.android.material)
+
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
-    implementation("androidx.compose.compiler:compiler:1.3.2")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.foundation:foundation:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.material:material-icons-core:$composeVersion")
-    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-rxjava2:$composeVersion")
-    implementation("androidx.navigation:navigation-runtime-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-compose:$navVersion")
-    implementation("io.coil-kt:coil-compose:$coilVersion")
-    implementation("io.coil-kt:coil-svg:$coilVersion")
-    implementation("io.ktor:ktor-client-android:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+
+    implementation(libs.compose.compiler)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.core)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material.core)
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.runtime.rxjava2)
+
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 }
 repositories {
     mavenCentral()
