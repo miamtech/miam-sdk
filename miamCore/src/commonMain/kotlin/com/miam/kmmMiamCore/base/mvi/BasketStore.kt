@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -25,8 +26,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 public data class AlterQuantityBasketEntry(
     val id: String,
@@ -62,7 +61,7 @@ public sealed class BasketEffect: Effect {
     public object BasketConfirmed: BasketEffect()
 }
 
-public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinComponent,
+public class BasketStore: Store<BasketState, BasketAction, BasketEffect>,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -71,14 +70,16 @@ public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, KoinCo
 
     override val state: MutableStateFlow<BasketState> = MutableStateFlow(BasketState(null, emptyList()))
     private val sideEffect = MutableSharedFlow<BasketEffect>()
-    private val basketRepo: BasketRepositoryImp by inject()
-    private val basketEntryRepo: BasketEntryRepositoryImp by inject()
-    private val groceriesRepo: GroceriesEntryRepositoryImp by inject()
-    private val supplierRepositoryImp: SupplierRepositoryImp by inject()
-    private val basketHandler: BasketHandler by inject()
-    private val groceriesListStore: GroceriesListStore by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
-    private val analyticsService: Analytics by inject()
+
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val basketRepo: BasketRepositoryImp by lazy { MiamDI.basketRepository }
+    private val basketEntryRepo: BasketEntryRepositoryImp by lazy { MiamDI.basketEntryRepository }
+    private val groceriesRepo: GroceriesEntryRepositoryImp by lazy { MiamDI.groceriesEntryRepository }
+    private val supplierRepositoryImp: SupplierRepositoryImp by lazy { MiamDI.supplierRepository }
+    private val basketHandler: BasketHandler by lazy { MiamDI.basketHandler }
+    private val groceriesListStore: GroceriesListStore by lazy { MiamDI.groceriesListStore }
+    private val pointOfSaleStore: PointOfSaleStore by lazy { MiamDI.pointOfSaleStore }
+    private val analyticsService: Analytics by lazy { MiamDI.analyticsService }
 
     override fun observeState(): StateFlow<BasketState> = state
 

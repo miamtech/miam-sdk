@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.miam_core.data.repository
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
@@ -8,8 +9,8 @@ import com.miam.kmmMiamCore.miam_core.model.RecipeLike
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
-
-    private val likeStore: LikeStore = LikeStoreInstance.instance
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val likeStore: LikeStore by lazy { MiamDI.likeStore }
 
     public companion object {
         public val DEFAULT_INCLUDED: List<String> =

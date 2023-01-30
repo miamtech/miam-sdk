@@ -4,16 +4,13 @@ import com.miam.kmmMiamCore.domain.MainDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 
-public abstract class MainExecutor : IExecutorScope, CoroutineScope, KoinComponent {
+public abstract class MainExecutor : IExecutorScope, CoroutineScope {
 
-    private val mainDispatcher: MainDispatcher by inject()
+    private val mainDispatcher: MainDispatcher = MainDispatcher()
 
     private var job = SupervisorJob()
 

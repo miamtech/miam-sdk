@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.handler
 
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleAction
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.helpers.letElse
@@ -10,8 +11,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import kotlin.native.concurrent.ThreadLocal
 
 public open class CatalogCategory(
@@ -20,17 +19,17 @@ public open class CatalogCategory(
 )
 
 @ThreadLocal
-public object PointOfSaleHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public object PointOfSaleHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
 
-    private val packageRepositoryImp: PackageRepositoryImp by inject()
+    private val packageRepositoryImp: PackageRepositoryImp by lazy { MiamDI.packageRepository }
 
     public var isAvailable: () -> Boolean = fun(): Boolean { return true }
-    private val store: PointOfSaleStore by inject()
-    private val analytics: Analytics by inject()
+    private val store: PointOfSaleStore = MiamDI.pointOfSaleStore
+    private val analytics: Analytics = MiamDI.analyticsService
 
     public fun updateStoreId(storeId: String?) {
         if (store.samePos(storeId)) return

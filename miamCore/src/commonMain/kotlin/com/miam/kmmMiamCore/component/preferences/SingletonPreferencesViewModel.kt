@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.preferences
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.Effect
@@ -21,12 +22,10 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Suppress("PreferencesViewModelInstance used by ios and component")
-public object PreferencesViewModelInstance: KoinComponent {
-    public val instance: SingletonPreferencesViewModel by inject()
+public object PreferencesViewModelInstance {
+    public val instance: SingletonPreferencesViewModel = MiamDI.preferencesViewModel
 }
 
 public sealed class PreferencesEffect: Effect {
@@ -40,10 +39,10 @@ public open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContra
         LogHandler.error(" [ERROR][Miam][Preference] $exception")
     }
 
-    private val tagsRepositoryImp: TagsRepositoryImp by inject()
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val userPreferences: UserPreferences by inject()
-    private val routeService: RouteService by inject()
+    private val tagsRepositoryImp: TagsRepositoryImp = MiamDI.tagsRepository
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val userPreferences: UserPreferences = MiamDI.userPreferences
+    private val routeService: RouteService = MiamDI.routeService
 
     private val sideEffect = MutableSharedFlow<PreferencesEffect>()
     public fun observeSideEffect(): Flow<PreferencesEffect> = sideEffect

@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.recipeCarousel
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
@@ -8,13 +9,12 @@ import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 
 public open class RecipeCarouselViewModel : BaseViewModel<RecipeCarouselContract.Event, RecipeCarouselContract.State, RecipeCarouselContract.Effect>() {
 
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val pointOfSaleStore: PointOfSaleStore = MiamDI.pointOfSaleStore
 
     override fun createInitialState(): RecipeCarouselContract.State = RecipeCarouselContract.State(suggestions = BasicUiState.Loading)
 

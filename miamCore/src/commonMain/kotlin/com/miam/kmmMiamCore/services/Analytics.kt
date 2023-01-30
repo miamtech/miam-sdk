@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.services
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -17,8 +18,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 public data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
@@ -32,11 +31,11 @@ public sealed class AnalyticEffect: Effect {
 }
 
 @Suppress("UserPreferencesInstance used by ios and component")
-public object AnalyticsInstance: KoinComponent {
-    public val instance: Analytics by inject()
+public object AnalyticsInstance {
+    public val instance: Analytics by lazy { MiamDI.analyticsService }
 }
 
-public class Analytics: KoinComponent {
+public class Analytics {
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in Analytics $exception ${exception.stackTraceToString()}")
     }

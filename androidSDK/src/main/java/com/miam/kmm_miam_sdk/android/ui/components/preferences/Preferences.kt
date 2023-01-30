@@ -7,17 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.AbstractComposeView
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class Preferences @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private var close: () -> Unit = {
         LogHandler.error("[Miam][Error] you must bind close function")
@@ -32,7 +31,7 @@ class Preferences @JvmOverloads constructor(
         this.onApply = onApply
     }
 
-    private val preferencesVM: SingletonPreferencesViewModel by inject()
+    private val preferencesVM: SingletonPreferencesViewModel by lazy { MiamDI.preferencesViewModel }
 
     private fun resetAndClose() {
         preferencesVM.resetPreferences()

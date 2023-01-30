@@ -42,13 +42,12 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.preferenceSearch.customization.PreferencesText.searchPreferencePlaceholder
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import org.koin.core.component.KoinComponent
 
 class PreferencesSearch @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): AbstractComposeView(context, attrs, defStyleAttr), KoinComponent {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private var back: () -> Unit = {
         LogHandler.error("[Miam][Error] you must bind back function")

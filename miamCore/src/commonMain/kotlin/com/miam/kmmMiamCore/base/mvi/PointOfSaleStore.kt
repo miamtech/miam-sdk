@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.base.mvi
 
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.miam_core.data.repository.PointOfSaleRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -12,8 +13,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 public data class PointOfSaleState(
     val idSupplier: Int?,
@@ -31,7 +30,6 @@ public sealed class PointOfSaleAction: Action {
 public sealed class PointOfSaleEffect: Effect
 
 public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointOfSaleEffect>,
-    KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -41,8 +39,9 @@ public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointO
     override val state: MutableStateFlow<PointOfSaleState> = MutableStateFlow(PointOfSaleState(null, null, null, null))
     private val sideEffect = MutableSharedFlow<PointOfSaleEffect>()
 
-    private val basketStore: BasketStore by inject()
-    private val pointOfSaleRepository: PointOfSaleRepositoryImp by inject()
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val basketStore: BasketStore by lazy { MiamDI.basketStore }
+    private val pointOfSaleRepository: PointOfSaleRepositoryImp by lazy { MiamDI.pointOfSaleRepository }
 
     override fun observeState(): StateFlow<PointOfSaleState> = state
 

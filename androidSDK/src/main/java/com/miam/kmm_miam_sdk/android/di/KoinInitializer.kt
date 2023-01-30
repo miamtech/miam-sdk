@@ -1,29 +1,13 @@
 package com.miam.kmm_miam_sdk.android.di
 
 import android.content.Context
-import com.miam.kmmMiamCore.di.*
-import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.Module
 
+@Deprecated("This is no more useful to work with Miam SDK, you can use the DI framework you'd like.", level = DeprecationLevel.ERROR)
 class KoinInitializer {
 
     companion object {
-        val miamModuleList = listOf(
-            viewModelModule,
-            repositoryModule,
-            dispatcherModule,
-            storeModule,
-            servicesModule,
-            platformModule()
-        )
-
-        fun init(context: Context) {
-            initKoin {
-                androidContext(context)
-                modules(
-                    miamModuleList
-                )
-            }
-        }
-
+        val miamModuleList = emptyList<Module>()
+        fun init(context: Context) { }
     }
 }

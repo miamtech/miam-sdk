@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.catalog
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
@@ -20,7 +21,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 public open class CatalogViewModel: BaseViewModel<CatalogContract.Event, CatalogContract.State, CatalogContract.Effect>() {
 
@@ -28,11 +28,11 @@ public open class CatalogViewModel: BaseViewModel<CatalogContract.Event, Catalog
         LogHandler.error("Miam error in catalog view $exception")
     }
 
-    private val packageRepositoryImp: PackageRepositoryImp by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
-    private val routeService: RouteService by inject()
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val preference: SingletonPreferencesViewModel by inject()
+    private val packageRepositoryImp: PackageRepositoryImp = MiamDI.packageRepository
+    private val pointOfSaleStore: PointOfSaleStore = MiamDI.pointOfSaleStore
+    private val routeService: RouteService = MiamDI.routeService
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val preference: SingletonPreferencesViewModel = MiamDI.preferencesViewModel
     private val filterVm = FilterViewModelInstance.instance
 
 

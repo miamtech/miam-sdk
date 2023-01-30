@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.preferencesSearch
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -7,7 +8,6 @@ import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 public open class PreferencesSearchViewModel:
     BaseViewModel<PreferencesSearchContract.Event, PreferencesSearchContract.State, PreferencesSearchContract.Effect>() {
@@ -17,7 +17,7 @@ public open class PreferencesSearchViewModel:
         LogHandler.error(" [ERROR][Miam][PreferencesSearchViewModel] $exception")
     }
 
-    private val tagsRepositoryImp: TagsRepositoryImp by inject()
+    private val tagsRepositoryImp: TagsRepositoryImp = MiamDI.tagsRepository
     private val rememberedLastSearch = MutableStateFlow("")
 
 

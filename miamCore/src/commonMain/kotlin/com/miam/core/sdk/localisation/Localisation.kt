@@ -1,4 +1,4 @@
-package com.miam.sdk
+package com.miam.core.sdk.localisation
 
 import com.miam.core.localisation.i18n.I18n
 import com.miam.sdk.resources.MiamSdkResources

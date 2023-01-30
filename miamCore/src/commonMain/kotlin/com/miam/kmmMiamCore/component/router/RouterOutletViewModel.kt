@@ -1,17 +1,17 @@
 package com.miam.kmmMiamCore.component.router
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.services.Analytics
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
-import org.koin.core.component.inject
 
 public open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Event, RouterOutletContract.State, RouterOutletContract.Effect>() {
 
-    private val analyticsService: Analytics by inject()
-    private val routeService: RouteService by inject()
+    private val analyticsService: Analytics = MiamDI.analyticsService
+    private val routeService: RouteService = MiamDI.routeService
 
     public fun goToDetail(vmRecipe: RecipeViewModel, showDetailsFooter: Boolean = true) {
         setEvent(

@@ -1,12 +1,7 @@
 package com.miam.kmmMiamCore.component.basketPreview
 
-import com.miam.kmmMiamCore.base.mvi.BasicUiState
-import com.miam.kmmMiamCore.base.mvi.BasketAction
-import com.miam.kmmMiamCore.base.mvi.BasketEffect
-import com.miam.kmmMiamCore.base.mvi.BasketStore
-import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
-import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
-import com.miam.kmmMiamCore.base.mvi.State
+import com.miam.core.sdk.di.MiamDI
+import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.handler.ContextHandler
@@ -22,20 +17,19 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 
 public open class BasketPreviewViewModel(public val recipeId: String?):
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
+    BaseViewModel<BasketPreviewContract.Event, BasketPreviewContract.State, BasketPreviewContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error(" [ERROR][Miam][Basket preview] $exception ${exception.stackTraceToString()}")
     }
 
-    private val basketStore: BasketStore by inject()
-    private val groceriesListStore: GroceriesListStore by inject()
-    private val itemSelectorViewModel: ItemSelectorViewModel by inject()
-    private val miamContext: ContextHandler by inject()
+    private val basketStore: BasketStore = MiamDI.basketStore
+    private val groceriesListStore: GroceriesListStore = MiamDI.groceriesListStore
+    private val itemSelectorViewModel: ItemSelectorViewModel = MiamDI.itemSelectorViewModel
+    private val miamContext: ContextHandler = MiamDI.contextHandler
     private val lineEntriesSubject = MutableSharedFlow<List<BasketEntry>>()
 
     public data class LineUpdateState(val lineUpdates: List<BasketEntry>): State

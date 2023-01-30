@@ -1,9 +1,9 @@
 package com.miam.kmmMiamCore.handler
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.KMMContext
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
-import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -15,11 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-public object ContextHandlerInstance: KoinComponent {
-    public val instance: ContextHandler by inject()
+public object ContextHandlerInstance {
+    public val instance: ContextHandler = MiamDI.contextHandler
 }
 
 public data class ContextHandlerState(
@@ -32,14 +30,15 @@ public sealed class ReadyEvent: Effect {
     public object isNotReady: ReadyEvent()
 }
 
-public class ContextHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class ContextHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("[ContextHandler] $exception ${exception.stackTraceToString()}")
     }
 
-    private val basketHandler: BasketHandler by inject()
-    private val preference: SingletonPreferencesViewModel by inject()
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val basketHandler: BasketHandler by lazy { MiamDI.basketHandler }
+    private val preference: SingletonPreferencesViewModel by lazy { MiamDI.preferencesViewModel }
 
     public val state: MutableStateFlow<ContextHandlerState> = MutableStateFlow(ContextHandlerState())
     private val readyEvent = MutableSharedFlow<ReadyEvent>()

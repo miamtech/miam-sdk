@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.helpers.letElse
@@ -12,22 +13,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 public sealed class LikeEffect(public open val recipeId: String): Effect {
     public data class Disliked(override val recipeId: String): LikeEffect(recipeId)
     public data class Liked(val recipe: Recipe): LikeEffect(recipe.id)
 }
 
-public object LikeStoreInstance: KoinComponent {
-    public val instance: LikeStore by inject()
+public object LikeStoreInstance {
+    public val instance: LikeStore by lazy { MiamDI.likeStore }
 }
 
-public class LikeStore: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class LikeStore: CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    private val recipeLikeRepositoryImp: RecipeLikeRepositoryImp by inject()
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val recipeLikeRepositoryImp: RecipeLikeRepositoryImp by lazy { MiamDI.recipeLikeRepository }
+    private val recipeRepositoryImp: RecipeRepositoryImp by lazy { MiamDI.recipeRepository }
 
     private val sideEffect = MutableSharedFlow<LikeEffect>()
     private val recipeLikesState = MutableStateFlow<Map<String, RecipeLike>>(mapOf())
