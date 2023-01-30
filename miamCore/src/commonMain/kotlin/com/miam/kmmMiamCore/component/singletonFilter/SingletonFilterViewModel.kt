@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -8,13 +9,10 @@ import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-public object FilterViewModelInstance: KoinComponent {
-    public val instance: SingletonFilterViewModel by inject()
+public object FilterViewModelInstance {
+    public val instance: SingletonFilterViewModel = MiamDI.recipeFilterViewModel
 }
 
 public sealed class FilterEffect: Effect {
@@ -23,7 +21,7 @@ public sealed class FilterEffect: Effect {
 
 public open class SingletonFilterViewModel:
     BaseViewModel<SingletonFilterContract.Event, SingletonFilterContract.State, SingletonFilterContract.Effect>() {
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
 
     private val sideEffect = MutableSharedFlow<FilterEffect>()
     public fun observeSideEffect(): Flow<FilterEffect> = sideEffect

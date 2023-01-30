@@ -31,24 +31,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.androidtestapp.di.myServicesModule
 import com.example.androidtestapp.models.Route
 import com.example.androidtestapp.views.Basket
 import com.example.androidtestapp.views.DeepLinkDropDownMenu
 import com.example.androidtestapp.views.Home
-import com.miam.kmmMiamCore.di.initKoin
 import com.miam.kmmMiamCore.services.RouteServiceInstance
-import com.miam.kmm_miam_sdk.android.di.KoinInitializer
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
 import com.miam.kmm_miam_sdk.android.ui.components.myMeal.MyMeal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.koin.android.ext.koin.androidContext
 
 class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
-
-    val koinModuleList = KoinInitializer.miamModuleList.toMutableList().apply { add(myServicesModule) }
 
     private val routes = listOf(
         Route("home", "home", Icons.Filled.Home),
@@ -58,10 +52,6 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
     )
 
     private fun initMiam() {
-        initKoin {
-            androidContext(this@MainActivity)
-            modules(koinModuleList.toList())
-        }
         MiamManager()
     }
 

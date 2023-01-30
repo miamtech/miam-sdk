@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.handler.Basket
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.AlterQuantityBasketEntry
 import com.miam.kmmMiamCore.base.mvi.BasketAction
 import com.miam.kmmMiamCore.base.mvi.BasketStore
@@ -11,11 +12,9 @@ import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-public object BasketHandlerInstance: KoinComponent {
-    public val instance: BasketHandler by inject()
+public object BasketHandlerInstance {
+    public val instance: BasketHandler = MiamDI.basketHandler
 }
 
 public data class BasketHandlerState(
@@ -31,8 +30,9 @@ public data class BasketHandlerState(
     }
 ): State
 
-public class BasketHandler: KoinComponent, CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    private val basketStore: BasketStore by inject()
+public class BasketHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val basketStore: BasketStore by lazy { MiamDI.basketStore }
 
     public val state: MutableStateFlow<BasketHandlerState> = MutableStateFlow(BasketHandlerState())
 

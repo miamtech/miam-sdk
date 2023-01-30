@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.base.mvi
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
@@ -14,8 +15,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 public data class GroceriesListState(val groceriesList: GroceriesList?): State {
     val recipeCount: Int
@@ -37,7 +36,6 @@ public sealed class GroceriesListEffect: Effect {
 }
 
 public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
-    KoinComponent,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
@@ -46,9 +44,11 @@ public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, 
 
     override val state: MutableStateFlow<GroceriesListState> = MutableStateFlow(GroceriesListState(null))
     private val sideEffect = MutableSharedFlow<GroceriesListEffect>()
-    private val groceriesListRepo: GroceriesListRepositoryImp by inject()
-    private val basketStore: BasketStore by inject()
-    private val analyticsService: Analytics by inject()
+
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val groceriesListRepo: GroceriesListRepositoryImp by lazy { MiamDI.groceriesListRepository }
+    private val basketStore: BasketStore by lazy { MiamDI.basketStore }
+    private val analyticsService: Analytics by lazy { MiamDI.analyticsService }
 
     override fun observeState(): StateFlow<GroceriesListState> = state
 

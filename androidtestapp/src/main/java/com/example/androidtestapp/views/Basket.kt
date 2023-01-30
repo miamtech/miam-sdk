@@ -21,12 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidtestapp.services.MyBasketService
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class Basket: KoinComponent {
+class Basket {
 
-    private val basketService: MyBasketService by inject()
+    private val basketService: MyBasketService by lazy { MyBasketService() }
 
     @Composable
     fun Content() {

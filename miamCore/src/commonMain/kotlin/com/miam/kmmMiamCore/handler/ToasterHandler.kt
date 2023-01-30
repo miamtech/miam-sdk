@@ -2,7 +2,6 @@ package com.miam.kmmMiamCore.handler
 
 import com.miam.kmmMiamCore.base.mvi.State
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.core.component.KoinComponent
 
 
 public data class ToasterState(
@@ -12,7 +11,7 @@ public data class ToasterState(
 ) : State
 
 
-public object ToasterHandler : KoinComponent {
+public object ToasterHandler {
 
     public val state: MutableStateFlow<ToasterState> = MutableStateFlow(ToasterState())
 

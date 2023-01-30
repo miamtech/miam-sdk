@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.recipe
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.GroceriesListAction
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 import kotlin.math.max
 import kotlin.math.min
 
@@ -39,12 +39,12 @@ public open class RecipeViewModel(public val routerVM: RouterOutletViewModel): B
         //setEvent(RecipeContract.Event.Error)
     }
 
-    private val groceriesListStore: GroceriesListStore by inject()
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
-    private val userStore: UserStore by inject()
-    private val analyticsService: Analytics by inject()
-    private val preference: SingletonPreferencesViewModel by inject()
+    private val groceriesListStore: GroceriesListStore = MiamDI.groceriesListStore
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val pointOfSaleStore: PointOfSaleStore = MiamDI.pointOfSaleStore
+    private val userStore: UserStore = MiamDI.userStore
+    private val analyticsService: Analytics = MiamDI.analyticsService
+    private val preference: SingletonPreferencesViewModel = MiamDI.preferencesViewModel
     private val guestSubject: MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val recipe: Recipe?

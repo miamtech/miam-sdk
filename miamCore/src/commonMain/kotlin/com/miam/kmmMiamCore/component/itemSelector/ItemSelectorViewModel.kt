@@ -1,23 +1,21 @@
 package com.miam.kmmMiamCore.component.itemSelector
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketAction
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
-public object ItemSelectorInstance: KoinComponent {
-    public val instance: ItemSelectorViewModel by inject()
+public object ItemSelectorInstance {
+    public val instance: ItemSelectorViewModel = MiamDI.itemSelectorViewModel
 }
 
-public open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>(),
-    KoinComponent {
+public open class ItemSelectorViewModel: BaseViewModel<ItemSelectorContract.Event, ItemSelectorContract.State, ItemSelectorContract.Effect>() {
 
-    private val basketStore: BasketStore by inject()
+    private val basketStore: BasketStore = MiamDI.basketStore
 
     override fun createInitialState(): ItemSelectorContract.State = ItemSelectorContract.State(
         selectedItem = BasicUiState.Loading,

@@ -11,10 +11,9 @@ import androidx.compose.ui.Modifier
 import com.example.androidtestapp.models.MyProductsRepository
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 import com.miam.kmm_miam_sdk.android.ui.components.recipeCard.RecipeView
-import org.koin.core.component.KoinComponent
 
 
-class Home(private val context: Context): KoinComponent {
+class Home(private val context: Context) {
     
     @Composable
     fun Content() {

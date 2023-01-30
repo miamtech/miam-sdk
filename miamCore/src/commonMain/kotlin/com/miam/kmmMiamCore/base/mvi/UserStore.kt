@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.base.mvi
 
 
+import com.miam.core.sdk.di.MiamDI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -9,8 +10,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 public data class UserState(
     val userId: String?,
@@ -25,13 +24,14 @@ public sealed class UserAction : Action {
 
 public sealed class UserEffect : Effect
 
-public class UserStore : Store<UserState, UserAction, UserEffect>, KoinComponent,
+public class UserStore : Store<UserState, UserAction, UserEffect>,
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     override val state: MutableStateFlow<UserState> = MutableStateFlow(UserState(null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()
-    private val groceriesListStore: GroceriesListStore by inject()
 
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val groceriesListStore: GroceriesListStore by lazy { MiamDI.groceriesListStore }
 
     override fun observeState(): StateFlow<UserState> = state
 

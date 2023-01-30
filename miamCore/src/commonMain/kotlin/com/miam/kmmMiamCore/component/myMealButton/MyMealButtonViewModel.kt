@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.myMealButton
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.GroceriesListEffect
@@ -10,16 +11,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-public open class MyMealButtonViewModel : BaseViewModel<MyMealButtonContract.Event, MyMealButtonContract.State, MyMealButtonContract.Effect>(), KoinComponent {
+public open class MyMealButtonViewModel : BaseViewModel<MyMealButtonContract.Event, MyMealButtonContract.State, MyMealButtonContract.Effect>() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error(" [ERROR][Miam][MyMeal] $exception")
     }
 
-    private val grocerieListStore: GroceriesListStore by inject()
+    private val grocerieListStore: GroceriesListStore = MiamDI.groceriesListStore
 
     override fun createInitialState(): MyMealButtonContract.State = MyMealButtonContract.State(recipeCount = BasicUiState.Empty)
     override fun handleEvent(event: MyMealButtonContract.Event) {

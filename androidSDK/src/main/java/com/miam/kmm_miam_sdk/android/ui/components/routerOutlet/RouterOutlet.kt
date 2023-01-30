@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorContract
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
@@ -28,15 +29,12 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-
-class RouterOutlet: KoinComponent {
+class RouterOutlet {
 
     private var vmRouter: RouterOutletViewModel = RouterOutletViewModel()
-    private val itemSelectorViewModel: ItemSelectorViewModel by inject()
-    private val routeService: RouteService by inject()
+    private val itemSelectorViewModel: ItemSelectorViewModel by lazy { MiamDI.itemSelectorViewModel }
+    private val routeService: RouteService by lazy { MiamDI.routeService }
 
     fun getViewModel(): RouterOutletViewModel {
         return vmRouter

@@ -8,17 +8,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
-import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class ItemsSelector: KoinComponent {
+class ItemsSelector {
 
-    private val vmItemSelector: ItemSelectorViewModel by inject()
-    private val routeService = RouteServiceInstance.instance
+    private val vmItemSelector: ItemSelectorViewModel by lazy { MiamDI.itemSelectorViewModel }
+    private val routeService by lazy { MiamDI.routeService }
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable

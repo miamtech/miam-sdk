@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.services
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.Action
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
@@ -17,12 +18,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Suppress("UserPreferencesInstance used by ios and component")
-public object RouteServiceInstance: KoinComponent {
-    public val instance: RouteService by inject()
+public object RouteServiceInstance {
+    public val instance: RouteService by lazy { MiamDI.routeService }
 }
 
 public abstract class Route(

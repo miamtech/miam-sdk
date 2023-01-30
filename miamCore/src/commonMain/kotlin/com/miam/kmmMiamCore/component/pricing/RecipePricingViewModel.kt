@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.pricing
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketStore
@@ -14,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 public open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, PricingContract.State, PricingContract.Effect>() {
 
@@ -22,9 +22,9 @@ public open class RecipePricingViewModel: BaseViewModel<PricingContract.Event, P
         LogHandler.error("Miam error in Pricing view $exception ${exception.stackTraceToString()}")
     }
 
-    private val basketStore: BasketStore by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
-    private val pricingRepository: PricingRepositoryImp by inject()
+    private val basketStore: BasketStore = MiamDI.basketStore
+    private val pointOfSaleStore: PointOfSaleStore = MiamDI.pointOfSaleStore
+    private val pricingRepository: PricingRepositoryImp = MiamDI.pricingRepository
 
     private val viewModelScope = CoroutineScope(coroutineContext)
 

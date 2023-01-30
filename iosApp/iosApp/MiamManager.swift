@@ -32,7 +32,6 @@ public class MiamManager: ObservableObject {
     
     // need to be private
     private init() {
-        KoinKt.doInitKoin()
         LogHandler.companion.info("Are you ready ? \(ContextHandlerInstance.shared.instance.isReady())")
         
         ContextHandlerInstance.shared.instance.setContext(context: MiamPreferencesContext())

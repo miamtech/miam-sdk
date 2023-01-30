@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.miam_core.data.datasource
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -11,8 +12,6 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 public object HttpRoutes {
@@ -35,10 +34,11 @@ public object HttpRoutes {
 
 public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
-    SupplierDataSource, PackageDataSource, TagDataSource, KoinComponent {
+    SupplierDataSource, PackageDataSource, TagDataSource {
 
-    private val userStore: UserStore by inject()
-    private val pointOfSaleStore: PointOfSaleStore by inject()
+    // TODO By lazy allows cyclic dependencies, even if it is bad design
+    private val userStore: UserStore by lazy { MiamDI.userStore }
+    private val pointOfSaleStore: PointOfSaleStore by lazy { MiamDI.pointOfSaleStore }
 
     private val httpClient = HttpClient {
         install(JsonFeature) {

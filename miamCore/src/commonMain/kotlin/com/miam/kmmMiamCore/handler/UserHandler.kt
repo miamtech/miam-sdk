@@ -1,13 +1,12 @@
 package com.miam.kmmMiamCore.handler
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.UserAction
 import com.miam.kmmMiamCore.base.mvi.UserStore
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-public object UserHandler : KoinComponent {
+public object UserHandler {
 
-    private val store: UserStore by inject()
+    private val store: UserStore = MiamDI.userStore
 
     public fun updateUserId(userId: String?) {
         if (store.sameUser(userId)) return

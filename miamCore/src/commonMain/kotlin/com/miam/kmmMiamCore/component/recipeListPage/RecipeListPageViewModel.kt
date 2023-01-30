@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.recipeListPage
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.component.preferences.PreferencesEffect
@@ -12,7 +13,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event, RecipeListPageContract.State, RecipeListPageContract.Effect>() {
 
@@ -20,9 +20,9 @@ public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event
         LogHandler.error("Miam error in recipe list view $exception")
     }
 
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val preference: SingletonPreferencesViewModel by inject()
-    private val recipeFilter: SingletonFilterViewModel by inject()
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val preference: SingletonPreferencesViewModel = MiamDI.preferencesViewModel
+    private val recipeFilter: SingletonFilterViewModel = MiamDI.recipeFilterViewModel
 
     init {
         listenPreferencesChanges()

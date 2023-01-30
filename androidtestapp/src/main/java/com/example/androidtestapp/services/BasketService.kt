@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import kotlin.random.Random
 
 class ExampleState(
@@ -18,7 +17,7 @@ class ExampleState(
 )
 
 
-class MyBasketService: CoroutineScope by CoroutineScope(Dispatchers.Main), KoinComponent {
+class MyBasketService: CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private val _RetailerBasketSubject: MutableStateFlow<ExampleState> = MutableStateFlow(ExampleState())
 

@@ -1,17 +1,15 @@
 package com.miam.kmmMiamCore.miam_core.data.repository
 
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.Tag
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+
+public class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource) {
 
 
-public class TagsRepositoryImp(private val tagDataSource: MiamAPIDatasource): KoinComponent {
-
-
-    private val pointOfSaleStore: PointOfSaleStore by inject()
+    private val pointOfSaleStore: PointOfSaleStore by lazy { MiamDI.pointOfSaleStore }
 
     public suspend fun getTagById(id: String): Tag {
         return tagDataSource.getTagById(id)

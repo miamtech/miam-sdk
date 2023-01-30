@@ -1,5 +1,6 @@
 package com.miam.kmmMiamCore.component.myMeal
 
+import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.BasketEffect
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
 
 public open class MyMealViewModel: BaseViewModel<MyMealContract.Event, MyMealContract.State, MyMealContract.Effect>() {
@@ -21,8 +21,8 @@ public open class MyMealViewModel: BaseViewModel<MyMealContract.Event, MyMealCon
         LogHandler.error(" [ERROR][Miam][MyMeal] $exception")
     }
 
-    private val basketStore: BasketStore by inject()
-    private val groceriesListStore: GroceriesListStore by inject()
+    private val basketStore: BasketStore = MiamDI.basketStore
+    private val groceriesListStore: GroceriesListStore = MiamDI.groceriesListStore
 
     override fun createInitialState(): MyMealContract.State =
         MyMealContract.State(

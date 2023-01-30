@@ -1,5 +1,7 @@
 package com.miam.kmmMiamCore.component.favoritePage
 
+import com.miam.core.sdk.di.MiamDI
+import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.LikeEffect
 import com.miam.kmmMiamCore.base.mvi.LikeStore
@@ -9,10 +11,8 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
-public open class FavoritePageViewModel:
-    com.miam.kmmMiamCore.base.mvi.BaseViewModel<FavoritePageContract.Event, FavoritePageContract.State, FavoritePageContract.Effect>() {
+public open class FavoritePageViewModel: BaseViewModel<FavoritePageContract.Event, FavoritePageContract.State, FavoritePageContract.Effect>() {
 
     public companion object {
         public val FILTERS: Map<String, String> = mapOf("liked" to "true", "active" to "true,false")
@@ -22,8 +22,8 @@ public open class FavoritePageViewModel:
         LogHandler.error("Miam error in favorite view $exception")
     }
 
-    private val recipeRepositoryImp: RecipeRepositoryImp by inject()
-    private val likeStore: LikeStore by inject()
+    private val recipeRepositoryImp: RecipeRepositoryImp = MiamDI.recipeRepository
+    private val likeStore: LikeStore = MiamDI.likeStore
 
     init {
         loadPage()
