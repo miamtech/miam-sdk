@@ -107,9 +107,9 @@ struct BasketPreviewRow: View {
                         HStack {
                             Spacer()
                             HStack {
-                                if previewLine.inlineTag != nil {
+                                if let inlineTag = previewLine.inlineTag {
                                     HStack {
-                                        Text(previewLine.inlineTag!)
+                                        Text(inlineTag)
                                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                                         Image.miamImage(icon: .look)
                                             .resizable()
