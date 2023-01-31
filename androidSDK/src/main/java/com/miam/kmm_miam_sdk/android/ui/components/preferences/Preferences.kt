@@ -77,9 +77,7 @@ class Preferences @JvmOverloads constructor(
             },
             emptyView = {
                 Box {}
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 }

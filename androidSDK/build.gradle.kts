@@ -38,7 +38,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += "-Xjvm-default=all"
+        freeCompilerArgs += listOf(
+            "-Xjvm-default=all",
+            "-opt-in=coil.annotation.ExperimentalCoilApi"
+        )
     }
 }
 

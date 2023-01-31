@@ -74,7 +74,7 @@ class PreferencesSearch @JvmOverloads constructor(
         Column(
             Modifier
                 .fillMaxSize()
-                .background(white)             
+                .background(white)
         ) {
             if (Template.SearchPreferencesTemplate != null) {
                 Template.SearchPreferencesTemplate?.let {
@@ -84,7 +84,7 @@ class PreferencesSearch @JvmOverloads constructor(
                     }
                 }
             } else {
-                Row(Modifier.padding(vertical = 24.dp, horizontal = 16.dp) ,verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.padding(vertical = 24.dp, horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                     BackButton(back)
                     SearchContainer {
                         TextField(
@@ -133,7 +133,10 @@ class PreferencesSearch @JvmOverloads constructor(
                                 preferencesSearchVM.resetState()
                                 addTag(tag)
                             }) {
-                                Row(Modifier.fillMaxWidth().padding( horizontal = 16.dp)) {
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)) {
                                     Text(
                                         text = tag.attributes!!.name,
                                         style = body,
@@ -160,9 +163,7 @@ class PreferencesSearch @JvmOverloads constructor(
                     Box {
                     }
                 }
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 }

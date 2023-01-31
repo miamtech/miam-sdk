@@ -36,7 +36,11 @@ public sealed class GroceriesListEffect: Effect {
     public data class RecipeRemoved(val recipeId: String): GroceriesListEffect()
 }
 
-public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>, CoroutineScope by MainScope() {
+public interface GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect> {
+    public fun getGroceriesList(): GroceriesList?
+}
+
+public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("[ERROR][Miam][GroceriesListStore] $exception ${exception.stackTraceToString()}")
@@ -54,7 +58,7 @@ public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, 
 
     override fun observeSideEffect(): Flow<GroceriesListEffect> = sideEffect
 
-    public fun getGroceriesList(): GroceriesList? {
+    public override fun getGroceriesList(): GroceriesList? {
         return state.value.groceriesList
     }
 

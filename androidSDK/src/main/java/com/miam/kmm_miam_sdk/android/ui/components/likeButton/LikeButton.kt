@@ -55,9 +55,7 @@ class LikeButton {
             },
             emptyView = {
                 //TODO
-            },
-            onTryAgain = {},
-            onCheckAgain = {},
+            }
         )
     }
 

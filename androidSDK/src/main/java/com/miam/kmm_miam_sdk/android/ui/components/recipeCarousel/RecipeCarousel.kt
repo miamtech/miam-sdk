@@ -16,7 +16,7 @@ class RecipeCarousel @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+): AbstractComposeView(context, attrs, defStyleAttr) {
 
     private var vmRecipeCarousel: RecipeCarouselViewModel = RecipeCarouselViewModel()
     private var recipeListSize = 4
@@ -52,9 +52,7 @@ class RecipeCarousel @JvmOverloads constructor(
             },
             emptyView = {
                 Box {}
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 }

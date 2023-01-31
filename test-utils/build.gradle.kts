@@ -13,7 +13,6 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         api(project(":core"))
         api(libs.moko.resources.core)
-        api(libs.kotlinx.coroutines.core)
         api(libs.kotlinx.coroutines.test)
         api(libs.test.turbine)
         api(libs.kotlin.test.common)

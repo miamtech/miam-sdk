@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
@@ -125,8 +126,8 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
                             }
                         }
                     }
-                ) { _ ->
-                    NavHost(navController = navController, startDestination = "home") {
+                ) { padding ->
+                    NavHost(modifier = Modifier.padding(padding), navController = navController, startDestination = "home") {
                         composable("home") {
                             Box {
                                 Home(this@MainActivity).Content()

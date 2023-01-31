@@ -2,9 +2,11 @@ package com.miam.core.sdk.di
 
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
+import com.miam.kmmMiamCore.base.mvi.GroceriesListStoreImpl
 import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.base.mvi.UserStore
+import com.miam.kmmMiamCore.base.mvi.UserStoreImpl
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
@@ -38,10 +40,10 @@ public object MiamDI {
     internal val tagsRepository: TagsRepositoryImp by lazy { TagsRepositoryImp(dataSource) }
     // Store
     internal val basketStore: BasketStore by lazy { BasketStore() }
-    internal val groceriesListStore: GroceriesListStore by lazy { GroceriesListStore() }
+    internal val groceriesListStore: GroceriesListStore by lazy { GroceriesListStoreImpl() }
     internal val likeStore: LikeStore by lazy { LikeStore() }
     internal val pointOfSaleStore: PointOfSaleStore by lazy { PointOfSaleStore() }
-    internal val userStore: UserStore by lazy { UserStore() }
+    internal val userStore: UserStore by lazy { UserStoreImpl(groceriesListStore) }
     // ViewModel
     public val itemSelectorViewModel: ItemSelectorViewModel by lazy { ItemSelectorViewModel() }
     public val preferencesViewModel: SingletonPreferencesViewModel by lazy { SingletonPreferencesViewModel() }

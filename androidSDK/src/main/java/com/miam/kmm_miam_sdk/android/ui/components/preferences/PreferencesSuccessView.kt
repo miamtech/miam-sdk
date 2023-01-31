@@ -320,11 +320,12 @@ fun PreferencesSuccessView(
         PreferencesContent.ALL_PREFRENCES -> {
             Scaffold(
                 topBar = { PreferencesHeader(closePreferences) },
-                content = {
+                content = { padding ->
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .background(color = backgroundGrey)
+                            .padding(padding)
                             .padding(horizontal = 16.dp)
                             .verticalScroll(rememberScrollState())
                     ) {

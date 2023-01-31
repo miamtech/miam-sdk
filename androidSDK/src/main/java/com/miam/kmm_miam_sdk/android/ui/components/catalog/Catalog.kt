@@ -101,9 +101,7 @@ class Catalog @JvmOverloads constructor(
                     },
                     emptyView = {
                         //TODO
-                    },
-                    onTryAgain = {},
-                    onCheckAgain = {},
+                    }
                 )
             }
         }

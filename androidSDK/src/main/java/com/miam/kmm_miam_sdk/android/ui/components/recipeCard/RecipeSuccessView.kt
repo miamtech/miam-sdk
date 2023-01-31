@@ -20,7 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
@@ -103,7 +102,6 @@ fun RecipeSuccessCard(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RecipeCardImageView(recipePicture: String, goToDetail: () -> Unit) {
     Box(modifier = RecipeCardStyle.imageContainer) {

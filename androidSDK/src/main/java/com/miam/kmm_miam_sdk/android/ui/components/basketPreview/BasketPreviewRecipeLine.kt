@@ -12,7 +12,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
@@ -28,7 +27,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import kotlin.math.max
 import kotlin.math.round
 
-@ExperimentalCoilApi
 @Composable
 fun BasketPreviewRecipeLine(
     line: BasketPreviewLine,

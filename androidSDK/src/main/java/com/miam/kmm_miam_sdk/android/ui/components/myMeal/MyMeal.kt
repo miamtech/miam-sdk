@@ -2,7 +2,12 @@ package com.miam.kmm_miam_sdk.android.ui.components.myMeal
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +30,7 @@ class MyMeal @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+): AbstractComposeView(context, attrs, defStyleAttr) {
     private val myMealVm = MyMealViewModel()
     private val modal = RouterOutlet()
 
@@ -57,9 +62,7 @@ class MyMeal @JvmOverloads constructor(
             },
             emptyView = {
                 Box {}
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 

@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
@@ -37,7 +36,6 @@ class BasketPreview(
 
     private val vmBasketPreview: BasketPreviewViewModel = BasketPreviewViewModel(recipeId)
 
-    @ExperimentalCoilApi
     @Composable
     fun content() {
         fun removeRecipeAndClose() {
@@ -55,9 +53,10 @@ class BasketPreview(
                     BasketPreviewHeader(goToDetail, previous)
                 }
             },
-            content = {
+            content = { padding ->
                 Column(
                     modifier = Modifier
+                        .padding(padding)
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
@@ -99,13 +98,12 @@ fun UpdatableContent(
             BasketPreviewSuccessView(
                 line,
                 vmBasketPreview,
-                updateGuest,
+                { guestCount -> vmBasketPreview.updateGuest(updateGuest, guestCount) },
+                state.isReloading,
                 goToDetail,
                 goToItemSelector
             )
         },
-        onTryAgain = { /*TODO*/ },
-        onCheckAgain = { /*TODO*/ },
         loadingView = { BasketPreviewLoader() }
     )
 }
@@ -116,15 +114,16 @@ fun BasketPreviewSuccessView(
     line: BasketPreviewLine,
     vmBasketPreview: BasketPreviewViewModel,
     updateGuest: (guestCount: Int) -> Unit,
+    isReloading: Boolean,
     goToDetail: () -> Unit,
     goToItemSelector: () -> Unit
 ) {
     Column {
         BasketPreviewRecipeLine(
             line = line,
-            { guestCount -> vmBasketPreview.updateGuest(updateGuest, guestCount) },
+            updateGuest,
             goToDetail,
-            vmBasketPreview.uiState.value.isReloading
+            isReloading
         )
         BasketPreviewItem(
             line = line,

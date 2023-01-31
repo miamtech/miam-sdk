@@ -90,8 +90,6 @@ fun PriceStateManager(vmPrice: RecipePricingViewModel) {
                 RecipePriceView(price.pricePerServe)
             },
             emptyView = { EmptyState() },
-            onTryAgain = { /*TODO*/ },
-            onCheckAgain = { /*TODO*/ },
             loadingView = { PriceShimmer() }
         )
     }

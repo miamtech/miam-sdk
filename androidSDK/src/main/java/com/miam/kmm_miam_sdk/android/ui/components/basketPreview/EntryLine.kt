@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
@@ -36,7 +35,6 @@ import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
 import java.util.*
 
-@ExperimentalCoilApi
 @Composable
 fun EntryLine(
     entry: BasketPreviewLine,

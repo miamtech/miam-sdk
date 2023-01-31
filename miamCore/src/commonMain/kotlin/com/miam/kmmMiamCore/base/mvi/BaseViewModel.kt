@@ -5,11 +5,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+// TODO Romain: is UiEffect necessary? side effects should be use carefully
 public abstract class BaseViewModel<Event : UiEvent, State : UiState, Effect : UiEffect> : MainExecutor() {
 
     private val initialState: State by lazy { createInitialState() }
     public abstract fun createInitialState(): State
 
+    // TODO Romain: This is a bad idea, a state is only a representation of a Screen (or part of it)
+    //  Reading the current value only leads to wrong behaviour
     public val currentState: State
         get() = uiState.value
 
@@ -17,12 +20,15 @@ public abstract class BaseViewModel<Event : UiEvent, State : UiState, Effect : U
     public val uiState: StateFlow<State> = _uiState.asStateFlow()
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
+    // TODO Romain: There is no reason to expose events outside of the MVI processor
     public val event: SharedFlow<Event> = _event.asSharedFlow()
 
+    // TODO Romain: Shared Flow is made for this purpose
     private val _effect: Channel<Effect> = Channel()
     public val effect: Flow<Effect> = _effect.receiveAsFlow()
 
     init {
+        // TODO Romain: Just inline the code here
         subscribeEvents()
     }
 

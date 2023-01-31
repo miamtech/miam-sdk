@@ -26,9 +26,9 @@ class ItemsSelector {
 
         ManagementResourceState(
             resourceState = state.selectedItem,
-            successView = { item ->
-                requireNotNull(item)
-                ItemsSelectorSuccessView(item, state.items, { routeService.previous() }, { item, index -> vmItemSelector.choose(item, index) })
+            successView = { currentItem ->
+                requireNotNull(currentItem)
+                ItemsSelectorSuccessView(currentItem, state.items, { routeService.previous() }, { item, index -> vmItemSelector.choose(item, index) })
             },
             loadingView = {
                 if (Template.itemSelectorLoadingTemplate != null) {
@@ -49,9 +49,7 @@ class ItemsSelector {
                 } else {
                     Box {}
                 }
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 }

@@ -43,9 +43,7 @@ class MyMealButton @JvmOverloads constructor(
             },
             emptyView = {
                 MyMealButtonEmptyView()
-            },
-            onTryAgain = { },
-            onCheckAgain = { },
+            }
         )
     }
 }
