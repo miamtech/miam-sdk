@@ -11,7 +11,7 @@ import miamCore
 @available(iOS 14, *)
 public struct CatalogRecipePageNoResultsView: View {
     let searchString: String = FilterViewModelInstance.shared.instance.currentState.searchString ?? ""
-    let browseCatalogAction: () -> Void
+    let browseCatalogAction: (() -> Void)?
     var showingFavorites = false
 
     public var body: some View {
@@ -27,7 +27,9 @@ public struct CatalogRecipePageNoResultsView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.miamColor(.white))
                     Button {
-                        browseCatalogAction()
+                        if let browseCatalogAction {
+                            browseCatalogAction()
+                        }
                     } label: {
                         Text("\(MiamText.sharedInstance.browseRecipesText)")
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)

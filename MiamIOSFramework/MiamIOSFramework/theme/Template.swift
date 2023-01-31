@@ -262,12 +262,10 @@ public class Template {
     ) -> AnyView)? = nil
     
     /**
-     catalog: CatalogVM
      close: () -> Void
      search: () -> Void
      */
     public var catalogSearchViewTemplate: ((
-        CatalogVM,
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)? = nil
@@ -279,7 +277,7 @@ public class Template {
      */
     public var catalogRecipePageNoResultsViewTemplate: ((
         String,
-        @escaping () -> Void,
+        (() -> Void)?,
         Bool
     ) -> AnyView)? = nil
     
