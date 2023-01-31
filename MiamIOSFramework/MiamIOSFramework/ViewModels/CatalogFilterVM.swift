@@ -23,13 +23,13 @@ public class CatalogFilterViewModel: ObservableObject {
 
     private init() {
         self.viewModelInstance.collect(flow: viewModelInstance.uiState) { data in
-            let state = data as! SingletonFilterContractState
+            let state = data as? SingletonFilterContractState
 
             self.state = state
-            self.numberOfRecipes = Int(state.numberOfResult)
-            self.difficulty = state.difficulty
-            self.cost = state.cost
-            self.time = state.time
+            self.numberOfRecipes = Int(state?.numberOfResult ?? 0)
+            self.difficulty = state?.difficulty ?? []
+            self.cost = state?.cost ?? []
+            self.time = state?.time ?? []
         }
     }
 

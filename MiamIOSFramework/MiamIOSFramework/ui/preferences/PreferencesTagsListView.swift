@@ -44,7 +44,7 @@ public struct PreferencesTagsListView: View {
         }
     }
 
-    public func displayTags(in g: GeometryProxy) -> some View {
+    public func displayTags(in geometry: GeometryProxy) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
 
@@ -54,16 +54,16 @@ public struct PreferencesTagsListView: View {
                     onToggleTag(tag)
                 })
                 .padding([.horizontal, .vertical], 4)
-                .alignmentGuide(.leading, computeValue: { d in
-                    if abs(width - d.width) > g.size.width {
+                .alignmentGuide(.leading, computeValue: { dimension in
+                    if abs(width - dimension.width) > geometry.size.width {
                         width = 0
-                        height -= d.height
+                        height -= dimension.height
                     }
                     let result = width
                     if tag == self.tags.first! {
                         width = 0 // last item
                     } else {
-                        width -= d.width
+                        width -= dimension.width
                     }
                     return result
                 })
@@ -79,10 +79,10 @@ public struct PreferencesTagsListView: View {
                 onAddTagTapped()
             })
             .padding([.horizontal, .vertical], 4)
-            .alignmentGuide(.leading, computeValue: { d in
-                if abs(width - d.width) > g.size.width {
+            .alignmentGuide(.leading, computeValue: { dimension in
+                if abs(width - dimension.width) > geometry.size.width {
                     width = 0
-                    height -= d.height
+                    height -= dimension.height
                 }
                 let result = width
                 width = 0

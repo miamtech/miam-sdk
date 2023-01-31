@@ -51,11 +51,14 @@ struct BasketPreviewRow: View {
     }
 
     func onQuantityChanged(value: Int) {
-        if value == 0 {
-            viewModel.removeBasketEntry(entry: previewLine.record as! BasketEntry)
+        guard let entry = previewLine.record as? BasketEntry else {
             return
         }
-        viewModel.updateBasketEntry(entry: previewLine.record as! BasketEntry, finalQty: Int32(value))
+        if value == 0 {
+            viewModel.removeBasketEntry(entry: entry)
+            return
+        }
+        viewModel.updateBasketEntry(entry: entry, finalQty: Int32(value))
     }
 
     var body: some View {
@@ -68,7 +71,7 @@ struct BasketPreviewRow: View {
                 productName,
                 productPrice,
                 Int(previewLine.count),
-                Int((previewLine.record as! BasketEntry).itemsCountOrZero),
+                Int((previewLine.record as? BasketEntry)?.itemsCountOrZero ?? 0),
                 updatingBasketEntryId,
                 removeProductAction,
                 replaceProductAction,
@@ -140,7 +143,7 @@ struct BasketPreviewRow: View {
                 // Ingredeient View
                 HStack {
                     HStack {
-                        if (previewLine.record as! BasketEntry).itemsCountOrZero > 1 {
+                        if let itemCount = (previewLine.record as? BasketEntry)?.itemsCountOrZero, itemCount > 1 {
                             Button(action: {
                                 replaceProductAction()
                             }) {
@@ -152,9 +155,7 @@ struct BasketPreviewRow: View {
                                     .foregroundColor(Color.miamColor(.primaryText))
                             }.frame(width: 100, height: 18, alignment: .topTrailing)
                         }
-                        Spacer().onAppear(perform: {
-                            print((previewLine.record as! BasketEntry).relationships!.items!.data.description )
-                        })
+                        Spacer()
 
                         // Plus Minus View
                         CounterView(

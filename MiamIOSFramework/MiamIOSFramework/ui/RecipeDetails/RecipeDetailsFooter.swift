@@ -26,7 +26,7 @@ public struct RecipeDetailsFooter: View {
             if let template = Template.sharedInstance.recipeDetailFooterTemplate {
                 template(recipeVM.recipe!, recipeVM.guest, recipeVM.isInCart, goToPreview, buy)
             } else {
-                defaultRecipeDetailFooterView(recipeId: recipeId, guest: recipeVM.guest,
+                DefaultRecipeDetailFooterView(recipeId: recipeId, guest: recipeVM.guest,
                                               isInCart: recipeVM.isInCart, goToPreview: goToPreview, buy: buy)
             }
         }
@@ -34,7 +34,7 @@ public struct RecipeDetailsFooter: View {
 }
 
 @available(iOS 14, *)
-public struct defaultRecipeDetailFooterView: View {
+public struct DefaultRecipeDetailFooterView: View {
     let recipeId: String
     let guest: Int
     let isInCart: Bool

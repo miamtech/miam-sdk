@@ -134,7 +134,9 @@ public struct BasketPreviewSuccessView: View {
             analytics.sendEvent(
                 eventType: Analytics.companion.EVENT_PAGEVIEW,
                 path: "/basket-preview",
-                props: Analytics.PlausibleProps(recipe_id: recipeVm.recipeId, category_id: nil, entry_name: nil, basket_id: nil, miam_amount: nil, total_amount: nil, pos_id: nil, pos_total_amount: nil, pos_name: nil, search_term: nil)
+                props: Analytics.PlausibleProps(recipe_id: recipeVm.recipeId, category_id: nil, entry_name: nil,
+                                                basket_id: nil, miam_amount: nil, total_amount: nil, pos_id: nil,
+                                                pos_total_amount: nil, pos_name: nil, search_term: nil)
             )})
     }
 }

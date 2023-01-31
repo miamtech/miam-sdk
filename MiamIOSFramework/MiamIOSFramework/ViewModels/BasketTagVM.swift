@@ -19,10 +19,10 @@ public class BasketTagVM: BasketTagViewModel, ObservableObject {
         super.init(vmRouter: vMRouter)
         // TODO handle other states
         collect(flow: uiState, collect: { data in
-            let state = data as! BasketTagContractState
-            switch state.recipeList {
+            let state = data as? BasketTagContractState
+            switch state?.recipeList {
                 case let success as BasicUiStateSuccess<NSArray>:
-                    self.recipeList = success.data!
+                    self.recipeList = success.data
                 default:
                     break
                 }

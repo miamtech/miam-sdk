@@ -22,7 +22,9 @@ internal struct RecipesView: View {
     let defaultTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
     let specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
 
-    init(title: String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void, showingFavorites: Bool, specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
+    init(title: String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat,
+         browseCatalogAction: @escaping () -> Void, showingFavorites: Bool,
+         specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -34,7 +36,9 @@ internal struct RecipesView: View {
         self.specialTitleTemplate = specialTitleTemplate
     }
 
-    init(categoryId: String, categoryTitle: String, categorySubtitle: String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void, showingFavorites: Bool) {
+    init(categoryId: String, categoryTitle: String, categorySubtitle: String?, recipesListColumns: Int,
+         recipeListSpacing: CGFloat, recipeCardHeight: CGFloat,
+         browseCatalogAction: @escaping () -> Void, showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns

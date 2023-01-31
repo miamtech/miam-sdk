@@ -64,7 +64,9 @@ public struct CatalogView: View {
                 usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
-        self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, willNavigateTo: willNavigateTo)
+        self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction,
+                  recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing,
+                  recipeCardHeight: recipeCardHeight, willNavigateTo: willNavigateTo)
         catalog = catalogViewModel
     }
 
@@ -172,7 +174,13 @@ internal struct CatalogSuccessView: View {
     let recipesListSpacing: CGFloat
     let recipeCardHeight: CGFloat
 
-    init(recipesListColumns: Int, recipesListSpacing: CGFloat, recipeCardHeight: CGFloat, packages: [CatalogPackage], content: CatalogContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
+    init(recipesListColumns: Int,
+         recipesListSpacing: CGFloat,
+         recipeCardHeight: CGFloat,
+         packages: [CatalogPackage],
+         content: CatalogContent,
+         showingPackageRecipes: Binding<Bool>,
+         showingFavorites: Binding<Bool>,
          headerHeight: Binding<Double>,
          browseCatalogAction: @escaping () -> Void,
          navigateToRecipeAction: @escaping (Package) -> Void,
@@ -196,7 +204,7 @@ internal struct CatalogSuccessView: View {
 
     var body: some View {
         switch catalogContent {
-            case .categoriesList:
+        case .categoriesList:
                 if packages.isEmpty {
                     CatalogRecipePageNoResultsView( browseCatalogAction: {}).frame(maxHeight: .infinity)
                 } else {
@@ -210,18 +218,28 @@ internal struct CatalogSuccessView: View {
                         }.padding([.top], Dimension.sharedInstance.lPadding)
                     }
                 }
-            case .wordSearch:
+        case .wordSearch:
             let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
             RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                 browseCatalogAction()}, showingFavorites: showingFavorites, specialTitleTemplate: Template.sharedInstance.recipesListSearchTitleTemplate)
             case .filterSearch:
-                RecipesView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                        browseCatalogAction()}, showingFavorites: showingFavorites)
-        case .category: RecipesView(categoryId: categoryId, categoryTitle: categoryTitle, categorySubtitle: categorySubtitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                browseCatalogAction()}, showingFavorites: showingFavorites)
-            case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                    browseCatalogAction()}, showingFavorites: showingFavorites)
-            default:  HStack {}
+                RecipesView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns,
+                            recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight,
+                            browseCatalogAction: {
+                                browseCatalogAction()
+                            }, showingFavorites: showingFavorites)
+        case .category: RecipesView(categoryId: categoryId, categoryTitle: categoryTitle,
+                                    categorySubtitle: categorySubtitle, recipesListColumns: recipesListColumns,
+                                    recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight,
+                                    browseCatalogAction: {
+                                        browseCatalogAction()
+                        }, showingFavorites: showingFavorites)
+        case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle,
+                                        recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing,
+                                        recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                                            browseCatalogAction()
+                            }, showingFavorites: showingFavorites)
+        default:  HStack {}
         }
     }
 }
@@ -384,7 +402,7 @@ internal struct CatalogToolbarView: View {
 }
 
 @available(iOS 14, *)
-struct CatalogView_Preview: PreviewProvider {
+struct CatalogViewPreview: PreviewProvider {
     static var previews: some View {
         CatalogView()
     }

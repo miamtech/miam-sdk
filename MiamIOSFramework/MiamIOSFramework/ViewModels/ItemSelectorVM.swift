@@ -21,9 +21,8 @@ public class ItemSelectorVM: ObservableObject {
 
         sharedInstance.collect(flow: sharedInstance.uiState,
                                                      collect: { data in
-            let state = data as! ItemSelectorContractState
-            self.state = state
-            switch state.selectedItem {
+            self.state = data as? ItemSelectorContractState
+            switch self.state?.selectedItem {
             case let success as BasicUiStateSuccess<BasketPreviewLine>:
                 self.selectedItem = success.data
             default:

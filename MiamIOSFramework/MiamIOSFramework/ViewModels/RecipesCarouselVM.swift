@@ -17,9 +17,9 @@ class RecipeCarouselVM: RecipeCarouselViewModel, ObservableObject {
     override init() {
         super.init()
         self.collect(flow: uiState) { data in
-            let state = data as! RecipeCarouselContractState
+            let state = data as? RecipeCarouselContractState
             self.state = state
-            switch state.suggestions {
+            switch state?.suggestions {
             case let success as BasicUiStateSuccess<NSArray>:
                 if let suggestions = success.data as? [Recipe] {
                     self.suggestions = suggestions

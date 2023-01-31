@@ -32,9 +32,9 @@ public class MyMealVM: MyMealViewModel, ObservableObject {
     override public init() {
         super.init()
         collect(flow: uiState) { data in
-            let state = data as! MyMealContractState
+            let state = data as? MyMealContractState
             self.state = state
-            switch state.lines {
+            switch state?.lines {
             case let success as BasicUiStateSuccess<NSArray>: // Must use an object, thus NSArray
                 if let basketPreviewLines = success.data as? [BasketPreviewLine] {
                     self.meals = basketPreviewLines.map { line in
