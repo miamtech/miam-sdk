@@ -22,8 +22,8 @@ struct CatalogFiltersView: View {
     }
 
     var body: some View {
-        if Template.sharedInstance.catalogFiltersViewTemplate != nil {
-            Template.sharedInstance.catalogFiltersViewTemplate!
+        if let template = Template.sharedInstance.catalogFiltersViewTemplate {
+            template
         } else {
             ScrollView {
                 VStack {
@@ -84,8 +84,8 @@ internal struct CatalogFilterSection: View {
     let filters: [CatalogFilterOptions]
     let filterSelected: (CatalogFilterOptions) -> Void
     var body: some View {
-        if Template.sharedInstance.catalogFiltersSectionTemplate != nil {
-            Template.sharedInstance.catalogFiltersSectionTemplate!(title, filters, filterSelected)
+        if let template = Template.sharedInstance.catalogFiltersSectionTemplate {
+            template(title, filters, filterSelected)
         } else {
             VStack(alignment: .leading) {
                 Text(title)
@@ -108,8 +108,8 @@ internal struct CatalogFilterRow: View {
         filter.isSelected ? .check : .cross
     }
     var body: some View {
-        if Template.sharedInstance.catalogFilterRowTemplate != nil {
-            Template.sharedInstance.catalogFilterRowTemplate!(filter, filterSelected)
+        if let template = Template.sharedInstance.catalogFilterRowTemplate {
+            template(filter, filterSelected)
         } else {
             HStack {
                 Button {

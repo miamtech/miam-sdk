@@ -153,8 +153,8 @@ internal struct IngredientsHeader: View {
     }
 
     var body: some View {
-        if Template.sharedInstance.ingredientFoldableHeaderTemplate != nil {
-            Template.sharedInstance.ingredientFoldableHeaderTemplate!(title, $folded)
+        if let template = Template.sharedInstance.ingredientFoldableHeaderTemplate {
+            template(title, $folded)
         } else {
             HStack {
                 Text(title)

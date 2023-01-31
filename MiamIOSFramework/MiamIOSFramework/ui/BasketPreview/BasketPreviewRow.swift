@@ -63,8 +63,8 @@ struct BasketPreviewRow: View {
 
     var body: some View {
 
-        if Template.sharedInstance.basketPreviewRowTemplate != nil {
-            Template.sharedInstance.basketPreviewRowTemplate!(
+        if let template = Template.sharedInstance.basketPreviewRowTemplate {
+            template(
                 productName,
                 productPictureURL,
                 productBrandName,
