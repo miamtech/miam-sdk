@@ -8,8 +8,8 @@
 import miamCore
 
 @available(iOS 14, *)
-public class RecipeCardVM : RecipeViewModel, ObservableObject {
-   
+public class RecipeCardVM: RecipeViewModel, ObservableObject {
+
     @Published public var recipe: Recipe?
     @Published var state: RecipeContractState?
     @Published var isInCart: Bool = false
@@ -34,7 +34,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
             switch state.recipeState {
                 case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
-                    
+
                     self.objectWillChange.send()
                 default:
                     break
@@ -42,7 +42,7 @@ public class RecipeCardVM : RecipeViewModel, ObservableObject {
             }
         )
     }
-    
+
     var isLikeEnabled: Bool {
         return state?.likeIsEnable ?? false
     }

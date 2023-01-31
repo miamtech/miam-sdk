@@ -32,7 +32,7 @@ struct MyMealButtonSuccessView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(EdgeInsets(top: 16.0, leading: 20.0, bottom: 8.0, trailing: 20.0))
-                
+
                 // Little trick to have corner radius only on top corners
             }
             .background(Color.clear)

@@ -15,14 +15,14 @@ public struct PreferencesListView: View {
     let subtitle: String
     let preferences: [CheckableTag]
     let onToggleTag: (CheckableTag) -> Void
-   
+
     public init(title: String, subtitle: String, preferences: [CheckableTag], onToggleTag: @escaping (CheckableTag) -> Void) {
         self.title = title
         self.subtitle = subtitle
         self.preferences = preferences
         self.onToggleTag = onToggleTag
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.preferencesListViewTemplate {
             template(title, subtitle, preferences, onToggleTag)
@@ -34,7 +34,7 @@ public struct PreferencesListView: View {
                 Text(subtitle)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyStyle)
                     .padding(.bottom, Dimension.sharedInstance.mPadding)
-                
+
                 VStack(alignment: .leading) {
                     ForEach(preferences, id: \.self) { tag in
                         PreferenceListItemView(tag: tag) { tag in
@@ -54,12 +54,12 @@ public struct PreferencesListView: View {
 public struct PreferenceListItemView: View {
     public let tag: CheckableTag
     public let onToggleTag: (CheckableTag) -> Void
-    
+
     public init(tag: CheckableTag, onToggleTag: @escaping (CheckableTag) -> Void) {
         self.tag = tag
         self.onToggleTag = onToggleTag
     }
-    
+
     var tagName: String {
         get {
             if let name = tag.tag.attributes?.name {
@@ -68,14 +68,14 @@ public struct PreferenceListItemView: View {
             return ""
         }
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.preferenceListItemViewTemplate {
             template(tag, onToggleTag)
         } else {
             VStack(alignment: .leading) {
                 HStack {
-                    Button(action:{
+                    Button(action: {
                         onToggleTag(tag)
                     }) {
                         ZStack(alignment: .center) {
@@ -83,9 +83,9 @@ public struct PreferenceListItemView: View {
                                 .fill(.white)
                                 .cornerRadius(4)
                                 .border(Color.miamColor(.borderLight), width: 1)
-                                .frame(width:20, height:20, alignment: .center)
-                            
-                            if(tag.isChecked) {
+                                .frame(width: 20, height: 20, alignment: .center)
+
+                            if tag.isChecked {
                                 Image.miamImage(icon: .check)
                                     .renderingMode(.original).frame( alignment: .center)
                             }

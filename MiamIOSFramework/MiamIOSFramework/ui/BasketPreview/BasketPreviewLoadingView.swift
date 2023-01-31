@@ -21,5 +21,3 @@ struct BasketPreviewLoadingView: View {
         }
     }
 }
-
-

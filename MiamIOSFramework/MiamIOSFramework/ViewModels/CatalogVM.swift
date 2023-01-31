@@ -32,7 +32,6 @@ public struct CatalogPackage: Identifiable {
     }
 }
 
-
 @available(iOS 14, *)
 public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
@@ -57,7 +56,7 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
             }
         }
     }
-    
+
     public convenience init(categoryID: String, title: String) {
         self.init()
         self.goToCategory(categoryId: categoryID, categoryTitle: title, subtitle: nil)

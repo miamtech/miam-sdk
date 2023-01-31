@@ -14,8 +14,8 @@ struct MyMealEmptyView: View {
             template()
         } else {
             GeometryReader { metrics in
-                VStack{
-                    HStack{
+                VStack {
+                    HStack {
                         Spacer()
                         Text(MiamText.sharedInstance.noMealIdeaInBasket)
                             .frame(width: metrics.size.width / 2)

@@ -9,11 +9,10 @@ import Foundation
 import miamCore
 import SwiftUI
 
-
 @available(iOS 14, *)
 public struct CatalogEmptyView: View {
     public var body: some View {
-        HStack{}
+        HStack {}
     }
 }
 
@@ -27,15 +26,15 @@ public struct CatalogView: View {
     @SwiftUI.State private var showingPackageRecipes = false
 
     @SwiftUI.State private var headerHeight = 50.0
-    
+
     let closeCatalogAction: (() -> Void)?
     private var usesPreferences = false
-    private let recipesListColumns : Int
+    private let recipesListColumns: Int
     private let recipesListSpacing: CGFloat
     private let recipeCardHeight: CGFloat
     private let routeService = RouteServiceInstance.shared.instance
     public var willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)?
-    
+
     public init(usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
@@ -48,7 +47,7 @@ public struct CatalogView: View {
 
         self.willNavigateTo = willNavigateTo
     }
-    
+
     public init(categoryId: String, title: String, usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
@@ -60,9 +59,9 @@ public struct CatalogView: View {
 
         self.willNavigateTo = willNavigateTo
     }
-    
+
     public init(catalogViewModel: CatalogVM,
-                usesPreferences: Bool = false , closeCatalogAction: (() -> Void)? = nil,
+                usesPreferences: Bool = false, closeCatalogAction: (() -> Void)? = nil,
                 recipesListColumns: Int = 1, recipesListSpacing: CGFloat = 12, recipeCardHeight: CGFloat = 400,
                 willNavigateTo: ((CatalogContent, String, CatalogVM) -> Void)? = nil) {
         self.init(usesPreferences: usesPreferences, closeCatalogAction: closeCatalogAction, recipesListColumns: recipesListColumns, recipesListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, willNavigateTo: willNavigateTo)
@@ -114,7 +113,7 @@ public struct CatalogView: View {
                                 willNavigateTo(.categoriesList, MiamText.sharedInstance.mealIdeas, catalog)
                             }
                             catalog.goToCategoriesList()
-                        }, navigateToRecipeAction: { package in	
+                        }, navigateToRecipeAction: { package in
                             if let willNavigateTo {
                                 willNavigateTo(.categoriesList, package.attributes?.title ?? "", catalog)
                             }
@@ -139,7 +138,7 @@ public struct CatalogView: View {
         }.sheet(isPresented: $showingFilters, onDismiss: {
             showingFilters = false
         }) {
-            CatalogFiltersView() {
+            CatalogFiltersView {
                 showingFilters = false
                 catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
@@ -161,24 +160,24 @@ public struct CatalogView: View {
 internal struct CatalogSuccessView: View {
     let packages: [CatalogPackage]
     let catalogContent: CatalogContent
-    let categoryId:String
-    let categoryTitle :String
-    var categorySubtitle :String? = nil
+    let categoryId: String
+    let categoryTitle: String
+    var categorySubtitle: String?
     @Binding var showingPackageRecipes: Bool
     @Binding var showingFavorites: Bool
     @Binding var headerHeight: Double
     let browseCatalogAction: () -> Void
     let navigateToRecipeAction: (Package) -> Void
-    let recipesListColumns : Int
+    let recipesListColumns: Int
     let recipesListSpacing: CGFloat
     let recipeCardHeight: CGFloat
-    
+
     init(recipesListColumns: Int, recipesListSpacing: CGFloat, recipeCardHeight: CGFloat, packages: [CatalogPackage], content: CatalogContent, showingPackageRecipes: Binding<Bool>, showingFavorites: Binding<Bool>,
          headerHeight: Binding<Double>,
          browseCatalogAction: @escaping () -> Void,
          navigateToRecipeAction: @escaping (Package) -> Void,
          categoryId: String,
-         categoryTitle : String,
+         categoryTitle: String,
          subtitle: String? = nil) {
         self.packages = packages
         self.catalogContent = content
@@ -198,9 +197,9 @@ internal struct CatalogSuccessView: View {
     var body: some View {
         switch catalogContent {
             case .categoriesList:
-                if(packages.isEmpty){
-                    CatalogRecipePageNoResultsView( browseCatalogAction: {} ).frame(maxHeight: .infinity)
-                }  else {
+                if packages.isEmpty {
+                    CatalogRecipePageNoResultsView( browseCatalogAction: {}).frame(maxHeight: .infinity)
+                } else {
                 ScrollView {
                         VStack {
                             ForEach(packages) { package in
@@ -214,15 +213,15 @@ internal struct CatalogSuccessView: View {
             case .wordSearch:
             let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
             RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                browseCatalogAction()},  showingFavorites: showingFavorites,specialTitleTemplate:  Template.sharedInstance.recipesListSearchTitleTemplate)
+                browseCatalogAction()}, showingFavorites: showingFavorites, specialTitleTemplate: Template.sharedInstance.recipesListSearchTitleTemplate)
             case .filterSearch:
-                RecipesView(title: MiamText.sharedInstance.filterSearchTitle , recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                        browseCatalogAction()},  showingFavorites: showingFavorites)
-        case .category: RecipesView(categoryId :categoryId,categoryTitle: categoryTitle,categorySubtitle: categorySubtitle,recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                browseCatalogAction()},  showingFavorites: showingFavorites)
+                RecipesView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                        browseCatalogAction()}, showingFavorites: showingFavorites)
+        case .category: RecipesView(categoryId: categoryId, categoryTitle: categoryTitle, categorySubtitle: categorySubtitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+                browseCatalogAction()}, showingFavorites: showingFavorites)
             case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
-                    browseCatalogAction()},  showingFavorites: showingFavorites)
-            default:  HStack{}
+                    browseCatalogAction()}, showingFavorites: showingFavorites)
+            default:  HStack {}
         }
     }
 }
@@ -232,15 +231,15 @@ public struct CatalogPackageRow: View {
     let package: CatalogPackage
     let recipeCardHeight: CGFloat
     let showRecipes: (CatalogPackage) -> Void
-    
+
     public init(package: CatalogPackage, recipeCardHeight: CGFloat, showRecipes: @escaping (CatalogPackage) -> Void) {
         self.package = package
         self.recipeCardHeight = recipeCardHeight
         self.showRecipes = showRecipes
     }
-    
+
     public var body: some View {
-        if (Template.sharedInstance.catalogPackageRowTemplate != nil) {
+        if Template.sharedInstance.catalogPackageRowTemplate != nil {
             Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
         } else {
             VStack(alignment: .leading) {
@@ -280,7 +279,7 @@ public struct CatalogPackageRow: View {
 internal struct CatalogViewHeader: View {
     let closeCatalogAction: (() -> Void)?
     var body: some View {
-        if (Template.sharedInstance.catalogViewHeaderTemplate != nil) {
+        if Template.sharedInstance.catalogViewHeaderTemplate != nil {
             Template.sharedInstance.catalogViewHeaderTemplate!(closeCatalogAction)
         } else {
             HStack {
@@ -289,7 +288,7 @@ internal struct CatalogViewHeader: View {
                     .foregroundColor(.white)
                     .frame(width: 30, height: 30)
 
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Spacer()
                     Text(MiamText.sharedInstance.mealIdeas)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
@@ -317,14 +316,13 @@ internal struct CatalogToolbarView: View {
     let searchTapped: () -> Void
     let favoritesTapped: () -> Void
     let preferencesTapped: () -> Void
-    
-    
+
     var body: some View {
-        if (Template.sharedInstance.catalogViewToolbarTemplate != nil) {
+        if Template.sharedInstance.catalogViewToolbarTemplate != nil {
             Template.sharedInstance.catalogViewToolbarTemplate!(showBackButton, favoritesFilterActive, backTapped, filtersTapped, searchTapped, favoritesTapped, preferencesTapped)
         } else {
             HStack(spacing: 16.0) {
-                if (showBackButton) {
+                if showBackButton {
                     Button {
                         backTapped()
                     } label: {
@@ -339,11 +337,11 @@ internal struct CatalogToolbarView: View {
                         .renderingMode(.template)
                         .foregroundColor(Color.miamColor(.primary))
                 }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
-                if (!showBackButton) {
+                if !showBackButton {
                     Spacer()
                 }
 
-                if (useFilters) {
+                if useFilters {
                     Button {
                         filtersTapped()
                     } label: {
@@ -352,8 +350,8 @@ internal struct CatalogToolbarView: View {
                             .foregroundColor(Color.miamColor(.primary))
                     }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
                 }
-                
-                if (usePreferences) {
+
+                if usePreferences {
                     Button {
                         preferencesTapped()
                     } label: {
@@ -362,8 +360,8 @@ internal struct CatalogToolbarView: View {
                             .foregroundColor(Color.miamColor(.primary))
                     }.frame(width: 40, height: 40).background(Color.white).clipShape(Circle())
                 }
-                
-                if (!showBackButton) {
+
+                if !showBackButton {
                         Button {
                             favoritesTapped()
                         } label: {

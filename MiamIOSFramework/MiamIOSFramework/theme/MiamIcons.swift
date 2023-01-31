@@ -48,4 +48,3 @@ public enum MiamIcon: String {
     case preferences = "miamPreferences"
     case empty = "miamEmpty"
 }
-

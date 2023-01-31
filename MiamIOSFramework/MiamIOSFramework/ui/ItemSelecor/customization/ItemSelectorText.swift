@@ -9,13 +9,13 @@ import Foundation
 
 @available(iOS 14, *)
 public class ItemSelectorText {
-    
+
     public static let sharedInstance = ItemSelectorText()
-    
+
     public var swapProduct = MiamText.sharedInstance.swapProduct
     public var selectedProduct = MiamText.sharedInstance.selectedProduct
     public var select = MiamText.sharedInstance.select
 
     private init() {}
-    
+
 }

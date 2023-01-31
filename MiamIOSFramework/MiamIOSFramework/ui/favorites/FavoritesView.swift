@@ -15,7 +15,7 @@ public struct FavoritesView: View {
     public init(_ browseCatalogAction: @escaping () -> Void) {
         self.browseCatalogAction = browseCatalogAction
     }
-    
+
     public var body: some View {
         if let currentState = favoritesViewModel.state {
             ManagementResourceState<NSArray, FavoritesSuccessView, ProgressLoader, FavoritesEmptyView>(

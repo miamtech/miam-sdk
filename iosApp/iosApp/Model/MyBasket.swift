@@ -9,15 +9,15 @@
 import Foundation
 
 class MyBasket: ObservableObject {
-    static let shared = MyBasket(items: [ MyProduct(id:"970417",name:"Beurre doux U, 125",quantity:1, price:2.12, identifier: "id_970417"),
-                                          MyProduct(id:"42851844",name:"Curry tradition en poudre DUCROS, 53g",quantity:1, price:3.40, identifier: "id_6511680")])
+    static let shared = MyBasket(items: [ MyProduct(id: "970417", name: "Beurre doux U, 125", quantity: 1, price: 2.12, identifier: "id_970417"),
+                                          MyProduct(id: "42851844", name: "Curry tradition en poudre DUCROS, 53g", quantity: 1, price: 3.40, identifier: "id_6511680")])
     @Published var items = [MyProduct]()
 
-    private init(items: Array<MyProduct>) {
+    private init(items: [MyProduct]) {
         self.items = items
     }
 
-    func add(addedProduct: MyProduct) -> Void {
+    func add(addedProduct: MyProduct) {
         if let existingProductIndex = items.firstIndex(where: { $0.id.isEqual(addedProduct.id) }) {
             let product = items[existingProductIndex]
             product.quantity += 1
@@ -26,8 +26,8 @@ class MyBasket: ObservableObject {
         }
     }
 
-    func remove(removedProduct : MyProduct){
-        guard let productIndex = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) } ) else {
+    func remove(removedProduct: MyProduct) {
+        guard let productIndex = items.firstIndex(where: { $0.id.isEqual(removedProduct.id) }) else {
             return
         }
         items.remove(at: productIndex)

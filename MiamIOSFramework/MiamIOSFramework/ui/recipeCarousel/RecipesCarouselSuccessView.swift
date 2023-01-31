@@ -9,7 +9,6 @@
 import SwiftUI
 import miamCore
 
-
 @available(iOS 14, *)
 struct RecipesCarouselSuccessView: View {
     let recipes: [Recipe]

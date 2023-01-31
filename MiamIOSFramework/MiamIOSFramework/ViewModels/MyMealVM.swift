@@ -25,7 +25,7 @@ public class MyMeal: Identifiable {
 }
 
 @available(iOS 14, *)
-public class MyMealVM : MyMealViewModel, ObservableObject {
+public class MyMealVM: MyMealViewModel, ObservableObject {
     @Published public var meals: [MyMeal] = []
     @Published var state: MyMealContractState?
 
@@ -47,5 +47,4 @@ public class MyMealVM : MyMealViewModel, ObservableObject {
         }
     }
 
-    
 }

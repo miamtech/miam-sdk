@@ -19,7 +19,7 @@ class FavoritesVM: FavoritePageViewModel, ObservableObject {
                 return
             }
             self.state = state
-            switch (state.favoritesRecipes) {
+            switch state.favoritesRecipes {
             case let success as BasicUiStateSuccess<NSArray>:
                 if let results = success.data as? [Recipe] {
                     self.favorites = results

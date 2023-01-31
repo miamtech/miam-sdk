@@ -10,26 +10,26 @@ import SwiftUI
 
 @available(iOS 14, *)
 public struct RecipeCardLoadingView: View {
-    
+
     private struct Constants {
         static let duration: Double = 0.9
         static let minOpacity: Double = 0.25
         static let maxOpacity: Double = 1.0
         static let cornerRadius: CGFloat = 2.0
     }
-    
+
     @State private var opacity: Double = Constants.minOpacity
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.recipeCardLoadingViewTemplate {
             template()
         } else {
-            VStack() {
+            VStack {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
                         .fill(Color.miamColor(.border))
                         .frame(height: 245)
-                    
+
                 }.frame(height: 245)
                 Text( "")
                     .lineLimit(2)
@@ -41,7 +41,7 @@ public struct RecipeCardLoadingView: View {
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .foregroundColor(Color.miamColor(.black))
                     .padding(Dimension.sharedInstance.sPadding)
-                
+
                 Rectangle()
                     .fill(Color.miamColor(.border)).opacity(0.1)
                     .frame(minHeight: 50.0, maxHeight: 50.0)
@@ -51,8 +51,7 @@ public struct RecipeCardLoadingView: View {
                     .cornerRadius(25)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                     .padding(.bottom, Dimension.sharedInstance.lPadding)
-                
-                
+
             }.redacted(reason: .placeholder).opacity(opacity)
                 .transition(.opacity).onAppear {
                     let baseAnimation = Animation.easeInOut(duration: Constants.duration)

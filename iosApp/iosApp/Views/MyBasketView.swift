@@ -54,7 +54,7 @@ struct MyBasketView: View {
         }
     }
 
-    private func removeRandomProduct(){
+    private func removeRandomProduct() {
         guard let product = basket.items.randomElement() else {
             return
         }

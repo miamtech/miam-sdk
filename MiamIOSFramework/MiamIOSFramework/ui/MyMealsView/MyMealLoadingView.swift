@@ -10,22 +10,22 @@ import SwiftUI
 @available(iOS 14, *)
 struct MyMealLoadingView: View {
     let loadingText: String
-    
+
     var body: some View {
         if let template = Template.sharedInstance.myMealsLoadingViewTemplate {
             template()
         } else {
             VStack {
                 Spacer()
-                HStack{
+                HStack {
                     Spacer()
-                    VStack{
+                    VStack {
                         ProgressLoader(color: Color.miamColor(.primary))
                         Text(MiamText.sharedInstance.simmering)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     }
                     Spacer()
-                    
+
                 }
                 Spacer()
             }.frame(

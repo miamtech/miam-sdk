@@ -19,9 +19,9 @@ protocol MiamFontStyle {
 @available(iOS 14, *)
 struct MiamFontStyleModifier: ViewModifier {
     let fontStyle: MiamFontStyle
-    
+
     func body(content: Content) -> some View {
-        content.font(fontStyle.font)//.fontWeight(weight)
+        content.font(fontStyle.font)// .fontWeight(weight)
         if let color = fontStyle.color {
             content.foregroundColor(color)
         }

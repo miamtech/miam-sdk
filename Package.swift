@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "MiamIOSFramework",
     platforms: [
-        .iOS(.v12),
+        .iOS(.v12)
     ],
     products: [
         .library(

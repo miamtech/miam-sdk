@@ -10,22 +10,19 @@ import SwiftUI
 @available(iOS 14, *)
 public struct MyMealsView: View {
     @ObservedObject var myMealsViewModel: MyMealVM = MyMealVM()
-    
+
     public init() {}
-    
+
     public var body: some View {
-        VStack{
+        VStack {
             if let myMealsState = myMealsViewModel.state {
-                ManagementResourceState<NSArray,MyMealSuccessView,MyMealLoadingView,MyMealEmptyView> (
+                ManagementResourceState<NSArray, MyMealSuccessView, MyMealLoadingView, MyMealEmptyView>(
                     resourceState: myMealsState.lines,
-                    successView:  MyMealSuccessView(myMealsViewModel:myMealsViewModel) ,
-                    loadingView: MyMealLoadingView(loadingText:""),
+                    successView: MyMealSuccessView(myMealsViewModel: myMealsViewModel),
+                    loadingView: MyMealLoadingView(loadingText: ""),
                     emptyView: MyMealEmptyView()
                 )
             }
         }
     }
 }
-
-
-

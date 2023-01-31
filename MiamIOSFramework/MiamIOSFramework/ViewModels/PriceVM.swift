@@ -8,7 +8,7 @@
 import miamCore
 
 @available(iOS 14, *)
-public class PriceVM : RecipePricingViewModel, ObservableObject {
+public class PriceVM: RecipePricingViewModel, ObservableObject {
     @Published var price: Pricing?
 
     override init() {

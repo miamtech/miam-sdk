@@ -10,21 +10,21 @@ import miamCore
 import Combine
 
 @available(iOS 14, *)
-public class DialogVM : ObservableObject {
-    
+public class DialogVM: ObservableObject {
+
     @Published var state: RouterOutletContractState?
     private let routerVm: RouterOutletViewModel
 
-     init(routerVm : RouterOutletViewModel) {
+     init(routerVm: RouterOutletViewModel) {
          self.routerVm = routerVm
-         
+
           routerVm.collect(flow: routerVm.uiState, collect: { data in
              self.state = data as? RouterOutletContractState
         })
-        
+
     }
-    
-    public func getKotlinVm() -> RouterOutletViewModel{
+
+    public func getKotlinVm() -> RouterOutletViewModel {
         return self.routerVm
     }
 }

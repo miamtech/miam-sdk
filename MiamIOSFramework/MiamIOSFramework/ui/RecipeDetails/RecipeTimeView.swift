@@ -12,17 +12,17 @@ struct RecipeTimeView: View {
     let preparationTime: String
     let cookingTime: String
     let restingTime: String
-    
+
     let noPreparationTime = "0s"
     let noCookingTime = "0s"
     let noRestingTime = "0s"
-    
+
     var body: some View {
         if let template = Template.sharedInstance.recipeTimeViewTemplate {
             template(preparationTime, cookingTime, restingTime)
         } else {
             HStack {
-                if (preparationTime != noPreparationTime) {
+                if preparationTime != noPreparationTime {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
@@ -31,8 +31,8 @@ struct RecipeTimeView: View {
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                     }
                 }
-                
-                if (cookingTime != noCookingTime) {
+
+                if cookingTime != noCookingTime {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
@@ -41,8 +41,8 @@ struct RecipeTimeView: View {
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
                     }
                 }
-                
-                if (restingTime != noRestingTime) {
+
+                if restingTime != noRestingTime {
                     HStack {
                         Text(RecipeDetailsText.sharedInstance.restingTime + " :")
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
@@ -54,6 +54,6 @@ struct RecipeTimeView: View {
                 Spacer()
             }.padding(.horizontal, Dimension.sharedInstance.lPadding)
         }
-        
+
     }
 }

@@ -9,12 +9,11 @@ import Foundation
 import Combine
 import miamCore
 
-
 @available(iOS 14, *)
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
-    
+
     @Published var basketPreviewLine: BasketPreviewLine?
-    @Published var state : BasketPreviewContractState?
+    @Published var state: BasketPreviewContractState?
 
     override init(recipeId: String?) {
         super.init(recipeId: recipeId)
@@ -72,36 +71,36 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         return basketPreviewLine?.entries?.found.count ?? 0
     }
 
-    public var productsInBasket: Array<BasketEntry> {
+    public var productsInBasket: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = basketPreviewLine?.entries?.found as? Array<BasketEntry> else {
+        guard let entries = basketPreviewLine?.entries?.found as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsNotFound: Array<BasketEntry> {
+    public var productsNotFound: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = basketPreviewLine?.entries?.notFound as? Array<BasketEntry> else {
+        guard let entries = basketPreviewLine?.entries?.notFound as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsOftenDeleted: Array<BasketEntry> {
+    public var productsOftenDeleted: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = basketPreviewLine?.entries?.oftenDeleted as? Array<BasketEntry> else {
+        guard let entries = basketPreviewLine?.entries?.oftenDeleted as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsRemoved: Array<BasketEntry> {
+    public var productsRemoved: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = basketPreviewLine?.entries?.removed as? Array<BasketEntry> else {
+        guard let entries = basketPreviewLine?.entries?.removed as? [BasketEntry] else {
             return []
         }
 

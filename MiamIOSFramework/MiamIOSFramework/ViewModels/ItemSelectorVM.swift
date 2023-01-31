@@ -9,16 +9,16 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-public class ItemSelectorVM : ObservableObject {
-    
+public class ItemSelectorVM: ObservableObject {
+
     @Published var state: ItemSelectorContractState?
-    @Published var selectedItem : BasketPreviewLine?
-    
+    @Published var selectedItem: BasketPreviewLine?
+
     public let sharedInstance = ItemSelectorInstance.shared.instance
     public let routeService = RouteServiceInstance.shared.instance
-    
+
     init() {
-        
+
         sharedInstance.collect(flow: sharedInstance.uiState,
                                                      collect: { data in
             let state = data as! ItemSelectorContractState
@@ -30,15 +30,15 @@ public class ItemSelectorVM : ObservableObject {
                 break
             }
         })
-        
+
     }
-    
+
     public func returnToPreview() {
         sharedInstance.setEvent(event: ItemSelectorContractEvent.ReturnToBasketPreview())
     }
-    
-    public func chooseItem(selectedItem: BasketPreviewLine,index : Int) {
-        sharedInstance.choose(selectedItem: selectedItem ,index: Int32(index))
+
+    public func chooseItem(selectedItem: BasketPreviewLine, index: Int) {
+        sharedInstance.choose(selectedItem: selectedItem, index: Int32(index))
         routeService.previous()
         returnToPreview()
     }

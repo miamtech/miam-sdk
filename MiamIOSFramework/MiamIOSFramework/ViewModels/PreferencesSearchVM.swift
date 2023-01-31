@@ -19,10 +19,10 @@ public class PreferencesSearchVM: PreferencesSearchViewModel, ObservableObject {
             guard let state = data as? PreferencesSearchContractState else {
                 return
             }
-            
+
             self.state = state
-            
-            switch(state.searchProposal) {
+
+            switch state.searchProposal {
             case let success as BasicUiStateSuccess<NSArray>:
                 if let suggestions = success.data as? [Tag] {
                     self.tagsSuggestions = suggestions

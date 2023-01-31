@@ -10,17 +10,17 @@ import miamCore
 
 @available(iOS 14, *)
 public struct RecipeDetailsFooter: View {
-    @ObservedObject private var recipeVM : RecipeCardVM
-    
+    @ObservedObject private var recipeVM: RecipeCardVM
+
     let buy: () -> Void
     let goToPreview: () -> Void
-    
-    public init(recipeVM : RecipeCardVM, buy: @escaping () -> Void, goToPreview: @escaping () -> Void) {
+
+    public init(recipeVM: RecipeCardVM, buy: @escaping () -> Void, goToPreview: @escaping () -> Void) {
         self.recipeVM = recipeVM
         self.buy = buy
         self.goToPreview = goToPreview
     }
-    
+
     public var body: some View {
         if let recipeId = recipeVM.recipe?.id {
             if let template = Template.sharedInstance.recipeDetailFooterTemplate {
@@ -36,15 +36,15 @@ public struct RecipeDetailsFooter: View {
 @available(iOS 14, *)
 public struct defaultRecipeDetailFooterView: View {
     let recipeId: String
-    let guest : Int
+    let guest: Int
     let isInCart: Bool
     let goToPreview: () -> Void
     let buy: () -> Void
-    
+
     public var body: some View {
         HStack {
-            PriceView(recipeId: recipeId, guestNumber: guest).padding(.horizontal,16)
-            if(isInCart){
+            PriceView(recipeId: recipeId, guestNumber: guest).padding(.horizontal, 16)
+            if isInCart {
                 HStack {
                     Text(RecipeDetailsText.sharedInstance.alreadyInCart).foregroundColor(Color.miamColor(.white))
                         .padding(.horizontal, Dimension.sharedInstance.sPadding)

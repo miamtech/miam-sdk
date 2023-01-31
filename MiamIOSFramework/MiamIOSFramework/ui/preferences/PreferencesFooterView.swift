@@ -13,13 +13,13 @@ public struct PreferencesFooterView: View {
     let cancelTapped: () -> Void
     let applyTapped: () -> Void
     let numberOfRecipesFound: Int
-    
+
     public init(cancelTapped: @escaping () -> Void, applyTapped: @escaping () -> Void, numberOfRecipesFound: Int) {
         self.cancelTapped = cancelTapped
         self.applyTapped = applyTapped
         self.numberOfRecipesFound = numberOfRecipesFound
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.preferencesFooterView {
             template(cancelTapped, applyTapped, numberOfRecipesFound)
@@ -37,7 +37,7 @@ public struct PreferencesFooterView: View {
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .background(Capsule().foregroundColor(Color.miamColor(.white)))
                 .overlay(Capsule().stroke(Color.miamColor(.borderLight), lineWidth: 1.0))
-                
+
                 Button {
                     applyTapped()
                 } label: {
@@ -49,7 +49,7 @@ public struct PreferencesFooterView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
                 .background(Capsule().foregroundColor(Color.miamColor(.primary)))
-                
+
             }.padding([.leading, .trailing], Dimension.sharedInstance.lPadding)
         }
     }

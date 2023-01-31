@@ -11,20 +11,20 @@ import miamCore
 @available(iOS 14, *)
 public class CatalogFilterViewModel: ObservableObject {
     public static let sharedInstance = CatalogFilterViewModel()
-    
+
     private let viewModelInstance = FilterViewModelInstance.shared.instance
 
     @Published public var state: SingletonFilterContractState?
-    
+
     public var numberOfRecipes: Int = 0
-    public var difficulty: Array<CatalogFilterOptions> = []
-    public var cost: Array<CatalogFilterOptions> = []
-    public var time: Array<CatalogFilterOptions> = []
+    public var difficulty: [CatalogFilterOptions] = []
+    public var cost: [CatalogFilterOptions] = []
+    public var time: [CatalogFilterOptions] = []
 
     private init() {
         self.viewModelInstance.collect(flow: viewModelInstance.uiState) { data in
             let state = data as! SingletonFilterContractState
-           
+
             self.state = state
             self.numberOfRecipes = Int(state.numberOfResult)
             self.difficulty = state.difficulty
@@ -32,11 +32,11 @@ public class CatalogFilterViewModel: ObservableObject {
             self.time = state.time
         }
     }
-    
+
     public func setEvent(event: SingletonFilterContractEvent) {
         viewModelInstance.setEvent(event: event)
     }
-    
+
     public func clear() {
         viewModelInstance.clear()
     }

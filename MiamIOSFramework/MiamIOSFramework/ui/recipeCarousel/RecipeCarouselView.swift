@@ -12,7 +12,7 @@ import miamCore
 @available(iOS 14, *)
 public struct RecipeCarouselView: View {
     public let index: Int = 4
-    
+
     let productId: String?
     let criteria: SuggestionsCriteria?
     let numberOfResults: Int
@@ -23,7 +23,7 @@ public struct RecipeCarouselView: View {
         self.criteria = criteria
         self.numberOfResults = numberOfResults
     }
-    
+
     public var body: some View {
         if let carouselState = recipeCarouselVm.state {
             ManagementResourceState<NSArray, RecipesCarouselSuccessView, ProgressLoader, EmptyView>(
@@ -34,10 +34,10 @@ public struct RecipeCarouselView: View {
             .onAppear {
                 if let productId = self.productId {
                     recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestionsFromId(productId: productId,
-                                                                                                            numberOfResult:  Int32(numberOfResults)))
+                                                                                                            numberOfResult: Int32(numberOfResults)))
                 } else if let criteria = self.criteria {
                     recipeCarouselVm.setEvent(event: RecipeCarouselContractEvent.GetRecipeSuggestionsFromCriteria(criteria: criteria,
-                                                                                                            numberOfResult:  Int32(numberOfResults)))
+                                                                                                            numberOfResult: Int32(numberOfResults)))
                 }
             }
         }

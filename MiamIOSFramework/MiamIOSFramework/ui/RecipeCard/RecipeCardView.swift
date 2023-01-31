@@ -16,33 +16,33 @@ public struct RecipeCardView: View {
     let recipeCardHeight: CGFloat
     private let showMealIdeaTag: Bool
     @ObservedObject var viewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
-    
+
     @SwiftUI.State private var initialDialogScreen = RouterContent.recipeDetail
     @SwiftUI.State var showingPopup = false
     @SwiftUI.State private var showBasketPreview = false
-    
+
     public init( criteria: SuggestionsCriteria, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.criteria = criteria
         self.showMealIdeaTag = showMealIdeaTag
         self.recipeCardHeight = recipeCardHeight
     }
-    
+
     public init(recipeId: String, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.recipeId = recipeId
         self.showMealIdeaTag = showMealIdeaTag
         self.recipeCardHeight = recipeCardHeight
     }
-    
+
     public init(recipe: Recipe, showMealIdeaTag: Bool = true, recipeCardHeight: CGFloat = 400.0) {
         self.recipe = recipe
         self.showMealIdeaTag = showMealIdeaTag
         self.recipeCardHeight = recipeCardHeight
     }
-    
+
     public var body: some View {
-        ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView> (
-            resourceState: viewModel.state?.recipeState ,
-            successView:  RecipeCardSuccessView(recipe: viewModel.recipe,
+        ManagementResourceState<Recipe, RecipeCardSuccessView, RecipeCardLoadingView, RecipeCardEmptyView>(
+            resourceState: viewModel.state?.recipeState,
+            successView: RecipeCardSuccessView(recipe: viewModel.recipe,
                                                 isRecipeInCart: viewModel.currentState.isInCart,
                                                 isLikeEnabled: viewModel.isLikeEnabled,
                                                 showMealIdeaTag: showMealIdeaTag,
@@ -58,16 +58,16 @@ public struct RecipeCardView: View {
                                                         showBasketPreview = true
                                                     }
                                                     showingPopup = true
-                                                    
+
                                                 }),
             loadingView: RecipeCardLoadingView(),
             emptyView: RecipeCardEmptyView()
         ).onAppear(perform: {
-            if(recipeId != nil){
+            if recipeId != nil {
                 viewModel.fetchRecipe(recipeId: self.recipeId!)
-            } else if (criteria != nil) {
+            } else if criteria != nil {
                 viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
-            } else if ( recipe != nil) {
+            } else if  recipe != nil {
                 if let  currentRecipe = recipe {
                     viewModel.setRecipe(recipe: currentRecipe)
                 }
@@ -82,7 +82,7 @@ public struct RecipeCardView: View {
                 }
             }
     }
-    
+
     private func addToCart() {
         viewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
 //        viewModel.routerVM.setEvent(event: RouterOutletContractEvent.GoToPreview(recipeId: viewModel.recipe?.id ?? "", vm: viewModel))
@@ -92,12 +92,12 @@ public struct RecipeCardView: View {
 @available(iOS 14, *)
 public struct RecipeCardEmptyView: View {
     public var body: some View {
-        VStack() {
+        VStack {
             ZStack(alignment: .topLeading) {
                 Rectangle()
                     .fill(Color.miamColor(.border))
                     .frame(height: 245)
-                
+
             }.frame(height: 245)
             Text( "")
                 .lineLimit(2)
@@ -109,7 +109,7 @@ public struct RecipeCardEmptyView: View {
                 .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                 .foregroundColor(Color.miamColor(.black))
                 .padding(Dimension.sharedInstance.sPadding)
-            
+
             Rectangle()
                 .fill(Color.miamColor(.border)).opacity(0.1)
                 .frame(minHeight: 50.0, maxHeight: 50.0)
@@ -119,8 +119,7 @@ public struct RecipeCardEmptyView: View {
                 .cornerRadius(25)
                 .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleMediumStyle)
                 .padding(.bottom, Dimension.sharedInstance.lPadding)
-            
-            
+
         }
     }
 }

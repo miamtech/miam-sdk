@@ -10,17 +10,17 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : View, EmptyView : View>: View {
-    
+struct ManagementResourceState<T: AnyObject, SuccessView: View, LoadingView: View, EmptyView: View>: View {
+
     private let resourceState: BasicUiState<T>?
-    private let successView:  SuccessView
+    private let successView: SuccessView
     private let loadingView: LoadingView
     private let emptyView: EmptyView
-    
+
     init(
         resourceState: BasicUiState<T>?,
-        successView:  SuccessView,
-        loadingView:  LoadingView,
+        successView: SuccessView,
+        loadingView: LoadingView,
         emptyView: EmptyView
     ) {
         self.resourceState = resourceState
@@ -28,11 +28,11 @@ struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : 
         self.loadingView = loadingView
         self.emptyView = emptyView
     }
-    
+
     init(
         resourceState: BasicUiState<T>,
-        successView:  SuccessView,
-        loadingView:  LoadingView,
+        successView: SuccessView,
+        loadingView: LoadingView,
         emptyView: EmptyView
     ) {
         self.resourceState = resourceState
@@ -40,14 +40,14 @@ struct ManagementResourceState<T : AnyObject, SuccessView : View, LoadingView : 
         self.loadingView = loadingView
         self.emptyView = emptyView
     }
-    
+
     var body: some View {
         switch self.resourceState {
         case is BasicUiStateEmpty:
             emptyView
         case is BasicUiStateError:
-            HStack{} // TODO handle error state
-        case is BasicUiStateSuccess<T> :
+            HStack {} // TODO handle error state
+        case is BasicUiStateSuccess<T>:
             successView
         case is BasicUiStateLoading:
             loadingView

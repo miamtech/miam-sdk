@@ -17,14 +17,14 @@ struct RecipeModal: View {
     let recipeId: String
     let showFooter: Bool
     let close: () -> Void
-    
+
     init(recipeId: String, showBasketPreview: Bool = false, showFooter: Bool = true, close: @escaping () -> Void) {
         self.showBasketPreview = showBasketPreview
         self.recipeId = recipeId
         self.showFooter = showFooter
         self.close = close
     }
-    
+
     var body: some View {
         if let template = Template.sharedInstance.recipeModalTemplate {
             template(recipeId, recipeViewModel, close)
@@ -39,9 +39,9 @@ struct RecipeModal: View {
                         recipeViewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                     })
                     .navigationTitle(recipeViewModel.recipe?.attributes?.title ?? "")
-                    
+
                     NavigationLink("Produits dans votre panier", isActive: $showBasketPreview) {
-                        VStack  {
+                        VStack {
                             BasketPreviewView(recipeId: recipeId, recipeVm: recipeViewModel) { _, _ in
                                 self.showBasketPreview = false
                             } close: {
@@ -49,7 +49,7 @@ struct RecipeModal: View {
                             } goToItemSelector: {
                                 self.showItemSelector = true
                             }
-                            
+
                             NavigationLink(ItemSelectorText.sharedInstance.swapProduct, isActive: $showItemSelector) {
                                 ItemSelector(recipeId: recipeId) {
                                     self.showItemSelector = false
@@ -83,7 +83,7 @@ struct RecipeModal: View {
             }
         }
     }
-        
+
     func navigateToBasketPreview() {
         self.showBasketPreview.toggle()
     }

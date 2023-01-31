@@ -9,11 +9,10 @@
 import Foundation
 import miamCore
 
-
 @available(iOS 14, *)
 public class LikeButtonVM: LikeButtonViewModel, ObservableObject {
     @Published var isLiked: Bool = false
-    
+
     override public init() {
         super.init()
         collect(flow: uiState) { data in

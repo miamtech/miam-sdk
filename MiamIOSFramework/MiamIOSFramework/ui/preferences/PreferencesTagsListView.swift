@@ -17,7 +17,7 @@ public struct PreferencesTagsListView: View {
     let geometry: GeometryProxy
     let onToggleTag: (CheckableTag) -> Void
     let onAddTagTapped: () -> Void
-    
+
     public init(title: String, subtitle: String, tags: [CheckableTag], geometry: GeometryProxy, onToggleTag: @escaping (CheckableTag) -> Void, onAddTagTapped: @escaping () -> Void) {
         self.title = title
         self.subtitle = subtitle
@@ -26,7 +26,7 @@ public struct PreferencesTagsListView: View {
         self.onToggleTag = onToggleTag
         self.onAddTagTapped = onAddTagTapped
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.preferencesTagsListViewTemplate {
             template(title, subtitle, tags, geometry, onToggleTag, onAddTagTapped)
@@ -38,12 +38,12 @@ public struct PreferencesTagsListView: View {
                 Text(subtitle)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyStyle)
                     .padding(.bottom, Dimension.sharedInstance.mPadding)
-                
+
                 displayTags(in: geometry)
             }
         }
     }
-    
+
     public func displayTags(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
@@ -55,20 +55,19 @@ public struct PreferencesTagsListView: View {
                 })
                 .padding([.horizontal, .vertical], 4)
                 .alignmentGuide(.leading, computeValue: { d in
-                    if (abs(width - d.width) > g.size.width)
-                    {
+                    if abs(width - d.width) > g.size.width {
                         width = 0
                         height -= d.height
                     }
                     let result = width
                     if tag == self.tags.first! {
-                        width = 0 //last item
+                        width = 0 // last item
                     } else {
                         width -= d.width
                     }
                     return result
                 })
-                .alignmentGuide(.top, computeValue: {d in
+                .alignmentGuide(.top, computeValue: {_ in
                     let result = height
                     if tag == self.tags.first! {
                         height = 0 // last item
@@ -81,8 +80,7 @@ public struct PreferencesTagsListView: View {
             })
             .padding([.horizontal, .vertical], 4)
             .alignmentGuide(.leading, computeValue: { d in
-                if (abs(width - d.width) > g.size.width)
-                {
+                if abs(width - d.width) > g.size.width {
                     width = 0
                     height -= d.height
                 }
@@ -90,7 +88,7 @@ public struct PreferencesTagsListView: View {
                 width = 0
                 return result
             })
-            .alignmentGuide(.top, computeValue: {d in
+            .alignmentGuide(.top, computeValue: {_ in
                 let result = height
                 height = 0
                 return result
@@ -102,11 +100,11 @@ public struct PreferencesTagsListView: View {
 @available(iOS 14, *)
 public struct AddTagView: View {
     public let onTapped: () -> Void
-   
+
     public init(onTapped: @escaping () -> Void) {
         self.onTapped = onTapped
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.addTagViewTemplate {
             template(onTapped)
@@ -138,7 +136,7 @@ public struct PreferenceTagView: View {
             return ""
         }
     }
-    
+
     public var backgroundColor: Color {
         get {
             if tag.isChecked {
@@ -148,7 +146,7 @@ public struct PreferenceTagView: View {
             }
         }
     }
-    
+
     public var foregroundColor: Color {
         get {
             if tag.isChecked {
@@ -158,12 +156,12 @@ public struct PreferenceTagView: View {
             }
         }
     }
-    
+
     public init(tag: CheckableTag, onToggleTag: @escaping (CheckableTag) -> Void) {
         self.tag = tag
         self.onToggleTag = onToggleTag
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.preferencesTagViewTemplate {
             template(tag, onToggleTag)

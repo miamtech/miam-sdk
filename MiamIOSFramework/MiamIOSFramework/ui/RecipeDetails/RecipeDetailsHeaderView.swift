@@ -17,7 +17,7 @@ public struct RecipeDetailsHeaderView: View {
     let isLikeEnabled: Bool
     let recipeId: String
     let imageHeight = 280.0
-    
+
     public init(mediaURL: String?, title: String, difficulty: Int, totalTime: String, showTitleInHeader: Binding<Bool>, isLikeEnabled: Bool, recipeId: String) {
         self.mediaURL = mediaURL
         self.title = title
@@ -27,7 +27,7 @@ public struct RecipeDetailsHeaderView: View {
         self.recipeId = recipeId
         self._showTitleInHeader = showTitleInHeader
     }
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.recipeDetailsHeaderTemplate {
             template(mediaURL,
@@ -40,20 +40,19 @@ public struct RecipeDetailsHeaderView: View {
         } else {
             if let picture =  URL(string: mediaURL ?? "") {
                 AsyncImage(
-                    url:picture ,
+                    url: picture,
                     height: imageHeight
                 ).frame(height: imageHeight)
             } else {
                 Image.miamImage(icon: .empty).frame( height: imageHeight)
             }
-            
-            
-            if (isLikeEnabled) {
+
+            if isLikeEnabled {
                 HStack {
                     LikeButton(recipeId: recipeId)
-                    
+
                     Spacer()
-                    
+
                     //                    Button(action: {
                     //                        
                     //                    }) {
@@ -62,7 +61,7 @@ public struct RecipeDetailsHeaderView: View {
                     //                    .frame(width: 40.0, height: 40.0, alignment: .center).background(Color.miamColor(.greySurface)).cornerRadius(25)
                 }.frame(height: 50.0, alignment: .topLeading).padding(.horizontal, Dimension.sharedInstance.lPadding)
             }
-            HStack() {
+            HStack {
                 Text(title)
                     .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                     .foregroundColor(Color.miamColor(.black))
@@ -73,15 +72,15 @@ public struct RecipeDetailsHeaderView: View {
                                                value: -$0.frame(in: .named("scroll")).origin.y)
                     })
                     .onPreferenceChange(ViewOffsetKey.self) {
-                        if($0 > 24){
+                        if $0 > 24 {
                             showTitleInHeader = true
-                        }else {
+                        } else {
                             showTitleInHeader = false
                         }
                     }
                 Spacer()
             }
-            
+
             HStack(alignment: .center) {
                 HStack {
                     RecipeDetailsDifficulty(difficulty: difficulty)
@@ -89,7 +88,7 @@ public struct RecipeDetailsHeaderView: View {
                 Divider().frame(height: 20).padding(.horizontal, Dimension.sharedInstance.lPadding)
                 HStack {
                     VStack(alignment: .center) {
-                        Image.miamImage(icon: .clock).frame(width: 25, height:25, alignment: .center)
+                        Image.miamImage(icon: .clock).frame(width: 25, height: 25, alignment: .center)
                         Text(totalTime)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodySmallStyle)
                             .foregroundColor(Color.miamColor(.secondaryText))

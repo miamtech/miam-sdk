@@ -8,14 +8,13 @@
 import Foundation
 import SwiftUI
 
-
 @available(iOS 14, *)
 struct IngredientNotInBasketRow: View {
     let name: String
     let addIngredientAction: () -> Void
     let isAddable: Bool
     var body: some View {
-        if (Template.sharedInstance.ingredientNotInBasketRowTemplate != nil) { 
+        if Template.sharedInstance.ingredientNotInBasketRowTemplate != nil {
             Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, isAddable ? addIngredientAction : nil)
         } else {
             HStack {
@@ -24,7 +23,7 @@ struct IngredientNotInBasketRow: View {
                     .foregroundColor(Color.miamColor(.secondaryText))
 
                 Spacer()
-                if(isAddable){
+                if isAddable {
                 Button(action: addIngredientAction) {
                     Image.miamImage(icon: .plusGreen)
                         .resizable()
@@ -35,7 +34,7 @@ struct IngredientNotInBasketRow: View {
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         .foregroundColor(Color.miamColor(.primary))
                 }
-                    
+
                 }
 
             }.padding(.horizontal, Dimension.sharedInstance.lPadding)

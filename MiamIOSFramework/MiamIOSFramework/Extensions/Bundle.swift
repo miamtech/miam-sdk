@@ -7,7 +7,7 @@
 
 import Foundation
 
-fileprivate class MiamBundleHelper {}
+private class MiamBundleHelper {}
 
 extension Bundle {
     public static let miamBundle: Bundle = {
@@ -16,7 +16,7 @@ extension Bundle {
                     Bundle.main.resourceURL,
 
                     // Bundle should be present here when the package is linked into a framework.
-                    Bundle(for: MiamBundleHelper.self).resourceURL,
+                    Bundle(for: MiamBundleHelper.self).resourceURL
                 ]
 
                 let bundleName = "MiamIOSFramework_MiamIOSFramework"

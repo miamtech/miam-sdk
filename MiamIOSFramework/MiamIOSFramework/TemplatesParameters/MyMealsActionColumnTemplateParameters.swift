@@ -8,8 +8,7 @@
 
 import Foundation
 
-
 public struct MyMealsActionColumnTemplateParameters {
-    public let delete : () -> Void
-    public let expand : () -> Void
+    public let delete: () -> Void
+    public let expand: () -> Void
 }

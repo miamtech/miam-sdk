@@ -14,19 +14,19 @@ internal struct CatalogRecipesPageSuccessView: View {
     let title: String
     let recipes: [Recipe]
     let hasNoResults: Bool
-    let columns: Int 
+    let columns: Int
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
     let titleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
     let loadMoreContentAction: (Recipe) -> Void
     let browseCatalogAction: () -> Void
     let subtitle: String?
-    
+
     var body: some View {
         if !hasNoResults {
             ScrollView {
                 VStack {
-                    
+
                     if let template = titleTemplate {
                         template(CatalogPageTitleTemplateParameters(title: title, subtitle: subtitle))
                     } else {
@@ -37,12 +37,12 @@ internal struct CatalogRecipesPageSuccessView: View {
                             Spacer()
                         }
                     }
-                        LazyVGrid( columns:  Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing){
+                        LazyVGrid( columns: Array(repeating: GridItem(.flexible()), count: columns), spacing: spacing) {
                             ForEach(recipes, id: \.self) { recipe in
                                 RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).onAppear {
                                     loadMoreContentAction(recipe)
                                     //
-                                }.padding(.top,Dimension.sharedInstance.lPadding)
+                                }.padding(.top, Dimension.sharedInstance.lPadding)
                             }
                         }
                     }

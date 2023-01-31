@@ -13,7 +13,7 @@ internal struct BasketPreviewFooter: View {
     let continueShoppingAction: () -> Void
 
     var body: some View {
-        if (Template.sharedInstance.basketPreviewFooterTemplate != nil) {
+        if Template.sharedInstance.basketPreviewFooterTemplate != nil {
             Template.sharedInstance.basketPreviewFooterTemplate!(removeFromBasketAction, continueShoppingAction)
         } else {
             HStack {

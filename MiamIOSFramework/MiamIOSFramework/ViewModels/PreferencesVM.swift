@@ -13,21 +13,21 @@ import miamCore
 class PreferencesVM: ObservableObject {
     static let sharedInstance = PreferencesVM()
     private let preferencesViewModelInstance = PreferencesViewModelInstance.shared.instance
-    
+
     @Published var state: PreferencesContractState?
-  
+
     var diets: [CheckableTag] = []
     var equipments: [CheckableTag] = []
     var ingredients: [CheckableTag] = []
-    
+
     private init() {
         self.preferencesViewModelInstance.collect(flow: self.preferencesViewModelInstance.uiState) { data in
             guard let state = data as? PreferencesContractState else {
                 return
             }
             self.state = state
-            
-            switch(state.basicState) {
+
+            switch state.basicState {
             case _ as BasicUiStateSuccess<KotlinBoolean>:
                 self.diets = state.diets
                 self.ingredients = state.ingredients
@@ -37,19 +37,19 @@ class PreferencesVM: ObservableObject {
             }
         }
     }
-    
+
     func addTag(_ tag: Tag) {
         preferencesViewModelInstance.addIngredientPreference(tag: tag)
     }
-    
+
     func updateGuestsNumber(_ numberOfGuests: Int) {
         preferencesViewModelInstance.changeGlobalGuest(numberOfGuest: Int32(numberOfGuests))
     }
-    
+
     func togglePreference(_ preference: CheckableTag) {
         preferencesViewModelInstance.togglePreference(tagIdToToggle: preference.tag.id)
     }
-    
+
     func resetPreferences() {
         preferencesViewModelInstance.resetPreferences()
     }

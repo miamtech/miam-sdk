@@ -8,34 +8,31 @@
 import SwiftUI
 import miamCore
 
-
 @available(iOS 14, *)
 struct BasketPreviewEmptyView: View {
     var body: some View {
-        HStack{}
+        HStack {}
     }
 }
 
-
 @available(iOS 14, *)
 public struct BasketPreviewView: View {
-    
+
     @ObservedObject private var viewModel: BasketPreviewVM
 
-    private var recipeVm : RecipeViewModel
+    private var recipeVm: RecipeViewModel
     private let title: String?
-    private var goToDetail : (_ : RecipeViewModel, Bool) -> Void
-    private var close : ()-> Void
+    private var goToDetail: (_: RecipeViewModel, Bool) -> Void
+    private var close: () -> Void
     private var goToItemSelector: () -> Void
-    
+
     public init(recipeId: String,
                 recipeVm: RecipeViewModel,
                 title: String? = nil,
-                goToDetail: @escaping (_ : RecipeViewModel, Bool) -> Void,
-                close: @escaping ()-> Void,
+                goToDetail: @escaping (_: RecipeViewModel, Bool) -> Void,
+                close: @escaping () -> Void,
                 goToItemSelector: @escaping () -> Void
-    )
-    {
+    ) {
         viewModel = BasketPreviewVM(recipeId: recipeId)
         self.recipeVm = recipeVm
         self.goToDetail = goToDetail
@@ -43,12 +40,12 @@ public struct BasketPreviewView: View {
         self.close = close
         self.goToItemSelector = goToItemSelector
     }
-    
+
     public var body: some View {
-        if(viewModel.state != nil) {
-            ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView,BasketPreviewLoadingView,BasketPreviewEmptyView> (
+        if viewModel.state != nil {
+            ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView, BasketPreviewLoadingView, BasketPreviewEmptyView>(
                 resourceState: viewModel.state!.line,
-                successView:  BasketPreviewSuccessView(
+                successView: BasketPreviewSuccessView(
                     viewModel: viewModel,
                     title: title,
                     recipeVm: recipeVm,
@@ -57,7 +54,7 @@ public struct BasketPreviewView: View {
                     goToItemSelector: goToItemSelector,
                     isReloading: viewModel.state?.isReloading ?? false,
                     updatingBasketEntryId: viewModel.state?.updatingBasketEntryId ??  nil
-                ) ,
+                ),
                 loadingView: BasketPreviewLoadingView(),
                 emptyView: BasketPreviewEmptyView()
             )

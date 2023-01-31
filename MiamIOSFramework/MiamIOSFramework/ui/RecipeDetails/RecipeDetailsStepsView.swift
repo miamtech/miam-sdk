@@ -12,7 +12,7 @@ import miamCore
 public struct RecipeDetailsStepsView: View {
     let steps: [RecipeStep]
     @SwiftUI.State private var activeStep = -1
-    
+
     public var body: some View {
         if let template = Template.sharedInstance.recipeDetailStepsViewTemplate {
             template(steps)
@@ -25,12 +25,12 @@ public struct RecipeDetailsStepsView: View {
                 Spacer()
             }.frame(height: 60.0, alignment: .topLeading)
                 .padding(.top, Dimension.sharedInstance.lPadding)
-            
-            //Steps
+
+            // Steps
             Divider().background(Color.miamColor(.borderLight))
                 .padding(.horizontal, Dimension.sharedInstance.lPadding)
-            
-            //Steps ListView
+
+            // Steps ListView
             VStack {
                 VStack {
                     ForEach(steps, id: \.self) { step in

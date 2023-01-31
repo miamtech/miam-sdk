@@ -7,15 +7,15 @@ struct MealIdeas: View {
     @SwiftUI.State private var recipeCount: Int = 0
     @SwiftUI.State private var showTag: Bool = false
     @SwiftUI.State private var showRecipeCount: Bool = false
-    
+
     @StateObject private var miamManager = MiamManager.sharedInstance
     var criteria = SuggestionsCriteria(
         shelfIngredientsIds: ["5319173", "970417", "1088020"],
-        currentIngredientsIds:nil,
+        currentIngredientsIds: nil,
         basketIngredientsIds: nil,
         groupId: nil
     )
-    
+
     var body: some View {
         ZStack {
             Color.white.edgesIgnoringSafeArea(.all)
@@ -26,17 +26,17 @@ struct MealIdeas: View {
                             Button("toggle tag", action: { showTag = !showTag})
                             CategoriesMenu(categorie: MiamManager.sharedInstance.categories)
                             VStack(spacing: 24.0) {
-                                if(showTag){
+                                if showTag {
                                     BasketTagView(itemId: "1088020")
                                 }
-                                
+
                                 RecipeCardView(recipeId: "9422")
-                                
+
                                 ForEach(0..<5) { _ in
                                     if let product = MyProductsRepository().getRandomProduct() {
                                         RecipeCardView(criteria: SuggestionsCriteria(
                                             shelfIngredientsIds: [product.id],
-                                            currentIngredientsIds:nil,
+                                            currentIngredientsIds: nil,
                                             basketIngredientsIds: nil,
                                             groupId: nil
                                         ))

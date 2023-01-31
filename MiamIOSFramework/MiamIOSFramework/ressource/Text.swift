@@ -7,9 +7,8 @@
 
 import Foundation
 
-
 public class MiamText {
-    
+
     public static let sharedInstance = MiamText()
 
     public var addRecipe = "Découvrir la recette"
@@ -43,41 +42,41 @@ public class MiamText {
     public var noRecipeFoundText = "Oups, aucune recette n'a été trouvée"
     public var tryAnotherSearchText = "Essayez une nouvelle recherche"
     public var addRecipeText = "Ajouter une idée repas"
-    
+
     public var filtersTitle = "Affiner ma sélection"
     public var filtersDifficultySectionTitle = "Difficulté"
     public var filterCostSectionTitle = "Coût par personne"
     public var filterPreparationTimeSectionTitle = "Temps de préparation"
     public var removeFiltersButtonTitle = "Retirer les filtres"
-    
+
     public var noFavoritRecipeYet = "Oups, vous n'avez pas encore d'idée repas"
     public var search = "Rechercher"
     public var showAll = "Tout voir"
     public var mealIdeas = "Idées repas en 1 clic"
     public var myMealIdeas = "Mes idées repas"
-   
+
     public var noMealIdeaInBasket = "Vous n'avez aucune idée repas dans votre panier."
     public var addIngredientText = "Ajouter"
     public var showDetails = "Voir le détail"
-   
+
     public var removeFromBasket = "Retirer du panier"
     public var keepShopping = "Continuer mes achats"
-    
+
     public var moreInformation = "Plus d'infos"
     public var replaceIngredient = "Remplacer"
-   
+
     public var persons = "pers."
     public var numberOfPersons = "Nombre de personnes"
-    
+
     public var mealsAdded = "repas ajouté"
     public var mealsAddedPlural = "repas ajoutés"
     public var cancel = "Annuler"
     public var see = "Voir les"
     public var meals = "repas"
     public var addTag = "Ajouter +"
-   
+
     public var searchTagPlaceholder = "Rechercher un ingrédient"
-  
+
     public var preferencesTitle = "Mes préférences"
     public var preferencesSearchTitle = "Je n'aime pas"
     public var dietTitle = "Régime particulier"
@@ -86,10 +85,10 @@ public class MiamText {
     public var cookingModesSubtitle = "De quels modes de cuissons disposez-vous ?"
     public var tastesTitle = "Goûts"
     public var tastesSubtitle = "Y a-t-il des ingrédients que vous n'aimez pas ?"
-    
+
     public var prefixWordSearchTitle = "Votre recherche :"
     public var filterSearchTitle = "Votre Sélection"
     public var favoriteTitle = "Mes idées repas"
-    
-    private init(){}
+
+    private init() {}
 }

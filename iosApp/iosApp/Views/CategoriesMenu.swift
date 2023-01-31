@@ -11,14 +11,14 @@ import miamCore
 
 @available(iOS 15, *)
 struct CategoriesMenu: View {
-    
+
     @ObservedObject var categorie: Categories
-    
+
     var body: some View {
         Menu("categories") {
-            ForEach(categorie.categoriesList, id: \.self){ cat in
-                Button(cat.title , action: {})
-            }         
-        }     
+            ForEach(categorie.categoriesList, id: \.self) { cat in
+                Button(cat.title, action: {})
+            }
+        }
     }
 }
