@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    api(project(":miamCore"))
+    embed(project(":miamCore"))
 
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.android)
