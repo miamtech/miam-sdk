@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,7 +88,7 @@ public sealed class RouteServiceEffect: Effect {
     public data class RouteChanged(val newRoute: Route): RouteServiceEffect()
 }
 
-public open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServiceEffect>, CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public open class RouteService: Store<RouteServiceState, RouteServiceAction, RouteServiceEffect>, CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("[ERROR][Miam][RouteService] $exception ${exception.stackTraceToString()}")

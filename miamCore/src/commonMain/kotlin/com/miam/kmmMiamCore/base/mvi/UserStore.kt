@@ -5,6 +5,7 @@ import com.miam.core.sdk.di.MiamDI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,7 @@ public sealed class UserAction : Action {
 
 public sealed class UserEffect : Effect
 
-public class UserStore : Store<UserState, UserAction, UserEffect>,
-    CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class UserStore : Store<UserState, UserAction, UserEffect>, CoroutineScope by MainScope() {
 
     override val state: MutableStateFlow<UserState> = MutableStateFlow(UserState(null, null))
     private val sideEffect = MutableSharedFlow<UserEffect>()

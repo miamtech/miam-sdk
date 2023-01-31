@@ -4,6 +4,7 @@ import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.miam_core.data.datasource.defaultPlatformEngine
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
@@ -55,7 +56,7 @@ public class Analytics {
         analyticsState.value = analyticsState.value.copy(onEventEmitted = onEventEmittedCallBack)
     }
 
-    private val httpClient = HttpClient {
+    private val httpClient = HttpClient(defaultPlatformEngine) {
         install(JsonFeature) { serializer = KotlinxSerializer(kotlinx.serialization.json.Json) }
         BrowserUserAgent()
         install(DefaultRequest)

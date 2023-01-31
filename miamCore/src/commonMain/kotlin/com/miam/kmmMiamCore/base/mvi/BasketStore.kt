@@ -15,17 +15,11 @@ import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.LineEntries
 import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
 import com.miam.kmmMiamCore.services.Analytics
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 public data class AlterQuantityBasketEntry(
     val id: String,
@@ -61,8 +55,7 @@ public sealed class BasketEffect: Effect {
     public object BasketConfirmed: BasketEffect()
 }
 
-public class BasketStore: Store<BasketState, BasketAction, BasketEffect>,
-    CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")

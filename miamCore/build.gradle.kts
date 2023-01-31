@@ -35,7 +35,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":core"))
-                implementation(libs.kotlinx.coroutines.core.mt)
+                implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.koin.core)
@@ -58,6 +58,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test.junit)
                 implementation(libs.test.junit)
+                implementation(libs.kotlinx.coroutines.android)
             }
         }
 
