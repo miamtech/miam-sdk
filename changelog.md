@@ -2,6 +2,7 @@
 - [FEA][AND] Add generic error template 
 - [FIX][IOS] Fix extra padding in my meal view
 - [FIX][IOS] Add flag to show/hide "meal ideas" image in navigation bar
+- [FEA][IOS] Add generic error template 
 
 # 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly

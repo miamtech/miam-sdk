@@ -578,4 +578,10 @@ public class Template {
         RecipeCardVM,
         @escaping () -> Void
     ) -> AnyView)? = nil
+    
+    /**
+     Error Template
+     */
+    public var ErrorTemplate: ((
+    ) -> AnyView)? = nil
 }
