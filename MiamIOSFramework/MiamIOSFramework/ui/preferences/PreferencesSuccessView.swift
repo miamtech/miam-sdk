@@ -20,7 +20,7 @@ struct PreferencesSuccessView: View {
     let onAddTagTapped: () -> Void
     let closeTapped: () -> Void
     let applyTapped: () -> Void
-    
+
     var body: some View {
         if let template = Template.sharedInstance.preferencesSuccessViewTemplate {
             template(numberOfPersons, ingredients, equipments, diets, numberOfRecipesFound, onNumberOfGuestsChanged, onToggleTag,
@@ -39,13 +39,13 @@ struct PreferencesSuccessView: View {
                                     onNumberOfGuestsChanged(count)
                                 }
                             }.background(Color.miamColor(.greyLighter))
-                            
+
                             PreferencesListView(title: MiamText.sharedInstance.dietTitle,
                                                 subtitle: MiamText.sharedInstance.dietSubtitle,
                                                 preferences: diets) { tag in
                                 onToggleTag(tag)
                             }
-                            
+
                             PreferencesTagsListView(title: MiamText.sharedInstance.tastesTitle,
                                                     subtitle: MiamText.sharedInstance.tastesSubtitle,
                                                     tags: ingredients, geometry: geometry,
@@ -54,14 +54,14 @@ struct PreferencesSuccessView: View {
                             }, onAddTagTapped: {
                                 onAddTagTapped()
                             })
-                            
+
                             PreferencesListView(title: MiamText.sharedInstance.cookingModesTitle,
                                                 subtitle: MiamText.sharedInstance.cookingModesSubtitle,
                                                 preferences: equipments) { tag in
                                 onToggleTag(tag)
                             }
                         }
-                        
+
                     }
                     .padding(16.0)
                     .background(Color.miamColor(.lightGreyBackground))
@@ -72,4 +72,3 @@ struct PreferencesSuccessView: View {
         }
     }
 }
-

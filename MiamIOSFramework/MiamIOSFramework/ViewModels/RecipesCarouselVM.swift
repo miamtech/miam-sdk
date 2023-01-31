@@ -10,16 +10,16 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class RecipeCarouselVM: RecipeCarouselViewModel ,ObservableObject {
+class RecipeCarouselVM: RecipeCarouselViewModel, ObservableObject {
     @Published var suggestions: [Recipe] = []
     @Published var state: RecipeCarouselContractState?
-    
+
     override init() {
         super.init()
         self.collect(flow: uiState) { data in
-            let state = data as! RecipeCarouselContractState
+            let state = data as? RecipeCarouselContractState
             self.state = state
-            switch(state.suggestions) {
+            switch state?.suggestions {
             case let success as BasicUiStateSuccess<NSArray>:
                 if let suggestions = success.data as? [Recipe] {
                     self.suggestions = suggestions

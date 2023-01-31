@@ -8,22 +8,20 @@
 import miamCore
 
 @available(iOS 14, *)
-public class PriceVM : RecipePricingViewModel, ObservableObject {
+public class PriceVM: RecipePricingViewModel, ObservableObject {
     @Published var price: Pricing?
 
     override init() {
         super.init()
         // TODO handle other states
         collect(flow: uiState, collect: { data in
-            let state = data as! PricingContractState
-            switch state.price {
-                case let success as BasicUiStateSuccess<Pricing>:
-                    self.price = success.data!
-                default:
+            let state = data as? PricingContractState
+            switch state?.price {
+            case let success as BasicUiStateSuccess<Pricing>:
+                    self.price = success.data
+            default:
                     break
-                }
             }
-        )
-
+        })
     }
 }

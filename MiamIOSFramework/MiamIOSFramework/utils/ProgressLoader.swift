@@ -9,17 +9,17 @@ import SwiftUI
 
 @available(iOS 14, *)
 public struct ProgressLoader: View {
-    
+
     @State private var isAnimating = false
     @State private var showProgress = false
-    private var color : Color
-    
+    private var color: Color
+
     var foreverAnimation: Animation {
         Animation.linear(duration: 0.5)
             .repeatForever(autoreverses: false)
     }
-    
-    public init(color: Color){
+
+    public init(color: Color) {
         self.color = color
     }
 
@@ -29,7 +29,7 @@ public struct ProgressLoader: View {
                 .stroke(lineWidth: 8.0)
                 .opacity(0.3)
                 .foregroundColor(color)
-            
+
             Circle()
                 .trim(from: 0, to: 0.3)
                 .stroke(style: StrokeStyle(lineWidth: 8.0, lineCap: .round, lineJoin: .round))
@@ -45,4 +45,3 @@ public struct ProgressLoader: View {
         }.frame(width: 60, height: 60)
     }
 }
-

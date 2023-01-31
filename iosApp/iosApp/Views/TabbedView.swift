@@ -24,7 +24,7 @@ struct TabbedView: View {
                     .tabItem {
                         Label("Idées repas", systemImage: "questionmark.square")
                     }
-            } 
+            }
             MealsView()
                 .tabItem {
                     Label("Mes repas", systemImage: "fork.knife.circle")

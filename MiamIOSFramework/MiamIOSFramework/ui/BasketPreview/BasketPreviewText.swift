@@ -8,11 +8,9 @@
 import Foundation
 
 public class BasketPreviewText {
-    
+
     public static let sharedInstance = BasketPreviewText()
 
-
     private init() {}
-    
-}
 
+}

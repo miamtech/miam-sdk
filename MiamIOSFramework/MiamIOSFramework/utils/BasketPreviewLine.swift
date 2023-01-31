@@ -9,7 +9,7 @@ import Foundation
 import miamCore
 
 extension BasketPreviewLine {
-    public static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine   {
+    public static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine {
         let item = entry.selectedItem
         let beI = entry.attributes!.basketEntriesItems?.first(where: { item in
             item.itemId == entry.attributes?.selectedItemId
@@ -82,36 +82,36 @@ extension BasketPreviewLine {
         return entries?.found.count ?? 0
     }
 
-    public var productsInBasket: Array<BasketEntry> {
+    public var productsInBasket: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = entries?.found as? Array<BasketEntry> else {
+        guard let entries = entries?.found as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsNotFound: Array<BasketEntry> {
+    public var productsNotFound: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = entries?.notFound as? Array<BasketEntry> else {
+        guard let entries = entries?.notFound as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsOftenDeleted: Array<BasketEntry> {
+    public var productsOftenDeleted: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = entries?.oftenDeleted as? Array<BasketEntry> else {
+        guard let entries = entries?.oftenDeleted as? [BasketEntry] else {
             return []
         }
 
         return entries
     }
 
-    public var productsRemoved: Array<BasketEntry> {
+    public var productsRemoved: [BasketEntry] {
         // Avoid error "Generic parameter 'C' could not be inferred" when accessing entries
-        guard let entries = entries?.removed as? Array<BasketEntry> else {
+        guard let entries = entries?.removed as? [BasketEntry] else {
             return []
         }
 

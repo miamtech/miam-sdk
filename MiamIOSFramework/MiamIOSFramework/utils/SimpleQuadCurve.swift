@@ -17,7 +17,7 @@ public struct SimpleQuadCurve: Shape {
         path.addQuadCurve(
           to: CGPoint(x: rect.width, y: rect.maxY),
           control: CGPoint(x: rect.midX, y: -rect.maxY))
-        
+
         return path
     }
 }

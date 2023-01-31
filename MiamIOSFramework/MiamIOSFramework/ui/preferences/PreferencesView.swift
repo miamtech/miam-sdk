@@ -12,20 +12,20 @@ import miamCore
 @available(iOS 14, *)
 public struct PreferencesView: View {
     @ObservedObject private var preferencesViewModel: PreferencesVM = PreferencesVM.sharedInstance
-   
+
     let onAddTagTapped: () -> Void
     let closeTapped: () -> Void
     let applyPreferencesTapped: () -> Void
-   
+
     let defaultNumberOfGuests = KotlinInt(int: 4)
-    
+
     public init(onAddTagTapped: @escaping () -> Void, closeTapped: @escaping () -> Void,
                 applyPreferencesTapped: @escaping () -> Void) {
         self.onAddTagTapped = onAddTagTapped
         self.closeTapped = closeTapped
         self.applyPreferencesTapped = applyPreferencesTapped
     }
-    
+
     public var body: some View {
         if let currentState = preferencesViewModel.state {
             VStack {

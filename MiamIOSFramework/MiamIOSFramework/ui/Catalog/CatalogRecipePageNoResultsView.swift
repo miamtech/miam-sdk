@@ -20,7 +20,7 @@ public struct CatalogRecipePageNoResultsView: View {
         } else {
             VStack(spacing: 32.0) {
                 Image.miamImage(icon: .noResults)
-                
+
                 if showingFavorites {
                     Text(MiamText.sharedInstance.noFavoritRecipeYet)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleBigStyle)

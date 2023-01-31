@@ -8,7 +8,6 @@
 import SwiftUI
 import miamCore
 
-
 @available(iOS 14, *)
 public struct MyMealRow: View {
     @SwiftUI.State private var isExpanded: Bool = false
@@ -23,18 +22,17 @@ public struct MyMealRow: View {
     @SwiftUI.State private var showingPopup = false
     @SwiftUI.State private var showingItemSelector = false
 
-    
     private let itemSelectorViewModel = ItemSelectorVM()
-    
+
     private func goToItemSelector() {
-        itemSelectorViewModel.sharedInstance.setEvent(event: ItemSelectorContractEvent.SetReturnToBasketPreview(returnToPreview : { closeItemSelector() }))
+        itemSelectorViewModel.sharedInstance.setEvent(event: ItemSelectorContractEvent.SetReturnToBasketPreview(returnToPreview: { closeItemSelector() }))
         showingItemSelector.toggle()
     }
-    
+
     private func closeItemSelector() {
         showingItemSelector.toggle()
     }
-    
+
     public init(myMealViewModel: MyMealVM, meal: MyMeal) {
         self.meal = meal
         self.myMealViewModel = myMealViewModel
@@ -42,8 +40,8 @@ public struct MyMealRow: View {
         self.recipeViewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
         self.count = meal.basketPreviewLine.numberOfGuests
     }
-    
-    func updateGuest(value :Int){
+
+    func updateGuest(value: Int) {
         recipeViewModel.updateGuest(nbGuest: Int32(value))
     }
 
@@ -64,17 +62,17 @@ public struct MyMealRow: View {
         content
             .frame(maxWidth: .infinity)
     }
-    
+
     private var content: some View {
-        
+
         let parameters =  MyMealsActionColumnTemplateParameters(
-            delete:  { myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))},
+            delete: { myMealViewModel.setEvent(event: MyMealContractEvent.RemoveRecipe.init(recipeId: meal.id))},
             expand: { withAnimation(.default) {
                 isExpanded.toggle()
                 chevronAngle = isExpanded ? 0.0 : -90.0
             }}
         )
-        
+
        return VStack(alignment: .leading) {
             HStack {
                 BasketPreviewHeader(basketTitle: meal.basketPreviewLine.basketTitle,
@@ -89,7 +87,7 @@ public struct MyMealRow: View {
 //                    recipeViewModel.routerVM.goToDetail(vmRecipe: recipeViewModel, showDetailsFooter: false)
                     showingPopup = true
                 }
-                
+
                 if let actionColumnTemplate = Template.sharedInstance.myMealsActionColumnTemplate {
                     actionColumnTemplate(parameters)
                 } else {
@@ -115,28 +113,28 @@ public struct MyMealRow: View {
                 VStack {
                     ForEach(meal.basketPreviewLine.productsInBasket, id: \.self) { entry in
                         let previewLine = BasketPreviewLine.fromBasketEntry(entry: entry)
-                        
-                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine, updatingBasketEntryId:basketPreviewViewModel.state?.updatingBasketEntryId ) {
+
+                        BasketPreviewRow(viewModel: basketPreviewViewModel, previewLine: previewLine, updatingBasketEntryId: basketPreviewViewModel.state?.updatingBasketEntryId ) {
                             removeProduct(entry)
                         } replaceProductAction: {
                             replaceProduct(previewLine)
                         }
                     }
                 }
-                
+
                 if meal.basketPreviewLine.productsOftenDeleted.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: meal.basketPreviewLine.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
-                    
+
                 }
-                
+
                 if meal.basketPreviewLine.productsNotFound.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: meal.basketPreviewLine.productsNotFound, isAddable: false, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
                 }
-                
+
                 if meal.basketPreviewLine.productsRemoved.count > 0 {
                     IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: meal.basketPreviewLine.productsRemoved, isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
@@ -144,12 +142,12 @@ public struct MyMealRow: View {
                 }
             }
         }.sheet(isPresented: $showingPopup) {
-            RecipeModal(recipeId:  meal.id, showFooter: false) {
+            RecipeModal(recipeId: meal.id, showFooter: false) {
                 showingPopup = false
             }
         }.sheet(isPresented: $showingItemSelector) {
             NavigationView {
-                ItemSelector(recipeId:  meal.id) {
+                ItemSelector(recipeId: meal.id) {
                     ()
                 }
                 .navigationBarTitleDisplayMode(.inline)

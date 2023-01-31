@@ -14,15 +14,17 @@ internal struct RecipesView: View {
     @ObservedObject private var recipesListPageModel: RecipeListPageVM
     let browseCatalogAction: () -> Void
     let showingFavorites: Bool
-    let columns:Int
+    let columns: Int
     let spacing: CGFloat
     let recipeCardHeight: CGFloat
     let title: String
-    let subtitle : String?
-    let defaultTitleTemplate : ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
+    let subtitle: String?
+    let defaultTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)? = Template.sharedInstance.recipesListTitleTemplate
     let specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)?
-    
-    init(title:String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool,specialTitleTemplate:((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
+
+    init(title: String, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat,
+         browseCatalogAction: @escaping () -> Void, showingFavorites: Bool,
+         specialTitleTemplate: ((CatalogPageTitleTemplateParameters) -> AnyView)? = nil ) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -33,8 +35,10 @@ internal struct RecipesView: View {
         self.subtitle = nil
         self.specialTitleTemplate = specialTitleTemplate
     }
-    
-    init(categoryId:String, categoryTitle :String, categorySubtitle:String?, recipesListColumns: Int, recipeListSpacing: CGFloat, recipeCardHeight: CGFloat, browseCatalogAction: @escaping () -> Void,  showingFavorites: Bool) {
+
+    init(categoryId: String, categoryTitle: String, categorySubtitle: String?, recipesListColumns: Int,
+         recipeListSpacing: CGFloat, recipeCardHeight: CGFloat,
+         browseCatalogAction: @escaping () -> Void, showingFavorites: Bool) {
         self.browseCatalogAction = browseCatalogAction
         self.showingFavorites = showingFavorites
         self.columns = recipesListColumns
@@ -42,10 +46,10 @@ internal struct RecipesView: View {
         self.recipeCardHeight = recipeCardHeight
         self.title = categoryTitle
         self.subtitle = categorySubtitle
-        self.recipesListPageModel = RecipeListPageVM(categoriesId: categoryId, title:categoryTitle)
+        self.recipesListPageModel = RecipeListPageVM(categoriesId: categoryId, title: categoryTitle)
         self.specialTitleTemplate = Template.sharedInstance.recipesListCategoryTitleTemplate
     }
-    
+
     var body: some View {
         if let state = recipesListPageModel.state {
             ManagementResourceState<NSArray, CatalogRecipesPageSuccessView, CatalogLoadingView, CatalogRecipePageNoResultsView>(
@@ -54,8 +58,8 @@ internal struct RecipesView: View {
                     title: title,
                     recipes: recipesListPageModel.recipes,
                     hasNoResults: recipesListPageModel.hasNoResults,
-                    columns:columns,
-                    spacing:spacing,
+                    columns: columns,
+                    spacing: spacing,
                     recipeCardHeight: recipeCardHeight,
                     titleTemplate: specialTitleTemplate ?? defaultTitleTemplate,
                     loadMoreContentAction: { recipe in

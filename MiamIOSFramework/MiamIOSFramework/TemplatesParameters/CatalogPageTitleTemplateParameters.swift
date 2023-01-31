@@ -8,8 +8,7 @@
 
 import Foundation
 
-
 public struct CatalogPageTitleTemplateParameters {
-    public let title:String
-    public var subtitle:String? = nil
+    public let title: String
+    public var subtitle: String?
 }

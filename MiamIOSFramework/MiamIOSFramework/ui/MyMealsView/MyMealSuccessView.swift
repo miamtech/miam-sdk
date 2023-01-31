@@ -9,9 +9,9 @@ import SwiftUI
 
 @available(iOS 14, *)
 struct MyMealSuccessView: View {
-    
+
     @ObservedObject var myMealsViewModel: MyMealVM
-    
+
     var body: some View {
         ScrollView {
             ForEach(myMealsViewModel.meals) { meal in

@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 14, *)
 public struct TitleBarView: View {
     let barHeight = 55.0
-    
+
     let showBackButton: Bool
     let backAction: (() -> Void)?
     let titleView: AnyView
@@ -18,7 +18,7 @@ public struct TitleBarView: View {
         if let template = Template.sharedInstance.titleBarViewTemplate {
            template(showBackButton, backAction, titleView)
         } else {
-            VStack(spacing: 0){
+            VStack(spacing: 0) {
                 HStack {
                     if showBackButton {
                         Button {

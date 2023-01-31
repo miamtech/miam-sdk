@@ -12,21 +12,21 @@ import miamCore
 struct CatalogFiltersView: View {
     @SwiftUI.State var resultCount: Int = 0
     @ObservedObject var catalogFilters = CatalogFilterViewModel.sharedInstance
-    
+
     let closeFilters: () -> Void
     let applyFilters: () -> Void
-    
+
     init(apply: @escaping () -> Void, close: @escaping () -> Void) {
         applyFilters = apply
         closeFilters = close
     }
-    
+
     var body: some View {
-        if (Template.sharedInstance.catalogFiltersViewTemplate != nil) {
+        if Template.sharedInstance.catalogFiltersViewTemplate != nil {
             Template.sharedInstance.catalogFiltersViewTemplate!
         } else {
             ScrollView {
-                VStack() {
+                VStack {
                     // Title and close button
                     HStack {
                         Text(MiamText.sharedInstance.filtersTitle)
@@ -38,7 +38,7 @@ struct CatalogFiltersView: View {
                             Image.miamImage(icon: .cross)
                         }
                     }.padding([.top], 20)
-                    
+
                     // Filters
                     CatalogFilterSection(title: MiamText.sharedInstance.filtersDifficultySectionTitle, filters: catalogFilters.difficulty) { option in
                         catalogFilters.setEvent(event: SingletonFilterContractEvent.OnDifficultyChanged(difficulty: option))
@@ -51,9 +51,9 @@ struct CatalogFiltersView: View {
                     CatalogFilterSection(title: MiamText.sharedInstance.filterPreparationTimeSectionTitle, filters: catalogFilters.time) { option in
                         catalogFilters.setEvent(event: SingletonFilterContractEvent.OnTimeFilterChanged(timeFilter: option))
                     }
-                    
+
                     Spacer()
-                    
+
                     Button {
                         catalogFilters.clear()
                     } label: {
@@ -81,10 +81,10 @@ struct CatalogFiltersView: View {
 @available(iOS 14, *)
 internal struct CatalogFilterSection: View {
     let title: String
-    let filters: Array<CatalogFilterOptions>
+    let filters: [CatalogFilterOptions]
     let filterSelected: (CatalogFilterOptions) -> Void
     var body: some View {
-        if (Template.sharedInstance.catalogFiltersSectionTemplate != nil) {
+        if Template.sharedInstance.catalogFiltersSectionTemplate != nil {
             Template.sharedInstance.catalogFiltersSectionTemplate!(title, filters, filterSelected)
         } else {
             VStack(alignment: .leading) {
@@ -115,7 +115,7 @@ internal struct CatalogFilterRow: View {
                 Button {
                     filterSelected(filter)
                 } label: {
-                    if (filter.isSelected) {
+                    if filter.isSelected {
                         Image.miamImage(icon: icon)
                     } else {
                         Rectangle().foregroundColor(.clear)

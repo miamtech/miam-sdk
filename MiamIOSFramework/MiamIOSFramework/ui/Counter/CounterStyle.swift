@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 @available(iOS 14, *)
-public struct MainRowContainer : ViewModifier {
+public struct MainRowContainer: ViewModifier {
     public func body(content: Content) -> some View {
         content.padding(Dimension.sharedInstance.sPadding)
     }
@@ -21,5 +21,3 @@ extension View {
        return modifier(MainRowContainer())
     }
 }
-
-

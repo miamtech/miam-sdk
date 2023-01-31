@@ -22,20 +22,20 @@ class RecipeListPageVM: ObservableObject {
         self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
         initStateManagment()
     }
-    
-    init(categoriesId :String, title: String){
+
+    init(categoriesId: String, title: String) {
         self.model = RecipeListPageViewModel()
         filterVM.setCat(catId: categoriesId)
         self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
         initStateManagment()
     }
-    
-    private func initStateManagment(){
+
+    private func initStateManagment() {
         self.model.collect(flow: model.uiState) { data in
-            let state = data as! RecipeListPageContractState
+            let state = data as? RecipeListPageContractState
             self.state = state
-            self.title = state.title
-            switch(state.recipes) {
+            self.title = state?.title ?? ""
+            switch state?.recipes {
             case let success as BasicUiStateSuccess<NSArray>:
                 if let recipes = success.data as? [Recipe] {
                     self.recipes = recipes

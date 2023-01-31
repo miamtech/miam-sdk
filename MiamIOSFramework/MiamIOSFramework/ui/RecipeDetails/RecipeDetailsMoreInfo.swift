@@ -8,22 +8,21 @@
 import SwiftUI
 import miamCore
 
-
 @available(iOS 14, *)
 struct RecipeDetailsMoreInfo: View {
-    
-    private var recipe : Recipe
-    
+
+    private var recipe: Recipe
+
     @SwiftUI.State private var collapsed: Bool = true
-    
-    init(recipe : Recipe){
+
+    init(recipe: Recipe) {
         self.recipe = recipe
     }
-    
+
     var body: some View {
         HStack {
-            if (recipe.preparationTimeIos != "0") {
-                HStack{
+            if recipe.preparationTimeIos != "0" {
+                HStack {
                     Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
@@ -32,8 +31,8 @@ struct RecipeDetailsMoreInfo: View {
                         .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
-            if (recipe.cookingTimeIos != "0") {
-                HStack{
+            if recipe.cookingTimeIos != "0" {
+                HStack {
                     Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
@@ -42,8 +41,8 @@ struct RecipeDetailsMoreInfo: View {
                         .foregroundColor(Color.miamColor(.secondaryText))
                 }
             }
-            if (recipe.restingTimeIos != "0") {
-                HStack{
+            if recipe.restingTimeIos != "0" {
+                HStack {
                     Text(RecipeDetailsText.sharedInstance.restingTime + " :")
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
@@ -57,9 +56,9 @@ struct RecipeDetailsMoreInfo: View {
         .clipped()
         .animation(.easeOut)
         .transition(.slide)
-            Button(action: {
+            Button {
                 self.collapsed.toggle()
-            }) {
+            } label: {
                 HStack {
                     Text(MiamText.sharedInstance.recpeitDetailsInfo)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)
@@ -69,7 +68,7 @@ struct RecipeDetailsMoreInfo: View {
                     Image.miamImage(icon: .greyChevronDown)
                     .renderingMode(.original)
                     .rotationEffect(Angle.degrees(collapsed ? 0 : 180))
-                    .padding(.trailing , 8)
+                    .padding(.trailing, 8)
                 }
                 .background(Color.miamColor(.greySurface))
                 .cornerRadius(15.0)
@@ -77,5 +76,3 @@ struct RecipeDetailsMoreInfo: View {
             }.padding(.trailing, Dimension.sharedInstance.lPadding)
     }
 }
-
-

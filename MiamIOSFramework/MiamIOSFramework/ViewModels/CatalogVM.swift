@@ -32,7 +32,6 @@ public struct CatalogPackage: Identifiable {
     }
 }
 
-
 @available(iOS 14, *)
 public class CatalogVM: CatalogViewModel, ObservableObject {
     @Published var packages: [CatalogPackage] = []
@@ -42,10 +41,10 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
     override public init() {
         super.init()
         collect(flow: uiState) { data in
-            let state = data as! CatalogContractState
-            self.content = state.content
+            let state = data as? CatalogContractState
+            self.content = state?.content ?? .categoriesList
             self.state = state
-            switch state.categories {
+            switch state?.categories {
             case let success as BasicUiStateSuccess<NSArray>: // Must use an object, thus NSArray
                 if let packages = success.data as? [Package] {
                     self.packages = packages.map { line in
@@ -57,7 +56,7 @@ public class CatalogVM: CatalogViewModel, ObservableObject {
             }
         }
     }
-    
+
     public convenience init(categoryID: String, title: String) {
         self.init()
         self.goToCategory(categoryId: categoryID, categoryTitle: title, subtitle: nil)

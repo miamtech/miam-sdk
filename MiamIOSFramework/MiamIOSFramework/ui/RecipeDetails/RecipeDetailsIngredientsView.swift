@@ -15,7 +15,7 @@ struct RecipeDetailsIngredientsView: View {
     let currentGuests: Int
     let guestUpdating: Bool
     let updateGuestsAction: (Int) -> Void
-    
+
     init(ingredients: [Ingredient], recipeGuests: Int, currentGuests: Int,
          guestUpdating: Bool, updateGuestsAction: @escaping (Int) -> Void) {
         self.ingredients = ingredients
@@ -24,7 +24,7 @@ struct RecipeDetailsIngredientsView: View {
         self.guestUpdating = guestUpdating
         self.updateGuestsAction = updateGuestsAction
     }
-    
+
     var body: some View {
         if let template = Template.sharedInstance.recipeDetailsIngredientsViewTemplate {
             template(
@@ -56,7 +56,7 @@ struct RecipeDetailsIngredientsView: View {
             Divider()
                 .background(Color.miamColor(.borderLight))
                 .padding(.horizontal, Dimension.sharedInstance.lPadding)
-            
+
             // Ingredients ListView
             VStack {
                 VStack {

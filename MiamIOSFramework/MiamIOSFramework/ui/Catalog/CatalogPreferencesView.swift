@@ -22,12 +22,12 @@ struct CatalogPreferencesView: View {
                 }, applyPreferencesTapped: {
                     close()
                 })
-                
+
                 NavigationLink("Search", isActive: $showSearch) {
                     // TODO: Show search view
                     PreferencesSearchView(close: {
                         self.showSearch = false
-                    }).navigationBarTitle(MiamText.sharedInstance.preferencesSearchTitle,displayMode: .inline)
+                    }).navigationBarTitle(MiamText.sharedInstance.preferencesSearchTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                         .navigationBarItems(leading: Button {
                             showSearch = false

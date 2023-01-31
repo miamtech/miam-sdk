@@ -15,7 +15,7 @@ struct PreferencesSearchView: View {
     @SwiftUI.State var searchString: String = ""
 
     let close: () -> Void
-    
+
     var body: some View {
         if let template = Template.sharedInstance.preferencesSearchViewTemplate {
             template(preferencesSearchViewModel, close)
@@ -34,7 +34,7 @@ struct PreferencesSearchView: View {
                     }.padding([.leading], 15).frame(height: 45.0)
                         .overlay(Capsule().stroke(Color.gray, lineWidth: 1.0))
                 }
-                
+
                 VStack(alignment: .leading) {
                     ForEach(preferencesSearchViewModel.tagsSuggestions, id: \.id) { tag in
                         // Tags without name will not be displayed in search results

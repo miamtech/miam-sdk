@@ -11,20 +11,20 @@ import miamCore
 
 @available(iOS 14, *)
 class MyMealButtonVM: MyMealButtonViewModel, ObservableObject {
-   
+
     @Published var state: MyMealButtonContractState?
-    
+
     var mealsCount: Int = 0
-    
+
     override init() {
         super.init()
         self.collect(flow: uiState) { data in
             guard let state = data as? MyMealButtonContractState else {
                 return
             }
-            
+
             self.state = state
-            switch(state.recipeCount) {
+            switch state.recipeCount {
             case let success as BasicUiStateSuccess<KotlinInt>:
                 self.mealsCount = success.data?.intValue ?? 0
             default:
