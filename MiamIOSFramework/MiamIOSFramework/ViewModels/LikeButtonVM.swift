@@ -18,10 +18,10 @@ public class LikeButtonVM: LikeButtonViewModel, ObservableObject {
         collect(flow: uiState) { data in
             let state = data as? RecipeLikeContractState
             switch state?.isLiked {
-                case let success as BasicUiStateSuccess<KotlinBoolean>:
+            case let success as BasicUiStateSuccess<KotlinBoolean>:
                 self.isLiked = Bool(success.data!)
-                default:
-                    break
+            default:
+                break
             }
         }
     }

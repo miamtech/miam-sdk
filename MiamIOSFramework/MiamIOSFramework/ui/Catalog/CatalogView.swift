@@ -222,7 +222,7 @@ internal struct CatalogSuccessView: View {
             let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
             RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                 browseCatalogAction()}, showingFavorites: showingFavorites, specialTitleTemplate: Template.sharedInstance.recipesListSearchTitleTemplate)
-            case .filterSearch:
+        case .filterSearch:
                 RecipesView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns,
                             recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight,
                             browseCatalogAction: {

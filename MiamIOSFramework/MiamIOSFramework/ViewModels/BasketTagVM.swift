@@ -21,13 +21,12 @@ public class BasketTagVM: BasketTagViewModel, ObservableObject {
         collect(flow: uiState, collect: { data in
             let state = data as? BasketTagContractState
             switch state?.recipeList {
-                case let success as BasicUiStateSuccess<NSArray>:
+            case let success as BasicUiStateSuccess<NSArray>:
                     self.recipeList = success.data
-                default:
+            default:
                     break
-                }
             }
-        )
+        })
         setEvent(event: BasketTagContractEvent.SetRetailerProductId(productId: productExtId))
     }
 

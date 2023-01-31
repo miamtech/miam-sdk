@@ -17,13 +17,11 @@ public class PriceVM: RecipePricingViewModel, ObservableObject {
         collect(flow: uiState, collect: { data in
             let state = data as? PricingContractState
             switch state?.price {
-                case let success as BasicUiStateSuccess<Pricing>:
+            case let success as BasicUiStateSuccess<Pricing>:
                     self.price = success.data
-                default:
+            default:
                     break
-                }
             }
-        )
-
+        })
     }
 }

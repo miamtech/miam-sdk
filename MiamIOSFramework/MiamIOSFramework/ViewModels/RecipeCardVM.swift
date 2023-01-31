@@ -32,15 +32,14 @@ public class RecipeCardVM: RecipeViewModel, ObservableObject {
             self.guestUpdating = state?.guestUpdating ?? false
             self.guest = Int(state?.guest ?? 0)
             switch state?.recipeState {
-                case let success as BasicUiStateSuccess<Recipe>:
+            case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
 
                     self.objectWillChange.send()
-                default:
+            default:
                     break
-                }
             }
-        )
+        })
     }
 
     var isLikeEnabled: Bool {
