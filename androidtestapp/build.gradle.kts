@@ -32,6 +32,7 @@ android {
         freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xopt-in=kotlinx.coroutines.FlowPreview",
+            "-Xopt-in=coil.annotation.ExperimentalCoilApi",
             "-Xjvm-default=all"
         )
     }

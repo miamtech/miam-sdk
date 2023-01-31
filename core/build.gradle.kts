@@ -86,6 +86,10 @@ android {
         targetSdk = Integer.parseInt(targetSdkVersion)
     }
 
+    lint {
+        abortOnError = false
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

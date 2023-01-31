@@ -119,9 +119,7 @@ open class CatalogPage @JvmOverloads constructor(
                 } else {
                     CatalogLoadingPage()
                 }
-            },
-            onTryAgain = { /**TODO*/ },
-            onCheckAgain = { /**TODO*/ },
+            }
         )
     }
 

@@ -34,11 +34,10 @@ before_script:
   - cd ../../
   - chmod +x ./gradlew
 
-
-build-sdk:
-  stage: build
+check-sdk:
+  stage: test
   script:
-    - ./gradlew :androidSDK:assembleRelease
+    - ./gradlew check
   rules:
     - when: manual
 

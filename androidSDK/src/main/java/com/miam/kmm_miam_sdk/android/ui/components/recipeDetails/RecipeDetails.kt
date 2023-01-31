@@ -70,8 +70,6 @@ fun RecipeDetails(
                 vmRouter.currentState.showFooter
             )
         },
-        onTryAgain = { },
-        onCheckAgain = { },
         loadingView = { CircularProgressIndicator() }
     )
 }
@@ -114,9 +112,11 @@ private fun recipeDetailContent(
             }
         },
         content =
-        {
+        { padding ->
             Column(
-                modifier = mainColumnsContainer.verticalScroll(scrollState)
+                modifier = mainColumnsContainer
+                    .padding(padding)
+                    .verticalScroll(scrollState)
             ) {
                 if (Template.recipeDetailInfosTemplate != null) {
                     Template.recipeDetailInfosTemplate!!({ closeDialogue() }, recipe)

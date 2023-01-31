@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun Empty(
-    msg: String = "No data to show",
-    onCheckAgain: () -> Unit = {}
 ) {
     Box {}
 }

@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -6,6 +7,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.moko.resources)
+    alias(libs.plugins.kosi.mockmp)
 }
 
 multiplatformResources {
@@ -44,8 +46,7 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.test.common)
-                implementation(libs.kotlin.test.annotation.common)
+                implementation(project(":test-utils"))
             }
         }
 
@@ -77,6 +78,7 @@ kotlin {
             languageSettings {
                 optIn("kotlinx.coroutines.FlowPreview")
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
+                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
             }
         }
 
@@ -119,4 +121,20 @@ android {
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+}
+
+// Workaround for https://youtrack.jetbrains.com/issue/KT-48436
+project.extensions.findByType<KotlinMultiplatformExtension>()?.let { ext ->
+    ext.sourceSets.removeAll { sourceSet ->
+        setOf(
+            "androidAndroidTestRelease",
+            "androidTestFixtures",
+            "androidTestFixturesDebug",
+            "androidTestFixturesRelease",
+        ).contains(sourceSet.name)
+    }
+}
+
+mockmp {
+    usesHelper = true
 }

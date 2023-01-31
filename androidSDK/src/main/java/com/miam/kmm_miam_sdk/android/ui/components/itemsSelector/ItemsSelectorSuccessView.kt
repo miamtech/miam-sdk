@@ -57,9 +57,9 @@ fun ItemsSelectorSuccessView(
             }
         },
         content =
-        {
+        { padding ->
             Column(
-                modifier = ItemsSelectorStyle.mainContainer,
+                modifier = ItemsSelectorStyle.mainContainer.padding(padding),
                 verticalArrangement = ItemsSelectorStyle.mainContainerArrangement,
                 horizontalAlignment = ItemsSelectorStyle.mainContainerAlignment,
             ) {

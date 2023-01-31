@@ -74,9 +74,7 @@ class FavoritePage @JvmOverloads constructor(
                 } else {
                     FavoriteLoading()
                 }
-            },
-            onTryAgain = { /**TODO*/ },
-            onCheckAgain = { /**TODO*/ },
+            }
         )
     }
 

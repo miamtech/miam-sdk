@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.ressource.Image
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -55,7 +54,6 @@ fun CatalogHeader(
 ) {
 
     var headerState by remember { mutableStateOf(HeaderState.DEFAULT) }
-    val catalogFilterVm = FilterViewModelInstance.instance
 
     fun openFilter() {
         headerState = HeaderState.FILTER

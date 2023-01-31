@@ -5,11 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -108,8 +110,8 @@ fun EmptyView(close: () -> Unit) {
                 }
             }
         },
-        content = {
-            Text(text = "Une erreur s'est produite, veuillez réessayer", textAlign = TextAlign.Center)
+        content = { padding ->
+            Text(modifier = Modifier.padding(padding), text = "Une erreur s'est produite, veuillez réessayer", textAlign = TextAlign.Center)
         }
     )
 }
