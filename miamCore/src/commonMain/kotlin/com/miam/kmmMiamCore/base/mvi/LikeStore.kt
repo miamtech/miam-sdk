@@ -10,6 +10,7 @@ import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ public object LikeStoreInstance {
     public val instance: LikeStore by lazy { MiamDI.likeStore }
 }
 
-public class LikeStore: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class LikeStore: CoroutineScope by MainScope() {
 
     // TODO By lazy allows cyclic dependencies, even if it is bad design
     private val recipeLikeRepositoryImp: RecipeLikeRepositoryImp by lazy { MiamDI.recipeLikeRepository }

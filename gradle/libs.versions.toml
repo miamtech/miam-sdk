@@ -1,12 +1,12 @@
 [versions]
 # Plugins
-kotlin = "1.6.21"
+kotlin = "1.7.21"
 mokoRes = "0.20.1"
 androidBuild = "7.2.2"
 kezongFatAar = "1.3.8"
 nexusPublish = "1.1.0"
 # Android / Compose
-composeCompilerPlugin = "1.2.0-rc02"
+composeCompilerPlugin = "1.4.0-alpha02"
 composeCompilerLib = "1.3.2"
 compose = "1.3.1"
 composeJunit = "1.0.5"
@@ -19,16 +19,15 @@ androidActivityCompose = "1.4.0"
 androidAppcompat = "1.4.1"
 androidMaterial = "1.7.0"
 # Kotlin(x)
-coroutines = "1.5.2"
-coroutines-mt = "1.5.2-mt"
-ktor = "1.6.7"
+coroutines = "1.6.4"
+ktor = "1.6.8"
 serialization = "1.4.0"
 # Others
 coil = "1.3.1"
 koin = "3.2.2"
 # Testing
 junit = "4.13.2"
-turbine = "0.12.1"
+turbine = "0.8.0"
 robolectric = "4.8.2"
 androidTestCore = "1.4.0"
 androidTestJunit = "1.1.5"
@@ -37,7 +36,6 @@ slf4j = "1.7.36"
 [libraries]
 # Kotlin(x)
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlinx-coroutines-core-mt = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-mt" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

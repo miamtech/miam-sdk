@@ -40,7 +40,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
     private val userStore: UserStore by lazy { MiamDI.userStore }
     private val pointOfSaleStore: PointOfSaleStore by lazy { MiamDI.pointOfSaleStore }
 
-    private val httpClient = HttpClient {
+    private val httpClient = HttpClient(defaultPlatformEngine) {
         install(JsonFeature) {
             serializer = KotlinxSerializer(
                 kotlinx.serialization.json.Json {

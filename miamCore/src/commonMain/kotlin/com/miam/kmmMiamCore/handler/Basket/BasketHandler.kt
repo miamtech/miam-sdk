@@ -11,6 +11,7 @@ import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 public object BasketHandlerInstance {
@@ -30,7 +31,7 @@ public data class BasketHandlerState(
     }
 ): State
 
-public class BasketHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class BasketHandler: CoroutineScope by MainScope() {
     // TODO By lazy allows cyclic dependencies, even if it is bad design
     private val basketStore: BasketStore by lazy { MiamDI.basketStore }
 

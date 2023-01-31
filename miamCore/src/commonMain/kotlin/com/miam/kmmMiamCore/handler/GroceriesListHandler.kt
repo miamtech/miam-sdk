@@ -8,13 +8,14 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-public object GroceriesListHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public object GroceriesListHandler: CoroutineScope by MainScope() {
     private val groceriesListStore: GroceriesListStore by lazy { MiamDI.groceriesListStore }
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->

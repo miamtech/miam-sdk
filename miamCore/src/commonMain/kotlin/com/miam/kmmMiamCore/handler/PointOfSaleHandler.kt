@@ -10,6 +10,7 @@ import com.miam.kmmMiamCore.services.Analytics
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.native.concurrent.ThreadLocal
 
@@ -19,7 +20,7 @@ public open class CatalogCategory(
 )
 
 @ThreadLocal
-public object PointOfSaleHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public object PointOfSaleHandler: CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")

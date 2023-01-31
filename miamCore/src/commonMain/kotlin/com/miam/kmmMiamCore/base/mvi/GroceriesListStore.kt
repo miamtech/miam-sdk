@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,8 +36,7 @@ public sealed class GroceriesListEffect: Effect {
     public data class RecipeRemoved(val recipeId: String): GroceriesListEffect()
 }
 
-public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>,
-    CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect>, CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("[ERROR][Miam][GroceriesListStore] $exception ${exception.stackTraceToString()}")

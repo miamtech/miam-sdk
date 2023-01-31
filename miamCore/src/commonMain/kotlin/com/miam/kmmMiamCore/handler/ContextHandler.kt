@@ -9,6 +9,7 @@ import com.miam.kmmMiamCore.handler.Basket.BasketHandler
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +31,7 @@ public sealed class ReadyEvent: Effect {
     public object isNotReady: ReadyEvent()
 }
 
-public class ContextHandler: CoroutineScope by CoroutineScope(Dispatchers.Main) {
+public class ContextHandler: CoroutineScope by MainScope() {
 
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         LogHandler.error("[ContextHandler] $exception ${exception.stackTraceToString()}")
