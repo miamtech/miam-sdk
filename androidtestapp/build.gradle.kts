@@ -44,11 +44,7 @@ android {
 
 dependencies {
     implementation(project(":androidSDK"))
-
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.logging)
+    compileOnly(project(":miamCore"))
 
     // Integration with activities
     implementation(libs.androidx.activity.compose)

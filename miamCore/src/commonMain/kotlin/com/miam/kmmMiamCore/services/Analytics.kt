@@ -4,13 +4,12 @@ import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.handler.LogHandler
-import com.miam.kmmMiamCore.miam_core.data.datasource.defaultPlatformEngine
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-
+import kotlinx.serialization.json.Json
 
 public data class AnalyticEvent(val eventType: String, val path: String, val props: Analytics.PlausibleProps)
 
@@ -56,16 +55,18 @@ public class Analytics {
         analyticsState.value = analyticsState.value.copy(onEventEmitted = onEventEmittedCallBack)
     }
 
-    private val httpClient = HttpClient(defaultPlatformEngine) {
-        install(JsonFeature) { serializer = KotlinxSerializer(kotlinx.serialization.json.Json) }
+    private val httpClient = HttpClient {
+        install(ContentNegotiation) {
+            json(Json.Default)
+        }
         BrowserUserAgent()
         install(DefaultRequest)
     }
 
     private suspend fun HttpClient.postEvent(event: PlausibleEvent) {
-        post<String>(PLAUSIBLE_URL) {
+        post(PLAUSIBLE_URL) {
             contentType(ContentType.Application.Json)
-            body = event
+            setBody(event)
         }
     }
 
