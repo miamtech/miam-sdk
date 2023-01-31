@@ -128,28 +128,28 @@ public struct CatalogView: View {
                     emptyView: CatalogEmptyView())
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        }.sheet(isPresented: $showingSearch, onDismiss: {
+        }.sheet(isPresented: $showingSearch) {
             showingSearch = false
-        }) {
-            CatalogSearchView(catalog: catalog, close: {
+        } content: {
+            CatalogSearchView(catalog: catalog) {
                 showingSearch = false
-            }) {
+            } search: {
                 showingSearch = false
                 catalog.onSimpleSearch(content: CatalogContent.wordSearch)
             }
-        }.sheet(isPresented: $showingFilters, onDismiss: {
+        }.sheet(isPresented: $showingFilters) {
             showingFilters = false
-        }) {
+        } content: {
             CatalogFiltersView {
                 showingFilters = false
                 catalog.onSimpleSearch(content: CatalogContent.filterSearch)
             } close: {
                 showingFilters = false
             }
-        }.sheet(isPresented: $showingPreferences, onDismiss: {
+        }.sheet(isPresented: $showingPreferences) {
             routeService.onCloseDialog()
             showingPreferences = false
-        }) {
+        } content: {
             CatalogPreferencesView {
                 routeService.onCloseDialog()
                 showingPreferences = false

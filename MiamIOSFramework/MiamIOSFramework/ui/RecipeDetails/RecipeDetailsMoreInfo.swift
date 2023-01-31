@@ -56,9 +56,9 @@ struct RecipeDetailsMoreInfo: View {
         .clipped()
         .animation(.easeOut)
         .transition(.slide)
-            Button(action: {
+            Button {
                 self.collapsed.toggle()
-            }) {
+            } label: {
                 HStack {
                     Text(MiamText.sharedInstance.recpeitDetailsInfo)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleExtraSmallStyle)

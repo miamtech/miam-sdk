@@ -76,9 +76,9 @@ public struct CounterView: View {
             template(count, lightMode, {increase()}, {decrease()})
         } else {
             HStack {
-                Button(action: {
+                Button {
                     decrease()
-                }) {
+                } label: {
                     Image.miamImage(icon: .minus)
                         .resizable()
                         .scaledToFill()
@@ -99,9 +99,9 @@ public struct CounterView: View {
                         .foregroundColor(Color.miamColor(.white))
                     Spacer()
                 }
-                Button(action: {
+                Button {
                    increase()
-                }) {
+                } label: {
                     Image.miamImage(icon: .plus)
                         .resizable()
                         .scaledToFill()

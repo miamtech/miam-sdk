@@ -18,9 +18,9 @@ internal struct BasketPreviewFooter: View {
         } else {
             HStack {
                 ZStack(alignment: .center) {
-                    Button(action: {
+                    Button {
                         removeFromBasketAction()
-                    }) {
+                    } label: {
                         Text(MiamText.sharedInstance.removeFromBasket)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
                     }.foregroundColor(Color.miamColor(.secondaryText))
@@ -28,9 +28,9 @@ internal struct BasketPreviewFooter: View {
                 }.padding(.horizontal, Dimension.sharedInstance.mPadding).frame(minWidth: 155.0)
 
                 ZStack(alignment: .center) {
-                    Button(action: {
+                    Button {
                         continueShoppingAction()
-                    }) {
+                    } label: {
                         Text(MiamText.sharedInstance.keepShopping)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                     }.foregroundColor(Color.miamColor(.white)).padding(.horizontal, Dimension.sharedInstance.sPadding)

@@ -42,24 +42,24 @@ struct RecipeDetailsStepRow: View {
                 .multilineTextAlignment(.leading)
                 .padding(Dimension.sharedInstance.mPadding).fixedSize(horizontal: false, vertical: true)
             Spacer()
-            Button(action: {
-                            onToogleCheckbox()
-                        }) {
-                        ZStack(alignment: .center) {
-                               Rectangle()
-                                .fill(.white)
-                                .cornerRadius(5)
-                                .border(.black, width: 1)
-                                        .frame(width: 20, height: 20, alignment: .center)
+            Button {
+                onToogleCheckbox()
+            } label: {
+                ZStack(alignment: .center) {
+                       Rectangle()
+                        .fill(.white)
+                        .cornerRadius(5)
+                        .border(.black, width: 1)
+                                .frame(width: 20, height: 20, alignment: .center)
 
-                            if self.checkState {
-                                Image.miamImage(icon: .check)
-                                    .renderingMode(.original).frame( alignment: .center)
-                            }
-
-                        }
+                    if self.checkState {
+                        Image.miamImage(icon: .check)
+                            .renderingMode(.original).frame( alignment: .center)
                     }
-                    .foregroundColor(Color.white)
+
+                }
+            }
+            .foregroundColor(Color.white)
         }
 
     }

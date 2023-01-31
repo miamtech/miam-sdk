@@ -75,9 +75,9 @@ public struct PreferenceListItemView: View {
         } else {
             VStack(alignment: .leading) {
                 HStack {
-                    Button(action: {
+                    Button {
                         onToggleTag(tag)
-                    }) {
+                    } label: {
                         ZStack(alignment: .center) {
                             Rectangle()
                                 .fill(.white)

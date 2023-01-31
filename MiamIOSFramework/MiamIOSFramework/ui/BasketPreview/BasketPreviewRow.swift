@@ -125,9 +125,9 @@ struct BasketPreviewRow: View {
                     }
 
                     Spacer()
-                    Button(action: {
+                    Button {
                         removeProductAction()
-                    }) {
+                    } label: {
                         Image.miamImage(icon: .bin)
                     }.frame(width: 30, height: 30, alignment: .topTrailing)
                 }
@@ -144,9 +144,9 @@ struct BasketPreviewRow: View {
                 HStack {
                     HStack {
                         if let itemCount = (previewLine.record as? BasketEntry)?.itemsCountOrZero, itemCount > 1 {
-                            Button(action: {
+                            Button {
                                 replaceProductAction()
-                            }) {
+                            } label: {
                                 Image.miamImage(icon: .sync).resizable()
                                     .renderingMode(.original)
                                     .frame(width: 18, height: 18, alignment: .topTrailing)
