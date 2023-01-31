@@ -36,7 +36,9 @@ kotlin {
             dependencies {
                 api(project(":core"))
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.contentNegotiation)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.koin.core)
                 implementation(libs.moko.resources.core)
@@ -51,7 +53,7 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-                implementation(libs.ktor.client.android)
+                api(libs.ktor.client.android)
             }
         }
         val androidTest by getting {

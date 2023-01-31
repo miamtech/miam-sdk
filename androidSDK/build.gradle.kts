@@ -51,6 +51,8 @@ dependencies {
     api(libs.ktor.client.core)
     api(libs.ktor.client.android)
     api(libs.ktor.client.serialization)
+    api(libs.ktor.client.contentNegotiation)
+    api(libs.ktor.client.logging)
 
     api(libs.androidx.activity.compose)
     api(libs.androidx.core.ktx)
