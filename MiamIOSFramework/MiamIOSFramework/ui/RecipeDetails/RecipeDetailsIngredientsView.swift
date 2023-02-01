@@ -61,19 +61,37 @@ struct RecipeDetailsIngredientsView: View {
             VStack {
                 VStack {
                     ForEach(ingredients, id: \.self) { ingredient in
-                        RecipeDetailsIngredientRow(
-                            ingredientName: ingredient.attributes!.name!,
-                            quantity: QuantityFormatter.default().readableFloatNumber(value:
-                                                                                        QuantityFormatter.default().realQuantities(
-                                                                                            quantity: ingredient.attributes!.quantity!,
-                                                                                            currentGuest: Int32(currentGuests),
-                                                                                            recipeGuest: Int32(recipeGuests)
-                                                                                        ),
-                                                                                      unit: ingredient.attributes!.unit))
+                        if let attributes = ingredient.attributes {
+                            let quantity = quantityForIngredient(ingredient, currentNumberOfGuests: currentGuests,
+                                                                 recipeNumberOfGuests: recipeGuests)
+                            let formattedQuantity = formatQuantity(quantity: quantity, unit: attributes.unit)
+                            RecipeDetailsIngredientRow(ingredientName: attributes.name ?? "",
+                                                       quantity: formattedQuantity)
+                        }
                     }
                 }.padding(.vertical, Dimension.sharedInstance.lPadding)
-            }.background(Color.miamColor(.greyLighter)).cornerRadius(15.0).padding( .horizontal, Dimension.sharedInstance.lPadding)
+            }.background(Color.miamColor(.greyLighter)).cornerRadius(15.0).padding( .horizontal,
+                                                                                    Dimension.sharedInstance.lPadding)
         }
+    }
+
+    func formatQuantity(quantity: Float, unit: String?) -> String {
+        return QuantityFormatter.default().readableFloatNumber(value: quantity, unit: unit)
+    }
+
+    func quantityForIngredient(_ ingredient: Ingredient, currentNumberOfGuests: Int,
+                               recipeNumberOfGuests: Int) -> Float {
+        guard let quantity = ingredient.attributes?.quantity else {
+            return 0.0
+        }
+
+        let realQuantities = QuantityFormatter.default().realQuantities(
+            quantity: quantity,
+            currentGuest: Int32(currentNumberOfGuests),
+            recipeGuest: Int32(recipeNumberOfGuests)
+        )
+
+        return realQuantities
     }
 }
 
