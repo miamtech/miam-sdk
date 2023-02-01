@@ -58,23 +58,23 @@ public struct RecipeDetailsView: View {
                         VStack {
                             VStack {
                                 VStack {
-                                    RecipeDetailsHeaderView(mediaURL: viewModel.recipe?.attributes?.mediaUrl,
-                                                            title: viewModel.recipe?.attributes?.title ?? "",
-                                                            difficulty: Int(truncating: viewModel.recipe?.attributes?.difficulty ?? 1),
-                                                            totalTime: viewModel.recipe?.totalTime ?? "10 min",
+                                    RecipeDetailsHeaderView(mediaURL: recipe.attributes?.mediaUrl,
+                                                            title: recipe.attributes?.title ?? "",
+                                                            difficulty: Int(truncating: recipe.attributes?.difficulty ?? 1),
+                                                            totalTime: recipe.totalTime,
                                                             showTitleInHeader: $showTitleInHeader,
                                                             isLikeEnabled: viewModel.isLikeEnabled,
                                                             recipeId: recipeId ?? recipe.id)
                                 }
 
-                                RecipeTimeView(preparationTime: viewModel.recipe!.preparationTimeIos,
-                                               cookingTime: viewModel.recipe!.cookingTimeIos,
-                                               restingTime: viewModel.recipe!.restingTimeIos)
+                                RecipeTimeView(preparationTime: recipe.preparationTimeIos,
+                                               cookingTime: recipe.cookingTimeIos,
+                                               restingTime: recipe.restingTimeIos)
                             }
 
-                            if let ingredients = viewModel.recipe?.relationships?.ingredients?.data {
+                            if let ingredients = recipe.relationships?.ingredients?.data {
                                 RecipeDetailsIngredientsView(ingredients: ingredients,
-                                                             recipeGuests: Int(viewModel.recipe?.attributes?.numberOfGuests ?? 0),
+                                                             recipeGuests: Int(recipe.attributes?.numberOfGuests ?? 0),
                                                              currentGuests: Int(viewModel.state?.guest ?? 0),
                                                              guestUpdating: viewModel.guestUpdating,
                                                              updateGuestsAction: { newGuest in viewModel.updateGuest(nbGuest: Int32(newGuest)) }
@@ -116,8 +116,8 @@ public struct RecipeDetailsView: View {
             }
         }
         .onAppear(perform: {
-            if recipeId != nil {
-                viewModel.fetchRecipe(recipeId: self.recipeId!)
+            if let recipeId = self.recipeId {
+                viewModel.fetchRecipe(recipeId: recipeId)
             }
         }
         )

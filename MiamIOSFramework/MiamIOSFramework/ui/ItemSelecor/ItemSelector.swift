@@ -19,13 +19,13 @@ public struct ItemSelector: View {
     }
 
     public var body: some View {
-        if viewModel.state != nil {
+        if let state = viewModel.state {
             ManagementResourceState<BasketPreviewLine, ItemSelectorSuccessView, ItemSelectorLoadingView, ItemSelectorEmptyView>(
-                resourceState: viewModel.state?.selectedItem,
+                resourceState: state.selectedItem,
                 successView: ItemSelectorSuccessView(
                     recipeId: recipeId,
                     selectedItem: viewModel.selectedItem,
-                    items: viewModel.state?.items ?? [],
+                    items: state.items,
                     chooseItem: { bpl, index in  viewModel.chooseItem(selectedItem: bpl, index: index)},
                     onItemSelected: { onItemSelected()}
                 ),

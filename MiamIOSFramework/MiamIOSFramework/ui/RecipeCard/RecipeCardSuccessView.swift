@@ -55,8 +55,8 @@ internal struct RecipeCardSuccessView: View {
                                 .cornerRadius(5).rotationEffect(Angle(degrees: -2.0))
                         }
                         Spacer()
-                        if isLikeEnabled {
-                            LikeButton(recipeId: recipe!.id)
+                        if isLikeEnabled, let recipeId = recipe?.id {
+                            LikeButton(recipeId: recipeId)
                         }
                     }.padding([.leading, .trailing], 8).padding(.top, 16)
                 }.frame(height: 240)

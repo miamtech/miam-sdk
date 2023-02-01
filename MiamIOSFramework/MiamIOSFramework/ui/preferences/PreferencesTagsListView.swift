@@ -60,7 +60,7 @@ public struct PreferencesTagsListView: View {
                         height -= dimension.height
                     }
                     let result = width
-                    if tag == self.tags.first! {
+                    if let firstTag = self.tags.first, tag == firstTag {
                         width = 0 // last item
                     } else {
                         width -= dimension.width
@@ -69,7 +69,7 @@ public struct PreferencesTagsListView: View {
                 })
                 .alignmentGuide(.top, computeValue: {_ in
                     let result = height
-                    if tag == self.tags.first! {
+                    if let firstTag = self.tags.first, tag == firstTag {
                         height = 0 // last item
                     }
                     return result

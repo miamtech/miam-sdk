@@ -123,7 +123,9 @@ public struct BasketPreviewSuccessView: View {
 
             BasketPreviewFooter(
                 removeFromBasketAction: {
-                    viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: viewModel.basketPreviewLine!.id! ))
+                    if let recipeId = viewModel.basketPreviewLine?.id {
+                        viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: recipeId))
+                    }
                     close()
                 }, continueShoppingAction: {
                     close()

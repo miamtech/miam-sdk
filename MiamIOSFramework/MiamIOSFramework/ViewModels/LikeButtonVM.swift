@@ -19,7 +19,9 @@ public class LikeButtonVM: LikeButtonViewModel, ObservableObject {
             let state = data as? RecipeLikeContractState
             switch state?.isLiked {
             case let success as BasicUiStateSuccess<KotlinBoolean>:
-                self.isLiked = Bool(success.data!)
+                if let liked = success.data {
+                    self.isLiked = liked.boolValue
+                }
             default:
                 break
             }

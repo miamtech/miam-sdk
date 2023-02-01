@@ -34,7 +34,8 @@ public struct RecipeDetailsStepsView: View {
             VStack {
                 VStack {
                     ForEach(steps, id: \.self) { step in
-                        let index = Int(step.attributes!.stepNumber)
+                        let stepNumber = step.attributes?.stepNumber ?? 0
+                        let index = Int(stepNumber)
                         let isChecked = activeStep > index
                         RecipeDetailsStepRow(
                             index: index,
