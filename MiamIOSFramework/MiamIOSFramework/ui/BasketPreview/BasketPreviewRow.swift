@@ -63,8 +63,8 @@ struct BasketPreviewRow: View {
 
     var body: some View {
 
-        if Template.sharedInstance.basketPreviewRowTemplate != nil {
-            Template.sharedInstance.basketPreviewRowTemplate!(
+        if let template = Template.sharedInstance.basketPreviewRowTemplate {
+            template(
                 productName,
                 productPictureURL,
                 productBrandName,
@@ -107,9 +107,9 @@ struct BasketPreviewRow: View {
                         HStack {
                             Spacer()
                             HStack {
-                                if previewLine.inlineTag != nil {
+                                if let inlineTag = previewLine.inlineTag {
                                     HStack {
-                                        Text(previewLine.inlineTag!)
+                                        Text(inlineTag)
                                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                                         Image.miamImage(icon: .look)
                                             .resizable()

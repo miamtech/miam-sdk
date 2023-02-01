@@ -42,9 +42,9 @@ public struct BasketPreviewView: View {
     }
 
     public var body: some View {
-        if viewModel.state != nil {
+        if let state = viewModel.state {
             ManagementResourceState<BasketPreviewLine, BasketPreviewSuccessView, BasketPreviewLoadingView, BasketPreviewEmptyView>(
-                resourceState: viewModel.state!.line,
+                resourceState: state.line,
                 successView: BasketPreviewSuccessView(
                     viewModel: viewModel,
                     title: title,
@@ -52,8 +52,8 @@ public struct BasketPreviewView: View {
                     goToDetail: goToDetail,
                     close: close,
                     goToItemSelector: goToItemSelector,
-                    isReloading: viewModel.state?.isReloading ?? false,
-                    updatingBasketEntryId: viewModel.state?.updatingBasketEntryId ??  nil
+                    isReloading: state.isReloading,
+                    updatingBasketEntryId: state.updatingBasketEntryId ??  nil
                 ),
                 loadingView: BasketPreviewLoadingView(),
                 emptyView: BasketPreviewEmptyView()

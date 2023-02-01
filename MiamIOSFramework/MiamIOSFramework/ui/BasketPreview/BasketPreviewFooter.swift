@@ -13,8 +13,8 @@ internal struct BasketPreviewFooter: View {
     let continueShoppingAction: () -> Void
 
     var body: some View {
-        if Template.sharedInstance.basketPreviewFooterTemplate != nil {
-            Template.sharedInstance.basketPreviewFooterTemplate!(removeFromBasketAction, continueShoppingAction)
+        if let template = Template.sharedInstance.basketPreviewFooterTemplate {
+            template(removeFromBasketAction, continueShoppingAction)
         } else {
             HStack {
                 ZStack(alignment: .center) {

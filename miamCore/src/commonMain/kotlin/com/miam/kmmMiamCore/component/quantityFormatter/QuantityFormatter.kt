@@ -4,17 +4,17 @@ import kotlin.math.ceil
 
 public class QuantityFormatter {
     public companion object default {
-        public fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): String {
-            return (quantity.toFloat() * currentGuest / recipeGuest).toString()
+        public fun realQuantities(quantity: String, currentGuest: Int, recipeGuest: Int): Float {
+            return (quantity.toFloat() * currentGuest / recipeGuest)
         }
 
 
-        public fun readableFloatNumber(value: String, unit: String?): String {
+        public fun readableFloatNumber(value: Float, unit: String?): String {
             if (isUnitCountless(unit)) {
                 return unit.toString()
             }
 
-            val valueToNumber = value.toFloat()
+            val valueToNumber = value
             var unitToDisplay = if (unit != null && unit.isNotEmpty()) unit else ""
             if (valueToNumber < 1) {
                 unitToDisplay = singularize(unit.toString())

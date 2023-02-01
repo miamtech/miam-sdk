@@ -56,7 +56,10 @@ public struct CounterView: View {
     }
 
     private func newValueBounded(newValue: Int) -> Bool {
-        return (minValue == nil || newValue >= minValue!) && (maxValue == nil || newValue <= maxValue!)
+        guard let minValue, let maxValue else {
+            return true
+        }
+        return newValue >= minValue && newValue <= maxValue
     }
 
     private func increase() {

@@ -63,14 +63,12 @@ public struct RecipeCardView: View {
             loadingView: RecipeCardLoadingView(),
             emptyView: RecipeCardEmptyView()
         ).onAppear(perform: {
-            if recipeId != nil {
-                viewModel.fetchRecipe(recipeId: self.recipeId!)
-            } else if criteria != nil {
-                viewModel.setRecipeFromSuggestion(criteria: self.criteria!)
-            } else if  recipe != nil {
-                if let  currentRecipe = recipe {
-                    viewModel.setRecipe(recipe: currentRecipe)
-                }
+            if let recipeId = self.recipeId {
+                viewModel.fetchRecipe(recipeId: recipeId)
+            } else if let criteria = self.criteria {
+                viewModel.setRecipeFromSuggestion(criteria: criteria)
+            } else if let recipe = self.recipe {
+                viewModel.setRecipe(recipe: recipe)
             }
         }).frame(height: recipeCardHeight)
             .sheet(isPresented: $showingPopup) {

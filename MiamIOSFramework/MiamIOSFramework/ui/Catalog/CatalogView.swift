@@ -257,8 +257,8 @@ public struct CatalogPackageRow: View {
     }
 
     public var body: some View {
-        if Template.sharedInstance.catalogPackageRowTemplate != nil {
-            Template.sharedInstance.catalogPackageRowTemplate!(package, showRecipes)
+        if let template = Template.sharedInstance.catalogPackageRowTemplate {
+            template(package, showRecipes)
         } else {
             VStack(alignment: .leading) {
                 Text(package.title)
@@ -297,8 +297,8 @@ public struct CatalogPackageRow: View {
 internal struct CatalogViewHeader: View {
     let closeCatalogAction: (() -> Void)?
     var body: some View {
-        if Template.sharedInstance.catalogViewHeaderTemplate != nil {
-            Template.sharedInstance.catalogViewHeaderTemplate!(closeCatalogAction)
+        if let template = Template.sharedInstance.catalogViewHeaderTemplate {
+            template(closeCatalogAction)
         } else {
             HStack {
                 Image.miamImage(icon: .ideeRepas)
@@ -336,8 +336,9 @@ internal struct CatalogToolbarView: View {
     let preferencesTapped: () -> Void
 
     var body: some View {
-        if Template.sharedInstance.catalogViewToolbarTemplate != nil {
-            Template.sharedInstance.catalogViewToolbarTemplate!(showBackButton, favoritesFilterActive, backTapped, filtersTapped, searchTapped, favoritesTapped, preferencesTapped)
+        if let template = Template.sharedInstance.catalogViewToolbarTemplate {
+            template(showBackButton, favoritesFilterActive, backTapped, filtersTapped,
+                     searchTapped, favoritesTapped, preferencesTapped)
         } else {
             HStack(spacing: 16.0) {
                 if showBackButton {

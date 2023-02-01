@@ -14,8 +14,8 @@ struct IngredientNotInBasketRow: View {
     let addIngredientAction: () -> Void
     let isAddable: Bool
     var body: some View {
-        if Template.sharedInstance.ingredientNotInBasketRowTemplate != nil {
-            Template.sharedInstance.ingredientNotInBasketRowTemplate!(name, isAddable ? addIngredientAction : nil)
+        if let template = Template.sharedInstance.ingredientNotInBasketRowTemplate {
+            template(name, isAddable ? addIngredientAction : nil)
         } else {
             HStack {
                 Text(name.capitalizingFirstLetter())

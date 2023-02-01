@@ -11,7 +11,7 @@ import miamCore
 extension BasketPreviewLine {
     public static func fromBasketEntry(entry: BasketEntry) -> BasketPreviewLine {
         let item = entry.selectedItem
-        let beI = entry.attributes!.basketEntriesItems?.first(where: { item in
+        let beI = entry.attributes?.basketEntriesItems?.first(where: { item in
             item.itemId == entry.attributes?.selectedItemId
         })
         var price = 0.0

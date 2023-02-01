@@ -123,7 +123,9 @@ public struct BasketPreviewSuccessView: View {
 
             BasketPreviewFooter(
                 removeFromBasketAction: {
-                    viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: viewModel.basketPreviewLine!.id! ))
+                    if let recipeId = viewModel.basketPreviewLine?.id {
+                        viewModel.setEvent(event: BasketPreviewContractEvent.RemoveRecipe(recipeId: recipeId))
+                    }
                     close()
                 }, continueShoppingAction: {
                     close()
@@ -153,8 +155,8 @@ internal struct IngredientsHeader: View {
     }
 
     var body: some View {
-        if Template.sharedInstance.ingredientFoldableHeaderTemplate != nil {
-            Template.sharedInstance.ingredientFoldableHeaderTemplate!(title, $folded)
+        if let template = Template.sharedInstance.ingredientFoldableHeaderTemplate {
+            template(title, $folded)
         } else {
             HStack {
                 Text(title)

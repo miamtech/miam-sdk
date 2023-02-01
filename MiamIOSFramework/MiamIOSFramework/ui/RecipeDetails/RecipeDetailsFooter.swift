@@ -22,11 +22,11 @@ public struct RecipeDetailsFooter: View {
     }
 
     public var body: some View {
-        if let recipeId = recipeVM.recipe?.id {
+        if let recipe = recipeVM.recipe {
             if let template = Template.sharedInstance.recipeDetailFooterTemplate {
-                template(recipeVM.recipe!, recipeVM.guest, recipeVM.isInCart, goToPreview, buy)
+                template(recipe, recipeVM.guest, recipeVM.isInCart, goToPreview, buy)
             } else {
-                DefaultRecipeDetailFooterView(recipeId: recipeId, guest: recipeVM.guest,
+                DefaultRecipeDetailFooterView(recipeId: recipe.id, guest: recipeVM.guest,
                                               isInCart: recipeVM.isInCart, goToPreview: goToPreview, buy: buy)
             }
         }
