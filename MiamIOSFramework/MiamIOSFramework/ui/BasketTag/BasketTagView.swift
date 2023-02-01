@@ -46,27 +46,29 @@ internal struct TagView: View {
         if let template = Template.sharedInstance.tagViewTemplate {
             template(recipes, tagTappedAction)
         } else {
-            HStack {
-                Text(recipes[0].attributes?.title ?? "")
-                    .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
-                    .lineLimit(1)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 50)
-                            .stroke(.gray, lineWidth: 1)
-                    ).onTapGesture {
-                        tagTappedAction()
-                    }
-
-                if recipes.count > 1 {
-                    ZStack {
-                        Circle()
-                            .strokeBorder(Color.miamColor(.primary), lineWidth: 1)
-                            .frame(width: 30, height: 30)
-                        Text("+" + String(recipes.count - 1))
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
-                            .foregroundColor(Color.miamColor(.primary))
+            if recipes.count > 0 {
+                HStack {
+                    Text(recipes[0].attributes?.title ?? "")
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                        .lineLimit(1)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(.gray, lineWidth: 1)
+                        ).onTapGesture {
+                            tagTappedAction()
+                        }
+                    
+                    if recipes.count > 1 {
+                        ZStack {
+                            Circle()
+                                .strokeBorder(Color.miamColor(.primary), lineWidth: 1)
+                                .frame(width: 30, height: 30)
+                            Text("+" + String(recipes.count - 1))
+                                .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigStyle)
+                                .foregroundColor(Color.miamColor(.primary))
+                        }
                     }
                 }
             }
