@@ -258,12 +258,10 @@ public class Template {
     ) -> AnyView)?
 
     /**
-     catalog: CatalogVM
      close: () -> Void
      search: () -> Void
      */
     public var catalogSearchViewTemplate: ((
-        CatalogVM,
         @escaping () -> Void,
         @escaping () -> Void
     ) -> AnyView)?
@@ -275,7 +273,7 @@ public class Template {
      */
     public var catalogRecipePageNoResultsViewTemplate: ((
         String,
-        @escaping () -> Void,
+        (() -> Void)?,
         Bool
     ) -> AnyView)?
 
@@ -534,6 +532,7 @@ public class Template {
      backAction: (() -> Void)?
      titleView: AnyView
      */
+    @available(*, deprecated, message: "Not used anymore, views use native navigation bar.")
     public var titleBarViewTemplate: ((
         Bool,
         (() -> Void)?,
@@ -571,5 +570,11 @@ public class Template {
         String,
         RecipeCardVM,
         @escaping () -> Void
-    ) -> AnyView)?
+    ) -> AnyView)? = nil
+    
+    /**
+     Error Template
+     */
+    public var errorTemplate: ((
+    ) -> AnyView)? = nil
 }
