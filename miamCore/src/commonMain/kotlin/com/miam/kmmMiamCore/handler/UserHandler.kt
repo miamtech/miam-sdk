@@ -10,8 +10,7 @@ public object UserHandler {
 
     public fun updateUserId(userId: String?) {
         if (store.sameUser(userId)) return
-
-        store.dispatch(UserAction.RefreshUser(userId))
+        store.refreshUser(userId)
     }
 
     public fun setProfilingAllowed(allowance: Boolean) {
