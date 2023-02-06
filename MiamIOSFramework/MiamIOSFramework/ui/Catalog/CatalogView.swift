@@ -131,7 +131,7 @@ public struct CatalogView: View {
         }.sheet(isPresented: $showingSearch) {
             showingSearch = false
         } content: {
-            CatalogSearchView(catalog: catalog) {
+            CatalogSearchView {
                 showingSearch = false
             } search: {
                 showingSearch = false
@@ -205,36 +205,26 @@ internal struct CatalogSuccessView: View {
     var body: some View {
         switch catalogContent {
         case .categoriesList:
-                if packages.isEmpty {
-                    CatalogRecipePageNoResultsView( browseCatalogAction: {}).frame(maxHeight: .infinity)
-                } else {
-                ScrollView {
-                        VStack {
-                            ForEach(packages) { package in
-                                CatalogPackageRow(package: package, recipeCardHeight: recipeCardHeight) { package in
-                                    navigateToRecipeAction(package.package)
-                                }
-                            }
-                        }.padding([.top], Dimension.sharedInstance.lPadding)
-                    }
-                }
+                CatalogCategoriesSuccessView(packages: packages, navigateToCategory: { package in
+                    navigateToRecipeAction(package.package)
+                }, recipeCardHeight: recipeCardHeight)
         case .wordSearch:
             let title = "\(MiamText.sharedInstance.prefixWordSearchTitle) \"\( FilterViewModelInstance.shared.instance.currentState.searchString ?? "" )\""
-            RecipesView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
+            RecipesListView(title: title, recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                 browseCatalogAction()}, showingFavorites: showingFavorites, specialTitleTemplate: Template.sharedInstance.recipesListSearchTitleTemplate)
         case .filterSearch:
-                RecipesView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns,
+                RecipesListView(title: MiamText.sharedInstance.filterSearchTitle, recipesListColumns: recipesListColumns,
                             recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight,
                             browseCatalogAction: {
                                 browseCatalogAction()
                             }, showingFavorites: showingFavorites)
-        case .category: RecipesView(categoryId: categoryId, categoryTitle: categoryTitle,
+        case .category: RecipesListView(categoryId: categoryId, categoryTitle: categoryTitle,
                                     categorySubtitle: categorySubtitle, recipesListColumns: recipesListColumns,
                                     recipeListSpacing: recipesListSpacing, recipeCardHeight: recipeCardHeight,
                                     browseCatalogAction: {
                                         browseCatalogAction()
                         }, showingFavorites: showingFavorites)
-        case .favorite: RecipesView(title: MiamText.sharedInstance.favoriteTitle,
+        case .favorite: RecipesListView(title: MiamText.sharedInstance.favoriteTitle,
                                         recipesListColumns: recipesListColumns, recipeListSpacing: recipesListSpacing,
                                         recipeCardHeight: recipeCardHeight, browseCatalogAction: {
                                             browseCatalogAction()

@@ -46,8 +46,12 @@ struct ManagementResourceState<T: AnyObject, SuccessView: View, LoadingView: Vie
         case is BasicUiStateEmpty:
             emptyView
         case is BasicUiStateError:
-            HStack {} // TODO handle error state
-        case is BasicUiStateSuccess<T>:
+            if let error = Template.sharedInstance.errorTemplate {
+                error()
+            } else {
+                HStack{} // TODO handle error state
+            }
+        case is BasicUiStateSuccess<T> :
             successView
         case is BasicUiStateLoading:
             loadingView

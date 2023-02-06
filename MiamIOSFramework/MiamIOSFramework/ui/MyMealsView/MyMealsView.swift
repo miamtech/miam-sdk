@@ -14,7 +14,7 @@ public struct MyMealsView: View {
     public init() {}
 
     public var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             if let myMealsState = myMealsViewModel.state {
                 ManagementResourceState<NSArray, MyMealSuccessView, MyMealLoadingView, MyMealEmptyView>(
                     resourceState: myMealsState.lines,

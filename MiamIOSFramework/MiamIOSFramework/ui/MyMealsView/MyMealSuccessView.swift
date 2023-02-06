@@ -14,8 +14,10 @@ struct MyMealSuccessView: View {
 
     var body: some View {
         ScrollView {
-            ForEach(myMealsViewModel.meals) { meal in
-                MyMealRow(myMealViewModel: myMealsViewModel, meal: meal).animation(.default, value: 1).padding(.bottom, Dimension.sharedInstance.mPadding)
+            VStack(spacing: 0) {
+                ForEach(myMealsViewModel.meals) { meal in
+                    MyMealRow(myMealViewModel: myMealsViewModel, meal: meal).animation(.default, value: 1).padding(.bottom, Dimension.sharedInstance.mPadding)
+                }
             }
         }
     }

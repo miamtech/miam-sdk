@@ -376,4 +376,12 @@ object Template {
      */
     var priceEmptyTemplate: (@Composable() (
     ) -> Unit)? = null
+
+///////////// ERROR //////////////////////////////////
+
+    /***
+     * Available 3.9.0
+     */
+    var errorTemplate: (@Composable() (
+    ) -> Unit)? = null
 }

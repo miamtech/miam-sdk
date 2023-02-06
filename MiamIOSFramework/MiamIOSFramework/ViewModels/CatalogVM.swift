@@ -12,7 +12,7 @@ public struct CatalogPackage: Identifiable {
     let package: Package
 
     public var id: String {
-        return UUID.init().uuidString
+        return package.id
     }
 
     public var title: String {
