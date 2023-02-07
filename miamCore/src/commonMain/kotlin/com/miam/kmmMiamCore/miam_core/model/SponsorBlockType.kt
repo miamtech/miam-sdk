@@ -65,9 +65,9 @@ public class SponsorBlockTypeRelationship(override var data: SponsorBlockType): 
     }
 }
 
-@Serializer(forClass = SponsorBlocksRelationship::class)
-public object SponsorBlockTypeSerializer: KSerializer<SponsorBlocksRelationship> {
-    override fun serialize(encoder: Encoder, value: SponsorBlocksRelationship) {
+@Serializer(forClass = SponsorBlockTypeRelationship::class)
+public object SponsorBlockTypeSerializer: KSerializer<SponsorBlockTypeRelationship> {
+    override fun serialize(encoder: Encoder, value: SponsorBlockTypeRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)
     }
