@@ -9,10 +9,15 @@
 import SwiftUI
 
 @available(iOS 14, *)
-struct CatalogPreferencesView: View {
+public struct CatalogPreferencesView: View {
     let close: () -> Void
     @State var showSearch = false
-    var body: some View {
+
+    public init(close: @escaping () -> Void) {
+        self.close = close
+    }
+
+    public var body: some View {
         NavigationView {
             VStack {
                 PreferencesView(onAddTagTapped: {

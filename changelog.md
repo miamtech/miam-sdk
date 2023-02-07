@@ -1,3 +1,6 @@
+# 3.9.1
+- [FIX][IOS] Make PreferencesSearchView and CatalogPreferencesView public
+
 # 3.9.0
 - [FEA][AND] Add generic error template 
 - [FIX][IOS] Fix extra padding in my meal view
