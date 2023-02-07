@@ -14,13 +14,13 @@ public data class Sponsor internal constructor(
     override val id: String,
     override val attributes: SponsorAttributes? = null,
     override val relationships: SponsorRelationships? = null
-) : Record() {
+): Record() {
     public constructor(
         id: String,
         attributes: JsonElement?,
         json_relationships: JsonElement?,
         includedRecords: List<Record>
-    ) : this(
+    ): this(
         id,
         if (attributes == null) attributes else jsonFormat.decodeFromJsonElement<SponsorAttributes>(
             attributes
@@ -38,11 +38,15 @@ public data class SponsorAttributes(
     val name: String,
     @SerialName("logo-url")
     val logoUrl: String
-) : Attributes()
+): Attributes()
 
 @Serializable
-public class SponsorRelationships : Relationships() {
+public class SponsorRelationships(
+    @SerialName("sponsor-block")
+    public var sponsorBlocks: SponsorBlocksRelationship? = null
+): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
+        sponsorBlocks?.buildFromIncluded(includedRecords)
     }
 }
 
@@ -50,7 +54,7 @@ public class SponsorRelationships : Relationships() {
  * Used from others relations
  */
 @Serializable(with = SponsorListSerializer::class)
-public class SponsorListRelationship(override var data: List<Sponsor>) : RelationshipList() {
+public class SponsorListRelationship(override var data: List<Sponsor>): RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, Sponsor::class)
             .filterIsInstance<Sponsor>()
@@ -58,7 +62,7 @@ public class SponsorListRelationship(override var data: List<Sponsor>) : Relatio
 }
 
 @Serializer(forClass = SponsorListRelationship::class)
-public object SponsorListSerializer : KSerializer<SponsorListRelationship> {
+public object SponsorListSerializer: KSerializer<SponsorListRelationship> {
     override fun serialize(encoder: Encoder, value: SponsorListRelationship) {
         // super method call to only keep types and id
         value.serialize(encoder)

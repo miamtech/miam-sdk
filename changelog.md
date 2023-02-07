@@ -1,16 +1,13 @@
-<<<<<<< HEAD
 # 3.10.0
 - [FEA][COR] Enable explicit API mode and compiler flag warning as error
 - [FEA][COR] Draft factories to help creating fakes in previews and tests
 - [FEA][COR] Adapt BaseViewModel to work with only one dispatcher
 - [FEA][COR] Introduce Gradle Version Catalog + Improve configuration
-=======
 # 3.9.0
 - [FEA][AND] Add generic error template 
 - [FIX][IOS] Fix extra padding in my meal view
 - [FIX][IOS] Add flag to show/hide "meal ideas" image in navigation bar
 - [FEA][IOS] Add generic error template 
->>>>>>> release/3.9.0
 
 # 3.8.1
 - [FIX][AND] Prefrence search modal now handle back press correctly
