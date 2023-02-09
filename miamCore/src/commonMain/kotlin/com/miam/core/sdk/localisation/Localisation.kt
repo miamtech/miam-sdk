@@ -138,4 +138,35 @@ public object Localisation {
         public val generic: I18n
             get() = I18n.string("com_miam_generic_error", miamStrings?.com_miam_generic_error)
     }
+
+    public object Tag {
+        public val preRecipeCount: I18n
+            get() = I18n.string("com_miam_tag_pre_recipe_count", miamStrings?.com_miam_tag_pre_recipe_count)
+
+        public val postRecipeCount: I18n
+            get() = I18n.string("com_miam_tag_post_recipe_count", miamStrings?.com_miam_tag_post_recipe_count)
+    }
+
+    public object Filters {
+        public val lessThanFiveEuros: I18n
+            get() = I18n.string("com_miam_filter_less_than_five_euros", miamStrings?.com_miam_filter_less_than_five_euros)
+
+        public val betweenFiveAndTenEuros: I18n
+            get() = I18n.string("com_miam_filter_between_five_and_ten_euros", miamStrings?.com_miam_filter_between_five_and_ten_euros)
+
+        public val moreThanTenEuros: I18n
+            get() = I18n.string("com_miam_filter_more_than_ten_euros", miamStrings?.com_miam_filter_more_than_ten_euros)
+
+        public val lessThanFifteenMinutes: I18n
+            get() = I18n.string("com_miam_filter_less_than_fifteen_minutes", miamStrings?.com_miam_filter_less_than_fifteen_minutes)
+
+        public val lessThanThirteenMinutes: I18n
+            get() = I18n.string("com_miam_filter_less_than_thirteen_minutes", miamStrings?.com_miam_filter_less_than_thirteen_minutes)
+
+        public val lessThanAnHour: I18n
+            get() = I18n.string("com_miam_filter_less_than_one_hour", miamStrings?.com_miam_filter_less_than_one_hour)
+
+        public val lessThanTwoHours: I18n
+            get() = I18n.string("com_miam_filter_less_than_two_hours", miamStrings?.com_miam_filter_less_than_two_hours)
+    }
 }

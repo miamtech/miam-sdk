@@ -50,4 +50,15 @@
     <string name="com_miam_price_per_guest">par personne.</string>
 
     <string name="com_miam_generic_error">Une erreur s\'est produite, veuillez réessayer</string>
+
+    <string name="com_miam_tag_pre_recipe_count">Ce produit est utilisé pour</string>
+    <string name="com_miam_tag_post_recipe_count">recettes</string>
+
+    <string name="com_miam_filter_less_than_five_euros">Moins de 5€</string>
+    <string name="com_miam_filter_between_five_and_ten_euros">Entre 5€ et 10€</string>
+    <string name="com_miam_filter_more_than_ten_euros">Plus de 10€</string>
+    <string name="com_miam_filter_less_than_fifteen_minutes">Moins de 15 min</string>
+    <string name="com_miam_filter_less_than_thirteen_minutes">Moins de 30 min</string>
+    <string name="com_miam_filter_less_than_one_hour">Moins de 1 h</string>
+    <string name="com_miam_filter_less_than_two_hours">Moins de 2 h</string>
 </resources>

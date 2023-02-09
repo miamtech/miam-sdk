@@ -28,7 +28,7 @@
     <string name="com_miam_catalog_filter_show_results">See ${numberOfResult} meals ideas</string>
 
     <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we help?</string>
-    <string name="com_miam_favorites_go_to_catalog">Browse recipes</string>
+    <string name="com_miam_favorites_go_to_catalog">Discover our recipes</string>
 
     <string name="com_miam_item_selector_replace_by">Replace this article with:</string>
 
@@ -49,4 +49,15 @@
     <string name="com_miam_price_per_guest">per person.</string>
 
     <string name="com_miam_generic_error">An error happened, please retry.</string>
+
+    <string name="com_miam_tag_pre_recipe_count">This product is used in</string>
+    <string name="com_miam_tag_post_recipe_count">recipes</string>
+
+    <string name="com_miam_filter_less_than_five_euros">Less than 5€</string>
+    <string name="com_miam_filter_between_five_and_ten_euros">Between 5€ and 10€</string>
+    <string name="com_miam_filter_more_than_ten_euros">More than 10€</string>
+    <string name="com_miam_filter_less_than_fifteen_minutes">Less than 15 min</string>
+    <string name="com_miam_filter_less_than_thirteen_minutes">Less than 30 min</string>
+    <string name="com_miam_filter_less_than_one_hour">Less than 1h</string>
+    <string name="com_miam_filter_less_than_two_hours">Less than 2h</string>
 </resources>
