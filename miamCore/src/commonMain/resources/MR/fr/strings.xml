@@ -6,17 +6,17 @@
     <string name="com_miam_recipe_difficulty_medium">Chef intermédiaire</string>
     <string name="com_miam_recipe_difficulty_high">Top chef</string>
     <string name="com_miam_recipe_is_in_cart">Voir le détail</string>
-    <string name="com_miam_recipe_cook_time"></string>
-    <string name="com_miam_recipe_preparation_time"></string>
-    <string name="com_miam_recipe_resting_time"></string>
+    <string name="com_miam_recipe_cook_time">Cuisson :</string>
+    <string name="com_miam_recipe_preparation_time">Préparation :</string>
+    <string name="com_miam_recipe_resting_time">Repos :</string>
     <string name="com_miam_recipe_steps">Étapes</string>
-    <string name="com_miam_recipe_check_basket_preview"></string>
+    <string name="com_miam_recipe_check_basket_preview">Voir les produits</string>
 
-    <string name="com_miam_basket_recipe_added"></string>
-    <string name="com_miam_basket_continue_shopping"></string>
-    <string name="com_miam_basket_more_details"></string>
-    <string name="com_miam_basket_remove_recipe"></string>
-    <string name="com_miam_basket_swap_product"></string>
+    <string name="com_miam_basket_recipe_added">1 repas ajouté à votre panier :</string>
+    <string name="com_miam_basket_continue_shopping">Continuer mes courses</string>
+    <string name="com_miam_basket_more_details">Voir le détail</string>
+    <string name="com_miam_basket_remove_recipe">Retirer du panier</string>
+    <string name="com_miam_basket_swap_product">Remplacer</string>
 
     <string name="com_miam_catalog_show_all">Tout voir</string>
     <string name="com_miam_catalog_loading_text">Ça mijote...</string>
@@ -42,7 +42,7 @@
     <string name="com_miam_preferences_tastes_title">Goûts</string>
     <string name="com_miam_preferences_cooking_equipment_title">Mode de cuisson</string>
     <string name="com_miam_preferences_diet_subtitle">Avez-vous un régime particulier ?</string>
-    <string name="com_miam_preferences_tastes_subtitle">Y a-t-il des ingrédients que vous n’aimez pas ?</string>
+    <string name="com_miam_preferences_tastes_subtitle">Y a-t-il des ingrédients que vous n\’aimez pas ?</string>
     <string name="com_miam_preferences_cooking_equipment_subtitle">Quel(s) équipement(s) possédez-vous chez vous ?</string>
     <string name="com_miam_preferences_search_placeholder">Rechercher un ingrédient</string>
 

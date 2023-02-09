@@ -7,7 +7,7 @@
     <string name="com_miam_recipe_difficulty_high">Top chef</string>
     <string name="com_miam_recipe_is_in_cart">Show details</string>
     <string name="com_miam_recipe_cook_time">Cooking: </string>
-    <string name="com_miam_recipe_preparation_time">Preparation : </string>
+    <string name="com_miam_recipe_preparation_time">Preparation: </string>
     <string name="com_miam_recipe_resting_time">Resting:</string>
     <string name="com_miam_recipe_steps">Steps</string>
     <string name="com_miam_recipe_check_basket_preview">Show products</string>
@@ -27,7 +27,7 @@
     <string name="com_miam_catalog_filter_remove_filters">Remove all filters</string>
     <string name="com_miam_catalog_filter_show_results">See ${numberOfResult} meals ideas</string>
 
-    <string name="com_miam_favorites_no_favorites">You don't have any favorite recipe yet. Can we help?</string>
+    <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we help?</string>
     <string name="com_miam_favorites_go_to_catalog">Browse recipes</string>
 
     <string name="com_miam_item_selector_replace_by">Replace this article with:</string>
@@ -41,7 +41,7 @@
     <string name="com_miam_preferences_tastes_title">Tastes</string>
     <string name="com_miam_preferences_cooking_equipment_title">Cooking equipments</string>
     <string name="com_miam_preferences_diet_subtitle">Do you follow a peculiar diet?</string>
-    <string name="com_miam_preferences_tastes_subtitle">Is there any ingredients you don't like?</string>
+    <string name="com_miam_preferences_tastes_subtitle">Is there any ingredients you don\'t like?</string>
     <string name="com_miam_preferences_cooking_equipment_subtitle">Which equipments do you have at home?</string>
     <string name="com_miam_preferences_search_placeholder">Search for ingredients</string>
 
