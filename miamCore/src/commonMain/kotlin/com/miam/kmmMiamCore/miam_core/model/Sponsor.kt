@@ -42,8 +42,8 @@ public data class SponsorAttributes(
 
 @Serializable
 public class SponsorRelationships(
-    @SerialName("sponsor-block")
-    public var sponsorBlocks: SponsorBlocksRelationship? = null
+    @SerialName("sponsor-blocks")
+    public var sponsorBlocks: SponsorBlocksRelationships? = null
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         sponsorBlocks?.buildFromIncluded(includedRecords)

@@ -2,7 +2,6 @@ package com.miam.kmmMiamCore.miam_core.data.repository
 
 import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.LikeStore
-import com.miam.kmmMiamCore.base.mvi.LikeStoreInstance
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
@@ -14,7 +13,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
 
     public companion object {
         public val DEFAULT_INCLUDED: List<String> =
-            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type", "sponsors")
         public const val DEFAULT_PAGESIZE: Int = 20
         public const val FIRST_PAGE: Int = 1
     }

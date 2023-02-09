@@ -75,6 +75,10 @@ public data class Recipe internal constructor(
             temp.sortBy { it.attributes?.stepNumber }
             return temp
         }
+    val isSponsored: Boolean
+        get() {
+            return (this.relationships?.sponsors?.data?.size ?: 0) > 0
+        }
 }
 
 @Serializable

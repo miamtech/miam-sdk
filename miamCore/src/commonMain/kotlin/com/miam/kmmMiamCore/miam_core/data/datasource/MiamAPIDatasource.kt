@@ -11,7 +11,6 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.headers
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -32,12 +31,13 @@ public object HttpRoutes {
     public const val SUPPLIER: String = "$BASE_URL/suppliers/"
     public const val PACKAGE_ENDPOINT: String = "$BASE_URL/packages"
     public const val TAGS_ENDPOINT: String = "$BASE_URL/tags"
+    public const val SPONSOR_ENDPOINT: String = "$BASE_URL/sponsors"
 }
 
 
 public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
-    SupplierDataSource, PackageDataSource, TagDataSource {
+    SupplierDataSource, PackageDataSource, TagDataSource, SponsorDataSource {
 
     // TODO By lazy allows cyclic dependencies, even if it is bad design
     private val userStore: UserStore by lazy { MiamDI.userStore }
@@ -204,7 +204,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             this.get<RecordWrapper>(HttpRoutes.RECIPE_ENDPOINT + "?$pageFilter$includedStr$filtersStr")!!
                 .toRecords()
         val recipeList = returnValue.map { record -> record as Recipe }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes ${recipeList.map { recipe -> "${recipe.id} / ${recipe.attributes?.title} --" }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipes ${recipeList.map { recipe -> "${recipe.id} / ${recipe.attributes?.title} " }}")
         return recipeList
     }
 
@@ -217,7 +217,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
         val url = "${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&page[size]=${size}&${includedToString(included)}"
         val returnValue = this.post<RecordWrapper>(url, criteria)!!.toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria ${returnValue.map { record -> { "${record.id}/ ${(record as Recipe).attributes?.title}--" } }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria ${returnValue.map { record -> { "${record.id}/ ${(record as Recipe).attributes?.title}" } }}")
         return returnValue.map { record -> record as Recipe }
     }
 
@@ -242,7 +242,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         val returnValue =
             this.get<RecordWrapper>(HttpRoutes.RECIPE_LIKE_ENDPOINT + "?$pageFilter&$idFilters")!!
                 .toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds ${returnValue.map { record -> "${(record as RecipeLike).attributes?.recipeId} / ${record.attributes?.isPast}--" }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikesByRecipeIds ${returnValue.map { record -> "${(record as RecipeLike).attributes?.recipeId} / ${record.attributes?.isPast}" }}")
         return returnValue.map { record -> record as RecipeLike }
     }
 
@@ -252,7 +252,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         recipesIds.chunked(pageSize).forEach { recipesIdsChunck ->
             returnValue.addAll(getRecipeLikesByRecipeIds(recipesIdsChunck, pageSize))
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes ${returnValue.map { record -> "${record.attributes?.recipeId} / ${record.attributes?.isPast}--" }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeLikes ${returnValue.map { record -> "${record.attributes?.recipeId} / ${record.attributes?.isPast}" }}")
         return returnValue
     }
 
@@ -334,7 +334,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             LogHandler.error("Point of sale not found or incorrect")
             return null
         }
-        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId ${posList.data.map { pos -> "${pos.id}--" }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end getPosFormExtId $extId $supplierId ${posList.data.map { pos -> "${pos.id}" }}")
         return posList.data[0]
     }
 
@@ -470,7 +470,28 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         val returnValue = httpClient.get {
             url(HttpRoutes.TAGS_ENDPOINT + "?${filtersToString(filters)}")
         }.body<RecordWrapper>().toRecords()
-        LogHandler.info("[Miam][MiamAPIDatasource] end ${returnValue.map { record -> "${(record as Tag).attributes?.name}--" }}")
+        LogHandler.info("[Miam][MiamAPIDatasource] end ${returnValue.map { record -> "${(record as Tag).attributes?.name}" }}")
         return returnValue.map { record -> record as Tag }
     }
+
+    ///////////////////////////////////// Sponsor /////////////////////////////////////////////////
+
+    override suspend fun getSponsorById(sponsorId: String, included: List<String>): Sponsor {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorById")
+        val returnValue = httpClient.get {
+            url(HttpRoutes.SPONSOR_ENDPOINT + "/$sponsorId?${includedToString(included)}")
+        }.body<RecordWrapper>().toRecord()
+        LogHandler.info("[Miam][MiamAPIDatasource] end getSponsorById ")
+        return returnValue as Sponsor
+    }
+
+    override suspend fun getSponsorBlockWithSponsorId(sponsorId: String, included: List<String>): List<SponsorBlock> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorBlockWithSponsorId")
+        val returnValue = httpClient.get {
+            url(HttpRoutes.TAGS_ENDPOINT + "/$sponsorId/sponsor-blocks?${includedToString(included)}")
+        }.body<RecordWrapper>().toRecords()
+        LogHandler.info("[Miam][MiamAPIDatasource] end ${returnValue.map { record -> "${(record as SponsorBlock).id}" }}")
+        return returnValue.map { record -> record as SponsorBlock }
+    }
+
 }

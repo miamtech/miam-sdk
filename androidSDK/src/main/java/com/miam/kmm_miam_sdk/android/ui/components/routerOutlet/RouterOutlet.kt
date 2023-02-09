@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
@@ -31,6 +32,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.itemsSelector.ItemsSelector
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetails
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle
+import com.miam.sdk.components.sponsorDetail.SponsorDetail
 
 class RouterOutlet {
 
@@ -139,6 +141,11 @@ fun FullScreenContent(
                     close = close,
                     goToItemSelector = goToReplaceItem
                 ).content()
+            }
+            RouterContent.RECIPE_SPONSOR -> {
+                state.sponsor?.let {
+                    SponsorDetail(context = LocalContext.current).apply { bind(it) }.Content()
+                }
             }
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()
             RouterContent.EMPTY -> EmptyView(close)

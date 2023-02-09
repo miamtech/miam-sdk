@@ -26,6 +26,7 @@ public open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Even
             content = RouterContent.EMPTY,
             rvm = null,
             recipeId = null,
+            sponsor = null,
             isOpen = false,
             showFooter = true
         )
@@ -33,6 +34,13 @@ public open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Even
 
     override fun handleEvent(event: RouterOutletContract.Event) {
         when (event) {
+            is RouterOutletContract.Event.GoToSponsor -> {
+                // TODO ajouté une  props sponsor ID a plaubible
+                analyticsService.sendEvent(Analytics.EVENT_PAGEVIEW, "/sponsor", Analytics.PlausibleProps())
+                routeService.dispatch(RouteServiceAction.SetDialogRoute("recipe sponsor", { navigateTo(RouterContent.RECIPE_SPONSOR) }, ::onClose))
+                setState { copy(sponsor = event.sponsor) }
+                navigateTo(RouterContent.RECIPE_SPONSOR)
+            }
             is RouterOutletContract.Event.GoToDetail -> {
                 LogHandler.info("Miam RouterOutletViewModel goToDetail event $event")
                 // TODO : path
@@ -58,7 +66,6 @@ public open class RouterOutletViewModel: BaseViewModel<RouterOutletContract.Even
             }
             is RouterOutletContract.Event.Previous -> routeService.previous()
             RouterOutletContract.Event.GoToHelper -> navigateTo(RouterContent.RECIPE_HELPER)
-            RouterOutletContract.Event.GoToSponsor -> navigateTo(RouterContent.RECIPE_SPONSOR)
             RouterOutletContract.Event.OpenDialog -> {
                 setState { copy(isOpen = true) }
             }

@@ -4,13 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
-import com.miam.kmmMiamCore.miam_core.model.BasketEntry
-import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
-import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
-import com.miam.kmmMiamCore.miam_core.model.CheckableTag
-import com.miam.kmmMiamCore.miam_core.model.Package
-import com.miam.kmmMiamCore.miam_core.model.Recipe
-import com.miam.kmmMiamCore.miam_core.model.RecipeStep
+import com.miam.kmmMiamCore.miam_core.model.*
 import com.miam.kmm_miam_sdk.android.templatesParameters.CatalogPageTitleTemplateParameters
 import com.miam.kmm_miam_sdk.android.templatesParameters.PriceParameters
 
@@ -91,6 +85,12 @@ object Template {
         vmRecipe: RecipeViewModel,
         look: () -> Unit,
         buy: () -> Unit
+    ) -> Unit)? = null
+
+    var recipeDetailSponsorBannerTemplate: (
+    @Composable() (
+        sponsor: Sponsor,
+        openSponsorDetail: (sponsor: Sponsor) -> Unit
     ) -> Unit)? = null
 
 ////////////////// Product Selector //////////////////
@@ -384,4 +384,20 @@ object Template {
      */
     var errorTemplate: (@Composable() (
     ) -> Unit)? = null
+
+///////////// SponsorDetail  //////////////////////////////////
+
+    /**
+     * Available 3.10.0
+     */
+    var sponsorDetailLoadingTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+    /**
+     * Available 3.10.0
+     */
+    var sponsorDetailEmptyTemplate: (@Composable() (
+    ) -> Unit)? = null
+
+
 }

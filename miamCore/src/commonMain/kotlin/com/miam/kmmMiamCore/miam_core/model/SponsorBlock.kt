@@ -51,7 +51,7 @@ public data class SponsorBlockAttributes(
 @Serializable
 public class SponsorBlockRelationships(
     @SerialName("sponsor-block-type")
-    public var sponsorBlockType: SponsorRelationships? = null,
+    public var sponsorBlockType: SponsorBlockTypeRelationship? = null,
 ): Relationships() {
     override fun buildFromIncluded(includedRecords: List<Record>) {
         sponsorBlockType?.buildFromIncluded(includedRecords)
@@ -63,15 +63,15 @@ public class SponsorBlockRelationships(
  */
 
 @Serializable(with = SponsorBlocksSerializer::class)
-public class SponsorBlocksRelationship(override var data: List<SponsorBlock>): RelationshipList() {
+public class SponsorBlocksRelationships(override var data: List<SponsorBlock>): RelationshipList() {
     public fun buildFromIncluded(includedRecords: List<Record>) {
         data = buildedFromIncluded(includedRecords, SponsorBlock::class).filterIsInstance<SponsorBlock>()
     }
 }
 
-@Serializer(forClass = SponsorBlocksRelationship::class)
-public object SponsorBlocksSerializer: KSerializer<SponsorBlocksRelationship> {
-    override fun serialize(encoder: Encoder, value: SponsorBlocksRelationship) {
+@Serializer(forClass = SponsorBlocksRelationships::class)
+public object SponsorBlocksSerializer: KSerializer<SponsorBlocksRelationships> {
+    override fun serialize(encoder: Encoder, value: SponsorBlocksRelationships) {
         // super method call to only keep types and id
         value.serialize(encoder)
     }
