@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.miam_core.model.Package
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Template
@@ -66,7 +67,7 @@ fun CatalogCategory(
                 horizontalArrangement = Arrangement.End
             ) {
                 Text(
-                    text = "Tout voir",
+                    text = Localisation.Catalog.showAll.localised,
                     style = TextStyle(textDecoration = TextDecoration.Underline),
                     color = moreInfoTextColor
                 )
