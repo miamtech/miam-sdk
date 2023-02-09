@@ -25,7 +25,7 @@
     <string name="com_miam_catalog_filter_preparation_time">Preparation time</string>
     <string name="com_miam_catalog_filter_title">Refine my selection</string>
     <string name="com_miam_catalog_filter_remove_filters">Remove all filters</string>
-    <string name="com_miam_catalog_filter_show_results">See ${numberOfResult} meals ideas</string>
+    <string name="com_miam_catalog_filter_show_results">See %d meals ideas</string>
 
     <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we help?</string>
     <string name="com_miam_favorites_go_to_catalog">Discover our recipes</string>
