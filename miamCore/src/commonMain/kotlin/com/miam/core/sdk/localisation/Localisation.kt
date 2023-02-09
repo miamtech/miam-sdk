@@ -59,8 +59,26 @@ public object Localisation {
         public val removeRecipe: I18n
             get() = I18n.string("com_miam_basket_remove_recipe", miamStrings?.com_miam_basket_remove_recipe)
 
+        public fun unavailableProducts(numberOfProducts: Int): I18n {
+            return I18n.string("com_miam_basket_unavailable_products", miamStrings?.com_miam_basket_unavailable_products, numberOfProducts)
+        }
+
+        public fun ownedProducts(numberOfProducts: Int): I18n {
+            return I18n.string("com_miam_basket_owned_products", miamStrings?.com_miam_basket_owned_products, numberOfProducts)
+        }
+
+        public fun removedProducts(numberOfProducts: Int): I18n {
+            return I18n.string("com_miam_basket_removed_products", miamStrings?.com_miam_basket_removed_products, numberOfProducts)
+        }
+
         public val swapProduct: I18n
             get() = I18n.string("com_miam_basket_swap_product", miamStrings?.com_miam_basket_swap_product)
+
+        public val addProduct: I18n
+            get() = I18n.string("com_miam_basket_add_product", miamStrings?.com_miam_basket_add_product)
+
+        public val person: I18n
+            get() = I18n.string("com_miam_basket_person", miamStrings?.com_miam_basket_person)
     }
 
     public object Favorites {
@@ -93,8 +111,10 @@ public object Localisation {
         public val removeFilters: I18n
             get() = I18n.string("com_miam_catalog_filter_remove_filters", miamStrings?.com_miam_catalog_filter_remove_filters)
 
-        public val showResults: I18n
-            get() = I18n.string("com_miam_catalog_filter_show_results", miamStrings?.com_miam_catalog_filter_show_results)
+        public fun showResults(numberOfResults: Int): I18n {
+            return I18n.string("com_miam_catalog_filter_show_results", miamStrings?.com_miam_catalog_filter_show_results, numberOfResults)
+        }
+
     }
 
     public object Preferences {

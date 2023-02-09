@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
@@ -129,7 +130,7 @@ fun ExpendableEntryLine(
                                             )
                                             Spacer(modifier = Modifier.padding(8.dp))
                                             Text(
-                                                text = "Ajouter",
+                                                text = Localisation.Basket.addProduct.localised,
                                                 style = bodyBold,
                                             )
                                         }

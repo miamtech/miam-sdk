@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.miam_core.model.BasketPreviewLine
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.black
@@ -37,7 +38,7 @@ fun BasketPreviewRecipeLine(
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
     val guestDivider = max(1, line.count)
-    val pricePerGuest = "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
+    val pricePerGuest = "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}${Localisation.Price.currency.localised} /${Localisation.Basket.person.localised}"
 
     fun goToRecipeDetail() {
         goToDetail()

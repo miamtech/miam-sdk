@@ -16,7 +16,12 @@
     <string name="com_miam_basket_continue_shopping">Continue shopping</string>
     <string name="com_miam_basket_more_details">See details</string>
     <string name="com_miam_basket_remove_recipe">Remove from cart</string>
+    <string name="com_miam_basket_unavailable_products">Unavailabled product(s) (%d)</string>
+    <string name="com_miam_basket_owned_products">Already in your cupboard? (%d)</string>
+    <string name="com_miam_basket_removed_products">Product(s) removed from cart (%d)</string>
     <string name="com_miam_basket_swap_product">Replace</string>
+    <string name="com_miam_basket_add_product">Add</string>
+    <string name="com_miam_basket_person">person</string>
 
     <string name="com_miam_catalog_show_all">See all</string>
     <string name="com_miam_catalog_loading_text">Simmering...</string>
