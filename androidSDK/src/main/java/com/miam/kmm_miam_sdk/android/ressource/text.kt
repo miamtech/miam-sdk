@@ -10,7 +10,7 @@ object Text {
     var checkBasketPreview = Localisation.Recipe.showBasketPreview.localised
     var continueShopping = Localisation.Basket.continueShopping.localised
     var currency = Localisation.Price.currency.localised
-    var goToCatalog = "Je découvre les recettes"
+    var goToCatalog = Localisation.Favorites.goToCatalog.localised
     var moreDetail = Localisation.Recipe.showDetails.localised
     var noFavoriteYet = Localisation.Favorites.noFavorites.localised
     var preGuests = Localisation.Price.perGuest.localised
@@ -19,10 +19,15 @@ object Text {
     var replaceBy = Localisation.ItemSelector.replaceProduct.localised
     var restingTime = Localisation.Recipe.restingTime.localised
     var steps = Localisation.Recipe.steps.localised
-    var tagPreRecipeCountText = "Ce produit est utilisé pour"
-    var tagPostRecipeCountText = "recettes"
+    var tagPreRecipeCountText = Localisation.Tag.preRecipeCount.localised
+    var tagPostRecipeCountText = Localisation.Tag.postRecipeCount.localised
     var swap = Localisation.Basket.swapProduct.localised
     var difficultyLow = Localisation.Recipe.lowDifficulty.localised
     var difficultyMedium = Localisation.Recipe.mediumDifficulty.localised
     var difficultyHigh = Localisation.Recipe.highDifficulty.localised
+    var refineSelection = Localisation.Catalog.filtersTitle.localised
+    var removeFilters = Localisation.Catalog.removeFilters.localised
+    var difficulty = Localisation.Catalog.difficulty.localised
+    var costPerPerson = Localisation.Catalog.costPerPerson.localised
+    var preparationTime = Localisation.Catalog.preparationTime.localised
 }
