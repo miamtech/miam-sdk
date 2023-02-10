@@ -1,5 +1,7 @@
 package com.miam.core.sdk.di
 
+import com.miam.core.sdk.data.repository.SponsorBlockRepository
+import com.miam.core.sdk.data.repository.SponsorBlockRepositoryImp
 import com.miam.core.sdk.data.repository.SponsorRepository
 import com.miam.core.sdk.data.repository.SponsorRepositoryImp
 import com.miam.kmmMiamCore.base.mvi.BasketStore
@@ -43,6 +45,7 @@ public object MiamDI {
     internal val supplierRepository: SupplierRepositoryImp by lazy { SupplierRepositoryImp(dataSource) }
     internal val tagsRepository: TagsRepositoryImp by lazy { TagsRepositoryImp(dataSource) }
     internal val sponsorRepository: SponsorRepository by lazy { SponsorRepositoryImp(dataSource) }
+    internal val sponsorBlockRepository: SponsorBlockRepository by lazy { SponsorBlockRepositoryImp(dataSource) }
 
     // Store
     internal val basketStore: BasketStore by lazy { BasketStore() }

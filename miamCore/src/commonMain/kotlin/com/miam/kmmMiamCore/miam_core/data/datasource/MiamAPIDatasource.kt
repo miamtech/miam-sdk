@@ -32,12 +32,13 @@ public object HttpRoutes {
     public const val PACKAGE_ENDPOINT: String = "$BASE_URL/packages"
     public const val TAGS_ENDPOINT: String = "$BASE_URL/tags"
     public const val SPONSOR_ENDPOINT: String = "$BASE_URL/sponsors"
+    public const val SPONSOR_BLOCK_ENDPOINT: String = "$BASE_URL/sponsor-block"
 }
 
 
 public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, PointOfSaleDataSource,
     BasketDataSource, PricingDataSource, BasketEntryDataSource, GrocerieEntryDataSource,
-    SupplierDataSource, PackageDataSource, TagDataSource, SponsorDataSource {
+    SupplierDataSource, PackageDataSource, TagDataSource, SponsorDataSource, SponsorBlockDataSource {
 
     // TODO By lazy allows cyclic dependencies, even if it is bad design
     private val userStore: UserStore by lazy { MiamDI.userStore }
@@ -485,10 +486,12 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         return returnValue as Sponsor
     }
 
-    override suspend fun getSponsorBlockWithSponsorId(sponsorId: String, included: List<String>): List<SponsorBlock> {
-        LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorBlockWithSponsorId")
+    ///////////////////////////////////// Sponsor block /////////////////////////////////////////////////
+
+    override suspend fun getSponsorBlocksBySponsorId(sponsorId: String, included: List<String>): List<SponsorBlock> {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorBlockBySponsorId")
         val returnValue = httpClient.get {
-            url(HttpRoutes.TAGS_ENDPOINT + "/$sponsorId/sponsor-blocks?${includedToString(included)}")
+            url(HttpRoutes.SPONSOR_BLOCK_ENDPOINT + "?filter[sponsor-id]=${sponsorId}&${includedToString(included)}")
         }.body<RecordWrapper>().toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end ${returnValue.map { record -> "${(record as SponsorBlock).id}" }}")
         return returnValue.map { record -> record as SponsorBlock }
