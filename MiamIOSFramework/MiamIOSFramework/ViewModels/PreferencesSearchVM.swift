@@ -11,8 +11,8 @@ import miamCore
 
 @available(iOS 14, *)
 public class PreferencesSearchVM: PreferencesSearchViewModel, ObservableObject {
-    @Published var state: PreferencesSearchContractState?
-    @Published var tagsSuggestions: [Tag] = []
+    @Published public var state: PreferencesSearchContractState?
+    @Published public var tagsSuggestions: [Tag] = []
     public override init() {
         super.init()
         self.collect(flow: uiState) { data in
