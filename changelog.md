@@ -1,5 +1,7 @@
 # 3.9.2
 - [FIX][IOS] Change visibility of published properties to public in PreferencesSearchVM
+- [FIX][IOS] Use users' locale to format price 
+- [FIX][AND] Use users' locale to format price 
 
 # 3.9.1
 - [FIX][IOS] Make PreferencesSearchView and CatalogPreferencesView public

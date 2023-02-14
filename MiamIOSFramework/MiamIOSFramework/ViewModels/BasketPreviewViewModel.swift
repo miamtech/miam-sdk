@@ -12,9 +12,18 @@ import miamCore
 
 @available(iOS 14, *)
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
-    
+    private let currencyCode = "EUR"
     @Published var basketPreviewLine: BasketPreviewLine?
     @Published var state : BasketPreviewContractState?
+
+    private lazy var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.currencyCode = currencyCode
+        numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 2
+
+        return numberFormatter
+    }()
 
     override init(recipeId: String?) {
         super.init(recipeId: recipeId)
@@ -56,8 +65,11 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         }
         let basketCount = basket.count > 0 ? basket.count : 1
         let price = parsedPrice * 100 / Double(basketCount) / 100
-        let formattedPrice = String(format: "%.2f", price)
-        return "\(formattedPrice)€ /personne"
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: price)) else {
+            return ""
+        }
+
+        return "\(formattedPrice) /personne"
     }
 
     public var numberOfGuests: Int {
@@ -65,7 +77,19 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
     }
 
     public var price: String {
-        return basketPreviewLine?.price ?? ""
+        guard let price = basketPreviewLine?.price else {
+            return ""
+        }
+
+        guard let doublePrice = Double(price) else {
+            return ""
+        }
+
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: doublePrice)) else {
+            return ""
+        }
+
+        return formattedPrice
     }
 
     public var  numberOfproductsInBasket: Int {
