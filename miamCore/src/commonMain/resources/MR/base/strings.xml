@@ -10,7 +10,9 @@
     <string name="com_miam_recipe_preparation_time">Preparation: </string>
     <string name="com_miam_recipe_resting_time">Resting:</string>
     <string name="com_miam_recipe_steps">Steps</string>
+    <string name="com_miam_recipe_number_of_ingredients">%d ingrédients</string>
     <string name="com_miam_recipe_check_basket_preview">Show products</string>
+    <string name="com_miam_recipe_flag">Meal idea</string>
 
     <string name="com_miam_basket_recipe_added">1 meal added to cart:</string>
     <string name="com_miam_basket_continue_shopping">Continue shopping</string>
@@ -23,24 +25,37 @@
     <string name="com_miam_basket_add_product">Add</string>
     <string name="com_miam_basket_person">person</string>
 
+    <string name="com_miam_catalog_title">Idées repas en 1 clic</string>
     <string name="com_miam_catalog_show_all">See all</string>
     <string name="com_miam_catalog_loading_text">Simmering...</string>
+    <string name="com_miam_catalog_favorites_title">My meal ideas</string>
     <string name="com_miam_catalog_filter_difficulty">Difficulty</string>
     <string name="com_miam_catalog_filter_cost_per_person">Cost per person</string>
     <string name="com_miam_catalog_filter_preparation_time">Preparation time</string>
     <string name="com_miam_catalog_filter_title">Refine my selection</string>
     <string name="com_miam_catalog_filter_remove_filters">Remove all filters</string>
     <string name="com_miam_catalog_filter_show_results">See %d meals ideas</string>
-
+    <string name="com_miam_catalog_filter_search_placeholder">Search</string>
+    <string name="com_miam_catalog_filter_search_prefix">Your search :</string>
+    <string name="com_miam_catalog_filter_search_title">Your selection</string>
+    <string name="com_miam_catalog_browse_recipes">Browse meal ideas</string>
+    <string name="com_miam_catalog_no_recipe_found">No recipe matching your criterias has been found.</string>
+    <string name="com_miam_catalog_try_another_search">Try a new search</string>
+    
+    <string name="com_miam_favorites_title">My meal ideas</string>
     <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we help?</string>
     <string name="com_miam_favorites_go_to_catalog">Discover our recipes</string>
 
     <string name="com_miam_item_selector_replace_by">Replace this article with:</string>
+    <string name="com_miam_item_selector_in_basket">In your basket</string>
+    <string name="com_miam_item_selector_select">Select</string>
 
     <string name="com_miam_my_meals_meal_added">1 meal added</string>
-    <string name="com_miam_my_meals_meals_added">%f meals added</string>
+    <string name="com_miam_my_meals_meals_added">%d meals added</string>
 
     <string name="com_miam_preferences_title">My preferences</string>
+    <string name="com_miam_preferences_cancel">Cancel</string>
+    <string name="com_miam_preferences_add_tag">Add +</string>
     <string name="com_miam_preferences_number_of_guests">Number of persons</string>
     <string name="com_miam_preferences_diet_title">Diet</string>
     <string name="com_miam_preferences_tastes_title">Tastes</string>
@@ -48,6 +63,7 @@
     <string name="com_miam_preferences_diet_subtitle">Do you follow a peculiar diet?</string>
     <string name="com_miam_preferences_tastes_subtitle">Is there any ingredients you don\'t like?</string>
     <string name="com_miam_preferences_cooking_equipment_subtitle">Which equipments do you have at home?</string>
+    <string name="com_miam_preferences_search_title">I don\'t like</string>
     <string name="com_miam_preferences_search_placeholder">Search for ingredients</string>
 
     <string name="com_miam_price_currency">€</string>
@@ -65,4 +81,8 @@
     <string name="com_miam_filter_less_than_thirteen_minutes">Less than 30 min</string>
     <string name="com_miam_filter_less_than_one_hour">Less than 1h</string>
     <string name="com_miam_filter_less_than_two_hours">Less than 2h</string>
+
+    <string name="com_miam_counter_person">pers.</string>
+
+    <string name="com_miam_my_meals_no_meal_in_basket">You have no meal in your basket.</string>
 </resources>

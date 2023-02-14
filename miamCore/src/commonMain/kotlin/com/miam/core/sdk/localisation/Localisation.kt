@@ -39,11 +39,24 @@ public object Localisation {
 
         public val showBasketPreview: I18n
             get() = I18n.string("com_miam_recipe_check_basket_preview", miamStrings?.com_miam_recipe_check_basket_preview)
+
+        public val flag: I18n
+            get() = I18n.string("com_miam_recipe_flag", miamStrings?.com_miam_recipe_flag)
+
+        public fun numberOfIngredients(numberOfIngredients: Int): I18n {
+            return I18n.string("com_miam_recipe_number_of_ingredients", miamStrings?.com_miam_recipe_number_of_ingredients, numberOfIngredients)
+        }
     }
 
     public object ItemSelector {
         public val replaceProduct: I18n
             get() = I18n.string("com_miam_item_selector_replace_by", miamStrings?.com_miam_item_selector_replace_by)
+
+        public val inBasket: I18n
+            get() = I18n.string("com_miam_item_selector_in_basket", miamStrings?.com_miam_item_selector_in_basket)
+
+        public val select: I18n
+            get() = I18n.string("com_miam_item_selector_select", miamStrings?.com_miam_item_selector_select)
     }
 
     public object Basket {
@@ -82,6 +95,9 @@ public object Localisation {
     }
 
     public object Favorites {
+        public val title: I18n
+            get() = I18n.string("com_miam_favorites_title", miamStrings?.com_miam_favorites_title)
+
         public val noFavorites: I18n
             get() = I18n.string("com_miam_favorites_no_favorites", miamStrings?.com_miam_favorites_no_favorites)
 
@@ -90,6 +106,9 @@ public object Localisation {
     }
 
     public object Catalog {
+        public val title: I18n
+            get() = I18n.string("com_miam_catalog_title", miamStrings?.com_miam_catalog_title)
+
         public val showAll: I18n
             get() = I18n.string("com_miam_catalog_show_all", miamStrings?.com_miam_catalog_show_all)
 
@@ -111,15 +130,38 @@ public object Localisation {
         public val removeFilters: I18n
             get() = I18n.string("com_miam_catalog_filter_remove_filters", miamStrings?.com_miam_catalog_filter_remove_filters)
 
+        public val searchPlaceholder: I18n
+            get() = I18n.string("com_miam_catalog_filter_search_placeholder", miamStrings?.com_miam_catalog_filter_search_placeholder)
+
+        public val searchPrefix: I18n
+            get() = I18n.string("com_miam_catalog_filter_search_prefix", miamStrings?.com_miam_catalog_filter_search_prefix)
+
+        public val searchTitle: I18n
+            get() = I18n.string("com_miam_catalog_filter_search_title", miamStrings?.com_miam_catalog_filter_search_title)
+
+        public val browseRecipes: I18n
+            get() = I18n.string("com_miam_catalog_browse_recipes", miamStrings?.com_miam_catalog_browse_recipes)
+
+        public val noRecipeFound: I18n
+            get() = I18n.string("com_miam_catalog_no_recipe_found", miamStrings?.com_miam_catalog_no_recipe_found)
+
+        public val tryAnotherSearch: I18n
+            get() = I18n.string("com_miam_catalog_try_another_search", miamStrings?.com_miam_catalog_try_another_search)
+
         public fun showResults(numberOfResults: Int): I18n {
             return I18n.string("com_miam_catalog_filter_show_results", miamStrings?.com_miam_catalog_filter_show_results, numberOfResults)
         }
-
     }
 
     public object Preferences {
         public val title: I18n
             get() = I18n.string("com_miam_preferences_title", miamStrings?.com_miam_preferences_title)
+
+        public val cancel: I18n
+            get() = I18n.string("com_miam_preferences_cancel", miamStrings?.com_miam_preferences_cancel)
+
+        public val addTag: I18n
+            get() = I18n.string("com_miam_preferences_add_tag", miamStrings?.com_miam_preferences_add_tag)
 
         public val numberOfGuests: I18n
             get() = I18n.string("com_miam_preferences_number_of_guests", miamStrings?.com_miam_preferences_number_of_guests)
@@ -141,6 +183,9 @@ public object Localisation {
 
         public val cookingEquipmentSubtitle: I18n
             get() = I18n.string("com_miam_preferences_cooking_equipment_subtitle", miamStrings?.com_miam_preferences_cooking_equipment_subtitle)
+
+        public val searchTitle: I18n
+            get() = I18n.string("com_miam_preferences_search_title", miamStrings?.com_miam_preferences_search_title)
 
         public val searchPlaceholder: I18n
             get() = I18n.string("com_miam_preferences_search_placeholder", miamStrings?.com_miam_preferences_search_placeholder)
@@ -188,5 +233,15 @@ public object Localisation {
 
         public val lessThanTwoHours: I18n
             get() = I18n.string("com_miam_filter_less_than_two_hours", miamStrings?.com_miam_filter_less_than_two_hours)
+    }
+
+    public object Counter {
+        public val persons: I18n
+            get() = I18n.string("com_miam_counter_person", miamStrings?.com_miam_counter_person)
+    }
+
+    public object MyMeals {
+        public val noMealIdeaInBasket: I18n
+            get() = I18n.string("com_miam_my_meals_no_meal_in_basket", miamStrings?.com_miam_my_meals_no_meal_in_basket)
     }
 }

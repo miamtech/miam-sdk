@@ -103,20 +103,28 @@ public struct BasketPreviewSuccessView: View {
                 }
 
                 if (viewModel.basketPreviewLine?.entries?.oftenDeleted ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowAlready, products: viewModel.productsOftenDeleted, isAddable: true, addIngredientAction: { entry in
+                    let numberOfProducts = Int32(viewModel.productsOftenDeleted.count)
+                    IngredientsFoldableView(title: Localization.basket.ownedProducts(numberOfProducts: numberOfProducts).localised,
+                                            products: viewModel.productsOftenDeleted,
+                                            isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)
                     })
-
                 }
 
                 if (viewModel.basketPreviewLine?.entries?.notFound ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowNotFound, products: viewModel.productsNotFound, isAddable: false, addIngredientAction: { entry in
+                    let numberOfProducts = Int32(viewModel.productsNotFound.count)
+                    IngredientsFoldableView(title: Localization.basket.unavailableProducts(numberOfProducts: numberOfProducts).localised,
+                                            products: viewModel.productsNotFound, isAddable: false,
+                                            addIngredientAction: { entry in
                         addIngredient(entry)})
 
                 }
 
                 if (viewModel.basketPreviewLine?.entries?.removed ?? []).count > 0 {
-                    IngredientsFoldableView(title: MiamText.sharedInstance.mealRowRemoved, products: viewModel.productsRemoved, isAddable: true, addIngredientAction: { entry in
+                    let numberOfProducts = Int32(viewModel.productsRemoved.count)
+                    IngredientsFoldableView(title: Localization.basket.removedProducts(numberOfProducts: numberOfProducts).localised,
+                                            products: viewModel.productsRemoved,
+                                            isAddable: true, addIngredientAction: { entry in
                         addIngredient(entry)})
                 }
             }

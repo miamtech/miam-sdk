@@ -8,13 +8,15 @@
 
 import Foundation
 import miamCore
-struct Localization {
-    static let recipe = Localisation.Recipe.shared
-    static let basket = Localisation.Basket.shared
-    static let itemSelector = Localisation.ItemSelector.shared
-    static let catalog = Localisation.Catalog.shared
-    static let favorites = Localisation.Favorites.shared
-    static let preferences = Localisation.Preferences.shared
-    static let price = Localisation.Price.shared
-    static let error = Localisation.Error.shared
+public struct Localization {
+    public static let recipe = Localisation.Recipe.shared
+    public static let basket = Localisation.Basket.shared
+    public static let itemSelector = Localisation.ItemSelector.shared
+    public static let catalog = Localisation.Catalog.shared
+    public static let favorites = Localisation.Favorites.shared
+    public static let preferences = Localisation.Preferences.shared
+    public static let price = Localisation.Price.shared
+    public static let error = Localisation.Error.shared
+    public static let counter = Localisation.Counter.shared
+    public static let myMeals = Localisation.MyMeals.shared
 }
