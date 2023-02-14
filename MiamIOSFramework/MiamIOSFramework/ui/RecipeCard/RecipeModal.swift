@@ -30,7 +30,8 @@ struct RecipeModal: View {
             template(recipeId, recipeViewModel, close)
         } else {
             NavigationView {
-                VStack {
+                VStack(spacing: 0) {
+
                     RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, close: {
                         close()
                     }, navigateToPreview: {
@@ -39,9 +40,9 @@ struct RecipeModal: View {
                         recipeViewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                     })
                     .navigationTitle(recipeViewModel.recipe?.attributes?.title ?? "")
-                    
+
                     NavigationLink("Produits dans votre panier", isActive: $showBasketPreview) {
-                        VStack  {
+                        VStack(spacing: 0) {
                             BasketPreviewView(recipeId: recipeId, recipeVm: recipeViewModel) { _, _ in
                                 self.showBasketPreview = false
                             } close: {
@@ -49,15 +50,16 @@ struct RecipeModal: View {
                             } goToItemSelector: {
                                 self.showItemSelector = true
                             }
-                            
-                            NavigationLink(ItemSelectorText.sharedInstance.swapProduct, isActive: $showItemSelector) {
-                                ItemSelector(recipeId: recipeId) {
-                                    self.showItemSelector = false
-                                }
-                            }
-                            .frame(height: 0.1)
-                            .hidden()
+
+
                         }.frame(maxHeight: .infinity)
+                        NavigationLink("", isActive: $showItemSelector) {
+                            ItemSelector(recipeId: recipeId) {
+                                self.showItemSelector = false
+                            }
+                        }
+                        .frame(height: 0.1)
+                        .hidden()
                     }
                     .frame(height: 0.1)
                     .hidden()
