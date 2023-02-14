@@ -12,13 +12,21 @@ import miamCore
 public struct PriceView: View {
     
     @ObservedObject var viewModel: PriceVM = PriceVM()
-    
+
     private var formattedPrice: String {
-        if let price = viewModel.price?.pricePerServe {
-            return String(format: "%.2f", price)
+        guard let price = viewModel.price?.pricePerServe else {
+            return ""
         }
-        
-        return ""
+
+        let numberFormatter = NumberFormatter()
+        numberFormatter.currencyCode = "EUR"
+        numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 2
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: price)) else {
+            return ""
+        }
+
+        return formattedPrice
     }
     
     public init(
@@ -38,8 +46,6 @@ public struct PriceView: View {
             VStack{
                 HStack(alignment: .top, spacing: 2) {
                     Text(formattedPrice)
-                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
-                    Text(MiamText.sharedInstance.currency)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                 }
                 

@@ -20,21 +20,13 @@ struct BasketPreviewHeader: View {
     let price: String
     let showDetailsButton = false
     let isReloading: Bool
-    
-    private var formattedPrice: String {
-        guard let priceDouble = Double(price) else {
-            return ""
-        }
-        
-        return String(format: "%.2f€", priceDouble)
-    }
-    
-    
     let pictureURL: URL?
     
     let updateGuest: (Int) -> Void
     let goToDetail: () -> Void
     
+    
+
     var body: some View {
         if (Template.sharedInstance.basketPreviewHeaderTemplate != nil) {
             Template.sharedInstance.basketPreviewHeaderTemplate!(basketTitle, pictureURL, basketDescription, pricePerGuest, numberOfGuests, price, isReloading, updateGuest)
@@ -69,7 +61,7 @@ struct BasketPreviewHeader: View {
                     }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
-                    Text(formattedPrice)
+                    Text(price)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         .foregroundColor(Color.miamColor(.primary))
                     Spacer()

@@ -25,6 +25,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.B
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 import com.miam.kmm_miam_sdk.android.ui.components.counter.Counter
 import com.miam.kmm_miam_sdk.android.ui.components.price.SimplePrice
+import com.miam.kmm_miam_sdk.android.ui.components.price.formatPrice
 import kotlin.math.max
 import kotlin.math.round
 
@@ -39,7 +40,7 @@ fun BasketPreviewRecipeLine(
     val recipeName = line.title
     val recipeDescription = line.bplDescription[0]
     val guestDivider = max(1, line.count)
-    val pricePerGuest = "${(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble()) / 100)}€ /personne"
+    val pricePerGuest = "${formatPrice(round(((line.price.toDouble() * 100).toBigDecimal() / guestDivider.toBigDecimal()).toDouble() / 100))} /personne"
 
     fun goToRecipeDetail() {
         goToDetail()
