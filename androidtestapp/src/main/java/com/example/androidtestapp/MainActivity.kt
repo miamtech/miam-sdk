@@ -176,4 +176,3 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
         }
     }
 }
-
