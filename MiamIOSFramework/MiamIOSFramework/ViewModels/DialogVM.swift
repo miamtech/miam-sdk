@@ -12,10 +12,10 @@ import Combine
 @available(iOS 14, *)
 public class DialogVM : ObservableObject {
     
-    @Published var state: RouterOutletContractState?
+    @Published public var state: RouterOutletContractState?
     private let routerVm: RouterOutletViewModel
 
-     init(routerVm : RouterOutletViewModel) {
+    public init(routerVm : RouterOutletViewModel) {
          self.routerVm = routerVm
          
           routerVm.collect(flow: routerVm.uiState, collect: { data in

@@ -10,17 +10,17 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class PreferencesVM: ObservableObject {
+public class PreferencesVM: ObservableObject {
     static let sharedInstance = PreferencesVM()
     private let preferencesViewModelInstance = PreferencesViewModelInstance.shared.instance
     
-    @Published var state: PreferencesContractState?
+    @Published public var state: PreferencesContractState?
   
-    var diets: [CheckableTag] = []
-    var equipments: [CheckableTag] = []
-    var ingredients: [CheckableTag] = []
+    public var diets: [CheckableTag] = []
+    public var equipments: [CheckableTag] = []
+    public var ingredients: [CheckableTag] = []
     
-    private init() {
+    public init() {
         self.preferencesViewModelInstance.collect(flow: self.preferencesViewModelInstance.uiState) { data in
             guard let state = data as? PreferencesContractState else {
                 return
@@ -38,23 +38,23 @@ class PreferencesVM: ObservableObject {
         }
     }
     
-    func addTag(_ tag: Tag) {
+    public func addTag(_ tag: Tag) {
         preferencesViewModelInstance.addIngredientPreference(tag: tag)
     }
     
-    func updateGuestsNumber(_ numberOfGuests: Int) {
+    public func updateGuestsNumber(_ numberOfGuests: Int) {
         preferencesViewModelInstance.changeGlobalGuest(numberOfGuest: Int32(numberOfGuests))
     }
     
-    func togglePreference(_ preference: CheckableTag) {
+    public func togglePreference(_ preference: CheckableTag) {
         preferencesViewModelInstance.togglePreference(tagIdToToggle: preference.tag.id)
     }
     
-    func resetPreferences() {
+    public func resetPreferences() {
         preferencesViewModelInstance.resetPreferences()
     }
 
-    func applyPreferences() {
+    public func applyPreferences() {
         preferencesViewModelInstance.applyPreferences()
     }
 }

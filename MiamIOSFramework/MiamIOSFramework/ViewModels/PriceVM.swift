@@ -11,7 +11,7 @@ import miamCore
 public class PriceVM : RecipePricingViewModel, ObservableObject {
     @Published var price: Pricing?
 
-    override init() {
+    public override init() {
         super.init()
         // TODO handle other states
         collect(flow: uiState, collect: { data in

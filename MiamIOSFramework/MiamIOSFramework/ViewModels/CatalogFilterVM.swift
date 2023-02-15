@@ -21,7 +21,7 @@ public class CatalogFilterViewModel: ObservableObject {
     public var cost: Array<CatalogFilterOptions> = []
     public var time: Array<CatalogFilterOptions> = []
 
-    private init() {
+    public init() {
         self.viewModelInstance.collect(flow: viewModelInstance.uiState) { data in
             let state = data as! SingletonFilterContractState
            
