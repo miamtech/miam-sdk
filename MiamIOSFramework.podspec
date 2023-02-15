@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "MiamIOSFramework"
-  spec.version      = "3.9.2"
+  spec.version      = "3.9.3"
   spec.summary      = "Miam SDK for iOS"
   spec.description  = <<-DESC
   Miam SDK for iOS.
