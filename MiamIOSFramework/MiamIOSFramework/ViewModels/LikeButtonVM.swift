@@ -12,9 +12,9 @@ import miamCore
 
 @available(iOS 14, *)
 public class LikeButtonVM: LikeButtonViewModel, ObservableObject {
-    @Published var isLiked: Bool = false
+    @Published public var isLiked: Bool = false
     
-    override public init() {
+    public override init() {
         super.init()
         collect(flow: uiState) { data in
             let state = data as! RecipeLikeContractState

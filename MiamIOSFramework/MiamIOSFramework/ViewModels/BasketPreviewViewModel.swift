@@ -13,8 +13,8 @@ import miamCore
 @available(iOS 14, *)
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
     private let currencyCode = "EUR"
-    @Published var basketPreviewLine: BasketPreviewLine?
-    @Published var state : BasketPreviewContractState?
+    @Published public var basketPreviewLine: BasketPreviewLine?
+    @Published public var state : BasketPreviewContractState?
 
     private lazy var numberFormatter: NumberFormatter = {
         let numberFormatter = NumberFormatter()
@@ -25,7 +25,7 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         return numberFormatter
     }()
 
-    override init(recipeId: String?) {
+    public override init(recipeId: String?) {
         super.init(recipeId: recipeId)
         collect(flow: uiState) { data in
             let state = data as! BasketPreviewContractState

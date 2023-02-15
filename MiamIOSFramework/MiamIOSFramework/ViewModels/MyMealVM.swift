@@ -10,7 +10,7 @@ import miamCore
 
 @available(iOS 14, *)
 public class MyMeal: Identifiable {
-    init(basketPreviewLine: BasketPreviewLine) {
+    public init(basketPreviewLine: BasketPreviewLine) {
         self.basketPreviewLine = basketPreviewLine
     }
 
@@ -27,9 +27,9 @@ public class MyMeal: Identifiable {
 @available(iOS 14, *)
 public class MyMealVM : MyMealViewModel, ObservableObject {
     @Published public var meals: [MyMeal] = []
-    @Published var state: MyMealContractState?
+    @Published public var state: MyMealContractState?
 
-    override public init() {
+    public override init() {
         super.init()
         collect(flow: uiState) { data in
             let state = data as! MyMealContractState
