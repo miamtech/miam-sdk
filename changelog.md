@@ -1,3 +1,6 @@
+# 3.9.3
+- [FIX][IOS] Make all view models public
+
 # 3.9.2
 - [FIX][IOS] Change visibility of published properties to public in PreferencesSearchVM
 - [FIX][IOS] Fix navigation link appearing in wireframe at the bottom of basket view
