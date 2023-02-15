@@ -50,9 +50,6 @@
     <string name="com_miam_item_selector_in_basket">In your basket</string>
     <string name="com_miam_item_selector_select">Select</string>
 
-    <string name="com_miam_my_meals_meal_added">1 meal added</string>
-    <string name="com_miam_my_meals_meals_added">%d meals added</string>
-
     <string name="com_miam_preferences_title">My preferences</string>
     <string name="com_miam_preferences_cancel">Cancel</string>
     <string name="com_miam_preferences_add_tag">Add +</string>

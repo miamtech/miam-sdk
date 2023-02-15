@@ -4,7 +4,7 @@ import com.miam.core.localisation.i18n.I18n
 import com.miam.sdk.resources.MiamSdkResources
 
 private val miamStrings = runCatching { MiamSdkResources.strings }.getOrNull()
-
+private val miamPlurals = runCatching { MiamSdkResources.plurals }.getOrNull()
 public object Localisation {
     public object Recipe {
         public val add: I18n
@@ -243,5 +243,9 @@ public object Localisation {
     public object MyMeals {
         public val noMealIdeaInBasket: I18n
             get() = I18n.string("com_miam_my_meals_no_meal_in_basket", miamStrings?.com_miam_my_meals_no_meal_in_basket)
+
+        public fun mealsAdded(numberOfMeals: Int): I18n {
+            return I18n.plural("com_miam_my_meals_meal_added", miamPlurals?.com_miam_my_meals_meal_added, numberOfMeals, numberOfMeals)
+        }
     }
 }
