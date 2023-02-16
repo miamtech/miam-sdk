@@ -47,6 +47,7 @@ android {
 
 dependencies {
     embed(project(":miamCore"))
+    embed(project(":core"))
 
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.android)
@@ -76,6 +77,9 @@ dependencies {
     api(libs.koin.android)
     api(libs.coil.compose)
     api(libs.coil.svg)
+
+    api(libs.moko.resources.core)
+    api(libs.moko.resources.android)
 
     androidTestImplementation(libs.compose.ui.test)
 }
