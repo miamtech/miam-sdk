@@ -117,7 +117,7 @@ fun Plus(decrease: () -> Unit, isDisable: Boolean) {
 fun MiddleText(localCount: Int?, lightMode: Boolean, isLoading: Boolean) {
     fun counterText(countValue: Int?, lightMode: Boolean): String {
         if (countValue == null) return "-"
-        return localCount.toString() + if (lightMode) "" else persons.localised
+        return localCount.toString() + if (lightMode) "" else " " + persons.localised
     }
 
     Row(

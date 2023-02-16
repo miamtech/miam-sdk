@@ -83,8 +83,8 @@
 
     <string name="com_miam_generic_error">Une erreur s\'est produite, veuillez réessayer</string>
 
-    <string name="com_miam_tag_pre_recipe_count">Ce produit est utilisé pour</string>
-    <string name="com_miam_tag_post_recipe_count">recettes</string>
+    <string name="com_miam_tag_pre_recipe_count">Pour</string>
+    <string name="com_miam_tag_post_recipe_count">repas</string>
 
     <string name="com_miam_filter_less_than_five_euros">Moins de 5€</string>
     <string name="com_miam_filter_between_five_and_ten_euros">Entre 5€ et 10€</string>

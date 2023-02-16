@@ -81,8 +81,8 @@
 
     <string name="com_miam_generic_error">An error happened, please retry.</string>
 
-    <string name="com_miam_tag_pre_recipe_count">This product is used in</string>
-    <string name="com_miam_tag_post_recipe_count">recipes</string>
+    <string name="com_miam_tag_pre_recipe_count">Used in</string>
+    <string name="com_miam_tag_post_recipe_count">meals</string>
 
     <string name="com_miam_filter_less_than_five_euros">Less than 5€</string>
     <string name="com_miam_filter_between_five_and_ten_euros">Between 5€ and 10€</string>

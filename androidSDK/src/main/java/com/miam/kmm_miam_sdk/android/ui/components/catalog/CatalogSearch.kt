@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation.Catalog.searchPlaceholder
 import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
@@ -127,7 +128,7 @@ class CatalogSearch(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
-            placeholder = { Text("Chercher un ingrédient ou une recette") }
+            placeholder = { Text(searchPlaceholder.localised) }
         )
     }
 
