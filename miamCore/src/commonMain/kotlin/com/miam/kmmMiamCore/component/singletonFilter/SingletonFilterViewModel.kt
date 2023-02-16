@@ -1,6 +1,7 @@
 package com.miam.kmmMiamCore.component.singletonFilter
 
 import com.miam.core.sdk.di.MiamDI
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.handler.LogHandler
@@ -158,20 +159,20 @@ public open class SingletonFilterViewModel:
     public companion object {
         public val initialState: SingletonFilterContract.State = SingletonFilterContract.State(
             difficulty = listOf(
-                CatalogFilterOptions("1", "Chef débutant"),
-                CatalogFilterOptions("2", "Chef intermédiaire"),
-                CatalogFilterOptions("3", "Top chef"),
+                CatalogFilterOptions("1", Localisation.Recipe.lowDifficulty.localised),
+                CatalogFilterOptions("2", Localisation.Recipe.mediumDifficulty.localised),
+                CatalogFilterOptions("3", Localisation.Recipe.highDifficulty.localised),
             ),
             cost = listOf(
-                CatalogFilterOptions("0-5", "Moins de 5€"),
-                CatalogFilterOptions("5-10", "Entre 5€ et 10€"),
-                CatalogFilterOptions("10-1000", "Plus de 10€"),
+                CatalogFilterOptions("0-5", Localisation.Filters.lessThanFiveEuros.localised),
+                CatalogFilterOptions("5-10", Localisation.Filters.betweenFiveAndTenEuros.localised),
+                CatalogFilterOptions("10-1000", Localisation.Filters.moreThanTenEuros.localised),
             ),
             time = listOf(
-                CatalogFilterOptions("15", "Moins de 15 min"),
-                CatalogFilterOptions("30", "Moins de 30 min"),
-                CatalogFilterOptions("60", "Moins de 1 h"),
-                CatalogFilterOptions("120", "Moins de 2 h"),
+                CatalogFilterOptions("15", Localisation.Filters.lessThanFifteenMinutes.localised),
+                CatalogFilterOptions("30", Localisation.Filters.lessThanThirteenMinutes.localised),
+                CatalogFilterOptions("60", Localisation.Filters.lessThanAnHour.localised),
+                CatalogFilterOptions("120", Localisation.Filters.lessThanTwoHours.localised),
             ),
             searchString = null,
             isFavorite = false,

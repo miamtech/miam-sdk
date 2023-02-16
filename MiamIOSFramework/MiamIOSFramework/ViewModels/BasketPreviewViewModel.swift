@@ -56,7 +56,7 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         let basketCount = basket.count > 0 ? basket.count : 1
         let price = parsedPrice * 100 / Double(basketCount) / 100
         let formattedPrice = String(format: "%.2f", price)
-        return "\(formattedPrice)€ /personne"
+        return "\(formattedPrice)€ /\(Localization.basket.person.localised)"
     }
 
     public var numberOfGuests: Int {

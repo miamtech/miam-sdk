@@ -1,30 +1,60 @@
 package com.miam.kmm_miam_sdk.android.ressource
 
+import com.miam.core.sdk.localisation.Localisation
+
 object Text {
-    var addRecipe = "Ajouter les ingrédients"
-    var addedRecipe = "1 repas ajouté à votre panier :"
-    var alreadyInCart = "Déjà ajoutée"
-    var cookTime = "Cuisson : "
-    var checkBasketPreview = "Voir les produits"
-    var continueShopping = "Continuer mes courses"
-    var currency = "€"
-    var goToCatalog = "Je découvre les recettes"
-    var ingredient = "Ingredients"
-    var moreDetail = "Voir le détail"
-    var noFavoriteYet = "Vous n’avez pas encore de recettes favorites, on peut vous aider ?!"
-    var moreInfo = "Plus d'informations"
-    var preGuests = "par personne."
-    var prepTime = "Préparation : "
-    var recipeFlag = "Recette"
-    var removeRecipe = "Retirer du panier"
-    var replaceBy = "Remplacer cet article par : "
-    var restingTime = "Repos : "
-    var steps = "Étapes"
-    var totalTime = "Temps total"
-    var tagPreRecipeCountText = "Ce produit est utilisé pour"
-    var tagPostRecipeCountText = "recettes"
-    var swap = "Remplacer"
-    var difficultyLow = "Chef débutant"
-    var difficultyMedium = "Chef intermédiaire"
-    var difficultyHigh = "Top chef"
+    @Deprecated("Use Localisation.Recipe.add instead")
+    var addRecipe = Localisation.Recipe.add.localised
+    @Deprecated("Use LLocalisation.Recipe.added instead")
+    var addedRecipe = Localisation.Recipe.added.localised
+    @Deprecated("Use Localisation.Recipe.showDetails instead")
+    var showDetails = Localisation.Recipe.showDetails.localised
+    @Deprecated("Use Localisation.Recipe.cookTime instead")
+    var cookTime = Localisation.Recipe.cookTime.localised
+    @Deprecated("Use Localisation.Recipe.showBasketPreview instead")
+    var checkBasketPreview = Localisation.Recipe.showBasketPreview.localised
+    @Deprecated("Use Localisation.Basket.continueShopping instead")
+    var continueShopping = Localisation.Basket.continueShopping.localised
+    @Deprecated("Use Localisation.Price.currency instead")
+    var currency = Localisation.Price.currency.localised
+    @Deprecated("Use Localisation.Favorites.goToCatalog instead")
+    var goToCatalog = Localisation.Favorites.goToCatalog.localised
+    @Deprecated("Use Localisation.Recipe.showDetails instead")
+    var moreDetail = Localisation.Recipe.showDetails.localised
+    @Deprecated("Use Localisation.Favorites.noFavorites instead")
+    var noFavoriteYet = Localisation.Favorites.noFavorites.localised
+    @Deprecated("Use Localisation.Price.perGuest instead")
+    var preGuests = Localisation.Price.perGuest.localised
+    @Deprecated("Use Localisation.Recipe.preparationTime instead")
+    var prepTime = Localisation.Recipe.preparationTime.localised
+    @Deprecated("Use Localisation.Basket.removeRecipe instead")
+    var removeRecipe = Localisation.Basket.removeRecipe.localised
+    @Deprecated("Use ocalisation.ItemSelector.replaceProduct instead")
+    var replaceBy = Localisation.ItemSelector.replaceProduct.localised
+    @Deprecated("Use Localisation.Recipe.restingTime instead")
+    var restingTime = Localisation.Recipe.restingTime.localised
+    @Deprecated("Use Localisation.Recipe.steps instead")
+    var steps = Localisation.Recipe.steps.localised
+    @Deprecated("Use Localisation.Tag.preRecipeCount instead")
+    var tagPreRecipeCountText = Localisation.Tag.preRecipeCount.localised
+    @Deprecated("Use Localisation.Tag.postRecipeCount instead")
+    var tagPostRecipeCountText = Localisation.Tag.postRecipeCount.localised
+    @Deprecated("Use Localisation.Basket.swapProduct instead")
+    var swap = Localisation.Basket.swapProduct.localised
+    @Deprecated("Use Localisation.Recipe.lowDifficulty instead")
+    var difficultyLow = Localisation.Recipe.lowDifficulty.localised
+    @Deprecated("Use Localisation.Recipe.mediumDifficulty instead")
+    var difficultyMedium = Localisation.Recipe.mediumDifficulty.localised
+    @Deprecated("Use Localisation.Recipe.highDifficulty instead")
+    var difficultyHigh = Localisation.Recipe.highDifficulty.localised
+    @Deprecated("Use Localisation.Catalog.filtersTitle instead")
+    var refineSelection = Localisation.Catalog.filtersTitle.localised
+    @Deprecated("Use Localisation.Catalog.removeFilters instead")
+    var removeFilters = Localisation.Catalog.removeFilters.localised
+    @Deprecated("Use Localisation.Catalog.difficulty instead")
+    var difficulty = Localisation.Catalog.difficulty.localised
+    @Deprecated("Use Localisation.Catalog.costPerPerson instead")
+    var costPerPerson = Localisation.Catalog.costPerPerson.localised
+    @Deprecated("Use Localisation.Catalog.preparationTime instead")
+    var preparationTime = Localisation.Catalog.preparationTime.localised
 }

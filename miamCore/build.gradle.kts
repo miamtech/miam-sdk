@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.LintOptions
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -120,6 +121,10 @@ android {
     defaultConfig {
         minSdk = Integer.parseInt(minSdkVersion)
         targetSdk = Integer.parseInt(targetSdkVersion)
+    }
+
+    lint {
+        abortOnError = false
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

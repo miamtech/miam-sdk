@@ -6,6 +6,6 @@ object RecipeCardText {
     var difficultyLow = Text.difficultyLow
     var difficultyMedium = Text.difficultyMedium
     var difficultyHigh = Text.difficultyHigh
-    var isInCart = "Voir le détail"
-    var addToCart = "Ajouter les ingrédients"
+    var isInCart = Text.showDetails
+    var addToCart = Text.addRecipe
 }
