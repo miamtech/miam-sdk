@@ -18,9 +18,8 @@ import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
-
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.changeYourPref
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noResultWithYourPref
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.preferenceNoResult
 
 @Composable
 fun CatalogCategoriesEmptyView(
@@ -42,7 +41,7 @@ fun CatalogCategoriesEmptyView(
             ) {
                 Image(painter = painterResource(CatalogImage.empty), contentDescription = null, Modifier.padding(vertical = 16.dp))
                 Text(
-                    text = noResultWithYourPref,
+                    text = preferenceNoResult,
                     color = Colors.white,
                     style = Typography.subtitleBold,
                     textAlign = TextAlign.Center,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="com_miam_i18n_recipe_add">Ajouter les ingrédients</string>
-    <string name="com_miam_i18n_recipe_added">1 repas ajouté à votre panier :</string>
+    <string name="com_miam_recipe_add">Ajouter les ingrédients</string>
+    <string name="com_miam_recipe_added">1 repas ajouté à votre panier :</string>
     <string name="com_miam_recipe_difficulty_low">Chef débutant</string>
     <string name="com_miam_recipe_difficulty_medium">Chef intermédiaire</string>
     <string name="com_miam_recipe_difficulty_high">Top chef</string>
@@ -38,12 +38,20 @@
     <string name="com_miam_catalog_filter_search_placeholder">Rechercher</string>
     <string name="com_miam_catalog_filter_search_prefix">Votre recherche :</string>
     <string name="com_miam_catalog_filter_search_title">Votre Sélection</string>
+    <string name="com_miam_catalog_preferences_no_result">Pas de résultat sur cette page avec
+        vos préférences
+    </string>
+    <string name="com_miam_catalog_prefrences_try_another">Modifiez les pour avoir plus de
+        résultats
+    </string>
     <string name="com_miam_catalog_browse_recipes">Parcourir les idées repas</string>
     <string name="com_miam_catalog_no_recipe_found">Oups, aucune recette n\'a été trouvée</string>
     <string name="com_miam_catalog_try_another_search">Essayez une nouvelle recherche</string>
 
     <string name="com_miam_favorites_title">Mes idées repas</string>
-    <string name="com_miam_favorites_no_favorites">Vous n\’avez pas encore de recettes favorites, on peut vous aider ?!</string>
+    <string name="com_miam_favorites_no_favorites">Vous n\’avez pas encore de recettes favorites, on
+        peut vous aider ?!
+    </string>
     <string name="com_miam_favorites_go_to_catalog">Je découvre les recettes</string>
 
     <string name="com_miam_item_selector_replace_by">Remplacer cet article par :</string>
@@ -61,8 +69,12 @@
     <string name="com_miam_preferences_tastes_title">Goûts</string>
     <string name="com_miam_preferences_cooking_equipment_title">Mode de cuisson</string>
     <string name="com_miam_preferences_diet_subtitle">Avez-vous un régime particulier ?</string>
-    <string name="com_miam_preferences_tastes_subtitle">Y a-t-il des ingrédients que vous n\’aimez pas ?</string>
-    <string name="com_miam_preferences_cooking_equipment_subtitle">Quel(s) équipement(s) possédez-vous chez vous ?</string>
+    <string name="com_miam_preferences_tastes_subtitle">Y a-t-il des ingrédients que vous n\’aimez
+        pas ?
+    </string>
+    <string name="com_miam_preferences_cooking_equipment_subtitle">Quel(s) équipement(s)
+        possédez-vous chez vous ?
+    </string>
     <string name="com_miam_preferences_search_title">Je n\'aime pas</string>
     <string name="com_miam_preferences_search_placeholder">Rechercher un ingrédient</string>
 
@@ -84,5 +96,7 @@
 
     <string name="com_miam_counter_person">pers.</string>
 
-    <string name="com_miam_my_meals_no_meal_in_basket">Vous n\'avez aucune idée repas dans votre panier.</string>
+    <string name="com_miam_my_meals_no_meal_in_basket">Vous n\'avez aucune idée repas dans votre
+        panier.
+    </string>
 </resources>

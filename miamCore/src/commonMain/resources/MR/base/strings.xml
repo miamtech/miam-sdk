@@ -6,11 +6,11 @@
     <string name="com_miam_recipe_difficulty_medium">Intermediate chef</string>
     <string name="com_miam_recipe_difficulty_high">Top chef</string>
     <string name="com_miam_recipe_is_in_cart">Show details</string>
-    <string name="com_miam_recipe_cook_time">Cooking: </string>
-    <string name="com_miam_recipe_preparation_time">Preparation: </string>
+    <string name="com_miam_recipe_cook_time">Cooking:</string>
+    <string name="com_miam_recipe_preparation_time">Preparation:</string>
     <string name="com_miam_recipe_resting_time">Resting:</string>
     <string name="com_miam_recipe_steps">Steps</string>
-    <string name="com_miam_recipe_number_of_ingredients">%d ingrédients</string>
+    <string name="com_miam_recipe_number_of_ingredients">%d ingredients</string>
     <string name="com_miam_recipe_check_basket_preview">Show products</string>
     <string name="com_miam_recipe_flag">Meal idea</string>
 
@@ -38,12 +38,22 @@
     <string name="com_miam_catalog_filter_search_placeholder">Search</string>
     <string name="com_miam_catalog_filter_search_prefix">Your search :</string>
     <string name="com_miam_catalog_filter_search_title">Your selection</string>
+    <string name="com_miam_catalog_preferences_no_result">No result on this page with your
+        preferences
+    </string>
+    <string name="com_miam_catalog_prefrences_try_another">Modify them to get more
+        results
+    </string>
     <string name="com_miam_catalog_browse_recipes">Browse meal ideas</string>
-    <string name="com_miam_catalog_no_recipe_found">No recipe matching your criterias has been found.</string>
+    <string name="com_miam_catalog_no_recipe_found">No recipe matching your criterias has been
+        found.
+    </string>
     <string name="com_miam_catalog_try_another_search">Try a new search</string>
-    
+
     <string name="com_miam_favorites_title">My meal ideas</string>
-    <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we help?</string>
+    <string name="com_miam_favorites_no_favorites">You don\'t have any favorite recipe yet. Can we
+        help?
+    </string>
     <string name="com_miam_favorites_go_to_catalog">Discover our recipes</string>
 
     <string name="com_miam_item_selector_replace_by">Replace this article with:</string>
@@ -58,8 +68,11 @@
     <string name="com_miam_preferences_tastes_title">Tastes</string>
     <string name="com_miam_preferences_cooking_equipment_title">Cooking equipments</string>
     <string name="com_miam_preferences_diet_subtitle">Do you follow a peculiar diet?</string>
-    <string name="com_miam_preferences_tastes_subtitle">Is there any ingredients you don\'t like?</string>
-    <string name="com_miam_preferences_cooking_equipment_subtitle">Which equipments do you have at home?</string>
+    <string name="com_miam_preferences_tastes_subtitle">Is there any ingredients you don\'t like?
+    </string>
+    <string name="com_miam_preferences_cooking_equipment_subtitle">Which equipments do you have at
+        home?
+    </string>
     <string name="com_miam_preferences_search_title">I don\'t like</string>
     <string name="com_miam_preferences_search_placeholder">Search for ingredients</string>
 

@@ -5,6 +5,7 @@ import com.miam.sdk.resources.MiamSdkResources
 
 private val miamStrings = runCatching { MiamSdkResources.strings }.getOrNull()
 private val miamPlurals = runCatching { MiamSdkResources.plurals }.getOrNull()
+
 public object Localisation {
     public object Recipe {
         public val add: I18n
@@ -115,6 +116,9 @@ public object Localisation {
         public val loadingText: I18n
             get() = I18n.string("com_miam_catalog_loading_text", miamStrings?.com_miam_catalog_loading_text)
 
+        public val favoriteTitle: I18n
+            get() = I18n.string("com_miam_catalog_favorites_title", miamStrings?.com_miam_catalog_favorites_title)
+
         public val difficulty: I18n
             get() = I18n.string("com_miam_catalog_filter_difficulty", miamStrings?.com_miam_catalog_filter_difficulty)
 
@@ -138,6 +142,12 @@ public object Localisation {
 
         public val searchTitle: I18n
             get() = I18n.string("com_miam_catalog_filter_search_title", miamStrings?.com_miam_catalog_filter_search_title)
+
+        public val preferencesNoResult: I18n
+            get() = I18n.string("com_miam_catalog_preferences_no_result", miamStrings?.com_miam_catalog_preferences_no_result)
+
+        public val preferencesTryAnother: I18n
+            get() = I18n.string("com_miam_catalog_prefrences_try_another", miamStrings?.com_miam_catalog_prefrences_try_another)
 
         public val browseRecipes: I18n
             get() = I18n.string("com_miam_catalog_browse_recipes", miamStrings?.com_miam_catalog_browse_recipes)

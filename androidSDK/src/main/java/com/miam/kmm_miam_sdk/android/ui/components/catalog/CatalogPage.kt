@@ -39,7 +39,7 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.backToCategories
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.browseRecipes
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noFavoriteYet
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.noResultFor
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.recipesListLoading
@@ -228,7 +228,7 @@ fun FavoriteEmptyPage(returnToCategoriesPage: () -> Unit) {
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    text = backToCategories,
+                                    text = browseRecipes,
                                     color = primary,
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                 )
