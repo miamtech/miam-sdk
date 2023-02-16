@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation.Catalog.showResults
 import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
@@ -132,7 +133,11 @@ fun MiamCatalogFilter(
                     .weight(weight = 1f, fill = false)
                     .verticalScroll(rememberScrollState())
             ) {
-                FilterSection(text = com.miam.kmm_miam_sdk.android.ressource.Text.difficulty, catalogFilterOptions = difficulties, onDifficultyChanged)
+                FilterSection(
+                    text = com.miam.kmm_miam_sdk.android.ressource.Text.difficulty,
+                    catalogFilterOptions = difficulties,
+                    onDifficultyChanged
+                )
                 Divider(Modifier.padding(vertical = 16.dp))
                 FilterSection(text = com.miam.kmm_miam_sdk.android.ressource.Text.costPerPerson, catalogFilterOptions = costs, onCostFilterChanged)
                 Divider(Modifier.padding(vertical = 16.dp))
@@ -207,7 +212,7 @@ fun ApplyAndGoButton(applyAndGo: () -> Unit, numberOfResult: Int) {
                 .background(primary)
         ) {
             Text(
-                text = "Voir les ${numberOfResult} idées repas",
+                text = showResults(numberOfResult).localised,
                 color = white,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )

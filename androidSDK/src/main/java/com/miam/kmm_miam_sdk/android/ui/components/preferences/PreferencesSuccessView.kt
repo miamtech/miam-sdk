@@ -22,6 +22,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation.Catalog.showResults
+import com.miam.core.sdk.localisation.Localisation.Preferences.addTag
+import com.miam.core.sdk.localisation.Localisation.Preferences.cancel
 import com.miam.kmmMiamCore.component.preferences.PreferencesContent
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
 import com.miam.kmmMiamCore.miam_core.model.Tag
@@ -160,7 +163,7 @@ fun IngredientPreferencesSection(
                     ) {
                         Row(Modifier.padding(horizontal = 8.dp, vertical = 11.dp)) {
                             Text(
-                                text = "Ajouter +",
+                                text = addTag.localised,
                                 color = Color.Gray
                             )
                         }
@@ -260,7 +263,7 @@ fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound
                 ) {
                     Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                         Text(
-                            text = "Annuler",
+                            text = cancel.localised,
                             style = subtitle.copy(fontWeight = FontWeight.Bold),
                             color = Color.Black
                         )
@@ -280,7 +283,7 @@ fun PreferencesFooter(closePref: () -> Unit, applyPref: () -> Unit, recipesFound
 
                     ) {
                         Text(
-                            text = "Voir les $recipesFound repas",
+                            text = showResults(recipesFound).localised,
                             style = subtitle.copy(fontWeight = FontWeight.Bold),
                             color = white
                         )

@@ -1,5 +1,7 @@
 package com.miam.kmmMiamCore.miam_core.model
 
+import com.miam.core.sdk.localisation.Localisation.Tag.postRecipeCount
+import com.miam.core.sdk.localisation.Localisation.Tag.preRecipeCount
 import kotlin.math.max
 import kotlin.math.truncate
 
@@ -101,7 +103,7 @@ public data class BasketPreviewLine(
                 id = entry.id,
                 record = entry,
                 isRecipe = false,
-                inlineTag = if (recipesCount > 1) "Pour $recipesCount repas" else null,
+                inlineTag = if (recipesCount > 1) "${preRecipeCount.localised} $recipesCount ${postRecipeCount.localised}" else null,
                 title = entry.relationships?.groceriesEntry?.data?.attributes?.name ?: "",
                 picture = item?.attributes?.image ?: "",
                 bplDescription = listOf(

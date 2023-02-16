@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.component.quantityFormatter.QuantityFormatter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
@@ -45,7 +46,7 @@ fun RecipeIngredients(recipe: Recipe, vmRecipe: RecipeViewModel) {
         ) {
 
             Text(
-                text = "${recipe.relationships?.ingredients?.data?.size} ingrédients",
+                text = Localisation.Recipe.numberOfIngredients(recipe.relationships?.ingredients?.data?.size ?: 0).localised,
                 style = Typography.subtitleBold,
                 color = black
             )

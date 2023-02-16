@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.miam.core.sdk.localisation.Localisation.Counter.persons
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.countTextColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundColor
 import com.miam.kmm_miam_sdk.android.ui.components.counter.CounterColor.lessButtonBackgroundDisableColor
@@ -116,7 +117,7 @@ fun Plus(decrease: () -> Unit, isDisable: Boolean) {
 fun MiddleText(localCount: Int?, lightMode: Boolean, isLoading: Boolean) {
     fun counterText(countValue: Int?, lightMode: Boolean): String {
         if (countValue == null) return "-"
-        return localCount.toString() + if (lightMode) "" else " pers."
+        return localCount.toString() + if (lightMode) "" else " " + persons.localised
     }
 
     Row(
