@@ -8,7 +8,7 @@ label: "Initialisation"
 ## Miam class
 
 We recommend that all the mapping functions that will define the interactions between the SDK and
-the host app be wrapped in a main "Miam" class.
+the host app be wrapped in a main **Miam** class.
 
 This class will use methods and attributes defined in SDK `handler` classes to manage objects such
 as the User profile, the Basket, or the selected Store. These haldlers are all singletons.
@@ -72,7 +72,7 @@ class Miam() {
 }
 ```
 :::info
-   To get full list of user feature check [**User handler**](../advanced/user-handler).
+   To get full list of user feature check [**User handler**](../advanced/user-configuration).
 :::
 
 ## Set store
@@ -238,6 +238,3 @@ Miam.getInstance().basketHandler.handlePayment()
 
 Congratulation **Miam** is good to go 🥳
 
-:::info
-   To get full list of Point of sale feature check [**Point of sale handler**](../advanced/point-of-sale-handler).
-:::
