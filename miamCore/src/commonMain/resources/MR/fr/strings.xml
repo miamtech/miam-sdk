@@ -99,4 +99,9 @@
     <string name="com_miam_my_meals_no_meal_in_basket">Vous n\'avez aucune idée repas dans votre
         panier.
     </string>
+
+    <string name="com_miam_sponsor_banner_speach">Cette recette vous est proposée par notre
+        partenaire
+    </string>
+    <string name="com_miam_sponsor_banner_more_info">En savoir plus</string>
 </resources>

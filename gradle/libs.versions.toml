@@ -19,6 +19,10 @@ androidConstraintlayout = "2.1.3"
 androidActivityCompose = "1.4.0"
 androidAppcompat = "1.4.1"
 androidMaterial = "1.7.0"
+
+# Video player
+exoPlayer = "2.18.3"
+
 # Kotlin(x)
 coroutines = "1.6.4"
 ktor = "2.2.2"
@@ -71,6 +75,10 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "compose" }
 compose-runtime-rxjava2 = { module = "androidx.compose.runtime:runtime-rxjava2", version.ref = "compose" }
+
+# Video player
+android-exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoPlayer" }
+
 # Moko
 moko-resources-android = { module = "dev.icerock.moko:resources-android", version.ref = "mokoRes" }
 moko-resources-core = { module = "dev.icerock.moko:resources", version.ref = "mokoRes" }

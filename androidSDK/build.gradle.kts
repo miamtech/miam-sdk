@@ -81,6 +81,8 @@ dependencies {
     api(libs.moko.resources.core)
     api(libs.moko.resources.android)
 
+    api(libs.android.exoplayer)
+
     androidTestImplementation(libs.compose.ui.test)
 }
 

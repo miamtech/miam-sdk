@@ -187,6 +187,12 @@ public data class RecordWrapper(var data: JsonElement? = null, var included: Jso
                 relationships,
                 includedRecords
             )
+            SponsorBlockType.serializer().descriptor.serialName -> SponsorBlockType(
+                id,
+                attributes,
+                relationships,
+                includedRecords
+            )
             else -> throw Exception("Unsuported record type $type")
         }
     }

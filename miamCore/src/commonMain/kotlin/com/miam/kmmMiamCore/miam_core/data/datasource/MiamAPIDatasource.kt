@@ -32,7 +32,7 @@ public object HttpRoutes {
     public const val PACKAGE_ENDPOINT: String = "$BASE_URL/packages"
     public const val TAGS_ENDPOINT: String = "$BASE_URL/tags"
     public const val SPONSOR_ENDPOINT: String = "$BASE_URL/sponsors"
-    public const val SPONSOR_BLOCK_ENDPOINT: String = "$BASE_URL/sponsor-block"
+    public const val SPONSOR_BLOCK_ENDPOINT: String = "$BASE_URL/sponsor-blocks"
 }
 
 

@@ -8,9 +8,12 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
+public enum class SponsorBlockTypesList {
+    TITLE, SMALL_TITLE, PICTURE, SMALL_PICTURE, IMAGE_WITH_TEXT, IMAGE_AND_TEXT, TEXT_AND_IMAGE, TEXT, SMALL_TEXT, VIDEO
+}
 
 @Serializable
-@SerialName("sponsor-block-type")
+@SerialName("sponsor-block-types")
 public data class SponsorBlockType internal constructor(
     override val id: String,
     override val attributes: SponsorBlockTypeAttributes? = null,
@@ -38,7 +41,7 @@ public data class SponsorBlockType internal constructor(
 public data class SponsorBlockTypeAttributes(
     val name: String,
     @SerialName("icon-url")
-    val iconUrl: String = "https://www.iconspng.com/images/rick-astley/rick-astley.jpg",
+    val iconUrl: String,
     val description: String,
     @SerialName("default-height")
     val defaultHeight: Int,

@@ -144,7 +144,7 @@ fun FullScreenContent(
             }
             RouterContent.RECIPE_SPONSOR -> {
                 state.sponsor?.let {
-                    SponsorDetail(context = LocalContext.current).apply { bind(it) }.Content()
+                    SponsorDetail(context = LocalContext.current).apply { bind(it, previous) }.Content()
                 }
             }
             RouterContent.ITEMS_SELECTOR -> ItemsSelector().Content()

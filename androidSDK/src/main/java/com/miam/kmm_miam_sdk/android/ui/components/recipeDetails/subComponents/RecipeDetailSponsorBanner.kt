@@ -10,6 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.miam_core.model.Sponsor
 import com.miam.kmmMiamCore.miam_core.model.fake.SponsorFakeFactory
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
@@ -18,8 +19,7 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.body
 import com.miam.kmm_miam_sdk.android.theme.Typography.link
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.sponsorBannerLink
-import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsText.sponsorBannerText
+
 
 @Composable
 fun RecipeDetailSponsorBanner(sponsor: Sponsor, openSponsorDetail: (sponsor: Sponsor) -> Unit) {
@@ -38,10 +38,10 @@ fun MiamRecipeDetailSponsorBanner(sponsor: Sponsor, openSponsorDetail: (sponsor:
         Arrangement.SpaceBetween
     ) {
         Column(Modifier.fillMaxWidth(0.7f)) {
-            Text(text = sponsorBannerText, style = body)
+            Text(text = Localisation.SponsorBanner.sponsorBannerSpeach.localised, style = body)
             Spacer(Modifier.size(4.dp))
             Clickable({ openSponsorDetail(sponsor) }) {
-                Text(text = sponsorBannerLink, style = link, color = primary)
+                Text(text = Localisation.SponsorBanner.sponsorBannerMoreInfo.localised, style = link, color = primary)
             }
 
         }

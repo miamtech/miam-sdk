@@ -25,7 +25,7 @@ public object SponsorBlockFakeFactory {
         width: Int = 5,
         videoUrl: String? = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         pictureUrl: String? = "https://kultt.fr/wp-content/uploads/2022/09/RickAstley-ad2022.jpg",
-        text: String? = null,
+        content: String? = null,
         backgroundColor: String? = null
     ): SponsorBlockAttributes = SponsorBlockAttributes(
         position = position,
@@ -33,7 +33,7 @@ public object SponsorBlockFakeFactory {
         width = width,
         videoUrl = videoUrl,
         pictureUrl = pictureUrl,
-        text = text,
+        content = content,
         backgroundColor = backgroundColor
     )
 }

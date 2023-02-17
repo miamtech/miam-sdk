@@ -19,10 +19,12 @@ class SponsorDetail @JvmOverloads constructor(
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
 
-    private var vmSponsorDetail: SponsorDetailViewModelImpl = SponsorDetailViewModelImpl()
+    private val vmSponsorDetail: SponsorDetailViewModelImpl = SponsorDetailViewModelImpl()
+    private var previous: () -> Unit = {}
 
-    fun bind(sponsor: Sponsor) {
+    fun bind(sponsor: Sponsor, previous: () -> Unit) {
         vmSponsorDetail.fetchSponsorBlockByIds(sponsor)
+        this.previous = previous
     }
 
     @Composable
@@ -33,7 +35,7 @@ class SponsorDetail @JvmOverloads constructor(
             resourceState = state.sponsorBlocks,
             successView = { sponsorBlocks ->
                 requireNotNull(sponsorBlocks)
-                SponsorDetailSuccessView(sponsorBlocks)
+                SponsorDetailSuccessView(sponsorBlocks, previous)
             },
             loadingView = {
                 Template.sponsorDetailLoadingTemplate?.let {

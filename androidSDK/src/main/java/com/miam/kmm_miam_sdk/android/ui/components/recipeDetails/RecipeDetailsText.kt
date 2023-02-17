@@ -12,6 +12,4 @@ object RecipeDetailsText {
     var difficultyLow = Text.difficultyLow
     var difficultyMedium = Text.difficultyMedium
     var difficultyHigh = Text.difficultyHigh
-    var sponsorBannerText = "Cette recette vous est proposée par notre partenaire"
-    var sponsorBannerLink = "En savoir plus"
 }

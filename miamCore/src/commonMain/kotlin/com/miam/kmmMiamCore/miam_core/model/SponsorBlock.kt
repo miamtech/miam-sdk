@@ -43,7 +43,7 @@ public data class SponsorBlockAttributes(
     val videoUrl: String? = null,
     @SerialName("picture-url")
     val pictureUrl: String? = null,
-    val text: String? = null,
+    val content: String? = null,
     @SerialName("background-color")
     val backgroundColor: String? = null
 ): Attributes()
