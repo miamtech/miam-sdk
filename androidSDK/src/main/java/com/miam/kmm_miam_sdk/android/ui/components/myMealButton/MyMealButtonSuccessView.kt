@@ -26,14 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Colors.white
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography.subtitleBold
 import com.miam.kmm_miam_sdk.android.ui.components.basketPreview.customization.BasketPreviewImage
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
-import com.miam.kmm_miam_sdk.android.ui.components.myMealButton.customization.MyMealButtonText.multipleMealText
-import com.miam.kmm_miam_sdk.android.ui.components.myMealButton.customization.MyMealButtonText.singleMealText
 
 @Composable
 fun MyMealButtonSuccessView(recipeCount: Int, onclick: () -> Unit) {
@@ -64,7 +63,7 @@ fun MyMealButtonSuccessView(recipeCount: Int, onclick: () -> Unit) {
                     colorFilter = ColorFilter.tint(Color.White)
                 )
                 Text(
-                    text = if (recipeCount == 1) singleMealText else "$recipeCount" + multipleMealText,
+                    text = Localisation.MyMeals.mealsAdded(recipeCount).localised,
                     color = white,
                     style = subtitleBold
                 )

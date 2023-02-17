@@ -35,7 +35,7 @@ import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.recipeId
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.search
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogImage.trait
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteButtonText
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteTitle
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.headerTitle
 import com.miam.kmm_miam_sdk.android.ui.components.common.Clickable
 
@@ -235,7 +235,7 @@ fun CatalogHeader(content: CatalogContent, enableFilters: Boolean, enablePrefere
                                         modifier = Modifier.padding(end = 8.dp)
                                     )
                                     Text(
-                                        text = favoriteButtonText,
+                                        text = favoriteTitle,
                                         color = white
                                     )
                                 }

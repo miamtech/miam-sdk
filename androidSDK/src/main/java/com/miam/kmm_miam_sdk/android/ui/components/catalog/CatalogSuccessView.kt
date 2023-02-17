@@ -17,7 +17,7 @@ import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier.categoryListContainer
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.favoriteTitle
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.filterSearchTitle
-import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.prefixWordSearchTitle
+import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogText.searchPrefix
 import com.miam.kmm_miam_sdk.android.ui.components.categoryRecipesPage.CategoryRecipesPage
 import com.miam.kmm_miam_sdk.android.ui.components.searchRecipesPage.SearchRecipesPage
 
@@ -90,7 +90,7 @@ fun CatalogBodyFilterSearch(back: () -> Unit, columns: Int, vSpacing: Int, hSpac
 
 @Composable
 fun CatalogBodyWordSearch(searchStr: String?, columns: Int, vSpacing: Int, hSpacing: Int) {
-    val title = "$prefixWordSearchTitle \"$searchStr\""
+    val title = "$searchPrefix \"$searchStr\""
     SearchRecipesPage(LocalContext.current).apply { bind(title, columns, vSpacing, hSpacing) }.Content()
 }
 
