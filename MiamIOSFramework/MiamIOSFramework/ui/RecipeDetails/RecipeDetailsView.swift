@@ -17,6 +17,7 @@ public struct RecipeDetailsView: View {
     public var close: () -> Void
     public var navigateToPreview: () -> Void
     public var buy: () -> Void
+    public var sponsorDetailsTapped: (Sponsor) -> Void
     @SwiftUI.State var showTitleInHeader = false
     @ObservedObject var viewModel: RecipeCardVM
 
@@ -31,7 +32,8 @@ public struct RecipeDetailsView: View {
     }
 
     public init(recipeId: String, showFooter: Bool = true, showMealIdeaImage: Bool = true,
-                close: @escaping () -> Void, navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
+                sponsorDetailsTapped: @escaping (Sponsor) -> Void, close: @escaping () -> Void,
+                navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.recipeId = recipeId
         self.close = close
         self.navigateToPreview = navigateToPreview
@@ -39,22 +41,32 @@ public struct RecipeDetailsView: View {
         viewModel = RecipeCardVM(routerVM: RouterOutletViewModel())
         self.showFooter = showFooter
         self.showMealIdeaImage = showMealIdeaImage
+        self.sponsorDetailsTapped = sponsorDetailsTapped
     }
 
     public init(vmRecipe: RecipeCardVM, showFooter: Bool = true, showMealIdeaImage: Bool = true,
-                close: @escaping () -> Void, navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
+                sponsorDetailsTapped: @escaping (Sponsor) -> Void, close: @escaping () -> Void,
+                navigateToPreview: @escaping () -> Void, buy: @escaping () -> Void) {
         self.viewModel = vmRecipe
         self.showFooter = showFooter
         self.close = close
         self.navigateToPreview = navigateToPreview
         self.buy = buy
         self.showMealIdeaImage = showMealIdeaImage
+        self.sponsorDetailsTapped = sponsorDetailsTapped
     }
 
     public var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 if let recipe = viewModel.recipe {
+                    if recipe.isSponsored, let sponsors = recipe.relationships?.sponsors?.data {
+                        ForEach(sponsors, id: \.id) { sponsor in
+                            RecipeDetailsSponsorBanner(sponsor: sponsor) { sponsor in
+                                sponsorDetailsTapped(sponsor)
+                            }
+                        }
+                    }
                     if let template = Template.sharedInstance.recipeDetailInfosTemplate {
                         template(recipe)
                     } else {
@@ -80,7 +92,9 @@ public struct RecipeDetailsView: View {
                                                              recipeGuests: Int(recipe.attributes?.numberOfGuests ?? 0),
                                                              currentGuests: Int(viewModel.state?.guest ?? 0),
                                                              guestUpdating: viewModel.guestUpdating,
-                                                             updateGuestsAction: { newGuest in viewModel.updateGuest(nbGuest: Int32(newGuest)) }
+                                                             updateGuestsAction: { newGuest in
+                                                                viewModel.updateGuest(nbGuest: Int32(newGuest))
+                                                            }
                                 )
                             }
 
@@ -98,15 +112,15 @@ public struct RecipeDetailsView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 if showMealIdeaImage {
-                    HStack{
+                    HStack {
                         Image.miamImage(icon: .ideeRepas)
                             .resizable()
                             .scaledToFill()
-                            .frame(width:24, height:24)
+                            .frame(width: 24, height: 24)
                         Text(RecipeCardText.sharedInstance.recipeFlag)
                             .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
-                    }.padding(.horizontal,16)
-                        .padding(.vertical,4)
+                    }.padding(.horizontal, 16)
+                        .padding(.vertical, 4)
                         .background(Color.miamColor(.musterd))
                         .cornerRadius(8).rotationEffect(Angle(degrees: -2.0))
                 }

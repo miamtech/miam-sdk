@@ -31,7 +31,8 @@ struct RecipeModal: View {
         } else {
             NavigationView {
                 VStack {
-                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, close: {
+                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, sponsorDetailsTapped: { _ in },
+                    close: {
                         close()
                     }, navigateToPreview: {
                         self.showBasketPreview = true

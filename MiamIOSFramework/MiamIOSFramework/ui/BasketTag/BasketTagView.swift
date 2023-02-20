@@ -110,7 +110,10 @@ internal struct BasketTagListModal: View {
                                             showingRecipeDetails = true
                                         }
                                     NavigationLink("Détails de la recette", isActive: $showingRecipeDetails) {
-                                        RecipeDetailsView(recipeId: recipe.id, showFooter: false, close: {}, navigateToPreview: {}, buy: {})
+                                        RecipeDetailsView(recipeId: recipe.id, showFooter: false,
+                                                          sponsorDetailsTapped: { _ in },
+                                                          close: {},
+                                                          navigateToPreview: {}, buy: {})
                                     }.hidden().frame(height: 1.0)
                                 }
                             }
