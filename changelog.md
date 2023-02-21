@@ -1,3 +1,6 @@
+# 3.9.4
+- [FIX][IOS] Add missing parameters to RecipeModalTemplate
+
 # 3.9.3
 - [FIX][IOS] Make all view models public
 
