@@ -8,6 +8,7 @@ import com.miam.kmmMiamCore.miam_core.model.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.cache.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -52,6 +53,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
                 }
             )
         }
+        install(HttpCache)
     }
 
     init {
