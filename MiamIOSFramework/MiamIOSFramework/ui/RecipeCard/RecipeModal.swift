@@ -27,7 +27,7 @@ struct RecipeModal: View {
     
     var body: some View {
         if let template = Template.sharedInstance.recipeModalTemplate {
-            template(recipeId, recipeViewModel, close)
+            template(recipeId, recipeViewModel, $showBasketPreview, showFooter, close)
         } else {
             NavigationView {
                 VStack(spacing: 0) {
