@@ -21,7 +21,7 @@ androidAppcompat = "1.4.1"
 androidMaterial = "1.7.0"
 # Kotlin(x)
 coroutines = "1.6.4"
-ktor = "2.2.2"
+ktor = "2.2.3"
 serialization = "1.4.0"
 # Others
 coil = "1.3.1"
