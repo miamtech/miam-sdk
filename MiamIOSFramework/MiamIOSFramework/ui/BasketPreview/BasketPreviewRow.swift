@@ -81,7 +81,7 @@ struct BasketPreviewRow: View {
                 productName,
                 productPictureURL,
                 productBrandName,
-                productName,
+                productDescription,
                 productPrice,
                 Int(previewLine.count),
                 Int((previewLine.record as! BasketEntry).itemsCountOrZero),
