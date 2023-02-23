@@ -14,6 +14,8 @@ struct RecipeModal: View {
     @StateObject private var recipeViewModel: RecipeCardVM = RecipeCardVM(routerVM: RouterOutletViewModel())
     @SwiftUI.State private var showBasketPreview: Bool = false
     @SwiftUI.State private var showItemSelector: Bool = false
+    @SwiftUI.State private var showSponsorDetail: Bool = false
+    @SwiftUI.State private var sponsor: Sponsor? = nil
     let recipeId: String
     let showFooter: Bool
     let close: () -> Void
@@ -31,7 +33,10 @@ struct RecipeModal: View {
         } else {
             NavigationView {
                 VStack {
-                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, sponsorDetailsTapped: { _ in },
+                    RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, sponsorDetailsTapped: { sponsor in
+                        self.sponsor = sponsor
+                        self.showSponsorDetail = true
+                    },
                     close: {
                         close()
                     }, navigateToPreview: {
@@ -40,7 +45,13 @@ struct RecipeModal: View {
                         recipeViewModel.setEvent(event: RecipeContractEvent.OnAddRecipe())
                     })
                     .navigationTitle(recipeViewModel.recipe?.attributes?.title ?? "")
-
+                    NavigationLink("", isActive: $showSponsorDetail) {
+                        VStack {
+                            if let sponsor {
+                                SponsorDetail(sponsor: sponsor)
+                            }
+                        }.frame(maxHeight: .infinity)
+                    }
                     NavigationLink("Produits dans votre panier", isActive: $showBasketPreview) {
                         VStack {
                             BasketPreviewView(recipeId: recipeId, recipeVm: recipeViewModel) { _, _ in
