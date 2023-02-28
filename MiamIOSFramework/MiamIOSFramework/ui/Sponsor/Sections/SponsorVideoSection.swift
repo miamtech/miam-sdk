@@ -14,7 +14,8 @@ struct SponsorVideoSection: View {
     let videoURL: String
     var body: some View {
         if let url = URL(string: videoURL) {
-            VideoPlayer(player: AVPlayer(url: url))
+            VideoPlayer(player: AVPlayer(url: url)
+            ).frame(height: 240)
         }
     }
 }
