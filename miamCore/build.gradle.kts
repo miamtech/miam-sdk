@@ -40,6 +40,7 @@ kotlin {
                 api(project(":core"))
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.encoding)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.contentNegotiation)
                 implementation(libs.ktor.client.logging)
