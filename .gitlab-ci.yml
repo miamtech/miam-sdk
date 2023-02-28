@@ -38,6 +38,7 @@ check-sdk:
   stage: test
   script:
     - ./gradlew check
+  timeout: 3 hours 30 minutes
   rules:
     - when: manual
 
