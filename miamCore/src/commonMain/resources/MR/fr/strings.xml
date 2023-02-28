@@ -1,5 +1,102 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="com_miam_i18n_recipe_add">Ajouter les ingrédients</string>
-    <string name="com_miam_i18n_recipe_added">1 repas ajouté à votre panier :</string>
+    <string name="com_miam_recipe_add">Ajouter les ingrédients</string>
+    <string name="com_miam_recipe_added">1 repas ajouté à votre panier :</string>
+    <string name="com_miam_recipe_difficulty_low">Chef débutant</string>
+    <string name="com_miam_recipe_difficulty_medium">Chef intermédiaire</string>
+    <string name="com_miam_recipe_difficulty_high">Top chef</string>
+    <string name="com_miam_recipe_is_in_cart">Voir le détail</string>
+    <string name="com_miam_recipe_cook_time">Cuisson :</string>
+    <string name="com_miam_recipe_preparation_time">Préparation :</string>
+    <string name="com_miam_recipe_resting_time">Repos :</string>
+    <string name="com_miam_recipe_steps">Étapes</string>
+    <string name="com_miam_recipe_number_of_ingredients">%d ingrédients</string>
+    <string name="com_miam_recipe_check_basket_preview">Voir les produits</string>
+    <string name="com_miam_recipe_flag">Idée repas</string>
+
+    <string name="com_miam_basket_recipe_added">1 repas ajouté à votre panier :</string>
+    <string name="com_miam_basket_continue_shopping">Continuer mes courses</string>
+    <string name="com_miam_basket_more_details">Voir le détail</string>
+    <string name="com_miam_basket_remove_recipe">Retirer du panier</string>
+    <string name="com_miam_basket_unavailable_products">Article(s) indisponible(s) (%d)</string>
+    <string name="com_miam_basket_owned_products">Déjà dans vos placards ? (%d)</string>
+    <string name="com_miam_basket_removed_products">Article(s) retiré(s) du panier (%d)</string>
+    <string name="com_miam_basket_swap_product">Remplacer</string>
+    <string name="com_miam_basket_add_product">Ajouter</string>
+    <string name="com_miam_basket_person">personne</string>
+
+    <string name="com_miam_catalog_title">Idées repas en 1 clic</string>
+    <string name="com_miam_catalog_show_all">Tout voir</string>
+    <string name="com_miam_catalog_loading_text">Ça mijote...</string>
+    <string name="com_miam_catalog_favorites_title">Mes idées repas</string>
+    <string name="com_miam_catalog_filter_difficulty">Difficulté</string>
+    <string name="com_miam_catalog_filter_cost_per_person">Coût par personne</string>
+    <string name="com_miam_catalog_filter_preparation_time">Temps de préparation</string>
+    <string name="com_miam_catalog_filter_title">Affiner ma sélection</string>
+    <string name="com_miam_catalog_filter_remove_filters">Retirer les filtres</string>
+    <string name="com_miam_catalog_filter_show_results">Voir les %d idées repas</string>
+    <string name="com_miam_catalog_filter_search_placeholder">Rechercher</string>
+    <string name="com_miam_catalog_filter_search_prefix">Votre recherche :</string>
+    <string name="com_miam_catalog_filter_search_title">Votre Sélection</string>
+    <string name="com_miam_catalog_preferences_no_result">Pas de résultat sur cette page avec
+        vos préférences
+    </string>
+    <string name="com_miam_catalog_prefrences_try_another">Modifiez les pour avoir plus de
+        résultats
+    </string>
+    <string name="com_miam_catalog_browse_recipes">Parcourir les idées repas</string>
+    <string name="com_miam_catalog_no_recipe_found">Oups, aucune recette n\'a été trouvée</string>
+    <string name="com_miam_catalog_try_another_search">Essayez une nouvelle recherche</string>
+
+    <string name="com_miam_favorites_title">Mes idées repas</string>
+    <string name="com_miam_favorites_no_favorites">Vous n\’avez pas encore de recettes favorites, on
+        peut vous aider ?!
+    </string>
+    <string name="com_miam_favorites_go_to_catalog">Je découvre les recettes</string>
+
+    <string name="com_miam_item_selector_replace_by">Remplacer cet article par :</string>
+    <string name="com_miam_item_selector_in_basket">Dans le panier</string>
+    <string name="com_miam_item_selector_select">Sélectionner</string>
+
+    <string name="com_miam_my_meals_meal_added">1 repas ajouté</string>
+    <string name="com_miam_my_meals_meals_added">%d repas ajoutés</string>
+
+    <string name="com_miam_preferences_title">Mes préférences</string>
+    <string name="com_miam_preferences_cancel">Annuler</string>
+    <string name="com_miam_preferences_add_tag">Ajouter +</string>
+    <string name="com_miam_preferences_number_of_guests">Nombre de personnes</string>
+    <string name="com_miam_preferences_diet_title">Régime particulier</string>
+    <string name="com_miam_preferences_tastes_title">Goûts</string>
+    <string name="com_miam_preferences_cooking_equipment_title">Mode de cuisson</string>
+    <string name="com_miam_preferences_diet_subtitle">Avez-vous un régime particulier ?</string>
+    <string name="com_miam_preferences_tastes_subtitle">Y a-t-il des ingrédients que vous n\’aimez
+        pas ?
+    </string>
+    <string name="com_miam_preferences_cooking_equipment_subtitle">Quel(s) équipement(s)
+        possédez-vous chez vous ?
+    </string>
+    <string name="com_miam_preferences_search_title">Je n\'aime pas</string>
+    <string name="com_miam_preferences_search_placeholder">Rechercher un ingrédient</string>
+
+    <string name="com_miam_price_currency">€</string>
+    <string name="com_miam_price_per_guest">par personne.</string>
+
+    <string name="com_miam_generic_error">Une erreur s\'est produite, veuillez réessayer</string>
+
+    <string name="com_miam_tag_pre_recipe_count">Pour</string>
+    <string name="com_miam_tag_post_recipe_count">repas</string>
+
+    <string name="com_miam_filter_less_than_five_euros">Moins de 5€</string>
+    <string name="com_miam_filter_between_five_and_ten_euros">Entre 5€ et 10€</string>
+    <string name="com_miam_filter_more_than_ten_euros">Plus de 10€</string>
+    <string name="com_miam_filter_less_than_fifteen_minutes">Moins de 15 min</string>
+    <string name="com_miam_filter_less_than_thirteen_minutes">Moins de 30 min</string>
+    <string name="com_miam_filter_less_than_one_hour">Moins de 1 h</string>
+    <string name="com_miam_filter_less_than_two_hours">Moins de 2 h</string>
+
+    <string name="com_miam_counter_person">pers.</string>
+
+    <string name="com_miam_my_meals_no_meal_in_basket">Vous n\'avez aucune idée repas dans votre
+        panier.
+    </string>
 </resources>

@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation.Catalog.showResults
 import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterContract
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
@@ -132,11 +133,15 @@ fun MiamCatalogFilter(
                     .weight(weight = 1f, fill = false)
                     .verticalScroll(rememberScrollState())
             ) {
-                FilterSection(text = "Difficulté", catalogFilterOptions = difficulties, onDifficultyChanged)
+                FilterSection(
+                    text = com.miam.kmm_miam_sdk.android.ressource.Text.difficulty,
+                    catalogFilterOptions = difficulties,
+                    onDifficultyChanged
+                )
                 Divider(Modifier.padding(vertical = 16.dp))
-                FilterSection(text = "Coût par personne", catalogFilterOptions = costs, onCostFilterChanged)
+                FilterSection(text = com.miam.kmm_miam_sdk.android.ressource.Text.costPerPerson, catalogFilterOptions = costs, onCostFilterChanged)
                 Divider(Modifier.padding(vertical = 16.dp))
-                FilterSection(text = "Temps de préparation", catalogFilterOptions = times, onTimeFilterChanged)
+                FilterSection(text = com.miam.kmm_miam_sdk.android.ressource.Text.preparationTime, catalogFilterOptions = times, onTimeFilterChanged)
             }
             ClearButton(clearFilter)
             Divider(Modifier.padding(vertical = 8.dp))
@@ -148,7 +153,7 @@ fun MiamCatalogFilter(
 @Composable
 fun FilterHeader(closeDialog: () -> Unit) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text("Affiner ma sélection", color = Colors.black, style = Typography.subtitleBold)
+        Text(com.miam.kmm_miam_sdk.android.ressource.Text.refineSelection, color = Colors.black, style = Typography.subtitleBold)
         Clickable(
             onClick = closeDialog,
             children = { Image(painter = painterResource(close), contentDescription = null) }
@@ -190,7 +195,7 @@ fun ClearButton(clearFilter: () -> Unit) {
             modifier = Modifier.border(border = BorderStroke(1.dp, primary), shape = RoundedCornerShape(50))
         ) {
             Text(
-                text = "Retirer les filtres",
+                text = com.miam.kmm_miam_sdk.android.ressource.Text.removeFilters,
                 color = primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
@@ -207,7 +212,7 @@ fun ApplyAndGoButton(applyAndGo: () -> Unit, numberOfResult: Int) {
                 .background(primary)
         ) {
             Text(
-                text = "Voir les ${numberOfResult} idées repas",
+                text = showResults(numberOfResult).localised,
                 color = white,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )

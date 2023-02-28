@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewContract
 import com.miam.kmmMiamCore.component.basketPreview.BasketPreviewViewModel
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
@@ -45,7 +46,7 @@ fun BasketPreviewItem(
                         line.entries!!.notFound,
                         backGroundColor = Color(0xffEDEDED),
                         fontColor = Color(0xff252525),
-                        title = "Article(s) indisponible(s) (${line.entries!!.notFound.size})"
+                        title = Localisation.Basket.unavailableProducts(line.entries!!.notFound.size).localised
                     )
                 }
             }
@@ -67,7 +68,7 @@ fun BasketPreviewItem(
                         line.entries!!.oftenDeleted,
                         backGroundColor = Color(0xffD9EFF2),
                         fontColor = Colors.primary,
-                        title = "Déjà dans vos placards ? (${line.entries!!.oftenDeleted.size})",
+                        title = Localisation.Basket.ownedProducts(line.entries!!.oftenDeleted.size).localised,
                         click = fun(entry: BasketEntry) {
                             vmBasketPreview.setEvent(
                                 BasketPreviewContract.Event.AddEntry(entry)
@@ -94,7 +95,7 @@ fun BasketPreviewItem(
                         line.entries!!.removed,
                         backGroundColor = Color(0xffBBBBBB),
                         fontColor = Color(0xff252525),
-                        title = "Article(s) retiré(s) du panier (${line.entries!!.removed.size})",
+                        title = Localisation.Basket.removedProducts(line.entries!!.removed.size).localised,
                         click = fun(entry: BasketEntry) {
                             vmBasketPreview.setEvent(
                                 BasketPreviewContract.Event.AddEntry(entry)

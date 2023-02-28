@@ -23,7 +23,7 @@ struct RecipeDetailsMoreInfo: View {
         HStack {
             if recipe.preparationTimeIos != "0" {
                 HStack {
-                    Text(RecipeDetailsText.sharedInstance.preparationTime + " :")
+                    Text(RecipeDetailsText.sharedInstance.preparationTime)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
                     Text(recipe.preparationTimeIos)
@@ -33,7 +33,7 @@ struct RecipeDetailsMoreInfo: View {
             }
             if recipe.cookingTimeIos != "0" {
                 HStack {
-                    Text(RecipeDetailsText.sharedInstance.cookingTime + " :")
+                    Text(RecipeDetailsText.sharedInstance.cookingTime)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
                     Text(recipe.cookingTimeIos)
@@ -43,7 +43,7 @@ struct RecipeDetailsMoreInfo: View {
             }
             if recipe.restingTimeIos != "0" {
                 HStack {
-                    Text(RecipeDetailsText.sharedInstance.restingTime + " :")
+                    Text(RecipeDetailsText.sharedInstance.restingTime)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumStyle)
                         .foregroundColor(Color.miamColor(.secondaryText))
                     Text(recipe.restingTimeIos)

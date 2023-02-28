@@ -3,6 +3,7 @@
 - [FEA][COR] Draft factories to help creating fakes in previews and tests
 - [FEA][COR] Adapt BaseViewModel to work with only one dispatcher
 - [FEA][COR] Introduce Gradle Version Catalog + Improve configuration
+- [FEA][COR] I18n
 
 # 3.9.0
 - [FEA][AND] Add generic error template 

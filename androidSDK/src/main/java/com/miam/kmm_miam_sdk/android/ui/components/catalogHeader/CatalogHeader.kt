@@ -242,7 +242,7 @@ fun CatalogHeader(
                     modifier = Modifier.padding(end = 8.dp)
                 )
                 Text(
-                    text = CatalogText.favoriteButtonText,
+                    text = CatalogText.favoriteTitle,
                     color = white
                 )
             }

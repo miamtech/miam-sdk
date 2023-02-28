@@ -18,8 +18,8 @@ import com.miam.kmm_miam_sdk.android.theme.Colors.grey
 import com.miam.kmm_miam_sdk.android.theme.Typography.overLine
 
 @Composable
-fun MultipleRecipeTag(sharingCount: String?) {
-    if (sharingCount != null) {
+fun MultipleRecipeTag(sharingCount: String) {
+    if (sharingCount != "null") {
 
         Surface(
             shape = RoundedCornerShape(8.dp),
@@ -33,7 +33,7 @@ fun MultipleRecipeTag(sharingCount: String?) {
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    text = sharingCount,
+                    text = sharingCount.toString(),
                     color = grey,
                     style = overLine
                 )

@@ -22,13 +22,9 @@ struct MyMealButtonSuccessView: View {
                 VStack {
                     Image.miamImage(icon: .greyChevronDown)
                         .rotationEffect(Angle(degrees: 180.0))
-                    if mealsCount > 1 {
-                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAddedPlural)")
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
-                    } else {
-                        Text("\(mealsCount) \(MiamText.sharedInstance.mealsAdded)")
-                            .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
-                    }
+                    let mealsAdded = Localization.myMeals.mealsAdded(numberOfMeals: Int32(mealsCount)).localised
+                    Text(mealsAdded)
+                        .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(EdgeInsets(top: 16.0, leading: 20.0, bottom: 8.0, trailing: 20.0))

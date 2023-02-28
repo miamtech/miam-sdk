@@ -41,7 +41,8 @@ public struct PreferencesFooterView: View {
                 Button {
                     applyTapped()
                 } label: {
-                    Text("\(MiamText.sharedInstance.see) \(numberOfRecipesFound) \(MiamText.sharedInstance.meals)")
+                    let cta = Localization.catalog.showResults(numberOfResults: Int32(numberOfRecipesFound)).localised
+                    Text(cta)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyMediumBoldStyle)
                         .foregroundColor(Color.miamColor(.white))
                 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.miam.core.sdk.localisation.Localisation.Catalog.loadingText
 import com.miam.kmm_miam_sdk.android.theme.Colors.primary
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
@@ -27,7 +28,7 @@ fun CatalogLoadingView() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Ça mijote...", style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
+            Text(loadingText.localised, style = Typography.subtitleBold, modifier = Modifier.padding(8.dp))
             CircularProgressIndicator(color = primary)
         }
     }

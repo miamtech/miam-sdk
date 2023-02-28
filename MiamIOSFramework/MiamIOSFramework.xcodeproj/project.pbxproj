@@ -22,7 +22,7 @@
 		0B61EB4D2889943C002E44FB /* MyMealLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61EB4C2889943C002E44FB /* MyMealLoadingView.swift */; };
 		0B61EB4F28899488002E44FB /* MyMealEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61EB4E28899488002E44FB /* MyMealEmptyView.swift */; };
 		0B7C9BD928196ABF00BFC7F8 /* RecipeCardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */; };
-		0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* Text.swift */; };
+		0B7C9BDC28196BAB00BFC7F8 /* MiamText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDB28196BAB00BFC7F8 /* MiamText.swift */; };
 		0B7C9BE028197A3600BFC7F8 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */; };
 		0B7C9BE22819929200BFC7F8 /* CounterColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BE12819929200BFC7F8 /* CounterColor.swift */; };
 		0B7C9BE42819933D00BFC7F8 /* MiamColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C9BE32819933D00BFC7F8 /* MiamColor.swift */; };
@@ -65,6 +65,7 @@
 		BF3FAEB628DB4B38009555A9 /* RecipeTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */; };
 		BF3FAEB828DB4B73009555A9 /* RecipeDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */; };
 		BF3FAEBA28DB4C15009555A9 /* RecipeDetailsStepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3FAEB928DB4C15009555A9 /* RecipeDetailsStepsView.swift */; };
+		BF5BD9BB299B8E9400DBB1DF /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5BD9BA299B8E9400DBB1DF /* Localization.swift */; };
 		BF6ACB7F28CB9F700005871D /* RecipesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6ACB7E28CB9F700005871D /* RecipesListView.swift */; };
 		BF6F5FA228D4C9F300E37B65 /* RecipeDetailsIngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6F5FA128D4C9F300E37B65 /* RecipeDetailsIngredientsView.swift */; };
 		BF7305F728DDAB9000CC5D6B /* FavoritesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7305F628DDAB9000CC5D6B /* FavoritesVM.swift */; };
@@ -141,7 +142,7 @@
 		0B61EB4C2889943C002E44FB /* MyMealLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealLoadingView.swift; sourceTree = "<group>"; };
 		0B61EB4E28899488002E44FB /* MyMealEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMealEmptyView.swift; sourceTree = "<group>"; };
 		0B7C9BD828196ABF00BFC7F8 /* RecipeCardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCardText.swift; sourceTree = "<group>"; };
-		0B7C9BDB28196BAB00BFC7F8 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		0B7C9BDB28196BAB00BFC7F8 /* MiamText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamText.swift; sourceTree = "<group>"; };
 		0B7C9BDF28197A3600BFC7F8 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		0B7C9BE12819929200BFC7F8 /* CounterColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterColor.swift; sourceTree = "<group>"; };
 		0B7C9BE32819933D00BFC7F8 /* MiamColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiamColor.swift; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 		BF3FAEB528DB4B38009555A9 /* RecipeTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTimeView.swift; sourceTree = "<group>"; };
 		BF3FAEB728DB4B73009555A9 /* RecipeDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsHeaderView.swift; sourceTree = "<group>"; };
 		BF3FAEB928DB4C15009555A9 /* RecipeDetailsStepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsStepsView.swift; sourceTree = "<group>"; };
+		BF5BD9BA299B8E9400DBB1DF /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		BF6ACB7E28CB9F700005871D /* RecipesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipesListView.swift; path = MiamIOSFramework/ui/RecipesList/RecipesListView.swift; sourceTree = SOURCE_ROOT; };
 		BF6F5FA128D4C9F300E37B65 /* RecipeDetailsIngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsIngredientsView.swift; sourceTree = "<group>"; };
 		BF7305F628DDAB9000CC5D6B /* FavoritesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVM.swift; sourceTree = "<group>"; };
@@ -328,7 +330,7 @@
 		0B7C9BDD28196BED00BFC7F8 /* ressource */ = {
 			isa = PBXGroup;
 			children = (
-				0B7C9BDB28196BAB00BFC7F8 /* Text.swift */,
+				0B7C9BDB28196BAB00BFC7F8 /* MiamText.swift */,
 			);
 			path = ressource;
 			sourceTree = "<group>";
@@ -436,6 +438,14 @@
 			path = Catalog;
 			sourceTree = "<group>";
 		};
+		BF5BD9BC299B8E9900DBB1DF /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				BF5BD9BA299B8E9400DBB1DF /* Localization.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		BF7305F528DDAB7A00CC5D6B /* favorites */ = {
 			isa = PBXGroup;
 			children = (
@@ -535,6 +545,7 @@
 		DCD4E30227BE914A000D3EA6 /* MiamIOSFramework */ = {
 			isa = PBXGroup;
 			children = (
+				BF5BD9BC299B8E9900DBB1DF /* Localization */,
 				0B3135C0296DBF5C001AEEA8 /* TemplatesParameters */,
 				BFAB5838292E80C800D1D3A4 /* Resources */,
 				BFB39579288A9DCE00D696D0 /* Extensions */,
@@ -810,6 +821,7 @@
 				BFA507EF287C126B00F274CA /* CatalogView.swift in Sources */,
 				BFD2317229131F2E00FC62B1 /* PreferencesVM.swift in Sources */,
 				BFA6FCA228EDC624006028DC /* RecipeCarouselView.swift in Sources */,
+				BF5BD9BB299B8E9400DBB1DF /* Localization.swift in Sources */,
 				0B8B646A297EEADC0001375B /* ItemSelectorLoadingView.swift in Sources */,
 				BF7305F728DDAB9000CC5D6B /* FavoritesVM.swift in Sources */,
 				0B3135C4296EC994001AEEA8 /* MyMealsActionColumnTemplateParameters.swift in Sources */,
@@ -878,7 +890,7 @@
 				0B8B6468297EEA2A0001375B /* ItemSelectorSuccessView.swift in Sources */,
 				521D645B283230DA0092AC52 /* BasketPreviewRow.swift in Sources */,
 				DCD4E32027BE9339000D3EA6 /* RecipeCardVM.swift in Sources */,
-				0B7C9BDC28196BAB00BFC7F8 /* Text.swift in Sources */,
+				0B7C9BDC28196BAB00BFC7F8 /* MiamText.swift in Sources */,
 				BFF4640B29152931008CF9E5 /* PreferencesSearchView.swift in Sources */,
 				BF7305FD28DDD8CB00CC5D6B /* FavoritesEmptyView.swift in Sources */,
 				DCD4E30527BE914A000D3EA6 /* MiamIOSFramework.docc in Sources */,

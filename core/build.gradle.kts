@@ -22,6 +22,7 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets["commonMain"].dependencies {
+        implementation(libs.ktor.client.encoding)
         implementation(libs.moko.resources.core)
     }
 

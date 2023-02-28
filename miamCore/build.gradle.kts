@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.LintOptions
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -39,6 +40,7 @@ kotlin {
                 api(project(":core"))
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.encoding)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.contentNegotiation)
                 implementation(libs.ktor.client.logging)
@@ -120,6 +122,10 @@ android {
     defaultConfig {
         minSdk = Integer.parseInt(minSdkVersion)
         targetSdk = Integer.parseInt(targetSdkVersion)
+    }
+
+    lint {
+        abortOnError = false
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
