@@ -1,3 +1,6 @@
+# 3.9.5
+- [FIX][IOS] Fix wrong product description in basketPreviewRowTemplate
+
 # 3.9.4
 - [FIX][IOS] Add missing parameters to RecipeModalTemplate
 
