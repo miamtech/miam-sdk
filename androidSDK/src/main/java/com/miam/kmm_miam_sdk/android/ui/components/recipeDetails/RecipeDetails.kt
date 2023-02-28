@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
@@ -29,6 +30,8 @@ import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.component.router.RouterOutletContract
 import com.miam.kmmMiamCore.component.router.RouterOutletViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.Sponsor
+import com.miam.kmmMiamCore.miam_core.model.fake.RecipeFakeFactory
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Template.recipeDetailIngredientTemplate
 import com.miam.kmm_miam_sdk.android.theme.Template.recipeDetailStepsTemplate
@@ -40,11 +43,13 @@ import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsSt
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.recipeImageModifier
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.RecipeDetailsStyle.titleModifier
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDetailFooter
+import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDetailSponsorBanner
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDetailSteps
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDetailTimeComposition
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDetailsHeader
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeDifficultyAndTiming
 import com.miam.kmm_miam_sdk.android.ui.components.recipeDetails.subComponents.RecipeIngredients
+import com.miam.kmm_miam_sdk.android.ui.components.routerOutlet.RouterOutlet
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
 
 
@@ -103,6 +108,14 @@ private fun recipeDetailContent(
         )
     }
 
+    fun seeSponsorDetail(sponsor: Sponsor) {
+        vmRouter.setEvent(
+            RouterOutletContract.Event.GoToSponsor(
+                sponsor = sponsor
+            )
+        )
+    }
+
     Scaffold(
         topBar = {
             if (Template.recipeDetailHeaderTemplate != null) {
@@ -110,6 +123,7 @@ private fun recipeDetailContent(
             } else {
                 RecipeDetailsHeader(recipe.attributes!!.title, scrollState.value) { closeDialogue() }
             }
+
         },
         content =
         { padding ->
@@ -118,6 +132,11 @@ private fun recipeDetailContent(
                     .padding(padding)
                     .verticalScroll(scrollState)
             ) {
+                if (recipe.isSponsored) {
+                    recipe.relationships?.sponsors?.data?.forEach { sponsor ->
+                        RecipeDetailSponsorBanner(sponsor = sponsor) { seeSponsorDetail(it) }
+                    }
+                }
                 if (Template.recipeDetailInfosTemplate != null) {
                     Template.recipeDetailInfosTemplate!!({ closeDialogue() }, recipe)
                 } else {
@@ -207,5 +226,11 @@ fun ActionRow(likeIsEnable: Boolean, recipeId: String) {
     }
 }
 
+@Preview
+@Composable
+fun RecipeDetailContentPreview() {
+    val router = RouterOutlet()
+    recipeDetailContent(RecipeFakeFactory.create(), RecipeViewModel(routerVM = router.getViewModel()), router.getViewModel(), {}, false)
+}
 
 

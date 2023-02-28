@@ -258,4 +258,12 @@ public object Localisation {
             return I18n.plural("com_miam_my_meals_meal_added", miamPlurals?.com_miam_my_meals_meal_added, numberOfMeals, numberOfMeals)
         }
     }
+
+    public object SponsorBanner {
+        public val sponsorBannerSpeach: I18n
+            get() = I18n.string("com_miam_sponsor_banner_speach", miamStrings?.com_miam_sponsor_banner_speach)
+
+            public val sponsorBannerMoreInfo: I18n
+            get() = I18n.string("com_miam_sponsor_banner_more_info", miamStrings?.com_miam_sponsor_banner_more_info)
+    }
 }

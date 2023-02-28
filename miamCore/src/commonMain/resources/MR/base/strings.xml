@@ -95,4 +95,8 @@
     <string name="com_miam_counter_person">pers.</string>
 
     <string name="com_miam_my_meals_no_meal_in_basket">You have no meal in your basket.</string>
+    <string name="com_miam_sponsor_banner_speach">This recipe is brought to you by our
+        partner
+    </string>
+    <string name="com_miam_sponsor_banner_more_info">Read more</string>
 </resources>

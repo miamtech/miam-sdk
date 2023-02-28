@@ -1,5 +1,9 @@
 package com.miam.core.sdk.di
 
+import com.miam.core.sdk.data.repository.SponsorBlockRepository
+import com.miam.core.sdk.data.repository.SponsorBlockRepositoryImp
+import com.miam.core.sdk.data.repository.SponsorRepository
+import com.miam.core.sdk.data.repository.SponsorRepositoryImp
 import com.miam.kmmMiamCore.base.mvi.BasketStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
 import com.miam.kmmMiamCore.base.mvi.GroceriesListStoreImpl
@@ -24,8 +28,10 @@ public object MiamDI {
     internal val analyticsService: Analytics by lazy { Analytics() }
     public val routeService: RouteService by lazy { RouteService() }
     internal val userPreferences: UserPreferences by lazy { UserPreferences() }
+
     // DataSource
     internal val dataSource: MiamAPIDatasource by lazy { MiamAPIDatasource() }
+
     // Repository
     internal val basketRepository: BasketRepositoryImp by lazy { BasketRepositoryImp(dataSource) }
     internal val basketEntryRepository: BasketEntryRepositoryImp by lazy { BasketEntryRepositoryImp(dataSource) }
@@ -38,16 +44,21 @@ public object MiamDI {
     internal val recipeLikeRepository: RecipeLikeRepositoryImp by lazy { RecipeLikeRepositoryImp(dataSource) }
     internal val supplierRepository: SupplierRepositoryImp by lazy { SupplierRepositoryImp(dataSource) }
     internal val tagsRepository: TagsRepositoryImp by lazy { TagsRepositoryImp(dataSource) }
+    internal val sponsorRepository: SponsorRepository by lazy { SponsorRepositoryImp(dataSource) }
+    internal val sponsorBlockRepository: SponsorBlockRepository by lazy { SponsorBlockRepositoryImp(dataSource) }
+
     // Store
     internal val basketStore: BasketStore by lazy { BasketStore() }
     internal val groceriesListStore: GroceriesListStore by lazy { GroceriesListStoreImpl() }
     internal val likeStore: LikeStore by lazy { LikeStore() }
     internal val pointOfSaleStore: PointOfSaleStore by lazy { PointOfSaleStore() }
     internal val userStore: UserStore by lazy { UserStoreImpl(groceriesListStore) }
+
     // ViewModel
     public val itemSelectorViewModel: ItemSelectorViewModel by lazy { ItemSelectorViewModel() }
     public val preferencesViewModel: SingletonPreferencesViewModel by lazy { SingletonPreferencesViewModel() }
     public val recipeFilterViewModel: SingletonFilterViewModel by lazy { SingletonFilterViewModel() }
+
     // Handler
     public val basketHandler: BasketHandler by lazy { BasketHandler() }
     public val contextHandler: ContextHandler by lazy { ContextHandler() }

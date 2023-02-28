@@ -19,4 +19,5 @@ public struct Localization {
     public static let error = Localisation.Error.shared
     public static let counter = Localisation.Counter.shared
     public static let myMeals = Localisation.MyMeals.shared
+    public static let sponsorBanner = Localisation.SponsorBanner.shared
 }

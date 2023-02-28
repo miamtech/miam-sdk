@@ -19,11 +19,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.miam.kmmMiamCore.component.recipe.RecipeContract
 import com.miam.kmmMiamCore.component.recipe.RecipeViewModel
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.fake.RecipeFakeFactory
 import com.miam.kmm_miam_sdk.android.theme.Colors
 import com.miam.kmm_miam_sdk.android.theme.Template
 import com.miam.kmm_miam_sdk.android.theme.Typography
@@ -250,4 +252,12 @@ fun RecipeCardCTAView(
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun RecipeSuccessCardPreview() {
+    val router = RouterOutlet()
+    RecipeSuccessCard(RecipeFakeFactory.create(), RecipeViewModel(routerVM = router.getViewModel()), router, true)
 }
