@@ -29,13 +29,14 @@ fun SponsorDetailSuccessView(sponsorBlocks: List<SponsorBlock>, previous: () -> 
 
     Scaffold(topBar = {
         SponsorDetailTopBar(previous)
-    }) {
+    }) { paddingValue ->
         Column(
             Modifier
                 .background(white)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 100.dp)
+                .padding(paddingValue)
         ) {
             sponsorBlocks.sortedBy { it.attributes?.position }.forEach { sponsorBlock ->
                 BlockFactory(sponsorBlock)

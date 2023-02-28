@@ -5,6 +5,7 @@ import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -16,7 +17,6 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
 
-// TODO make it work with youtube link
 
 @Composable
 fun SponsorVideoBlock(url: String) {
@@ -35,13 +35,31 @@ fun SponsorVideoBlock(url: String) {
         }
     }
 
+// Youtube Player need  com.pierfrancescosoffritti.androidyoutubeplayer:core
+//    val idVideo = url.substringAfter("watch?v=").substringBefore('&')
+//    Box(Modifier.padding(top = 8.dp).padding(horizontal = 16.dp)) {
+//        AndroidView(factory = {
+//            YouTubePlayerView(it).apply {
+//                addYouTubePlayerListener(
+//                    object: AbstractYouTubePlayerListener() {
+//                        override fun onReady(youTubePlayer: YouTubePlayer) {
+//                            super.onReady(youTubePlayer)
+//                            youTubePlayer.loadVideo(idVideo, 0f)
+//                        }
+//                    }
+//                )
+//            }
+//        })
+//    }
+
+
     Box(
         Modifier
             .height(240.dp)
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         DisposableEffect(key1 = Unit) { onDispose { exoPlayer.release() } }
-
         AndroidView(
             factory = {
                 StyledPlayerView(context).apply {
