@@ -3,6 +3,7 @@
 
 ## DeepLink
 Miam provide a bind function on catalog that show desired categories.
+it's design to be use with deeplink just pass **MIAM_CATEGORY_ID** as parametter in your link then bind it lkie this : 
 
 ```kotlin
 Catalog(this@MainActivity).apply { bind(MIAM_CATEGORY_ID) }.Content()

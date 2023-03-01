@@ -8,8 +8,7 @@ const FeatureList = [
     Svg: require('@site/static/img/plugAndPlay.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Miam provide native view that can be plugged in any configuration XML, Jetpack Compose, UIkit or Swiftui.
       </>
     ),
   },
@@ -18,8 +17,16 @@ const FeatureList = [
     Svg: require('@site/static/img/iaBuildin.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Miam SDK embed pre build component design to your application needs
+      </>
+    ),
+  },
+  {
+    title: 'Fit your Style',
+    Svg: require('@site/static/img/UI.svg').default,
+    description: (
+      <>
+        Miam experience and design is fully customisable 
       </>
     ),
   },

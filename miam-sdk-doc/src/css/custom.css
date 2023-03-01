@@ -28,3 +28,11 @@
   --ifm-color-primary-lightest: 24748f;
   --docusaurus-highlighted-code-line-bg: #10323f;
 }
+
+
+.miam_button_row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}

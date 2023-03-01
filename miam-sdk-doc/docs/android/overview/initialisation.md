@@ -29,7 +29,7 @@ Make sure this main "Miam" class is a singleton and instantiated only once in yo
 You need to ask Miam team for your **supplier id** and your **origin** (unique for all your apps and websites integrations).
 :::
 
-The aims is to differentiate **platforms** and **retailers** in Miam API. Once you got your **supplier id** and **origin** you can implement your **Miam** class as follow :
+To differentiate **platforms** and **retailers** in Miam API Miam sdk require  **supplier id** and your **origin**. Once you got your ids you can implement your **Miam** class as follow :
 
 ```kotlin 
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
@@ -51,10 +51,9 @@ Make sure to specify a different origin between your development and production 
 Miam initialization process will only start after the user is **logged** and has **selected a valid store**.
 then it'll need the **basket synchronization**
 
-## Set user
+## User setup 
 
-Here is how to inform the SDK whenever the user login state changes. We recommend using Observables
-or EventListeners to that end.
+Here is how to inform the SDK whenever the user login state changes. We recommend using Observables or EventListeners to that end.
 
 ```kotlin 
 import com.miam.kmmMiamCore.handler.UserHandler
@@ -75,9 +74,9 @@ class Miam() {
    To get full list of user feature check [**User handler**](../advanced/user-configuration).
 :::
 
-## Set store
+## Store setup
 
-Has user you acn inform the SDK whenever the user selected store changes :
+Has user you can inform the SDK whenever the user selected store changes :
 
 ```kotlin 
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
@@ -95,7 +94,7 @@ class Miam() {
 }
 ```
 
-## Set basket synchronization
+## Basket synchronization Setup
 
 Last but not least, the SDK embeds a complex synchronization system that will ensure Miam always
 keeps the knowledge of what products have been pushed to or removed from the in-app basket. This
@@ -137,6 +136,7 @@ private fun retailerProductsToYourProducts(products: List<RetailerProduct>): Lis
     }
 }     
 ```
+
 For the next step **Miam** needs to listen to any change applied to your basket in your app. To that end, you have to
 pass to **Miam** a function to `BasketHandler` with the flowing signature:
 `(callback : (products: List<RetailerProduct>) -> Unit) -> Unit`

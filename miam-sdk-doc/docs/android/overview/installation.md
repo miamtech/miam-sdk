@@ -50,7 +50,7 @@ implementation(name:'miam-SDK-release', ext:'aar')
 
 :::danger
  Miam SDK is using  <a target="\_blank" href='https://developer.android.com/jetpack/compose?gclsrc=aw.ds&gclid=CjwKCAjwrfCRBhAXEiwAnkmKmWkwGezGLmmfauda5_ACVVNtTVPUw576netuScD2mLnGacjr2cB30RoCC24QAvD_BwE&hl=fr'> Jetpack Compose </a>  under the hood, you must use the same version as miam supported.
- Note also that Jetpack Compose is not mandatory but it's the recommanded way to inject Miam's components.
+ In addition Jetpack Compose is not mandatory but it's the recommanded way to inject Miam's components.
 
  Current supported version is `1.3.2`
 :::

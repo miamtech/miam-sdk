@@ -49,13 +49,14 @@ public class MiamManager: ObservableObject {
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
         PointOfSaleHandler.shared.getCatalogCategories { categories in
             self.categories.categoriesList = categories
-
         }
         UserHandler.shared.updateUserId(userId: "test_user-tib02")
         UserHandler.shared.setProfilingAllowed(allowance: true)
         UserHandler.shared.setEnableLike(isEnable: true)
 
         AnalyticsInstance.shared.instance.setOnEventEmitted( onEventEmittedCallBack: {event in  print("event Miam \(event.eventType)  \(event.path)  \(event.props)")})
+
+        GroceriesListHandler.shared.
 
         // initTemplate()
 
