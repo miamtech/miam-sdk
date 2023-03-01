@@ -87,6 +87,10 @@ const config = {
                 label: 'android',
                 to: 'android/Introduction',
               },
+              {
+                label: 'ios',
+                to: 'ios/Introduction',
+              },
             ],
           },
           {
