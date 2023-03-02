@@ -56,10 +56,10 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             )
         }
         install(HttpCache)
-        install(ContentEncoding) {
-            gzip(0.9F)
-            deflate(1.0F)
-        }
+        // install(ContentEncoding) {
+        //     gzip(0.9F)
+        //     deflate(1.0F)
+        // }
     }
 
     init {
