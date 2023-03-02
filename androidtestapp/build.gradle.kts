@@ -52,7 +52,6 @@ dependencies {
     implementation(libs.android.material)
 
     // Integration with ViewModels
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
 
@@ -63,16 +62,10 @@ dependencies {
     implementation(libs.compose.material.core)
     implementation(libs.compose.material.icons.core)
     implementation(libs.compose.material.icons.extended)
-    implementation(libs.compose.runtime.livedata)
-    implementation(libs.compose.runtime.rxjava2)
 
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.svg)
 }
 repositories {
     mavenCentral()

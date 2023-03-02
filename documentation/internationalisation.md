@@ -200,7 +200,7 @@ When consuming `com_miam_i18n_recipe_add`, you should see **Add recipe to basket
 
 ### On iOS
 
-Overriding localisation on Android is a little big trickier. 
+Overriding localisation on ios is a little big trickier. 
 First thing is to create a new entry in your `Localizable.strings` file, to provide your localisation:
 
 ```text

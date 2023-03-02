@@ -12,6 +12,7 @@ import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.GroceriesListHandler
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.handler.PointOfSaleHandler
+import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.services.AnalyticsInstance
@@ -47,6 +48,9 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
         CatalogModifier.categoryListContainer = Modifier.padding(bottom = 500.dp)
+        ToasterHandler.setOnAddRecipeText("Well done !")
+        ToasterHandler.setOnLikeRecipeText("Good taste !")
+
 
 
         launch {

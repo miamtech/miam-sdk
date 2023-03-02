@@ -58,20 +58,13 @@ dependencies {
     api(libs.ktor.client.contentNegotiation)
     api(libs.ktor.client.logging)
 
-    api(libs.androidx.activity.compose)
-    api(libs.androidx.core.ktx)
     api(libs.android.material)
-    api(libs.android.legacy)
 
     api(libs.compose.compiler)
     api(libs.compose.ui.tooling)
     api(libs.compose.ui.core)
     api(libs.compose.foundation)
     api(libs.compose.material.core)
-    api(libs.compose.material.icons.core)
-    api(libs.compose.material.icons.extended)
-    api(libs.compose.runtime.livedata)
-    api(libs.compose.runtime.rxjava2)
 
     api(libs.koin.core)
     api(libs.koin.android)

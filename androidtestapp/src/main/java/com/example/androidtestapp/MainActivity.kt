@@ -37,6 +37,7 @@ import com.example.androidtestapp.views.Basket
 import com.example.androidtestapp.views.DeepLinkDropDownMenu
 import com.example.androidtestapp.views.Home
 import com.miam.core.localisation.I18nResolver
+import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.services.RouteServiceInstance
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.Catalog
 import com.miam.kmm_miam_sdk.android.ui.components.favoritePage.FavoritePage
@@ -55,6 +56,7 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
 
     private fun initMiam() {
         MiamManager()
+        ContextHandlerInstance.instance.setContext(this@MainActivity)
         I18nResolver.registerContext(this.applicationContext)
     }
 
@@ -178,4 +180,3 @@ class MainActivity: ComponentActivity(), CoroutineScope by CoroutineScope(Dispat
         }
     }
 }
-
