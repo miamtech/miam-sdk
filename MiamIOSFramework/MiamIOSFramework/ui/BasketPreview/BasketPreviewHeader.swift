@@ -69,7 +69,7 @@ struct BasketPreviewHeader: View {
                     }.frame(alignment: .topLeading).padding([.leading], Dimension.sharedInstance.sPadding)
                 }.frame(height: headerHeight, alignment: .topLeading)
                 HStack {
-                    Text(formattedPrice)
+                    Text(price)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.bodyBigBoldStyle)
                         .foregroundColor(Color.miamColor(.primary))
                     Spacer()

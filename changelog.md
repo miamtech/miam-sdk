@@ -4,6 +4,23 @@
 - [FEA][COR] Adapt BaseViewModel to work with only one dispatcher
 - [FEA][COR] Introduce Gradle Version Catalog + Improve configuration
 - [FEA][COR] I18n
+# 3.9.5
+- [FIX][IOS] Fix wrong product description in basketPreviewRowTemplate
+
+# 3.9.4
+- [FIX][IOS] Add missing parameters to RecipeModalTemplate
+
+# 3.9.3
+- [FIX][IOS] Make all view models public
+
+# 3.9.2
+- [FIX][IOS] Change visibility of published properties to public in PreferencesSearchVM
+- [FIX][IOS] Fix navigation link appearing in wireframe at the bottom of basket view
+- [FIX][IOS] Use users' locale to format price 
+- [FIX][AND] Use users' locale to format price 
+
+# 3.9.1
+- [FIX][IOS] Make PreferencesSearchView and CatalogPreferencesView public
 
 # 3.9.0
 - [FEA][AND] Add generic error template 

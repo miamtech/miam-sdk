@@ -38,7 +38,7 @@ internal struct RecipesListSuccessView: View {
                     }
                     LazyVGrid( columns: Array(repeating:GridItem(.flexible()), count: columns), spacing: spacing) {
                         ForEach(recipes, id: \.self) { recipe in
-                            RecipeCardView(recipeId: recipe.id, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).onAppear {
+                            RecipeCardView(recipe: recipe, showMealIdeaTag: false, recipeCardHeight: recipeCardHeight).onAppear {
                                 loadMoreContentAction(recipe)
                                 //
                             }.padding(.top,Dimension.sharedInstance.lPadding)

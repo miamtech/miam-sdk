@@ -10,13 +10,17 @@ import SwiftUI
 import miamCore
 
 @available(iOS 14, *)
-struct PreferencesSearchView: View {
+public struct PreferencesSearchView: View {
     @ObservedObject private var preferencesSearchViewModel = PreferencesSearchVM()
     @SwiftUI.State var searchString: String = ""
 
     let close: () -> Void
 
-    var body: some View {
+    public init(close: @escaping () -> Void) {
+        self.close = close
+    }
+
+    public var body: some View {
         if let template = Template.sharedInstance.preferencesSearchViewTemplate {
             template(preferencesSearchViewModel, close)
         } else {

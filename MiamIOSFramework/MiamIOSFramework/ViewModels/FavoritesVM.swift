@@ -9,10 +9,10 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class FavoritesVM: FavoritePageViewModel, ObservableObject {
+public class FavoritesVM: FavoritePageViewModel, ObservableObject {
     var favorites: [Recipe] = []
-    @Published var state: FavoritePageContractState?
-    override init() {
+    @Published public var state: FavoritePageContractState?
+    public override init() {
         super.init()
         collect(flow: uiState) { state in
             guard let state = state as? FavoritePageContractState else {

@@ -564,11 +564,16 @@ public class Template {
 
     /**
      recipeId: String
+     recipeViewModel: RecipeCardVM
+     showBasketPreview: Binding<Bool>
+     showFooter: Bool
      close: () -> Void
      */
     public var recipeModalTemplate: ((
         String,
         RecipeCardVM,
+        Binding<Bool>,
+        Bool,
         @escaping () -> Void
     ) -> AnyView)? = nil
     
