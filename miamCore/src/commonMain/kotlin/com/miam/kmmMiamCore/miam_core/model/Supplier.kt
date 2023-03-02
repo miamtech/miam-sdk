@@ -40,9 +40,6 @@ public data class Supplier internal constructor(
 
 @Serializable
 public data class SupplierAttributes(
-    val name: String?,
-    val description: String? = null,
-    val logo: String? = null,
     @SerialName("language-id")
     val languageId: String?
 ): Attributes()

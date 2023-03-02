@@ -434,10 +434,10 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun getSupplier(supplierId: Int): Supplier {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
-
-        val returnValue = httpClient.get {
-            url(HttpRoutes.SUPPLIER + "$supplierId")
-        }.body<RecordWrapper>().toRecord() as Supplier
+        val supplierFields = "?fields[suppliers]=language-id"
+        val returnValue = httpClient.get { url(HttpRoutes.SUPPLIER + "$supplierId$supplierFields") }
+            .body<RecordWrapper>()
+            .toRecord() as Supplier
         LogHandler.info("[Miam][MiamAPIDatasource] end getSupplier $supplierId $returnValue")
         return returnValue
     }
