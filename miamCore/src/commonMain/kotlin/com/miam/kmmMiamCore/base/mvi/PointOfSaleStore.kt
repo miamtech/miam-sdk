@@ -6,7 +6,6 @@ import com.miam.kmmMiamCore.base.executor.ExecutorHelper
 import com.miam.kmmMiamCore.miam_core.data.repository.PointOfSaleRepositoryImp
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +56,7 @@ public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointO
             }
             is PointOfSaleAction.SetSupplierId -> {
                 updateStateIfChanged(state.value.copy(idSupplier = action.supplierId))
+
                 if (!canFetch()) return ExecutorHelper.emptyJob()
 
                 return launchNewPosRefresh()

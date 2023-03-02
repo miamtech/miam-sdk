@@ -9,8 +9,8 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.cache.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.compression.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -56,10 +56,10 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             )
         }
         install(HttpCache)
-        install(ContentEncoding) {
+        /*install(ContentEncoding) {
             gzip(0.9F)
             deflate(1.0F)
-        }
+        }*/
     }
 
     init {
@@ -430,6 +430,16 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             url("${HttpRoutes.SUPPLIER}$supplierId/webhooks/basket_updated")
             setBody(SupplierNotificationWrapper(basketToken, status, price))
         }
+    }
+
+    override suspend fun getSupplier(supplierId: Int): Supplier {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
+
+        val returnValue = httpClient.get {
+            url(HttpRoutes.SUPPLIER + "$supplierId")
+        }.body<RecordWrapper>().toRecord() as Supplier
+        LogHandler.info("[Miam][MiamAPIDatasource] end getSupplier $supplierId $returnValue")
+        return returnValue
     }
 
     private fun includedToString(included: List<String>): String {
