@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<resources>
-    <plural name="com_miam_my_meals_meal_added">
-        <item quantity="one">%f meal added</item>
-        <item quantity="other">%f meals added</item>
-    </plural>
-</resources>
