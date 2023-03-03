@@ -11,11 +11,20 @@ import miamCore
 
 @available(iOS 14, *)
 public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
+    private let currencyCode = "EUR"
+    @Published public var basketPreviewLine: BasketPreviewLine?
+    @Published public var state : BasketPreviewContractState?
 
-    @Published var basketPreviewLine: BasketPreviewLine?
-    @Published var state: BasketPreviewContractState?
+    private lazy var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.currencyCode = currencyCode
+        numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 2
 
-    override init(recipeId: String?) {
+        return numberFormatter
+    }()
+
+    public override init(recipeId: String?) {
         super.init(recipeId: recipeId)
         collect(flow: uiState) { data in
             let state = data as? BasketPreviewContractState
@@ -55,8 +64,11 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
         }
         let basketCount = basket.count > 0 ? basket.count : 1
         let price = parsedPrice * 100 / Double(basketCount) / 100
-        let formattedPrice = String(format: "%.2f", price)
-        return "\(formattedPrice)€ /\(Localization.basket.person.localised)"
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: price)) else {
+            return ""
+        }
+
+        return "\(formattedPrice) /\(Localization.basket.person.localised)"
     }
 
     public var numberOfGuests: Int {
@@ -64,7 +76,19 @@ public class BasketPreviewVM: BasketPreviewViewModel, ObservableObject {
     }
 
     public var price: String {
-        return basketPreviewLine?.price ?? ""
+        guard let price = basketPreviewLine?.price else {
+            return ""
+        }
+
+        guard let doublePrice = Double(price) else {
+            return ""
+        }
+
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: doublePrice)) else {
+            return ""
+        }
+
+        return formattedPrice
     }
 
     public var  numberOfproductsInBasket: Int {

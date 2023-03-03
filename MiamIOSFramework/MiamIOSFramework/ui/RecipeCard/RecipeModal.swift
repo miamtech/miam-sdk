@@ -29,10 +29,10 @@ struct RecipeModal: View {
 
     var body: some View {
         if let template = Template.sharedInstance.recipeModalTemplate {
-            template(recipeId, recipeViewModel, close)
+            template(recipeId, recipeViewModel, $showBasketPreview, showFooter, close)
         } else {
             NavigationView {
-                VStack {
+                VStack(spacing: 0) {
                     RecipeDetailsView(vmRecipe: recipeViewModel, showFooter: showFooter, sponsorDetailsTapped: { sponsor in
                         self.sponsor = sponsor
                         self.showSponsorDetail = true
@@ -53,7 +53,7 @@ struct RecipeModal: View {
                         }.frame(maxHeight: .infinity)
                     }
                     NavigationLink("Produits dans votre panier", isActive: $showBasketPreview) {
-                        VStack {
+                        VStack(spacing: 0) {
                             BasketPreviewView(recipeId: recipeId, recipeVm: recipeViewModel) { _, _ in
                                 self.showBasketPreview = false
                             } close: {
@@ -70,6 +70,13 @@ struct RecipeModal: View {
                             .frame(height: 0.1)
                             .hidden()
                         }.frame(maxHeight: .infinity)
+                        NavigationLink("", isActive: $showItemSelector) {
+                            ItemSelector(recipeId: recipeId) {
+                                self.showItemSelector = false
+                            }
+                        }
+                        .frame(height: 0.1)
+                        .hidden()
                     }
                     .frame(height: 0.1)
                     .hidden()

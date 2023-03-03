@@ -1,5 +1,7 @@
 package com.miam.kmm_miam_sdk.android.ui.components.price
 
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -36,15 +38,14 @@ import com.miam.kmm_miam_sdk.android.ui.components.price.PriceStyle.priceEmptySt
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.currency
 import com.miam.kmm_miam_sdk.android.ui.components.price.PriceText.preGuests
 import com.miam.kmm_miam_sdk.android.ui.components.states.ManagementResourceState
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
-val twoDecimalsformat: DecimalFormat
-    get() {
-        val format = DecimalFormat("0.00")
-        format.roundingMode = RoundingMode.DOWN
-        return format
-    }
+fun formatPrice(price: Double): String {
+    val numberFormat = NumberFormat.getCurrencyInstance()
+    numberFormat.currency = Currency.getInstance("EUR")
+
+    return numberFormat.format(price)
+}
+
 
 @Composable
 fun SimplePrice(price: Double) {
@@ -57,7 +58,7 @@ fun SimplePrice(price: Double) {
         ) {
             Row(modifier = priceContainer) {
                 Text(
-                    "${twoDecimalsformat.format(price)}$currency",
+                    "${formatPrice(price)}",
                     color = priceIntegerTotalPriceColor,
                     style = subtitleBold
                 )
@@ -116,7 +117,7 @@ fun RecipePriceView(price: Double) {
         ) {
             Row(modifier = priceContainer) {
                 Text(
-                    "${twoDecimalsformat.format(price)}$currency",
+                    "${formatPrice(price)}",
                     color = priceIntegerColor,
                     style = subtitleBold
                 )

@@ -10,13 +10,13 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class MyMealButtonVM: MyMealButtonViewModel, ObservableObject {
-
-    @Published var state: MyMealButtonContractState?
-
-    var mealsCount: Int = 0
-
-    override init() {
+public class MyMealButtonVM: MyMealButtonViewModel, ObservableObject {
+   
+    @Published public var state: MyMealButtonContractState?
+    
+    public var mealsCount: Int = 0
+    
+    public override init() {
         super.init()
         self.collect(flow: uiState) { data in
             guard let state = data as? MyMealButtonContractState else {

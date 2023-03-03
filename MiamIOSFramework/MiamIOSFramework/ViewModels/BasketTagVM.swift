@@ -9,12 +9,12 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-public class BasketTagVM: BasketTagViewModel, ObservableObject {
-
-    @Published var recipeList: NSArray?
-    var vMRouter: RouterOutletViewModel
-
-    init(productExtId: String) {
+public class BasketTagVM : BasketTagViewModel, ObservableObject {
+    
+    @Published public var recipeList: NSArray?
+    var vMRouter : RouterOutletViewModel
+    
+    public init(productExtId: String) {
         self.vMRouter = RouterOutletViewModel()
         super.init(vmRouter: vMRouter)
         // TODO handle other states

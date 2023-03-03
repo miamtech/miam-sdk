@@ -28,7 +28,22 @@ struct BasketPreviewRow: View {
         productPictureURL != nil
     }
 
-    public init(viewModel: BasketPreviewVM,
+    private var formattedProductPrice: String {
+        guard let price = Double(previewLine.price) else {
+            return ""
+        }
+        let numberFormatter = NumberFormatter()
+        numberFormatter.currencyCode = "EUR"
+        numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 2
+        guard let formattedPrice = numberFormatter.string(from: NSNumber(floatLiteral: price)) else {
+            return ""
+        }
+
+        return formattedPrice
+    }
+
+    public init(viewModel : BasketPreviewVM,
                 previewLine: BasketPreviewLine,
                 updatingBasketEntryId: String?,
                 removeProductAction: @escaping() -> Void,
@@ -68,7 +83,7 @@ struct BasketPreviewRow: View {
                 productName,
                 productPictureURL,
                 productBrandName,
-                productName,
+                productDescription,
                 productPrice,
                 Int(previewLine.count),
                 Int((previewLine.record as? BasketEntry)?.itemsCountOrZero ?? 0),
@@ -134,7 +149,7 @@ struct BasketPreviewRow: View {
 
                 // Price
                 VStack {
-                    Text("\(productPrice)€")
+                    Text(formattedProductPrice)
                         .miamFontStyle(style: MiamFontStyleProvider.sharedInstance.titleStyle)
                         .foregroundColor(Color.miamColor(.primaryText))
                 }.frame(maxWidth: .infinity, alignment: .trailing)
