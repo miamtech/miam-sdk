@@ -4,11 +4,14 @@ import com.miam.core.sdk.di.MiamDI
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.component.preferences.PreferencesEffect
+import com.miam.kmmMiamCore.component.preferences.PreferencesViewModelInstance
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
+import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -33,7 +36,7 @@ public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event
         RecipeListPageContract.State(
             recipes = BasicUiState.Loading,
             title = "",
-            filter = "",
+            filter = mapOf(),
             currentPage = 1,
             isFetchingNewPage = false,
             noMoreData = false
@@ -74,9 +77,10 @@ public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event
         val currentPage = this.currentState.currentPage
         val newRecipes: MutableList<Recipe> = this.getCurrentRecipes().toMutableList()
         launch(coroutineHandler) {
-            val fetchedRecipes = recipeRepositoryImp.getRecipesFromStringFilter(
-                currentState.filter + preference.getPreferencesAsQueryString(),
-                RecipeRepositoryImp.DEFAULT_INCLUDED,
+            val filters = currentState.filter.plus(preference.getPreferences())
+            val fetchedRecipes = recipeRepositoryImp.getRecipes(
+                filters,
+                RecipeRelationshipName.relationshipsForRecipeCard(),
                 RecipeRepositoryImp.DEFAULT_PAGESIZE,
                 currentPage
             )
@@ -107,7 +111,7 @@ public class RecipeListPageViewModel: BaseViewModel<RecipeListPageContract.Event
         setState {
             copy(
                 title = title,
-                filter = recipeFilter.getSelectedFilterAsQueryString() + preference.getPreferencesAsQueryString(),
+                filter = FilterViewModelInstance.instance.getSelectedFilters(),
                 recipes = BasicUiState.Loading,
                 noMoreData = false,
                 currentPage = 1

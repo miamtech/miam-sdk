@@ -5,6 +5,7 @@ import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
@@ -18,8 +19,8 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
         public const val FIRST_PAGE: Int = 1
     }
 
-    override suspend fun getRecipeNumberOfResult(filter: String): Int {
-        return recipeDataSource.getRecipeNumberOfResult(filter)
+    override suspend fun getRecipeNumberOfResult(filters: Map<String, String>): Int {
+        return recipeDataSource.getRecipeNumberOfResult(filters)
     }
 
     override suspend fun getRecipeById(recipeId: String): Recipe {
@@ -36,7 +37,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
 
     public suspend fun getRecipes(
         filters: Map<String, String>,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {

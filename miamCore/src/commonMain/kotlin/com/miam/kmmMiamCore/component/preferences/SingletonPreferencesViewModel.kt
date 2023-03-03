@@ -6,6 +6,7 @@ import com.miam.kmmMiamCore.base.mvi.BasicUiState
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.handler.ContextHandlerInstance
 import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.miam_core.data.datasource.RecipeFilter
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.TagsRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CheckableTag
@@ -172,7 +173,7 @@ public open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContra
     }
 
     private suspend fun getRecipeCount(): Int {
-        return recipeRepositoryImp.getRecipeNumberOfResult(getPreferencesAsQueryString())
+        return recipeRepositoryImp.getRecipeNumberOfResult(getPreferences())
     }
 
     public fun back() {
@@ -203,12 +204,19 @@ public open class SingletonPreferencesViewModel: BaseViewModel<PreferencesContra
     public val allTags: List<CheckableTag>
         get() = listOf(*currentState.diets.toTypedArray(), *currentState.ingredients.toTypedArray(), *currentState.equipments.toTypedArray())
 
-    public fun getPreferencesAsQueryString(): String {
+    public fun getPreferences(): Map<String, String> {
+        var preferencesFilter = mutableMapOf<String, String>()
         val toInclude = allTags.filter { tag -> tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
         val toExclude = allTags.filter { tag -> !tag.isIncludedInQuery }.filter { tag -> tag.changedFromItsDefaultValue }.map { it.tag.id }
-        val includedStr = if (toInclude.isNotEmpty()) "&filter[include-tags]=${toInclude.joinToString(",")}" else ""
-        val excludedStr = if (toExclude.isNotEmpty()) "&filter[exclude-tags]=${toExclude.joinToString(",")}" else ""
-        return includedStr + excludedStr
+
+        if (toInclude.isNotEmpty()) {
+            preferencesFilter[RecipeFilter.INCLUDE_TAGS.filterName] = toInclude.joinToString(",")
+        }
+        if (toExclude.isNotEmpty()) {
+            preferencesFilter[RecipeFilter.EXCLUDE_TAGS.filterName] = toExclude.joinToString(",")
+        }
+
+        return preferencesFilter
     }
 
     public fun globalGuestCountOrDefault(defaultValue: Int = 4): Int {

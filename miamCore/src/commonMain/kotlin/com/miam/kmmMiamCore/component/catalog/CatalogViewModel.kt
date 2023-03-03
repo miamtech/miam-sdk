@@ -9,9 +9,11 @@ import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.FilterViewModelInstance
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.helpers.letElse
+import com.miam.kmmMiamCore.miam_core.data.datasource.RecipeFilter
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Package
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.RouteServiceAction
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -184,11 +186,11 @@ public open class CatalogViewModel: BaseViewModel<CatalogContract.Event, Catalog
     private suspend fun fetchPackagesRecipes(fetchedPackages: List<Package>): List<Deferred<Package>> {
         return fetchedPackages.map { currentPackage ->
             async {
-                val packageFilter = "&filter[packages]=${currentPackage.id}"
-                val filter = "${filterVm.getSelectedFilterAsQueryString()}${preference.getPreferencesAsQueryString()}&$packageFilter"
-                val recipes = recipeRepositoryImp.getRecipesFromStringFilter(
-                    filter,
-                    RecipeRepositoryImp.DEFAULT_INCLUDED,
+                var filters = filterVm.getSelectedFilters().plus(preference.getPreferences()).toMutableMap()
+                filters[RecipeFilter.PACKAGES.filterName] = currentPackage.id
+                val recipes = recipeRepositoryImp.getRecipes(
+                    filters,
+                    RecipeRelationshipName.relationshipsForRecipeCard(),
                     RecipeRepositoryImp.DEFAULT_PAGESIZE,
                     RecipeRepositoryImp.FIRST_PAGE
                 )
