@@ -7,7 +7,7 @@ const config = {
   tagline: 'miam for native ios and android apps',
   favicon: 'img/favicon.ico',
   url: 'https://miamtech.github.io/',
-  baseUrl: '/',
+  baseUrl: '/kmm-miam-sdk/',
   organizationName: 'miamtech', 
   projectName: 'kmm-miam-sdk', 
   deploymentBranch: 'main',
