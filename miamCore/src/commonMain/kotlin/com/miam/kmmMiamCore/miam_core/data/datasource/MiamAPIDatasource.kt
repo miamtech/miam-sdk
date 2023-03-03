@@ -56,10 +56,10 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             )
         }
         install(HttpCache)
-        // install(ContentEncoding) {
-        //     gzip(0.9F)
-        //     deflate(1.0F)
-        // }
+        /*install(ContentEncoding) {
+            gzip(0.9F)
+            deflate(1.0F)
+        }*/
     }
 
     init {
@@ -430,6 +430,16 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             url("${HttpRoutes.SUPPLIER}$supplierId/webhooks/basket_updated")
             setBody(SupplierNotificationWrapper(basketToken, status, price))
         }
+    }
+
+    override suspend fun getSupplier(supplierId: Int): Supplier {
+        LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
+        val supplierFields = "?fields[suppliers]=language-id"
+        val returnValue = httpClient.get { url(HttpRoutes.SUPPLIER + "$supplierId$supplierFields") }
+            .body<RecordWrapper>()
+            .toRecord() as Supplier
+        LogHandler.info("[Miam][MiamAPIDatasource] end getSupplier $supplierId $returnValue")
+        return returnValue
     }
 
     private fun includedToString(included: List<String>): String {

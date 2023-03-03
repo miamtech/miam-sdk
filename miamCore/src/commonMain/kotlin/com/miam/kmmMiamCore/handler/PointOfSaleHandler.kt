@@ -7,9 +7,10 @@ import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.helpers.letElse
 import com.miam.kmmMiamCore.miam_core.data.repository.PackageRepositoryImp
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.usecase.SetSupplierUseCase
+import com.miam.kmmMiamCore.usecase.SupplierInfo
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.native.concurrent.ThreadLocal
@@ -38,10 +39,12 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
         store.dispatch(PointOfSaleAction.SetExtId(storeId))
     }
 
+    @Deprecated(
+        "Handler will soon be replace by UseCases",
+        replaceWith = ReplaceWith("SetSupplierUseCase.instance.invoke(SupplierInfo(supplierId: Int)")
+    )
     public fun setSupplier(supplierId: Int) {
-        if (store.sameSupplier(supplierId)) return
-
-        store.dispatch(PointOfSaleAction.SetSupplierId(supplierId))
+        SetSupplierUseCase.instance.invoke(SupplierInfo(supplierId))
     }
 
     public fun setSupplierOrigin(origin: String) {
