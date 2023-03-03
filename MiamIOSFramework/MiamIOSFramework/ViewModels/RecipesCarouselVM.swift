@@ -10,11 +10,11 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class RecipeCarouselVM: RecipeCarouselViewModel, ObservableObject {
-    @Published var suggestions: [Recipe] = []
-    @Published var state: RecipeCarouselContractState?
-
-    override init() {
+public class RecipeCarouselVM: RecipeCarouselViewModel ,ObservableObject {
+    @Published public var suggestions: [Recipe] = []
+    @Published public var state: RecipeCarouselContractState?
+    
+    public override init() {
         super.init()
         self.collect(flow: uiState) { data in
             let state = data as? RecipeCarouselContractState

@@ -9,16 +9,16 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-public class ItemSelectorVM: ObservableObject {
-
-    @Published var state: ItemSelectorContractState?
-    @Published var selectedItem: BasketPreviewLine?
-
+public class ItemSelectorVM : ObservableObject {
+    
+    @Published public var state: ItemSelectorContractState?
+    @Published public var selectedItem : BasketPreviewLine?
+    
     public let sharedInstance = ItemSelectorInstance.shared.instance
     public let routeService = RouteServiceInstance.shared.instance
-
-    init() {
-
+    
+    public init() {
+        
         sharedInstance.collect(flow: sharedInstance.uiState,
                                                      collect: { data in
             self.state = data as? ItemSelectorContractState

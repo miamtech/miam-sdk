@@ -8,22 +8,21 @@
 import miamCore
 
 @available(iOS 14, *)
-public class RecipeCardVM: RecipeViewModel, ObservableObject {
-
+public class RecipeCardVM : RecipeViewModel, ObservableObject {
     @Published public var recipe: Recipe?
-    @Published var state: RecipeContractState?
-    @Published var isInCart: Bool = false
-    @Published var guest: Int = 4
-    @Published var guestUpdating: Bool = false
+    @Published public var state: RecipeContractState?
+    @Published public var isInCart: Bool = false
+    @Published public var guest: Int = 4
+    @Published public var guestUpdating: Bool = false
 
-    var sortedSteps: [RecipeStep] {
+    public var sortedSteps: [RecipeStep] {
         guard let recipe = recipe else {
             return []
         }
         return recipe.sortedStep
     }
 
-    override init(routerVM: RouterOutletViewModel) {
+    public override init(routerVM: RouterOutletViewModel) {
         super.init(routerVM: routerVM)
         collect(flow: uiState, collect: { data in
             let state = data as? RecipeContractState
@@ -41,8 +40,8 @@ public class RecipeCardVM: RecipeViewModel, ObservableObject {
             }
         })
     }
-
-    var isLikeEnabled: Bool {
+    
+    public var isLikeEnabled: Bool {
         return state?.likeIsEnable ?? false
     }
 }

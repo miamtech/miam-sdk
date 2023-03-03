@@ -9,21 +9,21 @@ import Foundation
 import miamCore
 
 @available(iOS 14, *)
-class RecipeListPageVM: ObservableObject {
-    @Published var recipes: [Recipe] = []
-    @Published var title: String = ""
-    @Published var state: RecipeListPageContractState?
+public class RecipeListPageVM: ObservableObject {
+    @Published public var recipes: [Recipe] = []
+    @Published public var title: String = ""
+    @Published public var state: RecipeListPageContractState?
 
     let model: RecipeListPageViewModel
     let filterVM = FilterViewModelInstance.shared.instance
 
-    init() {
+    public init() {
         self.model = RecipeListPageViewModel()
         self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
         initStateManagment()
     }
-
-    init(categoriesId: String, title: String) {
+    
+    public init(categoriesId :String, title: String){
         self.model = RecipeListPageViewModel()
         filterVM.setCat(catId: categoriesId)
         self.model.setEvent(event: RecipeListPageContractEvent.InitPage(title: ""))
@@ -46,11 +46,11 @@ class RecipeListPageVM: ObservableObject {
         }
     }
 
-    var hasNoResults: Bool {
+    public var hasNoResults: Bool {
         return self.model.currentState.noMoreData && recipes.isEmpty
     }
 
-    func loadMoreContent(currentRecipe: Recipe) {
+    public func loadMoreContent(currentRecipe: Recipe) {
         guard !self.model.currentState.isFetchingNewPage, !self.model.currentState.noMoreData else {
             return
         }
@@ -61,7 +61,7 @@ class RecipeListPageVM: ObservableObject {
         }
     }
 
-    private func loadPage() {
+    public func loadPage() {
         self.model.setEvent(event: RecipeListPageContractEvent.LoadPage())
     }
 }
