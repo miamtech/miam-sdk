@@ -20,3 +20,4 @@ The integration of the SDK into your app will take three steps:
 3. **Styling** : apply your own stylesheets, globally at the SDK level, and specifically for each
    component
 
+For more information see documentation
