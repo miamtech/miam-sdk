@@ -56,8 +56,6 @@ public class MiamManager: ObservableObject {
 
         AnalyticsInstance.shared.instance.setOnEventEmitted( onEventEmittedCallBack: {event in  print("event Miam \(event.eventType)  \(event.path)  \(event.props)")})
 
-        GroceriesListHandler.shared.
-
         // initTemplate()
 
         ContextHandlerInstance.shared.instance.onReadyEvent(callback: { event in
