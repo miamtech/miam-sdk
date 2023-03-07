@@ -8,6 +8,10 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
+public enum class SponsorRelationshipName(public val relationshipName: String) {
+    SPONSOR_BLOCK("sponsor-blocks")
+}
+
 @Serializable
 @SerialName("sponsors")
 public data class Sponsor internal constructor(

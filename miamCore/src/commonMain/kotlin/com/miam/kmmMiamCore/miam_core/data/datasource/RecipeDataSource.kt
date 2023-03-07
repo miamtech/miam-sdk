@@ -18,10 +18,10 @@ public enum class RecipeFilter(public val filterName: String) {
 }
 
 public interface RecipeDataSource {
-    public suspend fun getRecipeById(id: String, included: List<String> = listOf()): Recipe
+    public suspend fun getRecipeById(id: String, included: Array<RecipeRelationshipName> = arrayOf()): Recipe
     public suspend fun getRecipeByIds(
         recipesIds: List<String>,
-        included: List<String> = listOf(),
+        included: Array<RecipeRelationshipName> = arrayOf(),
         pageSize: Int = 20
     ): List<Recipe>
 
@@ -34,7 +34,7 @@ public interface RecipeDataSource {
 
     public suspend fun getRecipesFromStringFilter(
         filters: String,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int = 20,
         pageNumber: Int = 1
     ): List<Recipe>
@@ -43,7 +43,7 @@ public interface RecipeDataSource {
         supplierId: Int,
         size: Int? = 1,
         criteria: SuggestionsCriteria,
-        included: List<String> = listOf()
+        included: Array<RecipeRelationshipName> = arrayOf()
     ): List<Recipe>
 
     public suspend fun getRecipeLikes(recipesIds: List<String>, pageSize: Int = 20): List<RecipeLike>

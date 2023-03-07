@@ -25,13 +25,13 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
 
     override suspend fun getRecipeById(recipeId: String): Recipe {
         println("Miam getting recipe $recipeId")
-        val recipe = recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)
+        val recipe = recipeDataSource.getRecipeById(recipeId, RecipeRelationshipName.allRelationships())
         return addRecipeLike(recipe)
     }
 
     override suspend fun getRecipesByIds(recipeIds: List<String>): List<Recipe> {
         println("Miam getting recipes $recipeIds")
-        val recipes = recipeDataSource.getRecipeByIds(recipeIds, DEFAULT_INCLUDED)
+        val recipes = recipeDataSource.getRecipeByIds(recipeIds, RecipeRelationshipName.allRelationships())
         return addRecipeLikes(recipes)
     }
 
@@ -47,7 +47,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
 
     public suspend fun getRecipesFromStringFilter(
         filters: String,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
@@ -72,7 +72,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
             supplierId,
             size,
             criteria,
-            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+            RecipeRelationshipName.allRelationships()
         )
         return recipes.map { addRecipeLike(it) }
     }

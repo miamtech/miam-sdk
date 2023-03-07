@@ -152,13 +152,13 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         }
     }
 
-    override suspend fun getRecipeById(id: String, included: List<String>): Recipe {
+    override suspend fun getRecipeById(id: String, included: Array<RecipeRelationshipName>): Recipe {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeById $id")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.RECIPE.path, id)
             val recipeAttributes = RecipeAttributeName.values().map { it.attributeName }.joinToString(",")
             parameters.append("fields[recipe]", recipeAttributes)
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
         val returnValue = this.get<RecordWrapper>(url).toRecord() as Recipe
@@ -168,7 +168,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     private suspend fun getRecipeByIdsChunck(
         recipesIds: List<String>,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int
     ): List<Recipe> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeByIdsChunck $recipesIds")
@@ -176,7 +176,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             appendPathSegments(MiamAPIEndpoint.RECIPE.path)
             parameters.append("page[size]", pageSize.toString())
             parameters.append("filter[id]", recipesIds.joinToString(","))
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
 
@@ -187,7 +187,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun getRecipeByIds(
         recipesIds: List<String>,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int
     ): List<Recipe> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeByIds $recipesIds")
@@ -212,7 +212,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("page[size]", pageSize.toString())
             parameters.append("page[number]", pageNumber.toString())
             parameters.append("fields[${MiamAPIEndpoint.RECIPE.path}]", recipeAttributes)
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             filters.forEach {
                 parameters.append("filter[${it.key}]", it.value)
             }
@@ -226,7 +226,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun getRecipesFromStringFilter(
         filters: String,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
@@ -237,7 +237,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("page[size]", pageSize.toString())
             parameters.append("page[number]", pageNumber.toString())
             parameters.append("fields[${MiamAPIEndpoint.RECIPE.path}]", recipeAttributes)
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
 
@@ -251,7 +251,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         supplierId: Int,
         size: Int?,
         criteria: SuggestionsCriteria,
-        included: List<String>
+        included: Array<RecipeRelationshipName>
     ): List<Recipe> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeSuggestions $criteria")
 
@@ -259,10 +259,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             appendPathSegments(MiamAPIEndpoint.RECIPE_SUGGESTIONS.path)
             parameters.append("supplier_id", supplierId.toString())
             parameters.append("page[size]", size.toString())
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
-            //"${HttpRoutes.RECIPE_SUGGESTIONS}?supplier_id=${supplierId}&page[size]=${size}&${includedToString(included)}"
         val returnValue = this.post<RecordWrapper>(url, criteria).toRecords()
         LogHandler.info("[Miam][MiamAPIDatasource] end getRecipeSuggestions $criteria ${returnValue.map { record -> { "${record.id}/ ${(record as Recipe).attributes?.title}" } }}")
         return returnValue.map { record -> record as Recipe }
@@ -373,13 +372,11 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun updateGroceriesList(
         groceriesList: GroceriesList,
-        included: List<String>
     ): GroceriesList {
         LogHandler.info("[Miam][MiamAPIDatasource] starting updateGroceriesList $groceriesList")
         val returnValue = httpClient.patch {
             url {
                 appendPathSegments(MiamAPIEndpoint.GROCERIESLIST.path, groceriesList.id)
-                parameters.append("include", included.joinToString(","))
             }
             setBody(RecordWrapper.fromRecord(groceriesList))
         }.body<RecordWrapper>().toRecord() as GroceriesList
@@ -410,12 +407,12 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 /////////////////////// BASKET ////////////////////////////////////////////////
 
     @Suppress("unchecked_cast")
-    override suspend fun getFromListAndPos(listId: String, posId: Int, included: List<String>): Basket? {
+    override suspend fun getFromListAndPos(listId: String, posId: Int, included: Array<BasketRelationshipName>): Basket? {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getFromListAndPos $listId $posId")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.GROCERIESLIST.path, listId, "baskets")
             parameters.append("filter[point_of_sale_id]", posId.toString())
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
         val baskets = get<RecordWrapper>(url).toRecords().filterIsInstance<Basket>()
@@ -462,13 +459,13 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun updateBasketEntry(
         basketEntry: BasketEntry,
-        included: List<String>
+        included: Array<BasketEntryRelationshipName>
     ): BasketEntry {
         LogHandler.info("[Miam][MiamAPIDatasource] starting updateBasketEntry $basketEntry")
         val returnValue = httpClient.patch {
             url {
                 appendPathSegments(MiamAPIEndpoint.BASKET_ENTRIES.path, basketEntry.id)
-                parameters.append("include", included.joinToString(","))
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             }
             setBody(RecordWrapper.fromRecord(basketEntry))
         }.body<RecordWrapper>().toRecord() as BasketEntry
@@ -509,10 +506,13 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun getSupplier(supplierId: Int): Supplier {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
-        val supplierFields = "?fields[suppliers]=language-id"
-        val returnValue = httpClient.get { url(HttpRoutes.SUPPLIER + "$supplierId$supplierFields") }
-            .body<RecordWrapper>()
-            .toRecord() as Supplier
+        val url = URLBuilder(baseURL).run {
+            appendPathSegments(MiamAPIEndpoint.SUPPLIER.path, supplierId.toString())
+            parameters.append("fields[suppliers]", "language-id")
+            buildString()
+        }
+
+        val returnValue = get<RecordWrapper>(url).toRecord() as Supplier
         LogHandler.info("[Miam][MiamAPIDatasource] end getSupplier $supplierId $returnValue")
         return returnValue
     }
@@ -576,11 +576,11 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     ///////////////////////////////////// Sponsor /////////////////////////////////////////////////
 
-    override suspend fun getSponsorById(sponsorId: String, included: List<String>): Sponsor {
+    override suspend fun getSponsorById(sponsorId: String, included: Array<SponsorRelationshipName>): Sponsor {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorById")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.SPONSOR.path, sponsorId)
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecord()
@@ -590,12 +590,12 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     ///////////////////////////////////// Sponsor block /////////////////////////////////////////////////
 
-    override suspend fun getSponsorBlocksBySponsorId(sponsorId: String, included: List<String>): List<SponsorBlock> {
+    override suspend fun getSponsorBlocksBySponsorId(sponsorId: String, included: Array<SponsorBlockRelationshipName>): List<SponsorBlock> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorBlockBySponsorId")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.SPONSOR_BLOCK.path)
             parameters.append("filter[sponsor-id]", sponsorId.toString())
-            parameters.append("include", included.joinToString(","))
+            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecords()
