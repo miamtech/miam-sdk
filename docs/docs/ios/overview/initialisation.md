@@ -67,7 +67,7 @@ class Miam {
   
   private init() {
     //  CODE
-      SetSupplierUseCase.shared.instance.invoke(input: SupplierInfo(supplierId: YOUR_SUPPLIER_ID))
+      PointOfSaleHandler.shared.setSupplierOrigin(origin: <string>YOUR_SUPPLIER_ORIGIN))
       PointOfSaleHandler.shared.setSupplier(supplierId: <string>YOUR_SUPPLIER_ID)
   }
 
@@ -75,16 +75,6 @@ class Miam {
 }
 
 ```
-
-:::danger
-SetSupplier methode of PointOfSaleHandler is deprecated will be replace by 
-```swift 
-//new version
-SetSupplierUseCase.shared.instance.invoke(input: SupplierInfo(supplierId: YOUR_SUPPLIER_ID))
-//old version still working in 3.10.0
-PointOfSaleHandler.shared.setSupplier(supplierId: <string>YOUR_SUPPLIER_ID) 
-```
-:::
 
 :::tip
 Make sure to specify a different origin between your development and production environments
