@@ -6,19 +6,15 @@ const config = {
   title: 'Miam mobile SDK',
   tagline: 'miam for native ios and android apps',
   favicon: 'img/favicon.ico',
+  url: 'https://miamtech.github.io/',
+  baseUrl: '/kmm-miam-sdk/',
+  organizationName: 'miamtech', 
+  projectName: 'kmm-miam-sdk', 
+  deploymentBranch: 'main',
+  trailingSlash: false,
+  
 
-  // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'miam', // Usually your GitHub org/user name.
-  projectName: 'kmmMiamSdk', // Usually your repo name.
-
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -34,10 +30,7 @@ const config = {
         docs: {
          
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+         
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -97,8 +90,8 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'GitLab',
-                href: 'https://gitlab.com/miam/kmm-miam-sdk',
+                label: 'GitHub',
+                href: 'https://github.com/miamtech/kmm-miam-sdk',
               },
             ],
           },

@@ -4,7 +4,13 @@
 .idea
 .DS_Store
 /build
-*/build
+/androidDemoAppXml/build
+/androidSDK/build
+/androidtestapp/build
+/core/build
+/miamCore/build
+/test-utils/build
+
 /captures
 .externalNativeBuild
 .cxx
