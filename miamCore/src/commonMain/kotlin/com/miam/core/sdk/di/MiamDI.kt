@@ -22,6 +22,7 @@ import com.miam.kmmMiamCore.miam_core.data.repository.*
 import com.miam.kmmMiamCore.services.Analytics
 import com.miam.kmmMiamCore.services.RouteService
 import com.miam.kmmMiamCore.services.UserPreferences
+import com.miam.kmmMiamCore.usecase.SetSupplierUseCase
 
 public object MiamDI {
     // Service
@@ -53,6 +54,9 @@ public object MiamDI {
     internal val likeStore: LikeStore by lazy { LikeStore() }
     internal val pointOfSaleStore: PointOfSaleStore by lazy { PointOfSaleStore() }
     internal val userStore: UserStore by lazy { UserStoreImpl(groceriesListStore) }
+
+    //Use Cases
+    internal val setSupplierUseCase: SetSupplierUseCase by lazy { SetSupplierUseCase(supplierRepository, pointOfSaleStore) }
 
     // ViewModel
     public val itemSelectorViewModel: ItemSelectorViewModel by lazy { ItemSelectorViewModel() }
