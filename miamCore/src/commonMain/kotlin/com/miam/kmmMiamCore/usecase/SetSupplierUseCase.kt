@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 public data class SupplierInfo(val supplierId: Int)
 
-internal class SetSupplierUseCase(private val supplierRepository: SupplierRepository, private val pointOfSaleStore: PointOfSaleStore):
+public class SetSupplierUseCase(private val supplierRepository: SupplierRepository, private val pointOfSaleStore: PointOfSaleStore):
     ParameterisedUseCase<SupplierInfo, Unit>, CoroutineScope by MainScope() {
 
     override fun invoke(input: SupplierInfo) {
@@ -27,7 +27,7 @@ internal class SetSupplierUseCase(private val supplierRepository: SupplierReposi
         }
     }
 
-    companion object {
-        val instance: SetSupplierUseCase = MiamDI.setSupplierUseCase
+    public companion object {
+        public val create : SetSupplierUseCase = SetSupplierUseCase(MiamDI.supplierRepository, MiamDI.pointOfSaleStore)
     }
 }

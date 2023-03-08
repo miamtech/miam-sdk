@@ -16,6 +16,8 @@ import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.services.AnalyticsInstance
+import com.miam.kmmMiamCore.usecase.SetSupplierUseCase
+import com.miam.kmmMiamCore.usecase.SupplierInfo
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,7 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.setSupplierOrigin("miam.test")
         PointOfSaleHandler.updateStoreId("miam_test")
-        PointOfSaleHandler.setSupplier(14)
+        SetSupplierUseCase.create.invoke(SupplierInfo(14))
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)

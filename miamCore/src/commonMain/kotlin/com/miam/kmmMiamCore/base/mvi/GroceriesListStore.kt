@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-public data class GroceriesListState(val groceriesList: GroceriesList?): State {
+public data class GroceriesListState(
+    val groceriesList: GroceriesList?
+    ): State {
     val recipeCount: Int
         get() = groceriesList?.attributes?.recipesInfos?.size ?: 0
 }
@@ -102,7 +104,7 @@ public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainS
     }
 
     private suspend fun setGroceriesListAndRefreshBasket(groceriesList: GroceriesList) {
-        updateStateIfChanged(state.value.copy(groceriesList = groceriesList))
+        updateStateIfChanged(state.value.copy(groceriesList = groceriesList)) 
         sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)
         basketStore.dispatch(BasketAction.RefreshBasket)
     }

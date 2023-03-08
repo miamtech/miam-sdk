@@ -55,9 +55,6 @@ public object MiamDI {
     internal val pointOfSaleStore: PointOfSaleStore by lazy { PointOfSaleStore() }
     internal val userStore: UserStore by lazy { UserStoreImpl(groceriesListStore) }
 
-    //Use Cases
-    internal val setSupplierUseCase: SetSupplierUseCase by lazy { SetSupplierUseCase(supplierRepository, pointOfSaleStore) }
-
     // ViewModel
     public val itemSelectorViewModel: ItemSelectorViewModel by lazy { ItemSelectorViewModel() }
     public val preferencesViewModel: SingletonPreferencesViewModel by lazy { SingletonPreferencesViewModel() }
