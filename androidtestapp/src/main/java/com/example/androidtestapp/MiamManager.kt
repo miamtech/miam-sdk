@@ -45,7 +45,7 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         // this set on inexisting pos will be cancelled by second one
         PointOfSaleHandler.setSupplierOrigin("miam.test")
         PointOfSaleHandler.updateStoreId("miam_test")
-        SetSupplierUseCase.create.invoke(SupplierInfo(14))
+        PointOfSaleHandler.setSupplier(14)
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)
