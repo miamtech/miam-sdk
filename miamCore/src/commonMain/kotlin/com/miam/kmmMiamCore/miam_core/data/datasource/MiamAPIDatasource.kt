@@ -23,7 +23,7 @@ import kotlinx.serialization.json.Json
 
 private enum class MiamAPIEndpoint(val path: String) {
     RECIPE("recipes"),
-    RECIPE_LIKE("recipe-like"),
+    RECIPE_LIKE("recipe-likes"),
     GROCERIESLIST("groceries-lists"),
     GROCERIES_ENTRY("groceries-entries"),
     POINTOFSALE("point-of-sales"),
@@ -49,6 +49,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         install(DefaultRequest)
 
         defaultRequest {
+            url(baseURL)
             headers.append(HttpHeaders.ContentType, "application/vnd.api+json")
             headers.append(HttpHeaders.Accept, "*/*")
         }
@@ -103,7 +104,6 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             httpClient.get(url) {
                 method = HttpMethod.Get
                 headers {
-//                    append(HttpHeaders.ContentType, "application/vnd.api+json")
                     append(HttpHeaders.Accept, "*/*")
                 }
             }.body<T>()
@@ -290,7 +290,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
     ): List<RecipeLike> {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getRecipeLikesByRecipeIds $recipesIds")
         val url = URLBuilder(baseURL).run {
-            appendPathSegments(MiamAPIEndpoint.RECIPE.path)
+            appendPathSegments(MiamAPIEndpoint.RECIPE_LIKE.path)
             parameters.append("page[size]", pageSize.toString())
             parameters.append("filter[recipe_id]", recipesIds.joinToString(","))
             parameters.append("filter[is_past]", "true,false")
@@ -526,7 +526,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("filter[category_for]", supplierId)
             parameters.append("[status]", "4")
             parameters.append("[user_preferences]", "true")
-            parameters.append("sort", "catalog_positions")
+            parameters.append("sort", "catalog_position")
             parameters.append("include", included.joinToString(","))
             buildString()
         }
