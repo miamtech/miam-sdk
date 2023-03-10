@@ -160,19 +160,19 @@ public data class RecipeAttributes constructor(
     @SerialName("ingredients-str")
     val ingredientsStr: List<String>? = emptyList(),
 
-//    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = DurationSerializer::class)
     @SerialName("preparation-time")
     val preparationTime: Duration? = 0.minutes,
 
-//    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = DurationSerializer::class)
     @SerialName("preheating-time")
     val preheatingTime: Duration? = 0.minutes,
 
-//    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = DurationSerializer::class)
     @SerialName("cooking-time")
     val cookingTime: Duration? = 0.minutes,
 
-//    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = DurationSerializer::class)
     @SerialName("resting-time")
     val restingTime: Duration? = 0.minutes,
 
