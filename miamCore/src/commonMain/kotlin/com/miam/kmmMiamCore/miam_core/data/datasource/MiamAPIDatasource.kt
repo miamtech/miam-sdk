@@ -56,10 +56,18 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             )
         }
         install(HttpCache)
-        /*install(ContentEncoding) {
+        install(ContentEncoding) {
             gzip(0.9F)
             deflate(1.0F)
-        }*/
+        }
+        install(DefaultRequest)
+        defaultRequest {
+            headers.append(HttpHeaders.ContentType, "application/vnd.api+json")
+            headers.append(HttpHeaders.Accept, "*/*")
+            headers.append("miam-front-type","app")
+            headers.append("miam-front-version","3.10.0")
+            headers.append("miam-api-version","4.8.0")
+        }
     }
 
     init {
@@ -67,23 +75,20 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             if (userStore.getSessionId() == null) {
                 val newSessionId = "${response.headers["set-cookie"]}".split(';')[0]
                 if (userStore.sameSession(newSessionId)) return@intercept
-
                 userStore.setSessionId(newSessionId)
             }
         }
 
         httpClient.sendPipeline.intercept(HttpSendPipeline.State) {
-            context.headers.append(HttpHeaders.Accept, "*/*")
-            userStore.observeState().value.sessionId.let {
+            userStore.observeState().value.sessionId?.let {
                 context.headers.remove("Cookie")
-                if (it != null) {
-                    context.headers.append(HttpHeaders.Cookie, it)
-                }
+                context.headers.append(HttpHeaders.Cookie, it)
             }
             userStore.observeState().value.userId.let {
                 context.headers.append(HttpHeaders.Authorization, "user_id $it")
             }
             context.headers.append(HttpHeaders.Origin, pointOfSaleStore.getProviderOrigin())
+            context.headers.append("miam-origin", pointOfSaleStore.getProviderOrigin())
             if (userStore.ProfilingForbiden()) {
                 context.url.parameters["profiling"] = "off"
             }
@@ -94,10 +99,6 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         return try {
             httpClient.get(url) {
                 method = HttpMethod.Get
-                headers {
-                    append(HttpHeaders.ContentType, "application/vnd.api+json")
-                    append(HttpHeaders.Accept, "*/*")
-                }
             }.body<T>()
         } catch (e: RedirectResponseException) {
             // 3XX
@@ -120,10 +121,6 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
     private suspend inline fun <reified T> post(url: String, data: Any): T? {
         return try {
             httpClient.post(url) {
-                headers {
-                    append(HttpHeaders.ContentType, "application/vnd.api+json")
-                    append(HttpHeaders.Accept, "*/*")
-                }
                 setBody(data)
             }.body<T>()
         } catch (e: RedirectResponseException) {
@@ -426,7 +423,6 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
     ) {
         LogHandler.info("[Miam][MiamAPIDatasource] starting notifyBasketUpdated $basketToken $supplierId $status")
         httpClient.post {
-            headers.append(HttpHeaders.ContentType, "application/vnd.api+json")
             url("${HttpRoutes.SUPPLIER}$supplierId/webhooks/basket_updated")
             setBody(SupplierNotificationWrapper(basketToken, status, price))
         }
@@ -434,7 +430,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun getSupplier(supplierId: Int): Supplier {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
-        val supplierFields = "?fields[suppliers]=language-id"
+        val supplierFields = "?fields[suppliers]=${SupplierAttributesName.formattedAttributes()}"
         val returnValue = httpClient.get { url(HttpRoutes.SUPPLIER + "$supplierId$supplierFields") }
             .body<RecordWrapper>()
             .toRecord() as Supplier

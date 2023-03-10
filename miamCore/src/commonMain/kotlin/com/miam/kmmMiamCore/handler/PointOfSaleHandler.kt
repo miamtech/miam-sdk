@@ -48,7 +48,6 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
     }
 
     public fun setSupplierOrigin(origin: String) {
-        store.setOrigin(origin)
         analytics.init(origin)
     }
 
