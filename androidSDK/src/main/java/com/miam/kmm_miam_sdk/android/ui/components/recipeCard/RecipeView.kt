@@ -24,73 +24,29 @@ class RecipeView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): AbstractComposeView(context, attrs, defStyleAttr) {
 
-    private val modal = RouterOutlet()
-    private var vmRecipe: RecipeViewModel = RecipeViewModel(modal.getViewModel())
-    private val idRecipeState: MutableState<String?> = mutableStateOf(null)
-    private var isInShelve = true
+    private var vmRecipe: RecipeViewModel = RecipeViewModel()
 
     fun bind(
         recipeId: String = "",
-        criteria: SuggestionsCriteria? = null,
-        recipe: Recipe? = null
     ) {
-        if (recipeId != "") {
-            vmRecipe.fetchRecipe(recipeId)
-        } else if (criteria != null) {
-            vmRecipe.setRecipeFromSuggestion(criteria)
-        } else if (recipe != null) {
-            vmRecipe.setRecipe(recipe)
-        }
+        //TODO
 
     }
-
-    fun unbind() {
-        vmRecipe.unsetRecipe()
-    }
-
-    fun isNotInShelf() {
-        isInShelve = false
-    }
-
-    var idRecipe: String
-        get() = idRecipeState.value ?: ""
-        set(value) {
-            idRecipeState.value = value
-            vmRecipe.fetchRecipe(idRecipe)
-        }
 
     @Composable
     override fun Content() {
-        Column {
-            modal.Content()
-            UpdatableContent()
-        }
-    }
-
-    @Composable
-    private fun UpdatableContent() {
-        val state by vmRecipe.uiState.collectAsState()
-
         ManagementResourceState(
             resourceState = state.recipeState,
-            successView = { recipe ->
-                requireNotNull(recipe)
-                RecipeSuccessCard(recipe, vmRecipe, modal, isInShelve)
+            successView = { 
+                //TODO
             },
             loadingView = {
-                if (Template.recipeLoaderTemplate != null) {
-                    Template.recipeLoaderTemplate?.let { it() }
-                } else {
-                    RecipeLoadingView()
-                }
+               //TODO
             },
             emptyView = {
-                if (Template.recipeEmptyTemplate != null) {
-                    Template.recipeEmptyTemplate?.let { it() }
-                } else {
-                    Box {}
-                }
+            
             }
         )
     }
+
 }

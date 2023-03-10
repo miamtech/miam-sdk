@@ -10,38 +10,20 @@ import miamCore
 @available(iOS 14, *)
 public class RecipeCardVM : RecipeViewModel, ObservableObject {
     @Published public var recipe: Recipe?
-    @Published public var state: RecipeContractState?
-    @Published public var isInCart: Bool = false
-    @Published public var guest: Int = 4
-    @Published public var guestUpdating: Bool = false
 
-    public var sortedSteps: [RecipeStep] {
-        guard let recipe = recipe else {
-            return []
-        }
-        return recipe.sortedStep
-    }
-
-    public override init(routerVM: RouterOutletViewModel) {
+    public override init() {
         super.init(routerVM: routerVM)
         collect(flow: uiState, collect: { data in
             let state = data as? RecipeContractState
             self.state = state
-            self.isInCart = state?.isInCart ?? false
-            self.guestUpdating = state?.guestUpdating ?? false
-            self.guest = Int(state?.guest ?? 0)
+
             switch state?.recipeState {
             case let success as BasicUiStateSuccess<Recipe>:
                     self.recipe = success.data!
-
-                    self.objectWillChange.send()
             default:
                     break
             }
         })
     }
-    
-    public var isLikeEnabled: Bool {
-        return state?.likeIsEnable ?? false
-    }
+
 }
