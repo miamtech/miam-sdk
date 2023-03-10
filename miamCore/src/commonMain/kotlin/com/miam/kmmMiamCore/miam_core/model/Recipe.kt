@@ -116,7 +116,7 @@ public enum class RecipeAttributeName(public val attributeName: String) {
         }
 
         public fun recipeCardAttributes(): Array<RecipeAttributeName> {
-            return arrayOf(TITLE, COOKING_TIME, DIFFICULTY, MEDIA_URL, NUMBER_OF_GUESTS)
+            return arrayOf(TITLE, COOKING_TIME, RESTING_TIME, PREPARATION_TIME, DIFFICULTY, MEDIA_URL, NUMBER_OF_GUESTS)
         }
     }
 }
