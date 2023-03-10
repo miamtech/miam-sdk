@@ -67,7 +67,7 @@ public open class SingletonFilterViewModel:
 
     public fun getRecipeCount() {
         launch(coroutineHandler) {
-            val count = 200// recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
+            val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilters())
             setState { copy(numberOfResult = count) }
         }
     }
