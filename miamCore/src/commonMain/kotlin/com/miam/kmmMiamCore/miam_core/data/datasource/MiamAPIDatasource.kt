@@ -158,7 +158,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             appendPathSegments(MiamAPIEndpoint.RECIPE.path, id)
             val recipeAttributes = RecipeAttributeName.values().map { it.attributeName }.joinToString(",")
             parameters.append("fields[recipe]", recipeAttributes)
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
         val returnValue = this.get<RecordWrapper>(url).toRecord() as Recipe
@@ -176,7 +178,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             appendPathSegments(MiamAPIEndpoint.RECIPE.path)
             parameters.append("page[size]", pageSize.toString())
             parameters.append("filter[id]", recipesIds.joinToString(","))
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
 
@@ -212,7 +216,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("page[size]", pageSize.toString())
             parameters.append("page[number]", pageNumber.toString())
             parameters.append("fields[${MiamAPIEndpoint.RECIPE.path}]", recipeAttributes)
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             filters.forEach {
                 parameters.append("filter[${it.key}]", it.value)
             }
@@ -237,7 +243,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("page[size]", pageSize.toString())
             parameters.append("page[number]", pageNumber.toString())
             parameters.append("fields[${MiamAPIEndpoint.RECIPE.path}]", recipeAttributes)
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
 
@@ -259,7 +267,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             appendPathSegments(MiamAPIEndpoint.RECIPE_SUGGESTIONS.path)
             parameters.append("supplier_id", supplierId.toString())
             parameters.append("page[size]", size.toString())
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
         val returnValue = this.post<RecordWrapper>(url, criteria).toRecords()
@@ -351,7 +361,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         LogHandler.info("[Miam][MiamAPIDatasource] starting getCurrent")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.GROCERIESLIST.path, "current")
-            parameters.append("include", included.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.joinToString(","))
+            }
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecord() as GroceriesList
@@ -412,7 +424,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.GROCERIESLIST.path, listId, "baskets")
             parameters.append("filter[point_of_sale_id]", posId.toString())
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
         val baskets = get<RecordWrapper>(url).toRecords().filterIsInstance<Basket>()
@@ -465,7 +479,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         val returnValue = httpClient.patch {
             url {
                 appendPathSegments(MiamAPIEndpoint.BASKET_ENTRIES.path, basketEntry.id)
-                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+                if (included.isNotEmpty()) {
+                    parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+                }
             }
             setBody(RecordWrapper.fromRecord(basketEntry))
         }.body<RecordWrapper>().toRecord() as BasketEntry
@@ -527,7 +543,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
             parameters.append("[status]", "4")
             parameters.append("[user_preferences]", "true")
             parameters.append("sort", "catalog_position")
-            parameters.append("include", included.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.joinToString(","))
+            }
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecords()
@@ -580,7 +598,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSponsorById")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.SPONSOR.path, sponsorId)
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecord()
@@ -595,7 +615,9 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.SPONSOR_BLOCK.path)
             parameters.append("filter[sponsor-id]", sponsorId.toString())
-            parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            if (included.isNotEmpty()) {
+                parameters.append("include", included.map { it.relationshipName }.joinToString(","))
+            }
             buildString()
         }
         val returnValue = get<RecordWrapper>(url).toRecords()
