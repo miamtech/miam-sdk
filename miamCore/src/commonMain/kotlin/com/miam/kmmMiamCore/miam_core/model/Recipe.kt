@@ -1,6 +1,6 @@
 package com.miam.kmmMiamCore.miam_core.model
 
-import com.miam.kmmMiamCore.miam_core.model.utils.DurationSerializer
+import com.miam.kmmMiamCore.miam_core.model.utils.CustomDurationSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -160,19 +160,19 @@ public data class RecipeAttributes constructor(
     @SerialName("ingredients-str")
     val ingredientsStr: List<String>? = emptyList(),
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("preparation-time")
     val preparationTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("preheating-time")
     val preheatingTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("cooking-time")
     val cookingTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("resting-time")
     val restingTime: Duration? = 0.minutes,
 

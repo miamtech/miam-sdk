@@ -8,13 +8,13 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.time.Duration
 
-public object DurationSerializer : KSerializer<Duration> {
+public object CustomDurationSerializer : KSerializer<Duration> {
     override fun deserialize(decoder: Decoder): Duration =
         Duration.parseIsoString(decoder.decodeString())
 
 
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("Duration", PrimitiveKind.STRING)
+        get() = PrimitiveSerialDescriptor("CustomDurationSerializer", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Duration) {
         encoder.encodeString(value.toIsoString())
