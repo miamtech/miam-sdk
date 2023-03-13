@@ -55,8 +55,15 @@ public sealed class BasketEffect: Effect {
     public object BasketConfirmed: BasketEffect()
 }
 
-public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, CoroutineScope by MainScope() {
+public interface BasketStore: Store<BasketState, BasketAction, BasketEffect> {
+    public fun getBasket(): Basket?
+    public fun fastRemoveRecipeFromBpl(recipeId: String)
+    public fun activeEntries(): List<BasketEntry>?
+    public fun basketIsEmpty(): Boolean
+    public fun recipeInBasket(recipeId: String): Boolean
+}
 
+public class BasketStoreImp: BasketStore, CoroutineScope by MainScope() {
     private val coroutineHandler = CoroutineExceptionHandler { _, exception ->
         println("Miam error in BasketStore $exception ${exception.stackTraceToString()}")
     }
@@ -78,7 +85,7 @@ public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, Corout
 
     override fun observeSideEffect(): Flow<BasketEffect> = sideEffect
 
-    public fun getBasket(): Basket? {
+    public override fun getBasket(): Basket? {
         return state.value.basket
     }
 
@@ -148,13 +155,13 @@ public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, Corout
         }
     }
 
-    public fun fastRemoveRecipeFromBpl(recipeId: String) {
+    public override fun fastRemoveRecipeFromBpl(recipeId: String) {
         val newState =
             state.value.copy(basketPreview = state.value.basketPreview?.filter { bpl -> bpl.id != recipeId })
         updateStateIfChanged(newState)
     }
 
-    public fun activeEntries(): List<BasketEntry>? {
+    public override fun activeEntries(): List<BasketEntry>? {
         return state.value.basket?.relationships?.basketEntries?.data?.filter { e ->
             e.attributes!!.groceriesEntryStatus == "active"
         }
@@ -213,11 +220,11 @@ public class BasketStore: Store<BasketState, BasketAction, BasketEffect>, Corout
         }
     }
 
-    public fun basketIsEmpty(): Boolean {
+    public override fun basketIsEmpty(): Boolean {
         return (state.value.basket?.relationships?.basketEntries?.data?.isEmpty() == true)
     }
 
-    public fun recipeInBasket(recipeId: String): Boolean {
+    public override fun recipeInBasket(recipeId: String): Boolean {
         return state.value.basketPreview?.any { it.isRecipe && it.id == recipeId } == true
     }
 
