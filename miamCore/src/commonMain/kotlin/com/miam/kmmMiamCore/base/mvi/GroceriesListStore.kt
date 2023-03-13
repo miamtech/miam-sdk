@@ -6,6 +6,7 @@ import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.usecase.ResetGroceriesListUseCase
 import com.miam.kmmMiamCore.usecase.SetGroceriesListUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -79,9 +80,7 @@ public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainS
             }
             is GroceriesListAction.ResetGroceriesList -> {
                 return launch(coroutineHandler) {
-                    // TODO : path
-                    analyticsService.sendEvent(Analytics.EVENT_RECIPE_RESET, "", Analytics.PlausibleProps())
-                    SetGroceriesListUseCase().invoke(groceriesListRepo.reset())
+                    ResetGroceriesListUseCase().invoke()
                 }
             }
             is GroceriesListAction.AlterRecipeList -> {
