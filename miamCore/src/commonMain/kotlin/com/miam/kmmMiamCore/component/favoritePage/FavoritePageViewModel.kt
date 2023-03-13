@@ -8,6 +8,7 @@ import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.handler.LogHandler
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -54,7 +55,7 @@ public open class FavoritePageViewModel: BaseViewModel<FavoritePageContract.Even
             setState { copy(isFetchingNewPage = true) }
             val fetchedRecipes = recipeRepositoryImp.getRecipes(
                 FILTERS,
-                RecipeRepositoryImp.DEFAULT_INCLUDED,
+                RecipeRelationshipName.relationshipsForRecipeCard(),
                 RecipeRepositoryImp.DEFAULT_PAGESIZE,
                 currentPage
             )

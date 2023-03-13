@@ -8,6 +8,11 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
+public enum class BasketEntryRelationshipName(public val relationshipName: String) {
+    GROCERIES_ENTRY("groceries-entry"),
+    ITEM("items")
+}
+
 @Serializable
 @SerialName("basket-entries")
 public data class BasketEntry internal constructor(

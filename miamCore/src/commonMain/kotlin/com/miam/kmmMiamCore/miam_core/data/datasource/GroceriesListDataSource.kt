@@ -8,7 +8,6 @@ public interface GroceriesListDataSource {
     public suspend fun getCurrent(included: List<String> = listOf()): GroceriesList
     public suspend fun reset(): GroceriesList
     public suspend fun updateGroceriesList(
-        groceriesList: GroceriesList,
-        included: List<String> = listOf()
+        groceriesList: GroceriesList
     ): GroceriesList
 }

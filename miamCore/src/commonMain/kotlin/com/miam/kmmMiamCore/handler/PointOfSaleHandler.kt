@@ -39,10 +39,6 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
         store.dispatch(PointOfSaleAction.SetExtId(storeId))
     }
 
-    @Deprecated(
-        "Handler will soon be replace by UseCases",
-        replaceWith = ReplaceWith("SetSupplierUseCase.instance.invoke(SupplierInfo(supplierId: Int)")
-    )
     public fun setSupplier(supplierId: Int) {
         SetSupplierUseCase.create.invoke(SupplierInfo(supplierId))
     }

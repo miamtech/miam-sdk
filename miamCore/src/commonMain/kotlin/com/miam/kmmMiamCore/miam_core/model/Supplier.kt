@@ -52,7 +52,7 @@ public data class Supplier internal constructor(
 
 @Serializable
 public data class SupplierAttributes(
-    val name: String,
+    val name: String? = "",
     @SerialName("language-id")
     val languageId: String?
 ): Attributes()

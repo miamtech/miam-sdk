@@ -1,9 +1,11 @@
 package com.miam.kmmMiamCore.miam_core.data.repository
 
 
+import com.miam.kmmMiamCore.miam_core.data.datasource.GroceriesListDataSource
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.Recipe
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 
 
 public class GroceriesListRepositoryImp(
@@ -32,7 +34,7 @@ public class GroceriesListRepositoryImp(
         // need ingredients for tags to know to which recipes it belongs
         val missingRecipes = groceriesListDataSource.getRecipeByIds(
             gl.missingRecipesIds(existingRecipes),
-            included = listOf("ingredients")
+            included = arrayOf(RecipeRelationshipName.INGREDIENTS)
         )
         gl.rebuildRecipesRelationships(missingRecipes, existingRecipes)
         return gl

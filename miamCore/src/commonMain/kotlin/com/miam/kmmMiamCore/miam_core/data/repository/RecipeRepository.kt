@@ -8,5 +8,5 @@ public interface RecipeRepository {
     public suspend fun getRecipesByIds(recipeIds: List<String>): List<Recipe>
     public suspend fun getRecipeSuggestion(supplierId: Int, criteria: SuggestionsCriteria): Recipe
     public suspend fun getRecipeSuggestions(supplierId: Int, criteria: SuggestionsCriteria, size: Int): List<Recipe>
-    public suspend fun getRecipeNumberOfResult(filter: String): Int
+    public suspend fun getRecipeNumberOfResult(filters: Map<String, String>): Int
 }

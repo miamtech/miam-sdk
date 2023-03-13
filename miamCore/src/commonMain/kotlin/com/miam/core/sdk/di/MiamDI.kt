@@ -4,13 +4,7 @@ import com.miam.core.sdk.data.repository.SponsorBlockRepository
 import com.miam.core.sdk.data.repository.SponsorBlockRepositoryImp
 import com.miam.core.sdk.data.repository.SponsorRepository
 import com.miam.core.sdk.data.repository.SponsorRepositoryImp
-import com.miam.kmmMiamCore.base.mvi.BasketStore
-import com.miam.kmmMiamCore.base.mvi.GroceriesListStore
-import com.miam.kmmMiamCore.base.mvi.GroceriesListStoreImpl
-import com.miam.kmmMiamCore.base.mvi.LikeStore
-import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
-import com.miam.kmmMiamCore.base.mvi.UserStore
-import com.miam.kmmMiamCore.base.mvi.UserStoreImpl
+import com.miam.kmmMiamCore.base.mvi.*
 import com.miam.kmmMiamCore.component.itemSelector.ItemSelectorViewModel
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.component.singletonFilter.SingletonFilterViewModel
@@ -49,7 +43,7 @@ public object MiamDI {
     internal val sponsorBlockRepository: SponsorBlockRepository by lazy { SponsorBlockRepositoryImp(dataSource) }
 
     // Store
-    internal val basketStore: BasketStore by lazy { BasketStore() }
+    internal val basketStore: BasketStore by lazy { BasketStoreImp() }
     internal val groceriesListStore: GroceriesListStore by lazy { GroceriesListStoreImpl() }
     internal val likeStore: LikeStore by lazy { LikeStore() }
     internal val pointOfSaleStore: PointOfSaleStore by lazy { PointOfSaleStore() }

@@ -6,6 +6,7 @@ import com.miam.kmmMiamCore.miam_core.data.repository.GroceriesListRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.GroceriesList
 import com.miam.kmmMiamCore.miam_core.model.RecipeInfos
 import com.miam.kmmMiamCore.services.Analytics
+import com.miam.kmmMiamCore.usecase.SetGroceriesListUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,7 @@ public sealed class GroceriesListEffect: Effect {
 
 public interface GroceriesListStore: Store<GroceriesListState, GroceriesListAction, GroceriesListEffect> {
     public fun getGroceriesList(): GroceriesList?
+    public suspend fun setGroceriesList(groceriesList: GroceriesList)
 }
 
 public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainScope() {
@@ -72,14 +74,14 @@ public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainS
         when (action) {
             is GroceriesListAction.RefreshGroceriesList -> {
                 return launch(coroutineHandler) {
-                    setGroceriesListAndRefreshBasket(groceriesListRepo.getCurrent())
+                    SetGroceriesListUseCase().invoke(groceriesListRepo.getCurrent())
                 }
             }
             is GroceriesListAction.ResetGroceriesList -> {
                 return launch(coroutineHandler) {
                     // TODO : path
                     analyticsService.sendEvent(Analytics.EVENT_RECIPE_RESET, "", Analytics.PlausibleProps())
-                    setGroceriesListAndRefreshBasket(groceriesListRepo.reset())
+                    SetGroceriesListUseCase().invoke(groceriesListRepo.reset())
                 }
             }
             is GroceriesListAction.AlterRecipeList -> {
@@ -87,7 +89,7 @@ public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainS
                     appendRecipe(state.value.groceriesList, action.recipeId, action.guests)?.let { newGl ->
                         // side Effect only to refresh UI of c
                         sideEffect.emit(GroceriesListEffect.RecipeAdded(newGl.id, action.guests))
-                        setGroceriesListAndRefreshBasket(newGl)
+                        SetGroceriesListUseCase().invoke(newGl)
                     }
                 }
             }
@@ -96,17 +98,16 @@ public class GroceriesListStoreImpl: GroceriesListStore, CoroutineScope by MainS
                 return launch(coroutineHandler) {
                     removeRecipe(state.value.groceriesList, action.recipeId)?.let { newGl ->
                         sideEffect.emit(GroceriesListEffect.RecipeRemoved(newGl.id))
-                        setGroceriesListAndRefreshBasket(newGl)
+                        SetGroceriesListUseCase().invoke(newGl)
                     }
                 }
             }
         }
     }
 
-    private suspend fun setGroceriesListAndRefreshBasket(groceriesList: GroceriesList) {
-        updateStateIfChanged(state.value.copy(groceriesList = groceriesList)) 
+    public suspend override fun setGroceriesList(groceriesList: GroceriesList) {
+        updateStateIfChanged(state.value.copy(groceriesList = groceriesList))
         sideEffect.emit(GroceriesListEffect.GroceriesListLoaded)
-        basketStore.dispatch(BasketAction.RefreshBasket)
     }
 
     private suspend fun appendRecipe(
