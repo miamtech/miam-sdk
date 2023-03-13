@@ -16,6 +16,7 @@ public object SupplierFakeFactory {
     )
 
     public fun createAttributes(): SupplierAttributes = SupplierAttributes(
+        name = "test",
         languageId = "fr"
     )
 }

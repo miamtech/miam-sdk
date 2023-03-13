@@ -56,6 +56,7 @@ dependencies {
     api(libs.ktor.client.android)
     api(libs.ktor.client.serialization)
     api(libs.ktor.client.contentNegotiation)
+    api(libs.ktor.client.encoding)
     api(libs.ktor.client.logging)
 
     api(libs.android.material)

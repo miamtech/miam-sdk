@@ -76,6 +76,7 @@ class Miam {
 
 ```
 
+
 :::tip
 Make sure to specify a different origin between your development and production environments
 :::

@@ -6,6 +6,18 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
 
+
+public enum class SupplierAttributesName(public val supplierAttributesName: String) {
+    NAME(  "name"),
+    LANGUAGE_ID("language-id");
+
+    public companion object {
+      public fun formattedAttributes(): String {
+        return values().joinToString(",") { value -> value.supplierAttributesName }
+      }
+    }
+}
+
 @Serializable
 public data class SupplierNotificationWrapper(
     val token: String,
@@ -40,6 +52,7 @@ public data class Supplier internal constructor(
 
 @Serializable
 public data class SupplierAttributes(
+    val name: String? = "",
     @SerialName("language-id")
     val languageId: String?
 ): Attributes()

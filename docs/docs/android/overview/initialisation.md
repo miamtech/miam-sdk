@@ -48,6 +48,7 @@ class Miam() {
 Make sure to specify a different origin between your development and production environments
 :::
 
+
 Miam initialization process will only start after the user is **logged** and has **selected a valid store**.
 then it'll need the **basket synchronization**
 

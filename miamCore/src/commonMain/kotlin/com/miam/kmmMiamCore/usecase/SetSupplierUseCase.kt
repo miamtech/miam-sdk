@@ -5,6 +5,7 @@ import com.miam.kmmMiamCore.base.ParameterisedUseCase
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleAction
 import com.miam.kmmMiamCore.base.mvi.PointOfSaleStore
 import com.miam.kmmMiamCore.miam_core.data.repository.SupplierRepository
+import com.miam.kmmMiamCore.services.Analytics
 import dev.icerock.moko.resources.desc.StringDesc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 public data class SupplierInfo(val supplierId: Int)
 
-internal class SetSupplierUseCase(private val supplierRepository: SupplierRepository, private val pointOfSaleStore: PointOfSaleStore):
+public class SetSupplierUseCase(private val supplierRepository: SupplierRepository, private val pointOfSaleStore: PointOfSaleStore):
     ParameterisedUseCase<SupplierInfo, Unit>, CoroutineScope by MainScope() {
 
     override fun invoke(input: SupplierInfo) {
@@ -24,10 +25,13 @@ internal class SetSupplierUseCase(private val supplierRepository: SupplierReposi
             supplier.attributes?.languageId?.let { lang ->
                 StringDesc.localeType = StringDesc.LocaleType.Custom(lang)
             }
+            supplier.attributes?.name?.let { name ->
+                pointOfSaleStore.setOrigin(name)
+            }
         }
     }
 
-    companion object {
-         val create : SetSupplierUseCase = SetSupplierUseCase(MiamDI.supplierRepository, MiamDI.pointOfSaleStore)
+    public companion object {
+        public val create : SetSupplierUseCase = SetSupplierUseCase(MiamDI.supplierRepository, MiamDI.pointOfSaleStore)
     }
 }
