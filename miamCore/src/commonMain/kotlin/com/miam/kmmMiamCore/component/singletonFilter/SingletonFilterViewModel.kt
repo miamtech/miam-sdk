@@ -5,6 +5,7 @@ import com.miam.core.sdk.localisation.Localisation
 import com.miam.kmmMiamCore.base.mvi.BaseViewModel
 import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.handler.LogHandler
+import com.miam.kmmMiamCore.miam_core.data.datasource.RecipeFilter
 import com.miam.kmmMiamCore.miam_core.data.repository.RecipeRepositoryImp
 import com.miam.kmmMiamCore.miam_core.model.CatalogFilterOptions
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -66,7 +67,7 @@ public open class SingletonFilterViewModel:
 
     public fun getRecipeCount() {
         launch(coroutineHandler) {
-            val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilterAsQueryString())
+            val count = recipeRepositoryImp.getRecipeNumberOfResult(getSelectedFilters())
             setState { copy(numberOfResult = count) }
         }
     }
@@ -114,36 +115,34 @@ public open class SingletonFilterViewModel:
         getRecipeCount()
     }
 
-    public fun getSelectedFilterAsQueryString(): String {
-        var filter = ""
+    public fun getSelectedFilters(): Map<String, String> {
+        var filters: MutableMap<String, String> = mutableMapOf()
         val difficultyOptions = currentState.difficulty.filter { option -> option.isSelected }
         val costOption = currentState.cost.find { option -> option.isSelected }
         val timeOption = currentState.time.find { option -> option.isSelected }
 
         if (difficultyOptions.isNotEmpty()) {
-            filter += "filter[difficulty]="
-            filter += difficultyOptions.joinToString("-") { it.name }
-            filter += ",eq&"
+            filters[RecipeFilter.DIFFICULTY.filterName] = difficultyOptions.joinToString("-") { it.name } + ",eq"
         }
         if (costOption != null) {
-            filter += "filter[computed_cost]="
             val border = costOption.name.split('-')
-            filter += "${border[0]},gt,${border[1]},lt&"
+            filters[RecipeFilter.COST.filterName] = "${border[0]},gt,${border[1]},lt"
         }
         if (timeOption != null) {
-            filter += "filter[total-time]="
-            filter += (timeOption.name + "&")
+            filters[RecipeFilter.TOTAL_TIME.filterName]= timeOption.name
         }
         if (currentState.searchString != null) {
-            filter += "filter[search]=${currentState.searchString}&"
+            filters[RecipeFilter.SEARCH.filterName]= currentState.searchString.toString()
         }
         if (currentState.category != null) {
-            filter += "filter[packages]=${currentState.category}&"
+            filters[RecipeFilter.PACKAGES.filterName] = currentState.category.toString()
         }
         if (currentState.isFavorite) {
-            filter += "filter[liked]=true&filter[active]=true,false&"
+            filters[RecipeFilter.LIKED.filterName] = "true"
+            filters[RecipeFilter.ACTIVE.filterName] = "true,false"
         }
-        return filter
+
+        return filters
     }
 
     public fun getActiveFilterCount(): Int {

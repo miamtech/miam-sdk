@@ -2,6 +2,7 @@ package com.miam.kmmMiamCore.miam_core.data.repository
 
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.BasketEntry
+import com.miam.kmmMiamCore.miam_core.model.BasketEntryRelationshipName
 
 public class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPIDatasource) :
     BasketEntryRepository {
@@ -11,7 +12,7 @@ public class BasketEntryRepositoryImp(private val basketEntryDataSource: MiamAPI
         newBasketEntry.needPatch = false
         return basketEntryDataSource.updateBasketEntry(
             newBasketEntry,
-            listOf("groceries-entry", "items")
+            BasketEntryRelationshipName.values()
         )
     }
 }

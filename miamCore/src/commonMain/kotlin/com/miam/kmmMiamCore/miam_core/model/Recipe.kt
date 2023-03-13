@@ -1,6 +1,6 @@
 package com.miam.kmmMiamCore.miam_core.model
 
-import com.miam.kmmMiamCore.miam_core.model.utils.DurationSerializer
+import com.miam.kmmMiamCore.miam_core.model.utils.CustomDurationSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,6 +11,11 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+@Serializable
+@SerialName("recipes")
+public data class RecipesListWrapper internal constructor(
+    val data: List<Recipe>,
+)
 
 @Serializable
 @SerialName("recipes")
@@ -81,6 +86,60 @@ public data class Recipe internal constructor(
         }
 }
 
+public enum class RecipeAttributeName(public val attributeName: String) {
+    TITLE("title"),
+    EXT_ID("ext-id"),
+    EXT_LINK("ext-link"),
+    DESCRIPTION("description"),
+    INGREDIENTS_STRING("ingredients-str"),
+    NUMBER_OF_GUESTS("number-of-guests"),
+    PREPARATION_TIME("preparation-time"),
+    PREHEATING_TIME("preheating-time"),
+    COOKING_TIME("cooking-time"),
+    RESTING_TIME("resting-time"),
+    MEDIA_URL("media-url"),
+    INFORMATIONAL_PAGE_HTML("informational-page-html"),
+    FILIGRANE_LOGO_URL("filigrane-logo-url"),
+    INFORMATIONAL_SENTENCE("informational-sentence"),
+    DIFFICULTY("difficulty"),
+    COST("cost"),
+    SUGGESTED("suggested"),
+    POPULARITY("popularity"),
+    VIDEO_ID("video-id"),
+    PROMOTED("promoted"),
+    SLUG("slug"),
+    POSITION("position");
+
+    public companion object {
+        public fun allAttributes(): Array<RecipeAttributeName> {
+            return values()
+        }
+
+        public fun recipeCardAttributes(): Array<RecipeAttributeName> {
+            return arrayOf(TITLE, COOKING_TIME, RESTING_TIME, PREPARATION_TIME, DIFFICULTY, MEDIA_URL, NUMBER_OF_GUESTS)
+        }
+    }
+}
+
+public enum class RecipeRelationshipName(public val relationshipName: String) {
+    INGREDIENTS("ingredients"),
+    RECIPE_STEPS("recipe-steps"),
+    RECIPE_PROVIDERS("recipe-provider"),
+    RECIPE_STATUS("recipe-status"),
+    RECIPE_TYPE("recipe-type"),
+    SPONSORS("sponsors");
+
+    public companion object {
+        public fun allRelationships(): Array<RecipeRelationshipName> {
+            return values()
+        }
+
+        public fun relationshipsForRecipeCard(): Array<RecipeRelationshipName> {
+            return arrayOf()
+        }
+    }
+}
+
 @Serializable
 public data class RecipeAttributes constructor(
     val title: String,
@@ -101,19 +160,19 @@ public data class RecipeAttributes constructor(
     @SerialName("ingredients-str")
     val ingredientsStr: List<String>? = emptyList(),
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("preparation-time")
     val preparationTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("preheating-time")
     val preheatingTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("cooking-time")
     val cookingTime: Duration? = 0.minutes,
 
-    @Serializable(with = DurationSerializer::class)
+    @Serializable(with = CustomDurationSerializer::class)
     @SerialName("resting-time")
     val restingTime: Duration? = 0.minutes,
 

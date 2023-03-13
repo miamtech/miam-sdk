@@ -18,7 +18,7 @@ public interface RecipeListPageContract {
     public data class State(
         val recipes: BasicUiState<List<Recipe>>,
         val title: String,
-        val filter: String,
+        val filter: Map<String, String>,
         val currentPage: Int,
         val isFetchingNewPage: Boolean,
         val noMoreData: Boolean

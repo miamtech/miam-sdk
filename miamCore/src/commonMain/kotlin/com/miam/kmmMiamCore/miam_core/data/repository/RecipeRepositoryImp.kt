@@ -5,6 +5,7 @@ import com.miam.kmmMiamCore.base.mvi.LikeStore
 import com.miam.kmmMiamCore.miam_core.data.datasource.MiamAPIDatasource
 import com.miam.kmmMiamCore.miam_core.model.Recipe
 import com.miam.kmmMiamCore.miam_core.model.RecipeLike
+import com.miam.kmmMiamCore.miam_core.model.RecipeRelationshipName
 import com.miam.kmmMiamCore.miam_core.model.SuggestionsCriteria
 
 public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource): RecipeRepository {
@@ -18,25 +19,25 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
         public const val FIRST_PAGE: Int = 1
     }
 
-    override suspend fun getRecipeNumberOfResult(filter: String): Int {
-        return recipeDataSource.getRecipeNumberOfResult(filter)
+    override suspend fun getRecipeNumberOfResult(filters: Map<String, String>): Int {
+        return recipeDataSource.getRecipeNumberOfResult(filters)
     }
 
     override suspend fun getRecipeById(recipeId: String): Recipe {
         println("Miam getting recipe $recipeId")
-        val recipe = recipeDataSource.getRecipeById(recipeId, DEFAULT_INCLUDED)
+        val recipe = recipeDataSource.getRecipeById(recipeId, RecipeRelationshipName.allRelationships())
         return addRecipeLike(recipe)
     }
 
     override suspend fun getRecipesByIds(recipeIds: List<String>): List<Recipe> {
         println("Miam getting recipes $recipeIds")
-        val recipes = recipeDataSource.getRecipeByIds(recipeIds, DEFAULT_INCLUDED)
+        val recipes = recipeDataSource.getRecipeByIds(recipeIds, RecipeRelationshipName.allRelationships())
         return addRecipeLikes(recipes)
     }
 
     public suspend fun getRecipes(
         filters: Map<String, String>,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
@@ -46,7 +47,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
 
     public suspend fun getRecipesFromStringFilter(
         filters: String,
-        included: List<String>,
+        included: Array<RecipeRelationshipName>,
         pageSize: Int,
         pageNumber: Int
     ): List<Recipe> {
@@ -71,7 +72,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
             supplierId,
             size,
             criteria,
-            listOf("ingredients", "recipe-steps", "recipe-provider", "recipe-status", "recipe-type")
+            RecipeRelationshipName.allRelationships()
         )
         return recipes.map { addRecipeLike(it) }
     }
