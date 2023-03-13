@@ -37,7 +37,7 @@ import com.miam.kmmMiamCore.handler.PointOfSaleHandler
 class Miam() {
   init {
     //  CODE
-    PointOfSaleHandler.setSupplier(<string>YOUR_SUPPLIER_ID)
+    PointOfSaleHandler.setSupplier(YOUR_SUPPLIER_ID)
     PointOfSaleHandler.setSupplierOrigin(<string>YOUR_SUPPLIER_ORIGIN)
   }
 

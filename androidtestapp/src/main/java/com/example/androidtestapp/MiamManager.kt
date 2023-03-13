@@ -16,6 +16,8 @@ import com.miam.kmmMiamCore.handler.ToasterHandler
 import com.miam.kmmMiamCore.handler.UserHandler
 import com.miam.kmmMiamCore.miam_core.model.RetailerProduct
 import com.miam.kmmMiamCore.services.AnalyticsInstance
+import com.miam.kmmMiamCore.usecase.SetSupplierUseCase
+import com.miam.kmmMiamCore.usecase.SupplierInfo
 import com.miam.kmm_miam_sdk.android.ui.components.catalog.customization.CatalogModifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

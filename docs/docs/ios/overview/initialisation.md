@@ -67,7 +67,7 @@ class Miam {
   
   private init() {
     //  CODE
-      PointOfSaleHandler.shared.setSupplierOrigin(origin : <string>YOUR_SUPPLIER_ORIGIN)
+      PointOfSaleHandler.shared.setSupplierOrigin(origin: <string>YOUR_SUPPLIER_ORIGIN))
       PointOfSaleHandler.shared.setSupplier(supplierId: <string>YOUR_SUPPLIER_ID)
   }
 

@@ -44,7 +44,7 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
         replaceWith = ReplaceWith("SetSupplierUseCase.instance.invoke(SupplierInfo(supplierId: Int)")
     )
     public fun setSupplier(supplierId: Int) {
-        SetSupplierUseCase.instance.invoke(SupplierInfo(supplierId))
+        SetSupplierUseCase.create.invoke(SupplierInfo(supplierId))
     }
 
     public fun setSupplierOrigin(origin: String) {

@@ -28,6 +28,6 @@ internal class SetSupplierUseCase(private val supplierRepository: SupplierReposi
     }
 
     companion object {
-        val instance: SetSupplierUseCase = MiamDI.setSupplierUseCase
+         val create : SetSupplierUseCase = SetSupplierUseCase(MiamDI.supplierRepository, MiamDI.pointOfSaleStore)
     }
 }
