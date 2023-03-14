@@ -27,6 +27,7 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
     }
 
     fun setRecipe(recipeId: String) {
+        setState { copy (isLiked = BasicUiState.Loading) }
         viewModelScope.launch(coroutineHandler) {
             val isLiked = recipeLikeStore.fetchAndGetRecipeLikes(listOf(recipeId)).any { recipeLike -> recipeLike.isLiked }
             setState { copy(recipeId = recipeId, isLiked = BasicUiState.Success(isLiked)) }
@@ -51,8 +52,10 @@ open class LikeButtonViewModel: BaseViewModel<RecipeLikeContract.Event, RecipeLi
 
     fun toggleLike() {
         if (currentState.recipeId == null) return
+        setState { copy (isLiked = BasicUiState.Loading) }
         viewModelScope.launch(coroutineHandler) {
-            recipeLikeStore.toggleLike(currentState.recipeId!!)
+            val likeResponse = recipeLikeStore.toggleLike(currentState.recipeId!!)
+            setState { copy(isLiked = BasicUiState.Success(likeResponse.isLiked)) }
         }
     }
 }
