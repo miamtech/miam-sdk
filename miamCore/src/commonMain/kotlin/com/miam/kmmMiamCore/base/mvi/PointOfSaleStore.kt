@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 public data class PointOfSaleState(
-    val idSupplier: Int?,
+    val idSupplier: String?,
     val extIdPointOfSale: String?,
     val idPointOfSale: Int?,
     val origin: String?,
@@ -24,7 +24,7 @@ public data class PointOfSaleState(
 
 public sealed class PointOfSaleAction: Action {
     public data class SetExtId(val extId: String?): PointOfSaleAction()
-    public data class SetSupplierId(val supplierId: Int): PointOfSaleAction()
+    public data class SetSupplierId(val supplierId: String): PointOfSaleAction()
 }
 
 public sealed class PointOfSaleEffect: Effect
@@ -68,7 +68,7 @@ public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointO
         return extId == state.value.extIdPointOfSale
     }
 
-    public fun sameSupplier(supplierId: Int): Boolean {
+    public fun sameSupplier(supplierId: String): Boolean {
         return supplierId == state.value.idSupplier
     }
 
@@ -80,7 +80,7 @@ public class PointOfSaleStore: Store<PointOfSaleState, PointOfSaleAction, PointO
         return state.value.idPointOfSale
     }
 
-    public val supplierId: Int?
+    public val supplierId: String?
         get() = state.value.idSupplier
 
     public fun getProviderOrigin(): String {

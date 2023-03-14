@@ -43,9 +43,8 @@ public class MiamManager: ObservableObject {
         basketHandler.setListenToRetailerBasket(func: initBasketListener)
         basketHandler.setPushProductsToRetailerBasket(func: pushProductToBasket)
         basketHandler.pushProductsToMiamBasket(retailerBasket: [])
+        ContextHandlerInstance.shared.instance.doInitMiam(base64_key: "ewogICJzdXBwbGllcl9pZCI6ICIxNCIsCiAgInBsYXVzaWJsZV9kb21haW5lIjogIm1pYW0udGVzdCIsCiAgImhvc3QiOiAiYXBpLm1pYW0udGVjaCIsCiAgIm1pYW1fb3JpZ2luIjogImNvdXJzZXN1IiwKICAibWlhbV9lbnZpcm9ubWVudCI6ICJwcm9kIgp9")
         PointOfSaleHandler.shared.updateStoreId(storeId: "miam_test")
-        PointOfSaleHandler.shared.setSupplierOrigin(origin: "miam.test")
-        PointOfSaleHandler.shared.setSupplier(supplierId: 14)
         PointOfSaleHandler.shared.isAvailable = isActiveOnStore
         PointOfSaleHandler.shared.getCatalogCategories { categories in
             self.categories.categoriesList = categories

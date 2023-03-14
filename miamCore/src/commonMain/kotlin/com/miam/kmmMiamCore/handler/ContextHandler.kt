@@ -6,16 +6,18 @@ import com.miam.kmmMiamCore.base.mvi.Effect
 import com.miam.kmmMiamCore.base.mvi.State
 import com.miam.kmmMiamCore.component.preferences.SingletonPreferencesViewModel
 import com.miam.kmmMiamCore.handler.Basket.BasketHandler
+import com.miam.kmmMiamCore.usecase.InitMiamFromBase64KeyUseCase
+import io.ktor.util.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 public object ContextHandlerInstance {
     public val instance: ContextHandler = MiamDI.contextHandler
@@ -49,6 +51,11 @@ public class ContextHandler: CoroutineScope by MainScope() {
         launch(coroutineHandler) {
             readyEvent.emit(ReadyEvent.isNotReady)
         }
+    }
+
+    public fun initMiam(base64_key :String) {
+        val jsonString =  base64_key.decodeBase64String()
+        InitMiamFromBase64KeyUseCase.create.invoke(Json.decodeFromString(jsonString))
     }
 
     public fun emitReadiness() {
