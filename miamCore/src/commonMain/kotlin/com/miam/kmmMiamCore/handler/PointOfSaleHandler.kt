@@ -38,11 +38,12 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
 
         store.dispatch(PointOfSaleAction.SetExtId(storeId))
     }
-
+    @Deprecated(message="setSupplier and setSupplierOrigin are replace by a unique method initMiam",ReplaceWith("ContextHandlerInstance.instance.initMiam(base64_key: "YOUR KEY")"))
     public fun setSupplier(supplierId: Int) {
-        SetSupplierUseCase.create.invoke(SupplierInfo(supplierId))
+        SetSupplierUseCase.create.invoke(SupplierInfo(supplierId.toString()))
     }
 
+    @Deprecated(message="setSupplier and setSupplierOrigin are replace by a unique method initMiam",ReplaceWith("ContextHandlerInstance.instance.initMiam(base64_key: "YOUR KEY")"))
     public fun setSupplierOrigin(origin: String) {
         analytics.init(origin)
     }
@@ -52,7 +53,7 @@ public object PointOfSaleHandler: CoroutineScope by MainScope() {
             store.supplierId,
             { supplierId ->
                 launch(coroutineHandler) {
-                    val categories = packageRepositoryImp.getActivePackageForRetailer(supplierId.toString())
+                    val categories = packageRepositoryImp.getActivePackageForRetailer(supplierId)
                         .map { CatalogCategory(it.id, it.attributes?.title ?: "") }
                     setLocalCategories(categories)
                 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-public data class SupplierInfo(val supplierId: Int)
+public data class SupplierInfo(val supplierId: String)
 
 public class SetSupplierUseCase(private val supplierRepository: SupplierRepository, private val pointOfSaleStore: PointOfSaleStore):
     ParameterisedUseCase<SupplierInfo, Unit>, CoroutineScope by MainScope() {

@@ -11,7 +11,7 @@ import com.miam.kmmMiamCore.miam_core.model.Supplier
 public interface SupplierRepository {
     public suspend fun notifyConfirmBasket(basketToken: String)
     public suspend fun notifyPaidBasket(basketToken: String, price: String)
-    public suspend fun getSupplier(supplierId: Int): Supplier
+    public suspend fun getSupplier(supplierId: String): Supplier
 }
 
 public class SupplierRepositoryImp(private val recipeDataSource: MiamAPIDatasource): SupplierRepository {
@@ -34,7 +34,7 @@ public class SupplierRepositoryImp(private val recipeDataSource: MiamAPIDatasour
         )
     }
 
-    override suspend fun getSupplier(supplierId: Int): Supplier {
+    override suspend fun getSupplier(supplierId: String): Supplier {
         return recipeDataSource.getSupplier(supplierId)
     }
 }

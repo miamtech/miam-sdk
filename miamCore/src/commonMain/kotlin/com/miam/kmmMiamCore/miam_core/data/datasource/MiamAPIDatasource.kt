@@ -258,7 +258,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
     }
 
     override suspend fun getRecipeSuggestions(
-        supplierId: Int,
+        supplierId: String,
         size: Int?,
         criteria: SuggestionsCriteria,
         included: Array<RecipeRelationshipName>
@@ -400,7 +400,7 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
 /////////////////////// POINT OF SALE ////////////////////////////////////////////////
 
-    override suspend fun getPosFormExtId(extId: String, supplierId: Int): PointOfSale? {
+    override suspend fun getPosFormExtId(extId: String, supplierId: String): PointOfSale? {
         // this filter is suppose to return a single result or nothing
         LogHandler.info("[Miam][MiamAPIDatasource] starting getPosFormExtId $extId $supplierId")
         val url = URLBuilder(baseURL).run {
@@ -509,20 +509,20 @@ public class MiamAPIDatasource: RecipeDataSource, GroceriesListDataSource, Point
 
     override suspend fun notifyBasketUpdated(
         basketToken: String,
-        supplierId: Int,
+        supplierId: String,
         status: String,
         price: String?
     ) {
         LogHandler.info("[Miam][MiamAPIDatasource] starting notifyBasketUpdated $basketToken $supplierId $status")
         httpClient.post {
             url {
-                appendPathSegments(MiamAPIEndpoint.SUPPLIER.path, supplierId.toString(), "webhooks", "basket_updated")
+                appendPathSegments(MiamAPIEndpoint.SUPPLIER.path, supplierId, "webhooks", "basket_updated")
             }
             setBody(SupplierNotificationWrapper(basketToken, status, price))
         }
     }
 
-    override suspend fun getSupplier(supplierId: Int): Supplier {
+    override suspend fun getSupplier(supplierId: String): Supplier {
         LogHandler.info("[Miam][MiamAPIDatasource] starting getSupplier $supplierId ")
         val url = URLBuilder(baseURL).run {
             appendPathSegments(MiamAPIEndpoint.SUPPLIER.path, supplierId.toString())

@@ -43,9 +43,8 @@ class MiamManager: CoroutineScope by CoroutineScope(Dispatchers.Main) {
         setListenToRetailerBasket(basketHandler)
         setPushProductToBasket(basketHandler)
         // this set on inexisting pos will be cancelled by second one
-        PointOfSaleHandler.setSupplierOrigin("miam.test")
+        ContextHandlerInstance.instance.initMiam("ewogICJzdXBwbGllcl9pZCI6ICIxNCIsCiAgInBsYXVzaWJsZV9kb21haW5lIjogIm1pYW0udGVzdCIsCiAgImhvc3QiOiAiYXBpLm1pYW0udGVjaCIsCiAgIm1pYW1fb3JpZ2luIjogImNvdXJzZXN1IiwKICAibWlhbV9lbnZpcm9ubWVudCI6ICJwcm9kIgp9")
         PointOfSaleHandler.updateStoreId("miam_test")
-        SetSupplierUseCase.create.invoke(SupplierInfo(14))
         UserHandler.updateUserId("test_user")
         UserHandler.setProfilingAllowed(true)
         UserHandler.setEnableLike(true)

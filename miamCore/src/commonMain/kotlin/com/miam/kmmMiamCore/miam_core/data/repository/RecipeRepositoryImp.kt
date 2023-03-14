@@ -56,7 +56,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
     }
 
     override suspend fun getRecipeSuggestion(
-        supplierId: Int,
+        supplierId: String,
         criteria: SuggestionsCriteria
     ): Recipe {
         // TODO : WARNING what if list is empty !!??
@@ -64,7 +64,7 @@ public class RecipeRepositoryImp(private val recipeDataSource: MiamAPIDatasource
     }
 
     override suspend fun getRecipeSuggestions(
-        supplierId: Int,
+        supplierId: String,
         criteria: SuggestionsCriteria,
         size: Int
     ): List<Recipe> {

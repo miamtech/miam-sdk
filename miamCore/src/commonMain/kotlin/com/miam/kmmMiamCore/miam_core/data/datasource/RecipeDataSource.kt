@@ -40,7 +40,7 @@ public interface RecipeDataSource {
     ): List<Recipe>
 
     public suspend fun getRecipeSuggestions(
-        supplierId: Int,
+        supplierId: String,
         size: Int? = 1,
         criteria: SuggestionsCriteria,
         included: Array<RecipeRelationshipName> = arrayOf()
